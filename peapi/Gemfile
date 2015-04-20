@@ -19,6 +19,9 @@ gem 'puma'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Avoid migration issues, this should be removed at some point
+#gem 'arel', '6.0.0.beta2'
+
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'

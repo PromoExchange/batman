@@ -29,22 +29,22 @@ production:
 #   adapter:  postgresql
 #   host:     localhost
 #   encoding: unicode
-#   database: peapi_development
-#   username: peapi
+#   database: pxapi_development
+#   username: pxapi
 #   password:
 #
 # test:
 #   adapter:  postgresql
 #   host:     localhost
 #   encoding: unicode
-#   database: peapi_test
-#   username: peapi
+#   database: pxapi_test
+#   username: pxapi
 #   password:
 #
 # production:
 #   adapter:  postgresql
 #   host:     localhost
 #   encoding: unicode
-#   database: peapi_production
-#   username: peapi
+#   database: pxapi_production
+#   username: pxapi
 #   password:

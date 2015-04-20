@@ -19,5 +19,4 @@ RSpec.describe Product::Category, type: :model do
     expect(p.save).to eq true
     # teardown
   end
-
 end

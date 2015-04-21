@@ -21,4 +21,14 @@ RSpec.describe CategoryRelated, type: :model do
     expect(p.save).to eq true
     # teardown
   end
+
+  it 'should create category_related with valid values' do
+    # setup
+    c = build(:category_related)
+
+    # exercise
+    # verify
+    expect(p.category.name).to eq "CATEGORY"
+    # teardown
+  end
 end

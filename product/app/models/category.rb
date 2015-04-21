@@ -2,10 +2,13 @@
 #   t.string   "name"
 #   t.datetime "created_at", null: false
 #   t.datetime "updated_at", null: false
-#   t.integer  "parent_id"
 # end
 
 class Category < ActiveRecord::Base
   validates :name, presence: true
-  validates :related_id, presence: true
+
+  has_many :categoryrelated, :foreign_key => "category_id",
+      :class_name => "CategoryRelated"
+
+  has_many :related, :through => :categoryrelated
 end

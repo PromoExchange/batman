@@ -40,4 +40,15 @@ RSpec.describe Category, type: :model do
     expect(p.save).to eq true
     # teardown
   end
+
+  it 'test factory' do
+    # setup
+    c = build(:category)
+
+    # exercise
+    # verify
+    expect(c.name).to eq "CATEGORY"
+    # teardown
+  end
+
 end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  it 'should not create category with a null name' do
+  it 'should not create category with a nulls' do
     # setup
     p = Category.new
     # exercise
@@ -10,7 +10,7 @@ RSpec.describe Category, type: :model do
     # teardown
   end
 
-  it 'should create category with a valid name' do
+  it 'should create category with a valid name and parent' do
     # setup
     p = Category.new
     p.name = 'valid name'
@@ -19,4 +19,14 @@ RSpec.describe Category, type: :model do
     expect(p.save).to eq true
     # teardown
   end
+
+  it 'test factory' do
+    # setup
+    c = build(:category)
+    # exercise
+    # verify
+    expect(c.name).to eq "CATEGORY"
+    # teardown
+  end
+
 end

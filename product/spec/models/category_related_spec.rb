@@ -22,13 +22,33 @@ RSpec.describe CategoryRelated, type: :model do
     # teardown
   end
 
-  it 'should create category_related with valid values' do
+  it 'should create category_related with valid related category' do
     # setup
-    c = build(:category_related)
+    c = create(:category)
+    cr = create(:category_related, category_id: c.id, related_id: c.id )
 
     # exercise
     # verify
-    expect(p.category.name).to eq "CATEGORY"
+    expect(cr.category.name).to eq "CATEGORY"
     # teardown
   end
+
+  it 'should create category_related with valid 2 related categories' do
+    DatabaseCleaner.clean
+    # setup
+    c = create(:category)
+    c2 = create(:category, name: "CATEGORY2")
+    cr = create(:category_related, category_id: c.id, related_id: c.id )
+    cr2 = create(:category_related, category_id: c.id, related_id: c2.id )
+    cr3 = create(:category_related, category_id: c2.id, related_id: c2.id )
+
+    # exercise
+    # verify
+    crs = CategoryRelated.limit(3)
+    Rails.logger.debug crs.inspect
+    crc = crs[2]
+    expect(crc.category.name).to eq "CATEGORY2"
+    # teardown
+  end
+
 end

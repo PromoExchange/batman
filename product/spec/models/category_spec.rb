@@ -10,31 +10,10 @@ RSpec.describe Category, type: :model do
     # teardown
   end
 
-  it 'should not create category with a null name' do
-    # setup
-    p = Category.new
-    p.related_id = 3
-    # exercise
-    # verify
-    expect(p.save).to eq false
-    # teardown
-  end
-
-  it 'should not create category with a null parent' do
-    # setup
-    p = Category.new
-    p.name = 'valid name'
-    # exercise
-    # verify
-    expect(p.save).to eq false
-    # teardown
-  end
-
   it 'should create category with a valid name and parent' do
     # setup
     p = Category.new
     p.name = 'valid name'
-    p.related_id = 10
     # exercise
     # verify
     expect(p.save).to eq true
@@ -44,7 +23,6 @@ RSpec.describe Category, type: :model do
   it 'test factory' do
     # setup
     c = build(:category)
-
     # exercise
     # verify
     expect(c.name).to eq "CATEGORY"

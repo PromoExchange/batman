@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  it 'should not create category with a nulls' do
+  it 'should not create category with nulls' do
     # setup
     p = Category.new
     # exercise

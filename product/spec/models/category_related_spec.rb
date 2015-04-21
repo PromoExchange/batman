@@ -51,4 +51,15 @@ RSpec.describe CategoryRelated, type: :model do
     # teardown
   end
 
+  it 'test category_related factory' do
+    # setup
+    c = build(:category_related)
+    # exercise
+    # verify
+    expect(c.category_id).not_to eq(nil)
+    expect(c.related_id).not_to eq(nil)
+    # teardown
+  end
+
+
 end

@@ -21,4 +21,15 @@ RSpec.describe Line, type: :model do
     # teardown
   end
 
+  it 'test factory' do
+    # setup
+    c = build(:line)
+    # exercise
+    # verify
+    expect(c.name).to eq 'LINENAME'
+    expect(c.brand_id).to eq 1
+    # teardown
+  end
+
+
 end

@@ -7,5 +7,5 @@
 
 class Category < ActiveRecord::Base
   validates :name, presence: true
-  validates :parent_id, presence: true
+  validates :related_id, presence: true
 end

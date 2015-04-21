@@ -13,7 +13,7 @@ RSpec.describe Category, type: :model do
   it 'should not create category with a null name' do
     # setup
     p = Category.new
-    p.parent_id = 3
+    p.related_id = 3
     # exercise
     # verify
     expect(p.save).to eq false
@@ -34,7 +34,7 @@ RSpec.describe Category, type: :model do
     # setup
     p = Category.new
     p.name = 'valid name'
-    p.parent_id = 10
+    p.related_id = 10
     # exercise
     # verify
     expect(p.save).to eq true

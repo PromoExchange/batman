@@ -1,17 +1,7 @@
-# backend
+# batman
 
-This repo contains the api's used by the PX applications.
-As the API's mature I expect they will be promoted out to their own repo.
+This repo contains the api's used by the Sell side portal.
 
-** IMPORTANT **
+Requires PostgreSQL to be installed.
 
-Run most development commands within bundle exec.
-
-Recommended to have an alias in your .bash_profile
-
-    alias be='bundle exec'
-
-You should start the development server inside GUARD
-
-
-    be guard
+Set database configuration as defined in config/database.yml.

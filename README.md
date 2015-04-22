@@ -1,6 +1,6 @@
 # backend
 
-This repo contains the api's used by the PE application.
+This repo contains the api's used by the PX applications.
 As the API's mature I expect they will be promoted out to their own repo.
 
 ** IMPORTANT **

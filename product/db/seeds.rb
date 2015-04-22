@@ -5,3 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+require 'csv'
+
+CSV.foreach('./db/seed_data/countries.csv',:headers => true) do |row|
+  Country.create!(row.to_hash)
+  # p row['code_numeric']
+end

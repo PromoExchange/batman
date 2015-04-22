@@ -21,4 +21,13 @@ RSpec.describe Brand, type: :model do
     # teardown
   end
 
+  it 'test factory' do
+    # setup
+    b = build(:brand)
+    # exercise
+    # verify
+    expect(b.brand).to eq 'BRAND'
+    # teardown
+  end
+
 end

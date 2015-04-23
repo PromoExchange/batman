@@ -30,6 +30,4 @@ RSpec.describe Line, type: :model do
     expect(c.brand_id).to eq 1
     # teardown
   end
-
-
 end

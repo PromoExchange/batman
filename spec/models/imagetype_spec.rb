@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: imagetypes
+#
+#  id         :integer          not null, primary key
+#  image_id   :integer          not null
+#  product_id :integer          not null
+#  sizetype   :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 require 'rails_helper'
 
 RSpec.describe Imagetype, type: :model do

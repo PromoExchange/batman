@@ -13,7 +13,7 @@ RSpec.describe Material, type: :model do
 
   it 'should save material with nulls' do
     # setup
-    p = Material.new( material: 'material')
+    p = Material.new( name: 'material')
 
     # exercise
     # verify

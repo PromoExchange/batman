@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :material do
-    material 'material'
+    name 'material'
   end
 end

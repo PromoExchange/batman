@@ -1,4 +1,4 @@
 class Material < ActiveRecord::Base
-  validates :material, presence: true
+  validates :name, presence: true
   # belongs_to :product
 end

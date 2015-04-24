@@ -3,5 +3,4 @@ FactoryGirl.define do
     title "title"
     location "location"
   end
-
 end

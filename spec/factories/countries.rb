@@ -5,5 +5,4 @@ FactoryGirl.define do
     code_numeric 123
     short_name "Short description"
   end
-
 end

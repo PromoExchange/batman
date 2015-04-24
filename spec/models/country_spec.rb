@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: countries
+#
+#  id           :integer          not null, primary key
+#  code_2       :string           not null
+#  code_3       :string           not null
+#  short_name   :string           not null
+#  code_numeric :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 require 'rails_helper'
 
 RSpec.describe Country, type: :model do

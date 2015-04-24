@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: images
+#
+#  id         :integer          not null, primary key
+#  title      :string
+#  location   :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class Image < ActiveRecord::Base
   # TODO: Location needs better definition
   validates :location, presence: true

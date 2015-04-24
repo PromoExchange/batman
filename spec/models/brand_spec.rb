@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: brands
+#
+#  id         :integer          not null, primary key
+#  brand      :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 require 'rails_helper'
 
 RSpec.describe Brand, type: :model do

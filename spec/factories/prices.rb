@@ -8,6 +8,8 @@
 #  pricetype      :string           not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  lower          :string
+#  upper          :string
 #
 
 FactoryGirl.define do

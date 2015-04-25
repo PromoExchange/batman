@@ -8,8 +8,9 @@
 #  pricetype      :string           not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  lower          :string
+#  upper          :string
 #
-
 class Price < ActiveRecord::Base
   validates_inclusion_of :pricetype, in: %w( quanity discount base rush )
   monetize :value_cents

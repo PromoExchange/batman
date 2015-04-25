@@ -33,13 +33,14 @@ group :development, :test do
   gem 'guard-bundler'
   gem 'guard-rails'
   gem 'guard-rspec'
+  gem 'guard-rubocop'
   gem 'terminal-notifier-guard'
-  #gem 'growl'
-  #gem 'growl_notify'
+  # gem 'growl'
+  # gem 'growl_notify'
   gem 'rb-fchange', :require=>false
   gem 'rb-fsevent', :require=>false
   gem 'rb-inotify', :require=>false
-  #gem 'ruby_gntp'
+  # gem 'ruby_gntp'
   gem 'guard-livereload', require: false
 end
 

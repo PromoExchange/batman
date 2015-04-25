@@ -32,6 +32,7 @@ group :development, :test do
   gem 'guard-bundler'
   gem 'guard-rails'
   gem 'guard-rspec'
+  gem 'terminal-notifier-guard'
   #gem 'growl'
   #gem 'growl_notify'
   gem 'rb-fchange', :require=>false

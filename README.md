@@ -11,4 +11,9 @@ Requires PostgreSQL to be installed.
 - A database named batman_test should be created and batman made owner.
 
 
-Refere to database configuration defined in config/database.yml.
+Refer to database configuration defined in config/database.yml.
+
+I recommend installing terminal-notifier
+
+    brew update
+    brew install terminal-notifier

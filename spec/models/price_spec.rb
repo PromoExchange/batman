@@ -14,7 +14,7 @@
 
 require 'rails_helper'
 
-require "money-rails/test_helpers"
+require 'money-rails/test_helpers'
 include MoneyRails::TestHelpers
 
 RSpec.describe Price, type: :model do
@@ -29,7 +29,7 @@ RSpec.describe Price, type: :model do
 
   it 'should not save Price with null pricetype' do
     # setup
-    p = Price.new( value: 1.00 )
+    p = Price.new(value: 1.00)
     # exercise
     # verify
     expect(p.save).to eq false
@@ -38,7 +38,7 @@ RSpec.describe Price, type: :model do
 
   it 'should should not save Price with an invalid pricetype' do
     # setup
-    p = Price.new( pricetype: 'frog' )
+    p = Price.new(pricetype: 'frog')
     # exercise
     # verify
     expect(p.save).to eq false
@@ -47,7 +47,7 @@ RSpec.describe Price, type: :model do
 
   it 'should should save Price with null value' do
     # setup
-    p = Price.new( pricetype: 'base' )
+    p = Price.new(pricetype: 'base')
     # exercise
     # verify
     expect(p.save).to eq true

@@ -1,3 +1,4 @@
+# 20150425122147_create_sizes
 class CreateSizes < ActiveRecord::Migration
   def change
     create_table :sizes do |t|

@@ -11,7 +11,6 @@
 require 'rails_helper'
 
 RSpec.describe Keyword, type: :model do
-
   it 'should not create Keyword with a null word' do
     # setup
     k = Keyword.new
@@ -24,7 +23,7 @@ RSpec.describe Keyword, type: :model do
   it 'should create Keyword with a valid word' do
     # setup
     k = Keyword.new
-    k.word = "WORD"
+    k.word = 'WORD'
     # exercise
     # verify
     expect(k.save).to eq true

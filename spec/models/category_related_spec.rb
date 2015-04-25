@@ -34,11 +34,11 @@ RSpec.describe CategoryRelated, type: :model do
   it 'should create category_related with valid related category' do
     # setup
     c = create(:category)
-    cr = create(:category_related, category_id: c.id, related_id: c.id )
+    cr = create(:category_related, category_id: c.id, related_id: c.id)
 
     # exercise
     # verify
-    expect(cr.category.name).to eq "CATEGORY"
+    expect(cr.category.name).to eq 'CATEGORY'
     # teardown
   end
 
@@ -46,17 +46,17 @@ RSpec.describe CategoryRelated, type: :model do
     DatabaseCleaner.clean
     # setup
     c = create(:category)
-    c2 = create(:category, name: "CATEGORY2")
-    cr = create(:category_related, category_id: c.id, related_id: c.id )
-    cr2 = create(:category_related, category_id: c.id, related_id: c2.id )
-    cr3 = create(:category_related, category_id: c2.id, related_id: c2.id )
+    c2 = create(:category, name: 'CATEGORY2')
+    create(:category_related, category_id: c.id, related_id: c.id)
+    create(:category_related, category_id: c.id, related_id: c2.id)
+    create(:category_related, category_id: c2.id, related_id: c2.id)
 
     # exercise
     # verify
     crs = CategoryRelated.limit(3)
     Rails.logger.debug crs.inspect
     crc = crs[2]
-    expect(crc.category.name).to eq "CATEGORY2"
+    expect(crc.category.name).to eq 'CATEGORY2'
     # teardown
   end
 
@@ -69,6 +69,4 @@ RSpec.describe CategoryRelated, type: :model do
     expect(c.related_id).not_to eq(nil)
     # teardown
   end
-
-
 end

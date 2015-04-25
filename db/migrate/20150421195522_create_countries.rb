@@ -1,3 +1,4 @@
+# 20150421195522_create_countries
 class CreateCountries < ActiveRecord::Migration
   def change
     create_table :countries do |t|

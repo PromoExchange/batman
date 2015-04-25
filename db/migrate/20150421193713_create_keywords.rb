@@ -1,3 +1,4 @@
+# 20150421193713_create_keywords
 class CreateKeywords < ActiveRecord::Migration
   def change
     create_table :keywords do |t|

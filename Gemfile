@@ -17,12 +17,11 @@ gem 'money-rails'
 
 gem 'puma'
 
-gem 'rubocop', require: false
-
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  gem 'rubocop', require: false
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
@@ -33,7 +32,7 @@ group :development, :test do
   gem 'guard-bundler'
   gem 'guard-rails'
   gem 'guard-rspec'
-  gem 'guard-rubocop'
+  # gem 'guard-rubocop'
   gem 'terminal-notifier-guard'
   # gem 'growl'
   # gem 'growl_notify'

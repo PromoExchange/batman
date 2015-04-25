@@ -10,6 +10,6 @@
 
 FactoryGirl.define do
   factory :keyword do
-    word "WORD"
+    word 'WORD'
   end
 end

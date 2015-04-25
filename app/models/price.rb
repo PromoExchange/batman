@@ -12,6 +12,6 @@
 #  upper          :string
 #
 class Price < ActiveRecord::Base
-  validates_inclusion_of :pricetype, in: %w( quanity discount base rush )
+  validates :pricetype, inclusion: %w( quanity discount base rush )
   monetize :value_cents
 end

@@ -12,7 +12,6 @@
 require 'rails_helper'
 
 RSpec.describe Image, type: :model do
-
   it 'should not create Image with nulls' do
     # setup
     p = Image.new
@@ -24,7 +23,7 @@ RSpec.describe Image, type: :model do
 
   it 'should not create Image with null location' do
     # setup
-    p = Image.new( title: 'title ')
+    p = Image.new(title: 'title ')
     # exercise
     # verify
     expect(p.save).to eq false
@@ -33,7 +32,7 @@ RSpec.describe Image, type: :model do
 
   it 'should create Image with null valid values' do
     # setup
-    p = Image.new( title: 'title ', location: 'location')
+    p = Image.new(title: 'title ', location: 'location')
     # exercise
     # verify
     expect(p.save).to eq true
@@ -49,5 +48,4 @@ RSpec.describe Image, type: :model do
     expect(c.location).to eq 'location'
     # teardown
   end
-
 end

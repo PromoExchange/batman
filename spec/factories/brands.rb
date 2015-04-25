@@ -10,6 +10,6 @@
 
 FactoryGirl.define do
   factory :brand do
-    brand "BRAND"
+    brand 'BRAND'
   end
 end

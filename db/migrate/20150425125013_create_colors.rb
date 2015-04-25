@@ -1,3 +1,4 @@
+# 20150425125013_create_colors
 class CreateColors < ActiveRecord::Migration
   def change
     create_table :colors do |t|

@@ -25,7 +25,7 @@ RSpec.describe Line, type: :model do
     # setup
     b = create(:brand)
     # p = Line.new
-    l = build(:line, brand_id: b.id )
+    l = build(:line, brand_id: b.id)
     # exercise
     # verify
     expect(l.save).to eq true

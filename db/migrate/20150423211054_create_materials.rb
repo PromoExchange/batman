@@ -1,3 +1,4 @@
+# 20150423211054_create_materials
 class CreateMaterials < ActiveRecord::Migration
   def change
     create_table :materials do |t|

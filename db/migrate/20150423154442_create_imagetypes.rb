@@ -1,3 +1,4 @@
+# 20150423154442_create_imagetypes
 class CreateImagetypes < ActiveRecord::Migration
   def change
     create_table :imagetypes do |t|

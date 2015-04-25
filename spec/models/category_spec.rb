@@ -35,8 +35,7 @@ RSpec.describe Category, type: :model do
     c = build(:category)
     # exercise
     # verify
-    expect(c.name).to eq "CATEGORY"
+    expect(c.name).to eq 'CATEGORY'
     # teardown
   end
-
 end

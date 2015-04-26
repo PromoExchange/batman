@@ -10,6 +10,7 @@
 #  updated_at     :datetime         not null
 #  lower          :string
 #  upper          :string
+#  effective_date :datetime         default(Sun, 26 Apr 2015 11:22:00 UTC +00:00), not null
 #
 
 require 'rails_helper'
@@ -62,6 +63,7 @@ RSpec.describe Price, type: :model do
     # expect(c.value).to eq 1.5
     is_expected.to monetize(:value_cents)
     expect(c.pricetype).to eq 'base'
+    expect(c.pricetype).to eq '1/1/2015'
     # teardown
   end
 end

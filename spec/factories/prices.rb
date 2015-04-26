@@ -17,5 +17,6 @@ FactoryGirl.define do
     value_cents 0
     value_currency 'USD'
     pricetype 'base'
+    effective_date '1/1/2015'
   end
 end

@@ -10,6 +10,8 @@
 #  updated_at     :datetime         not null
 #  lower          :string
 #  upper          :string
+#  effective_date :datetime         default(Sun, 26 Apr 2015 11:22:00 UTC +00:00), not null
+#  code           :string
 #
 
 FactoryGirl.define do
@@ -18,5 +20,6 @@ FactoryGirl.define do
     value_currency 'USD'
     pricetype 'base'
     effective_date '1/1/2015'
+    code 'A'
   end
 end

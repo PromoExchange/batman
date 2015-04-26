@@ -11,6 +11,7 @@
 #  lower          :string
 #  upper          :string
 #  effective_date :datetime         default(Sun, 26 Apr 2015 11:22:00 UTC +00:00), not null
+#  code           :string
 #
 
 require 'rails_helper'
@@ -48,10 +49,19 @@ RSpec.describe Price, type: :model do
 
   it 'should should save Price with null value' do
     # setup
-    p = Price.new(pricetype: 'base')
+    p = Price.new(pricetype: 'base', code: 'X')
     # exercise
     # verify
     expect(p.save).to eq true
+    # teardown
+  end
+
+  it 'should should not save Price with invalid code' do
+    # setup
+    p = Price.new(pricetype: 'base', code: 'M')
+    # exercise
+    # verify
+    expect(p.save).to eq false
     # teardown
   end
 
@@ -63,7 +73,8 @@ RSpec.describe Price, type: :model do
     # expect(c.value).to eq 1.5
     is_expected.to monetize(:value_cents)
     expect(c.pricetype).to eq 'base'
-    expect(c.pricetype).to eq '1/1/2015'
+    expect(c.effective_date).to eq '1/1/2015'
+    expect(c.code).to eq 'A'
     # teardown
   end
 end

@@ -29,6 +29,5 @@ FactoryGirl.define do
     leadtime 'leadtime'
     rushtime 'rushtime'
     info 'info'
-    line
   end
 end

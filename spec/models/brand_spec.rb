@@ -23,7 +23,7 @@ RSpec.describe Brand, type: :model do
   it 'should create Brand with valid values' do
     # setup
     p = Brand.new
-    p.brand = 'BRAND'
+    p.name = 'BRAND'
     # exercise
     # verify
     expect(p.save).to eq true
@@ -35,7 +35,7 @@ RSpec.describe Brand, type: :model do
     b = build(:brand)
     # exercise
     # verify
-    expect(b.brand).to eq 'BRAND'
+    expect(b.name).to eq 'BRAND'
     # teardown
   end
 end

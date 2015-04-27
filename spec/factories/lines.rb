@@ -13,6 +13,5 @@ FactoryGirl.define do
   factory :line do
     name 'LINENAME'
     brand
-    product
   end
 end

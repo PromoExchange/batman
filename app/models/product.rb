@@ -20,5 +20,5 @@
 class Product < ActiveRecord::Base
   validates :name, presence: true
   validates :description, presence: true
-  has_one :line
+  has_and_belongs_to_many :lines
 end

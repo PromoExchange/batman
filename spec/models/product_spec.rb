@@ -20,6 +20,17 @@
 require 'rails_helper'
 
 RSpec.describe Product, type: :model do
+
+  it 'should have many lines' do
+    # setup
+    t = Product.reflect_on_association(:lines)
+
+    # exercise
+    # verify
+    expect(t.macro).to eq :has_and_belongs_to_many
+    # teardown
+  end
+
   it 'test factory' do
     # setup
     p = build(:product)

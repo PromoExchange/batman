@@ -7,6 +7,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+
 class Brand < ActiveRecord::Base
   validates :brand, presence: true
   has_many :lines

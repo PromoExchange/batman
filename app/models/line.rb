@@ -7,8 +7,9 @@
 #  brand_id   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  product_id :integer
+#  product_id :integer          not null
 #
+
 class Line < ActiveRecord::Base
   validates :name, presence: true
   validates :brand_id, presence: true

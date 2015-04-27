@@ -7,7 +7,7 @@
 #  brand_id   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  product_id :integer
+#  product_id :integer          not null
 #
 
 # TODO: Again, fix the associations

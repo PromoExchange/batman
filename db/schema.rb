@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427124415) do
+ActiveRecord::Schema.define(version: 20150427150507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "brands", force: :cascade do |t|
-    t.string   "brand",      null: false
+    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20150427124415) do
     t.integer  "brand_id",   null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "product_id"
+    t.integer  "product_id", null: false
   end
 
   create_table "materials", force: :cascade do |t|
@@ -97,7 +97,7 @@ ActiveRecord::Schema.define(version: 20150427124415) do
     t.datetime "updated_at",                                     null: false
     t.string   "lower"
     t.string   "upper"
-    t.datetime "effective_date", default: '2015-04-26 11:22:00', null: false
+    t.datetime "effective_date", default: '2015-04-27 14:50:16', null: false
     t.string   "code"
   end
 

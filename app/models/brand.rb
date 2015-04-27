@@ -9,6 +9,6 @@
 #
 
 class Brand < ActiveRecord::Base
-  validates :brand, presence: true
+  validates :name, presence: true
   has_many :lines
 end

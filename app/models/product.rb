@@ -16,7 +16,6 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
-
 class Product < ActiveRecord::Base
   validates :name, presence: true
   validates :description, presence: true

@@ -45,5 +45,11 @@ class Product < ActiveRecord::Base
   # Products can have many colors, colors are used by many products
   has_and_belongs_to_many :colors
 
+  # Images *should* not be reused between products
   has_many :images
+
+  # Products have many keywords, keywords are used by many products
+  has_and_belongs_to_many :keywords
+
+  has_one :supplier
 end

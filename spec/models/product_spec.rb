@@ -61,6 +61,16 @@ RSpec.describe Product, type: :model do
     # teardown
   end
 
+  it 'should have many keywords' do
+    # setup
+    t = Keyword.reflect_on_association(:products)
+
+    # exercise
+    # verify
+    expect(t.macro).to eq :has_and_belongs_to_many
+    # teardown
+  end
+
   it 'test factory' do
     # setup
     p = build(:product)

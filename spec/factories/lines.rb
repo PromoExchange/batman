@@ -12,5 +12,6 @@ FactoryGirl.define do
   factory :line do
     name 'LINENAME'
     brand
+    products {[FactoryGirl.create(:product)]}
   end
 end

@@ -11,5 +11,6 @@
 FactoryGirl.define do
   factory :color do
     name 'name'
+    products {[FactoryGirl.create(:product)]}
   end
 end

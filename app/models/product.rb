@@ -25,20 +25,23 @@ class Product < ActiveRecord::Base
   # This may look odd
   # i.e. A Bic QuickFlick lighter is a commodity
   # so we should only have one brand/line/product
-  # association.
-  # But...
-  # The reason is that a supplier's view of the products
+  # association. Wrong!
+  #
+  # The reason is that because the way supplier's view products
   #
   # Suppler A:
   #   Sells the BIC QuickFlick lighter
   # Supplier B:
   #   Also sells the BIC QuickFlick lighter
   #
-  # Suppliers view them as seperate products so we do.
+  # Suppliers view them as seperate products and so we should also.
   # By doing that, we save a bunch of headaches with
-  # the many other associations, we would have to
-  # segment all products table by supplier_id
+  # the many other associations. We would have to
+  # segment all associated products table by supplier_id.
   #
   # TL;DR. Products are not unique, product/suppliers are
   has_and_belongs_to_many :lines
+
+  # Products can have many colors, colors are used by many products
+  has_and_belongs_to_many :colors
 end

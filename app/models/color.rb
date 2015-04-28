@@ -9,4 +9,7 @@
 #
 class Color < ActiveRecord::Base
   validates :name, presence: true
+
+  # Products can have many colors, colors are used by many products
+  has_and_belongs_to_many :products
 end

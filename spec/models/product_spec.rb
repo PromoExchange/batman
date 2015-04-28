@@ -101,6 +101,15 @@ RSpec.describe Product, type: :model do
     # teardown
   end
 
+  it 'should have many prices' do
+    # setup
+    t = Product.reflect_on_association(:prices)
+
+    # exercise
+    # verify
+    expect(t.macro).to eq :has_and_belongs_to_many
+    # teardown
+  end
 
   it 'test factory' do
     # setup

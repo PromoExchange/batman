@@ -21,5 +21,6 @@ FactoryGirl.define do
     pricetype 'base'
     effective_date '1/1/2015'
     code 'A'
+    # products {[FactoryGirl.create(:product)]}
   end
 end

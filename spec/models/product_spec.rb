@@ -63,7 +63,7 @@ RSpec.describe Product, type: :model do
 
   it 'should have many keywords' do
     # setup
-    t = Keyword.reflect_on_association(:products)
+    t = Product.reflect_on_association(:keywords)
 
     # exercise
     # verify
@@ -73,7 +73,17 @@ RSpec.describe Product, type: :model do
 
   it 'should have many materials' do
     # setup
-    t = Material.reflect_on_association(:products)
+    t = Product.reflect_on_association(:materials)
+
+    # exercise
+    # verify
+    expect(t.macro).to eq :has_and_belongs_to_many
+    # teardown
+  end
+
+  it 'should have many media references' do
+    # setup
+    t = Product.reflect_on_association(:media_references)
 
     # exercise
     # verify

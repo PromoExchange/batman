@@ -42,6 +42,16 @@ RSpec.describe MediaReference, type: :model do
     # teardown
   end
 
+  it 'should have many media references' do
+    # setup
+    t = MediaReference.reflect_on_association(:products)
+
+    # exercise
+    # verify
+    expect(t.macro).to eq :has_and_belongs_to_many
+    # teardown
+  end
+
   it 'test factory' do
     # setup
     c = build(:media_reference)

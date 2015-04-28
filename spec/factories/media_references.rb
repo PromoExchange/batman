@@ -9,7 +9,6 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-
 FactoryGirl.define do
   factory :media_reference do
     name 'name'

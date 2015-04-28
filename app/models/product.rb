@@ -52,4 +52,12 @@ class Product < ActiveRecord::Base
   has_and_belongs_to_many :keywords
 
   has_one :supplier
+
+  # Products can have many materials, materials are used by many products
+  has_and_belongs_to_many :materials
+
+  # Products can have many Media References, Media References are
+  # used by many products
+  # i.e. 2015 Q1 catalog, Page 23 can contain several products
+  has_and_belongs_to_many :media_references
 end

@@ -9,8 +9,7 @@
 
 FactoryGirl.define do
   factory :supplier do
-    name "MyString"
-description "MyString"
+    name 'name'
+    description 'description'
   end
-
 end

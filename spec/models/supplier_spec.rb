@@ -27,4 +27,14 @@ RSpec.describe Supplier, type: :model do
     expect(p.save).to eq true
     # teardown
   end
+
+  it 'test factory' do
+    # setup
+    s = build(:supplier)
+    # exercise
+    # verify
+    expect(s.name).to eq 'name'
+    expect(s.description).to eq 'description'
+    # teardown
+  end
 end

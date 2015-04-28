@@ -24,6 +24,15 @@ RSpec.describe Size, type: :model do
     # teardown
   end
 
+  it 'should save size with valid values' do
+    # setup
+    p = Size.new( name: 'name')
+    # exercise
+    # verify
+    expect(p.save).to eq true
+    # teardown
+  end
+
   it 'test factory' do
     # setup
     s = build(:size)

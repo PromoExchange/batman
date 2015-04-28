@@ -30,5 +30,6 @@ FactoryGirl.define do
     leadtime 'leadtime'
     rushtime 'rushtime'
     info 'info'
+    supplier_id 1
   end
 end

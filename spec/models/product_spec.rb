@@ -21,24 +21,23 @@
 require 'rails_helper'
 
 RSpec.describe Product, type: :model do
-
   it 'should not save a null product' do
     # setup
     p = Product.new
 
     # exercise
     # verify
-    expect(p.macro).to eq false
+    expect(p.save).to eq false
     # teardown
   end
 
   it 'should save a valid product' do
     # setup
-    p = Product.new( name: => 'name' , description: => 'description')
+    p = Product.new(name: 'name', description: 'description')
 
     # exercise
     # verify
-    expect(p.macro).to eq false
+    expect(p.save).to eq false
     # teardown
   end
 

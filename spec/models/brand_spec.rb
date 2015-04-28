@@ -3,7 +3,7 @@
 # Table name: brands
 #
 #  id         :integer          not null, primary key
-#  brand      :string           not null
+#  name       :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
@@ -23,7 +23,7 @@ RSpec.describe Brand, type: :model do
   it 'should create Brand with valid values' do
     # setup
     p = Brand.new
-    p.brand = 'BRAND'
+    p.name = 'BRAND'
     # exercise
     # verify
     expect(p.save).to eq true
@@ -35,7 +35,7 @@ RSpec.describe Brand, type: :model do
     b = build(:brand)
     # exercise
     # verify
-    expect(b.brand).to eq 'BRAND'
+    expect(b.name).to eq 'BRAND'
     # teardown
   end
 end

@@ -10,7 +10,7 @@
 #  updated_at     :datetime         not null
 #  lower          :string
 #  upper          :string
-#  effective_date :datetime         default(Sun, 26 Apr 2015 11:22:00 UTC +00:00), not null
+#  effective_date :datetime         default(Tue, 28 Apr 2015 15:53:17 UTC +00:00), not null
 #  code           :string
 #
 
@@ -62,6 +62,16 @@ RSpec.describe Price, type: :model do
     # exercise
     # verify
     expect(p.save).to eq false
+    # teardown
+  end
+
+  it 'should have many products' do
+    # setup
+    t = Price.reflect_on_association(:products)
+
+    # exercise
+    # verify
+    expect(t.macro).to eq :has_and_belongs_to_many
     # teardown
   end
 

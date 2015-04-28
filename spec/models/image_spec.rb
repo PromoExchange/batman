@@ -39,6 +39,16 @@ RSpec.describe Image, type: :model do
     # teardown
   end
 
+  it 'should have one products' do
+    # setup
+    t = Image.reflect_on_association(:product)
+
+    # exercise
+    # verify
+    expect(t.macro).to eq :belongs_to
+    # teardown
+  end
+
   it 'test factory' do
     # setup
     c = build(:image)

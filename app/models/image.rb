@@ -14,6 +14,8 @@ class Image < ActiveRecord::Base
 
   has_many :imagetypes
 
+  belongs_to :product
+
   # This seems odd, but images can be shared across products
   # suppliers do this all the time. i.e. A photo may contain
   # several products and the image is reused.

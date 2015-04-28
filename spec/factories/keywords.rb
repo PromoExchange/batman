@@ -11,5 +11,6 @@
 FactoryGirl.define do
   factory :keyword do
     word 'WORD'
+    products {[FactoryGirl.create(:product)]}
   end
 end

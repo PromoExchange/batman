@@ -24,6 +24,25 @@ RSpec.describe Size, type: :model do
     # teardown
   end
 
+  it 'should save size with valid values' do
+    # setup
+    p = Size.new( name: 'name')
+    # exercise
+    # verify
+    expect(p.save).to eq true
+    # teardown
+  end
+
+  it 'should have many products' do
+    # setup
+    t = Size.reflect_on_association(:products)
+
+    # exercise
+    # verify
+    expect(t.macro).to eq :has_and_belongs_to_many
+    # teardown
+  end
+
   it 'test factory' do
     # setup
     s = build(:size)

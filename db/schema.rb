@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150426112513) do
+ActiveRecord::Schema.define(version: 20150428202948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "brands", force: :cascade do |t|
-    t.string   "brand",      null: false
+    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -37,6 +37,11 @@ ActiveRecord::Schema.define(version: 20150426112513) do
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "colors_products", id: false, force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "color_id",   null: false
   end
 
   create_table "countries", force: :cascade do |t|
@@ -69,6 +74,11 @@ ActiveRecord::Schema.define(version: 20150426112513) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "keywords_products", id: false, force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "keyword_id", null: false
+  end
+
   create_table "lines", force: :cascade do |t|
     t.string   "name",       null: false
     t.integer  "brand_id",   null: false
@@ -76,8 +86,18 @@ ActiveRecord::Schema.define(version: 20150426112513) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "lines_products", id: false, force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "line_id",    null: false
+  end
+
   create_table "materials", force: :cascade do |t|
     t.string "name", null: false
+  end
+
+  create_table "materials_products", id: false, force: :cascade do |t|
+    t.integer "product_id",  null: false
+    t.integer "material_id", null: false
   end
 
   create_table "media_references", force: :cascade do |t|
@@ -88,6 +108,11 @@ ActiveRecord::Schema.define(version: 20150426112513) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "media_references_products", id: false, force: :cascade do |t|
+    t.integer "product_id",         null: false
+    t.integer "media_reference_id", null: false
+  end
+
   create_table "prices", force: :cascade do |t|
     t.integer  "value_cents",    default: 0,                     null: false
     t.string   "value_currency", default: "USD",                 null: false
@@ -96,8 +121,34 @@ ActiveRecord::Schema.define(version: 20150426112513) do
     t.datetime "updated_at",                                     null: false
     t.string   "lower"
     t.string   "upper"
-    t.datetime "effective_date", default: '2015-04-26 11:22:00', null: false
+    t.datetime "effective_date", default: '2015-04-28 15:53:17', null: false
     t.string   "code"
+  end
+
+  create_table "prices_products", id: false, force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "price_id",   null: false
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string   "name",         null: false
+    t.string   "description",  null: false
+    t.string   "includes"
+    t.string   "features"
+    t.integer  "packsize"
+    t.string   "packweight"
+    t.string   "unit_measure"
+    t.string   "leadtime"
+    t.string   "rushtime"
+    t.string   "info"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "supplier_id",  null: false
+  end
+
+  create_table "products_sizes", id: false, force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "size_id",    null: false
   end
 
   create_table "sizes", force: :cascade do |t|
@@ -108,6 +159,11 @@ ActiveRecord::Schema.define(version: 20150426112513) do
     t.string   "dia"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "suppliers", force: :cascade do |t|
+    t.string "name",        null: false
+    t.string "description"
   end
 
 end

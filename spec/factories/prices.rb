@@ -10,7 +10,7 @@
 #  updated_at     :datetime         not null
 #  lower          :string
 #  upper          :string
-#  effective_date :datetime         default(Sun, 26 Apr 2015 11:22:00 UTC +00:00), not null
+#  effective_date :datetime         default(Tue, 28 Apr 2015 15:53:17 UTC +00:00), not null
 #  code           :string
 #
 
@@ -21,5 +21,6 @@ FactoryGirl.define do
     pricetype 'base'
     effective_date '1/1/2015'
     code 'A'
+    # products {[FactoryGirl.create(:product)]}
   end
 end

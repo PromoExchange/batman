@@ -13,5 +13,7 @@ FactoryGirl.define do
   factory :image do
     title 'title'
     location 'location'
+    # TODO: Correct assoc.
+    # products {[FactoryGirl.create(:product)]}
   end
 end

@@ -44,4 +44,6 @@ class Product < ActiveRecord::Base
 
   # Products can have many colors, colors are used by many products
   has_and_belongs_to_many :colors
+
+  has_many :images
 end

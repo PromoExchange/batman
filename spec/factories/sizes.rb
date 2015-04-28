@@ -19,5 +19,6 @@ FactoryGirl.define do
     height 'height'
     depth 'depth'
     dia 'dia'
+    # products {[FactoryGirl.create(:product)]}
   end
 end

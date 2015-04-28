@@ -60,4 +60,9 @@ class Product < ActiveRecord::Base
   # used by many products
   # i.e. 2015 Q1 catalog, Page 23 can contain several products
   has_and_belongs_to_many :media_references
+
+  # Products can have many Sizes, Sizes are used by many products
+  # i.e. 2015 Q1 catalog, Page 23 can contain several products
+  has_and_belongs_to_many :sizes
+
 end

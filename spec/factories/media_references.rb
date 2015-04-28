@@ -14,5 +14,6 @@ FactoryGirl.define do
     name 'name'
     location 'catalog'
     reference '347'
+    products {[FactoryGirl.create(:product)]}
   end
 end

@@ -15,6 +15,7 @@
 #  info         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  supplier_id  :integer          not null
 #
 
 FactoryGirl.define do

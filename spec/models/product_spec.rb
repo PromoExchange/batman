@@ -15,11 +15,32 @@
 #  info         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  supplier_id  :integer          not null
 #
 
 require 'rails_helper'
 
 RSpec.describe Product, type: :model do
+
+  it 'should not save a null product' do
+    # setup
+    p = Product.new
+
+    # exercise
+    # verify
+    expect(p.macro).to eq false
+    # teardown
+  end
+
+  it 'should save a valid product' do
+    # setup
+    p = Product.new( name: => 'name' , description: => 'description')
+
+    # exercise
+    # verify
+    expect(p.macro).to eq false
+    # teardown
+  end
 
   it 'should have many lines' do
     # setup

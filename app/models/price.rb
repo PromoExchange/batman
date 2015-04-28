@@ -10,10 +10,10 @@
 #  updated_at     :datetime         not null
 #  lower          :string
 #  upper          :string
-#  effective_date :datetime         default(Mon, 27 Apr 2015 14:50:16
-# =>                                UTC +00:00), not null
+#  effective_date :datetime         default(Mon, 27 Apr 2015 21:03:31 UTC +00:00), not null
 #  code           :string
 #
+
 class Price < ActiveRecord::Base
   validates :pricetype, inclusion: %w( quanity discount base rush )
 

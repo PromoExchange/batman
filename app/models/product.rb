@@ -15,9 +15,12 @@
 #  info         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  supplier_id  :integer          not null
 #
+
 class Product < ActiveRecord::Base
   validates :name, presence: true
+  validates :supplier_id, presence: true
   validates :description, presence: true
 
   # This may look odd

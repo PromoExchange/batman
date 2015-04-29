@@ -20,6 +20,14 @@ gem 'puma'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Authentication
+gem 'doorkeeper', '~> 1.3.0'
+gem 'oauth2'
+gem 'omniauth', '~> 1.2.1'
+gem 'omniauth-oauth2', '~> 1.1.2'
+gem 'rolify', '~> 3.4.0'
+gem 'pundit', '~> 0.2.3'
+
 group :development, :test do
   gem 'rubocop', require: false
   gem 'byebug'
@@ -41,9 +49,6 @@ group :development, :test do
   gem 'rb-inotify', :require=>false
   # gem 'ruby_gntp'
   gem 'guard-livereload', require: false
-end
-
-group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'pry-rails'

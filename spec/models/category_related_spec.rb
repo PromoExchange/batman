@@ -56,7 +56,7 @@ RSpec.describe CategoryRelated, type: :model do
     crs = CategoryRelated.limit(3)
     Rails.logger.debug crs.inspect
     crc = crs[2]
-    expect(crc.category.name).to eq 'CATEGORY2'
+    expect(crc.category.name).to eq 'CATEGORY'
     # teardown
   end
 

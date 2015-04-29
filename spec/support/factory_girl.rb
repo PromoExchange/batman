@@ -4,10 +4,10 @@ RSpec.configure do |config|
   # FactoryGirl.lint creates each factory and catches any exceptions
   config.before(:suite) do
     begin
-      DatabaseCleaner.start
+      # DatabaseCleaner.start
       FactoryGirl.lint
     ensure
-      DatabaseCleaner.clean
+      # DatabaseCleaner.clean
     end
   end
 end

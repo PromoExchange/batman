@@ -24,6 +24,8 @@ class BaseController < ApplicationController
   # GET /api/{plural_resource_name}
   def index
     plural_resource_name = "@#{resource_name.pluralize}"
+    Rails.logger.debug "Plural Resource Name: @#{plural_resource_name}"
+
     resources = resource_class.where(query_params)
                               # .page(page_params[:page])
                               # .per(page_params[:page_size])

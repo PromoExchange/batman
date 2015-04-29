@@ -51,7 +51,7 @@ class Product < ActiveRecord::Base
   # Products have many keywords, keywords are used by many products
   has_and_belongs_to_many :keywords
 
-  has_one :supplier
+  belongs_to :supplier
 
   # Products can have many materials, materials are used by many products
   has_and_belongs_to_many :materials

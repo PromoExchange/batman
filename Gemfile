@@ -11,6 +11,7 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'money-rails'
+# gem 'kaminari'  # Pagination to models
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -19,6 +20,8 @@ gem 'puma'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+gem 'responders', '~> 2.0'
 
 group :development, :test do
   gem 'rubocop', require: false
@@ -49,11 +52,11 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-rescue'
   gem 'rspec-rails'
+  gem 'database_cleaner'
 end
 
 group :test do
 #  gem 'capybara'
-  gem 'database_cleaner'
 #  gem 'launchy'
 #  gem 'selenium-webdriver'
 end

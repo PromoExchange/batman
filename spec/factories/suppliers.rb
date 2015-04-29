@@ -6,7 +6,6 @@
 #  name        :string           not null
 #  description :string
 #
-
 FactoryGirl.define do
   factory :supplier do
     name 'name'

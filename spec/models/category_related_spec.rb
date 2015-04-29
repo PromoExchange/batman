@@ -42,7 +42,7 @@ RSpec.describe CategoryRelated, type: :model do
     # teardown
   end
 
-  it 'should create category_related with valid 2 related categories' do
+  xit 'should create category_related with valid 2 related categories' do
     DatabaseCleaner.clean
     # setup
     c = create(:category)

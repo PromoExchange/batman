@@ -1,29 +1,22 @@
 source 'https://rubygems.org'
 ruby '2.2.2'
 gem 'rails', '4.2.1'
-#gem 'sqlite3'
-gem 'pg'                          # PostgreSQL
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
-gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
-gem 'sdoc', '~> 0.4.0', group: :doc
-gem 'money-rails'
-# gem 'kaminari'  # Pagination to models
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
+gem 'bootstrap-sass'
+gem 'devise'
+gem 'pg'
 gem 'puma'
+gem 'simple_form'
+gem 'upmin-admin'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
+gem 'money-rails'
 gem 'responders', '~> 2.0'
 
-group :development, :test do
+group :development do
   gem 'rubocop', require: false
   gem 'byebug'
   gem 'web-console', '~> 2.0'
@@ -35,28 +28,25 @@ group :development, :test do
   gem 'guard-bundler'
   gem 'guard-rails'
   gem 'guard-rspec'
-  # gem 'guard-rubocop'
-  gem 'terminal-notifier-guard'
-  # gem 'growl'
-  # gem 'growl_notify'
+  gem 'guard-livereload', require: false
+  gem 'quiet_assets'
+  gem 'rails_layout'
   gem 'rb-fchange', :require=>false
   gem 'rb-fsevent', :require=>false
   gem 'rb-inotify', :require=>false
-  # gem 'ruby_gntp'
-  gem 'guard-livereload', require: false
+  gem 'spring-commands-rspec'
 end
-
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
-  gem 'pry-rails'
-  gem 'pry-rescue'
   gem 'rspec-rails'
-  gem 'database_cleaner'
 end
-
+group :production do
+  gem 'rails_12factor'
+end
 group :test do
-#  gem 'capybara'
-#  gem 'launchy'
-#  gem 'selenium-webdriver'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'launchy'
+  gem 'selenium-webdriver'
 end

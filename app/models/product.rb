@@ -46,7 +46,7 @@ class Product < ActiveRecord::Base
   has_and_belongs_to_many :colors
 
   # Images *should* not be reused between products
-  has_many :images
+  has_many :imagetypes
 
   # Products have many keywords, keywords are used by many products
   has_and_belongs_to_many :keywords

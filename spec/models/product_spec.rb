@@ -121,7 +121,7 @@ RSpec.describe Product, type: :model do
     expect(p.description).to eq 'description'
     expect(p.includes).to eq 'includes'
     expect(p.features).to eq 'features'
-    expect(p.packsize).to eq 1
+    expect(p.packsize).to eq 100
     expect(p.packweight).to eq 'packweight'
     expect(p.unit_measure).to eq 'unit_measure'
     expect(p.leadtime).to eq 'leadtime'

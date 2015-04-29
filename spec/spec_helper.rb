@@ -46,6 +46,9 @@ RSpec.configure do |config|
 
   config.include FactoryGirl::Syntax::Methods
 
+  # Use the jsonhelpers to help parsing in API specs
+  # config.include Requests::JsonHelpers, type: :request
+
   # The settings below are suggested to provide a good initial experience
   # with RSpec, but feel free to customize to your heart's content.
   #   # These two settings work together to allow you to limit a spec run

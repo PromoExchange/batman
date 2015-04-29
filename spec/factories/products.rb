@@ -24,7 +24,7 @@ FactoryGirl.define do
     description 'description'
     includes 'includes'
     features 'features'
-    packsize 1
+    packsize 100
     packweight 'packweight'
     unit_measure 'unit_measure'
     leadtime 'leadtime'

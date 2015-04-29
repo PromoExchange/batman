@@ -1,21 +1,50 @@
-# batman
+Batman App
+================
 
-This repo contains the api's used by the sell side portal.
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-## PostgreSQL configuration
+This application was generated with the [rails_apps_composer](https://github.com/RailsApps/rails_apps_composer) gem
+provided by the [RailsApps Project](http://railsapps.github.io/).
 
-Requires PostgreSQL to be installed.
+Rails Composer is open source and supported by subscribers. Please join RailsApps to support development of Rails Composer.
 
-- A role of batman should be created
-- A database named batman_development should be created and batman made owner.
-- A database named batman_test should be created and batman made owner.
+Problems? Issues?
+-----------
 
-Refer to database configuration defined in config/database.yml.
+Need help? Ask on Stack Overflow with the tag 'railsapps.'
 
+Your application contains diagnostics in the README file. Please provide a copy of the README file when reporting any issues.
 
-## Recomendation
+If the application doesn't work as expected, please [report an issue](https://github.com/RailsApps/rails_apps_composer/issues)
+and include the diagnostics.
 
-I recommend installing terminal-notifier
+Ruby on Rails
+-------------
 
-    brew update
-    brew install terminal-notifier
+This application requires:
+
+- Ruby 2.2.2
+- Rails 4.2.1
+
+Learn more about [Installing Rails](http://railsapps.github.io/installing-rails.html).
+
+Getting Started
+---------------
+
+Documentation and Support
+-------------------------
+
+Issues
+-------------
+
+Similar Projects
+----------------
+
+Contributing
+------------
+
+Credits
+-------
+
+License
+-------

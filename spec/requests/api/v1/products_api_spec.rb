@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "Products API" do
-  it 'sends a list of products' do
+  xit 'sends a list of products' do
       FactoryGirl.create_list(:product, 10)
 
       get '/api/v1/products'
@@ -10,7 +10,7 @@ describe "Products API" do
       expect(json['products'].length).to eq(10)
   end
 
-  it 'retrieves a specific message' do
+  xit 'retrieves a specific message' do
     prod = FactoryGirl.create(:product)
     get "/api/v1/products/#{prod.id}"
 

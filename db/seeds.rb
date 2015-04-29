@@ -20,11 +20,30 @@ end
 
 CSV.foreach('./db/seed_data/countries.csv', headers: true) do |row|
   Country.create!(row.to_hash)
-  puts row['code_numeric']
+  # puts row['code_numeric']
 end
 
 CSV.foreach('./db/seed_data/suppliers.csv', headers: true) do |row|
   Supplier.create!(row.to_hash)
-  puts row['name']
-  puts row['description']
+  # puts row['name']
+  # puts row['description']
 end
+
+# Add initial users
+user = User.new :name => 'Supplier',
+        :email => 'supplier@example.com',
+        :password => 'password'
+user.add_role :supplier
+user.save!
+
+user = User.new :name => 'Buyer',
+        :email => 'buyer@example.com',
+        :password => 'password'
+user.add_role :buyer
+user.save!
+
+user = User.new :name => 'Seller',
+        :email => 'seller@example.com',
+        :password => 'password'
+user.add_role :seller
+user.save!

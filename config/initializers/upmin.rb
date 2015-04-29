@@ -13,6 +13,7 @@ module AdminOnly
   private
 
   def admin_only
+    # TODO: Rolify check here instead...
     unless current_user.admin?
       redirect_to :back, :alert => "Access denied."
     end

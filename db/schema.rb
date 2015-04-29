@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.datetime "updated_at",                                     null: false
     t.string   "lower"
     t.string   "upper"
-    t.datetime "effective_date", default: '2015-04-29 15:38:28', null: false
+    t.datetime "effective_date", default: '2015-04-29 21:59:39', null: false
     t.string   "code"
   end
 
@@ -242,4 +242,5 @@ ActiveRecord::Schema.define(version: 20150429132939) do
   end
 
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
+
 end

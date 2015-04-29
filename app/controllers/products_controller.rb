@@ -1,4 +1,4 @@
-class Api::V1::ProductsController < BaseController
+class ProductsController < BaseAPIController
   private
     def query_params
       params.permit(:product_id)

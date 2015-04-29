@@ -7,7 +7,7 @@ describe "Products API" do
       get '/api/v1/products'
 
       expect(response).to be_success
-      expect(json['messages'].length).to eq(10)
+      expect(json['products'].length).to eq(10)
   end
 
   it 'retrieves a specific message' do

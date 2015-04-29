@@ -9,7 +9,21 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'csv'
 
+[
+  Country,
+  Supplier,
+].each do |m|
+  ActiveRecord::Base.connection.execute(
+            "TRUNCATE TABLE #{m.table_name} RESTART IDENTITY;")
+end
+
 CSV.foreach('./db/seed_data/countries.csv', headers: true) do |row|
   Country.create!(row.to_hash)
-  # p row['code_numeric']
+  p row['code_numeric']
+end
+
+CSV.foreach('./db/seed_data/suppliers.csv', headers: true) do |row|
+  Supplier.create!(row.to_hash)
+  p row['name']
+  p row['description']
 end

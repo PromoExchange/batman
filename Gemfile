@@ -16,6 +16,14 @@ gem 'upmin-admin'
 gem 'money-rails'
 gem 'responders', '~> 2.0'
 
+# Authentication
+gem 'doorkeeper', '~> 1.3.0'
+gem 'oauth2'
+gem 'omniauth', '~> 1.2.1'
+gem 'omniauth-oauth2', '~> 1.1.2'
+gem 'rolify', '~> 3.4.0'
+gem 'pundit', '~> 0.2.3'
+
 group :development do
   gem 'rubocop', require: false
   gem 'byebug'

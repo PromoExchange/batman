@@ -1,5 +1,5 @@
-# 20150421133212_category_related
-class CategoryRelated < ActiveRecord::Migration
+
+class CreateCategoryRelated < ActiveRecord::Migration
   def change
     create_table :category_related do |t|
       t.integer :category_id, null: false

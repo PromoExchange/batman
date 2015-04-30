@@ -9,6 +9,11 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_imagetypes_on_image_id    (image_id)
+#  index_imagetypes_on_product_id  (product_id)
+#
 
 FactoryGirl.define do
   factory :imagetype do

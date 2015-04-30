@@ -6,6 +6,11 @@
 #  category_id :integer          not null
 #  related_id  :integer          not null
 #
+# Indexes
+#
+#  index_category_related_on_category_id  (category_id)
+#  index_category_related_on_related_id   (related_id)
+#
 
 require 'rails_helper'
 

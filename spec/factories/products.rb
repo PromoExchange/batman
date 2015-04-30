@@ -17,6 +17,10 @@
 #  updated_at   :datetime         not null
 #  supplier_id  :integer          not null
 #
+# Indexes
+#
+#  index_products_on_supplier_id  (supplier_id)
+#
 
 FactoryGirl.define do
   factory :product do

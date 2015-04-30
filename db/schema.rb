@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150429132939) do
+ActiveRecord::Schema.define(version: 20150430112125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,9 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.integer "related_id",  null: false
   end
 
+  add_index "category_related", ["category_id"], name: "index_category_related_on_category_id", using: :btree
+  add_index "category_related", ["related_id"], name: "index_category_related_on_related_id", using: :btree
+
   create_table "colors", force: :cascade do |t|
     t.string   "name",       null: false
     t.datetime "created_at", null: false
@@ -43,6 +46,9 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.integer "product_id", null: false
     t.integer "color_id",   null: false
   end
+
+  add_index "colors_products", ["color_id"], name: "index_colors_products_on_color_id", using: :btree
+  add_index "colors_products", ["product_id"], name: "index_colors_products_on_product_id", using: :btree
 
   create_table "countries", force: :cascade do |t|
     t.string   "code_2",       null: false
@@ -68,6 +74,9 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "imagetypes", ["image_id"], name: "index_imagetypes_on_image_id", using: :btree
+  add_index "imagetypes", ["product_id"], name: "index_imagetypes_on_product_id", using: :btree
+
   create_table "keywords", force: :cascade do |t|
     t.string   "word",       null: false
     t.datetime "created_at", null: false
@@ -79,6 +88,9 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.integer "keyword_id", null: false
   end
 
+  add_index "keywords_products", ["keyword_id"], name: "index_keywords_products_on_keyword_id", using: :btree
+  add_index "keywords_products", ["product_id"], name: "index_keywords_products_on_product_id", using: :btree
+
   create_table "lines", force: :cascade do |t|
     t.string   "name",       null: false
     t.integer  "brand_id",   null: false
@@ -86,10 +98,15 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "lines", ["brand_id"], name: "index_lines_on_brand_id", using: :btree
+
   create_table "lines_products", id: false, force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "line_id",    null: false
   end
+
+  add_index "lines_products", ["line_id"], name: "index_lines_products_on_line_id", using: :btree
+  add_index "lines_products", ["product_id"], name: "index_lines_products_on_product_id", using: :btree
 
   create_table "materials", force: :cascade do |t|
     t.string "name", null: false
@@ -99,6 +116,9 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.integer "product_id",  null: false
     t.integer "material_id", null: false
   end
+
+  add_index "materials_products", ["material_id"], name: "index_materials_products_on_material_id", using: :btree
+  add_index "materials_products", ["product_id"], name: "index_materials_products_on_product_id", using: :btree
 
   create_table "media_references", force: :cascade do |t|
     t.string   "name",       null: false
@@ -112,6 +132,9 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.integer "product_id",         null: false
     t.integer "media_reference_id", null: false
   end
+
+  add_index "media_references_products", ["media_reference_id"], name: "index_media_references_products_on_media_reference_id", using: :btree
+  add_index "media_references_products", ["product_id"], name: "index_media_references_products_on_product_id", using: :btree
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false
@@ -169,6 +192,9 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.integer "price_id",   null: false
   end
 
+  add_index "prices_products", ["price_id"], name: "index_prices_products_on_price_id", using: :btree
+  add_index "prices_products", ["product_id"], name: "index_prices_products_on_product_id", using: :btree
+
   create_table "products", force: :cascade do |t|
     t.string   "name",         null: false
     t.string   "description",  null: false
@@ -185,10 +211,15 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.integer  "supplier_id",  null: false
   end
 
+  add_index "products", ["supplier_id"], name: "index_products_on_supplier_id", using: :btree
+
   create_table "products_sizes", id: false, force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "size_id",    null: false
   end
+
+  add_index "products_sizes", ["product_id"], name: "index_products_sizes_on_product_id", using: :btree
+  add_index "products_sizes", ["size_id"], name: "index_products_sizes_on_size_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name"

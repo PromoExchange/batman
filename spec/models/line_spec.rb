@@ -8,6 +8,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_lines_on_brand_id  (brand_id)
+#
 
 require 'rails_helper'
 

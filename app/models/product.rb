@@ -17,6 +17,11 @@
 #  updated_at   :datetime         not null
 #  supplier_id  :integer          not null
 #
+# Indexes
+#
+#  index_products_on_supplier_id  (supplier_id)
+#
+
 class Product < ActiveRecord::Base
   validates :name, presence: true
   validates :supplier_id, presence: true

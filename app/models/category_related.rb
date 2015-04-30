@@ -6,6 +6,12 @@
 #  category_id :integer          not null
 #  related_id  :integer          not null
 #
+# Indexes
+#
+#  index_category_related_on_category_id  (category_id)
+#  index_category_related_on_related_id   (related_id)
+#
+
 class CategoryRelated < ActiveRecord::Base
   self.table_name = 'category_related'
 

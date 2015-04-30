@@ -25,10 +25,9 @@
 #
 
 class User < ActiveRecord::Base
-  enum role: [:user, :vip, :admin, :supplier, :buyer, :seller ]
-  after_initialize :set_default_role, :if => :new_record?
+  enum role: [:user, :vip, :admin, :supplier, :buyer, :seller]
+  after_initialize :set_default_role, if: :new_record?
   rolify
-
 
   def set_default_role
     self.role ||= :user

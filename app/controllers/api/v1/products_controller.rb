@@ -1,7 +1,7 @@
 # product
 module API
   module V1
-    class ProductsController < API::BaseAPIController
+    class ProductsController < API::BaseController
       private
 
         def query_params

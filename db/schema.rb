@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 20150429132939) do
     t.datetime "updated_at",                                     null: false
     t.string   "lower"
     t.string   "upper"
-    t.datetime "effective_date", default: '2015-04-29 21:59:39', null: false
+    t.datetime "effective_date", default: '2015-04-26 11:22:00', null: false
     t.string   "code"
   end
 

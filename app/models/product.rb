@@ -68,6 +68,4 @@ class Product < ActiveRecord::Base
   # Products can have many prices, prices are used by many products
   # i.e. 2015 Q1 catalog, Page 23 can contain several products
   has_and_belongs_to_many :prices
-
-
 end

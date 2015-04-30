@@ -7,7 +7,6 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'bootstrap-sass'
-gem 'devise'
 gem 'pg'
 gem 'puma'
 gem 'simple_form'
@@ -17,6 +16,8 @@ gem 'money-rails'
 gem 'responders', '~> 2.0'
 
 # Authentication
+gem 'devise'
+gem 'devise_invitable'
 gem 'doorkeeper', '~> 1.3.0'
 gem 'oauth2'
 gem 'omniauth', '~> 1.2.1'
@@ -43,6 +44,7 @@ group :development do
   gem 'rb-fsevent', :require=>false
   gem 'rb-inotify', :require=>false
   gem 'spring-commands-rspec'
+  gem 'letter_opener'
 end
 
 group :development, :test do

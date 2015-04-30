@@ -7,8 +7,6 @@
 #  code_3       :string           not null
 #  short_name   :string           not null
 #  code_numeric :string           not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
 #
 
 require 'rails_helper'

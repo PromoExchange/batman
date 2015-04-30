@@ -2,12 +2,10 @@
 #
 # Table name: media_references
 #
-#  id         :integer          not null, primary key
-#  name       :string           not null
-#  location   :string           not null
-#  reference  :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id        :integer          not null, primary key
+#  name      :string           not null
+#  location  :string           not null
+#  reference :string           not null
 #
 
 require 'rails_helper'

@@ -2,10 +2,8 @@
 #
 # Table name: keywords
 #
-#  id         :integer          not null, primary key
-#  word       :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id   :integer          not null, primary key
+#  word :string           not null
 #
 
 require 'rails_helper'

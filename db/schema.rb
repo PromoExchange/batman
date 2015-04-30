@@ -11,21 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150430112125) do
+ActiveRecord::Schema.define(version: 20150430124238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "brands", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "name", null: false
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "name"
   end
 
   create_table "category_related", force: :cascade do |t|
@@ -37,9 +33,7 @@ ActiveRecord::Schema.define(version: 20150430112125) do
   add_index "category_related", ["related_id"], name: "index_category_related_on_related_id", using: :btree
 
   create_table "colors", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "name", null: false
   end
 
   create_table "colors_products", id: false, force: :cascade do |t|
@@ -51,12 +45,10 @@ ActiveRecord::Schema.define(version: 20150430112125) do
   add_index "colors_products", ["product_id"], name: "index_colors_products_on_product_id", using: :btree
 
   create_table "countries", force: :cascade do |t|
-    t.string   "code_2",       null: false
-    t.string   "code_3",       null: false
-    t.string   "short_name",   null: false
-    t.string   "code_numeric", null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string "code_2",       null: false
+    t.string "code_3",       null: false
+    t.string "short_name",   null: false
+    t.string "code_numeric", null: false
   end
 
   create_table "images", force: :cascade do |t|
@@ -78,9 +70,7 @@ ActiveRecord::Schema.define(version: 20150430112125) do
   add_index "imagetypes", ["product_id"], name: "index_imagetypes_on_product_id", using: :btree
 
   create_table "keywords", force: :cascade do |t|
-    t.string   "word",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "word", null: false
   end
 
   create_table "keywords_products", id: false, force: :cascade do |t|
@@ -92,10 +82,8 @@ ActiveRecord::Schema.define(version: 20150430112125) do
   add_index "keywords_products", ["product_id"], name: "index_keywords_products_on_product_id", using: :btree
 
   create_table "lines", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.integer  "brand_id",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string  "name",     null: false
+    t.integer "brand_id", null: false
   end
 
   add_index "lines", ["brand_id"], name: "index_lines_on_brand_id", using: :btree
@@ -121,11 +109,9 @@ ActiveRecord::Schema.define(version: 20150430112125) do
   add_index "materials_products", ["product_id"], name: "index_materials_products_on_product_id", using: :btree
 
   create_table "media_references", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "location",   null: false
-    t.string   "reference",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "name",      null: false
+    t.string "location",  null: false
+    t.string "reference", null: false
   end
 
   create_table "media_references_products", id: false, force: :cascade do |t|
@@ -233,13 +219,11 @@ ActiveRecord::Schema.define(version: 20150430112125) do
   add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
   create_table "sizes", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "width"
-    t.string   "height"
-    t.string   "depth"
-    t.string   "dia"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "name",   null: false
+    t.string "width"
+    t.string "height"
+    t.string "depth"
+    t.string "dia"
   end
 
   create_table "suppliers", force: :cascade do |t|

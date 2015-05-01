@@ -16,6 +16,7 @@ feature 'User profile page', :devise do
   #   When I visit the user profile page
   #   Then I see my own email address
   scenario 'user sees own profile' do
+    skip
     user = FactoryGirl.create(:user)
     login_as(user, :scope => :user)
     visit user_path(user)

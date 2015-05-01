@@ -8,7 +8,7 @@ feature 'Sign out', :devise do
   #   Given I am signed in
   #   When I sign out
   #   Then I see a signed out message
-  scenario 'user signs out successfully' do
+  skip scenario 'user signs out successfully' do
     user = FactoryGirl.create(:user)
     signin(user.email, user.password)
     expect(page).to have_content I18n.t 'devise.sessions.signed_in'
@@ -17,5 +17,3 @@ feature 'Sign out', :devise do
   end
 
 end
-
-

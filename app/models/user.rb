@@ -4,7 +4,7 @@
 #
 #  id                     :integer          not null, primary key
 #  email                  :string           default(""), not null
-#  encrypted_password     :string           default(""), not null
+#  encrypted_password     :string           default("")
 #  reset_password_token   :string
 #  reset_password_sent_at :datetime
 #  remember_created_at    :datetime
@@ -17,10 +17,23 @@
 #  updated_at             :datetime
 #  name                   :string
 #  role                   :integer
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  unconfirmed_email      :string
+#  invitation_token       :string
+#  invitation_created_at  :datetime
+#  invitation_sent_at     :datetime
+#  invitation_accepted_at :datetime
+#  invitation_limit       :integer
+#  invited_by_id          :integer
+#  invited_by_type        :string
 #
 # Indexes
 #
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
 #  index_users_on_email                 (email) UNIQUE
+#  index_users_on_invitation_token      (invitation_token) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
@@ -29,12 +42,12 @@ class User < ActiveRecord::Base
   after_initialize :set_default_role, if: :new_record?
   rolify
 
+  devise :confirmable, :database_authenticatable, :registerable, :invitable,
+    :recoverable, :rememberable, :trackable, :validatable
+
+  private
+
   def set_default_role
     self.role ||= :user
   end
-
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
 end

@@ -1,4 +1,7 @@
 // import the CSS framework
+$font-family-sans-serif:  'Open Sans', sans-serif;
+$font-family-serif: 'Roboto Slab', serif;
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
@@ -35,15 +38,25 @@ img {
 // to make views framework-neutral
 main {
   @extend .container;
-  background-color: #eee;
+  background-color: #FFFFFF;
   padding-bottom: 80px;
-  width: 100%;
   margin-top: 51px; // accommodate the navbar
   }
 section {
   @extend .row;
   margin-top: 20px;
   }
+
+footer {
+  /* @extend .container; */
+  position: relative;
+  margin-top: -50px; /* negative value of footer height */
+  height: 50px;
+  clear:both;
+  padding-top:20px;
+  background: rgb(128, 139, 159);
+  color: white;
+}
 
 // Styles for form views
 // using Bootstrap
@@ -79,4 +92,21 @@ section {
   @extend .btn;
   @extend .btn-primary;
   @extend .btn-xs;
+}
+
+// New additions for batman
+// TODO: Split these once and a while, look at github issue #44
+
+.marketing{
+  @extend .container;
+  background-color: #FFFFFF;
+}
+
+.marketing h3{
+  font-size: 4em;
+  font-weight: 700;
+}
+
+.marketing p{
+  font-size: 2em;
 }

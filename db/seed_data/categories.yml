@@ -1,41 +1,41 @@
 'Apparel':
   'Unisex':
     'T-Shirts':
-      'Fashion Fitted':
-      'Polo Shirts':
-      'Dress Shirts':
-      'Jackets':
-      'Sweatshirts':
-      'Activewear':
-      'Bottoms':
-      'Sweaters':
-      'Workwear':
-    'Mens':
-      'T-Shirts':
-      'Polo Shirts':
-      'Dress Shirts':
-      'Jackets':
-      'Sweatshirts':
-      'Activewear':
-      'Bottoms':
-      'Workwear':
-    'Womens':
-      'T-Shirts':
-      'Fashion Fitted':
-      'Polo Shirts':
-      'Dress Shirts':
-      'Jackets':
-      'Sweatshirts':
-      'Activewear':
-      'Sweaters':
-      'Bottoms':
-    'Youth':
-      'T-Shirts':
-      'Polo Shirts':
-      'Jackets':
-      'Sweatshirts':
-      'Activewear':
-      'Bottoms':
+    'Fashion Fitted':
+    'Polo Shirts':
+    'Dress Shirts':
+    'Jackets':
+    'Sweatshirts':
+    'Activewear':
+    'Bottoms':
+    'Sweaters':
+    'Workwear':
+  'Mens':
+    'T-Shirts':
+    'Polo Shirts':
+    'Dress Shirts':
+    'Jackets':
+    'Sweatshirts':
+    'Activewear':
+    'Bottoms':
+    'Workwear':
+  'Womens':
+    'T-Shirts':
+    'Fashion Fitted':
+    'Polo Shirts':
+    'Dress Shirts':
+    'Jackets':
+    'Sweatshirts':
+    'Activewear':
+    'Sweaters':
+    'Bottoms':
+  'Youth':
+    'T-Shirts':
+    'Polo Shirts':
+    'Jackets':
+    'Sweatshirts':
+    'Activewear':
+    'Bottoms':
 'Headwear-Caps':
   'General':
     'Casual-Sport':
@@ -235,7 +235,7 @@
     'Markers':
     'Crayons':
     'Multi-Function':
-    'Stylus Pens':
+    'Stylus Pens':
 'Giveaways-Tradeshow':
   'Tradeshow':
     'Badge Holders':

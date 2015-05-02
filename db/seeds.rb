@@ -5,7 +5,6 @@ require 'yaml'
 [
   Country,
   # Supplier,
-  CategoryRelated,
   Category
 ].each do |m|
   ActiveRecord::Base.connection.execute(
@@ -55,20 +54,13 @@ end
 
 cf = YAML.load_file('./db/seed_data/categories.yml')
 
-def load_category_tree(o, d, p)
+def load_category_tree(o, p)
   o.each do |k, v|
-    # puts p.inspect
-    pa = p.id.nil? ? p : Category.create(name: p.name)
-    c = Category.create name: k
-
-    # puts ' ' * (d * 2) + "#{pa.name}:#{k}"
-    # puts "#{pa.id} : #{c.id}"
-
-    load_category_tree(v, d + 1, c) unless v.nil?
-
-    CategoryRelated.create related_id: pa.id, category_id: c.id
+    pa = Category.find_or_create_by(name: k, parent_id: p.id)
+    # puts "#{p.id} : #{pa.id}"
+    load_category_tree(v, pa) unless v.nil?
   end
 end
 
-r = Category.create name: 'root'
-load_category_tree(cf, 1, r)
+r = Category.create name: 'root', parent_id: -1
+load_category_tree(cf, r)

@@ -2,8 +2,9 @@
 #
 # Table name: categories
 #
-#  id   :integer          not null, primary key
-#  name :string
+#  id        :integer          not null, primary key
+#  name      :string
+#  parent_id :integer          not null
 #
 
 require 'rails_helper'
@@ -22,6 +23,7 @@ RSpec.describe Category, type: :model do
     # setup
     p = Category.new
     p.name = 'valid name'
+    p.parent_id = 1
     # exercise
     # verify
     expect(p.save).to eq true

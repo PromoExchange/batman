@@ -14,5 +14,5 @@ class Category < ActiveRecord::Base
   has_many :categoryrelated, foreign_key: 'category_id',
                              class_name: 'CategoryRelated'
 
-  has_many :related, through: :categoryrelated
+  has_many :children, through: :categoryrelated
 end

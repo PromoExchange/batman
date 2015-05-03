@@ -112,11 +112,26 @@ footer {
   font-size: 2em;
 }
 
-.nav2{
+.logobar{
   @extend .container;
-  background: white;
+  /* background: blue; */
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
-.nav2 > img{
-  border: 5px;
+.logobar img{
+  border: 15px;
 }
+
+.logobar li{
+  font-size: 1.5em;
+  /* background: red; */
+  margin: 5px;
+  margin-top: 35px;
+  display: inline-block;
+}
+
+/* .logobar li::after {
+    content: " | ";
+}
+ */

@@ -6,7 +6,7 @@
 # Note that this schema.rb definition is the authoritative source for your
 # database schema. If you need to create the application database on another
 # system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# from scratch. The latter is a flawed and unsustainable approach n(the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
@@ -27,11 +27,11 @@ ActiveRecord::Schema.define(version: 20150502155322) do
 
   create_table "category_related", force: :cascade do |t|
     t.integer "category_id", null: false
-    t.integer "related_id",  null: false
+    t.integer "parent_id",   null: false
   end
 
   add_index "category_related", ["category_id"], name: "index_category_related_on_category_id", using: :btree
-  add_index "category_related", ["related_id"], name: "index_category_related_on_related_id", using: :btree
+  add_index "category_related", ["parent_id"], name: "index_category_related_on_parent_id", using: :btree
 
   create_table "colors", force: :cascade do |t|
     t.string "name", null: false

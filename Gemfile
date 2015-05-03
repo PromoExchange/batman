@@ -29,7 +29,7 @@ group :development do
   gem 'rubocop', require: false
   gem 'byebug'
   gem 'web-console', '~> 2.0'
-  gem 'spring'
+  # gem 'spring'
   gem 'annotate', '~> 2.6.6'
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_21]

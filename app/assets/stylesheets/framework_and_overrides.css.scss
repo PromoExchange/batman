@@ -119,19 +119,23 @@ footer {
   margin-bottom: 5px;
 }
 
+
 .logobar img{
   border: 15px;
 }
 
+/* Not all browser support not correctly */
+/* Hence the inverse logic */
 .logobar li{
   font-size: 1.5em;
-  /* background: red; */
-  margin: 5px;
+  margin-left: 5px;
+  padding-left: 0.5em;
   margin-top: 35px;
   display: inline-block;
+  border-left: 2px dotted #a0a0a0;
 }
 
-/* .logobar li::after {
-    content: " | ";
+.logobar li:first-child {
+  border-left: none;
+  padding-left: none;
 }
- */

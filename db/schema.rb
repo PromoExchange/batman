@@ -27,11 +27,11 @@ ActiveRecord::Schema.define(version: 20150502155322) do
 
   create_table "category_related", force: :cascade do |t|
     t.integer "category_id", null: false
-    t.integer "related_id",  null: false
+    t.integer "parent_id",   null: false
   end
 
   add_index "category_related", ["category_id"], name: "index_category_related_on_category_id", using: :btree
-  add_index "category_related", ["related_id"], name: "index_category_related_on_related_id", using: :btree
+  add_index "category_related", ["parent_id"], name: "index_category_related_on_parent_id", using: :btree
 
   create_table "colors", force: :cascade do |t|
     t.string "name", null: false
@@ -170,7 +170,7 @@ ActiveRecord::Schema.define(version: 20150502155322) do
     t.datetime "updated_at",                                     null: false
     t.string   "lower"
     t.string   "upper"
-    t.datetime "effective_date", default: '2015-05-02 15:59:49', null: false
+    t.datetime "effective_date", default: '2015-05-02 14:13:07', null: false
     t.string   "code"
   end
 

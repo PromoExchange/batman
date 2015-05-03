@@ -4,7 +4,7 @@
 #
 #  id        :integer          not null, primary key
 #  name      :string
-#  parent_id :integer
+#  parent_id :integer          not null
 #
 
 class Category < ActiveRecord::Base

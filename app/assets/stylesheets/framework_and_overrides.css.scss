@@ -51,12 +51,13 @@ footer {
   /* @extend .container; */
   position: relative;
   margin-top: -50px; /* negative value of footer height */
-  height: 50px;
+  // height: 50px;
   clear:both;
   padding-top:20px;
-  background: rgb(128, 139, 159);
+  background: rgb(54,54,54);
   color: white;
 }
+
 
 // Styles for form views
 // using Bootstrap
@@ -109,4 +110,13 @@ footer {
 
 .marketing p{
   font-size: 2em;
+}
+
+.nav2{
+  @extend .container;
+  background: white;
+}
+
+.nav2 > img{
+  border: 5px;
 }

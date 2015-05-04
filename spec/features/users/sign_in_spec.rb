@@ -2,6 +2,8 @@
 #   As a user
 #   I want to sign in
 #   So I can visit protected areas of the site
+require 'rails_helper'
+
 feature 'Sign in', :devise do
 
   # Scenario: User cannot sign in if not registered
@@ -18,11 +20,22 @@ feature 'Sign in', :devise do
   #   And I am not signed in
   #   When I sign in with valid credentials
   #   Then I see a success message
-  skip scenario 'user can sign in with valid credentials' do
-
+  scenario 'user is required to confirm email' do
     user = FactoryGirl.create(:user)
     signin(user.email, user.password)
-    expect(page).to have_content I18n.t 'devise.sessions.signed_in'
+    # expect(page).to have_content I18n.t 'confirm your email'
+    expect(page).to have_content 'confirm your email'
+  end
+
+  # Scenario: User can sign in with valid credentials
+  #   Given I exist as a user
+  #   And I am not signed in
+  #   When I sign in with valid credentials
+  #   Then I see a success message
+  scenario 'user can sign in with valid credentials' do
+    user = FactoryGirl.create(:confirmed_user)
+    signin(user.email, user.password)
+    expect(page).to have_content 'Signed in successfully'
   end
 
   # Scenario: User cannot sign in with wrong email

@@ -46,6 +46,12 @@ FactoryGirl.define do
     trait :admin do
       role 'admin'
     end
+  end
 
+  factory :confirmed_user, class: User do
+    name "Test User"
+    email "test@example.com"
+    password "please123"
+    confirmed_at Time.zone.now
   end
 end

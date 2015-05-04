@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 include Warden::Test::Helpers
 Warden.test_mode!
 
@@ -16,8 +18,8 @@ feature 'User delete', :devise, :js do
   #   When I delete my account
   #   Then I should see an account deleted message
   scenario 'user can delete own account' do
-    skip 'skip a slow test'
-    user = FactoryGirl.create(:user)
+    # skip 'skip a slow test'
+    user = FactoryGirl.create(:confirmed_user)
     login_as(user, :scope => :user)
     visit edit_user_registration_path(user)
     click_button 'Cancel my account'
@@ -26,7 +28,3 @@ feature 'User delete', :devise, :js do
   end
 
 end
-
-
-
-

@@ -30,12 +30,13 @@ RSpec.describe Category, type: :model do
     # teardown
   end
 
-  xit 'test factory' do
+  it 'test factory' do
     # setup
     c = build(:category)
     # exercise
     # verify
-    expect(c.name).to eq 'CATEGORY2'
+    expect(c.name).to eq 'CATEGORY'
+    expect(c.parent_id).to eq 1
     # teardown
   end
 end

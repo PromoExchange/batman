@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 include Warden::Test::Helpers
 Warden.test_mode!
 
@@ -15,8 +17,8 @@ feature 'User edit', :devise do
   #   Given I am signed in
   #   When I change my email address
   #   Then I see an account updated message
-  skip scenario 'user changes email address' do
-    user = FactoryGirl.create(:user)
+  scenario 'user changes email address' do
+    user = FactoryGirl.create(:confirmed_user)
     login_as(user, :scope => :user)
     visit edit_user_registration_path(user)
     fill_in 'Email', :with => 'newemail@example.com'
@@ -30,8 +32,8 @@ feature 'User edit', :devise do
   #   Given I am signed in
   #   When I try to edit another user's profile
   #   Then I see my own 'edit profile' page
-  skip scenario "user cannot cannot edit another user's profile", :me do
-    me = FactoryGirl.create(:user)
+  scenario "user cannot cannot edit another user's profile", :me do
+    me = FactoryGirl.create(:confirmed_user)
     other = FactoryGirl.create(:user, email: 'other@example.com')
     login_as(me, :scope => :user)
     visit edit_user_registration_path(other)

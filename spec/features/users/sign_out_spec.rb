@@ -2,16 +2,19 @@
 #   As a user
 #   I want to sign out
 #   So I can protect my account from unauthorized access
+
+require 'rails_helper'
+
 feature 'Sign out', :devise do
 
   # Scenario: User signs out successfully
   #   Given I am signed in
   #   When I sign out
   #   Then I see a signed out message
-  skip scenario 'user signs out successfully' do
-    user = FactoryGirl.create(:user)
+  scenario 'user signs out successfully' do
+    user = FactoryGirl.create(:confirmed_user)
     signin(user.email, user.password)
-    expect(page).to have_content I18n.t 'devise.sessions.signed_in'
+    expect(page).to have_content 'Signed in successfully'
     click_link 'Sign out'
     expect(page).to have_content I18n.t 'devise.sessions.signed_out'
   end

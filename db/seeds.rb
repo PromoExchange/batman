@@ -4,6 +4,7 @@ require 'yaml'
 # Clear out old seed data
 [
   Country,
+  Color,
   # Supplier,
   Category
 ].each do |m|
@@ -42,12 +43,19 @@ CSV.foreach('./db/seed_data/countries.csv', headers: true) do |row|
   # puts row['code_numeric']
 end
 
-# # Some suppliers
+# Some suppliers
 # CSV.foreach('./db/seed_data/suppliers.csv', headers: true) do |row|
 #   Supplier.create!(row.to_hash)
 #   # puts row['name']
 #   # puts row['description']
 # end
+
+# Colors
+CSV.foreach('./db/seed_data/product_colors.csv', headers: true) do |row|
+  Color.create!(row.to_hash)
+  # puts row['name']
+  # puts row['description']
+end
 
 # Categories
 # Create tree and related (parents) via a join table

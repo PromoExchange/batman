@@ -16,7 +16,7 @@ module API
         if @product.present?
           render nothing: true, status: :conflict
         else
-          @products = product.new
+          @products = Product.new
           @products.assign_attributes(@json['product'])
           if @products.save
             render json: @products

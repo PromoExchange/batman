@@ -8,6 +8,7 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400' rel='stylesheet' type='text/css'>
     <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
+    <%= javascript_include_tag 'products-bundle' %>
     <%= csrf_meta_tags %>
   </head>
   <body>
@@ -17,7 +18,14 @@
     <main role="main">
       <%= render 'layouts/logobar' %>
       <%= render 'layouts/messages' %>
-      <%= yield %>
+      <div class="container">
+        <div class="col-md-3 ">
+          <%= render 'layouts/sidebar' %>
+        </div>
+        <div class="col-md-9">
+          <%= yield %>
+        </div>
+      </div>
     </main>
   </body>
   <footer role="footer">

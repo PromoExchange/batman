@@ -20,4 +20,6 @@ class Category < ActiveRecord::Base
   # Keywords will be a simple tag table.
   has_many :children, class_name: 'Category', foreign_key: 'parent_id'
   belongs_to :parent, class_name: 'Category', foreign_key: 'parent_id'
+
+  scope :top_level, -> { self.where( parent_id: self.find_by( parent_id: -1) ) }
 end

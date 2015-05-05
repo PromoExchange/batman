@@ -1,2 +1,16 @@
-<%= javascript_include_tag "products-bundle" %>
-<h1>Hellow product</h1>
+<div class="row well">
+  <div class="col-md-2">
+    <%= image_tag("test_tshirt.png") %>
+  </div>
+  <div class="col-md-10">
+    <h2>Product Title</h2>
+    <div class="row">
+      <div class="col-md-2 title">Name</div>
+      <div class="col-md-10"><%= @products[0].name %></div>
+    </div>
+
+
+    <%= @products[0].description %>
+    <%= @products[0].includes %>
+  </div>
+</div>

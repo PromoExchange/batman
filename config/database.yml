@@ -15,5 +15,7 @@ test:
 
 production:
   <<: *default
-  database: batman_production
-  username: batman
+  host: ec2-184-73-165-195.compute-1.amazonaws.com
+  database: d9499l7m4r45br
+  username: hifkiolcsmsuyl
+  password: g_x7ZW6PLj1hXDJDMTlLFHQ7J2

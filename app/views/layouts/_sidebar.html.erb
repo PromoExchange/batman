@@ -1,16 +1,21 @@
 <div class="well">
     <div>
+        <h4>Category</h4>
         <ul class="nav">
           <% @top_level_cats.each do |c| %>
           <li>
             <label label-default="" class="tree-toggle nav-header"><%= c.name %></label>
             <% c.children.sort.each do |c2| %>
-            <ul class="nav tree">
+            <ul class="nav tree" style="display: none;">
               <li><a href="#"><%= c2.name %></a></li>
             </ul>
             <% end %>
           </li>
           <% end %>
+        </ul>
+        <h4>Color</h4>
+        <ul>
+          <%= collection_select(:product, :colors, @colors, :id, :name, {:prompt => true}) %>
         </ul>
     </div>
 </div>

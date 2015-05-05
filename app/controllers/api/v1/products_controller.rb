@@ -35,10 +35,9 @@ module API
         end
       end
 
-    private
+      private
 
       def find_product
-        # @products = Product.find_by_name(params[:name])
         @products = Product.find(params[:id])
         render nothing: true, status: :not_found unless @products.present?
       end

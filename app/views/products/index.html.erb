@@ -1,16 +1,26 @@
+<%= javascript_include_tag 'products-bundle' %>
 <div class="row well">
   <div class="col-md-2">
-    <%= image_tag("test_tshirt.png") %>
+    <%= image_tag("test_tshirt.png", :class => 'large_img') %>
   </div>
   <div class="col-md-10">
-    <h2>Product Title</h2>
+    <h2><%= @products[0].name %></h2>
+    <% fields = { 'Name' => @products[0].name ,
+                'Description' => @products[0].description,
+                'Description' => @products[0].description,
+                'Includes' => @products[0].includes,
+                'Features' => @products[0].features,
+                'Pack size' => @products[0].packsize,
+                'Pack weight' => @products[0].packweight,
+                'Unit measure' => @products[0].unit_measure,
+                'Leadtime' => @products[0].leadtime,
+                'Rushtime' => @products[0].rushtime,
+                'Info' => @products[0].info } %>
+    <% fields.each do |k,v| %>
     <div class="row">
-      <div class="col-md-2 title">Name</div>
-      <div class="col-md-10"><%= @products[0].name %></div>
+      <div class="col-md-2 title"><%= k %></div>
+      <div class="col-md-10"><%= v %></div>
     </div>
-
-
-    <%= @products[0].description %>
-    <%= @products[0].includes %>
+    <% end %>
   </div>
 </div>

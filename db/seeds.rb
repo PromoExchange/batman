@@ -6,7 +6,8 @@ require 'yaml'
   Country,
   Color,
   # Supplier,
-  Category
+  Category,
+  Material
 ].each do |m|
   ActiveRecord::Base.connection.execute(
     "TRUNCATE TABLE #{m.table_name} RESTART IDENTITY;")
@@ -53,6 +54,13 @@ end
 # Colors
 CSV.foreach('./db/seed_data/product_colors.csv', headers: true) do |row|
   Color.create!(row.to_hash)
+  # puts row['name']
+  # puts row['description']
+end
+
+# Materials
+CSV.foreach('./db/seed_data/materials.csv', headers: true) do |row|
+  Material.create!(row.to_hash)
   # puts row['name']
   # puts row['description']
 end

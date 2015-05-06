@@ -9,6 +9,5 @@
 FactoryGirl.define do
   factory :material do
     name 'material'
-    products {[FactoryGirl.create(:product)]}
   end
 end

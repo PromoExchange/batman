@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: products_sizes
+#
+#  product_id :integer          not null
+#  size_id    :integer          not null
+#
+# Indexes
+#
+#  index_products_sizes_on_product_id  (product_id)
+#  index_products_sizes_on_size_id     (size_id)
+#
+
 require 'rails_helper'
 
 RSpec.describe SizeProduct, type: :model do

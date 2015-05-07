@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: products_sizes
+#
+#  product_id :integer          not null
+#  size_id    :integer          not null
+#
+# Indexes
+#
+#  index_products_sizes_on_product_id  (product_id)
+#  index_products_sizes_on_size_id     (size_id)
+#
+
 class SizeProduct < ActiveRecord::Base
   # TODO: Reverse this table name to match others
   self.table_name = 'products_sizes'

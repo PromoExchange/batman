@@ -4,24 +4,35 @@ namespace :px do
 PX Rake commands
 px:help                 This output
 px:info                 Current DB stats
-px:fake:product[<num>]  Create num fake products, default=1000
 px:fake:supplier[<num>] Create num fake suppliers, default=10
 px:fake:material[<num>] Create num fake materials, default=10
+px:fake:materialproduct Create material product associations
+                        For each product that does not have a material
+                        association, create one randomly.
 px:fake:size[<num>]     Create num fake sizes, default=10
 px:fake:brand[<num>]    Create num fake brands, default=100
 px:fake:keyword[<num>]  Create num fake keywords, default=100.
 px:fake:line[<num>]     Create num fake lines.
                         Associate with current brands
                         If no brands exists, create 10 fake ones
+px:fake:lineproduct     Create line product associations
+                        For each product that does not have a line
+                        association, create one randomly.
 px:fake:image[<num>]    Create num fake images (num*type),
                         default 1000 (1000*type)
 px:fake:imagetype[<num>] Create imagetype associations with products
-                        N.B. num * types * products
+                        N.B. (num * types) * products
                         Default = 1 (You should not need to change this)
 px:fake:keywordproduct[<num>]
                         Create keyword product associations
-                        N.B. num * keywords * products
+                        N.B. num * products
                         Default = 10 (You should not need to change this)
+px:fake:sizeproduct[<num>]
+                        Create size product associations
+                        N.B. num * products
+                        Default = 10 (You should not need to change this)
+px:fake:product[<num>]  Create num fake products, default=1000
+                        N.B. Will use random associations are available
 *The paramater and the square brackets are optional.
 END
     puts text
@@ -32,14 +43,17 @@ END
 PX Database Stats
 Table           | Count
 ----------------|----------------
-Products        | #{Product.count}
-Suppliers       | #{Supplier.count}
-Materials       | #{Material.count}
-Sizes           | #{Size.count}
-Brands          | #{Brand.count}
-Lines           | #{Line.count}
-Colors          | #{Color.count}
-Images          | #{Image.count}
+Product         | #{Product.count}
+Supplier        | #{Supplier.count}
+Material        | #{Material.count}
+MaterialProduct | #{MaterialProduct.count}
+Size            | #{Size.count}
+SizeProduct     | #{SizeProduct.count}
+Brand           | #{Brand.count}
+Line            | #{Line.count}
+LineProduct     | #{LineProduct.count}
+Color           | #{Color.count}
+Image           | #{Image.count}
 Imagetype       | #{Imagetype.count}
 Keyword         | #{Keyword.count}
 KeywordProduct  | #{KeywordProduct.count}
@@ -48,7 +62,7 @@ END
   end
 
   namespace :fake do
-    desc 'Fake supplier creation'
+    desc 'Fake supplier'
     task :supplier, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 10)
 
@@ -62,7 +76,7 @@ END
         description: Faker::Lorem.sentence(4)})
     end
 
-    desc 'Fake size creation'
+    desc 'Fake size'
     task :size, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 10)
 
@@ -75,7 +89,7 @@ END
       end
     end
 
-    desc 'Fake material creation'
+    desc 'Fake material'
     task :material, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 10)
 
@@ -84,7 +98,7 @@ END
       end
     end
 
-    desc '***DRY*** Fake Brand creation'
+    desc '***DRY*** Fake Brand'
     task :brand, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 10)
 
@@ -93,7 +107,7 @@ END
       end
     end
 
-    desc '***DRY*** Fake Line creation'
+    desc '***DRY*** Fake Line'
     task :line, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 500)
 
@@ -111,7 +125,7 @@ END
       end
     end
 
-    desc 'Fake Image creation'
+    desc 'Fake Image'
     task :image, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 1000)
 
@@ -128,7 +142,7 @@ END
       end
     end
 
-    desc 'Fake ImageType creation'
+    desc 'Fake ImageType'
     task :imagetype, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 1)
 
@@ -170,7 +184,7 @@ END
                       location: Faker::Avatar.image(Faker::Number.number(12) , dim)}) unless frgtbtt
     end
 
-    desc 'Fake Keyword creation'
+    desc 'Fake Keyword'
     task :keyword, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 100)
 
@@ -179,7 +193,7 @@ END
       end
     end
 
-    desc 'Fake KeywordProduct creation'
+    desc 'Fake KeywordProduct'
     task :keywordproduct, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 10)
 
@@ -195,6 +209,68 @@ END
 
       args.repeat.to_i.times do
         Keyword.create({ word: Faker::Lorem.word })
+      end
+    end
+
+    desc 'Fake Line Product'
+    task :lineproduct, [:repeat] => [:environment] do |t,args|
+      Product.find_each do |p|
+        if LineProduct.where(product_id: p.id).empty?
+          line = Line.limit(1).order("RANDOM()").first
+          # puts image.id
+          # puts p.id
+          CreateLineProduct( p.id , line.id , false )
+        end
+      end
+    end
+
+    def CreateLineProduct( product_id , line_id, check_first )
+      frgtbtt = false
+
+      if check_first
+        frgtbtt = LineProduct.exists?(product_id: product_id)
+      end
+
+      LineProduct.create( { line_id: line.id ,
+                          product_id: product_id }) unless frgtbtt
+    end
+
+    desc 'Fake Material Product'
+    task :materialproduct, [:repeat] => [:environment] do |t,args|
+
+      Product.find_each do |p|
+        if MaterialProduct.where(product_id: p.id).empty?
+          material = Material.limit(1).order("RANDOM()").first
+          # puts image.id
+          # puts p.id
+          CreateMaterialProduct( p.id , material.id , false )
+        end
+      end
+    end
+
+    def CreateMaterialProduct( product_id , material_id , check_first )
+      frgtbtt = false
+
+      if check_first
+        frgtbtt = MaterialProduct.exists?(product_id: product_id)
+      end
+
+      MaterialProduct.create( { material_id: material_id ,
+                                product_id: product_id }) unless frgtbtt
+    end
+
+    desc 'Fake Size Product'
+    task :sizeproduct, [:repeat] => [:environment] do |t,args|
+      args.with_defaults(:repeat => 10)
+      Product.find_each do |p|
+        if SizeProduct.where(product_id: p.id).empty?
+          args.repeat.to_i.times do
+            size = Size.limit(1).order("RANDOM()").first
+
+            SizeProduct.create( { size_id: size.id,
+                                  product_id: p.id })
+          end
+        end
       end
     end
 
@@ -224,7 +300,6 @@ END
                           info: Faker::Lorem.sentence(8),
                           supplier_id: supplier[0].id
                           })
-
       end
     end # task :product
   end # namespace :fake

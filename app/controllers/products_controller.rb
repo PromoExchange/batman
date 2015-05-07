@@ -6,13 +6,13 @@ class ProductsController < ApplicationController
       @colors = Color.all.sort_by{ |n| n.name }
       @top_level_cats = Category.top_level.sort_by{ |n| n.name }
       @products = Product.all
+      puts @product.inspect
       render layout: 'product'
     end
 
     def show
       @user = User.find(params[:id])
     end
-  private
     def find_product
       @products = Product.find(params[:id])
     end

@@ -10,7 +10,7 @@
 #  updated_at     :datetime         not null
 #  lower          :string
 #  upper          :string
-#  effective_date :datetime         default(Sat, 02 May 2015 15:59:49 UTC +00:00), not null
+#  effective_date :datetime         default(Wed, 06 May 2015 18:44:16 UTC +00:00), not null
 #  code           :string
 #
 

@@ -9,24 +9,40 @@ px:fake:supplier[<num>] Create num fake suppliers, default=10
 px:fake:material[<num>] Create num fake materials, default=10
 px:fake:size[<num>]     Create num fake sizes, default=10
 px:fake:brand[<num>]    Create num fake brands, default=100
+px:fake:keyword[<num>]  Create num fake keywords, default=100.
 px:fake:line[<num>]     Create num fake lines.
                         Associate with current brands
                         If no brands exists, create 10 fake ones
-The paramater and the square brackets are optional.
+px:fake:image[<num>]    Create num fake images (num*type),
+                        default 1000 (1000*type)
+px:fake:imagetype[<num>] Create imagetype associations with products
+                        N.B. num * types * products
+                        Default = 1 (You should not need to change this)
+px:fake:keywordproduct[<num>]
+                        Create keyword product associations
+                        N.B. num * keywords * products
+                        Default = 10 (You should not need to change this)
+*The paramater and the square brackets are optional.
 END
     puts text
   end
 
   task info: :environment do |t|
     text = <<END
-PX Rake commands
-Products  #{Product.count}
-Suppliers #{Supplier.count}
-Materials #{Material.count}
-Sizes     #{Size.count}
-Brands    #{Brand.count}
-Lines     #{Line.count}
-Colors    #{Color.count}
+PX Database Stats
+Table           | Count
+----------------|----------------
+Products        | #{Product.count}
+Suppliers       | #{Supplier.count}
+Materials       | #{Material.count}
+Sizes           | #{Size.count}
+Brands          | #{Brand.count}
+Lines           | #{Line.count}
+Colors          | #{Color.count}
+Images          | #{Image.count}
+Imagetype       | #{Imagetype.count}
+Keyword         | #{Keyword.count}
+KeywordProduct  | #{KeywordProduct.count}
 END
     puts text
   end
@@ -37,9 +53,13 @@ END
       args.with_defaults(:repeat => 10)
 
       args.repeat.to_i.times do
-        Supplier.create( { name: Faker::Company.name ,
-          description: Faker::Lorem.sentence(4)})
+        CreateSupplier
       end
+    end
+
+    def CreateSupplier()
+      Supplier.create( { name: Faker::Company.name ,
+        description: Faker::Lorem.sentence(4)})
     end
 
     desc 'Fake size creation'
@@ -91,14 +111,101 @@ END
       end
     end
 
+    desc 'Fake Image creation'
+    task :image, [:repeat] => [:environment] do |t,args|
+      args.with_defaults(:repeat => 1000)
+
+      args.repeat.to_i.times do
+          {
+            'large'  => '500x500',
+            'medium' => '400x400',
+            'small' => '300x300',
+            'thumb' => '150x150',
+            'zoom' => '50x50'
+          }.each do |k,v|
+          CreateImage( k, v,false)
+        end
+      end
+    end
+
+    desc 'Fake ImageType creation'
+    task :imagetype, [:repeat] => [:environment] do |t,args|
+      args.with_defaults(:repeat => 1)
+
+      image_types = {
+        'large'  => '500x500',
+        'medium' => '400x400',
+        'small' => '300x300',
+        'thumb' => '150x150',
+        'zoom' => '50x50'
+      }
+
+      # At least one of each
+      image_types.each do |k,v|
+        CreateImage( k, v,false)
+      end
+
+      args.repeat.to_i.times do
+        Product.find_each do |p|
+          image_types.each do |k,v|
+            image = Image.limit(1).where( title: k).order("RANDOM()").first
+            # puts image.id
+            # puts p.id
+            Imagetype.create( { image_id: image.id ,
+                                product_id: p.id,
+                                sizetype: k })
+          end
+        end
+      end
+    end
+
+    def CreateImage(title,dim,check_first)
+      frgtbtt = false
+
+      if check_first
+        frgtbtt = Image.exists?(title: title)
+      end
+
+      Image.create( { title: title ,
+                      location: Faker::Avatar.image(Faker::Number.number(12) , dim)}) unless frgtbtt
+    end
+
+    desc 'Fake Keyword creation'
+    task :keyword, [:repeat] => [:environment] do |t,args|
+      args.with_defaults(:repeat => 100)
+
+      args.repeat.to_i.times do
+        Keyword.create({ word: Faker::Lorem.word })
+      end
+    end
+
+    desc 'Fake KeywordProduct creation'
+    task :keywordproduct, [:repeat] => [:environment] do |t,args|
+      args.with_defaults(:repeat => 10)
+
+      args.repeat.to_i.times do
+        Product.find_each do |p|
+          keyword = Keyword.limit(1).order("RANDOM()").first
+          # puts image.id
+          # puts p.id
+          KeywordProduct.create( { keyword_id: keyword.id ,
+                                    product_id: p.id })
+        end
+      end
+
+      args.repeat.to_i.times do
+        Keyword.create({ word: Faker::Lorem.word })
+      end
+    end
+
+    desc 'Create fake product'
     task :product, [:repeat] => [:environment] do |t,args|
       args.with_defaults(:repeat => 1000)
       args.repeat.to_i.times do
 
-        if Supplier.count  == 0  # No suppliers, create 50 fakes
+        if Supplier.count == 0  # No suppliers, create 50 fakes
           50.times do
-            Supplier.create( { name: Faker::Company.name ,
-              description: Faker::Lorem.sentence(4)})
+            CreateSupplier
           end
         end
 
@@ -119,6 +226,6 @@ END
                           })
 
       end
-    end
-  end
-end
+    end # task :product
+  end # namespace :fake
+end # namespace :px

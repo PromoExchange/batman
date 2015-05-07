@@ -9,7 +9,6 @@
 #  updated_at :datetime         not null
 #
 class Image < ActiveRecord::Base
-  # TODO: Location needs better definition
   validates :location, presence: true
 
   has_many :imagetypes

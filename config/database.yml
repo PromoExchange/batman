@@ -7,7 +7,7 @@ default: &default
 
 development:
   <<: *default
-  database: batman_development
+  database: batman_dev
 
 test:
   <<: *default

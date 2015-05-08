@@ -80,3 +80,7 @@ end
 
 r = Category.create name: 'root', parent_id: -1
 load_category_tree(cf, r)
+
+
+Spree::Core::Engine.load_seed if defined?(Spree::Core)
+Spree::Auth::Engine.load_seed if defined?(Spree::Auth)

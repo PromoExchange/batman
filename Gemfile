@@ -50,7 +50,6 @@ end
 
 group :development, :test do
   gem 'factory_girl_rails'
-  gem 'faker'
   gem 'rspec-rails'
 end
 
@@ -64,3 +63,7 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver'
 end
+
+gem 'spree', '3.0.1'
+gem 'spree_gateway', github: 'spree/spree_gateway', branch: '3-0-stable'
+gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: '3-0-stable'

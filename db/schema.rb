@@ -11,46 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150508185538) do
+ActiveRecord::Schema.define(version: 20150509142459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "brands", force: :cascade do |t|
-    t.string "name", null: false
-  end
-
-  create_table "categories", force: :cascade do |t|
-    t.string  "name"
-    t.integer "parent_id", null: false
-  end
-
-  create_table "category_related", force: :cascade do |t|
-    t.integer "category_id", null: false
-    t.integer "parent_id",   null: false
-  end
-
-  add_index "category_related", ["category_id"], name: "index_category_related_on_category_id", using: :btree
-  add_index "category_related", ["parent_id"], name: "index_category_related_on_parent_id", using: :btree
-
-  create_table "colors", force: :cascade do |t|
-    t.string "name", null: false
-  end
-
-  create_table "colors_products", id: false, force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "color_id",   null: false
-  end
-
-  add_index "colors_products", ["color_id"], name: "index_colors_products_on_color_id", using: :btree
-  add_index "colors_products", ["product_id"], name: "index_colors_products_on_product_id", using: :btree
-
-  create_table "countries", force: :cascade do |t|
-    t.string "code_2",       null: false
-    t.string "code_3",       null: false
-    t.string "short_name",   null: false
-    t.string "code_numeric", null: false
-  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -64,181 +28,6 @@ ActiveRecord::Schema.define(version: 20150508185538) do
   add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
-
-  create_table "images", force: :cascade do |t|
-    t.string   "title"
-    t.string   "location",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "imagetypes", force: :cascade do |t|
-    t.integer  "image_id",   null: false
-    t.integer  "product_id", null: false
-    t.string   "sizetype",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "imagetypes", ["image_id"], name: "index_imagetypes_on_image_id", using: :btree
-  add_index "imagetypes", ["product_id"], name: "index_imagetypes_on_product_id", using: :btree
-
-  create_table "keywords", force: :cascade do |t|
-    t.string "word", null: false
-  end
-
-  create_table "keywords_products", id: false, force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "keyword_id", null: false
-  end
-
-  add_index "keywords_products", ["keyword_id"], name: "index_keywords_products_on_keyword_id", using: :btree
-  add_index "keywords_products", ["product_id"], name: "index_keywords_products_on_product_id", using: :btree
-
-  create_table "lines", force: :cascade do |t|
-    t.string  "name",     null: false
-    t.integer "brand_id", null: false
-  end
-
-  add_index "lines", ["brand_id"], name: "index_lines_on_brand_id", using: :btree
-
-  create_table "lines_products", id: false, force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "line_id",    null: false
-  end
-
-  add_index "lines_products", ["line_id"], name: "index_lines_products_on_line_id", using: :btree
-  add_index "lines_products", ["product_id"], name: "index_lines_products_on_product_id", using: :btree
-
-  create_table "materials", force: :cascade do |t|
-    t.string "name", null: false
-  end
-
-  create_table "materials_products", id: false, force: :cascade do |t|
-    t.integer "product_id",  null: false
-    t.integer "material_id", null: false
-  end
-
-  add_index "materials_products", ["material_id"], name: "index_materials_products_on_material_id", using: :btree
-  add_index "materials_products", ["product_id"], name: "index_materials_products_on_product_id", using: :btree
-
-  create_table "media_references", force: :cascade do |t|
-    t.string "name",      null: false
-    t.string "location",  null: false
-    t.string "reference", null: false
-  end
-
-  create_table "media_references_products", id: false, force: :cascade do |t|
-    t.integer "product_id",         null: false
-    t.integer "media_reference_id", null: false
-  end
-
-  add_index "media_references_products", ["media_reference_id"], name: "index_media_references_products_on_media_reference_id", using: :btree
-  add_index "media_references_products", ["product_id"], name: "index_media_references_products_on_product_id", using: :btree
-
-  create_table "oauth_access_grants", force: :cascade do |t|
-    t.integer  "resource_owner_id", null: false
-    t.integer  "application_id",    null: false
-    t.string   "token",             null: false
-    t.integer  "expires_in",        null: false
-    t.text     "redirect_uri",      null: false
-    t.datetime "created_at",        null: false
-    t.datetime "revoked_at"
-    t.string   "scopes"
-  end
-
-  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
-
-  create_table "oauth_access_tokens", force: :cascade do |t|
-    t.integer  "resource_owner_id"
-    t.integer  "application_id"
-    t.string   "token",             null: false
-    t.string   "refresh_token"
-    t.integer  "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at",        null: false
-    t.string   "scopes"
-  end
-
-  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
-  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
-  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
-
-  create_table "oauth_applications", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.string   "uid",          null: false
-    t.string   "secret",       null: false
-    t.text     "redirect_uri", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
-
-  create_table "prices", force: :cascade do |t|
-    t.integer  "value_cents",    default: 0,                     null: false
-    t.string   "value_currency", default: "USD",                 null: false
-    t.string   "pricetype",                                      null: false
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.string   "lower"
-    t.string   "upper"
-    t.datetime "effective_date", default: '2015-05-07 23:53:56', null: false
-    t.string   "code"
-  end
-
-  create_table "prices_products", id: false, force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "price_id",   null: false
-  end
-
-  add_index "prices_products", ["price_id"], name: "index_prices_products_on_price_id", using: :btree
-  add_index "prices_products", ["product_id"], name: "index_prices_products_on_product_id", using: :btree
-
-  create_table "products", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.string   "description",  null: false
-    t.string   "includes"
-    t.string   "features"
-    t.integer  "packsize"
-    t.string   "packweight"
-    t.string   "unit_measure"
-    t.string   "leadtime"
-    t.string   "rushtime"
-    t.string   "info"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.integer  "supplier_id",  null: false
-  end
-
-  add_index "products", ["supplier_id"], name: "index_products_on_supplier_id", using: :btree
-
-  create_table "products_sizes", id: false, force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "size_id",    null: false
-  end
-
-  add_index "products_sizes", ["product_id"], name: "index_products_sizes_on_product_id", using: :btree
-  add_index "products_sizes", ["size_id"], name: "index_products_sizes_on_size_id", using: :btree
-
-  create_table "roles", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "resource_id"
-    t.string   "resource_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
-  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
-
-  create_table "sizes", force: :cascade do |t|
-    t.string "name",   null: false
-    t.string "width"
-    t.string "height"
-    t.string "depth"
-    t.string "dia"
-  end
 
   create_table "spree_addresses", force: :cascade do |t|
     t.string   "firstname"
@@ -415,6 +204,18 @@ ActiveRecord::Schema.define(version: 20150508185538) do
 
   add_index "spree_log_entries", ["source_id", "source_type"], name: "index_spree_log_entries_on_source_id_and_source_type", using: :btree
 
+  create_table "spree_option_type_translations", force: :cascade do |t|
+    t.integer  "spree_option_type_id"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "presentation"
+  end
+
+  add_index "spree_option_type_translations", ["locale"], name: "index_spree_option_type_translations_on_locale", using: :btree
+  add_index "spree_option_type_translations", ["spree_option_type_id"], name: "index_spree_option_type_translations_on_spree_option_type_id", using: :btree
+
   create_table "spree_option_types", force: :cascade do |t|
     t.string   "name",         limit: 100
     t.string   "presentation", limit: 100
@@ -429,6 +230,18 @@ ActiveRecord::Schema.define(version: 20150508185538) do
     t.integer "prototype_id"
     t.integer "option_type_id"
   end
+
+  create_table "spree_option_value_translations", force: :cascade do |t|
+    t.integer  "spree_option_value_id"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "presentation"
+  end
+
+  add_index "spree_option_value_translations", ["locale"], name: "index_spree_option_value_translations_on_locale", using: :btree
+  add_index "spree_option_value_translations", ["spree_option_value_id"], name: "index_spree_option_value_translations_on_spree_option_value_id", using: :btree
 
   create_table "spree_option_values", force: :cascade do |t|
     t.integer  "position"
@@ -596,6 +409,34 @@ ActiveRecord::Schema.define(version: 20150508185538) do
   add_index "spree_product_properties", ["product_id"], name: "index_product_properties_on_product_id", using: :btree
   add_index "spree_product_properties", ["property_id"], name: "index_spree_product_properties_on_property_id", using: :btree
 
+  create_table "spree_product_property_translations", force: :cascade do |t|
+    t.integer  "spree_product_property_id"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "value"
+  end
+
+  add_index "spree_product_property_translations", ["locale"], name: "index_spree_product_property_translations_on_locale", using: :btree
+  add_index "spree_product_property_translations", ["spree_product_property_id"], name: "index_0968f57fbd8fb9f31050820cbb66109a266c516a", using: :btree
+
+  create_table "spree_product_translations", force: :cascade do |t|
+    t.integer  "spree_product_id"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.text     "description"
+    t.string   "meta_description"
+    t.string   "meta_keywords"
+    t.string   "slug"
+    t.datetime "deleted_at"
+  end
+
+  add_index "spree_product_translations", ["deleted_at"], name: "index_spree_product_translations_on_deleted_at", using: :btree
+  add_index "spree_product_translations", ["locale"], name: "index_spree_product_translations_on_locale", using: :btree
+  add_index "spree_product_translations", ["spree_product_id"], name: "index_spree_product_translations_on_spree_product_id", using: :btree
+
   create_table "spree_products", force: :cascade do |t|
     t.string   "name",                 default: "",   null: false
     t.text     "description"
@@ -687,6 +528,18 @@ ActiveRecord::Schema.define(version: 20150508185538) do
   add_index "spree_promotion_rules_users", ["promotion_rule_id"], name: "index_promotion_rules_users_on_promotion_rule_id", using: :btree
   add_index "spree_promotion_rules_users", ["user_id"], name: "index_promotion_rules_users_on_user_id", using: :btree
 
+  create_table "spree_promotion_translations", force: :cascade do |t|
+    t.integer  "spree_promotion_id"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "description"
+  end
+
+  add_index "spree_promotion_translations", ["locale"], name: "index_spree_promotion_translations_on_locale", using: :btree
+  add_index "spree_promotion_translations", ["spree_promotion_id"], name: "index_spree_promotion_translations_on_spree_promotion_id", using: :btree
+
   create_table "spree_promotions", force: :cascade do |t|
     t.string   "description"
     t.datetime "expires_at"
@@ -712,7 +565,7 @@ ActiveRecord::Schema.define(version: 20150508185538) do
 
   create_table "spree_properties", force: :cascade do |t|
     t.string   "name"
-    t.string   "presentation", null: false
+    t.string   "presentation"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
@@ -721,6 +574,18 @@ ActiveRecord::Schema.define(version: 20150508185538) do
     t.integer "prototype_id"
     t.integer "property_id"
   end
+
+  create_table "spree_property_translations", force: :cascade do |t|
+    t.integer  "spree_property_id"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "presentation"
+  end
+
+  add_index "spree_property_translations", ["locale"], name: "index_spree_property_translations_on_locale", using: :btree
+  add_index "spree_property_translations", ["spree_property_id"], name: "index_spree_property_translations_on_spree_property_id", using: :btree
 
   create_table "spree_prototypes", force: :cascade do |t|
     t.string   "name"
@@ -1058,8 +923,24 @@ ActiveRecord::Schema.define(version: 20150508185538) do
   add_index "spree_tax_rates", ["tax_category_id"], name: "index_spree_tax_rates_on_tax_category_id", using: :btree
   add_index "spree_tax_rates", ["zone_id"], name: "index_spree_tax_rates_on_zone_id", using: :btree
 
+  create_table "spree_taxon_translations", force: :cascade do |t|
+    t.integer  "spree_taxon_id"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.text     "description"
+    t.string   "meta_title"
+    t.string   "meta_description"
+    t.string   "meta_keywords"
+    t.string   "permalink"
+  end
+
+  add_index "spree_taxon_translations", ["locale"], name: "index_spree_taxon_translations_on_locale", using: :btree
+  add_index "spree_taxon_translations", ["spree_taxon_id"], name: "index_spree_taxon_translations_on_spree_taxon_id", using: :btree
+
   create_table "spree_taxonomies", force: :cascade do |t|
-    t.string   "name",                   null: false
+    t.string   "name"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.integer  "position",   default: 0
@@ -1067,10 +948,21 @@ ActiveRecord::Schema.define(version: 20150508185538) do
 
   add_index "spree_taxonomies", ["position"], name: "index_spree_taxonomies_on_position", using: :btree
 
+  create_table "spree_taxonomy_translations", force: :cascade do |t|
+    t.integer  "spree_taxonomy_id"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
+  add_index "spree_taxonomy_translations", ["locale"], name: "index_spree_taxonomy_translations_on_locale", using: :btree
+  add_index "spree_taxonomy_translations", ["spree_taxonomy_id"], name: "index_spree_taxonomy_translations_on_spree_taxonomy_id", using: :btree
+
   create_table "spree_taxons", force: :cascade do |t|
     t.integer  "parent_id"
     t.integer  "position",          default: 0
-    t.string   "name",                          null: false
+    t.string   "name"
     t.string   "permalink"
     t.integer  "taxonomy_id"
     t.integer  "lft"
@@ -1203,50 +1095,5 @@ ActiveRecord::Schema.define(version: 20150508185538) do
 
   add_index "spree_zones", ["default_tax"], name: "index_spree_zones_on_default_tax", using: :btree
   add_index "spree_zones", ["kind"], name: "index_spree_zones_on_kind", using: :btree
-
-  create_table "suppliers", force: :cascade do |t|
-    t.string "name",        null: false
-    t.string "description"
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: ""
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.inet     "current_sign_in_ip"
-    t.inet     "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "name"
-    t.integer  "role"
-    t.string   "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
-    t.string   "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
-    t.integer  "invitation_limit"
-    t.integer  "invited_by_id"
-    t.string   "invited_by_type"
-  end
-
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-
-  create_table "users_roles", id: false, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "role_id"
-  end
-
-  add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
 
 end

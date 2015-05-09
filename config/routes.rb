@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # route used by new relic to monitor uptime fo app
+  get '/ping', to: 'application#ping'
 
   # This line mounts Spree's routes at the root of your application.
   # This means, any requests to URLs such as /products, will go to Spree::ProductsController.

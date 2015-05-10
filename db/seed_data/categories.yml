@@ -1,0 +1,281 @@
+'Apparel':
+  'Unisex':
+    'T-Shirts':
+    'Fashion Fitted':
+    'Polo Shirts':
+    'Dress Shirts':
+    'Jackets':
+    'Sweatshirts':
+    'Activewear':
+    'Bottoms':
+    'Sweaters':
+    'Workwear':
+  'Mens':
+    'T-Shirts':
+    'Polo Shirts':
+    'Dress Shirts':
+    'Jackets':
+    'Sweatshirts':
+    'Activewear':
+    'Bottoms':
+    'Workwear':
+  'Womens':
+    'T-Shirts':
+    'Fashion Fitted':
+    'Polo Shirts':
+    'Dress Shirts':
+    'Jackets':
+    'Sweatshirts':
+    'Activewear':
+    'Sweaters':
+    'Bottoms':
+  'Youth':
+    'T-Shirts':
+    'Polo Shirts':
+    'Jackets':
+    'Sweatshirts':
+    'Activewear':
+    'Bottoms':
+'Headwear-Caps':
+  'General':
+    'Casual-Sport':
+    'Work-Trucker':
+    'Hunting-Outdoor':
+  'Miscellaneous':
+    'Knit-Beanies':
+    'Visors':
+    'Ladies':
+    'Other':
+'Bags-Coolers-Totes':
+  'Bags':
+    'Messenger':
+    'Plastic':
+    'Paper':
+    'Briefcases':
+    'Duffel-Rolling':
+    'Drawstring':
+    'Fashion':
+    'Backpack':
+    'Accessories':
+  'Coolers':
+    'Lunch':
+  'Totes':
+    'Tradeshow':
+    'Grocery':
+    'Fashion':
+    'Eco-Preferable':
+'Tech-Electronics':
+  'Computer-Tablet':
+    'USB':
+    'Speakers':
+    'USB Ports':
+    'USB Accessories':
+    'Mouse Pads-Mice':
+    'Stylus':
+    'Accessories':
+    'Headphones':
+    'Bags-Cases':
+  'Mobile Accessories':
+    'Chargers':
+    'Holders':
+    'Accessories':
+  'Electronics':
+    'AM-FM Radios':
+    'Calculators':
+    'Clocks':
+    'Speakers':
+    'Digital Frames':
+    'Cases':
+'BusinessSupplies':
+  'Supplies':
+    'Sticky':
+    'Notebooks':
+    'Journals':
+    'Badge Holders  Lanyards':
+    'Padfolios':
+    'Clips':
+    'Magnets':
+  'Desktop':
+    'Picture Frames':
+    'Stress Relievers':
+    'Business Card Holders':
+    'Desk Organizers':
+    'Desk Accessories':
+  'Calendars':
+    'Wall':
+    'Desktop':
+    'Planners':
+    'Magnets':
+    'Peel N Stick':
+'Home-Tools-Automotive':
+  'Home':
+    'Kitchen':
+    'Pet Products':
+    'Garden':
+    'Home Accessories':
+  'Tools':
+      'Flashlights':
+      'Knives':
+      'Tape Measures':
+      'Safety':
+      'Tools':
+      'Tool Kits':
+  'Automotive':
+      'Auto Accessories':
+      'Bumper Stickers-Decals':
+      'Auto Tools-Car Kits':
+      'Organizers-Storage':
+      'Travel Mugs':
+      'Key Chains':
+'Mugs-Drinkware':
+  'Mugs-Tumblers':
+    'Ceramic':
+    'Travel':
+    'Stainless Steel':
+    'Acrylic-Plastic':
+    'Disposable':
+    'Eco-Preferable':
+  'Glassware-Barware':
+    'Stemmed':
+    'Bar':
+    'Plastic':
+    'Accessories':
+    'Party':
+    'Eco-Preferable':
+  'Sports Bottles':
+    'Thermos':
+    'Aluminum':
+    'Plastic':
+    'Stainless Steel':
+    'Eco-Preferable':
+'Food-Drink':
+  'Food':
+    'Mints-Candy':
+    'Nuts-Chocolate':
+    'Snacks':
+    'Gift Sets':
+  'Drink':
+    'Hot Mixers':
+    'Bottled':
+'Personal-Healthcare':
+  'Spa':
+    'Bath':
+    'Skin Care':
+    'Nail Care':
+    'General Hygiene':
+  'Healthcare':
+    'Doctor-Dental':
+    'General Healthcare':
+    'Pharmaceutical-Hospital':
+    'Womens Scrubs':
+    'Mens Scrubs':
+  'Personal':
+    'First Aid':
+    'Fitness':
+    'Personal Accessories':
+'Gifts-Awards':
+  'Gifts':
+    'Executive':
+    'Employee':
+    'Holiday':
+    'Edible':
+    'Pen Sets':
+  'Awards':
+    'Trophies':
+    'Medallions':
+    'Plaques':
+    'Crystal-Glass':
+    'Fun':
+    'Desktop Awards':
+    'Lapel Pins':
+  'Clocks-Watches':
+    'Clocks':
+    'Watches':
+'Sports-Outdoor':
+  'Sports':
+    'Team Spirit':
+    'Golf Balls':
+    'Spectator Accessories':
+    'Stadium Cups-Sports Bottles':
+    'Football':
+    'Basketball':
+    'Baseball':
+    'Soccer':
+    'Golf':
+    'Other':
+  'Outdoors':
+    'Camo':
+    'Tailgating':
+    'Blankets-Towels':
+    'Coolers':
+    'Outdoor Games':
+    'Fish-Game':
+    'Pet Supplies':
+    'Camping':
+    'Personal Umbrellas':
+    'Golf Umbrellas':
+    'Other':
+  'Patio':
+    'Umbrellas':
+    'Patio Accessories':
+    'Cabanas':
+    'Outdoor Bar':
+'Pens-Writing Instruments':
+  'Pens':
+    'Executive Pens':
+    'Sets':
+    'Multi-Function':
+    'Eco-Preferable':
+  'Pencils':
+    'Standard':
+    'Mechanical':
+    'Eco-Preferable':
+  'Other':
+    'Highlighters':
+    'Markers':
+    'Crayons':
+    'Multi-Function':
+    'Stylus Pens':
+'Giveaways-Tradeshow':
+  'Tradeshow':
+    'Badge Holders':
+    'Lanyards':
+    'Buttons':
+    'Tote Bags':
+    'Table Covers-Runners':
+    'Banners-Signs':
+    'Lapel Pins':
+    'Stickers-Decals':
+    'Balloons':
+    'Luggage Tags':
+    'Miscellaneous':
+  'Giveaways':
+    'Key Chains':
+    'Pens Under':
+    'Water Bottles':
+    'Pocket Items':
+    'Sunglasses':
+'Novelties':
+  'Games':
+    'Outdoor Games':
+    'Other':
+    'Executive Games':
+    'Table Games':
+  'Novelty':
+    'Stuffed Animals':
+    'Stress Relievers':
+    'Coloring Books':
+    'Balloons':
+    'Sports-Outdoors':
+    'Balls':
+    'Coin Banks':
+    'Miscellaneous':
+'Uniforms':
+  'Apparel':
+    'Mens':
+    'Womens':
+    'Miscellaneous':
+  'Headwear':
+    'Miscellaneous':
+    'Baseball':
+    'Knit-Beanies':

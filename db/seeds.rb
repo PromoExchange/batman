@@ -22,19 +22,45 @@ puts 'Categories'
 # end
 # p.taxons = the_taxons
 #
+
+cf = YAML.load_file('./db/seed_data/categories.yml')
+
+
+
+def load_category_tree(o, p)
+  o.each do |k, v|
+    the_taxons = []
+    # pa = Category.find_or_create_by(name: k, parent_id: p.id)
+    # puts "#{p.id} : #{pa.id}"
+    taxon = Spree::Taxon.where(name: k).first_or_create
+    taxon.parent_id = p.id
+    taxon.save!
+
+    load_category_tree(v, taxon) unless v.nil?
+    the_taxons << taxon
+  end
+end
+
+# r = Category.create name: 'root', parent_id: -1
+main_taxonomy = Spree::Taxonomy.where(:name => 'Category').first_or_create
+t = load_category_tree(cf, main_taxonomy )
+t.inspect
+main_taxonomy.save!
+
+# create outside of loop
+
+
+# inside of main loop
 the_taxons = []
-category_taxonomy = Spree::Taxonomy.where(:name => 'Category').first_or_create
-tax_one = Spree::Taxon.create('one')
-the_taxons << tax_one
-tax_two = Spree::Taxon.create('two')
-the_taxons << tax_two
-tax_three = Spree::Taxon.create('three')
-the_taxons << tax_three
-
-category_taxonomy.taxons << the_taxons
-category_taxonomy.save
-
-exit
+taxon_col.split(/[\r\n]*/).each do |chain|
+  taxon = nil
+  names = chain.split
+  names.each do |name|
+    taxon = Spree::Taxon.where.first_or_create
+  end
+  the_taxons << taxon
+end
+p.taxons = the_taxons
 
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)

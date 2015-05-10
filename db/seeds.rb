@@ -5,7 +5,36 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+puts 'Categories'
 
+# # create outside of loop
+# main_taxonomy = Spree::Taxonomy.where(:name => 'Products').first_or_create
+#
+# # inside of main loop
+# the_taxons = []
+# taxon_col.split(/[\r\n]*/).each do |chain|
+#   taxon = nil
+#   names = chain.split
+#   names.each do |name|
+#     taxon = Spree::Taxon.where.first_or_create
+#   end
+#   the_taxons << taxon
+# end
+# p.taxons = the_taxons
+#
+the_taxons = []
+category_taxonomy = Spree::Taxonomy.where(:name => 'Category').first_or_create
+tax_one = Spree::Taxon.create('one')
+the_taxons << tax_one
+tax_two = Spree::Taxon.create('two')
+the_taxons << tax_two
+tax_three = Spree::Taxon.create('three')
+the_taxons << tax_three
+
+category_taxonomy.taxons << the_taxons
+category_taxonomy.save
+
+exit
 
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
@@ -28,7 +57,7 @@ puts 'Create Users'
   { 'seller@thepromoexchange.com': :seller },
   { 'suppler@thepromoexchange.com': :supplier }
 ].each do |a|
-  a.each do |k, v|
+  a.each do |k, v| # Icky
     user = Spree::User.create(email: k,
                               login: k,
                               password: 'spree123',

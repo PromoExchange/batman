@@ -1,6 +1,6 @@
 Batman App
 ================
-[ ![Codeship Status for PromoExchange/batman](https://codeship.com/projects/2cc23300-d897-0132-c7b9-56577b4e3777/status?branch=master)](https://codeship.com/projects/78885)
+[ ![Codeship Status for PromoExchange/batman](https://codeship.com/projects/2c006b50-d8a5-0132-7907-769405cfda59/status?branch=master)](https://codeship.com/projects/78899)
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 This application was generated with the [rails_apps_composer](https://github.com/RailsApps/rails_apps_composer) gem

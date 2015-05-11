@@ -1,3 +1,4 @@
+Multicolored
 AliceBlue
 AntiqueWhite
 Aqua

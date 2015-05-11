@@ -28,7 +28,6 @@ class CategoryLoader
 private
   def load_category_tree( branch , parent)
     branch.each do |k, v|
-      puts "K:#{k}, V:#{v}"
       taxon = Spree::Taxon.create(name: k,
                                   parent_id: parent.id,
                                   taxonomy_id: @category_taxonomy.id )
@@ -40,22 +39,55 @@ end
 CategoryLoader.new('./db/seed_data/categories.yml').load
 
 puts 'Colors'
-color_type = Spree::OptionType.create(name: 'Color', presentation: 'Colors')
+color_type = Spree::OptionType.create(name: 'color',
+                                      presentation: 'Colors')
 File.open('./db/seed_data/colors.txt').each do |n|
-  Spree::OptionValue.create(name: n, presentation: n, option_type: color_type)
+  Spree::OptionValue.create(name: n.parameterize,
+                            presentation: n,
+                            option_type: color_type)
 end
 
-puts 'Material'
-material_type = Spree::OptionType.create(name: 'Material', presentation: 'Materials')
+puts 'Materials'
+material_type = Spree::OptionType.create(name: 'material',
+                                         presentation: 'Materials')
 File.open('./db/seed_data/materials.txt').each do |n|
-  Spree::OptionValue.create(name: n, presentation: n, option_type: material_type)
+  Spree::OptionValue.create(name: n.parameterize,
+                            presentation: n,
+                            option_type: material_type)
 end
 
-puts 'Brand'
-brand_type = Spree::OptionType.create(name: 'Brand', presentation: 'Brands')
+puts 'Brands'
+brand_type = Spree::OptionType.create(name: 'brand',
+                                      presentation: 'Brands')
 File.open('./db/seed_data/brands.txt').each do |n|
   line = n.strip.split(',')
-  Spree::OptionValue.create(name: line[0], presentation: line[1], option_type: brand_type)
+  Spree::OptionValue.create(name: line[0].parameterize,
+                            presentation: line[1],
+                            option_type: brand_type)
+end
+
+# TODO: Time to DRY this
+puts 'Sizes'
+File.open('./db/seed_data/sizes.txt').each do |n|
+  line = n.strip.split(',')
+
+  option_type = Spree::OptionType.create(name: (line[0]+'_size').parameterize,
+                                         presentation: line[0]+' Size')
+
+  line[1].split('|').each do |v|
+    Spree::OptionValue.create(name: v.parameterize,
+                              presentation: v,
+                              option_type: option_type)
+  end
+end
+
+puts 'Imprint Methods'
+imprint_type = Spree::OptionType.create(name: 'imprint_method',
+                                         presentation: 'Imprint Method')
+File.open('./db/seed_data/imprint_methods.txt').each do |n|
+  Spree::OptionValue.create(name: n,
+                            presentation: n,
+                            option_type: imprint_type)
 end
 
 puts 'Roles'

@@ -15,16 +15,17 @@ puts 'Categories'
 
 category_root = YAML.load_file('./db/seed_data/categories.yml')
 
-def load_category_tree(o, p)
+def load_category_tree(o, p, root_id)
   o.each do |k, v|
     # puts "K:#{k}, V:#{v}"
-    taxon = Spree::Taxon.where(name: k).first_or_create(parent_id: p.id)
-    load_category_tree(v, taxon) unless v.nil?
+    # taxon = Spree::Taxon.where(name: k).first_or_create(parent_id: p.id, taxonomy_id: root_id)
+    taxon = Spree::Taxon.create(name: k, parent_id: p.id, taxonomy_id: root_id)
+    load_category_tree(v, taxon, root_id) unless v.nil?
   end
 end
 
-main_taxonomy = Spree::Taxonomy.where(name:  'Category').first_or_create
-load_category_tree(category_root, main_taxonomy)
+category_taxonomy = Spree::Taxonomy.where(name:  'Category').first_or_create
+load_category_tree(category_root, category_taxonomy, category_taxonomy.id)
 
 puts 'Colors'
 color_type = Spree::OptionType.create(name: 'Color', presentation: 'Colors')

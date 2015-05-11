@@ -13,7 +13,7 @@ SpreeCore::Engine.load_seed if defined?(SpreeCore)
 
 puts 'Categories'
 
-cf = YAML.load_file('./db/seed_data/categories.yml')
+category_root = YAML.load_file('./db/seed_data/categories.yml')
 
 def load_category_tree(o, p)
   o.each do |k, v|
@@ -24,7 +24,13 @@ def load_category_tree(o, p)
 end
 
 main_taxonomy = Spree::Taxonomy.where(:name => 'Category').first_or_create
-load_category_tree(cf, main_taxonomy )
+load_category_tree(category_root, main_taxonomy )
+
+puts 'Color'
+color_type = Spree::OptionType.create :name => 'Color', :presentation => 'Color'
+color_file = File.open('./db/seed_data/colors.txt').each do |n|
+  Spree::OptionValue.create :name => n, :presentation => n, :option_type => color_type
+end
 
 puts 'Roles'
 Spree::Role.where(name: 'admin').first_or_create

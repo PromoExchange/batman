@@ -13,42 +13,18 @@ SpreeCore::Engine.load_seed if defined?(SpreeCore)
 
 puts 'Categories'
 
-# # create outside of loop
-# main_taxonomy = Spree::Taxonomy.where(:name => 'Products').first_or_create
-#
-# # inside of main loop
-# the_taxons = []
-# taxon_col.split(/[\r\n]*/).each do |chain|
-#   taxon = nil
-#   names = chain.split
-#   names.each do |name|
-#     taxon = Spree::Taxon.where.first_or_create
-#   end
-#   the_taxons << taxon
-# end
-# p.taxons = the_taxons
-#
 cf = YAML.load_file('./db/seed_data/categories.yml')
 
 def load_category_tree(o, p)
-  the_taxons = []
   o.each do |k, v|
-    puts "K:#{k}, V:#{v}"
+    # puts "K:#{k}, V:#{v}"
     taxon = Spree::Taxon.where(name: k).first_or_create(parent_id: p.id)
-    the_taxons << taxon
-    the_taxons << load_category_tree(v, taxon) unless v.nil?
+    load_category_tree(v, taxon) unless v.nil?
   end
-  return the_taxons
 end
 
-# r = Category.create name: 'root', parent_id: -1
 main_taxonomy = Spree::Taxonomy.where(:name => 'Category').first_or_create
-t = load_category_tree(cf, main_taxonomy )
-# puts t.inspect
-# byebug
-# main_taxonomy.taxons = t
-# # main_taxonomy.save!
-# exit
+load_category_tree(cf, main_taxonomy )
 
 puts 'Roles'
 Spree::Role.where(name: 'admin').first_or_create
@@ -63,7 +39,7 @@ puts 'Create Users'
   { 'spencer.applegate@thepromoexchange.com': :admin  },
   { 'buyer@thepromoexchange.com': :buyer },
   { 'seller@thepromoexchange.com': :seller },
-  { 'suppler@thepromoexchange.com': :supplier }
+  { 'supplier@thepromoexchange.com': :supplier }
 ].each do |a|
   a.each do |k, v| # Icky
     user = Spree::User.create(email: k,

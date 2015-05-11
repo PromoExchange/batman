@@ -55,42 +55,6 @@ CategoryLoader.new('./db/seed_data/categories.yml').load
   end
 end
 
-# puts 'Colors'
-# color_type = Spree::OptionType.create(name: 'color',
-#                                       presentation: 'Colors')
-# File.open('./db/seed_data/colors.txt').each do |n|
-#   Spree::OptionValue.create(name: n.parameterize,
-#                             presentation: n,
-#                             option_type: color_type)
-# end
-#
-# puts 'Materials'
-# material_type = Spree::OptionType.create(name: 'material',
-#                                          presentation: 'Materials')
-# File.open('./db/seed_data/materials.txt').each do |n|
-#   Spree::OptionValue.create(name: n.parameterize,
-#                             presentation: n,
-#                             option_type: material_type)
-# end
-#
-# puts 'Brands'
-# brand_type = Spree::OptionType.create(name: 'brand',
-#                                       presentation: 'Brands')
-# File.open('./db/seed_data/brands.txt').each do |n|
-#   line = n.strip.split(',')
-#   Spree::OptionValue.create(name: line[0].parameterize,
-#                             presentation: line[1],
-#                             option_type: brand_type)
-# end
-# puts 'Imprint Methods'
-# imprint_type = Spree::OptionType.create(name: 'imprint_method',
-#                                          presentation: 'Imprint Method')
-# File.open('./db/seed_data/imprint_methods.txt').each do |n|
-#   Spree::OptionValue.create(name: n,
-#                             presentation: n,
-#                             option_type: imprint_type)
-# end
-
 puts 'Sizes'
 File.open('./db/seed_data/sizes.txt').each do |n|
   line = n.strip.split(',')

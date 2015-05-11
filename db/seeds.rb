@@ -13,18 +13,31 @@ SpreeCore::Engine.load_seed if defined?(SpreeCore)
 
 puts 'Categories'
 
-category_root = YAML.load_file('./db/seed_data/categories.yml')
+class CategoryLoader
 
-def load_category_tree(o, p)
-  o.each do |k, v|
-    # puts "K:#{k}, V:#{v}"
-    taxon = Spree::Taxon.where(name: k).first_or_create(parent_id: p.id)
-    load_category_tree(v, taxon) unless v.nil?
+  def initialize(fname)
+    @fname = fname
+    @category_taxonomy = Spree::Taxonomy.where(name: 'Category').first_or_create
+  end
+
+  def load
+    category_root = YAML.load_file(@fname)
+    load_category_tree(category_root,@category_taxonomy)
+  end
+
+private
+  def load_category_tree( branch , parent)
+    branch.each do |k, v|
+      puts "K:#{k}, V:#{v}"
+      taxon = Spree::Taxon.create(name: k,
+                                  parent_id: parent.id,
+                                  taxonomy_id: @category_taxonomy.id )
+      load_category_tree(v, taxon) unless v.nil?
+    end
   end
 end
 
-main_taxonomy = Spree::Taxonomy.where(name:  'Category').first_or_create
-load_category_tree(category_root, main_taxonomy)
+CategoryLoader.new('./db/seed_data/categories.yml').load
 
 puts 'Colors'
 color_type = Spree::OptionType.create(name: 'Color', presentation: 'Colors')

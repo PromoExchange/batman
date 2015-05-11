@@ -5,13 +5,45 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-
-
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 
 # Loads seed data out of default dir
 SpreeCore::Engine.load_seed if defined?(SpreeCore)
+
+puts 'Categories'
+
+category_root = YAML.load_file('./db/seed_data/categories.yml')
+
+def load_category_tree(o, p)
+  o.each do |k, v|
+    # puts "K:#{k}, V:#{v}"
+    taxon = Spree::Taxon.where(name: k).first_or_create(parent_id: p.id)
+    load_category_tree(v, taxon) unless v.nil?
+  end
+end
+
+main_taxonomy = Spree::Taxonomy.where(name:  'Category').first_or_create
+load_category_tree(category_root, main_taxonomy)
+
+puts 'Colors'
+color_type = Spree::OptionType.create(name: 'Color', presentation: 'Colors')
+File.open('./db/seed_data/colors.txt').each do |n|
+  Spree::OptionValue.create(name: n, presentation: n, option_type: color_type)
+end
+
+puts 'Material'
+material_type = Spree::OptionType.create(name: 'Material', presentation: 'Materials')
+File.open('./db/seed_data/materials.txt').each do |n|
+  Spree::OptionValue.create(name: n, presentation: n, option_type: material_type)
+end
+
+puts 'Brand'
+brand_type = Spree::OptionType.create(name: 'Brand', presentation: 'Brands')
+File.open('./db/seed_data/brands.txt').each do |n|
+  line = n.strip.split(',')
+  Spree::OptionValue.create(name: line[0], presentation: line[1], option_type: brand_type)
+end
 
 puts 'Roles'
 Spree::Role.where(name: 'admin').first_or_create
@@ -26,9 +58,9 @@ puts 'Create Users'
   { 'spencer.applegate@thepromoexchange.com': :admin  },
   { 'buyer@thepromoexchange.com': :buyer },
   { 'seller@thepromoexchange.com': :seller },
-  { 'suppler@thepromoexchange.com': :supplier }
+  { 'supplier@thepromoexchange.com': :supplier }
 ].each do |a|
-  a.each do |k, v|
+  a.each do |k, v| # Icky
     user = Spree::User.create(email: k,
                               login: k,
                               password: 'spree123',

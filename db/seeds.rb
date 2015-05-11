@@ -28,7 +28,6 @@ class CategoryLoader
 private
   def load_category_tree( branch , parent)
     branch.each do |k, v|
-      puts "K:#{k}, V:#{v}"
       taxon = Spree::Taxon.create(name: k,
                                   parent_id: parent.id,
                                   taxonomy_id: @category_taxonomy.id )
@@ -39,24 +38,73 @@ end
 
 CategoryLoader.new('./db/seed_data/categories.yml').load
 
-puts 'Colors'
-color_type = Spree::OptionType.create(name: 'Color', presentation: 'Colors')
-File.open('./db/seed_data/colors.txt').each do |n|
-  Spree::OptionValue.create(name: n, presentation: n, option_type: color_type)
+
+[
+  ['color', './db/seed_data/colors.txt'],
+  ['material', './db/seed_data/materials.txt'],
+  ['brand', './db/seed_data/brands.txt'],
+  ['imprint', './db/seed_data/imprint_methods.txt'],
+].each do |r|
+  puts r[0].humanize
+  option_type = Spree::OptionType.create(name: r[0],
+                                        presentation: r[0].humanize.pluralize)
+  File.open(r[1]).each do |n|
+    Spree::OptionValue.create(name: n.parameterize,
+              presentation: n,
+              option_type: option_type)
+  end
 end
 
-puts 'Material'
-material_type = Spree::OptionType.create(name: 'Material', presentation: 'Materials')
-File.open('./db/seed_data/materials.txt').each do |n|
-  Spree::OptionValue.create(name: n, presentation: n, option_type: material_type)
-end
+# puts 'Colors'
+# color_type = Spree::OptionType.create(name: 'color',
+#                                       presentation: 'Colors')
+# File.open('./db/seed_data/colors.txt').each do |n|
+#   Spree::OptionValue.create(name: n.parameterize,
+#                             presentation: n,
+#                             option_type: color_type)
+# end
+#
+# puts 'Materials'
+# material_type = Spree::OptionType.create(name: 'material',
+#                                          presentation: 'Materials')
+# File.open('./db/seed_data/materials.txt').each do |n|
+#   Spree::OptionValue.create(name: n.parameterize,
+#                             presentation: n,
+#                             option_type: material_type)
+# end
+#
+# puts 'Brands'
+# brand_type = Spree::OptionType.create(name: 'brand',
+#                                       presentation: 'Brands')
+# File.open('./db/seed_data/brands.txt').each do |n|
+#   line = n.strip.split(',')
+#   Spree::OptionValue.create(name: line[0].parameterize,
+#                             presentation: line[1],
+#                             option_type: brand_type)
+# end
+# puts 'Imprint Methods'
+# imprint_type = Spree::OptionType.create(name: 'imprint_method',
+#                                          presentation: 'Imprint Method')
+# File.open('./db/seed_data/imprint_methods.txt').each do |n|
+#   Spree::OptionValue.create(name: n,
+#                             presentation: n,
+#                             option_type: imprint_type)
+# end
 
-puts 'Brand'
-brand_type = Spree::OptionType.create(name: 'Brand', presentation: 'Brands')
-File.open('./db/seed_data/brands.txt').each do |n|
+puts 'Sizes'
+File.open('./db/seed_data/sizes.txt').each do |n|
   line = n.strip.split(',')
-  Spree::OptionValue.create(name: line[0], presentation: line[1], option_type: brand_type)
+
+  option_type = Spree::OptionType.create(name: (line[0]+'_size').parameterize,
+                                         presentation: line[0]+' Size')
+
+  line[1].split('|').each do |v|
+    Spree::OptionValue.create(name: v.parameterize,
+                              presentation: v,
+                              option_type: option_type)
+  end
 end
+
 
 puts 'Roles'
 Spree::Role.where(name: 'admin').first_or_create
@@ -67,18 +115,16 @@ Spree::Role.where(name: 'supplier').first_or_create
 
 puts 'Create Users'
 [
-  { 'tim.varley@thepromoexchange.com': :admin },
-  { 'spencer.applegate@thepromoexchange.com': :admin  },
-  { 'buyer@thepromoexchange.com': :buyer },
-  { 'seller@thepromoexchange.com': :seller },
-  { 'supplier@thepromoexchange.com': :supplier }
-].each do |a|
-  a.each do |k, v| # Icky
-    user = Spree::User.create(email: k,
-                              login: k,
-                              password: 'spree123',
-                              password_confirmation: 'spree123')
-    user.spree_roles << Spree::Role.find_by_name(v)
-    user.save!
-  end
+  ['tim.varley@thepromoexchange.com', 'admin'],
+  ['spencer.applegate@thepromoexchange.com', 'admin'],
+  ['buyer@thepromoexchange.com', 'buyer'],
+  ['seller@thepromoexchange.com', 'seller'],
+  ['supplier@thepromoexchange.com', 'supplier']
+].each do |r|
+  user = Spree::User.create(email: r[0],
+                            login: r[0],
+                            password: 'spree123',
+                            password_confirmation: 'spree123')
+  user.spree_roles << Spree::Role.find_by_name(r[1])
+  user.save!
 end

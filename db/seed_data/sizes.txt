@@ -1,0 +1,2 @@
+Apparel,S|M|L|XL|2X|3X|4X|5X|6X
+Drinkware,10oz|12oz|16oz|24oz

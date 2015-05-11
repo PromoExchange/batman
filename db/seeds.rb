@@ -23,13 +23,26 @@ def load_category_tree(o, p)
   end
 end
 
-main_taxonomy = Spree::Taxonomy.where(:name => 'Category').first_or_create
-load_category_tree(category_root, main_taxonomy )
+main_taxonomy = Spree::Taxonomy.where(name:  'Category').first_or_create
+load_category_tree(category_root, main_taxonomy)
 
-puts 'Color'
-color_type = Spree::OptionType.create :name => 'Color', :presentation => 'Color'
-color_file = File.open('./db/seed_data/colors.txt').each do |n|
-  Spree::OptionValue.create :name => n, :presentation => n, :option_type => color_type
+puts 'Colors'
+color_type = Spree::OptionType.create(name: 'Color', presentation: 'Colors')
+File.open('./db/seed_data/colors.txt').each do |n|
+  Spree::OptionValue.create(name: n, presentation: n, option_type: color_type)
+end
+
+puts 'Material'
+material_type = Spree::OptionType.create(name: 'Material', presentation: 'Materials')
+File.open('./db/seed_data/materials.txt').each do |n|
+  Spree::OptionValue.create(name: n, presentation: n, option_type: material_type)
+end
+
+puts 'Brand'
+brand_type = Spree::OptionType.create(name: 'Brand', presentation: 'Brands')
+File.open('./db/seed_data/brands.txt').each do |n|
+  line = n.strip.split(',')
+  Spree::OptionValue.create(name: line[0], presentation: line[1], option_type: brand_type)
 end
 
 puts 'Roles'

@@ -1,0 +1,8 @@
+Cotton
+Crystal
+Glass
+Linen
+Plastic
+StainlessSteel
+Steel
+Wood

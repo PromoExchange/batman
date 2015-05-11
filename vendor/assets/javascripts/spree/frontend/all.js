@@ -9,3 +9,4 @@
 //= require spree/frontend
 
 //= require_tree .
+//= require spree/frontend/spree_first_data_gge4

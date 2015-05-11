@@ -17,7 +17,6 @@ class CategoryLoader
 
   def initialize(fname)
     @fname = fname
-    # category_root = YAML.load_file('./db/seed_data/categories.yml')
     @category_taxonomy = Spree::Taxonomy.where(name: 'Category').first_or_create
   end
 

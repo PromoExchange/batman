@@ -1,10 +1,4 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+#  Seeds.rb
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 
@@ -14,7 +8,6 @@ SpreeCore::Engine.load_seed if defined?(SpreeCore)
 puts 'Categories'
 
 class CategoryLoader
-
   def initialize(fname)
     @fname = fname
     @category_taxonomy = Spree::Taxonomy.where(name: 'Category').first_or_create
@@ -22,15 +15,16 @@ class CategoryLoader
 
   def load
     category_root = YAML.load_file(@fname)
-    load_category_tree(category_root,@category_taxonomy)
+    load_category_tree(category_root, @category_taxonomy)
   end
 
-private
-  def load_category_tree( branch , parent)
+  private
+
+  def load_category_tree(branch, parent)
     branch.each do |k, v|
       taxon = Spree::Taxon.create(name: k,
                                   parent_id: parent.id,
-                                  taxonomy_id: @category_taxonomy.id )
+                                  taxonomy_id: @category_taxonomy.id)
       load_category_tree(v, taxon) unless v.nil?
     end
   end
@@ -38,20 +32,19 @@ end
 
 CategoryLoader.new('./db/seed_data/categories.yml').load
 
-
 [
   ['color', './db/seed_data/colors.txt'],
   ['material', './db/seed_data/materials.txt'],
   ['brand', './db/seed_data/brands.txt'],
-  ['imprint', './db/seed_data/imprint_methods.txt'],
+  ['imprint', './db/seed_data/imprint_methods.txt']
 ].each do |r|
   puts r[0].humanize
   option_type = Spree::OptionType.create(name: r[0],
-                                        presentation: r[0].humanize.pluralize)
+                                         presentation: r[0].humanize.pluralize)
   File.open(r[1]).each do |n|
     Spree::OptionValue.create(name: n.parameterize,
-              presentation: n,
-              option_type: option_type)
+                              presentation: n,
+                              option_type: option_type)
   end
 end
 
@@ -59,8 +52,8 @@ puts 'Sizes'
 File.open('./db/seed_data/sizes.txt').each do |n|
   line = n.strip.split(',')
 
-  option_type = Spree::OptionType.create(name: (line[0]+'_size').parameterize,
-                                         presentation: line[0]+' Size')
+  option_type = Spree::OptionType.create(name: (line[0] + '_size').parameterize,
+                                         presentation: line[0] + ' Size')
 
   line[1].split('|').each do |v|
     Spree::OptionValue.create(name: v.parameterize,
@@ -68,7 +61,6 @@ File.open('./db/seed_data/sizes.txt').each do |n|
                               option_type: option_type)
   end
 end
-
 
 puts 'Roles'
 Spree::Role.where(name: 'admin').first_or_create

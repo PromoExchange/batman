@@ -10,3 +10,4 @@
 
 //= require_tree .
 //= require spree/frontend/spree_first_data_gge4
+//= require spree/frontend/spree_px_auction

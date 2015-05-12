@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150509235521) do
+ActiveRecord::Schema.define(version: 20150512201325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "auction", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "seller_id"
+    t.integer  "bidder_id"
+    t.string   "descripiton"
+    t.datetime "started"
+    t.datetime "ended"
+    t.decimal  "bid"
+  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -91,6 +101,26 @@ ActiveRecord::Schema.define(version: 20150509235521) do
 
   add_index "spree_assets", ["viewable_id"], name: "index_assets_on_viewable_id", using: :btree
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
+
+  create_table "spree_auction", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "seller_id"
+    t.integer  "bidder_id"
+    t.string   "descripiton"
+    t.datetime "started"
+    t.datetime "ended"
+    t.decimal  "bid"
+  end
+
+  create_table "spree_auctions", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "seller_id"
+    t.integer  "bidder_id"
+    t.string   "descripiton"
+    t.datetime "started"
+    t.datetime "ended"
+    t.decimal  "bid"
+  end
 
   create_table "spree_calculators", force: :cascade do |t|
     t.string   "type"

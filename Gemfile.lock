@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: git://github.com/spree/spree_auth_devise.git
-  revision: 347428395b8c06c79c3bfe516404314a1c365839
+  revision: d2ee454e21746094d6e0bc79b9d4421b5849c20e
   branch: 3-0-stable
   specs:
     spree_auth_devise (3.0.0)
@@ -41,6 +41,12 @@ GIT
       kaminari-i18n (~> 0.3.2)
       rails-i18n (~> 4.0.1)
       spree_core (~> 3.0.0)
+
+PATH
+  remote: ../spree_px_auction
+  specs:
+    spree_px_auction (3.0.1)
+      spree_core (~> 3.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -250,7 +256,7 @@ GEM
     kgio (2.9.3)
     launchy (2.4.3)
       addressable (~> 2.3)
-    letter_opener (1.3.0)
+    letter_opener (1.4.0)
       launchy (~> 2.2)
     listen (2.10.0)
       celluloid (~> 0.16.0)
@@ -473,9 +479,9 @@ GEM
     spring (1.3.6)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
-    sprockets (3.0.3)
+    sprockets (3.1.0)
       rack (~> 1.0)
-    sprockets-rails (2.3.0)
+    sprockets-rails (2.3.1)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
@@ -573,6 +579,7 @@ DEPENDENCIES
   spree_first_data_gge4
   spree_gateway!
   spree_i18n!
+  spree_px_auction!
   spring
   spring-commands-rspec
   terminal-notifier-guard (~> 1.6.1)

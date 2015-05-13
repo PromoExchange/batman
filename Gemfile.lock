@@ -42,8 +42,10 @@ GIT
       rails-i18n (~> 4.0.1)
       spree_core (~> 3.0.0)
 
-PATH
-  remote: ../spree_px_auction
+GIT
+  remote: https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git
+  revision: 1d7659c934cbbb7daec4e3d89f750cdf75272a6a
+  branch: master
   specs:
     spree_px_auction (3.0.1)
       spree_core (~> 3.0.1)
@@ -230,7 +232,7 @@ GEM
     hitimes (1.2.2)
     htmlentities (4.3.3)
     http_parser.rb (0.6.0)
-    httparty (0.13.3)
+    httparty (0.13.4)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)

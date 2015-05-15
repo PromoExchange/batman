@@ -5,6 +5,8 @@
 #batman-footer {
   background: $gray-dark;
   color: #fff; // white
+  margin: 0;
+  border-radius: 0 !important;
 
   .company-info {
     margin: 15px 40px 15px 15px;

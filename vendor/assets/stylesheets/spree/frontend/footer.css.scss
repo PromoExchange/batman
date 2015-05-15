@@ -1,0 +1,12 @@
+@import "bootstrap-sprockets";
+@import "variables";
+@import "bootstrap";
+
+#batman-footer {
+  background: $gray-dark;
+  color: #fff; // white
+
+  .company-info {
+    margin: 15px 40px 15px 15px;
+  }
+}

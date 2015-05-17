@@ -1,0 +1,22 @@
+@import "bootstrap-sprockets";
+@import "variables";
+@import "bootstrap";
+
+#batman-header {
+  margin: 0;
+  border-radius: 0 !important;
+
+  .login-button {
+    margin: 15px 40px 15px;
+  }
+}
+
+#batman-footer {
+  color: $navbar-inverse-color;
+  margin: 0;
+  border-radius: 0 !important;
+
+  .company-info {
+    margin: 15px 40px 15px;
+  }
+}

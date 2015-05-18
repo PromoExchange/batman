@@ -20,7 +20,7 @@ Deface::Override.new(
     <div class="header-nav-elements">
       <a href="#"><h2 class="header-nav-element">BUYERS</h2></a>
       <a href="#"><h2 class="header-nav-element">SELLERS</h2></a>
-      <a href="#"><h2 class="header-nav-element">PRODUCTS</h2></a>
+      <a href="/products"><h2 class="header-nav-element">PRODUCTS</h2></a>
       <a href="#"><h2 class="header-nav-element">FAQ</h2></a>
       <a href="#"><h2 class="header-nav-element">CONTACT US</h2></a>
     </div>

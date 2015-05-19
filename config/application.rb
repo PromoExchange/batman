@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 module Batman
   class Application < Rails::Application
-    
+
     config.to_prepare do
       # Load application's model / class decorators
       Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|
@@ -19,6 +19,11 @@ module Batman
       Dir.glob(File.join(File.dirname(__FILE__), "../app/overrides/*.rb")) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
+    end
+
+    # Load all images in images sub directories
+    Dir.glob("#{Rails.root}/app/assets/images/**/").each do |path|
+      config.assets.paths << path
     end
 
     # Settings in config/environments/* take precedence over those specified here.

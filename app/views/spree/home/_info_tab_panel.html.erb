@@ -1,0 +1,23 @@
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#buy" aria-controls="buy" role="tab" data-toggle="tab">Buy on PromoExchange</a>
+    </li>
+    <li role="presentation">
+      <a href="#sell" aria-controls="sell" role="tab" data-toggle="tab">Sell on PromoExchange</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="buy">
+      <%= render partial: 'spree/home/buyer_info' %>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="sell">
+      <%= render partial: 'spree/home/seller_info' %>
+    </div>
+  </div>
+
+</div>

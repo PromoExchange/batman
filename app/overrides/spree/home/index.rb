@@ -9,9 +9,9 @@ Deface::Override.new(
 # Add buyer/seller info
 Deface::Override.new(
   virtual_path:  'spree/home/index',
-  name:          'home_index_add_user_info',
+  name:          'home_index_add_info_tab_panel',
   insert_before: "[data-hook='homepage_sidebar_navigation']",
-  partial:       'spree/home/user_info'
+  partial:       'spree/home/info_tab_panel'
 )
 
 # Remove products sidebar from homepage

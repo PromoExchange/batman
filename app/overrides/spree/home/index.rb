@@ -1,3 +1,11 @@
+# Add carousel
+Deface::Override.new(
+  virtual_path:  'spree/home/index',
+  name:          'home_index_add_carousel',
+  insert_before: "[data-hook='homepage_sidebar_navigation']",
+  partial:       'spree/home/carousel'
+)
+
 # Remove products sidebar from homepage
 Deface::Override.new(
   virtual_path: 'spree/home/index',

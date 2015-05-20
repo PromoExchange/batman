@@ -22,7 +22,7 @@ gem 'deface', git: 'git://github.com/spree/deface.git', branch: 'master'
 # PX Extension
 gem 'spree_px_auction', git: "https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git", branch: 'master'
 
-gem 'aws-sdk'
+gem 'aws-sdk', '~> 1.60.2'
 
 gem 'spree_first_data_gge4'
 

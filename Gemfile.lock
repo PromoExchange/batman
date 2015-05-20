@@ -31,7 +31,7 @@ GIT
 
 GIT
   remote: git://github.com/spree/spree_i18n.git
-  revision: 3dbfd20d6e7997adfa45e7b155e0db5d69b6e3bb
+  revision: e9cb3c9c8006f64e2b65919cb264c9a0a5d1d672
   branch: 3-0-stable
   specs:
     spree_i18n (3.0.0)
@@ -44,7 +44,7 @@ GIT
 
 GIT
   remote: https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git
-  revision: 1d7659c934cbbb7daec4e3d89f750cdf75272a6a
+  revision: 120392f1e8ddf2ba8ac63648f39e6b83799f2658
   branch: master
   specs:
     spree_px_auction (3.0.1)
@@ -108,14 +108,11 @@ GEM
       json
     awesome_nested_set (3.0.2)
       activerecord (>= 4.0.0, < 5)
-    aws-sdk (2.0.42)
-      aws-sdk-resources (= 2.0.42)
-    aws-sdk-core (2.0.42)
-      builder (~> 3.0)
-      jmespath (~> 1.0)
-      multi_json (~> 1.0)
-    aws-sdk-resources (2.0.42)
-      aws-sdk-core (= 2.0.42)
+    aws-sdk (1.60.2)
+      aws-sdk-v1 (= 1.60.2)
+    aws-sdk-v1 (1.60.2)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     bcrypt (3.1.10)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -127,7 +124,7 @@ GEM
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
     builder (3.2.2)
-    byebug (4.0.5)
+    byebug (5.0.0)
       columnize (= 0.9.0)
     camertron-eprun (1.1.0)
     cancancan (1.10.1)
@@ -232,21 +229,19 @@ GEM
     hitimes (1.2.2)
     htmlentities (4.3.3)
     http_parser.rb (0.6.0)
-    httparty (0.13.4)
+    httparty (0.13.5)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
     i18n_data (0.5.1)
-    jbuilder (2.2.13)
+    jbuilder (2.2.16)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
-    jmespath (1.0.2)
-      multi_json (~> 1.0)
     jquery-rails (4.0.3)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    jquery-ui-rails (5.0.3)
+    jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
     json (1.8.2)
     kaminari (0.16.3)
@@ -294,9 +289,9 @@ GEM
       mime-types
     paranoia (2.1.2)
       activerecord (~> 4.0)
-    parser (2.2.2.2)
+    parser (2.2.2.3)
       ast (>= 1.1, < 3.0)
-    pg (0.18.1)
+    pg (0.18.2)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
     polyglot (0.3.5)
@@ -542,7 +537,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate (~> 2.6.6)
-  aws-sdk
+  aws-sdk (~> 1.60.2)
   better_errors
   binding_of_caller
   byebug

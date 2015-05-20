@@ -44,7 +44,7 @@ GIT
 
 GIT
   remote: https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git
-  revision: 120392f1e8ddf2ba8ac63648f39e6b83799f2658
+  revision: b4887f6183ff466e4ea779166c180ed436cdaeb9
   branch: master
   specs:
     spree_px_auction (3.0.1)
@@ -189,6 +189,8 @@ GEM
     ffi (1.9.8)
     font-awesome-rails (4.3.0.0)
       railties (>= 3.2, < 5.0)
+    font-awesome-sass (4.3.2.1)
+      sass (~> 3.2)
     formatador (0.2.5)
     friendly_id (5.1.0)
       activerecord (>= 4.0.0)
@@ -548,6 +550,7 @@ DEPENDENCIES
   dotenv-rails
   factory_girl_rails
   ffaker
+  font-awesome-sass
   guard
   guard-bundler
   guard-livereload

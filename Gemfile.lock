@@ -44,7 +44,7 @@ GIT
 
 GIT
   remote: https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git
-  revision: b4887f6183ff466e4ea779166c180ed436cdaeb9
+  revision: 828471e82f7de0ef39ddc2448ccb16fa2182f561
   branch: master
   specs:
     spree_px_auction (3.0.1)

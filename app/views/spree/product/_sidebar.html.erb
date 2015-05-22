@@ -1,39 +1,17 @@
+<% max_level = Spree::Config[:max_level_in_taxons_menu] || 3 %>
 <div id="batman-sidebar">
 
   <div class="well well-sm">
-    <div class="slide-header">
-      <a data-toggle="collapse" href="#categories_slide"><%=Spree.t(:categories)%></a>
+    <% @taxonomies.each do |taxonomy| %>
+      <% name = ("#{taxonomy.name}-slide").downcase! %>
+      <div class="slide-header">
+          <a data-toggle="collapse" data-target='<%="\##{name}"%>'><%=Spree.t(taxonomy.name)%></a>
+        </div>
+        <div id='<%="#{name}"%>' class="collapse in scroll-box">
+        <% cache [I18n.locale, taxonomy, max_level] do %>
+          <%= taxons_tree(taxonomy.root, @taxon, max_level) %>
+        <% end %>
       </div>
-    <div id='categories_slide' class="collapse in scroll-box">
-      <h4><%= Spree.t(:categories) %></h4>
-    </div>
+    <% end %>
   </div>
-
-  <div class="well well-sm">
-    <div class="slide-header">
-      <a data-toggle="collapse" href="#colors-slide"><%=Spree.t(:colors)%></a>
-    </div>
-    <div id='colors-slide' class="collapse in scroll-box">
-      <h4><%= Spree.t(:colors) %></h4>
-    </div>
-  </div>
-
-  <div class="well well-sm">
-    <div class="slide-header">
-      <a data-toggle="collapse" href="#starting-bid"><%=Spree.t(:starting_bid)%></a>
-    </div>
-    <div id='starting-bid' class="collapse in scroll-box">
-      <h4><%= Spree.t(:starting_bid) %></h4>
-    </div>
-  </div>
-
-  <div class="well well-sm">
-    <div class="slide-header">
-      <a data-toggle="collapse" href="#app-sizing-slide"><%=Spree.t(:apparel_sizing)%></a>
-    </div>
-    <div id='app-sizing-slide' class="collapse in scroll-box">
-      <h4><%= Spree.t(:apparel_sizing) %></h4>
-    </div>
-  </div>
-
 </div>

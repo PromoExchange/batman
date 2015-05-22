@@ -18,11 +18,11 @@ Deface::Override.new(
       <%= render :partial => "spree/shared/search" %>
     </li>
     <div class="header-nav-elements">
-      <a href="#"><h2 class="header-nav-element">BUYERS</h2></a>
-      <a href="#"><h2 class="header-nav-element">SELLERS</h2></a>
+      <a href="/buyer_how_it_works"><h2 class="header-nav-element">BUYERS</h2></a>
+      <a href="/seller_how_it_works"><h2 class="header-nav-element">SELLERS</h2></a>
       <a href="/products"><h2 class="header-nav-element">PRODUCTS</h2></a>
-      <a href="#"><h2 class="header-nav-element">FAQ</h2></a>
-      <a href="#"><h2 class="header-nav-element">CONTACT US</h2></a>
+      <a href="/faq"><h2 class="header-nav-element">FAQ</h2></a>
+      <a href="/contact"><h2 class="header-nav-element">CONTACT US</h2></a>
     </div>
   </ul>
   CODE

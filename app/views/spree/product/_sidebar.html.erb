@@ -5,7 +5,7 @@
     <% @taxonomies.each do |taxonomy| %>
       <% name = ("#{taxonomy.name}-slide").downcase! %>
       <div class="slide-header">
-          <a data-toggle="collapse" data-target='<%="\##{name}"%>'><%=Spree.t(taxonomy.name)%></a>
+          <a data-toggle="collapse" data-target='<%="\##{name}"%>'<%=Spree.t(taxonomy.name)%></a>
         </div>
         <div id='<%="#{name}"%>' class="collapse in scroll-box">
         <% cache [I18n.locale, taxonomy, max_level] do %>

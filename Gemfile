@@ -21,7 +21,7 @@ gem 'spree_i18n', git: 'git://github.com/spree/spree_i18n.git', branch: '3-0-sta
 gem 'deface', git: 'git://github.com/spree/deface.git', branch: 'master'
 
 # PX Extension
-gem 'spree_px_auction', git: "https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git", branch: 'buyside_auction'
+gem 'spree_px_auction', git: "https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git", branch: 'master'
 
 gem 'aws-sdk', '~> 1.60.2'
 

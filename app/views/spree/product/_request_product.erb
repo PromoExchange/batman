@@ -15,10 +15,11 @@
                   <div class="form-group">
                     <%= label_tag(:q, "Upload picture* ") %>
                     <%= button_tag('Browse...') %>
+                    <i> Acceptable formats: .jpg, .png</i>
                   </div>
+                  <%= label_tag(:message, "Description") %>
                   <div class="form-group">
-                    <%= label_tag(:message, "Description") %>
-                    <%= text_area_tag(:message, "", size: "50x6") %>
+                    <%= text_area_tag(:message, "", size: "60x6") %>
                   </div>
                 <% end %>
             </div>

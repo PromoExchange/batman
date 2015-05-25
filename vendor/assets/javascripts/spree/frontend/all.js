@@ -11,3 +11,16 @@
 //= require_tree .
 //= require spree/frontend/spree_first_data_gge4
 //= require spree/frontend/spree_px_auction
+
+$(function() {
+  $('.title').on('keyup change', function(e) {
+    var qty = parseInt($(this).val());
+    if (allPrices === undefined || allPrices.length === 0) { return null; }
+
+    if (qty <= allPrices.length) {
+      $('span.price.selling').text('$' + allPrices[qty - 1]);
+    } else {
+      $('span.price.selling').text('$' + lowestDiscountedVolumePrice);
+    }
+  });
+});

@@ -6,6 +6,16 @@ Spree::Product.class_eval do
   end
 
   def lowest_discounted_volume_price
-    Spree::Variant.where(product_id: id).first.volume_prices[-1].amount.to_f
+    volume_prices = Spree::Variant.where(product_id: id).first.volume_prices
+
+    return 0 unless volume_prices.present?
+    volume_prices[-1].amount.to_f
+  end
+
+  def highest_discounted_volume_price
+    volume_prices = Spree::Variant.where(product_id: id).first.volume_prices
+
+    return nil unless volume_prices.present?
+    volume_prices[0].amount.to_f
   end
 end

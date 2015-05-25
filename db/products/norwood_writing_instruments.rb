@@ -11,6 +11,5 @@ default_attrs = {
 file_name = File.join(Rails.root, 'db/product_data/norwood_writing_instruments.csv')
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
-  binding.pry
   ap 'here'
 end

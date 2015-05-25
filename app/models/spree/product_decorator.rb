@@ -9,13 +9,13 @@ Spree::Product.class_eval do
     volume_prices = Spree::Variant.where(product_id: id).first.volume_prices
 
     return 0 unless volume_prices.present?
-    volume_prices[-1].amount.to_f
+    volume_prices.last.amount.to_f
   end
 
   def highest_discounted_volume_price
     volume_prices = Spree::Variant.where(product_id: id).first.volume_prices
 
     return 0 unless volume_prices.present?
-    volume_prices[0].amount.to_f
+    volume_prices.first.amount.to_f
   end
 end

@@ -51,6 +51,14 @@ GIT
       spree_core (~> 3.0.0)
 
 GIT
+  remote: git://github.com/spree/spree_volume_pricing.git
+  revision: a01fa2b9a29bebfb89d525caf18ce508d777a436
+  branch: 3-0-stable
+  specs:
+    spree_volume_pricing (3.3.0)
+      spree_core (~> 3.0.0)
+
+GIT
   remote: https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git
   revision: 828471e82f7de0ef39ddc2448ccb16fa2182f561
   branch: master
@@ -595,6 +603,7 @@ DEPENDENCIES
   spree_i18n!
   spree_px_auction!
   spree_static_content!
+  spree_volume_pricing!
   spring
   spring-commands-rspec
   terminal-notifier-guard (~> 1.6.1)

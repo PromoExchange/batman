@@ -4,7 +4,9 @@ require './lib/product_loader'
 #  Seeds.rb
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
-ActiveRecord::Base.descendants.each(&:reset_column_information)
+
+puts 'Tax Categories'
+Spree::TaxCategory.create!(name: 'Default', is_default: true)
 
 puts 'Categories'
 
@@ -87,4 +89,5 @@ puts 'Create Users'
 end
 
 # Load products
-ProductLoader.load_products('norwood_writing_instruments')
+# ActiveRecord::Base.descendants.each(&:reset_column_information)
+# ProductLoader.load_products('norwood_writing_instruments')

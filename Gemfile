@@ -30,7 +30,6 @@ gem 'spree_first_data_gge4'
 
 group :development do
   gem 'rubocop', require: false
-  gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'terminal-notifier-guard', '~> 1.6.1'
@@ -51,6 +50,9 @@ group :development do
 end
 
 group :development, :test do
+  gem 'awesome_print', '~> 1.2.0'
+  gem 'pry'
+  gem 'pry-byebug'
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'rspec-rails'

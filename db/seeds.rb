@@ -1,9 +1,10 @@
+# Product loader
+require './lib/product_loader'
+
 #  Seeds.rb
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
-
-# Loads seed data out of default dir
-SpreeCore::Engine.load_seed if defined?(SpreeCore)
+ActiveRecord::Base.descendants.each(&:reset_column_information)
 
 puts 'Categories'
 
@@ -84,3 +85,6 @@ puts 'Create Users'
   user.spree_roles << Spree::Role.find_by_name(r[1])
   user.save!
 end
+
+# Load products
+ProductLoader.load_products('norwood_writing_instruments')

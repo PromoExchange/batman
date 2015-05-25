@@ -21,3 +21,4 @@
 .env
 
 public/assets/**
+public/spree/**

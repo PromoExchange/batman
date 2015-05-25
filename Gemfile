@@ -17,12 +17,15 @@ gem 'font-awesome-sass'
 gem 'spree', '3.0.1'
 gem 'spree_gateway', github: 'spree/spree_gateway', branch: '3-0-stable'
 gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: '3-0-stable'
+gem 'spree_volume_pricing', github: 'spree/spree_volume_pricing', branch: '3-0-stable'
 gem 'spree_i18n', git: 'git://github.com/spree/spree_i18n.git', branch: '3-0-stable'
 gem 'deface', git: 'git://github.com/spree/deface.git', branch: 'master'
 gem 'spree_static_content', github: 'spree-contrib/spree_static_content', branch: '3-0-stable'
 
 # PX Extension
-gem 'spree_px_auction', git: "https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git", branch: 'master'
+gem 'spree_px_auction',
+  git: 'https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git',
+  branch: 'master'
 
 gem 'aws-sdk', '~> 1.60.2'
 
@@ -30,7 +33,6 @@ gem 'spree_first_data_gge4'
 
 group :development do
   gem 'rubocop', require: false
-  gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'terminal-notifier-guard', '~> 1.6.1'
@@ -51,6 +53,9 @@ group :development do
 end
 
 group :development, :test do
+  gem 'awesome_print', '~> 1.2.0'
+  gem 'pry'
+  gem 'pry-byebug'
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'rspec-rails'

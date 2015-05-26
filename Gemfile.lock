@@ -60,7 +60,7 @@ GIT
 
 GIT
   remote: https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git
-  revision: 828471e82f7de0ef39ddc2448ccb16fa2182f561
+  revision: 1641a5eab236f8ff612810d63e65b2c32f3445ad
   branch: master
   specs:
     spree_px_auction (3.0.1)
@@ -284,7 +284,7 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
-    mime-types (2.5)
+    mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.6.1)
     monetize (1.3.0)
@@ -318,7 +318,7 @@ GEM
     premailer (1.8.4)
       css_parser (>= 1.3.6)
       htmlentities (>= 4.0.0)
-    premailer-rails (1.8.1)
+    premailer-rails (1.8.2)
       actionmailer (>= 3, < 5)
       premailer (~> 1.7, >= 1.7.9)
     pry (0.10.1)

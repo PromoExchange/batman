@@ -88,6 +88,11 @@ puts 'Create Users'
   user.save!
 end
 
+puts 'Imprint methods'
+File.open('./db/seed_data/imprint_methods.txt').each do |n|
+  Spree::ImprintMethod.create( name: n )
+end
+
 # Load products
 # ActiveRecord::Base.descendants.each(&:reset_column_information)
 # ProductLoader.load_products('norwood_writing_instruments')

@@ -180,6 +180,19 @@ ActiveRecord::Schema.define(version: 20150526135438) do
   add_index "spree_gateways", ["active"], name: "index_spree_gateways_on_active", using: :btree
   add_index "spree_gateways", ["test_mode"], name: "index_spree_gateways_on_test_mode", using: :btree
 
+  create_table "spree_imprint_methods", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "spree_imprint_methods_products", force: :cascade do |t|
+    t.integer "product_id",        null: false
+    t.integer "imprint_method_id", null: false
+  end
+
+  add_index "spree_imprint_methods_products", ["product_id", "imprint_method_id"], name: "spree_imprint_product_idx", using: :btree
+
   create_table "spree_inventory_units", force: :cascade do |t|
     t.string   "state"
     t.integer  "variant_id"

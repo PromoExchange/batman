@@ -12,6 +12,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'pg'
 gem 'unicorn'
 gem 'font-awesome-sass'
+gem 'bower-rails'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

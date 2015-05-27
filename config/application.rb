@@ -23,6 +23,8 @@ module Batman
       end
     end
 
+    config.assets.paths << Rails.root.join("vendor","assets","bower_components")
+
     # Load all images in images sub directories
     Dir.glob("#{Rails.root}/app/assets/images/**/").each do |path|
       config.assets.paths << path

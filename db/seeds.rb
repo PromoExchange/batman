@@ -1,3 +1,5 @@
+require 'csv'
+
 # Product loader
 require './lib/product_loader'
 
@@ -8,8 +10,15 @@ Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 puts 'Tax Categories'
 Spree::TaxCategory.create!(name: 'Default', is_default: true)
 
-puts 'Categories'
+def seed_path(fname)
+  f = File.join(Rails.root, 'db', 'seed_data', fname)
+  unless File.exist?(f)
+    fail Errno::ENOENT "File #{f} does not exist"
+  end
+  f
+end
 
+puts 'Categories'
 class CategoryLoader
   def initialize(fname)
     @fname = fname
@@ -33,26 +42,35 @@ class CategoryLoader
   end
 end
 
-CategoryLoader.new('./db/seed_data/categories.yml').load
+CategoryLoader.new(seed_path('categories.yml')).load
 
 [
-  ['color', './db/seed_data/colors.txt'],
-  ['material', './db/seed_data/materials.txt'],
-  ['brand', './db/seed_data/brands.txt'],
-  ['imprint', './db/seed_data/imprint_methods.txt']
+  'color',
+  'material',
+  'brand'
 ].each do |r|
-  puts r[0].humanize
-  option_type = Spree::OptionType.create(name: r[0],
-                                         presentation: r[0].humanize.pluralize)
-  File.open(r[1]).each do |n|
+  puts r.humanize
+  option_type = Spree::OptionType.create(name: r,
+                                         presentation: r.humanize.pluralize)
+  File.open(seed_path(r.pluralize + '.txt')).each do |n|
     Spree::OptionValue.create(name: n.parameterize,
                               presentation: n,
                               option_type: option_type)
   end
 end
 
+puts 'Imprint methods'
+File.open(seed_path('imprint_methods.txt')).each do |n|
+  Spree::ImprintMethod.create(name: n)
+end
+
+puts 'PMS Colors'
+CSV.foreach(seed_path('pms_colors.csv'), headers: true, header_converters: :symbol) do |row|
+  Spree::PmsColor.create(row.to_hash)
+end
+
 puts 'Sizes'
-File.open('./db/seed_data/sizes.txt').each do |n|
+File.open(seed_path('sizes.txt')).each do |n|
   line = n.strip.split(',')
 
   option_type = Spree::OptionType.create(name: (line[0] + '_size').parameterize,
@@ -86,11 +104,6 @@ puts 'Create Users'
                             password_confirmation: 'spree123')
   user.spree_roles << Spree::Role.find_by_name(r[1])
   user.save!
-end
-
-puts 'Imprint methods'
-File.open('./db/seed_data/imprint_methods.txt').each do |n|
-  Spree::ImprintMethod.create( name: n )
 end
 
 # Load products

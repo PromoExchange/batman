@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150526135438) do
+ActiveRecord::Schema.define(version: 20150527031939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -436,6 +436,13 @@ ActiveRecord::Schema.define(version: 20150526135438) do
   add_index "spree_payments", ["order_id"], name: "index_spree_payments_on_order_id", using: :btree
   add_index "spree_payments", ["payment_method_id"], name: "index_spree_payments_on_payment_method_id", using: :btree
   add_index "spree_payments", ["source_id", "source_type"], name: "index_spree_payments_on_source_id_and_source_type", using: :btree
+
+  create_table "spree_pms_colors", force: :cascade do |t|
+    t.string "name",    null: false
+    t.string "pantone", null: false
+    t.string "textile"
+    t.string "hex"
+  end
 
   create_table "spree_preferences", force: :cascade do |t|
     t.text     "value"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150527031939) do
+ActiveRecord::Schema.define(version: 20150528183251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,12 +186,13 @@ ActiveRecord::Schema.define(version: 20150527031939) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "spree_imprint_methods_products", force: :cascade do |t|
-    t.integer "product_id",        null: false
+  create_table "spree_imprint_methods_products", id: false, force: :cascade do |t|
     t.integer "imprint_method_id", null: false
+    t.integer "product_id",        null: false
   end
 
-  add_index "spree_imprint_methods_products", ["product_id", "imprint_method_id"], name: "spree_imprint_product_idx", using: :btree
+  add_index "spree_imprint_methods_products", ["imprint_method_id"], name: "index_spree_imprint_methods_products_on_imprint_method_id", using: :btree
+  add_index "spree_imprint_methods_products", ["product_id"], name: "index_spree_imprint_methods_products_on_product_id", using: :btree
 
   create_table "spree_inventory_units", force: :cascade do |t|
     t.string   "state"
@@ -290,6 +291,14 @@ ActiveRecord::Schema.define(version: 20150527031939) do
 
   add_index "spree_option_values", ["option_type_id"], name: "index_spree_option_values_on_option_type_id", using: :btree
   add_index "spree_option_values", ["position"], name: "index_spree_option_values_on_position", using: :btree
+
+  create_table "spree_option_values_suppliers", id: false, force: :cascade do |t|
+    t.integer "option_value_id", null: false
+    t.integer "supplier_id",     null: false
+  end
+
+  add_index "spree_option_values_suppliers", ["option_value_id"], name: "index_spree_option_values_suppliers_on_option_value_id", using: :btree
+  add_index "spree_option_values_suppliers", ["supplier_id"], name: "index_spree_option_values_suppliers_on_supplier_id", using: :btree
 
   create_table "spree_option_values_variants", id: false, force: :cascade do |t|
     t.integer "variant_id"
@@ -974,7 +983,7 @@ ActiveRecord::Schema.define(version: 20150527031939) do
 
   create_table "spree_suppliers", force: :cascade do |t|
     t.integer  "address_id"
-    t.string   "name"
+    t.string   "name",        null: false
     t.string   "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false

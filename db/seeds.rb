@@ -18,6 +18,11 @@ def seed_path(fname)
   f
 end
 
+puts 'Suppliers'
+File.open(seed_path('suppliers.txt')).each do |n|
+  Spree::Supplier.create(name: n)
+end
+
 puts 'Categories'
 class CategoryLoader
   def initialize(fname)

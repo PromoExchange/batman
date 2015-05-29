@@ -114,4 +114,5 @@ end
 
 # Load products
 ActiveRecord::Base.descendants.each(&:reset_column_information)
-ProductLoader.load_products('norwood')
+ProductLoader.load_products('crown')
+# ProductLoader.load_products('norwood')

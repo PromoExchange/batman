@@ -12,9 +12,7 @@ Spree::TaxCategory.create!(name: 'Default', is_default: true)
 
 def seed_path(fname)
   f = File.join(Rails.root, 'db', 'seed_data', fname)
-  unless File.exist?(f)
-    fail Errno::ENOENT "File #{f} does not exist"
-  end
+  fail Errno::ENOENT "File #{f} does not exist" unless File.exist?(f)
   f
 end
 
@@ -105,6 +103,13 @@ puts 'Create Users'
                             password_confirmation: 'spree123')
   user.spree_roles << Spree::Role.find_by_name(r[1])
   user.save!
+end
+
+puts 'Pages'
+CSV.foreach(seed_path('pages.csv'), headers: true, header_converters: :symbol) do |row|
+  page = Spree::Page.create(row.to_hash)
+  page.stores << Spree::Store.first
+  page.save!
 end
 
 # Load products

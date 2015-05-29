@@ -1,6 +1,8 @@
 Spree::Product.class_eval do
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_and_belongs_to_many :imprint_methods
+  # TODO: Removed because sample data will not load
+  # validates :supplier_id, presence: true
 
   def all_prices
     price_ranges = Spree::Variant.where(product_id: id).first.volume_prices[0...-1].map(&:range)

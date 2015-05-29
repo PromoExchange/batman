@@ -341,6 +341,7 @@ ActiveRecord::Schema.define(version: 20150529202817) do
     t.integer  "canceler_id"
     t.integer  "store_id"
     t.integer  "state_lock_version",                                         default: 0,       null: false
+    t.integer  "auction_id"
   end
 
   add_index "spree_orders", ["approver_id"], name: "index_spree_orders_on_approver_id", using: :btree

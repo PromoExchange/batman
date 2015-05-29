@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528183251) do
+ActiveRecord::Schema.define(version: 20150529202817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,17 +93,14 @@ ActiveRecord::Schema.define(version: 20150528183251) do
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
 
   create_table "spree_auctions", force: :cascade do |t|
-    t.integer  "product_id",                          null: false
-    t.integer  "buyer_id",                            null: false
+    t.integer  "product_id",  null: false
+    t.integer  "buyer_id",    null: false
+    t.integer  "quantity",    null: false
     t.string   "description"
     t.datetime "started"
     t.datetime "ended"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.integer  "quantity",                            null: false
-    t.string   "imprint_description"
-    t.boolean  "accept_rush",         default: false
-    t.datetime "required_by"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "spree_bids", force: :cascade do |t|
@@ -451,6 +448,14 @@ ActiveRecord::Schema.define(version: 20150528183251) do
     t.string "pantone", null: false
     t.string "textile"
     t.string "hex"
+  end
+
+  create_table "spree_prebids", force: :cascade do |t|
+    t.integer  "taxon_id",    null: false
+    t.integer  "seller_id",   null: false
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "spree_preferences", force: :cascade do |t|

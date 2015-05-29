@@ -22,6 +22,7 @@ gem 'spree_volume_pricing', github: 'spree/spree_volume_pricing', branch: '3-0-s
 gem 'spree_i18n', git: 'git://github.com/spree/spree_i18n.git', branch: '3-0-stable'
 gem 'deface', git: 'git://github.com/spree/deface.git', branch: 'master'
 gem 'spree_static_content', github: 'spree-contrib/spree_static_content', branch: '3-0-stable'
+gem 'spree_first_data_gge4'
 
 # PX Extension
 gem 'spree_px_auction',
@@ -29,8 +30,6 @@ gem 'spree_px_auction',
   branch: 'master'
 
 gem 'aws-sdk', '~> 1.60.2'
-
-gem 'spree_first_data_gge4'
 
 group :development do
   gem 'rubocop', require: false

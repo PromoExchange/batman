@@ -1,3 +1,6 @@
 title,body,slug,layout,render_layout_as_partial
-About,About,/about,pages/about,t
 FAQ,FAQ,/faq,pages/faq,t
+About,About,/about,pages/about,t
+Privacy,Privacy,/privacy,pages/privacy,t
+Contact,Contact,/contact,pages/contact,t
+Support,Support,/support,pages/support,t

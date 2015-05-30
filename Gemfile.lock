@@ -60,7 +60,7 @@ GIT
 
 GIT
   remote: https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git
-  revision: 6f5b5dc69cceb2a1afaf7316a7d202cf9a8d7c50
+  revision: 0dde6c7f68690cec94fbaad14a4388f9af10cd4d
   branch: master
   specs:
     spree_px_auction (3.0.1)
@@ -287,7 +287,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.6.1)
     mini_portile (0.6.2)
-    minitest (5.6.1)
+    minitest (5.7.0)
     monetize (1.3.0)
       money (~> 6.5.0)
     money (6.5.1)

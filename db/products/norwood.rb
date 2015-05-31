@@ -1,30 +1,32 @@
+puts 'Norwood Products'
+
 require 'csv'
 require 'open-uri'
 
-px_colors = [
-  'Black',
-  'Blue',
-  'Brown',
-  'Gold',
-  'Grey',
-  'Green',
-  'Multicolor',
-  'Orange',
-  'Pink',
-  'Purple',
-  'Red',
-  'Silver',
-  'Tan/Beige',
-  'White',
-  'Yellow'
-]
-
-color_conversions = {}
-color_conversions_file = File.join(Rails.root, 'db/product_data/norwood_color_conversion.csv')
-CSV.foreach(color_conversions_file, headers: true, header_converters: :symbol) do |row|
-  hashed = row.to_hash
-  color_conversions[hashed[:catalog_data]] = [hashed[:px_color_1], hashed[:px_color_2], hashed[:px_color_3]]
-end
+# px_colors = [
+#   'Black',
+#   'Blue',
+#   'Brown',
+#   'Gold',
+#   'Grey',
+#   'Green',
+#   'Multicolor',
+#   'Orange',
+#   'Pink',
+#   'Purple',
+#   'Red',
+#   'Silver',
+#   'Tan/Beige',
+#   'White',
+#   'Yellow'
+# ]
+#
+# color_conversions = {}
+# color_conversions_file = File.join(Rails.root, 'db/product_data/norwood_color_conversion.csv')
+# CSV.foreach(color_conversions_file, headers: true, header_converters: :symbol) do |row|
+#   hashed = row.to_hash
+#   color_conversions[hashed[:catalog_data]] = [hashed[:px_color_1], hashed[:px_color_2], hashed[:px_color_3]]
+# end
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -49,7 +51,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
   # Image
-  # Spree::Image.create(attachment: URI.parse(hashed[:large_image_url]), viewable: product.master)
+  Spree::Image.create(attachment: URI.parse(hashed[:large_image_url]), viewable: product.master)
 
   # Prices
   (1..5).each do |i|

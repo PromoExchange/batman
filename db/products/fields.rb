@@ -1,4 +1,4 @@
-puts 'Crown Products'
+puts 'Fields Products'
 
 require 'csv'
 require 'open-uri'
@@ -37,17 +37,17 @@ default_attrs = {
   available_on: Time.zone.now
 }
 
-file_name = File.join(Rails.root, 'db/product_data/crown.csv')
+file_name = File.join(Rails.root, 'db/product_data/fields.csv')
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   # Skip conditionals
-  next unless hashed[:pricingqty1] && hashed[:pricingprice1]
+  next unless hashed[:price1_1] && hashed[:quantity1_1]
 
   product_attrs = {
-    sku: hashed[:item_sku],
-    name: hashed[:item_name],
-    description: hashed[:product_description],
+    sku: hashed[:productcode],
+    name: hashed[:productname],
+    description: hashed[:productdescription],
     price: 0
   }
 
@@ -58,21 +58,23 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   end
 
   # Prices
-  if hashed[:pricingqty5]
+  if hashed[:price6_1]
+    price_quantity = 6
+  elsif hashed[:price5_1]
     price_quantity = 5
-  elsif hashed[:pricingqty4]
+  elsif hashed[:price4_1]
     price_quantity = 4
-  elsif hashed[:pricingqty3]
+  elsif hashed[:price3_1]
     price_quantity = 3
-  elsif hashed[:pricingqty2]
+  elsif hashed[:price2_1]
     price_quantity = 2
-  elsif hashed[:pricingqty1]
+  elsif hashed[:price1_1]
     price_quantity = 1
   end
   (1..price_quantity).each do |i|
-    quantity_key1 = "pricingqty#{i}".to_sym
-    quantity_key2 = "pricingqty#{i + 1}".to_sym
-    price_key = "pricingprice#{i}".to_sym
+    quantity_key1 = "quantity#{i}_1".to_sym
+    quantity_key2 = "quantity#{i + 1}_1".to_sym
+    price_key = "price#{i}_1".to_sym
 
     if i == price_quantity
       name = "#{hashed[quantity_key1]}+"
@@ -99,8 +101,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   # Properties
   properties = []
   properties << "Imprint Area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
-  properties << "Packaging:#{hashed[:packaging]}" if hashed[:packaging]
-  properties << "Additional Information:#{hashed[:additional_info]}" if hashed[:additional_info]
 
   properties.each do |property|
     property_vals = property.split(':')

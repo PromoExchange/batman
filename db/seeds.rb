@@ -47,7 +47,7 @@ end
 
 CategoryLoader.new(seed_path('categories.yml')).load
 
-%w(color material brand upcharges).each do |r|
+%w(color material brand upcharge).each do |r|
   puts r.humanize
   option_type = Spree::OptionType.create(name: r,
                                          presentation: r.humanize.pluralize)

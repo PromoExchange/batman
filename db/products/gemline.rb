@@ -59,14 +59,58 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   end
 
   # Prices
-  Spree::VolumePrice.create!(
-    variant: product.master,
-    name: "#{hashed['min_qty'.to_sym]}+",
-    range: "#{hashed['min_qty'.to_sym]}+",
-    amount: hashed[:us_min_price],
-    position: 0,
-    discount_type: 'price'
-  )
+  if hashed[:us_3rd_price]
+    Spree::VolumePrice.create!(
+      variant: product.master,
+      name: "#{hashed['3rd_qty'.to_sym]}+",
+      range: "#{hashed['3rd_qty'.to_sym]}+",
+      amount: hashed[:us_3rd_price],
+      position: 0,
+      discount_type: 'price'
+    )
+    Spree::VolumePrice.create!(
+      variant: product.master,
+      name: "#{hashed['2nd_qty'.to_sym]} - #{hashed['3rd_qty'.to_sym]}",
+      range: "(#{hashed['2nd_qty'.to_sym]}..#{hashed['3rd_qty'.to_sym]})",
+      amount: hashed[:us_2nd_price],
+      position: 0,
+      discount_type: 'price'
+    )
+    Spree::VolumePrice.create!(
+      variant: product.master,
+      name: "#{hashed['min_qty'.to_sym]} - #{hashed['2nd_qty'.to_sym]}",
+      range: "(#{hashed['min_qty'.to_sym]}..#{hashed['2nd_qty'.to_sym]})",
+      amount: hashed[:us_min_price],
+      position: 0,
+      discount_type: 'price'
+    )
+  elsif hashed[:us_2nd_price]
+    Spree::VolumePrice.create!(
+      variant: product.master,
+      name: "#{hashed['2nd_qty'.to_sym]}+",
+      range: "#{hashed['2nd_qty'.to_sym]}+",
+      amount: hashed[:us_2nd_price],
+      position: 0,
+      discount_type: 'price'
+    )
+    Spree::VolumePrice.create!(
+      variant: product.master,
+      name: "#{hashed['min_qty'.to_sym]} - #{hashed['2nd_qty'.to_sym]}",
+      range: "(#{hashed['min_qty'.to_sym]}..#{hashed['2nd_qty'.to_sym]})",
+      amount: hashed[:us_min_price],
+      position: 0,
+      discount_type: 'price'
+    )
+  else
+    Spree::VolumePrice.create!(
+      variant: product.master,
+      name: "#{hashed['min_qty'.to_sym]}+",
+      range: "#{hashed['min_qty'.to_sym]}+",
+      amount: hashed[:us_min_price],
+      position: 0,
+      discount_type: 'price'
+    )
+  end
 
   # Properties
   properties = []

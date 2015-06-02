@@ -1,0 +1,30 @@
+<div class="batman-user-dashboard">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+          <li class="active"><a href="#home" data-toggle="tab"><%=Spree.t(:dashboard)%></a></li>
+          <li><a href="#auctions" data-toggle="tab"><%=Spree.t(:my_auctions)%></a></li>
+          <li><a href="#purchase-history" data-toggle="tab"><%=Spree.t(:purchase_history)%></a></li>
+          <li><a href="#payments" data-toggle="tab"><%=Spree.t(:payments)%></a></li>
+          <li><a href="#messages" data-toggle="tab"><%=Spree.t(:messages)%></a></li>
+          <li><a href="#favorite-items" data-toggle="tab"><%=Spree.t(:favorite_items)%></a></li>
+          <li><a href="#account-settings" data-toggle="tab"><%=Spree.t(:account_settings)%></a></li>
+          <li><a href="#support" data-toggle="tab"><%=Spree.t(:support)%></a></li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <div class="tab-content">
+          <div class="tab-pane active" id="home"><%= render partial: 'spree/dashboard/home'%></div>
+          <div class="tab-pane" id="auctions"><%= render partial: 'spree/dashboard/auctions'%></div>
+          <div class="tab-pane" id="purchase-history"><%= render partial: 'spree/dashboard/purchase_history'%></div>
+          <div class="tab-pane" id="payments"><%= render partial: 'spree/dashboard/payments'%></div>
+          <div class="tab-pane" id="messages"><%= render partial: 'spree/dashboard/messages'%></div>
+          <div class="tab-pane" id="favorite-items"><%= render partial: 'spree/dashboard/favorite_items'%></div>
+          <div class="tab-pane" id="account-settings"><%= render partial: 'spree/dashboard/account_settings'%></div>
+          <div class="tab-pane" id="support"><%= render partial: 'spree/dashboard/support'%></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

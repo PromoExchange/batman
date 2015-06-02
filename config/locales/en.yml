@@ -20,4 +20,28 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  spree:
+    auction: 'Auction'
+    dashboard: 'Dashboard'
+    my_auctions: 'My Auctions'
+    purchase_history: 'Purchase History'
+    messages: 'Messages'
+    favorite_items: 'Favorite Items'
+    account_settings: 'Account Settings'
+    support: 'Support'
+    awaiting_selection: 'Awaiting Selection'
+    end_date: 'End Date'
+    top_three_bids: 'Top three bids'
+    delivery_date: 'Delivery date'
+    final_price: 'Final price'
+    sale_date: 'Sale date'
+    action_col: 'Actions'
+    account_and_contact: 'Account and Contact'
+    logo: 'Logo'
+    account_information: 'Account information'
+    contact_information: 'Contact information'
+    communications_preferences: 'Communications Preferences'
+    paypal_profiles: 'Paypal Profiles'
+    primary_shipping: 'Primary Shipping'
+    alternate_shipping: 'Alternate Shipping'
+    paypal: 'Paypal'

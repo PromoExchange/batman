@@ -1,0 +1,45 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:purchase_history) %>
+<% end %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= Spree.t(:product) %></th>
+      <th><%= Spree.t(:final_price) %></th>
+      <th><%= Spree.t(:quantity) %></th>
+      <th><%= Spree.t(:sale_date) %></th>
+      <th><%= Spree.t(:status) %></th>
+      <th class="actions"><%= Spree.t(:action_col) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Super product</td>
+      <td>$1234.00</td>
+      <td>250</td>
+      <td>1/09/2014 11:13AM EST</td>
+      <td>Order Received</td>
+      <td><ul>
+        <li><a href="#">Track</a></li>
+        <li><a href="#">Receipt</a></li>
+        <li><a href="#">Message</a></li>
+        <li><a href="#">Reorder</a></li>
+      </ul></td>
+    </tr>
+    <tr>
+      <td>Awesome product</td>
+      <td>$793.20</td>
+      <td>112</td>
+      <td>12/05/2014 11:13AM EST</td>
+      <td>Tracking number sent</td>
+      <td><ul>
+        <li><a href="#">Track</a></li>
+        <li><a href="#">Receipt</a></li>
+        <li><a href="#">Message</a></li>
+        <li><a href="#">Reorder</a></li>
+        <li><a href="#">Rate Seller</a></li>
+      </ul></td>
+    </tr>
+  </tbody>
+</table>

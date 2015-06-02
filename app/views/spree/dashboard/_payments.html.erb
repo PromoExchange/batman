@@ -1,0 +1,38 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:payments) %>
+<% end %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= Spree.t(:product) %></th>
+      <th><%= Spree.t(:date) %></th>
+      <th><%= Spree.t(:amount) %></th>
+      <th><%= Spree.t(:payment_method) %></th>
+      <th><%= Spree.t(:status) %></th>
+      <th class="actions"><%= Spree.t(:action_col) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Super product</td>
+      <td>1/09/2014 11:13AM EST</td>
+      <td>$1234.00</td>
+      <td><i class="fa fa-paypal icon-2x"></i></td>
+      <td><i class="fa fa-money"></i>In my PromoBidz Account</td>
+      <td><ul>
+        <li><a href="#">Receipt</a></li>
+      </ul></td>
+    </tr>
+    <tr>
+      <td>Super product</td>
+      <td>1/09/2014 11:13AM EST</td>
+      <td>$1234.00</td>
+      <td><i class="fa fa-paypal icon-2x"></i></td>
+      <td class="align-center"><i class="fa fa-check"></i> Released to sender</td>
+      <td><ul>
+        <li><a href="#">Receipt</a></li>
+      </ul></td>
+    </tr>
+  </tbody>
+</table>

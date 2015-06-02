@@ -116,5 +116,6 @@ end
 ActiveRecord::Base.descendants.each(&:reset_column_information)
 # ProductLoader.load_products('crown')
 # ProductLoader.load_products('fields')
-ProductLoader.load_products('gemline')
+# ProductLoader.load_products('gemline')
+ProductLoader.load_products('high_caliber')
 # ProductLoader.load_products('norwood')

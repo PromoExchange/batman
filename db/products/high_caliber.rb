@@ -35,44 +35,43 @@ default_attrs = {
   available_on: Time.zone.now
 }
 
-file_name = File.join(Rails.root, 'db/product_data/fields.csv')
+file_name = File.join(Rails.root, 'db/product_data/high_caliber.csv')
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   # Skip conditionals
-  next unless hashed[:price1_1] && hashed[:quantity1_1]
+  next unless hashed[:qty_1] && hashed[:price_1] && hashed[:item_status] == 'Active/All Products'
 
   product_attrs = {
-    sku: hashed[:productcode],
-    name: hashed[:productname],
-    description: hashed[:productdescription],
+    sku: hashed[:hcl_item],
+    name: hashed[:item_name],
+    description: hashed[:description],
     price: 0
   }
 
   begin
     product = Spree::Product.create!(default_attrs.merge(product_attrs))
   rescue => e
-    ap "Error in #{hashed[:item_sku]} product data: #{e}"
+    ap "Error in #{hashed[:hcl_item]} product data: #{e}"
+    next
   end
 
   # Prices
-  if hashed[:price6_1]
-    price_quantity = 6
-  elsif hashed[:price5_1]
+  if hashed[:price_5]
     price_quantity = 5
-  elsif hashed[:price4_1]
+  elsif hashed[:price_4]
     price_quantity = 4
-  elsif hashed[:price3_1]
+  elsif hashed[:price_3]
     price_quantity = 3
-  elsif hashed[:price2_1]
+  elsif hashed[:price_2]
     price_quantity = 2
-  elsif hashed[:price1_1]
+  elsif hashed[:price_1]
     price_quantity = 1
   end
   (1..price_quantity).each do |i|
-    quantity_key1 = "quantity#{i}_1".to_sym
-    quantity_key2 = "quantity#{i + 1}_1".to_sym
-    price_key = "price#{i}_1".to_sym
+    quantity_key1 = "qty_#{i}".to_sym
+    quantity_key2 = "qty_#{i + 1}".to_sym
+    price_key = "price_#{i}".to_sym
 
     if i == price_quantity
       name = "#{hashed[quantity_key1]}+"
@@ -92,13 +91,15 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         discount_type: 'price'
       )
     rescue => e
-      ap "Error in #{hashed[:item_sku]} pricing data: #{e}"
+      binding.pry
+      ap "Error in #{hashed[:hcl_item]} pricing data: #{e}"
     end
   end
 
   # Properties
   properties = []
-  properties << "Imprint Area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
+  properties << "Size:#{hashed[:item_size]}" if hashed[:item_size]
+  properties << "Status:#{hashed[:item_status]}" if hashed[:item_status]
 
   properties.each do |property|
     property_vals = property.split(':')

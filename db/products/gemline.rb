@@ -1,5 +1,3 @@
-puts 'Gemline Products'
-
 require 'csv'
 require 'open-uri'
 

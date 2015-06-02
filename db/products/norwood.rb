@@ -1,5 +1,3 @@
-puts 'Norwood Products'
-
 require 'csv'
 require 'open-uri'
 

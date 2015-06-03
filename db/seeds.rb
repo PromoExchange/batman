@@ -113,5 +113,17 @@ CSV.foreach(seed_path('pages.csv'), headers: true, header_converters: :symbol) d
 end
 
 # Load products
-# ActiveRecord::Base.descendants.each(&:reset_column_information)
-# ProductLoader.load_products('norwood_writing_instruments')
+ActiveRecord::Base.descendants.each(&:reset_column_information)
+%w(
+  crown
+  fields
+  gemline
+  high_caliber
+  leeds
+  logomark
+  norwood
+  primeline
+  starline
+  sweda
+  vitronic
+).each { |supplier| ProductLoader.load_products(supplier) }

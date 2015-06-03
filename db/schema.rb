@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150602123137) do
+ActiveRecord::Schema.define(version: 20150603181557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -239,6 +239,17 @@ ActiveRecord::Schema.define(version: 20150602123137) do
   end
 
   add_index "spree_log_entries", ["source_id", "source_type"], name: "index_spree_log_entries_on_source_id_and_source_type", using: :btree
+
+  create_table "spree_messages", force: :cascade do |t|
+    t.integer  "owner_id",   null: false
+    t.integer  "from_id",    null: false
+    t.integer  "to_id",      null: false
+    t.string   "status"
+    t.string   "subject"
+    t.string   "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "spree_option_type_translations", force: :cascade do |t|
     t.integer  "spree_option_type_id"

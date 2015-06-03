@@ -1,0 +1,105 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:auction) %>
+<% end %>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="#live-auction" role="tab" data-toggle="tab"><%=Spree.t(:auctions)%></a></li>
+  <li><a href="#awaiting-selection" role="tab" data-toggle="tab"><%=Spree.t(:awaiting_selection)%></a></li>
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="live-auction">
+    <% if @auctions.any? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th><%= Spree.t(:product) %></th>
+            <th><%= Spree.t(:lowest_bid) %></th>
+            <th><%= Spree.t(:quantity) %></th>
+            <th><%= Spree.t(:end_date) %></th>
+            <th class="actions"><%= Spree.t(:action_col) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @auctions.each do |auction| %>
+            <tr>
+              <td><i class="fa fa-lg fa-gavel"></i></td>
+              <td><%= link_to small_image(auction.product, itemprop: "image")%><p><%= auction.product.name %></p></td>
+              <td><%= auction.lowest_bid.seller.email if auction.lowest_bid %></td>
+              <td><%= auction.quantity %></td>
+              <td><%= auction.ended.strftime("%m/%d/%Y %H:%M") if auction.ended %></td>
+              <td><ul>
+                <li><a href="#">Go to auction</a></li>
+                <li><a href="#">Cancel auction</a></li>
+              </ul></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="alert alert-info no-objects-found">
+        <%= Spree.t(:no_resource_found, resource: Spree.t(:auction)).html_safe %>.
+      </div>
+    <% end %>
+  </div>
+  <div class="tab-pane" id="awaiting-selection">
+    <% if @auctions.any? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th><%= Spree.t(:product) %></th>
+            <th><%= Spree.t(:top_three_bids) %></th>
+            <th><%= Spree.t(:quantity) %></th>
+            <th><%= Spree.t(:end_date) %></th>
+            <th><%= Spree.t(:delivery_date) %></th>
+            <th><%= Spree.t(:status) %></th>
+            <th class="actions"><%= Spree.t(:action_col) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="fa-stack fa-lg">
+              <i class="fa fa-gavel fa-stack-1x"></i>
+              <i class="fa fa-ban fa-stack-2x text-danger"></i>
+            </span></td>
+            <td>Super Duper Product</td>
+            <td>
+              <table>
+                <tr>
+                  <td>
+                    Seller X
+                    $0.73/unit
+                    $182.50 total
+                  </td>
+                  <td>
+                    Seller Y
+                    $0.75/unit
+                    $185.00 total
+                  </td>
+                  <td>
+                    Seller Z
+                    $0.76/unit
+                    $190.00 total
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td>250</td>
+            <td>05/23/2015 9:30am</td>
+            <td>06/19/2015</td>
+            <td>Awaiting bid selection</td>
+            <td><ul>
+              <li><a href="#">Go to auction</a></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="alert alert-info no-objects-found">
+        <%= Spree.t(:no_resource_found, resource: Spree.t(:auction)).html_safe %>.
+      </div>
+    <% end %>
+  </div>
+</div>

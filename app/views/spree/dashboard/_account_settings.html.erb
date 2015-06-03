@@ -1,0 +1,105 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:account_settings) %>
+<% end %>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="#account-contact" role="tab" data-toggle="tab"><%=Spree.t(:account_and_contact)%></a></li>
+  <li><a href="#paypal" role="tab" data-toggle="tab"><%=Spree.t(:paypal)%></a></li>
+  <li><a href="#shipping" role="tab" data-toggle="tab"><%=Spree.t(:shipping)%></a></li>
+  <li><a href="#logo" role="tab" data-toggle="tab"><%=Spree.t(:logo)%></a></li>
+  <li><a href="#company" role="tab" data-toggle="tab"><%=Spree.t(:company)%></a></li>
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="account-contact">
+    <div class="panel panel-default">
+      <div class="panel-heading"><%=Spree.t(:account_information)%></div>
+      <div class="panel-body">
+        <p>Account Type: Buyer <a href="#">edit</a></p>
+        <p>Company Name: Demo, Inc <a href="#">edit</a></p>
+        <p>Email: john.doe@thingsinc.com <a href="#">edit</a></p>
+        <p>Password: ******** <a href="#">edit</a></p>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading"><%=Spree.t(:contact_information)%></div>
+      <div class="panel-body">
+        <p>First Name: John <a href="#">edit</a></p>
+        <p>Last Name: Doe <a href="#">edit</a></p>
+        <p>Phone: 123-456-7890 ext 1800<a href="#">edit</a></p>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading"><%=Spree.t(:communications_preferences)%></div>
+      <div class="panel-body">
+        <p><%= check_box_tag("comm", value=0, checked=false)%>Communications option 1</p>
+        <p><%= check_box_tag("comm", value=0, checked=true)%>Communications option 2</p>
+        <p><%= check_box_tag("comm", value=0, checked=false)%>Communications option 3</p>
+        <p><%= check_box_tag("comm", value=0, checked=true)%>Communications option 4</p>
+        <p><%= check_box_tag("comm", value=0, checked=false)%>Communications option 5</p>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="paypal">
+    <div class="panel panel-default">
+      <div class="panel-heading"><%=Spree.t(:paypal_profiles)%></div>
+      <div class="panel-body">
+        <p>Paypal Account: Not Specified <a href="#">edit</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="shipping">
+    <div class="panel panel-default">
+      <div class="panel-heading"><%=Spree.t(:primary_shipping)%></div>
+      <div class="panel-body">
+        <p class="text-center">Address 1 nickname</p>
+        <p class="text-center">John Doe</p>
+        <p class="text-center">123 Street Address</p>
+        <p class="text-center">Apt, Suite</p>
+        <p class="text-center">City, State, Zipcode</p>
+        <p class="text-center">123-456-7890</p>
+        <p class="text-center"><a href="#"><%=Spree.t(:edit)%></a><a href="#"><%=Spree.t(:remove)%></a></p>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading"><%=Spree.t(:alternate_shipping)%></div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-lg-4">
+            <p class="text-center">Address 1 nickname</p>
+            <p class="text-center">John Doe</p>
+            <p class="text-center">123 Street Address</p>
+            <p class="text-center">Apt, Suite</p>
+            <p class="text-center">City, State, Zipcode</p>
+            <p class="text-center">123-456-7890</p>
+            <p class="text-center"><a href="#"><%=Spree.t(:edit)%></a><a href="#"><%=Spree.t(:remove)%></a></p>
+          </div>
+          <div class="col-lg-4">
+            <p class="text-center">Address 2 nickname</p>
+            <p class="text-center">John Doe</p>
+            <p class="text-center">123 Street Address</p>
+            <p class="text-center">Apt, Suite</p>
+            <p class="text-center">City, State, Zipcode</p>
+            <p class="text-center">123-456-7890</p>
+            <p class="text-center"><a href="#"><%=Spree.t(:edit)%></a><a href="#"><%=Spree.t(:remove)%></a></p>
+          </div>
+          <div class="col-lg-4">
+            <p class="text-center">Address 3 nickname</p>
+            <p class="text-center">John Doe</p>
+            <p class="text-center">123 Street Address</p>
+            <p class="text-center">Apt, Suite</p>
+            <p class="text-center">City, State, Zipcode</p>
+            <p class="text-center">123-456-7890</p>
+            <p class="text-center"><a href="#"><%=Spree.t(:edit)%></a><a href="#"><%=Spree.t(:remove)%></a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane" id="logo">
+    Logo
+  </div>
+  <div class="tab-pane" id="company">
+    My Company
+  </div>
+</div>

@@ -45,3 +45,4 @@ en:
     primary_shipping: 'Primary Shipping'
     alternate_shipping: 'Alternate Shipping'
     paypal: 'Paypal'
+    subject: 'Subject'

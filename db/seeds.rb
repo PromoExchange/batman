@@ -114,16 +114,17 @@ end
 
 # Load products
 ActiveRecord::Base.descendants.each(&:reset_column_information)
-%w(
-  crown
-  fields
-  gemline
-  high_caliber
-  leeds
-  logomark
-  norwood
-  primeline
-  starline
-  sweda
-  vitronic
-).each { |supplier| ProductLoader.load_products(supplier) }
+# %w(
+#   crown
+#   fields
+#   gemline
+#   high_caliber
+#   leeds
+#   logomark
+#   norwood
+#   primeline
+#   starline
+#   sweda
+#   vitronic
+# ).each { |supplier| ProductLoader.load_products(supplier) }
+ProductLoader.load_products('crown')

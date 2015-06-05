@@ -21,33 +21,40 @@ File.open(seed_path('suppliers.txt')).each do |n|
   Spree::Supplier.create(name: n)
 end
 
-puts 'Categories'
-class CategoryLoader
+puts 'Taxons'
+class TaxonLoader
   def initialize(fname)
     @fname = fname
-    @category_taxonomy = Spree::Taxonomy.where(name: 'Category').first_or_create
   end
 
-  def load
+  def load_categories
+    category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create
     category_root = YAML.load_file(@fname)
-    load_category_tree(category_root, @category_taxonomy)
+    load_taxon_tree(category_root, category_taxonomy, category_taxonomy)
+  end
+
+  def load_colors
+    color_taxonomy = Spree::Taxonomy.where(name: 'Colors').first_or_create
+    color_root = YAML.load_file(@fname)
+    load_taxon_tree(color_root, color_taxonomy, color_taxonomy)
   end
 
   private
 
-  def load_category_tree(branch, parent)
+  def load_taxon_tree(branch, parent, taxonomy)
     branch.each do |k, v|
       taxon = Spree::Taxon.create(name: k,
                                   parent_id: parent.id,
-                                  taxonomy_id: @category_taxonomy.id)
-      load_category_tree(v, taxon) unless v.nil?
+                                  taxonomy_id: taxonomy.id)
+      load_taxon_tree(v, taxon, taxonomy) unless v.nil?
     end
   end
 end
 
-CategoryLoader.new(seed_path('categories.yml')).load
+TaxonLoader.new(seed_path('categories.yml')).load_categories
+TaxonLoader.new(seed_path('colors.yml')).load_colors
 
-%w(color material brand upcharge).each do |r|
+%w(material brand upcharge).each do |r|
   puts r.humanize
   option_type = Spree::OptionType.create(name: r,
                                          presentation: r.humanize.pluralize)
@@ -127,4 +134,4 @@ ActiveRecord::Base.descendants.each(&:reset_column_information)
 #   sweda
 #   vitronic
 # ).each { |supplier| ProductLoader.load_products(supplier) }
-ProductLoader.load_products('crown')
+# ProductLoader.load_products('crown')

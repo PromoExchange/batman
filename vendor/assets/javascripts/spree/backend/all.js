@@ -10,5 +10,4 @@
 
 //= require_tree .
 //= require spree/backend/spree_first_data_gge4
-//= require spree/backend/spree_px_auction
 //= require spree/backend/spree_volume_pricing

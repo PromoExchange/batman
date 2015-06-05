@@ -1,4 +1,3 @@
-# This migration comes from spree_px_auction (originally 20150519234457)
 class CreateBids < ActiveRecord::Migration
   def change
     create_table :spree_bids do |t|

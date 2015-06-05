@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe Spree::Supplier, type: :model do
   it 'should not create supplier with nulls' do
     s = Spree::Supplier.new
-    expect(s.save).to eq false
+    expect(s.save).to be_falsey
   end
 
   it 'should create supplier with values' do
     s = Spree::Supplier.new( name: 'name')
-    expect(s.save).to eq true
+    expect(s.save).to be_truthy
   end
 
   it 'should belong to address' do

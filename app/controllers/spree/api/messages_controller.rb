@@ -1,8 +1,11 @@
 class Spree::Api::MessagesController < Spree::Api::BaseController
-  before_filter :fetch_message, except: [:index, :create]
+  before_action :fetch_message, except: [:index, :create]
 
   def index
     @messages = Spree::Message.all
+      .page(params[:page])
+      .per(params[:per_page] || Spree::Config[:orders_per_page])
+
     render 'spree/api/messages/index'
   end
 
@@ -31,12 +34,14 @@ class Spree::Api::MessagesController < Spree::Api::BaseController
   private
 
   def message_params
-    params.require(:messages).permit(:owner_id,
-                                     :from_id,
-                                     :to_id,
-                                     :status,
-                                     :subject,
-                                     :body)
+    params.require(:message).permit(:owner_id,
+      :from_id,
+      :to_id,
+      :status,
+      :subject,
+      :body,
+      :page,
+      :per_page)
   end
 
   def fetch_message

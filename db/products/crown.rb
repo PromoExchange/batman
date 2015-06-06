@@ -3,22 +3,20 @@ require 'open-uri'
 
 supplier = Spree::Supplier.create(name: 'Crown')
 
-color_conversions = {}
 color_conversions_file = File.join(Rails.root, 'db/product_data/crown_color_conversion.csv')
 CSV.foreach(color_conversions_file, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
-  option_type = Spree::OptionType.where(name: 'supplier_color'.parameterize).first
-  option_value = Spree::OptionValue.create(name: hashed[:catalog_data].parameterize,
-                                           presentation: hashed[:catalog_data],
-                                           option_type: option_type,
-                                           supplier: supplier)
-  ap Spree::Taxon.where(name: 'Brown')
-  binding.pry
-  color_conversions[hashed[:catalog_data]] = []
-  color_conversions[hashed[:catalog_data]] << hashed[:px_color_1] if hashed[:px_color_1]
-  color_conversions[hashed[:catalog_data]] << hashed[:px_color_2] if hashed[:px_color_2]
-  color_conversions[hashed[:catalog_data]] << hashed[:px_color_3] if hashed[:px_color_3]
+  ot = Spree::OptionType.where(name: 'supplier_color'.parameterize).first
+  ov = Spree::OptionValue.new(name: hashed[:catalog_data].parameterize,
+                              presentation: hashed[:catalog_data],
+                              option_type: ot)
+
+  ov.suppliers << supplier
+  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_1].to_url}").first if hashed[:px_color_1]
+  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_2].to_url}").first if hashed[:px_color_2]
+  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_3].to_url}").first if hashed[:px_color_3]
+  ov.save!
 end
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')

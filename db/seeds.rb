@@ -23,25 +23,23 @@ end
 
 puts 'Taxons'
 class TaxonLoader
-  def initialize(fname)
-    @fname = fname
-  end
-
-  def load_categories
+  def self.load_categories(file_name)
     category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create
-    category_root = YAML.load_file(@fname)
+    category_root = YAML.load_file(file_name)
     load_taxon_tree(category_root, category_taxonomy, category_taxonomy)
   end
 
-  def load_colors
+  def self.load_colors(file_name)
     color_taxonomy = Spree::Taxonomy.where(name: 'Colors').first_or_create
-    color_root = YAML.load_file(@fname)
-    load_taxon_tree(color_root, color_taxonomy, color_taxonomy)
+    File.open(file_name).each do |color|
+      Spree::Taxon.create(
+        name: color.strip,
+        parent_id: Spree::Taxon.where(name: 'Colors').first.id,
+        taxonomy_id: color_taxonomy.id)
+    end
   end
 
-  private
-
-  def load_taxon_tree(branch, parent, taxonomy)
+  def self.load_taxon_tree(branch, parent, taxonomy)
     branch.each do |k, v|
       taxon = Spree::Taxon.create(name: k,
                                   parent_id: parent.id,
@@ -51,8 +49,8 @@ class TaxonLoader
   end
 end
 
-TaxonLoader.new(seed_path('categories.yml')).load_categories
-TaxonLoader.new(seed_path('colors.yml')).load_colors
+TaxonLoader.load_categories(seed_path('categories.yml'))
+TaxonLoader.load_colors(seed_path('px_colors.txt'))
 
 %w(material brand upcharge).each do |r|
   puts r.humanize

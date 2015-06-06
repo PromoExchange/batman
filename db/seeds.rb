@@ -73,6 +73,10 @@ CSV.foreach(seed_path('pms_colors.csv'), headers: true, header_converters: :symb
   Spree::PmsColor.create(row.to_hash)
 end
 
+puts 'Supplier Colors'
+Spree::OptionType.create(name: 'supplier_color'.parameterize,
+                         presentation: 'Supplier Color')
+
 puts 'Sizes'
 File.open(seed_path('sizes.txt')).each do |n|
   line = n.strip.split(',')
@@ -94,7 +98,7 @@ Spree::Role.where(name: 'buyer').first_or_create
 Spree::Role.where(name: 'seller').first_or_create
 Spree::Role.where(name: 'supplier').first_or_create
 
-puts 'Create Users'
+puts 'Users'
 [
   ['tim.varley@thepromoexchange.com', 'admin'],
   ['spencer.applegate@thepromoexchange.com', 'admin'],
@@ -118,6 +122,7 @@ CSV.foreach(seed_path('pages.csv'), headers: true, header_converters: :symbol) d
 end
 
 # Load products
+puts 'Products'
 ActiveRecord::Base.descendants.each(&:reset_column_information)
 # %w(
 #   crown
@@ -132,4 +137,4 @@ ActiveRecord::Base.descendants.each(&:reset_column_information)
 #   sweda
 #   vitronic
 # ).each { |supplier| ProductLoader.load_products(supplier) }
-# ProductLoader.load_products('crown')
+ProductLoader.load_products('crown')

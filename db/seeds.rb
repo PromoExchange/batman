@@ -21,33 +21,38 @@ File.open(seed_path('suppliers.txt')).each do |n|
   Spree::Supplier.create(name: n)
 end
 
-puts 'Categories'
-class CategoryLoader
-  def initialize(fname)
-    @fname = fname
-    @category_taxonomy = Spree::Taxonomy.where(name: 'Category').first_or_create
+puts 'Taxons'
+class TaxonLoader
+  def self.load_categories(file_name)
+    category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create
+    category_root = YAML.load_file(file_name)
+    load_taxon_tree(category_root, category_taxonomy, category_taxonomy)
   end
 
-  def load
-    category_root = YAML.load_file(@fname)
-    load_category_tree(category_root, @category_taxonomy)
+  def self.load_colors(file_name)
+    color_taxonomy = Spree::Taxonomy.where(name: 'Colors').first_or_create
+    File.open(file_name).each do |color|
+      Spree::Taxon.create(
+        name: color.strip,
+        parent_id: Spree::Taxon.where(name: 'Colors').first.id,
+        taxonomy_id: color_taxonomy.id)
+    end
   end
 
-  private
-
-  def load_category_tree(branch, parent)
+  def self.load_taxon_tree(branch, parent, taxonomy)
     branch.each do |k, v|
       taxon = Spree::Taxon.create(name: k,
                                   parent_id: parent.id,
-                                  taxonomy_id: @category_taxonomy.id)
-      load_category_tree(v, taxon) unless v.nil?
+                                  taxonomy_id: taxonomy.id)
+      load_taxon_tree(v, taxon, taxonomy) unless v.nil?
     end
   end
 end
 
-CategoryLoader.new(seed_path('categories.yml')).load
+TaxonLoader.load_categories(seed_path('categories.yml'))
+TaxonLoader.load_colors(seed_path('px_colors.txt'))
 
-%w(color material brand upcharge).each do |r|
+%w(material brand upcharge).each do |r|
   puts r.humanize
   option_type = Spree::OptionType.create(name: r,
                                          presentation: r.humanize.pluralize)
@@ -114,16 +119,17 @@ end
 
 # Load products
 ActiveRecord::Base.descendants.each(&:reset_column_information)
-%w(
-  crown
-  fields
-  gemline
-  high_caliber
-  leeds
-  logomark
-  norwood
-  primeline
-  starline
-  sweda
-  vitronic
-).each { |supplier| ProductLoader.load_products(supplier) }
+# %w(
+#   crown
+#   fields
+#   gemline
+#   high_caliber
+#   leeds
+#   logomark
+#   norwood
+#   primeline
+#   starline
+#   sweda
+#   vitronic
+# ).each { |supplier| ProductLoader.load_products(supplier) }
+# ProductLoader.load_products('crown')

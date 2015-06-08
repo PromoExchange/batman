@@ -13,6 +13,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
         .page(params[:page])
         .per(params[:per_page] || Spree::Config[:orders_per_page])
     end
+
     render 'spree/api/bids/index'
   end
 

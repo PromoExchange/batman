@@ -33,4 +33,9 @@ Rails.application.routes.draw do
   put '/api/bids/:id', to: 'spree/api/bids#update', defaults: {format: 'json'}
   delete '/api/bids/:id', to: 'spree/api/bids#destroy', defaults: {format: 'json'}
 
+  get '/api/prebids', to: 'spree/api/prebids#index', defaults: {format: 'json'}
+  get '/api/prebids/:id', to: 'spree/api/prebids#show', defaults: {format: 'json'}
+  post '/api/prebids', to: 'spree/api/prebids#create', defaults: {format: 'json'}
+  put '/api/prebids/:id', to: 'spree/api/prebids#update', defaults: {format: 'json'}
+  delete '/api/prebids/:id', to: 'spree/api/prebids#destroy', defaults: {format: 'json'}
 end

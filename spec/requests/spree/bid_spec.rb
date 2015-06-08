@@ -8,13 +8,24 @@ describe 'Bids API' do
     user
   end
 
-  it 'must require an api key' do
+  it 'must require an api key (nested)' do
     auction = FactoryGirl.build(:auction)
     bid = FactoryGirl.build(:bid)
     bid.auction_id = auction.id
     auction.save
 
     get "/api/auctions/#{auction.id}/bids"
+
+    expect(response).to have_http_status(401)
+  end
+
+  it 'must require an api key (root)' do
+    auction = FactoryGirl.build(:auction)
+    bid = FactoryGirl.build(:bid)
+    bid.auction_id = auction.id
+    auction.save
+
+    get "/api/bids"
 
     expect(response).to have_http_status(401)
   end
@@ -35,6 +46,15 @@ describe 'Bids API' do
 
     expect(response).to be_success
     expect(json.length).to eq(5)
+  end
+
+  it 'should gets a page of bids' do
+    FactoryGirl.create_list(:bid, 10)
+
+    get '/api/bids?page=2&per_page=3', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to be_success
+    expect(json.length).to eq(3)
   end
 
   it 'should get a single bid (nested)' do

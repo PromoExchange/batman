@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Spree::Prebid, type: :model do
-  it 'should not save with a nil taxon' do
-    p = FactoryGirl.build(:prebid, taxon_id: nil)
-    expect(p.save).to be_falsey
-  end
-
   it 'should not save with a nil seller' do
     p = FactoryGirl.build(:prebid, seller_id: nil)
     expect(p.save).to be_falsey
@@ -23,11 +18,6 @@ RSpec.describe Spree::Prebid, type: :model do
 
   it 'should belong to user' do
     t = Spree::Prebid.reflect_on_association(:seller)
-    expect(t.macro).to eq :belongs_to
-  end
-
-  it 'should belong to a taxon' do
-    t = Spree::Prebid.reflect_on_association(:taxon)
     expect(t.macro).to eq :belongs_to
   end
 end

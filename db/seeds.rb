@@ -12,13 +12,8 @@ Spree::TaxCategory.create!(name: 'Default', is_default: true)
 
 def seed_path(fname)
   f = File.join(Rails.root, 'db', 'seed_data', fname)
-  fail Errno::ENOENT "File #{f} does not exist" unless File.exist?(f)
+  fail StandardError "File #{f} does not exist" unless File.exist?(f)
   f
-end
-
-puts 'Suppliers'
-File.open(seed_path('suppliers.txt')).each do |n|
-  Spree::Supplier.create(name: n)
 end
 
 puts 'Taxons'
@@ -73,6 +68,22 @@ CSV.foreach(seed_path('pms_colors.csv'), headers: true, header_converters: :symb
   Spree::PmsColor.create(row.to_hash)
 end
 
+puts 'Supplier Colors'
+ot = Spree::OptionType.create(name: 'supplier_color'.parameterize,
+                              presentation: 'Supplier Color')
+CSV.foreach(seed_path('supplier_color_conversions.csv'), headers: true, header_converters: :symbol) do |row|
+  hashed = row.to_hash
+
+  ov = Spree::OptionValue.new(name: hashed[:catalog_data].parameterize,
+                              presentation: hashed[:catalog_data],
+                              option_type: ot)
+
+  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_1].to_url}").first if hashed[:px_color_1]
+  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_2].to_url}").first if hashed[:px_color_2]
+  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_3].to_url}").first if hashed[:px_color_3]
+  ov.save!
+end
+
 puts 'Sizes'
 File.open(seed_path('sizes.txt')).each do |n|
   line = n.strip.split(',')
@@ -94,7 +105,7 @@ Spree::Role.where(name: 'buyer').first_or_create
 Spree::Role.where(name: 'seller').first_or_create
 Spree::Role.where(name: 'supplier').first_or_create
 
-puts 'Create Users'
+puts 'Users'
 [
   ['tim.varley@thepromoexchange.com', 'admin'],
   ['spencer.applegate@thepromoexchange.com', 'admin'],
@@ -118,18 +129,18 @@ CSV.foreach(seed_path('pages.csv'), headers: true, header_converters: :symbol) d
 end
 
 # Load products
+puts 'Products'
 ActiveRecord::Base.descendants.each(&:reset_column_information)
-# %w(
-#   crown
-#   fields
-#   gemline
-#   high_caliber
-#   leeds
-#   logomark
-#   norwood
-#   primeline
-#   starline
-#   sweda
-#   vitronic
-# ).each { |supplier| ProductLoader.load_products(supplier) }
-# ProductLoader.load_products('crown')
+%w(
+  crown
+  fields
+  gemline
+  high_caliber
+  leeds
+  logomark
+  norwood
+  primeline
+  starline
+  sweda
+  vitronic
+).each { |supplier| ProductLoader.load_products(supplier) }

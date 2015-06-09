@@ -1,6 +1,8 @@
 Spree::Product.class_eval do
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_and_belongs_to_many :imprint_methods
+  has_and_belongs_to_many :option_values
+
   # TODO: Removed because sample data will not load
   # validates :supplier_id, presence: true
 
@@ -22,5 +24,9 @@ Spree::Product.class_eval do
 
     return 0 unless volume_prices.present?
     volume_prices.first.amount.to_f
+  end
+
+  def upcharges
+    option_values.upcharges
   end
 end

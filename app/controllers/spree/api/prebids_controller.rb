@@ -20,7 +20,7 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
   end
 
   def create
-    if @prebid.present?
+    if Spree::Prebid.exists?(id: params[:id])
       render nothing: true, status: :conflict
     else
       @prebid = Spree::Prebid.new

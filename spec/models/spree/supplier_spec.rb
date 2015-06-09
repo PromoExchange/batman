@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Spree::Supplier, type: :model do
   it 'should not create supplier with nulls' do
-    s = Spree::Supplier.new
+    s = FactoryGirl.build(:supplier, name: nil)
     expect(s.save).to be_falsey
   end
 
   it 'should create supplier with values' do
-    s = Spree::Supplier.new( name: 'name')
+    s = FactoryGirl.build(:supplier)
     expect(s.save).to be_truthy
   end
 

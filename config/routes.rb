@@ -14,5 +14,23 @@ Rails.application.routes.draw do
   post '/api/messages', to: 'spree/api/messages#create', defaults: {format: 'json'}
   put '/api/messages/:id', to: 'spree/api/messages#update', defaults: {format: 'json'}
   delete '/api/messages/:id', to: 'spree/api/messages#destroy', defaults: {format: 'json'}
-  
+
+  get '/api/auctions', to: 'spree/api/auctions#index', defaults: {format: 'json'}
+  get '/api/auctions/:id', to: 'spree/api/auctions#show', defaults: {format: 'json'}
+  post '/api/auctions', to: 'spree/api/auctions#create', defaults: {format: 'json'}
+  put '/api/auctions/:id', to: 'spree/api/auctions#update', defaults: {format: 'json'}
+  delete '/api/auctions/:id', to: 'spree/api/auctions#destroy', defaults: {format: 'json'}
+
+  get '/api/auctions/:id/bids', to: 'spree/api/bids#index', defaults: {format: 'json'}
+  get '/api/auctions/:id/bids/:id', to: 'spree/api/bids#show', defaults: {format: 'json'}
+  post '/api/auctions/:id/bids', to: 'spree/api/bids#create', defaults: {format: 'json'}
+  put '/api/auctions/:id/bids/:id', to: 'spree/api/bids#update', defaults: {format: 'json'}
+  delete '/api/auctions/:id/bids/:id', to: 'spree/api/bids#destroy', defaults: {format: 'json'}
+
+  get '/api/bids', to: 'spree/api/bids#index', defaults: {format: 'json'}
+  get '/api/bids/:id', to: 'spree/api/bids#show', defaults: {format: 'json'}
+  post '/api/bids', to: 'spree/api/bids#create', defaults: {format: 'json'}
+  put '/api/bids/:id', to: 'spree/api/bids#update', defaults: {format: 'json'}
+  delete '/api/bids/:id', to: 'spree/api/bids#destroy', defaults: {format: 'json'}
+
 end

@@ -58,14 +58,6 @@ GIT
     spree_volume_pricing (3.3.0)
       spree_core (~> 3.0.0)
 
-GIT
-  remote: https://49887dcddfed712f0ae9a296756a31df77ae0d1e:x-oauth-basic@github.com/PromoExchange/spree_px_auction.git
-  revision: 9475aaa5d19fe140103e7abf1891f5d8356be348
-  branch: master
-  specs:
-    spree_px_auction (3.0.1)
-      spree_core (~> 3.0.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -603,7 +595,6 @@ DEPENDENCIES
   spree_first_data_gge4
   spree_gateway!
   spree_i18n!
-  spree_px_auction!
   spree_static_content!
   spree_volume_pricing!
   spring

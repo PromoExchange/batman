@@ -35,4 +35,12 @@ Spree::Api::ApiHelpers.module_eval do
       :prebid_id
     ])
   mattr_reader :bid_attributes
+
+  class_variable_set(:@@prebid_attributes,
+    [
+      :id,
+      :seller_id,
+      :description
+    ])
+  mattr_reader :prebid_attributes
 end

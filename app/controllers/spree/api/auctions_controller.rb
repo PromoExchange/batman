@@ -13,6 +13,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         .page(params[:page])
         .per(params[:per_page] || Spree::Config[:orders_per_page])
     end
+
     render 'spree/api/auctions/index'
   end
 

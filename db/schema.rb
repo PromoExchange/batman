@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150606201809) do
+ActiveRecord::Schema.define(version: 20150608193556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -472,7 +472,6 @@ ActiveRecord::Schema.define(version: 20150606201809) do
   end
 
   create_table "spree_prebids", force: :cascade do |t|
-    t.integer  "taxon_id",    null: false
     t.integer  "seller_id",   null: false
     t.string   "description"
     t.datetime "created_at",  null: false

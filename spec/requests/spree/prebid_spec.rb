@@ -1,14 +1,10 @@
 require 'rails_helper'
+require 'spree_shared'
 
 describe 'Prebids API' do
-  let(:current_api_user) do
-    user = Spree.user_class.new(email: 'spree@example.com',
-                                password: 'password')
-    user.generate_spree_api_key!
-    user
-  end
+  include_context 'spree_shared'
 
-  it 'must require an api key' do
+  it 'should require an api key' do
     prebid = FactoryGirl.create(:prebid)
 
     get "/api/prebids/#{prebid.id}"
@@ -50,6 +46,14 @@ describe 'Prebids API' do
 
     expect(response).to be_success
     expect(json['description']).to eq('put subject')
+  end
+
+  it 'should not create a duplicate prebid' do |member|
+    prebid = FactoryGirl.create(:prebid)
+
+    post '/api/prebids', prebid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to have_http_status(422)
   end
 
   it 'should create a prebid' do

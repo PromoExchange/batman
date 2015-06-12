@@ -16,8 +16,18 @@ RSpec.describe Spree::Prebid, type: :model do
     expect(t.macro).to eq :has_many
   end
 
-  it 'should belong to user' do
+  it 'should have many adjustments' do
+    t = Spree::Prebid.reflect_on_association(:adjustments)
+    expect(t.macro).to eq :has_many
+  end
+
+  it 'should belong to a user' do
     t = Spree::Prebid.reflect_on_association(:seller)
+    expect(t.macro).to eq :belongs_to
+  end
+
+  it 'should belong to a product' do
+    t = Spree::Prebid.reflect_on_association(:product)
     expect(t.macro).to eq :belongs_to
   end
 end

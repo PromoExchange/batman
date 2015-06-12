@@ -12,15 +12,17 @@ RSpec.describe Spree::Bid, type: :model do
     expect(b.save).to be_falsey
   end
 
-  it 'should not save with a nil bid' do
-    b = FactoryGirl.build(:bid, bid: nil)
-    expect(b.save).to be_falsey
-  end
-
   it 'should save with valid values' do
     b = FactoryGirl.build(:bid)
     expect(b.save).to be_truthy
   end
+
+  xit 'should create an order' do
+    b = FactoryGirl.create(:bid)
+    expect(Spree::Order.find(b.order_id)).to exist
+  end
+
+  xit 'should cascade delete order'
 
   it 'should belong to an auction' do
     t = Spree::Bid.reflect_on_association(:auction)

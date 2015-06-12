@@ -46,4 +46,15 @@ RSpec.configure do |config|
   config.deprecation_stream = 'log/deprecations.log'
 
   config.include Requests::JsonHelpers, type: :request
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
 end

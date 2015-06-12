@@ -1,12 +1,8 @@
 require 'rails_helper'
+require 'spree_shared'
 
 describe 'Bids API' do
-  let(:current_api_user) do
-    user = Spree.user_class.new(email: 'spree@example.com',
-                                password: 'password')
-    user.generate_spree_api_key!
-    user
-  end
+  include_context 'spree_shared'
 
   it 'must require an api key (nested)' do
     auction = FactoryGirl.build(:auction)
@@ -75,7 +71,7 @@ describe 'Bids API' do
     expect(json['description']).to eq(bid.description)
   end
 
-  it 'should update a bid (nested)' do
+  xit 'should update a bid (nested)' do
     auction = FactoryGirl.create(:auction)
     bid = FactoryGirl.create(:bid, description: 'created description')
     bid.description = 'put description'
@@ -90,7 +86,7 @@ describe 'Bids API' do
     expect(b.bid).to eq(11.11)
   end
 
-  it 'should update a bid (root)' do
+  xit 'should update a bid (root)' do
     bid = FactoryGirl.create(:bid, description: 'created description')
     bid.description = 'put description'
     bid.bid = 11.11
@@ -114,6 +110,15 @@ describe 'Bids API' do
     expect(json['description']).to eq('posty description')
   end
 
+  it 'should not create a duplicate bid (nested)' do
+    auction = FactoryGirl.create(:auction)
+    bid = FactoryGirl.create(:bid)
+
+    post "/api/auctions/#{auction.id}/bids", bid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to have_http_status(422)
+  end
+
   it 'should create a bid (root)' do
     bid = FactoryGirl.build(:bid, description: 'posty description')
 
@@ -121,6 +126,14 @@ describe 'Bids API' do
 
     expect(response).to be_success
     expect(json['description']).to eq('posty description')
+  end
+
+  it 'should not create a duplicate bid (root)' do
+    bid = FactoryGirl.create(:bid)
+
+    post "/api/bids", bid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to have_http_status(422)
   end
 
   it 'should delete a bid (nested)' do

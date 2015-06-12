@@ -1,12 +1,8 @@
 require 'rails_helper'
+require 'spree_shared'
 
 describe 'Auctions API' do
-  let(:current_api_user) do
-    user = Spree.user_class.new(email: 'spree@example.com',
-                                password: 'password')
-    user.generate_spree_api_key!
-    user
-  end
+  include_context 'spree_shared'
 
   it 'should require an api key' do
     auction = FactoryGirl.create(:auction)
@@ -50,6 +46,14 @@ describe 'Auctions API' do
 
     expect(response).to be_success
     expect(json['description']).to eq('put description')
+  end
+
+  it 'should not create a duplication auction' do
+    auction = FactoryGirl.create(:auction)
+
+    post '/api/auctions', auction.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to have_http_status(422)
   end
 
   it 'should create an auction' do

@@ -1,12 +1,8 @@
 require 'rails_helper'
+require 'spree_shared'
 
 describe 'Messages API' do
-  let(:current_api_user) do
-    user = Spree.user_class.new(email: 'spree@example.com',
-                                password: 'password')
-    user.generate_spree_api_key!
-    user
-  end
+  include_context 'spree_shared'
 
   it 'should require an api key' do
     message = FactoryGirl.create(:message)
@@ -60,6 +56,14 @@ describe 'Messages API' do
 
     expect(response).to be_success
     expect(json['subject']).to eq('posty subject')
+  end
+
+  it 'should not create a duplicate message' do
+    message = FactoryGirl.create(:message)
+
+    post '/api/messages', message.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to have_http_status(422)
   end
 
   it 'should deletes a message' do

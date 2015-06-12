@@ -17,12 +17,7 @@ RSpec.describe Spree::Bid, type: :model do
     expect(b.save).to be_truthy
   end
 
-  xit 'should create an order' do
-    b = FactoryGirl.create(:bid)
-    expect(Spree::Order.find(b.order_id)).to exist
-  end
-
-  xit 'should cascade delete order'
+  it 'should cascade delete order'
 
   it 'should belong to an auction' do
     t = Spree::Bid.reflect_on_association(:auction)

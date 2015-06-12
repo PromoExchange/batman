@@ -22,8 +22,7 @@ class Spree::Prebid < Spree::Base
         auction.bids << Spree::Bid.new( seller_id: seller_id,
           description: 'Prebid generated',
           auction_id: auction.id,
-          prebid_id: id,
-          bid: 1111.11)
+          prebid_id: id)
         auction.save
       end
     end

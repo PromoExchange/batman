@@ -71,11 +71,10 @@ describe 'Bids API' do
     expect(json['description']).to eq(bid.description)
   end
 
-  xit 'should update a bid (nested)' do
+  it 'should update a bid (nested)' do
     auction = FactoryGirl.create(:auction)
     bid = FactoryGirl.create(:bid, description: 'created description')
     bid.description = 'put description'
-    bid.bid = 11.11
 
     put "/api/auctions/#{auction.id}/bids/#{bid.id}", bid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
@@ -83,13 +82,11 @@ describe 'Bids API' do
 
     b = Spree::Bid.find(bid.id)
     expect(b.description).to eq('put description')
-    expect(b.bid).to eq(11.11)
   end
 
-  xit 'should update a bid (root)' do
+  it 'should update a bid (root)' do
     bid = FactoryGirl.create(:bid, description: 'created description')
     bid.description = 'put description'
-    bid.bid = 11.11
 
     put "/api/bids/#{bid.id}", bid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
@@ -97,7 +94,6 @@ describe 'Bids API' do
 
     b = Spree::Bid.find(bid.id)
     expect(b.description).to eq('put description')
-    expect(b.bid).to eq(11.11)
   end
 
   it 'should create a bid (nested)' do

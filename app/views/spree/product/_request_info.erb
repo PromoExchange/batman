@@ -1,0 +1,29 @@
+<% unless spree_current_user.nil? %>
+<button type="button" class="btn btn-info " data-toggle="modal" data-target="#request-info">Ask supplier a question</button>
+<i class="fa fa-star fa-2x"></i>
+<div class="modal fade" data-id="<%=spree_current_user.spree_api_key%>" id="request-info" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="" action="/api/messages" method="post" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></button>
+          <h4 class="modal-title" >Question supplier about <%= @product.name %></h4>
+          <%= hidden_field_tag id="seller-id", (@product.supplier ? @product.supplier.id : 1) %>
+          <%= hidden_field_tag id="buyer-id", spree_current_user.id %>
+          <%= hidden_field_tag id="product-id", @product.id %>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <%= label_tag(:question, "Question", class: 'control-label') %>
+              <%= text_area_tag(:question, "", size: "70x6", class: 'form-control') %>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <a type="submit" href="#" id="message-submit" class="btn btn-default">Submit</a>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<% end %>

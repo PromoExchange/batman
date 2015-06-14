@@ -14,7 +14,7 @@ class Spree::Api::MessagesController < Spree::Api::BaseController
   end
 
   def create
-    if @message.present?
+    if Spree::Message.exists?(id: params[:id])
       render nothing: true, status: :conflict
     else
       @message = Spree::Message.new
@@ -39,6 +39,7 @@ class Spree::Api::MessagesController < Spree::Api::BaseController
       :to_id,
       :status,
       :subject,
+      :product,
       :body,
       :page,
       :per_page)

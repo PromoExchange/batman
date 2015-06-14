@@ -1,1 +1,17 @@
-<h1>Favorite items</h1>
+<% content_for :page_title do %>
+  <%= Spree.t(:favorites) %>
+<% end %>
+
+<div class="row">
+<% @favorites.each do |favorite| %>
+    <div class="col-md-4">
+      <div id="product-cell">
+        <div class="pull-left">
+          <%= link_to small_image(favorite.product, itemprop: "image")%>
+        </div>
+        <%= favorite.product.name %><br/>
+        <%= link_to Spree.t(:auction), products_url , class: 'btn btn-default' %>
+      </div>
+    </div>
+<% end %>
+</div>

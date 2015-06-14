@@ -10,6 +10,17 @@
   }
 }
 
-.fa-cog {
-  color: #FFD700;
+#favorite{
+  .fa{
+    cursor: pointer;
+    cursor: hand;
+    margin-right: 5px;
+  }
+  .fa.off{
+    color: #808080;
+  }
+
+  .fa.on{
+    color: #FFD700;
+  }
 }

@@ -1,6 +1,12 @@
 <% unless spree_current_user.nil? %>
-<button type="button" class="btn btn-info " data-toggle="modal" data-target="#request-info">Ask supplier a question</button>
-<i class="fa fa-star fa-2x"></i>
+<div class="row">
+  <div class="col-md-6">
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#request-info">Ask a question</button>
+  </div>
+  <div class="col-md-6" id="favorite">
+    <i class="fa fa-star off"></i><span>Add to favorites</span>
+  </div>
+</div>
 <div class="modal fade" data-id="<%=spree_current_user.spree_api_key%>" id="request-info" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
   <div class="modal-dialog">
     <form class="" action="/api/messages" method="post" >

@@ -17,8 +17,6 @@ Rails.application.routes.draw do
     resources :bids, controller: 'spree/api/bids'
     resources :prebids, controller: 'spree/api/prebids', as: "api_prebids"
     resources :upcharges, controller: 'spree/api/upcharges', as: "api_upcharges"
+    resources :favorites, controller: 'spree/api/favorites', as: "api_favorites"
   end
-
-  resources :messages, controller: 'spree/api/messages'
-  resources :bids, controller: 'spree/api/bids'
 end

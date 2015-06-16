@@ -2,6 +2,7 @@ Spree::Product.class_eval do
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_and_belongs_to_many :imprint_methods
   has_and_belongs_to_many :option_values
+  has_many :upcharges, as: :related
 
   # TODO: Removed because sample data will not load
   # validates :supplier_id, presence: true

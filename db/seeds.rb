@@ -47,7 +47,7 @@ end
 TaxonLoader.load_categories(seed_path('categories.yml'))
 TaxonLoader.load_colors(seed_path('px_colors.txt'))
 
-%w(material brand upcharge).each do |r|
+%w(material brand).each do |r|
   puts r.humanize
   option_type = Spree::OptionType.create(name: r,
                                          presentation: r.humanize.pluralize)
@@ -56,6 +56,11 @@ TaxonLoader.load_colors(seed_path('px_colors.txt'))
                               presentation: n,
                               option_type: option_type)
   end
+end
+
+puts 'Upcharge types'
+File.open(seed_path('upcharge_types.txt')).each do |n|
+  Spree::UpchargeType.create(name: n.strip)
 end
 
 puts 'Imprint methods'
@@ -128,19 +133,20 @@ CSV.foreach(seed_path('pages.csv'), headers: true, header_converters: :symbol) d
   page.save!
 end
 
-# Load products
-puts 'Products'
-ActiveRecord::Base.descendants.each(&:reset_column_information)
 %w(
+  gemline
   crown
   fields
-  gemline
   high_caliber
   leeds
   logomark
   norwood
   primeline
   starline
-  sweda
   vitronic
-).each { |supplier| ProductLoader.load_products(supplier) }
+).each { |supplier| ProductLoader.load('products', supplier) }
+# sweda
+
+%w(
+  vitronic
+).each { |supplier| ProductLoader.load('upcharges', supplier) }

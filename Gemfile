@@ -13,6 +13,7 @@ gem 'pg'
 gem 'unicorn'
 gem 'font-awesome-sass'
 gem 'bower-rails'
+gem 'work_queue'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

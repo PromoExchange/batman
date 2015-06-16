@@ -1,7 +1,10 @@
 require 'csv'
 require 'open-uri'
+require 'work_queue'
 
-supplier = Spree::Supplier.create(name: 'Logomark')
+puts 'Loading Logomark products'
+
+Spree::Supplier.create(name: 'Logomark')
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -13,74 +16,93 @@ default_attrs = {
 }
 
 file_name = File.join(Rails.root, 'db/product_data/logomark.csv')
+load_fail = 0
+count = 0
+beginning_time = Time.zone.now
+wq = WorkQueue.new 4
+
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   # Skip conditionals
   next unless hashed[:pricepoint1qty] && hashed[:pricepoint1price]
 
-  product_attrs = {
-    sku: hashed[:sku],
-    name: hashed[:name],
-    description: hashed[:description],
-    price: 0
-  }
+  count += 1
 
-  begin
-    product = Spree::Product.create!(default_attrs.merge(product_attrs))
-  rescue => e
-    ap "Error in #{hashed[:sku]} product data: #{e}"
-    next
-  end
-
-  # Prices
-  if hashed[:pricepoint6price]
-    price_quantity = 6
-  elsif hashed[:pricepoint5price]
-    price_quantity = 5
-  elsif hashed[:pricepoint4price]
-    price_quantity = 4
-  elsif hashed[:pricepoint3price]
-    price_quantity = 3
-  elsif hashed[:pricepoint2price]
-    price_quantity = 2
-  elsif hashed[:pricepoint1price]
-    price_quantity = 1
-  end
-  (1..price_quantity).each do |i|
-    quantity_key1 = "pricepoint#{i}qty".to_sym
-    quantity_key2 = "pricepoint#{i + 1}qty".to_sym
-    price_key = "pricepoint#{i}price".to_sym
-
-    if i == price_quantity
-      name = "#{hashed[quantity_key1]}+"
-      range = "#{hashed[quantity_key1]}+"
-    else
-      name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2]}"
-      range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2]})"
-    end
-
+  wq.enqueue_b do
     begin
-      Spree::VolumePrice.create!(
-        variant: product.master,
-        name: name,
-        range: range,
-        amount: hashed[price_key],
-        position: i,
-        discount_type: 'price'
-      )
+
+          product_attrs = {
+            sku: hashed[:sku],
+            name: hashed[:name],
+            description: hashed[:description],
+            price: 0
+          }
+
+          product_attrs[:name] = product_attrs[:sku] unless hashed[:name].present?
+
+          product = Spree::Product.create!(default_attrs.merge(product_attrs))
+
+          # Prices
+          if hashed[:pricepoint6price]
+            price_quantity = 6
+          elsif hashed[:pricepoint5price]
+            price_quantity = 5
+          elsif hashed[:pricepoint4price]
+            price_quantity = 4
+          elsif hashed[:pricepoint3price]
+            price_quantity = 3
+          elsif hashed[:pricepoint2price]
+            price_quantity = 2
+          elsif hashed[:pricepoint1price]
+            price_quantity = 1
+          end
+          (1..price_quantity).each do |i|
+            quantity_key1 = "pricepoint#{i}qty".to_sym
+            quantity_key2 = "pricepoint#{i + 1}qty".to_sym
+            price_key = "pricepoint#{i}price".to_sym
+
+            if i == price_quantity
+              name = "#{hashed[quantity_key1]}+"
+              range = "#{hashed[quantity_key1]}+"
+            else
+              name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2]}"
+              range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2]})"
+            end
+
+            begin
+              Spree::VolumePrice.create!(
+                variant: product.master,
+                name: name,
+                range: range,
+                amount: hashed[price_key],
+                position: i,
+                discount_type: 'price'
+              )
+            rescue => e
+              ap "Error in #{hashed[:sku]} pricing data: #{e}"
+            end
+          end
+
+          # Properties
+          properties = []
+          properties << "Features:#{hashed[:features]}" if hashed[:features]
+          properties << "Size:#{hashed[:item_size]}" if hashed[:item_size]
+
+          properties.each do |property|
+            property_vals = property.split(':')
+            product.set_property(property_vals[0].strip, property_vals[1].strip)
+          end
     rescue => e
-      ap "Error in #{hashed[:sku]} pricing data: #{e}"
+      load_fail += 1
+      ap "Error in #{hashed[:sku]} product data: #{e}"
+    ensure
+      ActiveRecord::Base.clear_active_connections!
     end
-  end
 
-  # Properties
-  properties = []
-  properties << "Features:#{hashed[:features]}" if hashed[:features]
-  properties << "Size:#{hashed[:item_size]}" if hashed[:item_size]
-
-  properties.each do |property|
-    property_vals = property.split(':')
-    product.set_property(property_vals[0].strip, property_vals[1].strip)
   end
 end
+wq.join
+end_time = Time.zone.now
+average_time = ((end_time-beginning_time)/count)*1000
+puts "Loaded: #{count}, Failed: #{load_fail}, Time per product: #{average_time.round(3)}ms"

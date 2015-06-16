@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150614193510) do
+ActiveRecord::Schema.define(version: 20150618155132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1151,6 +1151,17 @@ ActiveRecord::Schema.define(version: 20150614193510) do
   end
 
   add_index "spree_trackers", ["active"], name: "index_spree_trackers_on_active", using: :btree
+
+  create_table "spree_upcharge_types", force: :cascade do |t|
+    t.string "name", null: false
+  end
+
+  create_table "spree_upcharges", force: :cascade do |t|
+    t.integer "upcharge_type_id", null: false
+    t.string  "related_type",     null: false
+    t.integer "related_id",       null: false
+    t.string  "value",            null: false
+  end
 
   create_table "spree_users", force: :cascade do |t|
     t.string   "encrypted_password",     limit: 128

@@ -13,6 +13,6 @@ class Spree::Message < Spree::Base
   validates :product_id, presence: true
 
   def self.user_messages
-    Spree::Auctions.where(buyer_id: current_spree_user.id)
+    Spree::Messages.where(owner_id: current_spree_user.id)
   end
 end

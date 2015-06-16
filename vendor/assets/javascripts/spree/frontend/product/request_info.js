@@ -1,5 +1,4 @@
 $(function(){
-  $("#message-submit").show();
   $('#message-submit').click(function(e) {
     var key = $("#request-info").attr("data-id");
     var owner = $("#buyer-id").val();
@@ -9,8 +8,8 @@ $(function(){
       to_id: $("#seller-id").val(),
       status: 'unread',
       subject: $(".modal-title").text(),
-      body: $("#product-id").val(),
-      product_id: $("#question").val()
+      body: $("#question").val(),
+      product_id: $("#product-id").val()
     };
     $.ajax({
       type: 'POST',

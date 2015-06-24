@@ -26,6 +26,7 @@ default_attrs = {
 
 file_name = File.join(Rails.root, 'db/product_data/vitronic.csv')
 load_fail = 0
+image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
@@ -38,9 +39,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   count += 1
   wq.enqueue_b do
     begin
-      # Skip conditionals
-      # next unless hashed[:qty_point1] && hashed[:qty_price1]
-
       product_attrs = {
         sku: hashed[:sku],
         name: hashed[:item_name],
@@ -50,6 +48,18 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       }
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
+
+      # Image
+      begin
+        image_uri = "http://www.vitronicpromotional.com/image.php?sz=viewitem_lg&itemno=#{hashed[:sku]}"
+        product.images << Spree::Image.create!(
+          attachment: open(URI.parse(image_uri)),
+          viewable: product)
+      rescue => e
+        ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
+        image_fail += 1
+      end
+
       # Properties
       properties = []
       properties << "Imprint Area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
@@ -58,7 +68,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         property_vals = property.split(':')
         product.set_property(property_vals[0].strip, property_vals[1].strip)
       end
-    rescue=> e
+    rescue => e
       load_fail += 1
       ap "Error in #{hashed[:sku]} product data: #{e}"
     ensure
@@ -76,7 +86,7 @@ file_name = File.join(Rails.root, 'db/product_data/vitronic_pricing.csv')
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
-  # We need to think about the pros/con between upcharges by IM
+  # We need to think about the pros/cons between upcharges by IM
   # and quantity pricing. Vitronic use both but we could
   # handle it by 'internal' upcharges.
   # For now, we will only accept one set of base quanity prices
@@ -115,7 +125,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         ap "Error in #{hashed[:productitem]} pricing data: #{e}"
       end
     end
-  rescue=>e
+  rescue => e
     ap "Error in #{hashed[:sku]} product data: #{e}"
   ensure
     ActiveRecord::Base.clear_active_connections!
@@ -124,4 +134,5 @@ end
 
 end_time = Time.zone.now
 average_time = ((end_time - beginning_time) / count) * 1000
-puts "Loaded: #{count}, Failed: #{load_fail}, Time per product: #{average_time.round(3)}ms"
+puts "Loaded: #{count}, Failed: #{load_fail}, Image fail #{image_fail}"
+puts "Time per product: #{average_time.round(3)}ms"

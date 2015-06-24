@@ -145,7 +145,6 @@ end
   starline
   vitronic
 ).each { |supplier| ProductLoader.load('products', supplier) }
-# sweda
 
 %w(
   vitronic

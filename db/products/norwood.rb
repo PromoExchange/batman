@@ -74,7 +74,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       # Image
       begin
         Spree::Image.create(attachment: URI.parse(hashed[:large_image_url]), viewable: product.master)
-      rescue
+      rescue => e
         ap "Error loading product image [#{product_attrs[:sku]}], #{e}"
       end
 

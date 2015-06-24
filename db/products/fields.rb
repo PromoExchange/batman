@@ -4,7 +4,7 @@ require 'work_queue'
 
 puts 'Loading Fields products'
 
-Spree::Supplier.create(name: 'Fields')
+supplier = Spree::Supplier.create(name: 'Fields')
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -34,7 +34,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         sku: hashed[:productcode],
         name: hashed[:productname],
         description: hashed[:productdescription],
-        price: 0
+        price: 0,
+        supplier_id: supplier.id
       }
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))

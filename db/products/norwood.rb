@@ -34,7 +34,7 @@ def check_quantities(hashed, limit)
   check
 end
 
-Spree::Supplier.create(name: 'Norwood')
+supplier = Spree::Supplier.create(name: 'Norwood')
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -60,7 +60,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         sku: "NORWOOD-#{hashed[:product_id]}",
         name: hashed[:product_name],
         description: hashed[:product_description],
-        price: hashed[:price1]
+        price: hashed[:price1],
+        supplier_id: supplier.id
       }
 
       next unless hashed[:product_name].parameterize.length > 3

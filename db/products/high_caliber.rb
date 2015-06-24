@@ -4,7 +4,7 @@ require 'work_queue'
 
 puts 'Loading High Caliber products'
 
-Spree::Supplier.create(name: 'High Caliber')
+supplier = Spree::Supplier.create(name: 'High Caliber')
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -35,7 +35,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         sku: hashed[:hcl_item],
         name: hashed[:item_name],
         description: hashed[:description],
-        price: 0
+        price: 0,
+        supplier_id: supplier.id
       }
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))

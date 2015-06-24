@@ -4,7 +4,16 @@ require 'work_queue'
 
 puts 'Loading Vitronic products'
 
-Spree::Supplier.create(name: 'Vitronic')
+def get_last_break(hashed, root, limit)
+  highest = 0
+  (1..limit).each do |i|
+    price_key = "#{root}#{i}".to_sym
+    highest = i unless hashed[price_key].to_i == 0
+  end
+  highest
+end
+
+supplier = Spree::Supplier.create(name: 'Vitronic')
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -36,11 +45,11 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         sku: hashed[:sku],
         name: hashed[:item_name],
         description: hashed[:product_description],
-        price: 0
+        price: 0,
+        supplier_id: supplier.id
       }
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
-
       # Properties
       properties = []
       properties << "Imprint Area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
@@ -58,7 +67,61 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   end
 end
 
+# Join product threads
 wq.join
+
+last_product = 0
+
+file_name = File.join(Rails.root, 'db/product_data/vitronic_pricing.csv')
+CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
+  hashed = row.to_hash
+
+  # We need to think about the pros/con between upcharges by IM
+  # and quantity pricing. Vitronic use both but we could
+  # handle it by 'internal' upcharges.
+  # For now, we will only accept one set of base quanity prices
+  next if hashed[:sku] == last_product
+  last_product = hashed[:sku]
+
+  begin
+    product = Spree::Product.search(master_sku_eq: hashed[:sku]).result.first
+
+    price_quantity = get_last_break(hashed, 'pricingqty', 5)
+    next unless price_quantity > 0
+
+    (1..price_quantity).each do |i|
+      quantity_key1 = "pricingqty#{i}".to_sym
+      quantity_key2 = "pricingqty#{i + 1}".to_sym
+      price_key = "pricingprice#{i}".to_sym
+
+      if i == price_quantity
+        name = "#{hashed[quantity_key1]}+"
+        range = "#{hashed[quantity_key1]}+"
+      else
+        name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2]}"
+        range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2]})"
+      end
+
+      begin
+        Spree::VolumePrice.create!(
+          variant: product.master,
+          name: name,
+          range: range,
+          amount: hashed[price_key],
+          position: i,
+          discount_type: 'price'
+        )
+      rescue => e
+        ap "Error in #{hashed[:productitem]} pricing data: #{e}"
+      end
+    end
+  rescue=>e
+    ap "Error in #{hashed[:sku]} product data: #{e}"
+  ensure
+    ActiveRecord::Base.clear_active_connections!
+  end
+end
+
 end_time = Time.zone.now
 average_time = ((end_time - beginning_time) / count) * 1000
 puts "Loaded: #{count}, Failed: #{load_fail}, Time per product: #{average_time.round(3)}ms"

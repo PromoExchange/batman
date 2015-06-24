@@ -3,13 +3,14 @@ module ProductLoader
 
   def self.load(folder, file)
     # If file exists within application it takes precendence.
-    if File.exist?(File.join(Rails.root, 'db', folder, "#{file}.rb"))
-      path = File.expand_path(File.join(Rails.root, 'db', 'products', "#{file}.rb"))
+    file = File.join(Rails.root, 'db', folder, "#{file}.rb")
+    if File.exist?(file)
+      path = File.expand_path(file)
     else
       fail FileNotFound "File #{file} does not exist"
     end
 
     require path
-    puts "Loaded #{folder}/#{file} products"
+    puts "Loaded #{folder}/#{file}"
   end
 end

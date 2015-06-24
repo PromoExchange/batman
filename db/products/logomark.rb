@@ -4,7 +4,7 @@ require 'work_queue'
 
 puts 'Loading Logomark products'
 
-Spree::Supplier.create(name: 'Logomark')
+supplier = Spree::Supplier.create(name: 'Logomark')
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -36,7 +36,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
             sku: hashed[:sku],
             name: hashed[:name],
             description: hashed[:description],
-            price: 0
+            price: 0,
+            supplier_id: supplier.id
           }
 
           product_attrs[:name] = product_attrs[:sku] unless hashed[:name].present?

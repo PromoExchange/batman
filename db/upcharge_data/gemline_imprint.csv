@@ -1,0 +1,7 @@
+imprint_slug,charge_type,range1,range2,range3,range4,range5,price1,price2,price3,price4,price5
+silk-screen,SETUP,0,0,0,0,0,44,0,0,0,0
+silk-screen,RUN,(6..99),(100..299),(300..399),1000+,0,0.79,0.59,0.47,0.36,0
+embroider,RUN,(6..99),(100..299),300+,0,0,2.24,2.04,1.83,0,0
+deboss,SETUP,0,0,0,0,0,56,0,0,0,0
+logomatic,SETUP,0,0,0,0,0,44,0,0,0,0
+gemphoto,RUN,(1..99),(100..299),(300.399),1000+,0,2.24,2.04,1.83,1.64,0

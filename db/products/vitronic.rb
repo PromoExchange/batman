@@ -50,14 +50,16 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
       # Image
-      begin
-        image_uri = "http://www.vitronicpromotional.com/image.php?sz=viewitem_lg&itemno=#{hashed[:sku]}"
-        product.images << Spree::Image.create!(
-          attachment: open(URI.parse(image_uri)),
-          viewable: product)
-      rescue => e
-        ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
-        image_fail += 1
+      if Rails.configuration.x.load_images
+        begin
+          image_uri = "http://www.vitronicpromotional.com/image.php?sz=viewitem_lg&itemno=#{hashed[:sku]}"
+          product.images << Spree::Image.create!(
+            attachment: open(URI.parse(image_uri)),
+            viewable: product)
+        rescue => e
+          ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
+          image_fail += 1
+        end
       end
 
       # Properties

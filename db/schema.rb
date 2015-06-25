@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624155909) do
+ActiveRecord::Schema.define(version: 20150625132956) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 20150624155909) do
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "slug"
   end
 
   create_table "spree_imprint_methods_products", id: false, force: :cascade do |t|
@@ -1164,6 +1165,7 @@ ActiveRecord::Schema.define(version: 20150624155909) do
     t.string  "range"
     t.string  "actual"
     t.string  "price_code"
+    t.integer "position"
   end
 
   create_table "spree_users", force: :cascade do |t|

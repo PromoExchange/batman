@@ -9,7 +9,6 @@ def get_last_break(hashed, root, limit)
   (1..limit).each do |i|
     price_key = "#{root}#{i}".to_sym
     highest = i unless hashed[price_key].to_i == 0
-    # ap "#{price_key}:#{highest}"
   end
   highest
 end
@@ -51,10 +50,12 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
       # Image
-      begin
-        Spree::Image.create(attachment: URI.parse(hashed[:image_path]), viewable: product.master)
-      rescue => e
-        ap "Error in #{hashed[:productitem]} image load: #{e}"
+      if Rails.configuration.x.load_images
+        begin
+          Spree::Image.create(attachment: URI.parse(hashed[:image_path]), viewable: product.master)
+        rescue => e
+          ap "Error in #{hashed[:productitem]} image load: #{e}"
+        end
       end
 
       price_quantity = get_last_break(hashed, 'price_break', 5)

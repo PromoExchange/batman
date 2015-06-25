@@ -14,6 +14,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   product = Spree::Product.search(master_sku_eq: hashed[:sku]).result.first
 
+  next if imprint.nil?
+  
   if product.nil?
     puts "Error: Failed to find product #{hashed[:sku]}"
     upcharge_product_error += 1
@@ -35,17 +37,19 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     attrs[:value] = hashed[:setup]
     attrs[:range] = nil
     Spree::Upcharge.create(attrs)
+    upcharge_product_count += 1
   else
     volume_price = Spree::VolumePrice.where(variant_id: product.master).order(:position)
     quantity_count = 1
     volume_price.each do |v|
       attrs[:value] = hashed["run_chargeqty#{quantity_count}".to_sym]
       attrs[:range] = v.range
+      attrs[:position] = quantity_count
       Spree::Upcharge.create(attrs)
       quantity_count += 1
+      upcharge_product_count += 1
     end
   end
-  upcharge_product_count += 1
 end
 
 puts "Loaded #{upcharge_product_count} upcharges, #{upcharge_product_error} failed"

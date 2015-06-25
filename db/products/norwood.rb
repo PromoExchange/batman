@@ -72,10 +72,12 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
       # Image
-      begin
-        Spree::Image.create(attachment: URI.parse(hashed[:large_image_url]), viewable: product.master)
-      rescue => e
-        ap "Error loading product image [#{product_attrs[:sku]}], #{e}"
+      if Rails.configuration.x.load_images
+        begin
+          Spree::Image.create(attachment: URI.parse(hashed[:large_image_url]), viewable: product.master)
+        rescue => e
+          ap "Error loading product image [#{product_attrs[:sku]}], #{e}"
+        end
       end
 
       price_quantity = get_last_break(hashed, 'quantity', 5)

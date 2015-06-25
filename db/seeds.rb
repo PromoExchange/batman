@@ -3,7 +3,6 @@ require 'csv'
 # Product loader
 require './lib/product_loader'
 
-#  Seeds.rb
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 
@@ -147,5 +146,12 @@ end
 ).each { |supplier| ProductLoader.load('products', supplier) }
 
 %w(
+  gemline
+  crown
+  fields
+  high_caliber
+  logomark
+  primeline
+  starline
   vitronic
 ).each { |supplier| ProductLoader.load('upcharges', supplier) }

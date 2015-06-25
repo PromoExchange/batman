@@ -17,6 +17,7 @@ default_attrs = {
 
 file_name = File.join(Rails.root, 'db/product_data/logomark.csv')
 load_fail = 0
+image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
@@ -85,6 +86,21 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
             end
           end
 
+          # Images
+          if Rails.configuration.x.load_images
+            begin
+              # http://www.logomark.com/Image/Group/Group270/BA1400.jpg
+              image_base = hashed[:sku].match(/..[0-9]*/)
+              image_uri = "http://www.logomark.com/Image/Group/Group270/#{image_base}.jpg"
+              product.images << Spree::Image.create!(
+                attachment: open(URI.parse(image_uri)),
+                viewable: product)
+            rescue => e
+              ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
+              image_fail += 1
+            end
+          end
+
           # Properties
           properties = []
           properties << "Features:#{hashed[:features]}" if hashed[:features]
@@ -100,10 +116,10 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     ensure
       ActiveRecord::Base.clear_active_connections!
     end
-
   end
 end
 wq.join
 end_time = Time.zone.now
-average_time = ((end_time-beginning_time)/count)*1000
-puts "Loaded: #{count}, Failed: #{load_fail}, Time per product: #{average_time.round(3)}ms"
+average_time = ((end_time - beginning_time) / count) * 1000
+puts "Loaded: #{count}, Failed: #{load_fail}, Image Fails #{image_fail}"
+puts "Time per product: #{average_time.round(3)}ms"

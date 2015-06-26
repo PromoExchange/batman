@@ -1,10 +1,11 @@
 require 'csv'
 require 'open-uri'
 require 'work_queue'
+require 'thread'
 
 puts 'Loading Crown products'
 
-supplier = Spree::Supplier.create(name: 'Crown')
+supplier = Spree::Supplier.where( name: 'Crown').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -20,6 +21,20 @@ load_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
+
+semaphore = Mutex.new
+
+category_hash = {
+  'Tools': 'Tools',
+  'Drinkware': 'Mugs-Drinkware',
+  'Bags': 'Bags',
+  'Workplace': 'Business Supplies',
+  'Techno Trends': 'Tech-Electronics',
+  'Personal Care': 'Personal-Healthcare',
+  'Lifestyles': 'Sports-Outdoor',
+  'Writing Instruments': 'Pens-Writing Instruments',
+  'Coolers': 'Coolers'
+}
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
@@ -79,11 +94,41 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         end
       end
 
+      # Categories
+      product_category = hashed[:product_categories]
+      categories = product_category.split(',') unless product_category.nil?
+
+      unless categories.nil?
+        categories.each do |c|
+          taxon_key = category_hash[c.strip.to_sym]
+
+          if taxon_key.nil?
+            puts "Category Warning: #{hashed[:item_sku]} - #{hashed[:product_categories]}"
+            next
+          end
+
+          taxon = Spree::Taxon.where(name: taxon_key).first
+
+          if taxon.nil?
+            puts "Taxon Warning: #{hashed[:item_sku]} - #{hashed[:product_categories]}"
+            next
+          end
+
+          semaphore.synchronize do
+            Spree::Classification.where(
+              taxon_id: taxon.id,
+              product_id: product.id).first_or_create
+          end
+        end
+      end
+
       # Properties
       properties = []
-      properties << "Imprint Area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
-      properties << "Packaging:#{hashed[:packaging]}" if hashed[:packaging]
-      properties << "Additional Information:#{hashed[:additional_info]}" if hashed[:additional_info]
+      properties << "Imprint Area: #{hashed[:imprint_area]}" if hashed[:imprint_area]
+      properties << "Packaging: #{hashed[:packaging]}" if hashed[:packaging]
+      properties << "Additional Information: #{hashed[:additional_info]}" if hashed[:additional_info]
+      properties << "Catalog Page: #{hashed[:catalog_page]}" if hashed[:catalog_page]
+      properties << "Price Includes: #{hashed[:price_includes]}" if hashed[:price_includes]
 
       properties.each do |property|
         property_vals = property.split(':')
@@ -93,6 +138,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       load_fail += 1
       ap "Error in #{hashed[:item_sku]} product data: #{e}"
     ensure
+      ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
       ActiveRecord::Base.clear_active_connections!
     end
   end

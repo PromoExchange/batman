@@ -1,10 +1,11 @@
 require 'csv'
 require 'open-uri'
 require 'work_queue'
+require 'thread'
 
 puts 'Loading Starline products'
 
-supplier = Spree::Supplier.create(name: 'Starline')
+supplier = Spree::Supplier.where(name: 'Starline').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -17,9 +18,14 @@ default_attrs = {
 
 file_name = File.join(Rails.root, 'db/product_data/starline.csv')
 load_fail = 0
+image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
+
+semaphore = Mutex.new
+
+category_hash = CSV.read(File.join(Rails.root, 'db/product_data/starline_category_map.csv')).to_h
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
@@ -30,6 +36,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       # Skip conditionals
       next unless hashed[:price1] && hashed[:column_1_max]
 
+      # Product
       product_attrs = {
         sku: hashed[:productcode].strip,
         name: hashed[:productname],
@@ -42,11 +49,26 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Image
       if Rails.configuration.x.load_images
-        begin
-          Spree::Image.create(attachment: URI.parse(hashed[:productimageurl]), viewable: product.master)
-        rescue => e
-          ap "Error in #{hashed[:productcode]} image load: #{e}"
-          next
+        if hashed[:productimageurl]
+          begin
+            Spree::Image.create(attachment: URI.parse(hashed[:productimageurl]), viewable: product.master)
+          rescue => e
+            ap "Error in #{hashed[:productcode]} image load: #{e}"
+            image_fail += 1
+          end
+        end
+      end
+
+      # Category
+      sub_category = hashed[:subcategory]
+      taxon_key = category_hash[sub_category]
+
+      unless taxon_key.nil?
+        taxon = Spree::Taxon.where(name: taxon_key).first
+        semaphore.synchronize do
+          Spree::Classification.where(
+            taxon_id: taxon.id,
+            product_id: product.id).first_or_create
         end
       end
 
@@ -92,7 +114,17 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Properties
       properties = []
-      properties << "Country of Origin:#{hashed[:origin]}" if hashed[:origin]
+      properties << "Country of Origin: #{hashed[:origin]}" if hashed[:origin]
+      properties << "Year introduced: #{hashed[:year_new]}" if hashed[:year_new]
+      properties << "Is Green: #{hashed[:isgreen]}" if hashed[:isgreen]
+      properties << "Packaging: #{hashed[:packaging]}" if hashed[:packaging]
+      properties << "Product colors: #{hashed[:productcolors]}" if hashed[:productcolors]
+      properties << "Imprint Area: #{hashed[:primary_imprint_area]}" if hashed[:primary_imprint_area]
+      properties << "Imprint Method: #{hashed[:primary_imprint_method]}" if hashed[:primary_imprint_method]
+      properties << "Imprint Location: #{hashed[:primary_imprint_location]}" if hashed[:primary_imprint_location]
+      properties << "Imprint Height: #{hashed[:primary_imprint_height]}" if hashed[:primary_imprint_height]
+      properties << "Imprint Width: #{hashed[:primary_imprint_width]}" if hashed[:primary_imprint_width]
+      properties << "Minimum: #{hashed[:minimum]}" if hashed[:minimum]
 
       properties.each do |property|
         property_vals = property.split(':')
@@ -102,6 +134,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       load_fail += 1
       ap "Error in #{hashed[:productcode]} product data: #{e}"
     ensure
+      ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
       ActiveRecord::Base.clear_active_connections!
     end
   end
@@ -109,4 +142,5 @@ end
 wq.join
 end_time = Time.zone.now
 average_time = ((end_time - beginning_time) / count) * 1000
-puts "Loaded: #{count}, Failed: #{load_fail}, Time per product: #{average_time.round(3)}ms"
+puts "Loaded: #{count}, Failed: #{load_fail}, Image fail #{image_fail}"
+puts "Time per product: #{average_time.round(3)}ms"

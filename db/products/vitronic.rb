@@ -1,6 +1,7 @@
 require 'csv'
 require 'open-uri'
 require 'work_queue'
+require 'thread'
 
 puts 'Loading Vitronic products'
 
@@ -13,7 +14,7 @@ def get_last_break(hashed, root, limit)
   highest
 end
 
-supplier = Spree::Supplier.create(name: 'Vitronic')
+supplier = Spree::Supplier.where(name: 'Vitronic').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -30,6 +31,19 @@ image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
+
+semaphore = Mutex.new
+
+category_map = {
+  'Headwear': 'Headwear-Caps',
+  'Lifestyle': 'Personal-Healthcare',
+  'Totes & Bags': 'Bags-Coolers-Totes',
+  'Business': 'Business Supplies',
+  'Umbrellas': 'Personal Umbrellas',
+  'Calendars': 'Calendars',
+  'Plush': 'Stuffed Animals',
+  'Andrew Philips': 'Executive' # Technically a Brand
+}
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
@@ -62,9 +76,41 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         end
       end
 
+      # Categories
+      product_category = hashed[:product_categories]
+      categories = product_category.split(',') unless product_category.nil?
+
+      unless categories.nil?
+        categories.each do |c|
+          taxon_key = category_map[c.strip.to_sym]
+
+          if taxon_key.nil?
+            puts "Category Warning: #{hashed[:sku]} - #{hashed[:product_categories]}"
+            next
+          end
+
+          taxon = Spree::Taxon.where(name: taxon_key).first
+
+          semaphore.synchronize do
+            Spree::Classification.where(
+              taxon_id: taxon.id,
+              product_id: product.id).first_or_create
+          end
+        end
+      end
+
       # Properties
       properties = []
-      properties << "Imprint Area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
+      properties << "Country of Origin: #{hashed[:origin]}" if hashed[:origin]
+      properties << "Imprint Area: #{hashed[:imprint_area]}" if hashed[:imprint_area]
+      properties << "Catalog Page: #{hashed[:catalog_page]}" if hashed[:catalog_page]
+      properties << "Price Includes: #{hashed[:price_includes]}" if hashed[:price_includes]
+      properties << "Product Size: #{hashed[:product_size]}" if hashed[:product_size]
+      properties << "Additional Info: #{hashed[:additional_info]}" if hashed[:additional_info]
+      properties << "FOB: #{hashed[:fob]}" if hashed[:fob]
+      properties << "Shipping Quantity: #{hashed[:shipping_quantity]}" if hashed[:shipping_quantity]
+      properties << "Shipping Dimensions: #{hashed[:shipping_dimensions]}" if hashed[:shipping_dimensions]
+      properties << "Available Colors: #{hashed[:available_colors]}" if hashed[:available_colors]
 
       properties.each do |property|
         property_vals = property.split(':')
@@ -91,12 +137,14 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   # We need to think about the pros/cons between upcharges by IM
   # and quantity pricing. Vitronic use both but we could
   # handle it by 'internal' upcharges.
-  # For now, we will only accept one set of base quanity prices
+  # For now, we will only accept one set of base quantity prices
   next if hashed[:sku] == last_product
   last_product = hashed[:sku]
 
   begin
     product = Spree::Product.search(master_sku_eq: hashed[:sku]).result.first
+
+    next unless product
 
     price_quantity = get_last_break(hashed, 'pricingqty', 5)
     next unless price_quantity > 0
@@ -130,6 +178,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   rescue => e
     ap "Error in #{hashed[:sku]} product data: #{e}"
   ensure
+    ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
     ActiveRecord::Base.clear_active_connections!
   end
 end

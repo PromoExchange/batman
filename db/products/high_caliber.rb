@@ -4,7 +4,7 @@ require 'work_queue'
 
 puts 'Loading High Caliber products'
 
-supplier = Spree::Supplier.create(name: 'High Caliber')
+supplier = Spree::Supplier.where( name: 'High Caliber').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')

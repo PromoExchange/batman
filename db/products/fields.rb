@@ -1,10 +1,11 @@
 require 'csv'
 require 'open-uri'
 require 'work_queue'
+require 'thread'
 
 puts 'Loading Fields products'
 
-supplier = Spree::Supplier.create(name: 'Fields')
+supplier = Spree::Supplier.where(name: 'Fields').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -21,13 +22,17 @@ count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
 
+semaphore = Mutex.new
+
+category_hash = CSV.read(File.join(Rails.root, 'db/product_data/fields_category_map.csv')).to_h
+
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   # Skip conditionals
   next unless hashed[:price1_1] && hashed[:quantity1_1]
 
-  count += 1;
+  count += 1
   wq.enqueue_b do
     begin
       product_attrs = {
@@ -39,6 +44,20 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       }
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
+
+      # Categories
+      subcategory = hashed[:subcategoryname]
+      taxon_key = category_hash[subcategory]
+
+      taxon = Spree::Taxon.where(name: taxon_key).first unless taxon_key.nil?
+
+      if taxon.nil?
+        puts "Taxon Warning: #{hashed[:productcode]} - #{hashed[:subcategoryname]}"
+      else
+        Spree::Classification.where(
+          taxon_id: taxon.id,
+          product_id: product.id).create
+      end
 
       # Prices
       if hashed[:price6_1]
@@ -83,7 +102,27 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Properties
       properties = []
-      properties << "Imprint Area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
+
+      %w(
+        fob
+        colors
+        imprint
+        weight
+        lead_time
+        rush_lead_time
+        imprint_area
+        packaging
+        additional_colorspositions
+        additional_colors
+        additional_positions
+        carton_weight_lbs
+        carton_width
+        carton_height
+        carton_length
+        units_per_carton
+      ).each do |w|
+        properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]
+      end
 
       properties.each do |property|
         property_vals = property.split(':')
@@ -93,6 +132,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       load_fail += 1
       ap "Error in #{hashed[:productcode]} product data: #{e}"
     ensure
+      ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
       ActiveRecord::Base.clear_active_connections!
     end
   end

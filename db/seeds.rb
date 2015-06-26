@@ -145,6 +145,7 @@ end
   vitronic
 ).each { |supplier| ProductLoader.load('products', supplier) }
 
+# TODO: Merge these into the main product load queue
 %w(
   gemline
   crown

@@ -4,7 +4,7 @@ require 'work_queue'
 
 puts 'Loading Logomark products'
 
-supplier = Spree::Supplier.create(name: 'Logomark')
+supplier = Spree::Supplier.where( name: 'Logomark').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')

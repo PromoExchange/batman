@@ -1,50 +1,54 @@
 require 'csv'
+require 'imprint_upcharge_loader'
 
-# Imprint Level
-puts 'Loading Fields Imprint level upcharges'
-
-# TODO: DRY This up, place in lib method
+# Product Level
+file_name = File.join(Rails.root, 'db/product_data/fields.csv')
 
 setup_type = Spree::UpchargeType.where(name: 'setup').first.id
 run_type = Spree::UpchargeType.where(name: 'run').first.id
 
-file_name = File.join(Rails.root, 'db/upcharge_data/fields_imprint.csv')
-imprint_upcharge_count = 0
+upcharge_product_count = 0
+upcharge_product_error = 0
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
-  is_setup = (hashed[:charge_type] == 'SETUP')
+  product = Spree::Product.search(master_sku_eq: hashed[:productcode]).result.first
 
-  imprint = Spree::ImprintMethod.where(slug: hashed[:imprint_slug]).first
-
-  next if imprint.nil?
-  
-  attrs = {
-    upcharge_type_id: (is_setup ? setup_type : run_type),
-    related_type: 'Spree::ImprintMethod',
-  }
-  attrs[:related_id] = imprint.id
-
-  if is_setup
-    attrs[:value] = hashed[:price1]
-    Spree::Upcharge.create(attrs)
-    imprint_upcharge_count += 1
-  else
-    (1..5).each do |i|
-      range_key = "range#{i}".to_sym
-      price_key = "price#{i}".to_sym
-
-      next if hashed[range_key] == '0'
-
-      attrs[:range] = hashed[range_key]
-      attrs[:value] = hashed[price_key]
-      attrs[:position] = i
-
-      Spree::Upcharge.create(attrs)
-      imprint_upcharge_count += 1
-    end
+  if product.nil?
+    puts "Error: Failed to find product #{hashed[:productcode]}"
+    upcharge_product_error += 1
+    next
   end
-end
 
-puts "Loaded #{imprint_upcharge_count} imprint upcharges"
+  added_charge = false
+
+  setup_charge_value = hashed[:setup_charge]
+  if setup_charge_value && setup_charge_value != 'No set-up charge.'
+    attrs = {
+      upcharge_type_id: setup_type,
+      related_type: 'Spree::Product',
+      related_id: product.id,
+      value: hashed[:setup_charge]
+    }
+    Spree::Upcharge.create(attrs)
+    added_charge = true
+  end
+
+  if hashed[:run_charge]
+    attrs = {
+      upcharge_type_id: run_type,
+      related_type: 'Spree::Product',
+      related_id: product.id,
+      value: hashed[:run_charge]
+    }
+    Spree::Upcharge.create(attrs)
+    added_charge = true
+  end
+
+  upcharge_product_count += 1 unless added_charge == false
+end
+puts "Loaded #{upcharge_product_count} upcharges, #{upcharge_product_error} failed"
+
+# Imprint Level
+ImprintUpchargeLoader::load('fields_imprint.csv')

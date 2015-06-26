@@ -14,8 +14,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   product = Spree::Product.search(master_sku_eq: hashed[:sku]).result.first
 
-  next if imprint.nil?
-  
   if product.nil?
     puts "Error: Failed to find product #{hashed[:sku]}"
     upcharge_product_error += 1
@@ -51,11 +49,10 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     end
   end
 end
-
 puts "Loaded #{upcharge_product_count} upcharges, #{upcharge_product_error} failed"
 
 # Supplier level
-supplier = Spree::Supplier.find_by_name('Vitronic')
+supplier = Spree::Supplier.where( name: 'Vitronic').first_or_create
 
 puts 'Loading Vitronic supplier upcharges'
 
@@ -73,5 +70,4 @@ File.open(file_name, 'r').each_line do |line|
     value: charge_values[1])
   supplier_upcharge_count += 1
 end
-
 puts "Loaded #{supplier_upcharge_count} supplier upcharges"

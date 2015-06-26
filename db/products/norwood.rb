@@ -13,7 +13,6 @@ def get_last_break(hashed, root, limit)
   highest
 end
 
-# TODO: Merge with method above, part of larger restructure
 def check_quantities(hashed, limit)
   check = true
 
@@ -34,7 +33,7 @@ def check_quantities(hashed, limit)
   check
 end
 
-supplier = Spree::Supplier.create(name: 'Norwood')
+supplier = Spree::Supplier.where( name: 'Norwood').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -82,7 +81,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       price_quantity = get_last_break(hashed, 'quantity', 5)
 
-      # throw "No price found" unless check_quantities(hashed, price_quantity)
       next unless check_quantities(hashed, price_quantity)
 
       # Prices

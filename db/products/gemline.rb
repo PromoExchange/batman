@@ -4,7 +4,7 @@ require 'work_queue'
 
 puts 'Loading Gemline products'
 
-supplier = Spree::Supplier.create(name: 'Gemline')
+supplier = Spree::Supplier.where(name: 'Gemline').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -21,13 +21,15 @@ count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
 
+category_hash = CSV.read(File.join(Rails.root, 'db/product_data/gemline_category_map.csv')).to_h
+
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   # Skip conditionals
   next unless hashed[:us_min_price] && hashed[:min_qty]
 
-  count += 1;
+  count += 1
   wq.enqueue_b do
     begin
       product_attrs = {
@@ -39,6 +41,21 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       }
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
+
+      # Category
+      category_list = hashed[:category]
+      unless category_list.nil?
+        category_list.split(',').each do |c|
+          taxon_key = category_hash[c.strip]
+          # We swallow nil matches, because Gemline add themes to the categories
+          taxon = Spree::Taxon.where(name: taxon_key).first unless taxon_key.nil?
+          unless taxon.nil?
+            Spree::Classification.where(
+              taxon_id: taxon.id,
+              product_id: product.id).create
+          end
+        end
+      end
 
       # Prices
       if hashed[:us_3rd_price]
@@ -96,7 +113,22 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Properties
       properties = []
-      properties << "Dimensions:#{hashed[:carton_dimensions]}" if hashed[:carton_dimensions]
+
+      %w(
+        color
+        length
+        height
+        width
+        diameter
+        fabricmaterial
+        code
+        min_qty
+        weight_per_carton_lbs
+        quantity_per_box
+        carton_dimensions
+      ).each do |w|
+        properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]
+      end
 
       properties.each do |property|
         property_vals = property.split(':')

@@ -141,6 +141,7 @@ end
   logomark
   norwood
   primeline
+  sweda
   starline
   vitronic
 ).each { |supplier| ProductLoader.load('products', supplier) }

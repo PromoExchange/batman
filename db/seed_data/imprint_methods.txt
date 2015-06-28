@@ -12,3 +12,5 @@ Valuemark
 Logomark
 Vinyl
 ColorSplash
+Colorprint
+Photografixx

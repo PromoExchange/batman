@@ -27,7 +27,5 @@ Spree::Product.class_eval do
     volume_prices.first.amount.to_f
   end
 
-  def upcharges
-    option_values.upcharges
-  end
+  delegate :upcharges, to: :option_values
 end

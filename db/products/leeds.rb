@@ -17,9 +17,12 @@ default_attrs = {
 
 file_name = File.join(Rails.root, 'db/product_data/leeds.csv')
 load_fail = 0
+image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
+
+category_hash = CSV.read(File.join(Rails.root, 'db/product_data/leeds_category_map.csv')).to_h
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
@@ -27,7 +30,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   # Skip conditionals
   next unless hashed[:priceqtycol1] && hashed[:priceuscol1]
 
-  count += 1;
+  count += 1
 
   wq.enqueue_b do
     begin
@@ -40,6 +43,37 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       }
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
+
+      # Category
+      subcategory = hashed[:subcategory]
+      taxon_key = category_hash[subcategory]
+
+      taxon = Spree::Taxon.where(name: taxon_key).first unless taxon_key.nil?
+
+      if taxon.nil?
+        puts "Taxon Warning: #{hashed[:itemno]} - #{hashed[:subcategory]}"
+      else
+        Spree::Classification.where(
+          taxon_id: taxon.id,
+          product_id: product.id).create
+      end
+
+      # Image
+      if Rails.configuration.x.load_images
+        begin
+          photo_feature = hashed[:photo_feature]
+          unless photo_feature.nil?
+            base_file = File.basename(photo_feature, File.extname(photo_feature))
+            image_uri = "http://media.pcna.com/ms/?/leeds/large/#{base_file}/en"
+            product.images << Spree::Image.create!(
+              attachment: open(URI.parse(image_uri)),
+              viewable: product)
+          end
+        rescue => e
+          ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
+          image_fail += 1
+        end
+      end
 
       # Prices
       if hashed[:priceuscol5]
@@ -82,8 +116,21 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Properties
       properties = []
-      properties << "Material:#{hashed[:material]}" if hashed[:material]
-      properties << "Size:#{hashed[:catalogsize]}" if hashed[:catalogsize]
+      %w(
+        material
+        colorlist
+        catalogsize
+        packagingdetails
+        catalogweight
+        disclaimers
+        standard_master_carton_width
+        standard_master_carton_length
+        standard_master_carton_depth
+        standard_master_carton_quantity
+        standard_master_carton_actual_weight
+      ).each do |w|
+        properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]
+      end
 
       properties.each do |property|
         property_vals = property.split(':')
@@ -93,11 +140,13 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       load_fail += 1
       ap "Error in #{hashed[:itemno]} product data: #{e}"
     ensure
+      ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
       ActiveRecord::Base.clear_active_connections!
     end
   end
 end
 wq.join
 end_time = Time.zone.now
-average_time = ((end_time-beginning_time)/count)*1000
-puts "Loaded: #{count}, Failed: #{load_fail}, Time per product: #{average_time.round(3)}ms"
+average_time = ((end_time - beginning_time) / count) * 1000
+puts "Loaded: #{count}, Failed: #{load_fail}, Image fail #{image_fail}"
+puts "Time per product: #{average_time.round(3)}ms"

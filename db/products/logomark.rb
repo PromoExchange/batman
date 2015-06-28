@@ -22,6 +22,8 @@ count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
 
+category_hash = CSV.read(File.join(Rails.root, 'db/product_data/logomark_category_map.csv')).to_h
+
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
@@ -32,84 +34,112 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   wq.enqueue_b do
     begin
+      product_attrs = {
+        sku: hashed[:sku],
+        name: hashed[:name],
+        description: hashed[:description],
+        price: 0,
+        supplier_id: supplier.id
+      }
 
-          product_attrs = {
-            sku: hashed[:sku],
-            name: hashed[:name],
-            description: hashed[:description],
-            price: 0,
-            supplier_id: supplier.id
-          }
+      product_attrs[:name] = product_attrs[:sku] unless hashed[:name].present?
 
-          product_attrs[:name] = product_attrs[:sku] unless hashed[:name].present?
+      product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
-          product = Spree::Product.create!(default_attrs.merge(product_attrs))
+      # Prices
+      if hashed[:pricepoint6price]
+        price_quantity = 6
+      elsif hashed[:pricepoint5price]
+        price_quantity = 5
+      elsif hashed[:pricepoint4price]
+        price_quantity = 4
+      elsif hashed[:pricepoint3price]
+        price_quantity = 3
+      elsif hashed[:pricepoint2price]
+        price_quantity = 2
+      elsif hashed[:pricepoint1price]
+        price_quantity = 1
+      end
+      (1..price_quantity).each do |i|
+        quantity_key1 = "pricepoint#{i}qty".to_sym
+        quantity_key2 = "pricepoint#{i + 1}qty".to_sym
+        price_key = "pricepoint#{i}price".to_sym
 
-          # Prices
-          if hashed[:pricepoint6price]
-            price_quantity = 6
-          elsif hashed[:pricepoint5price]
-            price_quantity = 5
-          elsif hashed[:pricepoint4price]
-            price_quantity = 4
-          elsif hashed[:pricepoint3price]
-            price_quantity = 3
-          elsif hashed[:pricepoint2price]
-            price_quantity = 2
-          elsif hashed[:pricepoint1price]
-            price_quantity = 1
+        if i == price_quantity
+          name = "#{hashed[quantity_key1]}+"
+          range = "#{hashed[quantity_key1]}+"
+        else
+          name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2]}"
+          range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2]})"
+        end
+
+        begin
+          Spree::VolumePrice.create!(
+            variant: product.master,
+            name: name,
+            range: range,
+            amount: hashed[price_key],
+            position: i,
+            discount_type: 'price'
+          )
+        rescue => e
+          ap "Error in #{hashed[:sku]} pricing data: #{e}"
+        end
+      end
+
+      # Category
+      category_list = hashed[:categories]
+      unless category_list.nil?
+        category_list.split(',').each do |c|
+          taxon_key = category_hash[c.strip]
+          taxon = Spree::Taxon.where(name: taxon_key).first unless taxon_key.nil?
+          unless taxon.nil?
+            Spree::Classification.where(
+              taxon_id: taxon.id,
+              product_id: product.id).create
           end
-          (1..price_quantity).each do |i|
-            quantity_key1 = "pricepoint#{i}qty".to_sym
-            quantity_key2 = "pricepoint#{i + 1}qty".to_sym
-            price_key = "pricepoint#{i}price".to_sym
+        end
+      end
 
-            if i == price_quantity
-              name = "#{hashed[quantity_key1]}+"
-              range = "#{hashed[quantity_key1]}+"
-            else
-              name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2]}"
-              range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2]})"
-            end
+      # Images
+      if Rails.configuration.x.load_images
+        begin
+          # http://www.logomark.com/Image/Group/Group270/BA1400.jpg
+          image_base = hashed[:sku].match(/..[0-9]*/)
+          image_uri = "http://www.logomark.com/Image/Group/Group270/#{image_base}.jpg"
+          product.images << Spree::Image.create!(
+            attachment: open(URI.parse(image_uri)),
+            viewable: product)
+        rescue => e
+          ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
+          image_fail += 1
+        end
+      end
 
-            begin
-              Spree::VolumePrice.create!(
-                variant: product.master,
-                name: name,
-                range: range,
-                amount: hashed[price_key],
-                position: i,
-                discount_type: 'price'
-              )
-            rescue => e
-              ap "Error in #{hashed[:sku]} pricing data: #{e}"
-            end
-          end
+      # Properties
+      properties = []
 
-          # Images
-          if Rails.configuration.x.load_images
-            begin
-              # http://www.logomark.com/Image/Group/Group270/BA1400.jpg
-              image_base = hashed[:sku].match(/..[0-9]*/)
-              image_uri = "http://www.logomark.com/Image/Group/Group270/#{image_base}.jpg"
-              product.images << Spree::Image.create!(
-                attachment: open(URI.parse(image_uri)),
-                viewable: product)
-            rescue => e
-              ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
-              image_fail += 1
-            end
-          end
+      properties = []
+      %w(
+        product_line
+        item_color
+        features
+        finish__material
+        decoration_methods
+        item_size
+        catalog_page
+        box_weight
+        quantity_per_box
+        box_length
+        production_time
+      ).each do |w|
+        properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]
+      end
 
-          # Properties
-          properties = []
-          properties << "Features:#{hashed[:features]}" if hashed[:features]
-          properties << "Size:#{hashed[:item_size]}" if hashed[:item_size]
-
-          properties.each do |property|
-            property_vals = property.split(':')
-            product.set_property(property_vals[0].strip, property_vals[1].strip)
-          end
+      properties.each do |property|
+        property_vals = property.split(':')
+        product.set_property(property_vals[0].strip, property_vals[1].strip)
+      end
     rescue => e
       load_fail += 1
       ap "Error in #{hashed[:sku]} product data: #{e}"

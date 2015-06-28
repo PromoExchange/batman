@@ -113,7 +113,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Properties
       properties = []
-
       %w(
         color
         length
@@ -136,9 +135,9 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       end
     rescue => e
       load_fail += 1
-
       ap "Error in GEMLINE-#{hashed[:item_]} product data: #{e}"
     ensure
+      ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
       ActiveRecord::Base.clear_active_connections!
     end
   end

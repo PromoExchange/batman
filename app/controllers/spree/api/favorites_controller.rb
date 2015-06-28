@@ -5,11 +5,11 @@ class Spree::Api::FavoritesController < Spree::Api::BaseController
     if params[:buyer_id].present?
       if params[:product_id].present?
         @favorites = Spree::Favorite
-          .where( buyer_id: params[:buyer_id] )
-          .where( product_id: params[:product_id] )
+          .where(buyer_id: params[:buyer_id])
+          .where(product_id: params[:product_id])
       else
         @favorites = Spree::Favorite
-          .where( buyer_id: params[:buyer_id] )
+          .where(buyer_id: params[:buyer_id])
           .page(params[:page])
           .per(params[:per_page] || Spree::Config[:orders_per_page])
       end

@@ -33,7 +33,7 @@ def check_quantities(hashed, limit)
   check
 end
 
-supplier = Spree::Supplier.where( name: 'Norwood').first_or_create
+supplier = Spree::Supplier.where(name: 'Norwood').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
@@ -46,9 +46,12 @@ default_attrs = {
 
 file_name = File.join(Rails.root, 'db/product_data/norwood.csv')
 load_fail = 0
+image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
+
+category_hash = CSV.read(File.join(Rails.root, 'db/product_data/norwood_category_map.csv')).to_h
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
@@ -70,20 +73,36 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
+      # Category
+      category = hashed[:category]
+      taxon_key = category_hash[category]
+
+      taxon = Spree::Taxon.where(name: taxon_key).first unless taxon_key.nil?
+
+      if taxon.nil?
+        puts "Taxon Warning: #{hashed[:itemno]} - #{hashed[:category]}"
+      else
+        Spree::Classification.where(
+          taxon_id: taxon.id,
+          product_id: product.id).create
+      end
+
       # Image
       if Rails.configuration.x.load_images
         begin
-          Spree::Image.create(attachment: URI.parse(hashed[:large_image_url]), viewable: product.master)
+          image_uri = hashed[:large_image_url]
+          product.images << Spree::Image.create!(
+            attachment: open(URI.parse(image_uri)),
+            viewable: product)
         rescue => e
           ap "Error loading product image [#{product_attrs[:sku]}], #{e}"
         end
       end
 
+      # Prices
       price_quantity = get_last_break(hashed, 'quantity', 5)
 
       next unless check_quantities(hashed, price_quantity)
-
-      # Prices
       (1..price_quantity).each do |i|
         quantity_key1 = "quantity#{i}".to_sym
         quantity_key2 = "quantity#{i + 1}".to_sym
@@ -107,17 +126,41 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       end
 
       # Properties
-      properties = ["Material: #{hashed[:material]}", "Size: #{hashed[:sizes]}"].concat(hashed[:features].split('|'))
+      properties = []
+      %w(
+        brand
+        brand_name
+        price_includes
+        country_of_origin
+        features
+        material
+        page_number
+        price_message
+        pack_size
+        pack_weight
+        unit_of_measure
+        sizes
+        lead_time
+        rush_lead_time
+        selections
+        item_color_charges
+        additional_product_information
+        fob_ship_from_city
+        fob_ship_from_state
+        fob_ship_from_zip
+      ).each do |w|
+        properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]
+      end
+
       properties.each do |property|
         property_vals = property.split(':')
         product.set_property(property_vals[0], property_vals[1].strip)
       end
     rescue => e
       load_fail += 1
-
       ap "Error in NORWOOD-#{hashed[:product_id]} product data: #{e}"
-      exit
     ensure
+      ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
       ActiveRecord::Base.clear_active_connections!
     end
   end
@@ -126,4 +169,5 @@ end
 wq.join
 end_time = Time.zone.now
 average_time = ((end_time - beginning_time) / count) * 1000
-puts "Loaded: #{count}, Failed: #{load_fail}, Time per product: #{average_time.round(3)}ms"
+puts "Loaded: #{count}, Failed: #{load_fail}, Image fail #{image_fail}"
+puts "Time per product: #{average_time.round(3)}ms"

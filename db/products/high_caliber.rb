@@ -27,7 +27,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   # Skip conditionals
   next unless hashed[:qty_1] && hashed[:price_1] && hashed[:item_status] == 'Active/All Products'
 
-  count += 1;
+  count += 1
 
   wq.enqueue_b do
     begin
@@ -82,8 +82,18 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Properties
       properties = []
-      properties << "Size:#{hashed[:item_size]}" if hashed[:item_size]
-      properties << "Status:#{hashed[:item_status]}" if hashed[:item_status]
+      %w(
+        item_color
+        item_size
+        length
+        width
+        height
+        carton_weight
+        carton_qty
+        standard_production_time
+      ).each do |w|
+        properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]
+      end
 
       properties.each do |property|
         property_vals = property.split(':')
@@ -93,6 +103,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       load_fail += 1
       ap "Error in #{hashed[:hcl_item]} product data: #{e}"
     ensure
+      ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
       ActiveRecord::Base.clear_active_connections!
     end
   end

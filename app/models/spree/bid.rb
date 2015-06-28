@@ -3,7 +3,7 @@ class Spree::Bid < Spree::Base
 
   belongs_to :auction
   belongs_to :seller, class_name: 'Spree::User'
-  belongs_to :order, :dependent => :destroy
+  belongs_to :order, dependent: :destroy
   belongs_to :prebid
 
   validates :auction_id, presence: true

@@ -46,13 +46,13 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
       # Categories
-      subcategory = hashed[:subcategoryname]
+      subcategory = hashed[:subcategory]
       taxon_key = category_hash[subcategory]
 
       taxon = Spree::Taxon.where(name: taxon_key).first unless taxon_key.nil?
 
       if taxon.nil?
-        puts "Taxon Warning: #{hashed[:productcode]} - #{hashed[:subcategoryname]}"
+        puts "Taxon Warning: #{hashed[:productcode]} - #{hashed[:subcategory]}"
       else
         Spree::Classification.where(
           taxon_id: taxon.id,

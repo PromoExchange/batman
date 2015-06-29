@@ -78,5 +78,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Seed data, load image files
-  config.seed.load_images = true
+  config.x.load_images = true
 end

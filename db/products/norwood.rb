@@ -4,6 +4,12 @@ require 'open-uri'
 
 puts 'Loading Norwood products'
 
+supplier = Spree::Supplier.where(name: 'Norwood').first_or_create
+
+# PMS Colors
+ProductLoader.pms_load('norwood_pms_map.csv', supplier.id)
+
+# Product
 def get_last_break(hashed, root, limit)
   highest = 0
   (1..limit).each do |i|
@@ -32,8 +38,6 @@ def check_quantities(hashed, limit)
   end
   check
 end
-
-supplier = Spree::Supplier.where(name: 'Norwood').first_or_create
 
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')

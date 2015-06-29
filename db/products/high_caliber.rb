@@ -4,8 +4,12 @@ require 'work_queue'
 
 puts 'Loading High Caliber products'
 
-supplier = Spree::Supplier.where( name: 'High Caliber').first_or_create
+supplier = Spree::Supplier.where(name: 'High Caliber').first_or_create
 
+# PMS Colors
+ProductLoader.pms_load('high_caliber_pms_map.csv', supplier.id)
+
+# Product
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
 

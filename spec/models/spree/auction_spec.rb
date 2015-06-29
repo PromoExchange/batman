@@ -32,18 +32,33 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.save).to be_truthy
   end
 
-  it "should have many bids" do
+  it 'should have many bids' do
     t = Spree::Auction.reflect_on_association(:bids)
     expect(t.macro).to eq :has_many
   end
 
-  it "should have one order" do
+  it 'should have one order' do
     t = Spree::Auction.reflect_on_association(:order)
     expect(t.macro).to eq :has_one
   end
 
-  it "should have many adjustments" do
+  it 'should have many adjustments' do
     t = Spree::Auction.reflect_on_association(:adjustments)
     expect(t.macro).to eq :has_many
+  end
+
+  it 'should belong to one imprint method' do
+    t = Spree::Auction.reflect_on_association(:imprint_method)
+    expect(t.macro).to eq :belongs_to
+  end
+
+  it 'should have many pms colors' do
+    t = Spree::Auction.reflect_on_association(:pms_colors)
+    expect(t.macro).to eq :has_many
+  end
+
+  it 'should belong to an address' do
+    t = Spree::Auction.reflect_on_association(:shipping_address)
+    expect(t.macro).to eq :belongs_to
   end
 end

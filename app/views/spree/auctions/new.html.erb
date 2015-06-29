@@ -28,9 +28,8 @@
       </div>
 
       <div class="form-group">
-        <%= f.label(:colors, Spree.t(:pms_colors)) %>
-        <%# TODO: By Factory %>
-        <%= f.select( :pms_colors, @auction.product.supplier.pms_colors.all.each {|i| [ i.name, i.id ] }) %>
+        <%= f.label(:pms_colors, Spree.t(:pms_colors)) %>
+        <%= collection_select(@auction, :pms_colors, @pms_colors, :pms_color_id, :display_name,{:multiple => true}) %>
       </div>
 
       <div class="form-group">
@@ -40,19 +39,19 @@
 
       <div class="form-group">
         <%= label(:shipping_address, Spree.t(:shipping_address)) %>
-        <%= select_tag( :shipping_address, options_for_select(
+        <%= select(:auction,:shipping_address, options_for_select(
            [
-             [@auction.buyer.shipping_address.to_s,"ship"],
-             [@auction.buyer.billing_address.to_s,"bill"],
+             ["Shipping: #{@auction.buyer.shipping_address.to_s}", "ship"],
+             ["Billing: #{@auction.buyer.billing_address.to_s}", "bill"],
            ])) %>
       </div>
       <%= link_to 'Add new address', spree.account_path(spree_current_user) %>
 
-      <div class="form-actions" data-hook="buttons">
+      <!-- <div class="form-actions" data-hook="buttons">
         <%= button 'Start Auction', 'ok', 'submit', {class: 'btn-success'} %>
         <span class="or"><%= Spree.t(:or) %></span>
         <%= button_link_to Spree.t('actions.cancel'), main_app.auctions_path, :icon => 'remove' %>
-      </div>
+      </div> -->
     </fieldset>
     <% end %>
   </div>

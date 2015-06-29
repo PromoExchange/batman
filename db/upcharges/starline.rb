@@ -37,7 +37,7 @@ puts "Loaded #{upcharge_product_count} upcharges, #{upcharge_product_error} fail
 # Supplier level
 puts 'Loading Starline supplier upcharges'
 
-supplier = Spree::Supplier.where( name: 'Starline').first_or_create
+supplier = Spree::Supplier.where(name: 'Starline').first_or_create
 
 file_name = File.join(Rails.root, 'db/upcharge_data/starline_supplier.csv')
 

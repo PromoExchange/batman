@@ -17,32 +17,40 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def new
-    @auction = Spree::Auction.new(product_id: params[:product_id],
-                                    buyer_id: current_spree_user.id,
-                                    started: Time.zone.now)
+    @auction = Spree::Auction.new(
+      product_id: params[:product_id],
+      buyer_id: current_spree_user.id,
+      started: Time.zone.now)
+    @pms_colors = Spree::PmsColorsSupplier.where(supplier_id: @auction.product.supplier)
   end
 
   def create
-    if @auction.present?
-      render nothing: true, status: :conflict
-    else
-      @auction = Spree::Auction.new
-      save_auction
+    @auction = Spree::Auction.new(auction_params)
+    respond_to do |format|
+      if @auction.save
+        format.html do
+          redirect_to(products_path,
+          notice: 'Auction was successfully created.')
+        end
+      else
+        format.html do
+          redirect_to(products_path,
+          fatal: 'Auction was not created successfully')
+        end
+      end
     end
-  end
-
-  def update
-    save_auction
   end
 
   private
 
   def auction_params
-    params.require(:auction).permit(:product_id,
+    params.require(:auction).permit(
+      :product_id,
       :buyer_id,
-      :auction,
-      :description,
       :started,
+      :pms_colors,
+      :quantity,
+      :shipping_address,
       :ended,
       :page,
       :per_page)
@@ -50,16 +58,6 @@ class Spree::AuctionsController < Spree::StoreController
 
   def fetch_auction
     @auction = Spree::Auction.find(params[:id])
-  end
-
-  def save_auction
-    @json = JSON.parse(request.body.read)
-    @auction.assign_attributes(@json)
-    if @auction.save
-      render 'spree/auctions/show'
-    else
-      render nothing: true, status: :bad_request
-    end
   end
 
   def require_login

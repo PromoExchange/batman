@@ -13,5 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require image-picker/image-picker
+//= require image-picker/image-picker/image-picker.min
 //= require_tree .

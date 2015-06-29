@@ -5,17 +5,12 @@ require 'thread'
 
 puts 'Loading Vitronic products'
 
-def get_last_break(hashed, root, limit)
-  highest = 0
-  (1..limit).each do |i|
-    price_key = "#{root}#{i}".to_sym
-    highest = i unless hashed[price_key].to_i == 0
-  end
-  highest
-end
-
 supplier = Spree::Supplier.where(name: 'Vitronic').first_or_create
 
+# PMS Colors
+ProductLoader.pms_load('vitronic_pms_colors.csv', supplier.id)
+
+# Products
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
 
@@ -128,6 +123,16 @@ end
 # Join product threads
 wq.join
 
+# Pricing
+def get_last_break(hashed, root, limit)
+  highest = 0
+  (1..limit).each do |i|
+    price_key = "#{root}#{i}".to_sym
+    highest = i unless hashed[price_key].to_i == 0
+  end
+  highest
+end
+
 last_product = 0
 
 file_name = File.join(Rails.root, 'db/product_data/vitronic_pricing.csv')
@@ -158,8 +163,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         name = "#{hashed[quantity_key1]}+"
         range = "#{hashed[quantity_key1]}+"
       else
-        name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2]}"
-        range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2]})"
+        name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2].to_i - 1}"
+        range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2].to_i - 1})"
       end
 
       begin
@@ -182,7 +187,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     ActiveRecord::Base.clear_active_connections!
   end
 end
-
 end_time = Time.zone.now
 average_time = ((end_time - beginning_time) / count) * 1000
 puts "Loaded: #{count}, Failed: #{load_fail}, Image fail #{image_fail}"

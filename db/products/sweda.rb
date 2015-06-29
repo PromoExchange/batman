@@ -1,10 +1,15 @@
+require 'csv'
 require 'open-uri'
 require 'work_queue'
 
 puts 'Loading Sweda products'
 
-Spree::Supplier.create(name: 'Sweda')
+supplier = Spree::Supplier.where(name: 'Sweda').first_or_create
 
+# PMS Colors
+ProductLoader.pms_load('sweda_pms_map.csv', supplier.id)
+
+# Product
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
 

@@ -36,16 +36,15 @@ describe 'Auctions API' do
     get "/api/auctions/#{auction.id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
-    expect(json['description']).to eq(auction.description)
   end
 
   it 'should update an auction' do
-    auction = FactoryGirl.create(:auction, description: 'put description')
+    auction = FactoryGirl.create(:auction, quantity: 10000)
 
     put "/api/auctions/#{auction.id}", auction.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
-    expect(json['description']).to eq('put description')
+    expect(json['quantity']).to eq(10000)
   end
 
   it 'should not create a duplication auction' do
@@ -57,12 +56,12 @@ describe 'Auctions API' do
   end
 
   it 'should create an auction' do
-    auction = FactoryGirl.build(:auction, description: 'posty description')
+    auction = FactoryGirl.build(:auction, quantity: 10232)
 
     post '/api/auctions', auction.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
-    expect(json['description']).to eq('posty description')
+    expect(json['quantity']).to eq(10232)
   end
 
   it 'should delete an auction' do

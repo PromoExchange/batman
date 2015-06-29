@@ -6,6 +6,10 @@ puts 'Loading Gemline products'
 
 supplier = Spree::Supplier.where(name: 'Gemline').first_or_create
 
+# PMS Colors
+ProductLoader.pms_load('gemline_pms_map.csv', supplier.id)
+
+# Products
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
 

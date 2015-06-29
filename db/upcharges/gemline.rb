@@ -7,7 +7,7 @@ ImprintUpchargeLoader::load('gemline_imprint.csv')
 # Supplier level
 puts 'Loading Gemline supplier upcharges'
 
-supplier = Spree::Supplier.where( name: 'Gemline').first_or_create
+supplier = Spree::Supplier.where(name: 'Gemline').first_or_create
 
 file_name = File.join(Rails.root, 'db/upcharge_data/gemline_supplier.csv')
 supplier_upcharge_count = 0

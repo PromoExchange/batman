@@ -52,7 +52,7 @@ end
 puts "Loaded #{upcharge_product_count} upcharges, #{upcharge_product_error} failed"
 
 # Supplier level
-supplier = Spree::Supplier.where( name: 'Vitronic').first_or_create
+supplier = Spree::Supplier.where(name: 'Vitronic').first_or_create
 
 puts 'Loading Vitronic supplier upcharges'
 

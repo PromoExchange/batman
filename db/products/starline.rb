@@ -7,6 +7,10 @@ puts 'Loading Starline products'
 
 supplier = Spree::Supplier.where(name: 'Starline').first_or_create
 
+# PMS Colors
+ProductLoader.pms_load('starline_pms_colors.csv', supplier.id)
+
+# Product
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
 

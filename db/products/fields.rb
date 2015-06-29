@@ -39,7 +39,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         sku: hashed[:productcode],
         name: hashed[:productname],
         description: hashed[:productdescription],
-        price: 0,
+        price: 1.0,
         supplier_id: supplier.id
       }
 

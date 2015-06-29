@@ -1,1 +1,1 @@
-<%= link_to Spree.t(:new_auction), products_url , class: 'btn btn-default' %>
+<%= link_to Spree.t(:new_auction), main_app.new_auction_path(product_id: product.id) , class: 'btn btn-default' %>

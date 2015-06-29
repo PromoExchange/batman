@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150625132956) do
+ActiveRecord::Schema.define(version: 20150630212436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,15 +93,24 @@ ActiveRecord::Schema.define(version: 20150625132956) do
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
 
   create_table "spree_auctions", force: :cascade do |t|
-    t.integer  "product_id",  null: false
-    t.integer  "buyer_id",    null: false
-    t.integer  "quantity",    null: false
+    t.integer  "product_id",        null: false
+    t.integer  "buyer_id",          null: false
+    t.integer  "quantity",          null: false
     t.string   "description"
     t.datetime "started"
     t.datetime "ended"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "imprint_method_id"
   end
+
+  create_table "spree_auctions_pms_colors", id: false, force: :cascade do |t|
+    t.integer "auction_id",   null: false
+    t.integer "pms_color_id", null: false
+  end
+
+  add_index "spree_auctions_pms_colors", ["auction_id"], name: "index_spree_auctions_pms_colors_on_auction_id", using: :btree
+  add_index "spree_auctions_pms_colors", ["pms_color_id"], name: "index_spree_auctions_pms_colors_on_pms_color_id", using: :btree
 
   create_table "spree_bids", force: :cascade do |t|
     t.integer  "auction_id",  null: false
@@ -490,6 +499,14 @@ ActiveRecord::Schema.define(version: 20150625132956) do
     t.string "textile"
     t.string "hex"
   end
+
+  create_table "spree_pms_colors_suppliers", id: false, force: :cascade do |t|
+    t.integer "pms_color_id", null: false
+    t.integer "supplier_id",  null: false
+  end
+
+  add_index "spree_pms_colors_suppliers", ["pms_color_id"], name: "index_spree_pms_colors_suppliers_on_pms_color_id", using: :btree
+  add_index "spree_pms_colors_suppliers", ["supplier_id"], name: "index_spree_pms_colors_suppliers_on_supplier_id", using: :btree
 
   create_table "spree_prebids", force: :cascade do |t|
     t.integer  "seller_id",   null: false

@@ -40,5 +40,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Seed data, load image files
-  config.x.load_images = false
+  config.x.load_images = true
 end

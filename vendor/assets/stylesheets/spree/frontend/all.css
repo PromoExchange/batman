@@ -9,4 +9,5 @@
  *= require_tree .
  *= require spree/frontend/spree_first_data_gge4
  *= require spree/frontend/spree_static_content
+ *= require image-picker/image-picker/image-picker.css
 */

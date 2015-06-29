@@ -1,5 +1,6 @@
-class Spree::Api::AuctionsController < Spree::Api::BaseController
-  before_action :fetch_auction, except: [:index, :create]
+class Spree::AuctionsController < Spree::StoreController
+  before_action :require_login, only: [:new, :edit]
+  before_action :fetch_auction, except: [:index, :create, :new]
 
   def index
     if params[:buyer_id].present?
@@ -13,11 +14,12 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         .page(params[:page])
         .per(params[:per_page] || Spree::Config[:orders_per_page])
     end
-    render 'spree/api/auctions/index'
   end
 
-  def show
-    render 'spree/api/auctions/show'
+  def new
+    @auction = Spree::Auction.new(product_id: params[:product_id],
+                                    buyer_id: current_spree_user.id,
+                                    started: Time.zone.now)
   end
 
   def create
@@ -33,17 +35,12 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     save_auction
   end
 
-  def destroy
-    @auction.destroy
-    render nothing: true, status: :ok
-  end
-
   private
 
   def auction_params
     params.require(:auction).permit(:product_id,
       :buyer_id,
-      :quantity,
+      :auction,
       :description,
       :started,
       :ended,
@@ -59,9 +56,13 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     @json = JSON.parse(request.body.read)
     @auction.assign_attributes(@json)
     if @auction.save
-      render 'spree/api/auctions/show'
+      render 'spree/auctions/show'
     else
       render nothing: true, status: :bad_request
     end
+  end
+
+  def require_login
+    redirect_to login_url unless current_spree_user
   end
 end

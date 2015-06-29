@@ -1,9 +1,0 @@
-{
-  "name": "dsl-generated dependencies",
-  "dependencies": {
-    "bootstrap-colorpickersliders": "latest"
-  },
-  "resolutions": {
-    "jquery": ">= 1.9.1"
-  }
-}

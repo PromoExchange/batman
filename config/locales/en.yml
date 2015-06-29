@@ -46,3 +46,7 @@ en:
     alternate_shipping: 'Alternate Shipping'
     paypal: 'Paypal'
     subject: 'Subject'
+    new_auction: 'New Auction'
+    colors: 'Colors'
+    pms_colors: 'PMS Colors'
+    imprint_method: 'Imprint Method'

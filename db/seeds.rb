@@ -46,17 +46,6 @@ end
 TaxonLoader.load_categories(seed_path('categories.yml'))
 TaxonLoader.load_colors(seed_path('px_colors.txt'))
 
-%w(material brand).each do |r|
-  puts r.humanize
-  option_type = Spree::OptionType.create(name: r,
-                                         presentation: r.humanize.pluralize)
-  File.open(seed_path(r.pluralize + '.txt')).each do |n|
-    Spree::OptionValue.create(name: n.parameterize,
-                              presentation: n,
-                              option_type: option_type)
-  end
-end
-
 puts 'Upcharge types'
 File.open(seed_path('upcharge_types.txt')).each do |n|
   Spree::UpchargeType.create(name: n.strip)
@@ -88,20 +77,6 @@ CSV.foreach(seed_path('supplier_color_conversions.csv'), headers: true, header_c
   ov.save!
 end
 
-puts 'Sizes'
-File.open(seed_path('sizes.txt')).each do |n|
-  line = n.strip.split(',')
-
-  option_type = Spree::OptionType.create(name: (line[0] + '_size').parameterize,
-                                         presentation: line[0] + ' Size')
-
-  line[1].split('|').each do |v|
-    Spree::OptionValue.create(name: v.parameterize,
-                              presentation: v,
-                              option_type: option_type)
-  end
-end
-
 puts 'Roles'
 Spree::Role.where(name: 'admin').first_or_create
 Spree::Role.where(name: 'user').first_or_create
@@ -111,6 +86,10 @@ Spree::Role.where(name: 'supplier').first_or_create
 
 puts 'Users'
 [
+  ['michael.goldstein@thepromoexchange.com', 'admin'],
+  ['mackie.yakaitis@thepromoexchange.com', 'admin'],
+  ['kevin.widmaier@thepromoexchange.com', 'admin'],
+  ['connor.labarge@thepromoexchange.com', 'admin'],
   ['tim.varley@thepromoexchange.com', 'admin'],
   ['spencer.applegate@thepromoexchange.com', 'admin'],
   ['buyer@thepromoexchange.com', 'buyer'],

@@ -1,0 +1,59 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:auction) %>
+<% end %>
+
+<div class="row" id="new-auction">
+  <div class="col-md-6">
+    <% url = spree.product_url(@auction.product) %>
+    <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url' %><br/>
+    <p><%=@auction.product.description%></p>
+  </div>
+  <div class="col-md-6 well">
+    <h2><%= @auction.product.name %></h2>
+    <%= form_for @auction, url: main_app.auctions_path do |f| %>
+    <%= f.hidden_field :product_id, value: @auction.product.id %>
+    <%= f.hidden_field :buyer_id, value: @auction.buyer_id %>
+    <fieldset>
+      <div class="form-group" id="imprint-methods">
+        <%= f.label(:imprint_method, Spree.t(:imprint_method)) %>
+        <%= select(:auction, :imprint_method, @auction.product.imprint_methods.all.each {|i| [ i.name, i.id ] }) %>
+      </div>
+      <div class="form-group" id="auction-logo">
+        <label for="logo">Logo</label>
+        <select class="image-picker show-html" id="logo">
+          <option data-img-src="<%=image_path('corp_logo/batman-logo-big.gif')%>" value="1">Batman</option>
+          <option data-img-src="<%=image_path('corp_logo/buzzfeed-logo.png')%>" value="2">Buzzfeed</option>
+          <option data-img-src="<%=image_path('corp_logo/coca_cola_logo.jpg')%>" value="3">Cola</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:colors, Spree.t(:pms_colors)) %>
+        <%# TODO: By Factory %>
+        <%= f.select( :pms_colors, @auction.product.supplier.pms_colors.all.each {|i| [ i.name, i.id ] }) %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:quantity, Spree.t(:quantity)) %>
+        <%= f.number_field(:quantity) %>
+      </div>
+
+      <div class="form-group">
+        <%= label(:shipping_address, Spree.t(:shipping_address)) %>
+        <%= select_tag( :shipping_address, options_for_select(
+           [
+             [@auction.buyer.shipping_address.to_s,"ship"],
+             [@auction.buyer.billing_address.to_s,"bill"],
+           ])) %>
+      </div>
+      <%= link_to 'Add new address', spree.account_path(spree_current_user) %>
+
+      <div class="form-actions" data-hook="buttons">
+        <%= button 'Start Auction', 'ok', 'submit', {class: 'btn-success'} %>
+        <span class="or"><%= Spree.t(:or) %></span>
+        <%= button_link_to Spree.t('actions.cancel'), main_app.auctions_path, :icon => 'remove' %>
+      </div>
+    </fieldset>
+    <% end %>
+  </div>
+</div>

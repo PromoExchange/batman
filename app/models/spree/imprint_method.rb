@@ -3,6 +3,7 @@ class Spree::ImprintMethod < Spree::Base
   friendly_id :name, use: :slugged
 
   has_and_belongs_to_many :products
+  has_many :auctions
 
   validates :name, presence: true
 end

@@ -131,29 +131,3 @@ CSV.foreach(seed_path('pages.csv'), headers: true, header_converters: :symbol) d
   page.stores << Spree::Store.first
   page.save!
 end
-
-%w(
-  gemline
-  crown
-  fields
-  high_caliber
-  leeds
-  logomark
-  norwood
-  primeline
-  sweda
-  starline
-  vitronic
-).each { |supplier| ProductLoader.load('products', supplier) }
-
-# TODO: Merge these into the main product load queue
-%w(
-  gemline
-  crown
-  fields
-  high_caliber
-  logomark
-  primeline
-  starline
-  vitronic
-).each { |supplier| ProductLoader.load('upcharges', supplier) }

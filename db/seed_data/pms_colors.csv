@@ -1,34 +1,34 @@
 name,pantone,hex
-black,426 C,#25282B
+black,426,#25282B
 white,White,#FFFFFF
-red202,202 C,#862633
-green356,356 C,#007a33
-purple268,268 C,#582c83
-blue281,281 C,#00205b
-copper876,876 C,#8b634b
-green320,320 C,#009ca6
-red186,186 C,#c8102e
+red202,202,#862633
+green356,356,#007a33
+purple268,268,#582c83
+blue281,281,#00205b
+copper876,876,#8b634b
+green320,320,#009ca6
+red186,186,#c8102e
 process_blue,"Process Blue",#0085ca
-gold123,123 C,#ffc72c
+gold123,123,#ffc72c
 jute,Brown,#cca36e
-red032,032 C,#ef3340
+red032,032,#ef3340
 reflex_blue,"Reflex Blue",#001489
 gold873,Gold,#896e4b
-orange151,151 C,#ff8200
-silver877,877 C,#8a8d8f
-blue286,286 C,#228866
-gray429,429 C,#442299
-pink211,211 C,#f57eb6
-brown476,476 C,#84bd00
-green3435,3435 C,#154734
-pink806,806 C,#ff3eb5
-yellow115,115 C,#fdda24
-brown4695,4695 C,#5b3427
+orange151,151,#ff8200
+silver877,877,#8a8d8f
+blue286,286,#228866
+gray429,429,#a2aaad
+pink211,211,#f57eb6
+brown476,476,#84bd00
+green3435,3435,#154734
+pink806,806,#ff3eb5
+yellow115,115,#fdda24
+brown4695,4695,#5b3427
 green347,347,#009a44
 red185,185,#e4002b
 yellow114,114,#fbdd40
 orange021,021,#fe5000
-process_yellow,Process Yellow,#fedd00
+process_yellow,"Process Yellow",#fedd00
 brown161,161,#603d20
 green341,341,#007a53
 purple266,366,#753bbd
@@ -72,7 +72,6 @@ grey424,424,#707372
 gold872,872,#ac936e
 green8203,8203,#3177a3
 purple8085,8085,#a13769
-teal328,"Teal 328",
-silver878,"Metallic Silver",
-red385,"Red 485",
-red1797,"Red 1797",
+teal328,328,#007367
+silver878,"Metallic Silver",#887788
+red1797,1797,#cb333b

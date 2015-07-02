@@ -31,7 +31,10 @@ class Spree::AuctionsController < Spree::StoreController
       "Billing: #{@auction.buyer.billing_address}",
       @auction.buyer.billing_address.id] unless @auction.buyer.billing_address.nil?
 
-    @pms_colors = Spree::PmsColorsSupplier.where(supplier_id: @auction.product.supplier)
+    @pms_colors = Spree::PmsColorsSupplier
+      .select('display_name,spree_pms_colors.hex,spree_pms_colors.pantone,spree_pms_colors.name')
+      .joins(:pms_color)
+      .where(supplier_id: 1)
   end
 
   def create
@@ -39,13 +42,11 @@ class Spree::AuctionsController < Spree::StoreController
     respond_to do |format|
       if @auction.save
         format.html do
-          redirect_to(products_path,
-          notice: 'Auction was successfully created.')
+          redirect_to(products_path, notice: 'Auction was successfully created.')
         end
       else
         format.html do
-          redirect_to(products_path,
-          fatal: 'Auction was not created successfully')
+          redirect_to(products_path, fatal: 'Auction was not created successfully')
         end
       end
     end

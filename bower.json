@@ -1,6 +1,7 @@
 {
-  "name": "PX Batman",
+  "name": "batman",
   "dependencies": {
-    "image-picker": "*"
-  }
+    "image-picker": "0.2.4"
+  },
+  "private": true
 }

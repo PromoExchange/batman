@@ -31,10 +31,11 @@ class Spree::AuctionsController < Spree::StoreController
       "Billing: #{@auction.buyer.billing_address}",
       @auction.buyer.billing_address.id] unless @auction.buyer.billing_address.nil?
 
+    # TODO: There must be a cleaner way of doing this
     @pms_colors = Spree::PmsColorsSupplier
-      .select('display_name,spree_pms_colors.hex,spree_pms_colors.pantone,spree_pms_colors.name')
+      .select('pms_color_id,display_name,spree_pms_colors.hex,spree_pms_colors.pantone,spree_pms_colors.name')
       .joins(:pms_color)
-      .where(supplier_id: 1)
+      .where(supplier_id: @auction.product.supplier)
   end
 
   def create

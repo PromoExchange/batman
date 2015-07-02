@@ -10,7 +10,8 @@
 
 //= require_tree .
 //= require spree/frontend/spree_first_data_gge4
-//= require image-picker/image-picker/image-picker.min.js
+//= require image-picker/image-picker/image-picker.min
+//= require bootstrap-tagsinput/dist/bootstrap-tagsinput.min
 
 $(function() {
   $('.title').on('keyup change', function(e) {

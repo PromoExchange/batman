@@ -21,6 +21,16 @@ class Spree::AuctionsController < Spree::StoreController
       product_id: params[:product_id],
       buyer_id: current_spree_user.id,
       started: Time.zone.now)
+
+    @addresses = []
+    @addresses << [
+      "Shipping: #{@auction.buyer.shipping_address}",
+      @auction.buyer.shipping_address.id] unless @auction.buyer.shipping_address.nil?
+
+    @addresses << [
+      "Billing: #{@auction.buyer.billing_address}",
+      @auction.buyer.billing_address.id] unless @auction.buyer.billing_address.nil?
+
     @pms_colors = Spree::PmsColorsSupplier.where(supplier_id: @auction.product.supplier)
   end
 

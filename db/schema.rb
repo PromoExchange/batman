@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701201338) do
+ActiveRecord::Schema.define(version: 20150702004337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 20150701201338) do
     t.integer  "shipping_address_id"
   end
 
-  create_table "spree_auctions_pms_colors", id: false, force: :cascade do |t|
+  create_table "spree_auctions_pms_colors", force: :cascade do |t|
     t.integer "auction_id",   null: false
     t.integer "pms_color_id", null: false
   end
@@ -499,7 +499,7 @@ ActiveRecord::Schema.define(version: 20150701201338) do
     t.string "hex"
   end
 
-  create_table "spree_pms_colors_suppliers", id: false, force: :cascade do |t|
+  create_table "spree_pms_colors_suppliers", force: :cascade do |t|
     t.integer "pms_color_id", null: false
     t.integer "supplier_id",  null: false
     t.string  "display_name"

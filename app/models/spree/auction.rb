@@ -19,6 +19,15 @@ class Spree::Auction < Spree::Base
   end
 
   def lowest_bid
-    bids.order('bid asc').first
+    # TODO: Sort by association
+    lowest_bid = nil
+    lowest_bid_value = 1.0 / 0
+    bids.each do |b|
+      unless lowest_bid_value < b.bid
+        lowest_bid_value = b.bid
+        lowest_bid = b.id
+      end
+    end
+    lowest_bid
   end
 end

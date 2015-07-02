@@ -1,78 +1,65 @@
 require './lib/product_loader'
 
+def load_files(supplier)
+  ProductLoader.load('products', supplier)
+  ProductLoader.load('upcharges', supplier)
+end
+
 namespace :product do
   namespace :load do
     desc 'Gemline Load'
     task gemline: :environment do
-      supplier = 'gemline'
-      ProductLoader.load('products', supplier)
-      ProductLoader.load('upcharges', supplier)
+      load_files('gemline')
     end
 
     desc 'Crown Load'
     task crown: :environment do
-      supplier = 'crown'
-      ProductLoader.load('products', supplier)
-      ProductLoader.load('upcharges', supplier)
+      load_files('crown')
     end
 
     desc 'Fields Load'
     task fields: :environment do
-      supplier = 'fields'
-      ProductLoader.load('products', supplier)
-      ProductLoader.load('upcharges', supplier)
+      load_files('fields')
     end
 
-    desc 'Fields Load'
+    desc 'High Caliber Load'
     task high_caliber: :environment do
-      supplier = 'high_caliber'
-      ProductLoader.load('products', supplier)
-      ProductLoader.load('upcharges', supplier)
+      load_files('high_caliber')
     end
 
     desc 'Leeds Load'
     task leeds: :environment do
-      supplier = 'leeds'
-      ProductLoader.load('products', supplier)
+      ProductLoader.load('products', 'leeds')
     end
 
-    desc 'logomark Load'
+    desc 'Logomark Load'
     task logomark: :environment do
-      supplier = 'logomark'
-      ProductLoader.load('products', supplier)
-      ProductLoader.load('upcharges', supplier)
+      load_files('logomark')
     end
 
-    desc 'norwood Load'
+    desc 'Norwood Load'
     task norwood: :environment do
-      supplier = 'norwood'
-      ProductLoader.load('products', supplier)
-      ProductLoader.load('upcharges', supplier)
+      load_files('norwood')
     end
 
-    desc 'primeline Load'
+    desc 'Primeline Load'
     task primeline: :environment do
-      supplier = 'primeline'
-      ProductLoader.load('products', supplier)
-      ProductLoader.load('upcharges', supplier)
+      load_files('primeline')
     end
 
-    desc 'sweda Load'
+    desc 'Sweda Load'
     task sweda: :environment do
-      supplier = 'sweda'
-      ProductLoader.load('products', supplier)
+      ProductLoader.load('products', 'sweda')
     end
 
-    desc 'starline Load'
+    desc 'Starline Load'
     task starline: :environment do
-      supplier = 'starline'
-      ProductLoader.load('products', supplier)
+      load_files('starline')
     end
 
-    desc 'vitronic Load'
+    desc 'Vitronic Load'
     task vitronic: :environment do
-      supplier = 'vitronic'
-      ProductLoader.load('products', supplier)
+      load_files('vitronic')
     end
 
     desc 'Product Load'

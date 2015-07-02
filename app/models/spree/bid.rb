@@ -10,7 +10,7 @@ class Spree::Bid < Spree::Base
   validates :seller_id, presence: true
 
   def bid
-    1111.11
+    order.total
   end
 
   def build_order

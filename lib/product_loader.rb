@@ -18,10 +18,14 @@ module ProductLoader
     CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       hashed = row.to_hash
       pms = Spree::PmsColor.where(name: hashed[:slug]).first
-      Spree::PmsColorsSupplier.create(
-        supplier_id: supplier_id,
-        pms_color_id: pms.id,
-        display_name: hashed[:display_name])
+      if pms.nil?
+        puts "Warning: Unable to locate #{hashed[:slug]} in pms master list"
+      else
+        Spree::PmsColorsSupplier.create(
+          supplier_id: supplier_id,
+          pms_color_id: pms.id,
+          display_name: hashed[:display_name])
+      end
     end
   end
 end

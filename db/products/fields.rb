@@ -1,12 +1,15 @@
 require 'csv'
 require 'open-uri'
 require 'work_queue'
-require 'thread'
 
 puts 'Loading Fields products'
 
 supplier = Spree::Supplier.where(name: 'Fields').first_or_create
 
+# PMS Colors
+ProductLoader.pms_load('fields_pms_map.csv', supplier.id)
+
+# Product
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
 
@@ -21,8 +24,6 @@ load_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
-
-semaphore = Mutex.new
 
 category_hash = CSV.read(File.join(Rails.root, 'db/product_data/fields_category_map.csv')).to_h
 
@@ -46,13 +47,13 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
       # Categories
-      subcategory = hashed[:subcategory]
-      taxon_key = category_hash[subcategory]
+      subcategoryname = hashed[:subcategoryname]
+      taxon_key = category_hash[subcategoryname]
 
       taxon = Spree::Taxon.where(name: taxon_key).first unless taxon_key.nil?
 
       if taxon.nil?
-        puts "Taxon Warning: #{hashed[:productcode]} - #{hashed[:subcategory]}"
+        puts "Taxon Warning: #{hashed[:productcode]} - #{hashed[:subcategoryname]}"
       else
         Spree::Classification.where(
           taxon_id: taxon.id,

@@ -73,16 +73,16 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         )
         Spree::VolumePrice.create!(
           variant: product.master,
-          name: "#{hashed['2nd_qty'.to_sym]} - #{hashed['3rd_qty'.to_sym]}",
-          range: "(#{hashed['2nd_qty'.to_sym]}..#{hashed['3rd_qty'.to_sym]})",
+          name: "#{hashed['2nd_qty'.to_sym]} - #{hashed['3rd_qty'.to_sym].to_i - 1}",
+          range: "(#{hashed['2nd_qty'.to_sym]}..#{hashed['3rd_qty'.to_sym].to_i - 1})",
           amount: hashed[:us_2nd_price],
           position: 0,
           discount_type: 'price'
         )
         Spree::VolumePrice.create!(
           variant: product.master,
-          name: "#{hashed['min_qty'.to_sym]} - #{hashed['2nd_qty'.to_sym]}",
-          range: "(#{hashed['min_qty'.to_sym]}..#{hashed['2nd_qty'.to_sym]})",
+          name: "#{hashed['min_qty'.to_sym]} - #{hashed['2nd_qty'.to_sym].to_i - 1}",
+          range: "(#{hashed['min_qty'.to_sym]}..#{hashed['2nd_qty'.to_sym].to_i - 1})",
           amount: hashed[:us_min_price],
           position: 0,
           discount_type: 'price'
@@ -98,8 +98,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         )
         Spree::VolumePrice.create!(
           variant: product.master,
-          name: "#{hashed['min_qty'.to_sym]} - #{hashed['2nd_qty'.to_sym]}",
-          range: "(#{hashed['min_qty'.to_sym]}..#{hashed['2nd_qty'.to_sym]})",
+          name: "#{hashed['min_qty'.to_sym]} - #{hashed['2nd_qty'.to_sym].to_i - 1}",
+          range: "(#{hashed['min_qty'.to_sym]}..#{hashed['2nd_qty'.to_sym].to_i - 1})",
           amount: hashed[:us_min_price],
           position: 0,
           discount_type: 'price'

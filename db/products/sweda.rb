@@ -85,8 +85,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
           name = "#{hashed[quantity_key1]}+"
           range = "#{hashed[quantity_key1]}+"
         else
-          name = "#{hashed[quantity_key1]} - #{(hashed[quantity_key2].to_i)-1})"
-          range = "(#{hashed[quantity_key1]}..#{(hashed[quantity_key2].to_i)-1})"
+          name = "#{hashed[quantity_key1]} - #{(hashed[quantity_key2].to_i) - 1})"
+          range = "(#{hashed[quantity_key1]}..#{(hashed[quantity_key2].to_i) - 1})"
         end
 
         begin

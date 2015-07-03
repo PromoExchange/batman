@@ -19,6 +19,10 @@ default_attrs = {
   available_on: Time.zone.now
 }
 
+def check_price(price)
+  price.present? && price.to_f != 0.0
+end
+
 file_name = File.join(Rails.root, 'db/product_data/logomark.csv')
 load_fail = 0
 image_fail = 0
@@ -38,6 +42,23 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   wq.enqueue_b do
     begin
+      # Check prices first, no valid price = do not create product
+      if check_price(hashed[:pricepoint6price])
+        price_quantity = 6
+      elsif check_price(hashed[:pricepoint5price])
+        price_quantity = 5
+      elsif check_price(hashed[:pricepoint4price])
+        price_quantity = 4
+      elsif check_price(hashed[:pricepoint3price])
+        price_quantity = 3
+      elsif check_price(hashed[:pricepoint2price])
+        price_quantity = 2
+      elsif check_price(hashed[:pricepoint1price])
+        price_quantity = 1
+      else
+        raise "No pricing data"
+      end
+
       product_attrs = {
         sku: hashed[:sku],
         name: hashed[:name],
@@ -51,19 +72,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
       # Prices
-      if hashed[:pricepoint6price]
-        price_quantity = 6
-      elsif hashed[:pricepoint5price]
-        price_quantity = 5
-      elsif hashed[:pricepoint4price]
-        price_quantity = 4
-      elsif hashed[:pricepoint3price]
-        price_quantity = 3
-      elsif hashed[:pricepoint2price]
-        price_quantity = 2
-      elsif hashed[:pricepoint1price]
-        price_quantity = 1
-      end
       (1..price_quantity).each do |i|
         quantity_key1 = "pricepoint#{i}qty".to_sym
         quantity_key2 = "pricepoint#{i + 1}qty".to_sym
@@ -73,8 +81,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
           name = "#{hashed[quantity_key1]}+"
           range = "#{hashed[quantity_key1]}+"
         else
-          name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2]}"
-          range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2]})"
+          name = "#{hashed[quantity_key1]} - #{hashed[quantity_key2].to_i - 1}"
+          range = "(#{hashed[quantity_key1]}..#{hashed[quantity_key2].to_i - 1})"
         end
 
         begin
@@ -88,6 +96,13 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
           )
         rescue => e
           ap "Error in #{hashed[:sku]} pricing data: #{e}"
+          ap range
+          ap hashed[:pricepoint6qty]
+          ap hashed[:pricepoint5qty]
+          ap hashed[:pricepoint4qty]
+          ap hashed[:pricepoint3qty]
+          ap hashed[:pricepoint2qty]
+          ap hashed[:pricepoint1qty]
         end
       end
 

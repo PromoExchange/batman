@@ -48,10 +48,17 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   count += 1
   wq.enqueue_b do
     begin
+      desc = hashed[:product_description]
+      [
+        '&bull;'
+      ].each do |s|
+        desc.gsub!(s, ';')
+      end
+
       product_attrs = {
         sku: hashed[:sku],
         name: hashed[:item_name],
-        description: hashed[:product_description],
+        description: desc,
         price: 1.0,
         supplier_id: supplier.id
       }
@@ -69,6 +76,12 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
           ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
           image_fail += 1
         end
+      end
+
+      # Main Product Color
+      colors = hashed[:available_colors]
+      colors.split(',').each do |color|
+        Spree::ColorProduct.create(product_id: product.id, color: color.strip)
       end
 
       # Categories
@@ -149,10 +162,11 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   begin
     product = Spree::Product.search(master_sku_eq: hashed[:sku]).result.first
 
-    next unless product
+    fail 'Failed to create product' unless product
 
     price_quantity = get_last_break(hashed, 'pricingqty', 5)
-    next unless price_quantity > 0
+
+    fail 'No pricing data' unless price_quantity > 0
 
     (1..price_quantity).each do |i|
       quantity_key1 = "pricingqty#{i}".to_sym

@@ -61,22 +61,6 @@ CSV.foreach(seed_path('pms_colors.csv'), headers: true, header_converters: :symb
   Spree::PmsColor.create(row.to_hash)
 end
 
-puts 'Supplier Colors'
-ot = Spree::OptionType.create(name: 'supplier_color'.parameterize,
-                              presentation: 'Supplier Color')
-CSV.foreach(seed_path('supplier_color_conversions.csv'), headers: true, header_converters: :symbol) do |row|
-  hashed = row.to_hash
-
-  ov = Spree::OptionValue.new(name: hashed[:catalog_data].parameterize,
-                              presentation: hashed[:catalog_data],
-                              option_type: ot)
-
-  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_1].to_url}").first if hashed[:px_color_1]
-  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_2].to_url}").first if hashed[:px_color_2]
-  ov.taxons << Spree::Taxon.where(permalink: "colors/#{hashed[:px_color_3].to_url}").first if hashed[:px_color_3]
-  ov.save!
-end
-
 puts 'Roles'
 Spree::Role.where(name: 'admin').first_or_create
 Spree::Role.where(name: 'user').first_or_create

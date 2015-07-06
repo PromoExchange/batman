@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150702004337) do
+ActiveRecord::Schema.define(version: 20150706154127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 20150702004337) do
     t.datetime "updated_at",          null: false
     t.integer  "imprint_method_id"
     t.integer  "shipping_address_id"
+    t.integer  "main_color"
   end
 
   create_table "spree_auctions_pms_colors", force: :cascade do |t|
@@ -133,6 +134,13 @@ ActiveRecord::Schema.define(version: 20150702004337) do
 
   add_index "spree_calculators", ["calculable_id", "calculable_type"], name: "index_spree_calculators_on_calculable_id_and_calculable_type", using: :btree
   add_index "spree_calculators", ["id", "type"], name: "index_spree_calculators_on_id_and_type", using: :btree
+
+  create_table "spree_color_products", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.string  "color",      null: false
+  end
+
+  add_index "spree_color_products", ["product_id"], name: "index_spree_color_products_on_product_id", using: :btree
 
   create_table "spree_countries", force: :cascade do |t|
     t.string   "iso_name"

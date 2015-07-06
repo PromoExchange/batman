@@ -33,9 +33,17 @@ class Spree::AuctionsController < Spree::StoreController
 
     # TODO: There must be a cleaner way of doing this
     @pms_colors = Spree::PmsColorsSupplier
-      .select('pms_color_id,display_name,spree_pms_colors.hex,spree_pms_colors.pantone,spree_pms_colors.name')
+      .select(
+        'pms_color_id,
+        display_name,
+        spree_pms_colors.hex,
+        spree_pms_colors.pantone,
+        spree_pms_colors.name')
       .joins(:pms_color)
       .where(supplier_id: @auction.product.supplier)
+
+    @main_colors = Spree::ColorProduct
+      .where(product_id: @auction.product.id).pluck(:color, :product_id)
   end
 
   def create
@@ -63,6 +71,7 @@ class Spree::AuctionsController < Spree::StoreController
       :pms_colors,
       :quantity,
       :shipping_address,
+      :main_color,
       :ended,
       :page,
       :per_page)

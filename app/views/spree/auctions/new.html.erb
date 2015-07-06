@@ -57,6 +57,11 @@
       </div>
       <%= link_to 'Add new address', spree.account_path(spree_current_user) %>
 
+      <div class="form-group">
+        <%= label(:main_color, Spree.t(:main_color)) %>
+        <%= f.select(:main_color, options_for_select(@main_colors)) %>
+      </div>
+
       <div class="form-actions" data-hook="buttons">
         <%= button 'Start Auction', 'ok', 'submit', {class: 'btn-success'} %>
         <span class="or"><%= Spree.t(:or) %></span>

@@ -56,7 +56,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       elsif check_price(hashed[:pricepoint1price])
         price_quantity = 1
       else
-        raise "No pricing data"
+        fail "No pricing data"
       end
 
       product_attrs = {

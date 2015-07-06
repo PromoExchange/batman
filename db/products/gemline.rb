@@ -36,10 +36,17 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   count += 1
   wq.enqueue_b do
     begin
+      desc = hashed[:description]
+      [
+        '^'
+      ].each do |s|
+        desc.gsub!(s, '')
+      end
+
       product_attrs = {
         sku: "GEMLINE-#{hashed[:item_]}",
         name: hashed[:name],
-        description: hashed[:description],
+        description: desc,
         price: 1.0,
         supplier_id: supplier.id
       }

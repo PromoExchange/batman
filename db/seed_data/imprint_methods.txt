@@ -1,7 +1,7 @@
 Deboss
-Silk Screen
+Screen Print
 Pad Print
-Embroider
+Embroidery
 Engrave
 Logomatic
 Gemphoto
@@ -14,3 +14,10 @@ Vinyl
 ColorSplash
 Colorprint
 Photografixx
+Vivid Expression
+Four Color Process
+Hot Stamp
+Blank
+Image Lock
+Photo Magic
+Full Color

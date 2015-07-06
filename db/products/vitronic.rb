@@ -80,9 +80,14 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Main Product Color
       colors = hashed[:available_colors]
-      colors.split(',').each do |color|
-        Spree::ColorProduct.create(product_id: product.id, color: color.strip)
+      if colors
+        colors.split(',').each do |color|
+          Spree::ColorProduct.create(product_id: product.id, color: color.strip)
+        end
+      else
+        Spree::ColorProduct.create(product_id: product.id, color: 'Default')
       end
+
 
       # Categories
       product_category = hashed[:product_categories]
@@ -152,18 +157,46 @@ file_name = File.join(Rails.root, 'db/product_data/vitronic_pricing.csv')
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
-  # We need to think about the pros/cons between upcharges by IM
-  # and quantity pricing. Vitronic use both but we could
-  # handle it by 'internal' upcharges.
-  # For now, we will only accept one set of base quantity prices
-  next if hashed[:sku] == last_product
-  last_product = hashed[:sku]
 
   begin
     product = Spree::Product.search(master_sku_eq: hashed[:sku]).result.first
 
-    fail 'Failed to create product' unless product
+    fail 'Failed to find product' unless product
 
+    # Imprint methods
+    imprint_method = hashed[:imprint_method]
+    [
+      ['Image Lock', 'Image Lock'],
+      ['Embroidery', 'Embroidery'],
+      ['Vivid Expression', 'Vivid Expression'],
+      ['Screen Print', 'Screen Print'],
+      ['ScreenPrint', 'Screen Print'],
+      ['Photo Magic', 'Photo Magic'],
+      ['Deboss', 'Deboss'],
+      ['Four Color Process', 'Four Color Process'],
+      ['Hot Stamp', 'Hot Stamp'],
+      ['Full Color', 'Full Color'],
+      ['Photo Magic', 'Photo Magic'],
+      ['Blank', 'Blank']
+    ].each do |w|
+      if( imprint_method.include?(w[0]))
+        imprint = Spree::ImprintMethod.where(name: w[1]).first
+        unless imprint.nil?
+          Spree::ImprintMethodsProduct.create(
+            imprint_method_id: imprint.id,
+            product_id: product.id)
+        end
+      end
+    end
+
+    # We need to think about the pros/cons between upcharges by IM
+    # and quantity pricing. Vitronic use both but we could
+    # handle it by 'internal' upcharges.
+    # For now, we will only accept one set of base quantity prices
+    next if hashed[:sku] == last_product
+    last_product = hashed[:sku]
+
+    # Price
     price_quantity = get_last_break(hashed, 'pricingqty', 5)
 
     fail 'No pricing data' unless price_quantity > 0

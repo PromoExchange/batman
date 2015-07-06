@@ -53,7 +53,7 @@ end
 
 puts 'Imprint methods'
 File.open(seed_path('imprint_methods.txt')).each do |n|
-  Spree::ImprintMethod.create(name: n)
+  Spree::ImprintMethod.create(name: n.strip)
 end
 
 puts 'PMS Colors'

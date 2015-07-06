@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150706154127) do
+ActiveRecord::Schema.define(version: 20150707003750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -203,13 +203,10 @@ ActiveRecord::Schema.define(version: 20150706154127) do
   add_index "spree_gateways", ["test_mode"], name: "index_spree_gateways_on_test_mode", using: :btree
 
   create_table "spree_imprint_methods", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "slug"
+    t.string "name", null: false
   end
 
-  create_table "spree_imprint_methods_products", id: false, force: :cascade do |t|
+  create_table "spree_imprint_methods_products", force: :cascade do |t|
     t.integer "imprint_method_id", null: false
     t.integer "product_id",        null: false
   end

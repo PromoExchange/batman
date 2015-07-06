@@ -15,16 +15,13 @@ class Spree::Prebid < Spree::Base
     auctions = Spree::Auction.joins(:bids)
       .where(product_id: product_id)
 
-    # Spree::Auction.joins(:bids).where.not( spree_bids: {prebid_id: 1} ).where( product_id: 1 )
-
     auctions.each do |auction|
-      unless auction.bids.where(prebid_id: id).present?
-        auction.bids << Spree::Bid.new(seller_id: seller_id,
-                                       description: 'Prebid generated',
-                                       auction_id: auction.id,
-                                       prebid_id: id)
-        auction.save
-      end
+      next unless auction.bids.where(prebid_id: id).present?
+      auction.bids << Spree::Bid.new(seller_id: seller_id,
+                                     description: 'Prebid generated',
+                                     auction_id: auction.id,
+                                     prebid_id: id)
+      auction.save
     end
   end
 end

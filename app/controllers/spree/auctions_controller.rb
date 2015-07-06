@@ -31,7 +31,7 @@ class Spree::AuctionsController < Spree::StoreController
       "Billing: #{@auction.buyer.billing_address}",
       @auction.buyer.billing_address.id] unless @auction.buyer.billing_address.nil?
 
-    # TODO: There must be a cleaner way of doing this
+    # TODO: pluck it
     @pms_colors = Spree::PmsColorsSupplier
       .select(
         'pms_color_id,
@@ -43,7 +43,13 @@ class Spree::AuctionsController < Spree::StoreController
       .where(supplier_id: @auction.product.supplier)
 
     @main_colors = Spree::ColorProduct
-      .where(product_id: @auction.product.id).pluck(:color, :product_id)
+      .where(product_id: @auction.product.id)
+      .pluck(:color, :product_id)
+
+    @imprint_methods = Spree::ImprintMethodsProduct
+      .joins(:imprint_method)
+      .where(product_id: @auction.product.id)
+      .pluck(:name, :imprint_method_id)
   end
 
   def create
@@ -71,6 +77,7 @@ class Spree::AuctionsController < Spree::StoreController
       :pms_colors,
       :quantity,
       :shipping_address,
+      :imprint_method_id,
       :main_color,
       :ended,
       :page,

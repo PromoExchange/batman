@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150707003750) do
+ActiveRecord::Schema.define(version: 20150707132937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,9 +100,10 @@ ActiveRecord::Schema.define(version: 20150707003750) do
     t.datetime "ended"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.integer  "imprint_method_id"
-    t.integer  "shipping_address_id"
-    t.integer  "main_color"
+    t.integer  "imprint_method_id",   null: false
+    t.integer  "shipping_address_id", null: false
+    t.integer  "main_color_id",       null: false
+    t.string   "payment_method",      null: false
   end
 
   create_table "spree_auctions_pms_colors", force: :cascade do |t|
@@ -507,7 +508,7 @@ ActiveRecord::Schema.define(version: 20150707003750) do
   create_table "spree_pms_colors_suppliers", force: :cascade do |t|
     t.integer "pms_color_id", null: false
     t.integer "supplier_id",  null: false
-    t.string  "display_name"
+    t.string  "display_name", null: false
   end
 
   add_index "spree_pms_colors_suppliers", ["pms_color_id"], name: "index_spree_pms_colors_suppliers_on_pms_color_id", using: :btree

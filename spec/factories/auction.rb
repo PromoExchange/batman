@@ -8,6 +8,8 @@ FactoryGirl.define do
     ended nil
     association :imprint_method, factory: :imprint_method
     association :shipping_address, factory: :address
+    association :main_color, factory: :color_product
+    payment_method 'Credit Card'
   end
 
   factory :auction_with_bids, parent: :auction do |auction|

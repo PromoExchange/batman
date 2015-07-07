@@ -61,7 +61,7 @@ class Spree::AuctionsController < Spree::StoreController
         end
       else
         format.html do
-          redirect_to(products_path, fatal: 'Auction was not created successfully')
+          redirect_to(products_path, error: 'Failed to create an auction')
         end
       end
     end
@@ -78,7 +78,9 @@ class Spree::AuctionsController < Spree::StoreController
       :quantity,
       :shipping_address,
       :imprint_method_id,
-      :main_color,
+      :main_color_id,
+      :shipping_address_id,
+      :payment_method,
       :ended,
       :page,
       :per_page)

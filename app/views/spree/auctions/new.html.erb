@@ -16,7 +16,7 @@
     <fieldset>
       <div class="form-group" id="imprint-methods">
         <%= f.label(:imprint_method_id, Spree.t(:imprint_method)) %>
-        <%= f.select(:imprint_method_id, options_for_select(@imprint_methods)) %>
+        <%= f.select(:imprint_method_id, options_for_select(@imprint_methods),:prompt => 'Select') %>
       </div>
 
       <div class="form-group" id="auction-logo">
@@ -53,14 +53,21 @@
       </div>
 
       <div class="form-group">
-        <%= label(:shipping_address, Spree.t(:shipping_address)) %>
-        <%= f.select(:shipping_address, options_for_select(@addresses)) %>
+        <%= label(:shipping_address_id, Spree.t(:shipping_address)) %>
+        <%= f.select(:shipping_address_id, options_for_select(@addresses), :prompt => 'Select') %>
       </div>
       <%= link_to 'Add new address', spree.account_path(spree_current_user) %>
 
       <div class="form-group">
-        <%= label(:main_color, Spree.t(:main_color)) %>
-        <%= f.select(:main_color, options_for_select(@main_colors)) %>
+        <%= label(:main_color_id, Spree.t(:main_color)) %>
+        <%= f.select(:main_color_id, options_for_select(@main_colors), :prompt => 'Select') %>
+      </div>
+
+      <div class="form-group">
+        <%= label(:payment_method, Spree.t(:payment_method)) %>
+        <%= f.select(:payment_method, options_for_select(
+          [['Credit Card','Credit Card'],['Check','Check']]),
+          :prompt => 'Select') %>
       </div>
 
       <div class="form-actions" data-hook="buttons">

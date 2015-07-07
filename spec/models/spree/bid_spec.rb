@@ -17,7 +17,7 @@ RSpec.describe Spree::Bid, type: :model do
     expect(b.save).to be_truthy
   end
 
-  it 'should cascade delete order'
+  xit 'should cascade delete order'
 
   it 'should belong to an auction' do
     t = Spree::Bid.reflect_on_association(:auction)

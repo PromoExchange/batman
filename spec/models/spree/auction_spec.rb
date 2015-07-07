@@ -9,21 +9,28 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.save).to be_falsey
   end
 
-  it 'should not save with a null product' do
-    a = FactoryGirl.build(:auction,
-      product_id: nil)
+  it 'should not save with a nil product' do
+    a = FactoryGirl.build(:auction, product_id: nil)
     expect(a.save).to be_falsey
   end
 
-  it 'should not save with a null buyer_id' do
-    a = FactoryGirl.build(:auction,
-      buyer_id: nil)
+  it 'should not save with a nil buyer_id' do
+    a = FactoryGirl.build(:auction, buyer_id: nil)
     expect(a.save).to be_falsey
   end
 
-  it 'should not save with a null quantity' do
-    a = FactoryGirl.build(:auction,
-      quantity: nil)
+  it 'should not save with a nil quantity' do
+    a = FactoryGirl.build(:auction, quantity: nil)
+    expect(a.save).to be_falsey
+  end
+
+  it 'should not save with a nil shipping' do
+    a = FactoryGirl.build(:auction, shipping_address: nil)
+    expect(a.save).to be_falsey
+  end
+
+  it 'should not save with a nil main color' do
+    a = FactoryGirl.build(:auction, main_color: nil)
     expect(a.save).to be_falsey
   end
 
@@ -59,6 +66,11 @@ RSpec.describe Spree::Auction, type: :model do
 
   it 'should belong to an address' do
     t = Spree::Auction.reflect_on_association(:shipping_address)
+    expect(t.macro).to eq :belongs_to
+  end
+
+  it 'should belong to an color product' do
+    t = Spree::Auction.reflect_on_association(:main_color)
     expect(t.macro).to eq :belongs_to
   end
 end

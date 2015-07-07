@@ -52,3 +52,5 @@ en:
     imprint_method: 'Imprint Method'
     main_color: 'Product Color'
     payment_method: 'Payment Method'
+    cancel: 'Cancel'
+    accept_bid: 'Accept Bid'

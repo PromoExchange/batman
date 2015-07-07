@@ -1,6 +1,6 @@
 class Spree::AuctionsController < Spree::StoreController
   before_action :require_login, only: [:new, :edit]
-  before_action :fetch_auction, except: [:index, :create, :new]
+  before_action :fetch_auction, except: [:index, :create, :new, :accept_bid]
 
   def index
     if params[:buyer_id].present?
@@ -14,6 +14,12 @@ class Spree::AuctionsController < Spree::StoreController
         .page(params[:page])
         .per(params[:per_page] || Spree::Config[:orders_per_page])
     end
+  end
+
+  def accept_bid
+    auction = Spree::Auction.find(params[:auction_id])
+    auction.update_attributes(status: 'closed')
+    redirect_to account_path
   end
 
   def new
@@ -61,16 +67,22 @@ class Spree::AuctionsController < Spree::StoreController
         end
       else
         format.html do
-          redirect_to(products_path, error: 'Failed to create an auction')
+          redirect_to(products_path, flash: { error: 'Failed to create an auction' })
         end
       end
     end
+  end
+
+  def destroy
+    @auction.destroy
+    redirect_to account_path
   end
 
   private
 
   def auction_params
     params.require(:auction).permit(
+      :auction_id,
       :product_id,
       :buyer_id,
       :started,

@@ -3,7 +3,8 @@ Spree::UsersController.class_eval do
   before_action :load_favorites, only: :show
 
   def load_auctions
-    @auctions = Spree::Auction.where(buyer: current_spree_user)
+    @live_auctions = Spree::Auction.open.where(buyer: current_spree_user)
+    @waiting_auctions = Spree::Auction.waiting.where(buyer: current_spree_user)
   end
 
   def load_favorites

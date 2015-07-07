@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150707132937) do
+ActiveRecord::Schema.define(version: 20150707222019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,17 +93,18 @@ ActiveRecord::Schema.define(version: 20150707132937) do
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
 
   create_table "spree_auctions", force: :cascade do |t|
-    t.integer  "product_id",          null: false
-    t.integer  "buyer_id",            null: false
-    t.integer  "quantity",            null: false
+    t.integer  "product_id",                           null: false
+    t.integer  "buyer_id",                             null: false
+    t.integer  "quantity",                             null: false
     t.datetime "started"
     t.datetime "ended"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.integer  "imprint_method_id",   null: false
-    t.integer  "shipping_address_id", null: false
-    t.integer  "main_color_id",       null: false
-    t.string   "payment_method",      null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "imprint_method_id",                    null: false
+    t.integer  "shipping_address_id",                  null: false
+    t.integer  "main_color_id",                        null: false
+    t.string   "payment_method",                       null: false
+    t.string   "status",              default: "open"
   end
 
   create_table "spree_auctions_pms_colors", force: :cascade do |t|
@@ -205,6 +206,7 @@ ActiveRecord::Schema.define(version: 20150707132937) do
 
   create_table "spree_imprint_methods", force: :cascade do |t|
     t.string "name", null: false
+    t.string "slug"
   end
 
   create_table "spree_imprint_methods_products", force: :cascade do |t|

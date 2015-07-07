@@ -1,6 +1,7 @@
 require 'csv'
 require 'open-uri'
 require 'work_queue'
+require 'thread'
 
 puts 'Loading Logomark products'
 
@@ -29,6 +30,8 @@ image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 wq = WorkQueue.new 4
+
+semaphore = Mutex.new
 
 category_hash = CSV.read(File.join(Rails.root, 'db/product_data/logomark_category_map.csv')).to_h
 
@@ -61,13 +64,11 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       product_attrs = {
         sku: hashed[:sku],
-        name: hashed[:name],
-        description: hashed[:description],
+        name: hashed[:description],
+        description: hashed[:features],
         price: 1.0,
         supplier_id: supplier.id
       }
-
-      product_attrs[:name] = product_attrs[:sku] unless hashed[:name].present?
 
       product = Spree::Product.create!(default_attrs.merge(product_attrs))
 
@@ -113,9 +114,11 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
           taxon_key = category_hash[c.strip]
           taxon = Spree::Taxon.where(name: taxon_key).first unless taxon_key.nil?
           unless taxon.nil?
-            Spree::Classification.where(
-              taxon_id: taxon.id,
-              product_id: product.id).create
+            semaphore.synchronize do
+              Spree::Classification.where(
+                taxon_id: taxon.id,
+                product_id: product.id).first_or_create
+            end
           end
         end
       end
@@ -123,7 +126,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       # Images
       if Rails.configuration.x.load_images
         begin
-          # http://www.logomark.com/Image/Group/Group270/BA1400.jpg
           image_base = hashed[:sku].match(/..[0-9]*/)
           image_uri = "http://www.logomark.com/Image/Group/Group270/#{image_base}.jpg"
           product.images << Spree::Image.create!(

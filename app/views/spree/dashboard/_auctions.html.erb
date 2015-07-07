@@ -9,11 +9,10 @@
 <!-- Tab panes -->
 <div class="tab-content">
   <div class="tab-pane active" id="live-auction">
-    <% if @auctions.any? %>
-      <table class="table table-striped">
+    <% if @live_auctions.any? %>
+      <table data-id="<%=spree_current_user.spree_api_key%>" class="table table-striped" id="auction-table">
         <thead>
           <tr>
-            <th>&nbsp;</th>
             <th><%= Spree.t(:product) %></th>
             <th><%= Spree.t(:lowest_bid) %></th>
             <th><%= Spree.t(:quantity) %></th>
@@ -22,16 +21,14 @@
           </tr>
         </thead>
         <tbody>
-          <% @auctions.each do |auction| %>
+          <% @live_auctions.each do |auction| %>
             <tr>
-              <td><i class="fa fa-lg fa-gavel"></i></td>
               <td><%= link_to small_image(auction.product, itemprop: "image")%><p><%= auction.product.name %></p></td>
               <td><%= auction.lowest_bid.seller.email if auction.lowest_bid %></td>
               <td><%= auction.quantity %></td>
               <td><%= auction.ended.strftime("%m/%d/%Y %H:%M") if auction.ended %></td>
               <td><ul>
-                <li><a href="#">Go to auction</a></li>
-                <li><a href="#">Cancel auction</a></li>
+                <li><%= link_to Spree.t(:cancel), main_app.auction_path(auction), method: :delete, :data => {:confirm => 'Are you sure?'}%></li>
               </ul></td>
             </tr>
           <% end %>
@@ -44,56 +41,36 @@
     <% end %>
   </div>
   <div class="tab-pane" id="awaiting-selection">
-    <% if @auctions.any? %>
-      <table class="table table-striped">
+    <% if @waiting_auctions.any? %>
+      <table data-id="<%=spree_current_user.spree_api_key%>" class="table table-striped" id="auction-table">
         <thead>
           <tr>
             <th>&nbsp;</th>
             <th><%= Spree.t(:product) %></th>
-            <th><%= Spree.t(:top_three_bids) %></th>
-            <th><%= Spree.t(:quantity) %></th>
-            <th><%= Spree.t(:end_date) %></th>
-            <th><%= Spree.t(:delivery_date) %></th>
-            <th><%= Spree.t(:status) %></th>
             <th class="actions"><%= Spree.t(:action_col) %></th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><span class="fa-stack fa-lg">
-              <i class="fa fa-gavel fa-stack-1x"></i>
-              <i class="fa fa-ban fa-stack-2x text-danger"></i>
-            </span></td>
-            <td>Super Duper Product</td>
-            <td>
-              <table>
-                <tr>
-                  <td>
-                    Seller X
-                    $0.73/unit
-                    $182.50 total
-                  </td>
-                  <td>
-                    Seller Y
-                    $0.75/unit
-                    $185.00 total
-                  </td>
-                  <td>
-                    Seller Z
-                    $0.76/unit
-                    $190.00 total
-                  </td>
-                </tr>
-              </table>
-            </td>
-            <td>250</td>
-            <td>05/23/2015 9:30am</td>
-            <td>06/19/2015</td>
-            <td>Awaiting bid selection</td>
-            <td><ul>
-              <li><a href="#">Go to auction</a></li>
-            </ul></td>
-          </tr>
+          <% @waiting_auctions.each do |auction| %>
+            <tr>
+              <td><%= link_to small_image(auction.product, itemprop: "image")%><p><%= auction.product.name %></p></td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>BIDS</td>
+              <td colspan="2">&nbsp;</td>
+            </tr>
+            <% auction.bids.each do |bid| %>
+              <tr>
+                <td><%= bid.seller.email %></td>
+                <td><%= bid.bid %></td>
+                <td><ul>
+                  <li><%= link_to Spree.t(:accept_bid), main_app.auction_accept_bid_path(auction), method: :get, :data => {:confirm => 'Are you sure?'}%></li>
+                </ul></td>
+              </tr>
+            <% end %>
+          <% end %>
         </tbody>
       </table>
     <% else %>

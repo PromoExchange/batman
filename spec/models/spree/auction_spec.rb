@@ -34,6 +34,11 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.save).to be_falsey
   end
 
+  it 'should not save with a nil status' do
+    a = FactoryGirl.build(:auction, status: nil)
+    expect(a.save).to be_falsey
+  end
+
   it 'should save with valid values' do
     a = FactoryGirl.build(:auction)
     expect(a.save).to be_truthy

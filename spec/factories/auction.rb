@@ -10,6 +10,7 @@ FactoryGirl.define do
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     payment_method 'Credit Card'
+    status 'open'
   end
 
   factory :auction_with_bids, parent: :auction do |auction|

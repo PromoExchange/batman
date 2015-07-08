@@ -10,12 +10,14 @@
 <div class="tab-content">
   <div class="tab-pane active" id="live-auction">
     <% if @live_auctions.any? %>
+      <%= paginate @live_auctions %>
       <table data-id="<%=spree_current_user.spree_api_key%>" class="table table-striped" id="auction-table">
         <thead>
           <tr>
             <th><%= Spree.t(:product) %></th>
             <th><%= Spree.t(:lowest_bid) %></th>
             <th><%= Spree.t(:quantity) %></th>
+            <th><%= Spree.t(:start_date) %></th>
             <th><%= Spree.t(:end_date) %></th>
             <th class="actions"><%= Spree.t(:action_col) %></th>
           </tr>
@@ -23,10 +25,11 @@
         <tbody>
           <% @live_auctions.each do |auction| %>
             <tr>
-              <td><%= link_to small_image(auction.product, itemprop: "image")%><p><%= auction.product.name %></p></td>
+              <td><%= image_tag auction.image, { itemprop: "image", alt: auction.product.name } %><p><%= auction.product.name %></p></td>
               <td><%= auction.lowest_bid.seller.email if auction.lowest_bid %></td>
               <td><%= auction.quantity %></td>
-              <td><%= auction.ended.strftime("%m/%d/%Y %H:%M") if auction.ended %></td>
+              <td><%= local_time(auction.started, '%m/%d/%Y') if auction.started %></td>
+              <td><%= local_time(auction.ended, '%m/%d/%Y') if auction.ended %></td>
               <td><ul>
                 <li><%= link_to Spree.t(:cancel), main_app.auction_path(auction), method: :delete, :data => {:confirm => 'Are you sure?'}%></li>
               </ul></td>
@@ -53,7 +56,7 @@
         <tbody>
           <% @waiting_auctions.each do |auction| %>
             <tr>
-              <td><%= link_to small_image(auction.product, itemprop: "image")%><p><%= auction.product.name %></p></td>
+              <td><%= image_tag auction.image, { itemprop: "image", alt: auction.product.name } %><p><%= auction.product.name %></p></td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
             </tr>

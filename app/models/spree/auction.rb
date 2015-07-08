@@ -5,6 +5,8 @@ class Spree::Auction < Spree::Base
   scope :ended, -> { where(status: :ended) }
   scope :cancelled, -> { where(status: :cancelled) }
 
+  before_create :set_default_dates
+
   has_many :adjustments, as: :adjustable
   has_many :bids
   belongs_to :buyer, class_name: 'Spree::User'
@@ -19,7 +21,7 @@ class Spree::Auction < Spree::Base
 
   validates :buyer_id, presence: true
   validates :main_color_id, presence: true
-  validates_inclusion_of :payment_method, in: ['Credit Card','Check']
+  validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
   validates :quantity, presence: true
   validates_inclusion_of :status, in: %w(open waiting closed ended cancelled)
@@ -29,9 +31,17 @@ class Spree::Auction < Spree::Base
     Spree::Auctions.where(buyer_id: current_spree_user.id)
   end
 
+  def image
+    image_url = 'noimage/mini.png'
+    unless product.images.empty?
+      image_url = product.images.first.attachment.url('mini')
+    end
+    image_url
+  end
+
   def lowest_bid
     lowest_bid = nil
-    lowest_bid_value = BigDecimal.new(-1,4)
+    lowest_bid_value = BigDecimal.new(-1, 4)
     bids.each do |b|
       unless lowest_bid_value == -1 || lowest_bid_value < b.bid
         lowest_bid_value = b.bid
@@ -39,5 +49,10 @@ class Spree::Auction < Spree::Base
       end
     end
     lowest_bid
+  end
+
+  def set_default_dates
+    started = Time.zone.now
+    ended = started + 21.days unless ended
   end
 end

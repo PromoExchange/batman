@@ -88,7 +88,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         Spree::ColorProduct.create(product_id: product.id, color: 'Default')
       end
 
-
       # Categories
       product_category = hashed[:product_categories]
       categories = product_category.split(',') unless product_category.nil?

@@ -13,7 +13,7 @@ FactoryGirl.define do
     status 'open'
   end
 
-  factory :auction_with_bids, parent: :auction do |auction|
-    bids{ build_list :bid, 10}
+  factory :auction_with_bids, parent: :auction do
+    bids { build_list :bid, 10 }
   end
 end

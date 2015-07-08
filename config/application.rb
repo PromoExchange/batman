@@ -10,20 +10,19 @@ Dotenv::Railtie.load unless Rails.env.production?
 
 module Batman
   class Application < Rails::Application
-
     config.to_prepare do
       # Load application's model / class decorators
-      Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|
+      Dir.glob(File.join(File.dirname(__FILE__), '../app/**/*_decorator*.rb')) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
 
       # Load application's view overrides
-      Dir.glob(File.join(File.dirname(__FILE__), "../app/overrides/*.rb")) do |c|
+      Dir.glob(File.join(File.dirname(__FILE__), '../app/overrides/*.rb')) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
     end
 
-    config.assets.paths << Rails.root.join('vendor','assets','bower_components')
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
 
     # Load all images in images sub directories
     Dir.glob("#{Rails.root}/app/assets/images/**/").each do |path|

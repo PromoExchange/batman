@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     get 'accept_bid'
   end
 
+  resources :dashboards, controller: 'spree/dashboards', as: 'dashboards'
+
   scope :api do
     resources :messages, controller: 'spree/api/messages', as: 'api_messages'
     resources :auctions, controller: 'spree/api/auctions' do

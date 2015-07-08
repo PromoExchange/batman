@@ -13,6 +13,7 @@ gem 'pg'
 gem 'unicorn'
 gem 'font-awesome-sass'
 gem 'work_queue'
+gem 'local_time'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

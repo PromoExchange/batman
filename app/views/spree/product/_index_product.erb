@@ -1,0 +1,2 @@
+<%= link_to small_image(product, itemprop: 'image'), main_app.new_auction_path(product_id: product.id), itemprop: 'url' %><br/>
+<%= link_to truncate(product.name, length: 50), main_app.new_auction_path(product_id: product.id), class: 'info', itemprop: "name", title: product.name %>

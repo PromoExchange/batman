@@ -7,6 +7,7 @@
     <% url = spree.product_url(@auction.product) %>
     <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url' %><br/>
     <p><%=@auction.product.description%></p>
+    <%= render partial: 'properties' %>
   </div>
   <div class="col-md-6 well">
     <h2><%= @auction.product.name %></h2>

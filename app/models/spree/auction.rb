@@ -32,11 +32,7 @@ class Spree::Auction < Spree::Base
   end
 
   def image
-    image_url = 'noimage/mini.png'
-    unless product.images.empty?
-      image_url = product.images.first.attachment.url('mini')
-    end
-    image_url
+    product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
   end
 
   def lowest_bid

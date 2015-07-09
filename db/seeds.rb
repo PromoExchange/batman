@@ -1,8 +1,5 @@
 require 'csv'
 
-# Product loader
-require './lib/product_loader'
-
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 
@@ -68,6 +65,19 @@ Spree::Role.where(name: 'buyer').first_or_create
 Spree::Role.where(name: 'seller').first_or_create
 Spree::Role.where(name: 'supplier').first_or_create
 
+country = Spree::Country.where( iso3: 'USA' ).first
+state = Spree::State.where( name: 'New York' ).first
+address = Spree::Address.create(
+  firstname: 'Donald',
+  lastname: 'Duck',
+  address1: '123 PromoExchange Road',
+  city: 'Tarrytown',
+  zipcode: '10591',
+  state_id: state.id,
+  country_id: country.id,
+  phone: '555-555-5555'
+  )
+
 puts 'Users'
 [
   ['michael.goldstein@thepromoexchange.com', 'admin'],
@@ -85,6 +95,9 @@ puts 'Users'
                             password: 'spree123',
                             password_confirmation: 'spree123')
   user.spree_roles << Spree::Role.find_by_name(r[1])
+  user.generate_spree_api_key!
+  user.bill_address = address
+  user.ship_address = address
   user.save!
 end
 

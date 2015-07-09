@@ -37,6 +37,8 @@ class Spree::AuctionsController < Spree::StoreController
       "Billing: #{@auction.buyer.billing_address}",
       @auction.buyer.billing_address.id] unless @auction.buyer.billing_address.nil?
 
+      @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
+
     # TODO: pluck it
     @pms_colors = Spree::PmsColorsSupplier
       .select(

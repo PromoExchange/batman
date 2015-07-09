@@ -39,7 +39,7 @@ namespace :product do
 
     desc 'Norwood Load'
     task norwood: :environment do
-      load_files('norwood')
+      ProductLoader.load('products', 'norwood')
     end
 
     desc 'Primeline Load'

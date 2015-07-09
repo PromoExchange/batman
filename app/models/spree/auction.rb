@@ -27,11 +27,13 @@ class Spree::Auction < Spree::Base
   validates_inclusion_of :status, in: %w(open waiting closed ended cancelled)
   validates :shipping_address_id, presence: true
 
+  delegate :name, to: :product
+
   def self.user_auctions
     Spree::Auctions.where(buyer_id: current_spree_user.id)
   end
 
-  def image
+  def image_uri
     product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
   end
 
@@ -49,6 +51,6 @@ class Spree::Auction < Spree::Base
 
   def set_default_dates
     started = Time.zone.now
-    ended = started + 21.days unless ended
+    ended = started + 21.days
   end
 end

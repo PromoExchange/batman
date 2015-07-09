@@ -2,7 +2,8 @@
   "name": "batman",
   "dependencies": {
     "image-picker": "0.2.4",
-    "bootstrap-tagsinput": "0.5.0"
+    "bootstrap-tagsinput": "0.5.0",
+    "lodash": "3.10.0"
   },
   "private": true
 }

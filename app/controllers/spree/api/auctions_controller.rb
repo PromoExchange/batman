@@ -2,17 +2,16 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   before_action :fetch_auction, except: [:index, :create]
 
   def index
-    if params[:buyer_id].present?
-      @auctions = Spree::Auction.where(buyer_id: params[:buyer_id])
-        .includes(:buyer, :bids, :product)
-        .page(params[:page])
-        .per(params[:per_page] || Spree::Config[:orders_per_page])
-    else
-      @auctions = Spree::Auction.all
-        .includes(:buyer, :bids, :product)
-        .page(params[:page])
-        .per(params[:per_page] || Spree::Config[:orders_per_page])
-    end
+    params[:buyer_id] = {} if params[:buyer_id].blank?
+    params[:status] = 'open' if params[:status].blank?
+
+    @auctions = Spree::Auction.search(
+      buyer_id_eq: params[:buyer_id],
+      status_eq: params[:status]
+    ).result
+      .page(params[:page])
+      .per(params[:per_page] || Spree::Config[:orders_per_page])
+
     render 'spree/api/auctions/index'
   end
 
@@ -41,14 +40,18 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   private
 
   def auction_params
-    params.require(:auction).permit(:product_id,
+    params.require(:auction).permit(
+      :product_id,
       :buyer_id,
       :quantity,
       :description,
       :started,
+      :filter,
       :ended,
+      :status,
       :page,
-      :per_page)
+      :per_page
+    )
   end
 
   def fetch_auction

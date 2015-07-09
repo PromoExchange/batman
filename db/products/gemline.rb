@@ -44,7 +44,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       end
 
       product_attrs = {
-        sku: "GEMLINE-#{hashed[:item_]}",
+        sku: "#{hashed[:item_]}",
         name: hashed[:name],
         description: desc,
         price: 1.0,

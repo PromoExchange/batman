@@ -9,6 +9,8 @@ class Spree::Bid < Spree::Base
   validates :auction_id, presence: true
   validates :seller_id, presence: true
 
+  delegate :email, to: :seller
+
   def bid
     order.total
   end

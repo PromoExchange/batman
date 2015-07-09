@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   scope :api do
     resources :messages, controller: 'spree/api/messages', as: 'api_messages'
     resources :auctions, controller: 'spree/api/auctions' do
+      get 'info'
       resources :bids, controller: 'spree/api/bids'
     end
     resources :bids, controller: 'spree/api/bids'

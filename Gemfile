@@ -14,6 +14,7 @@ gem 'unicorn'
 gem 'font-awesome-sass'
 gem 'work_queue'
 gem 'local_time'
+gem 'aws-sdk', '< 2.0'
 
 # spree ecommerce
 gem 'spree', '3.0.1'
@@ -24,8 +25,6 @@ gem 'spree_i18n', git: 'git://github.com/spree/spree_i18n.git', branch: '3-0-sta
 gem 'deface', git: 'git://github.com/spree/deface.git', branch: 'master'
 gem 'spree_static_content', github: 'spree-contrib/spree_static_content', branch: '3-0-stable'
 gem 'spree_first_data_gge4'
-
-gem 'aws-sdk', '~> 1.60.2'
 
 group :development do
   gem 'rubocop', require: false

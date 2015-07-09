@@ -19,7 +19,7 @@ class Spree::AuctionsController < Spree::StoreController
   def accept_bid
     auction = Spree::Auction.find(params[:auction_id])
     auction.update_attributes(status: 'closed')
-    redirect_to account_path
+    redirect_to dashboards_path
   end
 
   def new
@@ -77,7 +77,7 @@ class Spree::AuctionsController < Spree::StoreController
 
   def destroy
     @auction.destroy
-    redirect_to account_path
+    redirect_to dashboards_path
   end
 
   private

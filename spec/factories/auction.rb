@@ -16,4 +16,8 @@ FactoryGirl.define do
   factory :auction_with_bids, parent: :auction do
     bids { build_list :bid, 10 }
   end
+
+  factory :waiting_auction, parent: :auction do
+    status 'waiting'
+  end
 end

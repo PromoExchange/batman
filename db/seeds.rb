@@ -65,8 +65,8 @@ Spree::Role.where(name: 'buyer').first_or_create
 Spree::Role.where(name: 'seller').first_or_create
 Spree::Role.where(name: 'supplier').first_or_create
 
-country = Spree::Country.where( iso3: 'USA' ).first
-state = Spree::State.where( name: 'New York' ).first
+country = Spree::Country.where(iso3: 'USA').first
+state = Spree::State.where(name: 'New York').first
 address = Spree::Address.create(
   firstname: 'Donald',
   lastname: 'Duck',
@@ -76,10 +76,11 @@ address = Spree::Address.create(
   state_id: state.id,
   country_id: country.id,
   phone: '555-555-5555'
-  )
+)
 
 puts 'Users'
 [
+  ['jessica.swanderski@gmail.com', 'admin'],
   ['michael.goldstein@thepromoexchange.com', 'admin'],
   ['mackie.yakaitis@thepromoexchange.com', 'admin'],
   ['kevin.widmaier@thepromoexchange.com', 'admin'],

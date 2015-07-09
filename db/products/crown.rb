@@ -5,6 +5,9 @@ require 'thread'
 
 puts 'Loading Crown products'
 
+# Load the main color map
+main_color_map = ProductLoader.main_color_map_load('db/product_data/crown_main_color_map.csv')
+
 supplier = Spree::Supplier.where(name: 'Crown').first_or_create
 
 # PMS Colors
@@ -46,7 +49,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   # Skip conditionals
   next unless hashed[:pricingqty1] && hashed[:pricingprice1]
 
-  count += 1;
+  count += 1
   wq.enqueue_b do
     begin
       product_attrs = {

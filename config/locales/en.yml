@@ -54,3 +54,5 @@ en:
     payment_method: 'Payment Method'
     cancel: 'Cancel'
     accept_bid: 'Accept Bid'
+    lowest_bid: 'Lowest Bid'
+    start_date: 'Start Date'

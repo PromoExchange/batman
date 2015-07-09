@@ -16,11 +16,14 @@ Spree::Api::ApiHelpers.module_eval do
     [
       :id,
       :product_id,
+      :name,
       :buyer_id,
+      :lowest_bid,
       :quantity,
-      :description,
+      :image_uri,
       :started,
-      :ended
+      :ended,
+      :status
     ])
   mattr_reader :auction_attributes
 
@@ -29,7 +32,7 @@ Spree::Api::ApiHelpers.module_eval do
       :id,
       :auction_id,
       :seller_id,
-      :description,
+      :email,
       :bid,
       :order_id,
       :prebid_id

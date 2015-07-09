@@ -28,4 +28,23 @@ module ProductLoader
       end
     end
   end
+
+  def self.main_color_map_load(file)
+    main_color_map = {}
+    file_name = File.join(Rails.root, file)
+    CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
+      hashed = row.to_hash
+
+      main_color = hashed[:main_color]
+      px_colors = []
+
+      (1..3).each do |n|
+        name = "px_color#{n}"
+        px_colors << hashed[name.to_sym] if hashed[name.to_sym]
+      end
+
+      main_color_map[main_color.to_sym] = px_colors
+    end
+    main_color_map
+  end
 end

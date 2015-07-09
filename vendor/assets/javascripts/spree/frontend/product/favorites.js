@@ -55,14 +55,14 @@ $(function(){
   });
 
   function set_favorite(a){
-    if( a == 'on'){
-      $("#favorite>i").removeClass('off');
-      $("#favorite>i").addClass('on');
+    if (a == 'on'){
+      $("#favorite>i").removeClass('off').addClass('on');
       $("#favorite>span").text('Remove from favorites');
+      $("#favorite").delay(100).fadeOut().fadeIn('slow');
     }else{
-      $("#favorite>i").removeClass('on');
-      $("#favorite>i").addClass('off');
+      $("#favorite>i").removeClass('on').addClass('off');
       $("#favorite>span").text('Add to favorites');
+      $("#favorite").delay(100).fadeOut().fadeIn('slow');
     }
   }
 
@@ -70,6 +70,13 @@ $(function(){
     var key = $("#request-info").attr("data-id");
     var owner = $("#buyer-id").val();
     var product_id = $("#product-id").val();
+
+    if ($.isEmptyObject(owner) ||
+        $.isEmptyObject(key) ||
+        $.isEmptyObject(product_id)){
+      return;
+    }
+
     var url = '/api/favorites?buyer_id='+owner+'&product_id='+product_id;
     $.ajax({
       type: 'GET',

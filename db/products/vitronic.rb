@@ -5,12 +5,16 @@ require 'thread'
 
 puts 'Loading Vitronic products'
 
+# Load the main color map
+main_color_map = ProductLoader.main_color_map_load('db/product_data/vitronic_main_color_map.csv')
+
 supplier = Spree::Supplier.where(name: 'Vitronic').first_or_create
 
 # PMS Colors
 ProductLoader.pms_load('vitronic_pms_colors.csv', supplier.id)
 
 # Products
+
 shipping_category = Spree::ShippingCategory.find_by_name!('Default')
 tax_category = Spree::TaxCategory.find_by_name!('Default')
 
@@ -52,7 +56,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       [
         '&bull;'
       ].each do |s|
-        desc.gsub!(s, ';')
+        desc.gsub!(s, '. ')
       end
 
       product_attrs = {
@@ -81,8 +85,22 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       # Main Product Color
       colors = hashed[:available_colors]
       if colors
-        colors.split(',').each do |color|
-          Spree::ColorProduct.create(product_id: product.id, color: color.strip)
+        colors.split(',').each do |c|
+          color = c.strip
+          Spree::ColorProduct.create(product_id: product.id, color: color)
+
+          # Map to the PX Colors taxons
+          begin
+            # We do not know if multiple colors in the product
+            # list end up mapping to the same PX colors.
+            # It is actually quite likely they will.
+            main_color_map[color.to_sym].each do |px_color|
+              taxon = Spree::Taxon.where(name: px_color).first
+              product.taxons << taxon
+            end
+          rescue
+            puts 'Duplicate taxon detected'
+          end
         end
       else
         Spree::ColorProduct.create(product_id: product.id, color: 'Default')
@@ -156,7 +174,6 @@ file_name = File.join(Rails.root, 'db/product_data/vitronic_pricing.csv')
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
-
   begin
     product = Spree::Product.search(master_sku_eq: hashed[:sku]).result.first
 
@@ -178,7 +195,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       ['Photo Magic', 'Photo Magic'],
       ['Blank', 'Blank']
     ].each do |w|
-      if( imprint_method.include?(w[0]))
+      if (imprint_method.include?(w[0]))
         imprint = Spree::ImprintMethod.where(name: w[1]).first
         unless imprint.nil?
           Spree::ImprintMethodsProduct.create(
@@ -233,6 +250,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     ActiveRecord::Base.clear_active_connections!
   end
 end
+
 end_time = Time.zone.now
 average_time = ((end_time - beginning_time) / count) * 1000
 puts "Loaded: #{count}, Failed: #{load_fail}, Image fail #{image_fail}"

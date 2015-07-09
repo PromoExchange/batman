@@ -120,20 +120,20 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
       # Properties
       properties = []
-      %w(
-        material
-        colorlist
-        catalogsize
-        packagingdetails
-        catalogweight
-        disclaimers
-        standard_master_carton_width
-        standard_master_carton_length
-        standard_master_carton_depth
-        standard_master_carton_quantity
-        standard_master_carton_actual_weight
-      ).each do |w|
-        properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]
+      {
+        material: 'Material',
+        colorlist: 'Colors',
+        catalogsize: 'Size',
+        packagingdetails: 'Packaging Details',
+        catalogweight: 'Weight',
+        disclaimers: 'Disclaimers',
+        standard_master_carton_width: 'Carton width',
+        standard_master_carton_length: 'Carton length',
+        standard_master_carton_depth: 'Carton Depth',
+        standard_master_carton_quantity: 'Carton Quantity',
+        standard_master_carton_actual_weight: 'Carton weight'
+      }.each do |k, v|
+        properties << "#{v}: #{hashed[k]}" if hashed[k]
       end
 
       properties.each do |property|

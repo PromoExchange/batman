@@ -3,82 +3,38 @@
 <% end %>
 
 <ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="#live-auction" role="tab" data-toggle="tab"><%=Spree.t(:auctions)%></a></li>
-  <li><a href="#awaiting-selection" role="tab" data-toggle="tab"><%=Spree.t(:awaiting_selection)%></a></li>
+  <li class="active"><a href="#live-auction" id="live-auction-tab" role="tab" data-toggle="tab"><%=Spree.t(:auctions)%></a></li>
+  <li><a href="#awaiting-selection" role="tab" id="waiting-auction-tab" data-toggle="tab"><%=Spree.t(:awaiting_selection)%></a></li>
 </ul>
 
 <div class="tab-content">
   <div class="tab-pane active" id="live-auction">
-    <% if @live_auctions.any? %>
-      <table data-id="<%=spree_current_user.spree_api_key%>" class="table table-striped" id="auction-table">
-        <thead>
-          <tr>
-            <th><%= Spree.t(:product) %></th>
-            <th><%= Spree.t(:lowest_bid) %></th>
-            <th><%= Spree.t(:quantity) %></th>
-            <th><%= Spree.t(:start_date) %></th>
-            <th><%= Spree.t(:end_date) %></th>
-            <th class="actions"><%= Spree.t(:action_col) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @live_auctions.each do |auction| %>
-            <tr>
-              <td><%= image_tag auction.image, { itemprop: "image", alt: auction.product.name } %><p><%= auction.product.name %></p></td>
-              <td><%= auction.lowest_bid.seller.email if auction.lowest_bid %></td>
-              <td><%= auction.quantity %></td>
-              <td><%= local_time(auction.started, '%m/%d/%Y') if auction.started %></td>
-              <td><%= local_time(auction.ended, '%m/%d/%Y') if auction.ended %></td>
-              <td><ul>
-                <li><%= link_to Spree.t(:cancel), main_app.auction_path(auction), method: :delete, :data => {:confirm => 'Are you sure?'}%></li>
-              </ul></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <div class="alert alert-info no-objects-found">
-        <%= Spree.t(:no_resource_found, resource: Spree.t(:auction)).html_safe %>.
-      </div>
-    <% end %>
+    <table data-key="<%= spree_current_user.spree_api_key %>" data-id="<%= spree_current_user.id %>" class="table table-striped" id="live-auction-table">
+      <thead>
+        <tr>
+          <th><%= Spree.t(:product) %></th>
+          <th><%= Spree.t(:lowest_bid) %></th>
+          <th><%= Spree.t(:quantity) %></th>
+          <th><%= Spree.t(:start_date) %></th>
+          <th><%= Spree.t(:end_date) %></th>
+          <th class="actions"><%= Spree.t(:action_col) %></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
   </div>
   <div class="tab-pane" id="awaiting-selection">
-    <% if @waiting_auctions.any? %>
-      <table data-id="<%=spree_current_user.spree_api_key%>" class="table table-striped" id="auction-table">
-        <thead>
-          <tr>
-            <th>&nbsp;</th>
-            <th><%= Spree.t(:product) %></th>
-            <th class="actions"><%= Spree.t(:action_col) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @waiting_auctions.each do |auction| %>
-            <tr>
-              <td><%= image_tag auction.image, { itemprop: "image", alt: auction.product.name } %><p><%= auction.product.name %></p></td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-            <tr>
-              <td>BIDS</td>
-              <td colspan="2">&nbsp;</td>
-            </tr>
-            <% auction.bids.each do |bid| %>
-              <tr>
-                <td><%= bid.seller.email %></td>
-                <td><%= bid.bid %></td>
-                <td><ul>
-                  <li><%= link_to Spree.t(:accept_bid), main_app.auction_accept_bid_path(auction), method: :get, :data => {:confirm => 'Are you sure?'}%></li>
-                </ul></td>
-              </tr>
-            <% end %>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <div class="alert alert-info no-objects-found">
-        <%= Spree.t(:no_resource_found, resource: Spree.t(:auction)).html_safe %>.
-      </div>
-    <% end %>
+    <table class="table table-striped" id="waiting-auction-table">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th><%= Spree.t(:product) %></th>
+          <th class="actions"><%= Spree.t(:action_col) %></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
   </div>
 </div>

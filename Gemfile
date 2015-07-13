@@ -15,6 +15,7 @@ gem 'font-awesome-sass'
 gem 'work_queue'
 gem 'local_time'
 gem 'aws-sdk', '< 2.0'
+gem 'awesome_print', '~> 1.2.0'
 
 # spree ecommerce
 gem 'spree', '3.0.1'
@@ -48,7 +49,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'awesome_print', '~> 1.2.0'
   gem 'pry'
   gem 'pry-byebug'
   gem 'factory_girl_rails'

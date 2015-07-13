@@ -16,11 +16,14 @@ Spree.config do |config|
   config.logo = 'logo/px_logo.png'
   config.currency = 'USD'
   config.products_per_page = 12
+  signout_after_password_change = true
 end
 
 Spree.user_class = 'Spree::User'
 
 Rails.application.config.spree.payment_methods << Spree::Gateway::FirstdataE4
+
+Spree::PermittedAttributes.user_attributes << :company
 
 {
   s3_credentials: {

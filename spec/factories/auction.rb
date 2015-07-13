@@ -1,4 +1,3 @@
-require 'ffaker'
 FactoryGirl.define do
   factory :auction, class: Spree::Auction do
     association :product, factory: :product

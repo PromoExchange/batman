@@ -8,5 +8,7 @@ class Spree::DashboardsController < Spree::StoreController
   def index
     @favorites = Spree::Favorite.where(buyer: current_spree_user)
       .includes(:product)
+
+    @user = spree_current_user
   end
 end

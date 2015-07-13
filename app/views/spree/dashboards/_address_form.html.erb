@@ -1,0 +1,45 @@
+<div class="form-group">
+  <%= f.label :company, Spree.t(:company) %>
+  <%= f.text_field :company, class: 'form-control'%>
+</div>
+<div class="form-group">
+  <%= f.label :firstname, Spree.t(:firstname) %>
+  <%= f.text_field :firstname, class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= f.label :lastname, Spree.t(:lastname) %>
+  <%= f.text_field :lastname, class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= f.label :address1, Spree.t(:address1) %>
+  <%= f.text_field :address1, class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= f.label :address2, Spree.t(:address2) %>
+  <%= f.text_field :address2, class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= f.label :city, Spree.t(:city) %>
+  <%= f.text_field :city, class: 'form-control' %>
+</div>
+<%= f.hidden_field :country %>
+<div class="form-group">
+  <%= f.label :state_id, Spree.t(:state) %>
+  <%= f.text_field :state_name,
+        style: "display: #{f.object.country.states.empty? ? 'block' : 'none' };",
+        disabled: !f.object.country.states.empty?, class: 'form-control state_name' %>
+  <%= f.collection_select :state_id,
+        f.object.country.states.sort,
+        :id, :name, { include_blank: true },
+        { class: 'select2',
+        style: "display: #{f.object.country.states.empty? ? 'none' : 'block' };",
+        disabled: f.object.country.states.empty? } %>
+</div>
+<div class="form-group">
+  <%= f.label :zipcode, Spree.t(:zip) %>
+  <%= f.text_field :zipcode, class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= f.label :phone, Spree.t(:phone) %>
+  <%= f.text_field :phone, class: 'form-control' %>
+</div>

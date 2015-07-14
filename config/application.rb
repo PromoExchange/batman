@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-Dotenv::Railtie.load unless Rails.env.production?
+Dotenv::Railtie.load if Rails.env.development?
 
 module Batman
   class Application < Rails::Application

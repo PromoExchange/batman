@@ -1,1 +1,5 @@
-<%= link_to Spree.t(:new_auction), main_app.new_auction_path(product_id: product.id) , class: 'btn btn-default' %>
+<% if spree_current_user.has_spree_role?(:buyer) %>
+  <%= link_to Spree.t(:new_auction), main_app.new_auction_path(product_id: product.id), class: 'btn btn-default' %>
+<% else %>
+  <%= link_to Spree.t(:view_details), url, class: 'btn btn-default' %>
+<% end %>

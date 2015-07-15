@@ -1,0 +1,15 @@
+<ul class="nav navbar-nav">
+  <li id="search-bar" data-hook>
+    <%= render :partial => "spree/shared/search" %>
+  </li>
+  <div class="header-nav-elements">
+    <a href="/buyer_how_it_works"><h3 class="header-nav-element">BUYERS</h3></a>
+    <a href="/seller_how_it_works"><h3 class="header-nav-element">SELLERS</h3></a>
+    <a href="/products"><h3 class="header-nav-element">PRODUCTS</h3></a>
+    <% if spree_current_user && spree_current_user.has_spree_role?(:seller) %>
+      <a href="/dashboards"><h3 class="header-nav-element">MARKETPLACE</h3></a>
+    <% end %>
+    <a href="/faq"><h3 class="header-nav-element">FAQ</h3></a>
+    <a href="/contact"><h3 class="header-nav-element">CONTACT US</h3></a>
+  </div>
+</ul>

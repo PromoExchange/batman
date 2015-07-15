@@ -1,0 +1,42 @@
+<div class="tab-pane active" id="seller-live-auction">
+  <div class="panel panel-default">
+    <div class="panel-heading"><%= Spree.t(:live_auctions) %></div>
+    <div class="panel-body">
+      <table data-key="<%= spree_current_user.spree_api_key %>"
+             data-id="<%= spree_current_user.id %>"
+             class="table table-striped" id="live-auction-table">
+        <thead>
+          <tr>
+            <th><%= Spree.t(:product) %></th>
+            <th><%= Spree.t(:quantity) %></th>
+            <th><%= Spree.t(:your_bid) %></th>
+            <th><%= Spree.t(:top_3_bids) %></th>
+            <th class="actions"><%= Spree.t(:action_col) %></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><%=Spree.t(:in_the_lead)%></div>
+    <div class="panel-body">
+      <table data-key="<%= spree_current_user.spree_api_key %>"
+             data-id="<%= spree_current_user.id %>"
+             class="table table-striped" id="live-auction-table">
+        <thead>
+          <tr>
+            <th><%= Spree.t(:product) %></th>
+            <th><%= Spree.t(:quantity) %></th>
+            <th><%= Spree.t(:your_bid) %></th>
+            <th><%= Spree.t(:top_3_bids) %></th>
+            <th class="actions"><%= Spree.t(:action_col) %></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

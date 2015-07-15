@@ -10,23 +10,9 @@ Deface::Override.new(
 Deface::Override.new(
   virtual_path:  'spree/shared/_main_nav_bar',
   name:          'main_nav_bar_insert_search',
-  insert_before: 'ul.navbar-right'
-) do
-  <<-CODE.chomp
-  <ul class="nav navbar-nav">
-    <li id="search-bar" data-hook>
-      <%= render :partial => "spree/shared/search" %>
-    </li>
-    <div class="header-nav-elements">
-      <a href="/buyer_how_it_works"><h2 class="header-nav-element">BUYERS</h2></a>
-      <a href="/seller_how_it_works"><h2 class="header-nav-element">SELLERS</h2></a>
-      <a href="/products"><h2 class="header-nav-element">PRODUCTS</h2></a>
-      <a href="/faq"><h2 class="header-nav-element">FAQ</h2></a>
-      <a href="/contact"><h2 class="header-nav-element">CONTACT US</h2></a>
-    </div>
-  </ul>
-  CODE
-end
+  insert_before: 'ul.navbar-right',
+  partial:       'spree/shared/main_nav'
+)
 
 # Remove home link
 Deface::Override.new(

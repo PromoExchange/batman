@@ -3,7 +3,7 @@ Deface::Override.new(
   virtual_path:  'spree/products/_cart_form',
   name:          'auction_button',
   insert_after:  "[data-hook='inside_product_cart_form']",
-  text:          "<%= link_to Spree.t(:new_auction), main_app.new_auction_path(product_id: @product.id) , class: 'btn btn-default' %>"
+  partial:       'spree/product/auction_button'
 )
 
 Deface::Override.new(

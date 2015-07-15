@@ -1,0 +1,19 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:exchange) %>
+<% end %>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="#seller-live-auction" id="seller-live-auction-tab" role="tab" data-toggle="tab"><%=Spree.t(:live_auctions)%></a></li>
+  <li><a href="#seller-won-auction" id="seller-won-auction-tab" role="tab" data-toggle="tab"><%=Spree.t(:auctions_won)%></a></li>
+  <li><a href="#seller-lost-auction" id="seller-lost-auction-tab" role="tab" data-toggle="tab"><%=Spree.t(:auctions_lost)%></a></li>
+  <li><a href="#seller-settings" id="seller-settings-tab" role="tab" data-toggle="tab"><%=Spree.t(:settings)%></a></li>
+  <li><a href="#seller-myratings" id="seller-myratings-tab" role="tab" data-toggle="tab"><%=Spree.t(:my_ratings)%></a></li>
+</ul>
+
+<div class="tab-content">
+  <%= render partial: 'live_auction' %>
+  <%= render partial: 'won_auctions' %>
+  <%= render partial: 'lost_auctions' %>
+  <%= render partial: 'seller_settings' %>
+  <%= render partial: 'seller_myratings' %>
+</div>

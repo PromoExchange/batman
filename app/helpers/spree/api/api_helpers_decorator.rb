@@ -23,7 +23,8 @@ Spree::Api::ApiHelpers.module_eval do
       :image_uri,
       :started,
       :ended,
-      :status
+      :status,
+      :reference
     ])
   mattr_reader :auction_attributes
 

@@ -10,6 +10,7 @@ FactoryGirl.define do
     association :main_color, factory: :color_product
     payment_method 'Credit Card'
     status 'open'
+    reference SecureRandom.hex(3)
   end
 
   factory :auction_with_bids, parent: :auction do
@@ -18,5 +19,14 @@ FactoryGirl.define do
 
   factory :waiting_auction, parent: :auction do
     status 'waiting'
+  end
+
+  factory :no_ref_auction, parent: :auction do
+    reference nil
+  end
+
+  factory :no_date_auction, parent: :auction do
+    started nil
+    ended nil
   end
 end

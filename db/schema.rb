@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150707222019) do
+ActiveRecord::Schema.define(version: 20150716190001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,7 +105,10 @@ ActiveRecord::Schema.define(version: 20150707222019) do
     t.integer  "main_color_id",                        null: false
     t.string   "payment_method",                       null: false
     t.string   "status",              default: "open"
+    t.string   "reference"
   end
+
+  add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree
 
   create_table "spree_auctions_pms_colors", force: :cascade do |t|
     t.integer "auction_id",   null: false

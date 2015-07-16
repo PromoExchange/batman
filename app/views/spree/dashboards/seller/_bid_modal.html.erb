@@ -1,0 +1,56 @@
+<div class="modal" data-id="<%=spree_current_user.spree_api_key%>" id="place-bid" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <form role="form" action="/api/bid" method="post" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Place bid</h4>
+        </div>
+        <form class="" action="/api/messages" method="post">
+          <div class="modal-body">
+            <div class="panel panel-default">
+              <div class="panel-body">Quantity requested:&nbsp;<span id="quantity-requested"></span></div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="col-md-6">Lowest price shown to buyer:</div>
+                <div class="col-md-6">
+                  <div><span id="lowest-per-unit-price"></span></div>
+                  <div><span id="lowest-total-price"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="per-unit-price"><%= Spree.t(:per_unit_price) %></label></br>
+                    <input type="text" name="per-unit-price">
+                  </div>
+                  <div class="form-group">
+                    <label for="per-unit-price-shown"><%= Spree.t(:per_unit_price_shown) %></label></br>
+                    <input type="text" name="per-unit-price-shown">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="total-price"><%= Spree.t(:total_price) %></label></br>
+                    <input type="text" name="total-price">
+                  </div>
+                  <div class="form-group">
+                    <label for="total-price-shown"><%= Spree.t(:total_price_shown) %></label></br>
+                    <input type="text" name="total-price-shown">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <i class='fa fa-spinner fa-pulse fa-2x'></i>
+            <button type="button" class="btn btn-success" disabled='true' data-dismiss="modal">Bid</button>
+            <button type="button" class="btn btn-default" disabled='true' data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </form>
+  </div>
+</div>

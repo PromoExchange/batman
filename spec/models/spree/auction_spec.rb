@@ -14,6 +14,17 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.save).to be_falsey
   end
 
+  it 'should generate a reference' do
+    a = FactoryGirl.create(:no_ref_auction)
+    expect(a.reference).not_to be_empty
+  end
+
+  it 'should generate start and end date' do
+    a = FactoryGirl.create(:no_date_auction)
+    expect(a.started.to_s).not_to be_empty
+    expect(a.ended.to_s).not_to be_empty
+  end
+
   it 'should not save with a nil buyer_id' do
     a = FactoryGirl.build(:auction, buyer_id: nil)
     expect(a.save).to be_falsey

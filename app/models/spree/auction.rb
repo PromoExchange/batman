@@ -6,6 +6,7 @@ class Spree::Auction < Spree::Base
   scope :cancelled, -> { where(status: :cancelled) }
 
   before_create :set_default_dates
+  after_create :generate_reference
 
   has_many :adjustments, as: :adjustable
   has_many :bids
@@ -50,7 +51,16 @@ class Spree::Auction < Spree::Base
   end
 
   def set_default_dates
-    started = Time.zone.now
-    ended = started + 21.days
+    self.started = Time.zone.now
+    self.ended = started + 21.days
+  end
+
+  def generate_reference
+    update_column :reference, SecureRandom.hex(3).upcase
+  rescue ActiveRecord::RecordNotUnique => e
+    @token_attempts ||= 0
+    @token_attempts += 1
+    retry if @token_attempts < 3
+    raise e, 'Retries exhausted'
   end
 end

@@ -95,8 +95,10 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
             # list end up mapping to the same PX colors.
             # It is actually quite likely they will.
             main_color_map[color.to_sym].each do |px_color|
-              taxon = Spree::Taxon.where(name: px_color).first
-              product.taxons << taxon
+              semaphore.synchronize do
+                taxon = Spree::Taxon.where(name: px_color).first
+                product.taxons << taxon
+              end
             end
           rescue
             puts 'Duplicate taxon detected'

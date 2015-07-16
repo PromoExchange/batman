@@ -18,15 +18,17 @@
       <div class="col-md-9">
         <div class="tab-content">
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-            <div class="tab-pane active" id="exchange"><%= render partial: 'spree/dashboards/exchange' %></div>
+            <div class="tab-pane active" id="exchange"><%= render partial: 'spree/dashboards/seller/exchange' %></div>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-            <div class="tab-pane active" id="auctions"><%= render partial: 'spree/dashboards/auctions' %></div>
+            <div class="tab-pane active" id="auctions"><%= render partial: 'spree/dashboards/buyer/auctions' %></div>
           <% end %>
-          <div class="tab-pane" id="messages"><%= render partial: 'spree/dashboards/messages' %></div>
-          <div class="tab-pane" id="favorite-items"><%= render partial: 'spree/dashboards/favorite_items' %></div>
-          <div class="tab-pane" id="account-settings"><%= render partial: 'spree/dashboards/account_settings' %></div>
-          <div class="tab-pane" id="support"><%= render partial: 'spree/dashboards/support' %></div>
+          <div class="tab-pane" id="messages"><%= render partial: 'spree/dashboards/shared/messages' %></div>
+          <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
+            <div class="tab-pane" id="favorite-items"><%= render partial: 'spree/dashboards/buyer/favorite_items' %></div>
+          <% end %>
+          <div class="tab-pane" id="account-settings"><%= render partial: 'spree/dashboards/shared/account_settings' %></div>
+          <div class="tab-pane" id="support"><%= render partial: 'spree/dashboards/shared/support' %></div>
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
 Spree::Image.class_eval do
   attachment_definitions[:attachment][:styles] = {
-    :mini => '48x48>', # thumbs under image
-    :small => '100x100>', # images on category view
-    :product => '240x240>', # full product image
-    :large => '600x600>' # light box image
+    mini: '48x48>',
+    small: '100x100>',
+    product: '240x240>',
+    large: '600x600>'
   }
 end

@@ -29,13 +29,13 @@
             <div class="col-md-6">
               <h4><%= Spree.t(:billing_address) %></h4>
               <%= user_fields.fields_for :billing_address, @user.billing_address do |bill_fields| %>
-                <%= render partial: 'address_form', locals: { f: bill_fields, type: 'billing' } %>
+                <%= render partial: 'spree/dashboards/shared/address_form', locals: { f: bill_fields, type: 'billing' } %>
               <% end %>
             </div>
             <div class="col-md-6">
               <h4><%= Spree.t(:shipping_address) %></h4>
               <%= user_fields.fields_for :shipping_address, @user.shipping_address do |ship_fields| %>
-                <%= render partial: 'address_form', locals: { f: ship_fields, :type => 'shipping' } %>
+                <%= render partial: 'spree/dashboards/shared/address_form', locals: { f: ship_fields, :type => 'shipping' } %>
               <% end %>
             </div>
             <div class="panel-footer form-actions">

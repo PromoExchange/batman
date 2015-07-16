@@ -1,15 +1,13 @@
 <ul class="nav navbar-nav">
-  <li id="search-bar" data-hook>
-    <%= render :partial => "spree/shared/search" %>
-  </li>
-  <div class="header-nav-elements">
-    <a href="/buyer_how_it_works"><h3 class="header-nav-element">BUYERS</h3></a>
-    <a href="/seller_how_it_works"><h3 class="header-nav-element">SELLERS</h3></a>
-    <a href="/products"><h3 class="header-nav-element">PRODUCTS</h3></a>
-    <% if spree_current_user && spree_current_user.has_spree_role?(:seller) %>
-      <a href="/dashboards"><h3 class="header-nav-element">MARKETPLACE</h3></a>
-    <% end %>
-    <a href="/faq"><h3 class="header-nav-element">FAQ</h3></a>
-    <a href="/contact"><h3 class="header-nav-element">CONTACT US</h3></a>
-  </div>
+  <% if spree_current_user %>
+    <li id="search-bar" data-hook><%= render :partial => "spree/shared/search" %></li>
+  <% end %>
+  <li><a href="/buyer_how_it_works"><h4 class="header-nav-element">BUYERS</h4></a></li>
+  <li><a href="/seller_how_it_works"><h4 class="header-nav-element">SELLERS</h4></a></li>
+  <li><a href="/products"><h4 class="header-nav-element">PRODUCTS</h4></a></li>
+  <% if spree_current_user && spree_current_user.has_spree_role?(:seller) %>
+    <li><a href="/dashboards"><h4 class="header-nav-element">MARKETPLACE</h4></a></li>
+  <% end %>
+  <li><a href="/faq"><h4 class="header-nav-element">FAQ</h4></a></li>
+  <li><a href="/contact"><h4 class="header-nav-element">CONTACT US</h4></a></li>
 </ul>

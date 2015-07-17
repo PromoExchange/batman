@@ -24,7 +24,8 @@ Spree::Api::ApiHelpers.module_eval do
       :started,
       :ended,
       :status,
-      :reference
+      :reference,
+      :product_unit_price
     ])
   mattr_reader :auction_attributes
 

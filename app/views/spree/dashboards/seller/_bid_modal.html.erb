@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h4>Place bid</h4>
         </div>
-        <form class="" action="/api/messages" method="post">
+        <form class="form" id="place-bid-form" action="/api/bids" method="post">
           <div class="modal-body">
             <div class="panel panel-default">
               <div class="panel-body">Quantity requested:&nbsp;<span id="quantity-requested"></span></div>
@@ -24,21 +24,21 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="per-unit-price"><%= Spree.t(:per_unit_price) %></label></br>
-                    <input type="text" name="per-unit-price">
+                    <input type="text" name="per-unit-price" id="per-unit-price">
                   </div>
                   <div class="form-group">
                     <label for="per-unit-price-shown"><%= Spree.t(:per_unit_price_shown) %></label></br>
-                    <input type="text" name="per-unit-price-shown">
+                    <input type="text" name="per-unit-price-shown" id="per-unit-price-shown">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="total-price"><%= Spree.t(:total_price) %></label></br>
-                    <input type="text" name="total-price">
+                    <input type="text" name="total-price" id="total-price">
                   </div>
                   <div class="form-group">
                     <label for="total-price-shown"><%= Spree.t(:total_price_shown) %></label></br>
-                    <input type="text" name="total-price-shown">
+                    <input type="text" name="total-price-shown" id="total-price-shown">
                   </div>
                 </div>
               </div>
@@ -46,7 +46,7 @@
           </div>
           <div class="modal-footer">
             <i class='fa fa-spinner fa-pulse fa-2x'></i>
-            <button type="button" class="btn btn-success" disabled='true' data-dismiss="modal">Bid</button>
+            <button type="button" class="btn btn-success" disabled='true' id="place-bid-submit" data-dismiss="modal">Bid</button>
             <button type="button" class="btn btn-default" disabled='true' data-dismiss="modal">Close</button>
           </div>
         </form>

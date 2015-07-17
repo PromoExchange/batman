@@ -38,6 +38,17 @@ class Spree::Auction < Spree::Base
     product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
   end
 
+  def product_unit_price
+    unit_price = product.price
+    product.master.volume_prices.each do |v|
+      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
+        unit_price = v.amount
+        break
+      end
+    end
+    unit_price
+  end
+
   def lowest_bid
     lowest_bid = nil
     lowest_bid_value = BigDecimal.new(-1, 4)

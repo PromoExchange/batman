@@ -58,9 +58,9 @@ class Spree::Auction < Spree::Base
   def generate_reference
     update_column :reference, SecureRandom.hex(3).upcase
   rescue ActiveRecord::RecordNotUnique => e
-    @token_attempts ||= 0
-    @token_attempts += 1
-    retry if @token_attempts < 3
+    @reference_attempts ||= 0
+    @reference_attempts += 1
+    retry if @reference_attempts < 5
     raise e, 'Retries exhausted'
   end
 end

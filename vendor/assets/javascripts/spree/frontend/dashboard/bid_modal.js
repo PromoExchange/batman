@@ -4,10 +4,6 @@ $(function(){
     var key = $("#seller-live-auction-table").attr("data-key");
     var auction_url = '/api/auctions/' + auction_id;
 
-    console.log(auction_url);
-    console.log(key);
-    console.log(auction_id);
-
     $.ajax({
       type: 'GET',
       data:{
@@ -26,7 +22,7 @@ $(function(){
           $('#lowest-per-unit-price').text('no bids');
           $('#lowest-total-price').text('no bids');
         }else{
-          $('#lowest-per-unit-price').text(low_bid/data.quantity);
+          $('#lowest-per-unit-price').text(low_bid / data.quantity);
           $('#lowest-total-price').text(low_bid);
         }
       }

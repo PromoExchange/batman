@@ -18,8 +18,5 @@ class Spree::Bid < Spree::Base
   def build_order
     o = Spree::Order.create
     self.order_id = o.id
-    true
   end
-
-  # l = Spree::LineItem.create( currency: 'USD' , order_id: 1, quantity:1, price: 100, variant_id: v.id )
 end

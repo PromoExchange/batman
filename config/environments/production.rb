@@ -79,4 +79,7 @@ Rails.application.configure do
 
   # Seed data, load image files
   config.x.load_images = true
+
+  # How many lowest bids to show
+  config.x.num_lowest_bids = 3
 end

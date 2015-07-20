@@ -42,12 +42,11 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   private
 
   def bid_params
-    params.require(:bid).permit(:auction_id,
-      :buyer_id,
+    params.require(:bid).permit(
+      :auction_id,
       :seller_id,
-      :description,
       :prebid_id,
-      :prebid_id,
+      :per_unit_bid,
       :order_id,
       :per_page)
   end
@@ -57,12 +56,28 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   end
 
   def save_bid
-    @json = JSON.parse(request.body.read)
-    @bid.assign_attributes(@json)
-    if @bid.save
-      render 'spree/api/bids/show'
-    else
-      render nothing: true, status: :bad_request
+    json = JSON.parse(request.body.read)
+    @bid.assign_attributes(
+      auction_id: json['auction_id'],
+      seller_id: json['seller_id']
+    )
+    @bid.save
+
+    unless json['per_unit_bid'].nil?
+      Spree::LineItem.create(
+        currency: 'USD',
+        order_id: @bid.order.id,
+        quantity: @bid.auction.quantity,
+        price: json['per_unit_bid'],
+        variant_id: @bid.auction.product.master.id
+      )
+
+      order_updater = Spree::OrderUpdater.new(@bid.order)
+      order_updater.update
     end
+
+    render 'spree/api/bids/show'
+  rescue
+    render nothing: true, status: :bad_request
   end
 end

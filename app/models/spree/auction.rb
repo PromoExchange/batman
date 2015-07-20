@@ -49,16 +49,11 @@ class Spree::Auction < Spree::Base
     unit_price
   end
 
-  def lowest_bid
-    lowest_bid = nil
-    lowest_bid_value = BigDecimal.new(-1, 4)
-    bids.each do |b|
-      unless lowest_bid_value == -1 || lowest_bid_value < b.bid
-        lowest_bid_value = b.bid
-        lowest_bid = b.id
-      end
-    end
-    lowest_bid
+  def lowest_bids
+    Spree::Bid.includes(:order)
+      .where(auction_id: id)
+      .order('spree_orders.total ASC')
+      .limit(3)
   end
 
   def set_default_dates

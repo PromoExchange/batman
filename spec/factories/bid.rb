@@ -4,6 +4,5 @@ FactoryGirl.define do
     auction
     association :seller, factory: :user
     association :order, factory: :order
-    description Faker::Lorem.sentence(5)
   end
 end

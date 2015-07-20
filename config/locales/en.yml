@@ -57,7 +57,7 @@ en:
     lowest_bid: 'Lowest Bid'
     start_date: 'Start Date'
     your_bid: 'Your bid'
-    top_3_bids: 'Top 3 Bids'
+    lowest_3_bids: 'Lowest 3 Bids'
     in_the_lead: 'In the lead'
     lost_auctions: 'Lost Auctions'
     my_ratings: 'My Ratings'

@@ -22,11 +22,11 @@ $(function(){
             'X-Spree-Token': key
           },
           success: function(data){
-            get_favorite()
+            get_favorite();
             is_working = false;
           },
           error: function(data){
-            console.log(data)
+            console.log(data);
             is_working = false;
           }
         });
@@ -40,11 +40,11 @@ $(function(){
               'X-Spree-Token': key
             },
             success: function(data){
-              get_favorite()
+              get_favorite();
               is_working = false;
             },
             error: function(data){
-              console.log(data)
+              console.log(data);
               is_working = false;
             }
           });
@@ -95,6 +95,6 @@ $(function(){
         }
       }
     });
-  };
+  }
   get_favorite();
 });

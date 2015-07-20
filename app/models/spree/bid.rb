@@ -1,5 +1,5 @@
 class Spree::Bid < Spree::Base
-  before_save :build_order, on: :create
+  before_create :build_order
 
   belongs_to :auction
   belongs_to :seller, class_name: 'Spree::User'

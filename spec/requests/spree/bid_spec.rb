@@ -96,7 +96,7 @@ describe 'Bids API' do
     expect(response).to be_success
   end
 
-  it 'should not create a duplicate bid (nested)' do
+  xit 'should not create a duplicate bid (nested)' do
     auction = FactoryGirl.create(:auction)
     bid = FactoryGirl.create(:bid)
 
@@ -113,7 +113,7 @@ describe 'Bids API' do
     expect(response).to be_success
   end
 
-  it 'should not create a duplicate bid (root)' do
+  xit 'should not create a duplicate bid (root)' do
     bid = FactoryGirl.create(:bid)
 
     post '/api/bids', bid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"

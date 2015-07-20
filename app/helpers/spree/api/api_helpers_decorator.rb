@@ -18,7 +18,6 @@ Spree::Api::ApiHelpers.module_eval do
       :product_id,
       :name,
       :buyer_id,
-      :lowest_bid,
       :quantity,
       :image_uri,
       :started,
@@ -35,7 +34,7 @@ Spree::Api::ApiHelpers.module_eval do
       :auction_id,
       :seller_id,
       :email,
-      :bid,
+      :per_unit_bid,
       :order_id,
       :prebid_id
     ])

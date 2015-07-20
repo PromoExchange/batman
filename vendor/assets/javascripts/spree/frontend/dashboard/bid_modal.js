@@ -15,13 +15,12 @@ $(function () {
       },
       success: function (data) {
         $('.modal-body #quantity-requested').text(data.quantity);
-        var low_bid = data.lowest_bid;
-        if (low_bid === null) {
-          $('.modal-body #lowest-per-unit-price').text('no bids');
-          $('.modal-body #lowest-total-price').text('no bids');
-        }else {
-          $('.modal-body #lowest-per-unit-price').text(low_bid / data.quantity);
-          $('.modal-body #lowest-total-price').text(low_bid);
+        var num_bids = data.lowest_bids.length;
+        var low_bid = 'no bids';
+        if (num_bids > 0) {
+          low_bid = data.lowest_bids[0].bid;
+          $('.modal-body #lowest-per-unit-price').text(low_bid);
+          $('.modal-body #lowest-total-price').text(low_bid * data.quantity);
         }
         $('.modal-body #per-unit-price').val(data.product_unit_price);
         calc_prices('per-unit-price');
@@ -72,19 +71,13 @@ $(function () {
   {
     $('.fa-spinner').show();
     $('.modal-footer button').prop('disabled', true);
-    $('.modal-body #per-unit-price').prop('disabled', true);
-    $('.modal-body #total-price').prop('disabled', true);
-    $('.modal-body #per-unit-price-shown').prop('disabled', true);
-    $('.modal-body #total-price-shown').prop('disabled', true);
+    $('input.bid-edit').prop('disabled', true);
   }
 
   function stop_download(data) {
     $('.fa-spinner').hide();
     $('.modal-footer button').prop('disabled', false);
-    $('.modal-body #per-unit-price').prop('disabled', false);
-    $('.modal-body #total-price').prop('disabled', false);
-    $('.modal-body #per-unit-price-shown').prop('disabled', false);
-    $('.modal-body #total-price-shown').prop('disabled', false);
+    $('input.bid-edit').prop('disabled', false);
   }
 
   $('.modal-body #per-unit-price').change(function() {
@@ -103,14 +96,38 @@ $(function () {
     calc_prices('total-price-shown');
   });
 
-  $('#place-bid-submit').click(function() {
-    alert('Submit me');
-    event.preventDefault();
+  $('#place-bid-submit').click(function(e) {
+    e.preventDefault();
+    var auction_id = $('#auction-id').val();
+    var seller_id = $('#seller-id').val();
+    var bid = $('#per-unit-price-shown').val();
+    var bid_message = {
+      seller_id: parseInt(seller_id, 10),
+      auction_id: parseInt(auction_id, 10),
+      per_unit_bid: parseFloat(bid)
+    };
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      data: JSON.stringify(bid_message),
+      url: '/api/bids',
+      headers:{
+        'X-Spree-Token': key
+      },
+      success: function(data){
+        alert('bid created!!');
+      },
+      error: function(data){
+        console.log(data);
+      }
+    });
+    return false;
   });
 
   $('tbody').on('click','button.open-bid',function(e) {
-    var auction_id = $(this).data('id');
     start_download();
+    var auction_id = $(this).data('id');
+    $('#auction-id').val(auction_id);
     get_auction(auction_id);
   });
 });

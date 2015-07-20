@@ -1,6 +1,7 @@
 # Configure Spree Preferences
 #
-# Note: Initializing preferences available within the Admin will overwrite any changes that were made through the user interface when you restart.
+# Note: Initializing preferences available within the Admin will overwrite any changes that were made
+#       through the user interface when you restart.
 #       If you would like users to be able to update a setting with the Admin it should NOT be set here.
 #
 # Note: If a preference is set here it will be stored within the cache & database upon initialization.
@@ -16,8 +17,9 @@ Spree.config do |config|
   config.logo = 'logo/px_logo.png'
   config.currency = 'USD'
   config.products_per_page = 12
-  signout_after_password_change = true
 end
+
+Spree::Auth::Config.set(signout_after_password_change: true)
 
 Spree.user_class = 'Spree::User'
 

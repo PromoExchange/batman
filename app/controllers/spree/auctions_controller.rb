@@ -76,7 +76,7 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def destroy
-    @auction.destroy
+    @auction.update_attributes( status: 'cancelled', cancelled_date: Time.zone.now )
     redirect_to dashboards_path
   end
 

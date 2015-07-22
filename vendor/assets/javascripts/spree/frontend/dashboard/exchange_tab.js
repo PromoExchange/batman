@@ -112,7 +112,8 @@ $(function(){
               }else if (num_bids == 1){
                 bid1_val = item.lowest_bids[0].bid;
               }
-              trHTML += top3_template({bid1: bid1_val, bid2: bid2_val, bid3: bid3_val});              trHTML += "</tr>";
+              trHTML += top3_template({bid1: bid1_val, bid2: bid2_val, bid3: bid3_val});
+              trHTML += "</tr>";
             });
           }else{
             trHTML += "<tr><td class='text-center' colspan='6'>No auctions found!</td></tr>";

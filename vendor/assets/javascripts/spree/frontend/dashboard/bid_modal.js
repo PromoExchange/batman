@@ -19,8 +19,8 @@ $(function () {
         var low_bid = 'no bids';
         if (num_bids > 0) {
           low_bid = data.lowest_bids[0].bid;
-          $('.modal-body #lowest-per-unit-price').text(low_bid);
-          $('.modal-body #lowest-total-price').text(low_bid * data.quantity);
+          $('.modal-body #lowest-per-unit-price').text(low_bid / data.quantity );
+          $('.modal-body #lowest-total-price').text(low_bid);
         }
         $('.modal-body #per-unit-price').val(data.product_unit_price);
         calc_prices('per-unit-price');
@@ -116,12 +116,12 @@ $(function () {
       },
       success: function(data){
         alert('bid created!!');
+        $('#seller-live-auction-tab').trigger('click');
       },
       error: function(data){
         console.log(data);
       }
     });
-    return false;
   });
 
   $('tbody').on('click','button.open-bid',function(e) {

@@ -36,6 +36,7 @@ Spree::Api::ApiHelpers.module_eval do
       :email,
       :per_unit_bid,
       :order_id,
+      :bid,
       :prebid_id
     ])
   mattr_reader :bid_attributes

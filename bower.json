@@ -3,7 +3,8 @@
   "dependencies": {
     "image-picker": "0.2.4",
     "bootstrap-tagsinput": "0.5.0",
-    "lodash": "3.10.0"
+    "lodash": "3.10.0",
+    "jquery-color": "2.1.2"
   },
   "private": true
 }

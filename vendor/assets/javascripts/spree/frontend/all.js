@@ -14,6 +14,7 @@
 //= require image-picker/image-picker/image-picker.min
 //= require bootstrap-tagsinput/dist/bootstrap-tagsinput.min
 //= require lodash/lodash.min
+//= require jquery-color/jquery.color.js
 
 $(function() {
   $('.title').on('keyup change', function(e) {

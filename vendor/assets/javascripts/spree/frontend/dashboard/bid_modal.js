@@ -39,32 +39,49 @@ $(function () {
     var seller_markup = 0.15;
     var px_markup = 0.0299;
     var total_markup = (seller_markup + px_markup);
+    var flash_fields = [];
 
     if (anchor_field === 'per-unit-price') {
       per_unit_price = parseFloat($('.modal-body #per-unit-price').val());
       total_price = per_unit_price * quantity;
       per_unit_price_shown = (per_unit_price / (1 - total_markup));
       total_price_shown = per_unit_price_shown * quantity;
+      flash_fields.push('.modal-body #total-price');
+      flash_fields.push('.modal-body #per-unit-price-shown');
+      flash_fields.push('.modal-body #total-price-shown');
     } else if (anchor_field === 'total-price') {
       total_price = parseFloat($('.modal-body #total-price').val());
       per_unit_price = total_price / quantity;
       per_unit_price_shown = (per_unit_price / (1 - total_markup));
       total_price_shown = per_unit_price_show * quantity;
+      flash_fields.push('.modal-body #per-unit-price');
+      flash_fields.push('.modal-body #per-unit-price-shown');
+      flash_fields.push('.modal-body #total-price-shown');
     } else if (anchor_field === 'per-unit-price-shown') {
       per_unit_price_shown = parseFloat($('.modal-body #per-unit-price-shown').val());
       total_price_shown = per_unit_price_shown * quantity;
       per_unit_price = (per_unit_price_shown / (1 + total_markup));
       total_price = per_unit_price * quantity;
+      flash_fields.push('.modal-body #per-unit-price');
+      flash_fields.push('.modal-body #total-price');
+      flash_fields.push('.modal-body #total-price-shown');
     } else if (anchor_field === 'total-price-shown') {
       total_price_shown = parseFloat($('.modal-body #total-price-shown').val());
       per_unit_price_shown = total_price_shown / quantity;
       per_unit_price = (per_unit_price_shown / (1 + total_markup));
       total_price = per_unit_price * quantity;
+      flash_fields.push('.modal-body #per-unit-price');
+      flash_fields.push('.modal-body #total-price');
+      flash_fields.push('.modal-body #per-unit-price-shown');
     }
     $('.modal-body #per-unit-price').val(+per_unit_price.toFixed(2));
     $('.modal-body #total-price').val(+total_price.toFixed(2));
     $('.modal-body #per-unit-price-shown').val(+per_unit_price_shown.toFixed(2));
     $('.modal-body #total-price-shown').val(+total_price_shown.toFixed(2));
+    var s = flash_fields.join(',');
+    // $(s).delay(100).fadeOut().fadeIn('200');
+    $(s).stop().css("background-color", "#FFFF9C")
+      .animate({ backgroundColor: "#FFFFFF"}, 500);
   }
 
   function start_download(data)

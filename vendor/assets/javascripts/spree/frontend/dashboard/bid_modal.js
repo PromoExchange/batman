@@ -79,7 +79,6 @@ $(function () {
     $('.modal-body #per-unit-price-shown').val(+per_unit_price_shown.toFixed(2));
     $('.modal-body #total-price-shown').val(+total_price_shown.toFixed(2));
     var s = flash_fields.join(',');
-    // $(s).delay(100).fadeOut().fadeIn('200');
     $(s).stop().css("background-color", "#FFFF9C")
       .animate({ backgroundColor: "#FFFFFF"}, 500);
   }

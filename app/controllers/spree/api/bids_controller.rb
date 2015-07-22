@@ -62,15 +62,18 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       seller_id: json['seller_id']
     )
     @bid.save
-
+    price = json['per_unit_bid'].to_s
+    quantity = @bid.auction.quantity
     unless json['per_unit_bid'].nil?
-      Spree::LineItem.create(
+      li = Spree::LineItem.create(
         currency: 'USD',
         order_id: @bid.order.id,
-        quantity: @bid.auction.quantity,
-        price: json['per_unit_bid'],
-        variant_id: @bid.auction.product.master.id
+        quantity: quantity,
+        variant: @bid.auction.product.master
       )
+
+      li.price = price
+      li.save
 
       order_updater = Spree::OrderUpdater.new(@bid.order)
       order_updater.update

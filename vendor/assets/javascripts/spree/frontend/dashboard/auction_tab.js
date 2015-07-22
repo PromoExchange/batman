@@ -19,7 +19,7 @@ $(function(){
             simple_template = _.template("<td><%= value %></td>");
             image_template = _.template("<td><img itemprop='image' alt='<%= name %>' src='<%= image %>'</td>");
             date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= date %>'><%= date %></time></td>");
-            action_template = _.template("<td><a class='cancel' data-confirm='Are you sure?' href='#' data-id='<%= auction_id %>'>Cancel</a></td>");
+            action_template = _.template("<td><ul><li><a href='/auctions/<%= auction_id %>' data-id='<%= auction_id %>'>Go to Auction</a></li><li><a class='cancel' data-confirm='Are you sure?' href='#' data-id='<%= auction_id %>'>Cancel</a></li></ul></td>");
 
             $.each(data, function(i,item){
               trHTML += "<tr>";

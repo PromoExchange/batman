@@ -9,7 +9,7 @@ class Spree::Auction < Spree::Base
   after_create :generate_reference
 
   has_many :adjustments, as: :adjustable
-  has_many :bids
+  has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }
   belongs_to :buyer, class_name: 'Spree::User'
   belongs_to :imprint_method
   belongs_to :main_color, class_name: 'Spree::ColorProduct'

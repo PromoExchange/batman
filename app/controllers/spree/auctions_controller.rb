@@ -5,15 +5,16 @@ class Spree::AuctionsController < Spree::StoreController
   def index
     if params[:buyer_id].present?
       @auctions = Spree::Auction.where(buyer_id: params[:buyer_id])
-        .includes(:buyer, :bids, :product)
-        .page(params[:page])
-        .per(params[:per_page] || Spree::Config[:orders_per_page])
+        .includes(:bids, :product)
+        .where.not(status: 'cancelled')
     else
-      @auctions = Spree::Auction.all
-        .includes(:buyer, :bids, :product)
-        .page(params[:page])
-        .per(params[:per_page] || Spree::Config[:orders_per_page])
+      @auctions = Spree::Auction.where.not(status: 'cancelled')
+        .includes(:bids, :product)
     end
+  end
+
+  def show
+    @product_properties = @auction.product.product_properties
   end
 
   def accept_bid
@@ -37,7 +38,7 @@ class Spree::AuctionsController < Spree::StoreController
       "Billing: #{@auction.buyer.billing_address}",
       @auction.buyer.billing_address.id] unless @auction.buyer.billing_address.nil?
 
-      @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
+    @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
 
     # TODO: pluck it
     @pms_colors = Spree::PmsColorsSupplier
@@ -76,7 +77,7 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def destroy
-    @auction.update_attributes( status: 'cancelled', cancelled_date: Time.zone.now )
+    @auction.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
     redirect_to dashboards_path
   end
 

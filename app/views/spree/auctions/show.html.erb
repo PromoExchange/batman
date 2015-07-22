@@ -1,0 +1,34 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:auction) %>
+<% end %>
+
+<div class="row" id="show-auction">
+  <div class="col-md-6">
+    <% url = spree.product_url(@auction.product) %>
+    <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url' %><br/>
+    <p><%= @auction.product.description %></p>
+    <%= render partial: 'properties' %>
+  </div>
+  <div class="col-md-6 well" >
+    <h2><%= @auction.product.name %></h2>
+    <h3>Top Bids</h3>
+    <table class='table'>
+      <thead>
+        <tr>
+          <th><%= Spree.t(:seller) %></th>
+          <th><%= Spree.t(:bid) %></th>
+          <th class="actions"><%= Spree.t(:action_col) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @auction.bids.each do |b| %>
+        <tr>
+          <td><%= b.email %></td>
+          <td><%= b.bid %></td>
+          <td><a href="#" class="accept">Accept</a></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

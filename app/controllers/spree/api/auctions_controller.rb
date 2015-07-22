@@ -33,7 +33,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   end
 
   def destroy
-    @auction.update_attributes( status: 'cancelled', cancelled_date: Time.zone.now )
+    @auction.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
     render nothing: true, status: :ok
   end
 

@@ -9,8 +9,6 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
       buyer_id_eq: params[:buyer_id],
       status_eq: params[:status]
     ).result
-      .page(params[:page])
-      .per(params[:per_page] || Spree::Config[:orders_per_page])
 
     render 'spree/api/auctions/index'
   end
@@ -39,6 +37,20 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   private
 
+  def fetch_auction
+    @auction = Spree::Auction.find(params[:id])
+  end
+
+  def save_auction
+    @json = JSON.parse(request.body.read)
+    @auction.assign_attributes(@json)
+    if @auction.save
+      render 'spree/api/auctions/show'
+    else
+      render nothing: true, status: :bad_request
+    end
+  end
+
   def auction_params
     params.require(:auction).permit(
       :product_id,
@@ -52,19 +64,5 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
       :page,
       :per_page
     )
-  end
-
-  def fetch_auction
-    @auction = Spree::Auction.find(params[:id])
-  end
-
-  def save_auction
-    @json = JSON.parse(request.body.read)
-    @auction.assign_attributes(@json)
-    if @auction.save
-      render 'spree/api/auctions/show'
-    else
-      render nothing: true, status: :bad_request
-    end
   end
 end

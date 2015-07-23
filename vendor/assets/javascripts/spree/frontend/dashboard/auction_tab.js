@@ -1,6 +1,6 @@
 $(function(){
   $('#live-auction-tab').click(function(e) {
-      $("#live-auction-table > tbody").html("<tr><td class='text-center' colspan='5'><i class='fa fa-spinner fa-pulse fa-3x'></i></td></tr>");
+      $("#live-auction-table > tbody").html("<tr><td class='text-center' colspan='7'><i class='fa fa-spinner fa-pulse fa-3x'></i></td></tr>");
       var key = $("#live-auction-table").attr("data-key");
       var buyer_id = $("#live-auction-table").attr("data-id");
       var auction_url = '/api/auctions?status=open&buyer_id=' + buyer_id;
@@ -31,10 +31,10 @@ $(function(){
                 id: item.name
               });
 
-              var num_bids = item.lowest_bids.length;
+              var num_bids = item.bids.length;
               var low_bid = 'no bids';
               if (num_bids > 0) {
-                low_bid = item.lowest_bids[0].bid;
+                low_bid = item.bids[0].bid;
                 if (low_bid === null){
                   low_bid = 'no bids';
                 }

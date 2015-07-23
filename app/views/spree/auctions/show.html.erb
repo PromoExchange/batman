@@ -10,25 +10,35 @@
     <%= render partial: 'properties' %>
   </div>
   <div class="col-md-6 well">
-    <h2><%= @auction.product.name %></h2>
-    <h3>Top Bids</h3>
-    <table class='table'>
-      <thead>
-        <tr>
-          <th><%= Spree.t(:seller) %></th>
-          <th><%= Spree.t(:bid) %></th>
-          <th class="actions"><%= Spree.t(:action_col) %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @auction.bids.each do |b| %>
-          <tr>
-            <td><%= b.email %></td>
-            <td><%= b.bid %></td>
-            <td><a href="#" class="accept-link" data-id='<%= b.id %>'>Accept</a></td>
-          </tr>
+    <div class="auction-details">
+      <h4><%= Spree::t(:auction_details) %></h4>
+      <div class="col-md-6 titles">
+        <p>Product:</p>
+        <p>Factory:</p>
+        <p>SKU:</p>
+        <p>Buyer:</p>
+        <p>Imprint Method:</p>
+        <p>Main Color:</p>
+        <p>Payment Method:</p>
+        <p>Imprint Colors:</p>
+      </div>
+      <div class="col-md-6">
+        <p><%= @auction.product.name %></p>
+        <p><%= @auction.product.supplier.name %></p>
+        <p><%= @auction.product.sku %></p>
+        <p><%= @auction.buyer.billing_address.full_name %></p>
+        <p><%= @auction.imprint_method.name %></p>
+        <p><%= @auction.main_color.color %></p>
+        <p><%= @auction.payment_method %></p>
+        <% @auction.pms_colors.each do |c| %>
+          <p><%= c.pms_color.name %>/<%= c.pms_color.pantone %></p>
         <% end %>
-      </tbody>
-    </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 well">
+    <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
+      <%= render partial: 'spree/auctions/top_bids' %>
+    <% end %>
   </div>
 </div>

@@ -44,19 +44,19 @@ describe 'Bids API' do
     expect(json.length).to eq(5)
   end
 
-  it 'should gets a page of bids' do
-    FactoryGirl.create_list(:bid, 10)
-
-    get '/api/bids?page=2&per_page=3', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
-
-    expect(response).to be_success
-    expect(json.length).to eq(3)
-  end
-
   it 'should get a single bid (nested)' do
     auction = FactoryGirl.create(:auction_with_bids)
 
     get "/api/auctions/#{auction.id}/bids/#{auction.bids[0].id}",
+      nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to be_success
+  end
+
+  it 'should find one auction' do
+    auctions = FactoryGirl.create_list(:auction,10)
+
+    get "/api/bids?auction_id=#{auctions[2].id}",
       nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success

@@ -6,19 +6,16 @@ $(function () {
 
     $.ajax({
       type: 'GET',
-      data: {
-        format: 'json'
-      },
       url: auction_url,
       headers: {
         'X-Spree-Token': key
       },
       success: function (data) {
         $('.modal-body #quantity-requested').text(data.quantity);
-        var num_bids = data.lowest_bids.length;
+        var num_bids = data.bids.length;
         var low_bid = 'no bids';
         if (num_bids > 0) {
-          low_bid = data.lowest_bids[0].bid;
+          low_bid = data.bids[0].bid;
           $('.modal-body #lowest-per-unit-price').text(low_bid / data.quantity );
           $('.modal-body #lowest-total-price').text(low_bid);
         }

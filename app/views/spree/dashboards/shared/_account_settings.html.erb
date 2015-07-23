@@ -5,7 +5,9 @@
 <ul class="nav nav-tabs" role="tablist">
   <li class="active"><a href="#account-contact" role="tab" data-toggle="tab"><%=Spree.t(:account_and_contact)%></a></li>
   <li><a href="#paypal" role="tab" data-toggle="tab"><%=Spree.t(:paypal)%></a></li>
+  <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
   <li><a href="#logo" role="tab" data-toggle="tab"><%=Spree.t(:logo)%></a></li>
+  <% end %>
 </ul>
 <!-- Tab panes -->
 <div class="tab-content" id="account-settings">

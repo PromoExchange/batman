@@ -1,0 +1,21 @@
+<div class="top-bids">
+  <h4>Top Bids</h4>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th><%= Spree.t(:seller) %></th>
+        <th><%= Spree.t(:bid) %></th>
+        <th class="actions"><%= Spree.t(:action_col) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @auction.bids.each do |b| %>
+        <tr>
+          <td><%= b.email %></td>
+          <td><%= b.bid %></td>
+          <td><a href="#" class="accept-link" data-id='<%= b.id %>'>Accept</a></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

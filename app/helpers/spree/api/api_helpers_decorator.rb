@@ -37,7 +37,8 @@ Spree::Api::ApiHelpers.module_eval do
       :per_unit_bid,
       :order_id,
       :bid,
-      :prebid_id
+      :prebid_id,
+      :status
     ])
   mattr_reader :bid_attributes
 

@@ -66,15 +66,6 @@ describe 'Auctions API' do
     expect(json.length).to eq(0)
   end
 
-  it 'should get a page of auctions' do
-    FactoryGirl.create_list(:auction, 10)
-
-    get '/api/auctions?page=2&per_page=3', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
-
-    expect(response).to be_success
-    expect(json.length).to eq(3)
-  end
-
   it 'should get a single auction' do
     auction = FactoryGirl.create(:auction)
 

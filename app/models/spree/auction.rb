@@ -14,7 +14,8 @@ class Spree::Auction < Spree::Base
   belongs_to :imprint_method
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
   has_one :order
-  has_many :pms_colors, class_name: 'Spree::AuctionPmsColor'
+  has_many :auctions_pms_colors, class_name: 'Spree::AuctionPmsColor'
+  has_many :pms_colors, through: :auctions_pms_colors
   belongs_to :product
   belongs_to :shipping_address, class_name: 'Spree::Address'
 
@@ -47,13 +48,6 @@ class Spree::Auction < Spree::Base
       end
     end
     unit_price
-  end
-
-  def lowest_bids
-    Spree::Bid.includes(:order)
-      .where(auction_id: id)
-      .order('spree_orders.total ASC')
-      .limit(3)
   end
 
   def set_default_dates

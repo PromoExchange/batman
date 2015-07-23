@@ -1,5 +1,5 @@
 collection @auctions
-attributes *auction_attributes
-child lowest_bids: :lowest_bids do
-  attributes *bid_attributes
+attributes(*auction_attributes)
+child bids: :bids do
+  attributes(*bid_attributes)
 end

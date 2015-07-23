@@ -5,13 +5,13 @@ $(function(){
   });
   $('.swatch-clickable').tooltip();
 
-  $('#pms-tags').tagsinput({
+  $('#pms-colors').tagsinput({
     itemValue: 'id',
     itemText: 'text',
     maxTags: 2
   });
 
   $(".swatch-clickable").click(function() {
-    $('#pms-tags').tagsinput('add', { id: $(this).attr('id'), text: $(this).attr('name') });
+    $('#pms-colors').tagsinput('add', { id: $(this).attr('id'), text: $(this).attr('name') });
   });
 });

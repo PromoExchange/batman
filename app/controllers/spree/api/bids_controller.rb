@@ -2,17 +2,17 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   before_action :fetch_bid, except: [:index, :create]
 
   def index
-    if params[:auction_id].present?
-      @bids = Spree::Bid.where(auction_id: params[:auction_id])
-        .includes(:seller)
-        .page(params[:page])
-        .per(params[:per_page] || Spree::Config[:orders_per_page])
-    else
-      @bids = Spree::Bid.all
-        .includes(:seller)
-        .page(params[:page])
-        .per(params[:per_page] || Spree::Config[:orders_per_page])
-    end
+    params[:seller_id] = {} if params[:seller_id].blank?
+    params[:auction_id] = {} if params[:auction_id].blank?
+    params[:status] = {} if params[:status].blank?
+
+    @bids = Spree::Bid.search(
+      seller_id_eq: params[:seller_id],
+      auction_id_eq: params[:auction_id],
+      status_eq: params[:status]
+    ).result
+      .includes(:seller)
+
     render 'spree/api/bids/index'
   end
 
@@ -86,7 +86,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       :prebid_id,
       :per_unit_bid,
       :order_id,
-      :per_page
+      :status
     )
   end
 end

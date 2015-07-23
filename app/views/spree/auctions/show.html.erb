@@ -22,11 +22,11 @@
       </thead>
       <tbody>
         <% @auction.bids.each do |b| %>
-        <tr>
-          <td><%= b.email %></td>
-          <td><%= b.bid %></td>
-          <td><a href="#" class="accept">Accept</a></td>
-        </tr>
+          <tr>
+            <td><%= b.email %></td>
+            <td><%= b.bid %></td>
+            <td><a href="#" class="accept">Accept</a></td>
+          </tr>
         <% end %>
       </tbody>
     </table>

@@ -4,5 +4,7 @@ FactoryGirl.define do
     auction
     association :seller, factory: :user
     association :order, factory: :order
+    association :prebid, factory: :prebid
+    status 'open'
   end
 end

@@ -9,19 +9,18 @@ Rails.application.routes.draw do
   # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
   mount Spree::Core::Engine, at: '/'
 
-  resources :auctions, controller: 'spree/auctions', as: 'auctions' do
-    get 'accept_bid'
-  end
-
+  resources :auctions, controller: 'spree/auctions', as: 'auctions'
   resources :dashboards, controller: 'spree/dashboards', as: 'dashboards'
 
   scope :api do
     resources :messages, controller: 'spree/api/messages', as: 'api_messages'
     resources :auctions, controller: 'spree/api/auctions' do
-      get 'info'
-      resources :bids, controller: 'spree/api/bids'
+      resources :bids, controller: 'spree/api/bids' do
+        post 'accept'
+      end
     end
-    resources :bids, controller: 'spree/api/bids'
+    match '/bids/:id/accept' => 'spree/api/bids#accept', via: :post
+    resources :bids, controller: 'spree/api/bids', as: 'api_bids'
     resources :prebids, controller: 'spree/api/prebids', as: 'api_prebids'
     resources :upcharges, controller: 'spree/api/upcharges', as: 'api_upcharges'
     resources :favorites, controller: 'spree/api/favorites', as: 'api_favorites'

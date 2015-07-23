@@ -16,14 +16,20 @@ $(function(){
         success: function(data){
           var trHTML = '';
           if( data.length > 0 ){
+            reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
             simple_template = _.template("<td><%= value %></td>");
-            image_template = _.template("<td><img itemprop='image' alt='<%= name %>' src='<%= image %>'</td>");
+            image_template = _.template("<td><a href='/auctions/<%= auction_id %>'><img itemprop='image' alt='<%= name %>' src='<%= image %>'</a></td>");
             date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= date %>'><%= date %></time></td>");
             action_template = _.template("<td><ul><li><a href='/auctions/<%= auction_id %>' data-id='<%= auction_id %>'>Go to Auction</a></li><li><a class='cancel' data-confirm='Are you sure?' href='#' data-id='<%= auction_id %>'>Cancel</a></li></ul></td>");
 
             $.each(data, function(i,item){
               trHTML += "<tr>";
-              trHTML += image_template( {image: item.image_uri, id: item.name} );
+              trHTML += reference_template({reference: item.reference, auction_id: item.id });
+              trHTML += image_template({
+                auction_id: item.id,
+                image: item.image_uri,
+                id: item.name
+                });
 
               var num_bids = item.lowest_bids.length;
               var low_bid = 'no bids';

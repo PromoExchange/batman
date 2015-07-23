@@ -13,7 +13,6 @@ class Spree::Api::BidsController < Spree::Api::BaseController
         .page(params[:page])
         .per(params[:per_page] || Spree::Config[:orders_per_page])
     end
-
     render 'spree/api/bids/index'
   end
 
@@ -35,21 +34,17 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   end
 
   def destroy
-    @bid.destroy
+    @bid.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
+    render nothing: true, status: :ok
+  end
+
+  def accept
+    @bid.update_attributes(status: 'accepted')
+    @bid.auction.update_attributes(status: 'closed')
     render nothing: true, status: :ok
   end
 
   private
-
-  def bid_params
-    params.require(:bid).permit(
-      :auction_id,
-      :seller_id,
-      :prebid_id,
-      :per_unit_bid,
-      :order_id,
-      :per_page)
-  end
 
   def fetch_bid
     @bid = Spree::Bid.find(params[:id])
@@ -82,5 +77,15 @@ class Spree::Api::BidsController < Spree::Api::BaseController
     render 'spree/api/bids/show'
   rescue
     render nothing: true, status: :bad_request
+  end
+
+  def bid_params
+    params.require(:bid).permit(
+      :auction_id,
+      :seller_id,
+      :prebid_id,
+      :per_unit_bid,
+      :order_id,
+      :per_page)
   end
 end

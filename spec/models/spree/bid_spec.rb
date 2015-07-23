@@ -17,6 +17,11 @@ RSpec.describe Spree::Bid, type: :model do
     expect(b.save).to be_truthy
   end
 
+  it 'should not save with an invalid status' do
+    b = FactoryGirl.build(:bid, status: 'invalid')
+    expect(b.save).to be_falsey
+  end
+
   xit 'should cascade delete order'
 
   it 'should belong to an auction' do

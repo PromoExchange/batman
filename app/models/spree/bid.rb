@@ -8,6 +8,7 @@ class Spree::Bid < Spree::Base
 
   validates :auction_id, presence: true
   validates :seller_id, presence: true
+  validates_inclusion_of :status, in: %w(open accepted cancelled)
 
   delegate :email, to: :seller
 

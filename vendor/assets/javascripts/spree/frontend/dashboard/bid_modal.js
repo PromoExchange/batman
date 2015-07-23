@@ -140,7 +140,7 @@ $(function () {
     });
   });
 
-  $('tbody').on('click','button.open-bid',function(e) {
+  $('tbody').on('click','button.open-bid', function(e) {
     start_download();
     var auction_id = $(this).data('id');
     $('#auction-id').val(auction_id);

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721141843) do
+ActiveRecord::Schema.define(version: 20150723183802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,12 +120,14 @@ ActiveRecord::Schema.define(version: 20150721141843) do
   add_index "spree_auctions_pms_colors", ["pms_color_id"], name: "index_spree_auctions_pms_colors_on_pms_color_id", using: :btree
 
   create_table "spree_bids", force: :cascade do |t|
-    t.integer  "auction_id", null: false
-    t.integer  "seller_id",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "auction_id",                      null: false
+    t.integer  "seller_id",                       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "order_id"
     t.integer  "prebid_id"
+    t.string   "status",         default: "open"
+    t.datetime "cancelled_date"
   end
 
   create_table "spree_calculators", force: :cascade do |t|

@@ -122,14 +122,14 @@ describe 'Bids API' do
   end
 
   it 'should delete a bid (nested)' do
-    auction = FactoryGirl.create(:auction_with_bids)
+    auction = FactoryGirl.create(:auction_with_one_bid)
 
     delete "/api/auctions/#{auction.id}/bids/#{auction.bids[0].id}",
       nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
     a = Spree::Auction.find(auction.id)
-    expect(a.bids.length).to eq(9)
+    expect(a.bids.length).to eq(1)
   end
 
   it 'should delete a bid (root)' do
@@ -138,5 +138,15 @@ describe 'Bids API' do
     delete "/api/bids/#{bid.id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
+  end
+
+  it 'should allow accept bid' do
+    bid = FactoryGirl.create(:bid)
+
+    post "/api/bids/#{bid.id}/accept", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to be_success
+    a = Spree::Bid.find(bid.id)
+    expect(a.status).to eq('accepted')
   end
 end

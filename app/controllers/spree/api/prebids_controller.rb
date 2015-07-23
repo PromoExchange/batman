@@ -39,14 +39,6 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
 
   private
 
-  def prebid_params
-    params.require(:prebid).permit(:taxon_id,
-      :seller_id,
-      :description,
-      :page,
-      :per_page)
-  end
-
   def fetch_prebid
     @prebid = Spree::Prebid.find(params[:id])
   end
@@ -59,5 +51,13 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
     else
       render nothing: true, status: :bad_request
     end
+  end
+
+  def prebid_params
+    params.require(:prebid).permit(:taxon_id,
+      :seller_id,
+      :description,
+      :page,
+      :per_page)
   end
 end

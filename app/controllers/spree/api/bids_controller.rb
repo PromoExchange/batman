@@ -86,6 +86,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       :prebid_id,
       :per_unit_bid,
       :order_id,
-      :per_page)
+      :per_page
+    )
   end
 end

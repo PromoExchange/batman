@@ -54,10 +54,12 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
   end
 
   def prebid_params
-    params.require(:prebid).permit(:taxon_id,
+    params.require(:prebid).permit(
+      :taxon_id,
       :seller_id,
       :description,
       :page,
-      :per_page)
+      :per_page
+    )
   end
 end

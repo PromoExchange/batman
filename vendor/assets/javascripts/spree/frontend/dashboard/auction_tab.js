@@ -29,7 +29,7 @@ $(function(){
                 auction_id: item.id,
                 image: item.image_uri,
                 id: item.name
-                });
+              });
 
               var num_bids = item.lowest_bids.length;
               var low_bid = 'no bids';

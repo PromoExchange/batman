@@ -1,8 +1,12 @@
 $(function(){
-  $(".image-picker").imagepicker();
+  $(".auction-logo").imagepicker({
+    hide_select : false
+  });
+
   $('.swatch-clickable').each(function () {
       $(this).attr('title', $(this).attr('name'));
   });
+
   $('.swatch-clickable').tooltip();
 
   $('#pms-colors').tagsinput({

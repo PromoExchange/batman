@@ -21,11 +21,11 @@
       </div>
 
       <div class="form-group" id="auction-logo">
-        <label for="logo">Logo</label>
-        <select class="image-picker show-html" id="logo">
-          <option data-img-src="<%=image_path('corp_logo/batman-logo-big.gif')%>" value="1">Batman</option>
-          <option data-img-src="<%=image_path('corp_logo/buzzfeed-logo.png')%>" value="2">Buzzfeed</option>
-          <option data-img-src="<%=image_path('corp_logo/coca_cola_logo.jpg')%>" value="3">Cola</option>
+        <label for="logo"><%= Spree.t(:logo) %></label>
+        <select class="image-picker auction-logo" id="logo">
+          <option data-img-src="<%= image_path('corp_logo/batman-logo-big.gif') %>" value="1">Batman</option>
+          <option data-img-src="<%= image_path('corp_logo/buzzfeed-logo.png') %>" value="2">Buzzfeed</option>
+          <option data-img-src="<%= image_path('corp_logo/coca_cola_logo.jpg') %>" value="3">Cola</option>
         </select>
       </div>
 
@@ -36,7 +36,7 @@
             <% @pms_colors.in_groups_of(6,false) do |row| %>
             <tr>
               <% for cell in row %>
-                <td><div id="<%=cell[:pms_color_id]%>" name="<%=cell[:name]%>" class="swatch swatch-clickable" style="background-color:<%=cell[:hex]%>"></div>
+                <td><div id="<%= cell[:pms_color_id] %>" name="<%= cell[:name] %>" class="swatch swatch-clickable" style="background-color:<%= cell[:hex] %>"></div>
                   <span class="pms-text"><%= cell[:display_name] %><br/><%= cell[:pantone] unless cell[:display_name] == cell[:pantone] %></span>
                 </td>
               <% end %>
@@ -44,8 +44,7 @@
             <% end %>
           </tbody>
         </table>
-        <input class="form-control tagsinput" data-role="tagsinput" id="pms-colors"
-          name="pms_colors" type="text">
+        <input type='text' class="form-control tagsinput" data-role="tagsinput" id="pms-colors" name="auction[pms_colors]"></input>
         <p>Maxmimum number of PMS imprint colors: 2</p>
       </div>
 

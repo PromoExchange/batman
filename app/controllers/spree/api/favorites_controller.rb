@@ -46,13 +46,6 @@ class Spree::Api::FavoritesController < Spree::Api::BaseController
 
   private
 
-  def favorite_params
-    params.require(:favorite).permit(:buyer_id,
-      :product_id,
-      :page,
-      :per_page)
-  end
-
   def fetch_favorite
     @favorite = Spree::Favorite.find(params[:id])
   end
@@ -65,5 +58,14 @@ class Spree::Api::FavoritesController < Spree::Api::BaseController
     else
       render nothing: true, status: :bad_request
     end
+  end
+
+  def favorite_params
+    params.require(:favorite).permit(
+      :buyer_id,
+      :product_id,
+      :page,
+      :per_page
+    )
   end
 end

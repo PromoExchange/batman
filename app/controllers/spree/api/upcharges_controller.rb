@@ -34,12 +34,6 @@ class Spree::Api::UpchargesController < Spree::Api::BaseController
 
   private
 
-  def upcharge_params
-    params.require(:upcharge).permit(:product_id,
-      :name,
-      :value)
-  end
-
   def fetch_upcharge
     @upcharge = Spree::Upcharge.find(params[:id])
   end
@@ -52,5 +46,13 @@ class Spree::Api::UpchargesController < Spree::Api::BaseController
     else
       render nothing: true, status: :bad_request
     end
+  end
+
+  def upcharge_params
+    params.require(:upcharge).permit(
+      :product_id,
+      :name,
+      :value
+    )
   end
 end

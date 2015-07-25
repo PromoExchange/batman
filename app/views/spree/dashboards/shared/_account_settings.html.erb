@@ -58,7 +58,9 @@
       </div>
     </div>
   </div>
-  <div class="tab-pane" id="logo">
-    Logo
-  </div>
+  <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
+    <div class="tab-pane" id="logo">
+      <%= render partial: 'spree/dashboards/buyer/logos' %>
+    </div>
+  <% end %>
 </div>

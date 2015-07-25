@@ -31,7 +31,7 @@
         <p><%= @auction.main_color.color %></p>
         <p><%= @auction.payment_method %></p>
         <% @auction.pms_colors.each do |c| %>
-          <p><%= c.pms_color.name %>/<%= c.pms_color.pantone %></p>
+          <p><%= c.name %>/<%= c.pantone %></p>
         <% end %>
       </div>
     </div>

@@ -61,18 +61,32 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def create
-    @auction = Spree::Auction.new(auction_params)
-    respond_to do |format|
-      if @auction.save
-        format.html do
-          redirect_to(products_path, notice: 'Auction was successfully created.')
-        end
-      else
-        format.html do
-          redirect_to(products_path, flash: { error: 'Failed to create an auction' })
-        end
+    # TODO: Come back and clean this
+    @auction = Spree::Auction.create(
+      product_id: params[:auction][:product_id],
+      buyer_id: params[:auction][:buyer_id],
+      started: params[:auction][:started],
+      quantity: params[:auction][:quantity],
+      shipping_address: params[:auction][:shipping_address],
+      imprint_method_id: params[:auction][:imprint_method_id],
+      main_color_id: params[:auction][:main_color_id],
+      shipping_address_id: params[:auction][:shipping_address_id],
+      payment_method: params[:auction][:payment_method],
+      ended: params[:auction][:ended]
+    )
+
+    unless params[:auction][:pms_colors].nil?
+      params[:auction][:pms_colors].split(',').each do |pms_color|
+        Spree::AuctionPmsColor.create(
+          auction_id: @auction.id,
+          pms_color_id: pms_color
+        )
       end
     end
+
+    redirect_to(products_path, notice: 'Auction was successfully created.')
+  rescue
+    redirect_to(products_path, flash: { error: 'Failed to create an auction' })
   end
 
   def destroy

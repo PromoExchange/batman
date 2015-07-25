@@ -43,33 +43,41 @@ $(function () {
       total_price = per_unit_price * quantity;
       per_unit_price_shown = (per_unit_price / (1 - total_markup));
       total_price_shown = per_unit_price_shown * quantity;
-      flash_fields.push('.modal-body #total-price');
-      flash_fields.push('.modal-body #per-unit-price-shown');
-      flash_fields.push('.modal-body #total-price-shown');
+      flash_fields.push(
+        '.modal-body #total-price',
+        '.modal-body #per-unit-price-shown',
+        '.modal-body #total-price-shown'
+      );
     } else if (anchor_field === 'total-price') {
       total_price = parseFloat($('.modal-body #total-price').val());
       per_unit_price = total_price / quantity;
       per_unit_price_shown = (per_unit_price / (1 - total_markup));
-      total_price_shown = per_unit_price_show * quantity;
-      flash_fields.push('.modal-body #per-unit-price');
-      flash_fields.push('.modal-body #per-unit-price-shown');
-      flash_fields.push('.modal-body #total-price-shown');
+      total_price_shown = per_unit_price_shown * quantity;
+      flash_fields.push(
+        '.modal-body #per-unit-price',
+        '.modal-body #per-unit-price-shown',
+        '.modal-body #total-price-shown'
+      );
     } else if (anchor_field === 'per-unit-price-shown') {
       per_unit_price_shown = parseFloat($('.modal-body #per-unit-price-shown').val());
       total_price_shown = per_unit_price_shown * quantity;
       per_unit_price = (per_unit_price_shown / (1 + total_markup));
       total_price = per_unit_price * quantity;
-      flash_fields.push('.modal-body #per-unit-price');
-      flash_fields.push('.modal-body #total-price');
-      flash_fields.push('.modal-body #total-price-shown');
+      flash_fields.push(
+        '.modal-body #per-unit-price',
+        '.modal-body #total-price',
+        '.modal-body #total-price-shown'
+      );
     } else if (anchor_field === 'total-price-shown') {
       total_price_shown = parseFloat($('.modal-body #total-price-shown').val());
       per_unit_price_shown = total_price_shown / quantity;
       per_unit_price = (per_unit_price_shown / (1 + total_markup));
       total_price = per_unit_price * quantity;
-      flash_fields.push('.modal-body #per-unit-price');
-      flash_fields.push('.modal-body #total-price');
-      flash_fields.push('.modal-body #per-unit-price-shown');
+      flash_fields.push(
+        '.modal-body #per-unit-price',
+        '.modal-body #total-price',
+        '.modal-body #per-unit-price-shown'
+      );
     }
     $('.modal-body #per-unit-price').val(+per_unit_price.toFixed(2));
     $('.modal-body #total-price').val(+total_price.toFixed(2));

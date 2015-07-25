@@ -19,7 +19,7 @@ class Spree::Auction < Spree::Base
   belongs_to :product
   belongs_to :shipping_address, class_name: 'Spree::Address'
 
-  accepts_nested_attributes_for :pms_colors
+  accepts_nested_attributes_for :auctions_pms_colors
 
   validates :buyer_id, presence: true
   validates :main_color_id, presence: true

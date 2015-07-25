@@ -46,7 +46,7 @@ Spree::PermittedAttributes.user_attributes << :company
   },
   path: '/:class/:id/:style/:basename.:extension',
   default_url: '/:class/:id/:style/:basename.:extension',
-  default_style: 'asset'
+  default_style: 'product'
 }.each do |key, value|
   Spree::Image.attachment_definitions[:attachment][key.to_sym] = value
 end

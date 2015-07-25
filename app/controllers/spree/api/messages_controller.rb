@@ -33,18 +33,6 @@ class Spree::Api::MessagesController < Spree::Api::BaseController
 
   private
 
-  def message_params
-    params.require(:message).permit(:owner_id,
-      :from_id,
-      :to_id,
-      :status,
-      :subject,
-      :product,
-      :body,
-      :page,
-      :per_page)
-  end
-
   def fetch_message
     @message = Spree::Message.find(params[:id])
   end
@@ -57,5 +45,19 @@ class Spree::Api::MessagesController < Spree::Api::BaseController
     else
       render nothing: true, status: :bad_request
     end
+  end
+
+  def message_params
+    params.require(:message).permit(
+      :owner_id,
+      :from_id,
+      :to_id,
+      :status,
+      :subject,
+      :product,
+      :body,
+      :page,
+      :per_page
+    )
   end
 end

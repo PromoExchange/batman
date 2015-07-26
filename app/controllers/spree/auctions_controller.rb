@@ -61,18 +61,16 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def create
-    # TODO: Come back and clean this
+    # TODO: Fix this nasty code
+    auction_data = params[:auction]
     @auction = Spree::Auction.create(
-      product_id: params[:auction][:product_id],
-      buyer_id: params[:auction][:buyer_id],
-      started: params[:auction][:started],
-      quantity: params[:auction][:quantity],
-      shipping_address: params[:auction][:shipping_address],
-      imprint_method_id: params[:auction][:imprint_method_id],
-      main_color_id: params[:auction][:main_color_id],
-      shipping_address_id: params[:auction][:shipping_address_id],
-      payment_method: params[:auction][:payment_method],
-      ended: params[:auction][:ended]
+      product_id: auction_data[:product_id],
+      buyer_id: auction_data[:buyer_id],
+      quantity: auction_data[:quantity],
+      imprint_method_id: auction_data[:imprint_method_id],
+      main_color_id: auction_data[:main_color_id],
+      shipping_address_id: auction_data[:shipping_address_id],
+      payment_method: auction_data[:payment_method],
     )
 
     unless params[:auction][:pms_colors].nil?
@@ -104,14 +102,14 @@ class Spree::AuctionsController < Spree::StoreController
       :started,
       :pms_colors,
       :quantity,
-      :shipping_address,
       :imprint_method_id,
       :main_color_id,
       :shipping_address_id,
       :payment_method,
       :ended,
       :page,
-      :per_page)
+      :per_page
+    )
   end
 
   def fetch_auction

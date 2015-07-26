@@ -72,3 +72,4 @@ en:
     auctions_lost: 'Auctions lost'
     buyer: 'Buyer'
     winning_bid: 'Winning bid'
+    auction_hash: 'Auction #'

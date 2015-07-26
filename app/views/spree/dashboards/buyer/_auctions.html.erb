@@ -8,13 +8,13 @@
 </ul>
 
 <div class="tab-content">
-  <div class="tab-pane active" id="live-auction">
+  <div class="tab-pane active scrolling" id="live-auction">
     <table data-key="<%= spree_current_user.spree_api_key %>"
            data-id="<%= spree_current_user.id %>"
            class="table table-striped" id="live-auction-table">
       <thead>
         <tr>
-          <th>#</th>
+          <th><%= Spree.t(:auction_hash) %></th>
           <th><%= Spree.t(:product) %></th>
           <th><%= Spree.t(:lowest_bid) %></th>
           <th><%= Spree.t(:quantity) %></th>
@@ -27,7 +27,7 @@
       </tbody>
     </table>
   </div>
-  <div class="tab-pane" id="awaiting-selection">
+  <div class="tab-pane scrolling" id="awaiting-selection">
     <table class="table table-striped" id="waiting-auction-table">
       <thead>
         <tr>

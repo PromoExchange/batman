@@ -30,12 +30,8 @@ class Spree::AuctionsController < Spree::StoreController
 
     @addresses = []
     @addresses << [
-      "Shipping: #{@auction.buyer.shipping_address}",
+      "#{@auction.buyer.shipping_address}",
       @auction.buyer.shipping_address.id] unless @auction.buyer.shipping_address.nil?
-
-    @addresses << [
-      "Billing: #{@auction.buyer.billing_address}",
-      @auction.buyer.billing_address.id] unless @auction.buyer.billing_address.nil?
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
 
@@ -70,7 +66,7 @@ class Spree::AuctionsController < Spree::StoreController
       imprint_method_id: auction_data[:imprint_method_id],
       main_color_id: auction_data[:main_color_id],
       shipping_address_id: auction_data[:shipping_address_id],
-      payment_method: auction_data[:payment_method],
+      payment_method: auction_data[:payment_method]
     )
 
     unless params[:auction][:pms_colors].nil?
@@ -82,7 +78,7 @@ class Spree::AuctionsController < Spree::StoreController
       end
     end
 
-    redirect_to(products_path, notice: 'Auction was successfully created.')
+    redirect_to('/dashboards', flash: { notice: 'Auction was successfully created.' })
   rescue
     redirect_to(products_path, flash: { error: 'Failed to create an auction' })
   end

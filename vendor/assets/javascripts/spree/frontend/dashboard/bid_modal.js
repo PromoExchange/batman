@@ -12,6 +12,7 @@ $(function () {
       },
       success: function (data) {
         $('.modal-body #quantity-requested').text(data.quantity);
+        $('.modal-body #payment-method').text(data.payment_method);
         var num_bids = data.bids.length;
         var low_bid = 'no bids';
         if (num_bids > 0) {
@@ -32,10 +33,14 @@ $(function () {
     var per_unit_price_shown = 0;
     var total_price_shown = 0;
     var quantity = parseFloat($('.modal-body #quantity-requested').text());
-    // TODO: Get these from config/database
-    var seller_markup = 0.15;
+
+    var processing_markup = 0.0;
+    if($('.modal-body #payment-method').text() === 'Credit Card'){
+      processing_markup = 0.022;
+    }
+
     var px_markup = 0.0299;
-    var total_markup = (seller_markup + px_markup);
+    var total_markup = (processing_markup + px_markup);
     var flash_fields = [];
 
     if (anchor_field === 'per-unit-price') {
@@ -61,7 +66,7 @@ $(function () {
     } else if (anchor_field === 'per-unit-price-shown') {
       per_unit_price_shown = parseFloat($('.modal-body #per-unit-price-shown').val());
       total_price_shown = per_unit_price_shown * quantity;
-      per_unit_price = (per_unit_price_shown / (1 + total_markup));
+      per_unit_price = per_unit_price_shown * (1 - total_markup);
       total_price = per_unit_price * quantity;
       flash_fields.push(
         '.modal-body #per-unit-price',
@@ -71,7 +76,7 @@ $(function () {
     } else if (anchor_field === 'total-price-shown') {
       total_price_shown = parseFloat($('.modal-body #total-price-shown').val());
       per_unit_price_shown = total_price_shown / quantity;
-      per_unit_price = (per_unit_price_shown / (1 + total_markup));
+      per_unit_price = per_unit_price_shown * (1 - total_markup);
       total_price = per_unit_price * quantity;
       flash_fields.push(
         '.modal-body #per-unit-price',

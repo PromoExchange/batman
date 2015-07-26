@@ -30,13 +30,15 @@
             </div>
             <div class="col-md-6">
               <h4><%= Spree.t(:billing_address) %></h4>
-              <%= user_fields.fields_for :billing_address, @user.billing_address do |bill_fields| %>
+              <%= user_fields.fields_for :billing_address, @user.billing_address || Spree::Address.default(@user, "bill") do |bill_fields| %>
+                <% bill_fields.object ||= Spree::Address.new(country: Spree::Country.new) %>
                 <%= render partial: 'spree/dashboards/shared/address_form', locals: { f: bill_fields, type: 'billing' } %>
               <% end %>
             </div>
             <div class="col-md-6">
               <h4><%= Spree.t(:shipping_address) %></h4>
-              <%= user_fields.fields_for :shipping_address, @user.shipping_address do |ship_fields| %>
+              <%= user_fields.fields_for :shipping_address, @user.shipping_address || Spree::Address.default(@user, "ship") do |ship_fields| %>
+                <% ship_fields.object ||= Spree::Address.new(country: Spree::Country.new) %>
                 <%= render partial: 'spree/dashboards/shared/address_form', locals: { f: ship_fields, :type => 'shipping' } %>
               <% end %>
             </div>

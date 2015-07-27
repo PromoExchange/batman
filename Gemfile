@@ -16,6 +16,9 @@ gem 'work_queue'
 gem 'local_time'
 gem 'aws-sdk', '< 2.0'
 gem 'awesome_print', '~> 1.2.0'
+gem 'redis'
+gem 'resque'
+gem 'resque-scheduler', '~> 3.1.0'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

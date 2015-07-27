@@ -3,11 +3,13 @@
     <div class="row">
       <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked">
+          <% active_me = 'active' %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-            <li class="active"><a href="#exchange" id="auction-tab" data-toggle="tab"><%= Spree.t(:exchange) %></a></li>
+            <li class="<%= active_me %>"><a href="#exchange" id="auction-tab" data-toggle="tab"><%= Spree.t(:exchange) %></a></li>
+            <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-            <li class="active"><a href="#auctions" id="auction-tab" data-toggle="tab"><%= Spree.t(:my_auctions) %></a></li>
+            <li class="<%= active_me %>"><a href="#auctions" id="auction-tab" data-toggle="tab"><%= Spree.t(:my_auctions) %></a></li>
           <% end %>
           <li><a href="#messages" id="message-tab"><%= Spree.t(:messages) %></a></li>
           <li><a href="#favorite-items" data-toggle="tab"><%= Spree.t(:favorite_items) %></a></li>
@@ -17,11 +19,13 @@
       </div>
       <div class="col-md-9">
         <div class="tab-content">
+          <% active_me = 'active' %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-            <div class="tab-pane active" id="exchange"><%= render partial: 'spree/dashboards/seller/exchange' %></div>
+            <div class="tab-pane <%= active_me %>" id="exchange"><%= render partial: 'spree/dashboards/seller/exchange' %></div>
+            <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-            <div class="tab-pane active" id="auctions"><%= render partial: 'spree/dashboards/buyer/auctions' %></div>
+            <div class="tab-pane <%= active_me %>" id="auctions"><%= render partial: 'spree/dashboards/buyer/auctions' %></div>
           <% end %>
           <div class="tab-pane" id="messages"><%= render partial: 'spree/dashboards/shared/messages' %></div>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>

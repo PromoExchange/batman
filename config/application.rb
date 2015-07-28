@@ -8,6 +8,8 @@ Bundler.require(*Rails.groups)
 
 Dotenv::Railtie.load if Rails.env.development?
 
+Dir["#{Rails.root}/app/jobs/*.rb"].each { |file| require file }
+
 module Batman
   class Application < Rails::Application
     config.to_prepare do

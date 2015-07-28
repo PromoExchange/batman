@@ -1,2 +1,1 @@
-uri = URI.parse(ENV['REDISCLOUD_URL'])
-REDIS = Redis.new(url: uri)
+REDIS = Redis.new(url: URI.parse(ENV['REDISCLOUD_URL']))

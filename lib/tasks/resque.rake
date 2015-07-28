@@ -3,7 +3,7 @@ require 'resque/tasks'
 require 'resque/scheduler/tasks'
 
 namespace :resque do
-  task :setup do
+  task setup: :environment do
     require 'resque'
     Resque.redis = Redis.new(url: URI.parse(ENV['REDISCLOUD_URL']))
   end

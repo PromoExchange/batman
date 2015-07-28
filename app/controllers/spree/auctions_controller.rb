@@ -16,9 +16,10 @@ class Spree::AuctionsController < Spree::StoreController
     @product_properties = @auction.product.product_properties
   end
 
-  def accept_bid
+  def pay_invoice
     auction = Spree::Auction.find(params[:auction_id])
-    auction.update_attributes(status: 'closed')
+    auction.update_attributes(status: 'completed')
+    Resque.remove_delayed_selection { |args| args[0]['auction_id'] == auction.id }
     redirect_to dashboards_path
   end
 

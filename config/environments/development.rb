@@ -41,4 +41,7 @@ Rails.application.configure do
 
   # Seed data, load image files
   config.x.load_images = ENV['PRODUCT_LOAD_IMAGES']
+
+  # Send mail to letter_opener
+  config.action_mailer.delivery_method = :letter_opener
 end

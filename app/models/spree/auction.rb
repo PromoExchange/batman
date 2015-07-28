@@ -26,7 +26,7 @@ class Spree::Auction < Spree::Base
   validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
   validates :quantity, presence: true
-  validates_inclusion_of :status, in: %w(open waiting closed ended cancelled)
+  validates_inclusion_of :status, in: %w(open waiting closed ended cancelled unpaid completed)
   validates :shipping_address_id, presence: true
 
   delegate :name, to: :product

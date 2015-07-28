@@ -40,7 +40,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
 
   def accept
     @bid.update_attributes(status: 'accepted')
-    @bid.auction.update_attributes(status: 'closed')
+    @bid.auction.update_attributes(status: 'unpaid')
+    Resque.enqueue_at(3.days.from_now, UnpaidInvoice, auction_id: @bid.auction.id)
     render nothing: true, status: :ok
   end
 

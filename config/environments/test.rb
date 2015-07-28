@@ -42,4 +42,7 @@ Rails.application.configure do
 
   # Seed data, load image files
   config.x.load_images = ENV['PRODUCT_LOAD_IMAGES']
+
+  # Send mail to file for tests
+  config.action_mailer.delivery_method = :test
 end

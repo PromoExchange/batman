@@ -37,6 +37,8 @@ $(function () {
     var processing_markup = 0.0;
     if($('.modal-body #payment-method').text() === 'Credit Card'){
       processing_markup = 0.022;
+    }else{
+      processing_markup = 0.015;
     }
 
     var px_markup = 0.0299;

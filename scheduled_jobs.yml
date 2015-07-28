@@ -1,4 +1,4 @@
 Heartbeat:
-  cron: 0,5 * * * *
+  every: 5m
   queue: :heartbeat
-  description: "Heartbeat job"
+  description: "Heartbeat"

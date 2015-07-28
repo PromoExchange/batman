@@ -3,11 +3,15 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   def index
     params[:buyer_id] = {} if params[:buyer_id].blank?
+    params[:seller_id] = {} if params[:seller_id].blank?
     params[:status] = 'open' if params[:status].blank?
 
+    stati = params[:status].split(',')
+
     @auctions = Spree::Auction.search(
+      seller_id_eq: params[:seller_id],
       buyer_id_eq: params[:buyer_id],
-      status_eq: params[:status]
+      status_in: stati
     ).result
 
     render 'spree/api/auctions/index'

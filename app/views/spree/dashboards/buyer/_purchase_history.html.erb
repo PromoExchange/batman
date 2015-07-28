@@ -1,45 +1,26 @@
 <% content_for :page_title do %>
   <%= Spree.t(:purchase_history) %>
 <% end %>
-
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= Spree.t(:product) %></th>
-      <th><%= Spree.t(:final_price) %></th>
-      <th><%= Spree.t(:quantity) %></th>
-      <th><%= Spree.t(:sale_date) %></th>
-      <th><%= Spree.t(:status) %></th>
-      <th class="actions"><%= Spree.t(:action_col) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Super product</td>
-      <td>$1234.00</td>
-      <td>250</td>
-      <td>1/09/2014 11:13AM EST</td>
-      <td>Order Received</td>
-      <td><ul>
-        <li><a href="#">Track</a></li>
-        <li><a href="#">Receipt</a></li>
-        <li><a href="#">Message</a></li>
-        <li><a href="#">Reorder</a></li>
-      </ul></td>
-    </tr>
-    <tr>
-      <td>Awesome product</td>
-      <td>$793.20</td>
-      <td>112</td>
-      <td>12/05/2014 11:13AM EST</td>
-      <td>Tracking number sent</td>
-      <td><ul>
-        <li><a href="#">Track</a></li>
-        <li><a href="#">Receipt</a></li>
-        <li><a href="#">Message</a></li>
-        <li><a href="#">Reorder</a></li>
-        <li><a href="#">Rate Seller</a></li>
-      </ul></td>
-    </tr>
-  </tbody>
-</table>
+<div class="tab-pane scrolling" id="buyer-purchase-history">
+  <div class="panel panel-default">
+    <div class="panel-heading"><%= Spree.t(:purchase_history) %></div>
+    <div class="panel-body">
+      <table data-key="<%= spree_current_user.spree_api_key %>"
+             data-id="<%= spree_current_user.id %>"
+             class="table table-striped" id="buyer-purchase-history-table">
+        <thead>
+          <tr>
+            <th><%= Spree.t(:auction_hash) %></th>
+            <th><%= Spree.t(:product) %></th>
+            <th><%= Spree.t(:date) %></th>
+            <th><%= Spree.t(:quantity) %></th>
+            <th><%= Spree.t(:total) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class='text-center' colspan='5'><i class='fa fa-spinner fa-pulse fa-3x'></i></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -30,6 +30,16 @@ describe 'Auctions API' do
     expect(json.length).to eq(10)
   end
 
+  it 'should get a list of auctions with multiple stati' do
+    FactoryGirl.create(:auction)
+    FactoryGirl.create(:waiting_auction)
+
+    get '/api/auctions?status=open,waiting', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to be_success
+    expect(json.length).to eq(2)
+  end
+
   it 'should not get a list of open auctions' do
     FactoryGirl.create(:waiting_auction)
 
@@ -37,6 +47,15 @@ describe 'Auctions API' do
 
     expect(response).to be_success
     expect(json.length).to eq(0)
+  end
+
+  it 'should get an auction for a buyer' do
+    auction = FactoryGirl.create(:auction)
+
+    get "/api/auctions?buyer_id=#{auction.buyer_id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+
+    expect(response).to be_success
+    expect(json.length).to eq(1)
   end
 
   it 'should get a list of waiting auctions' do

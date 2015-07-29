@@ -34,11 +34,9 @@ $(function () {
     var total_price_shown = 0;
     var quantity = parseFloat($('.modal-body #quantity-requested').text());
 
-    var processing_markup = 0.0;
-    if($('.modal-body #payment-method').text() === 'Credit Card'){
+    var processing_markup = 0.015;
+    if($('.modal-body #payment-method').text() === 'Credit Card') {
       processing_markup = 0.022;
-    }else{
-      processing_markup = 0.015;
     }
 
     var px_markup = 0.0299;

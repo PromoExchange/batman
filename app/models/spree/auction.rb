@@ -50,6 +50,14 @@ class Spree::Auction < Spree::Base
     unit_price
   end
 
+  def buyer_email
+    Spree::User.find(buyer_id).email
+  end
+
+  def winning_bid
+    Spree::Bid.where(auction_id: id).where(status: 'accepted').first
+  end
+
   def set_default_dates
     self.started = Time.zone.now
     self.ended = started + 21.days

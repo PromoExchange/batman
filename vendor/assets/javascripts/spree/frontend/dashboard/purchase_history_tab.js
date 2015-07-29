@@ -2,7 +2,7 @@ $(function(){
   $('#purchase-history-tab').click(function(){
     var key = $("#buyer-purchase-history-table").attr("data-key");
     var buyer_id = $("#buyer-purchase-history-table").attr("data-id");
-    var auction_url = '/api/auctions?status=completed&buyer_id=' + buyer_id;
+    var auction_url = '/api/auctions?status=unpaid,completed&buyer_id=' + buyer_id;
 
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");

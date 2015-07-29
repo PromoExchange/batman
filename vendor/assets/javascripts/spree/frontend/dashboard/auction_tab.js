@@ -75,7 +75,7 @@ $(function(){
           if( data.length > 0 ){
             image_row = _.template("<tr><td colspan='3'><img itemprop='image' alt='<%= name %>' src='<%= image %>'><p><%= name %></p></td></tr>");
             bid_cell = _.template("<td><%= email %></td><td><%= bid %></td>");
-            action_template = _.template("<td><ul><li><a data-confirm='Are you sure?' rel='nofollow' data-method='get' href='/auctions/<%= auction_id %>/accept_bid'>Accept bid</a></li></ul></td>");
+            action_template = _.template("<td><ul><li><a rel='nofollow' data-method='get' href='/bids/<%= bid_id %>Accept bid</a></li></ul></td>");
 
             $.each(data, function(i,item){
               trHTML += image_row( {image: item.image_uri, name: item.name} );
@@ -86,7 +86,7 @@ $(function(){
                 $.each(item.bids, function(i,bitem){
                   trHTML += '<tr>';
                   trHTML += bid_cell( {email: bitem.email, bid: bitem.bid} );
-                  trHTML += action_template( { auction_id: item.id } );
+                  trHTML += action_template( { bid_id: item.id } );
                   trHTML += '</tr>';
                 });
               }

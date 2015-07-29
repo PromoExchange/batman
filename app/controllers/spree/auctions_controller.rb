@@ -1,6 +1,6 @@
 class Spree::AuctionsController < Spree::StoreController
   before_action :require_login, only: [:new, :edit]
-  before_action :fetch_auction, except: [:index, :create, :new, :accept_bid]
+  before_action :fetch_auction, except: [:index, :create, :new]
 
   def index
     if params[:buyer_id].present?
@@ -10,10 +10,6 @@ class Spree::AuctionsController < Spree::StoreController
     else
       @auctions = Spree::Auction.where.not(status: 'cancelled').includes(:bids, :product)
     end
-  end
-
-  def show
-    @product_properties = @auction.product.product_properties
   end
 
   def pay_invoice
@@ -91,6 +87,14 @@ class Spree::AuctionsController < Spree::StoreController
 
   private
 
+  def fetch_auction
+    @auction = Spree::Auction.find(params[:id])
+  end
+
+  def require_login
+    redirect_to login_url unless current_spree_user
+  end
+
   def auction_params
     params.require(:auction).permit(
       :auction_id,
@@ -107,13 +111,5 @@ class Spree::AuctionsController < Spree::StoreController
       :page,
       :per_page
     )
-  end
-
-  def fetch_auction
-    @auction = Spree::Auction.find(params[:id])
-  end
-
-  def require_login
-    redirect_to login_url unless current_spree_user
   end
 end

@@ -9,8 +9,20 @@ Rails.application.routes.draw do
   # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
   mount Spree::Core::Engine, at: '/'
 
-  resources :auctions, controller: 'spree/auctions', as: 'auctions'
-  resources :dashboards, controller: 'spree/dashboards', as: 'dashboards'
+  resources :auctions,
+    controller: 'spree/auctions',
+    as: 'auctions',
+    only: [:show, :new]
+
+  resources :dashboards,
+    controller: 'spree/dashboards',
+    as: 'dashboards',
+    only: [:index]
+
+  resources :invoices,
+    controller: 'spree/invoices',
+    as: 'invoices',
+    only: [:index, :show]
 
   scope :api do
     resources :auctions, controller: 'spree/api/auctions' do

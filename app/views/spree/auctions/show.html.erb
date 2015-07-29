@@ -3,42 +3,8 @@
 <% end %>
 
 <div class="row" id="show-auction" data-key="<%= spree_current_user.spree_api_key %>">
-  <div class="col-md-6">
-    <% url = spree.product_url(@auction.product) %>
-    <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url' %><br/>
-    <p><%= @auction.product.description %></p>
-    <%= render partial: 'properties' %>
-  </div>
-  <div class="col-md-6 well">
-    <div class="auction-details">
-      <h4><%= Spree::t(:auction_details) %></h4>
-      <div class="col-md-6 titles">
-        <p>Product:</p>
-        <p>Factory:</p>
-        <p>SKU:</p>
-        <p>Buyer:</p>
-        <p>Imprint Method:</p>
-        <p>Main Color:</p>
-        <p>Payment Method:</p>
-        <p>Imprint Colors:</p>
-      </div>
-      <div class="col-md-6">
-        <p><%= @auction.product.name %></p>
-        <p><%= @auction.product.supplier.name %></p>
-        <p><%= @auction.product.sku %></p>
-        <p><%= @auction.buyer.billing_address.full_name %></p>
-        <p><%= @auction.imprint_method.name %></p>
-        <p><%= @auction.main_color.color %></p>
-        <p><%= @auction.payment_method %></p>
-        <% @auction.pms_colors.each do |c| %>
-          <p><%= c.name %>/<%= c.pantone %></p>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6 well">
-    <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-      <%= render partial: 'spree/auctions/top_bids' %>
-    <% end %>
-  </div>
+  <%= render partial: 'spree/shared/auction_details' %>
+  <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
+    <%= render partial: 'spree/auctions/top_bids' %>
+  <% end %>
 </div>

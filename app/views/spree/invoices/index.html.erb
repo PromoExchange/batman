@@ -1,0 +1,33 @@
+<div class="scrolling" id="seller-invoice-index">
+  <table class="table table-striped">
+    <tr>
+      <thead>
+        <th><%= Spree.t(:auction_hash) %></th>
+        <th><%= Spree.t(:product) %></th>
+        <th><%= Spree.t(:date_started) %></th>
+        <th><%= Spree.t(:date_ended) %></th>
+        <th><%= Spree.t(:buyer) %></th>
+        <th><%= Spree.t(:quantity) %></th>
+        <th><%= Spree.t(:total) %></th>
+        <th><%= Spree.t(:px_fee) %></th>
+        <th><%= Spree.t(:action) %></th>
+      </thead>
+      <tbody>
+        <% @auctions.each do |a| %>
+          <tr>
+            <td><a href='/auctions/<%= a.id %>'><%= a.reference %></a></td>
+            <% url = spree.product_url(a.product) %>
+            <td><a href='/auctions/<%= a.id %>'><%= link_to small_image(a.product, itemprop: "image"), url, itemprop: 'url' %></a></td>
+            <td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= a.started %>'><%= a.started %></time></td>
+            <td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= a.ended %>'><%= a.ended %></time></td>
+            <td><%= a.buyer_email %></td>
+            <td><%= a.quantity %></td>
+            <td><%= a.winning_bid.bid unless a.winning_bid.nil?%></td>
+            <td><%= (a.winning_bid.bid * 0.0299).round(2) unless a.winning_bid.nil? %></td>
+            <td><a href='/invoices/<%= a.id %>'>Pay Invoice</a></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </tr>
+  </table>
+</div>

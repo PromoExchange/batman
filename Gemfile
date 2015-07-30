@@ -49,6 +49,7 @@ group :development do
   gem 'rb-inotify', require: false
   gem 'spring-commands-rspec'
   gem 'letter_opener'
+  gem 'letter_opener_web', '~> 1.2.0'
 end
 
 group :development, :test do
@@ -58,6 +59,7 @@ group :development, :test do
   gem 'ffaker'
   gem 'rspec-rails'
   gem 'dotenv-rails'
+  gem 'launchy'
 end
 
 group :production do
@@ -69,7 +71,6 @@ end
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'launchy'
   gem 'selenium-webdriver'
   gem 'shoulda'
 end

@@ -75,7 +75,7 @@ class Spree::AuctionsController < Spree::StoreController
       end
     end
 
-    redirect_to('/dashboards', flash: { notice: 'Auction was successfully created.' })
+    redirect_to('/dashboards', flash: { notice: 'Auction was created successfully.' })
   rescue
     redirect_to(products_path, flash: { error: 'Failed to create an auction' })
   end

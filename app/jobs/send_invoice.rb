@@ -3,6 +3,6 @@ module SendInvoice
 
   def self.perform(auction)
     @auction = Spree::Auction.find(auction['auction_id'])
-    SellerEmail.initial_invoice(@auction)
+    SellerMailer.initial_invoice(@auction).deliver
   end
 end

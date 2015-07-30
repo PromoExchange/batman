@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   # route used by new relic to monitor uptime fo app
   get '/ping', to: 'application#ping'
 
+  mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
+
   # This line mounts Spree's routes at the root of your application.
   # This means, any requests to URLs such as /products, will go to Spree::ProductsController.
   # If you would like to change where this engine is mounted, simply change the :at option to something different.
@@ -11,8 +13,7 @@ Rails.application.routes.draw do
 
   resources :auctions,
     controller: 'spree/auctions',
-    as: 'auctions',
-    only: [:show, :new]
+    as: 'auctions'
 
   resources :dashboards,
     controller: 'spree/dashboards',

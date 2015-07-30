@@ -1,15 +1,16 @@
 <h1>Your invoice</h1>
 
-<p><%= @auction.product.name %></p>
-<p><%= @auction.product.supplier.name %></p>
-<p><%= @auction.product.sku %></p>
-<p><%= @auction.buyer.billing_address.full_name %></p>
-<p><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></p>
-<p><%= @auction.imprint_method.name %></p>
-<p><%= @auction.main_color.color %></p>
-<p><%= @auction.payment_method %></p>
+<p>Product: <%= @auction.product.name %></p>
+<p>Factory: <%= @auction.product.supplier.name %></p>
+<p>SKU: <%= @auction.product.sku %></p>
+<p>Buyer name: <%= @auction.buyer.billing_address.full_name %></p>
+<p>Auction Started: <time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></p>
+<p>Imprint Method: <%= @auction.imprint_method.name %></p>
+<p>Main Product Color: <%= @auction.main_color.color %></p>
+<p>Payment method: <%= @auction.payment_method %></p>
+<p>PMS Colors:</p>
 <% @auction.pms_colors.each do |c| %>
   <p><%= c.name %>/<%= c.pantone %></p>
 <% end %>
 
-<h2>Your fee: <%= @auction.winning_bid.bid * 0.0299 %></h2>
+<h2>Your fee: <%= (@auction.winning_bid.bid * 0.0299).round(2) %></h2>

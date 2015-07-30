@@ -42,10 +42,14 @@ class Spree::Api::BidsController < Spree::Api::BaseController
     @bid.transaction do
       @bid.update_attributes(status: 'accepted')
       @bid.auction.update_attributes(status: 'unpaid')
+      @bid.order.update_attributes(payment_state: 'balance_due')
     end
+    Spree::OrderUpdater.new(@bid.order).update
     Resque.enqueue_at(3.days.from_now, UnpaidInvoice, auction_id: @bid.auction.id)
     Resque.enqueue(SendInvoice, auction_id: @bid.auction.id)
     render nothing: true, status: :ok
+  rescue
+    render nothing: true, status: :internal_server_error
   end
 
   private

@@ -1,0 +1,60 @@
+<%= f.hidden_field :buyer_seller, value: type %>
+<% if type == 'seller' %>
+<div class="form-group">
+  <label for="pxuser_company"><%= Spree.t(:company) %></label>
+  <input class="form-control" type="text" name="pxuser[company]" id="pxuser_company" value="<%= @pxuser.company %>">
+</div>
+<div class="form-group">
+  <label for="pxuser_asi_number"><%= Spree.t(:asi_number) %></label>
+  <input class="form-control" type="text" name="pxuser[asi_number]" id="pxuser_asi_number" value="<%= @pxuser.asi_number %>">
+</div>
+<% end %>
+<div class="form-group">
+  <label for="pxuser_first_name"><%= Spree.t(:first_name) %></label>
+  <input class="form-control" type="text" name="pxuser[first_name]" id="pxuser_first_name" value="<%= @pxuser.first_name %>">
+</div>
+<div class="form-group">
+  <label for="pxuser_last_name"><%= Spree.t(:last_name) %></label>
+  <input class="form-control" type="text" name="pxuser[last_name]" id="pxuser_last_name" value="<%= @pxuser.last_name %>">
+</div>
+<div class="form-group">
+  <label for="pxuser_email_address"><%= Spree.t(:email_address) %></label>
+  <input class="form-control" type="email" name="pxuser[email_address]" id="pxuser_email_address" value="<%= @pxuser.email_address %>">
+</div>
+<div class="form-group">
+  <label for="pxuser_password"><%= Spree.t(:password) %></label>
+  <input class="form-control" type="password" name="pxuser[password]" id="pxuser_password">
+</div>
+<div class="form-group">
+  <label for="pxuser_password_confirm"><%= Spree.t(:password_confirm) %></label>
+  <input class="form-control" type="password" name="pxuser[password_confirm]" id="pxuser_password_confirm">
+</div>
+<h4><%= Spree.t(:mailing_address) %></h4>
+<div class="form-group">
+  <label for="pxuser_address_line1"><%= Spree.t(:address_line1) %></label>
+  <input class="form-control" type="text" name="pxuser[address_line1]" id="pxuser_address_line1" value="<%= @pxuser.address_line1 %>">
+</div>
+<div class="form-group">
+  <label for="pxuser_address_line2"><%= Spree.t(:address_line2) %></label>
+  <input class="form-control" type="text" name="pxuser[address_line2]" id="pxuser_address_line2" value="<%= @pxuser.address_line2 %>">
+</div>
+<div class="form-group">
+  <label for="pxuser_city"><%= Spree.t(:city) %></label>
+  <input class="form-control" type="text" name="pxuser[city]" id="pxuser_city" value="<%= @pxuser.city %>">
+</div>
+<div class="form-group">
+  <label for="pxuser_zipcode"><%= Spree.t(:zipcode) %></label>
+  <input class="form-control" type="text" name="pxuser[zipcode]" id="pxuser_zipcode" value="<%= @pxuser.zipcode %>">
+</div>
+<div class="form-group">
+  <label for="pxuser_state"><%= Spree.t(:state) %></label>
+  <select class="form-control" name="pxuser[state]" id="pxuser_state" data-value="<%= @pxuser.state %>">
+    <%= render partial: 'spree/pxusers/us_states' %>
+  </select>
+</div>
+<div class="form-group">
+  <label for="pxuser_phonenumber"><%= Spree.t(:phonenumber) %></label>
+  <input class="form-control" type="text" name="pxuser[phonenumber]" id="pxuser_phonenumber" value="<%= @pxuser.phonenumber %>">
+</div>
+<p><input type="checkbox" id="read-agreement-check-<%= type %>" value="no"/>&nbsp;I have read and accept the <a data-toggle="modal" data-target="#user-agreement">PromoExchange User Agreement</a></p>
+<input type="submit" id="pxuser_submit-<%= type %>" name="commit" value="Sign up" class="btn btn-success" disabled="disabled">

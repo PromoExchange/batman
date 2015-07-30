@@ -1,4 +1,4 @@
-$(function(){
+$(function() {
   var is_working = false;
   $('#favorite>i').click(function(e) {
     if(!is_working){
@@ -8,7 +8,7 @@ $(function(){
       var owner = $("#buyer-id").val();
       var product_id = $("#product-id").val();
 
-      if( $("#favorite>i").hasClass('off') ){
+      if( $("#favorite>i").hasClass('off') ) {
         var message = {
           buyer_id: owner,
           product_id: product_id
@@ -54,7 +54,7 @@ $(function(){
     return false;
   });
 
-  function set_favorite(a){
+  function set_favorite(a) {
     if (a == 'on'){
       $("#favorite>i").removeClass('off').addClass('on');
       $("#favorite>span").text('Remove from favorites');
@@ -66,7 +66,7 @@ $(function(){
     }
   }
 
-  function get_favorite(){
+  function get_favorite() {
     var key = $("#request-info").attr("data-id");
     var owner = $("#buyer-id").val();
     var product_id = $("#product-id").val();

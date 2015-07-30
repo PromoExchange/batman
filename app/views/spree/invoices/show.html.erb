@@ -5,7 +5,7 @@
 <div class="row" id="show-invoice" data-key="<%= spree_current_user.spree_api_key %>">
     <%= render partial: 'spree/shared/auction_details' %>
     <div class="Payment button">
-      <button type='button' href='/invoices/<%= @auction_id %>' class='btn btn-success' data-id='<%= @auction_id %>'>Pay</button>
+      <button type='button' class='btn btn-success'><a href='/invoices/'>Pay</a></button>
     </div>
   </div>
 </div>

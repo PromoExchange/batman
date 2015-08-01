@@ -1,0 +1,9 @@
+<nav class="navbar col-md-8" id="top-nav-bar">
+  <ul id="nav-bar" class="nav navbar-nav navbar-right" data-hook>
+    <li id="search-bar" data-hook>
+      <% if spree_current_user %>
+        <%= render :partial => 'spree/shared/search' %>
+      <% end %>
+    </li>
+  </ul>
+</nav>

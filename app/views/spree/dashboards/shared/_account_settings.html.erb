@@ -4,7 +4,6 @@
 
 <ul class="nav nav-tabs" role="tablist">
   <li class="active"><a href="#account-contact" role="tab" data-toggle="tab"><%=Spree.t(:account_and_contact)%></a></li>
-  <li><a href="#paypal" role="tab" data-toggle="tab"><%=Spree.t(:paypal)%></a></li>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
     <li><a href="#logo" role="tab" data-toggle="tab"><%=Spree.t(:logo)%></a></li>
   <% end %>
@@ -49,14 +48,6 @@
             </div>
           </fieldset>
         <% end %>
-      </div>
-    </div>
-  </div>
-  <div class="tab-pane" id="paypal">
-    <div class="panel panel-default">
-      <div class="panel-heading"><%=Spree.t(:paypal_profiles)%></div>
-      <div class="panel-body">
-        <p>Paypal Account: Not Specified <a href="#">edit</a></p>
       </div>
     </div>
   </div>

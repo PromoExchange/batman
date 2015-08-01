@@ -3,7 +3,7 @@
     <div class="col-lg-offset-2 col-lg-2">
       <ul>
         <li>Buy</li>
-        <li><a href="/signup?role=buyer">Register</a></li>
+        <li><%= link_to Spree.t(:register), main_app.new_pxuser_path %></li>
         <li><a href="/buyer_how_it_works">How it Works</a></li>
         <li><a href="/products">Product Search</a></li>
         <li><a href="/faq#buyer">FAQ</a></li>
@@ -12,10 +12,9 @@
     <div class="col-lg-2">
       <ul>
         <li>Sell</li>
-        <li><a href="/signup?role=seller">Register</a></li>
+        <li><%= link_to Spree.t(:register), main_app.new_pxuser_path %></li>
         <li><a href="/seller_how_it_works">How it Works</a></li>
-        <!-- TODO: Add this link back after the marketplace has been implemented -->
-        <li><a href="#">Marketplace</a></li>
+        <li><%= link_to Spree.t(:marketplace), main_app.dashboards_path %></a></li>
         <li><a href="/faq#seller">FAQ</a></li>
       </ul>
     </div>

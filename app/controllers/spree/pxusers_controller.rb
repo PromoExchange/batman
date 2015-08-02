@@ -49,20 +49,9 @@ class Spree::PxusersController < Spree::StoreController
     redirect_to login_url
   rescue
     @pxuser = Spree::Pxuser.new
-    # TODO: Fix ugly code, map pxuser to spree::user?
-    # becomes?
-    @pxuser.first_name = pxuser_params[:first_name]
-    @pxuser.last_name = pxuser_params[:last_name]
-    @pxuser.company = pxuser_params[:company]
-    @pxuser.email_address = pxuser_params[:email_address]
-    @pxuser.address_line1 = pxuser_params[:address_line1]
-    @pxuser.address_line2 = pxuser_params[:address_line2]
-    @pxuser.city = pxuser_params[:city]
-    @pxuser.state = pxuser_params[:state]
-    @pxuser.zipcode = pxuser_params[:zipcode]
-    @pxuser.phonenumber = pxuser_params[:phonenumber]
-    @pxuser.asi_number = pxuser_params[:asi_number]
-    @pxuser.buyer_seller = pxuser_params[:buyer_seller]
+    params[:pxuser].each do |k, v|
+      @pxuser.instance_variable_set("@#{k}", v)
+    end
     @pxuser.errors = user.errors.full_messages
     render :new
   end

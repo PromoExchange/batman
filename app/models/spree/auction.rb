@@ -55,7 +55,7 @@ class Spree::Auction < Spree::Base
   end
 
   def winning_bid
-    Spree::Bid.where(auction_id: id).where(status: 'accepted').first
+    Spree::Bid.where(auction_id: id, status: 'accepted').first
   end
 
   def set_default_dates

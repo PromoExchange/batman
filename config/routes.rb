@@ -29,6 +29,10 @@ Rails.application.routes.draw do
     as: 'invoices',
     only: [:index, :show]
 
+  resources :logos,
+    controller: 'spree/logos',
+    as: 'logos'
+
   scope :api do
     resources :auctions, controller: 'spree/api/auctions' do
       resources :bids, controller: 'spree/api/bids' do
@@ -38,7 +42,6 @@ Rails.application.routes.draw do
     resources :bids, controller: 'spree/api/bids', as: 'api_bids'
     match '/bids/:id/accept' => 'spree/api/bids#accept', via: :post
     resources :favorites, controller: 'spree/api/favorites', as: 'api_favorites'
-    resources :logos, controller: 'spree/api/logos', as: 'api_logos'
     resources :messages, controller: 'spree/api/messages', as: 'api_messages'
     resources :prebids, controller: 'spree/api/prebids', as: 'api_prebids'
     resources :upcharges, controller: 'spree/api/upcharges', as: 'api_upcharges'

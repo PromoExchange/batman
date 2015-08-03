@@ -12,6 +12,7 @@ class Spree::Auction < Spree::Base
   has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }
   belongs_to :buyer, class_name: 'Spree::User'
   belongs_to :imprint_method
+  belongs_to :logo
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
   has_one :order
   has_many :auctions_pms_colors, class_name: 'Spree::AuctionPmsColor'

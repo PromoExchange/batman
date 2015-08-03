@@ -5,6 +5,7 @@ class Spree::DashboardsController < Spree::StoreController
       .includes(:product)
 
     @user = spree_current_user
+    @logo = Spree::Logo.new
   end
 
   private

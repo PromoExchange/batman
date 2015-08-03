@@ -606,6 +606,7 @@ DEPENDENCIES
   letter_opener_web (~> 1.2.0)
   local_time
   newrelic_rpm
+  paperclip
   pg
   pry
   pry-byebug

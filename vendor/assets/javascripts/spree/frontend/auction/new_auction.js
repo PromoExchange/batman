@@ -1,5 +1,5 @@
 $(function(){
-  $(".auction-logo").imagepicker({
+  $("#auction_logo_id").imagepicker({
     hide_select : false
   });
 

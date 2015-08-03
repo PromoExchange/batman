@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+  <div class="panel-body" id="logo-panel-edit">
+    <div id="user-logo-tab">
+      <%= form_for @logo, multipart: true, url: main_app.logos_path, class: 'form' do |f| %>
+        <%= f.hidden_field :user_id, value: spree_current_user.id %>
+        <div class="form-group">
+          <%= f.label :logo_file, Spree.t(:add_logo) %>
+          <%= f.file_field :logo_file, class: 'form-control' %>
+          <%= button 'Upload', 'ok', 'submit', {class: 'btn-success'} %>
+        </div>
+      <% end %>
+      <div class="well">
+        <% unless @user.logos.any? %>
+          <p>No logos found</p>
+        <% else %>
+          <% @user.logos.each do |image| %>
+          <div class="col-md-3">
+            <div class="panel panel-default">
+              <div class="panel-body text-center">
+                <%= image_tag(image.logo_file.url(:thumb), { itemprop: "image", alt: image.logo_file_file_name }) %>
+              </div>
+              <div class="panel-footer">
+                <%= button_to "delete", "/logos/#{image.id}", :method => :delete %>
+              </div>
+            </div>
+          </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

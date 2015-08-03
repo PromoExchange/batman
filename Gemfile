@@ -19,6 +19,7 @@ gem 'awesome_print', '~> 1.2.0'
 gem 'redis'
 gem 'resque'
 gem 'resque-scheduler', '~> 3.1.0'
+gem 'paperclip'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

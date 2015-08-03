@@ -17,16 +17,16 @@
     <fieldset>
       <div class="form-group" id="imprint-methods">
         <%= f.label(:imprint_method_id, Spree.t(:imprint_method)) %>
-        <%= f.select(:imprint_method_id, options_for_select(@imprint_methods),:prompt => 'Select', class: 'form-control') %>
+        <%= f.select :imprint_method_id, options_for_select(@imprint_methods),
+          {:prompt => 'Please Select'}, {class: 'form-control'} %>
       </div>
 
-      <div class="form-group" id="auction-logo">
-        <label for="logo"><%= Spree.t(:logo) %></label>
-        <select class="image-picker auction-logo" id="logo" class="form-control">
-          <option data-img-src="<%= image_path('corp_logo/batman-logo-big.gif') %>" value="1">Batman</option>
-          <option data-img-src="<%= image_path('corp_logo/buzzfeed-logo.png') %>" value="2">Buzzfeed</option>
-          <option data-img-src="<%= image_path('corp_logo/coca_cola_logo.jpg') %>" value="3">Cola</option>
-        </select>
+      <div class="form-group">
+        <%= f.label :logo_id, Spree.t(:logo) %>
+        <%= f.select :logo_id,
+          @user.logos.map { |l| [ l.logo_file_file_name, l.id,
+            { 'data-img-src' => l.logo_file.url(:thumb)}]},
+            { :prompt => 'Please Select'} , { class: 'image-picker form-control'} %>
       </div>
 
       <div class="form-group">
@@ -55,20 +55,22 @@
 
       <div class="form-group">
         <%= label(:shipping_address_id, Spree.t(:shipping_address)) %>
-        <%= f.select(:shipping_address_id, options_for_select(@addresses), :prompt => 'Select', class: 'form-control') %>
+        <%= f.select(:shipping_address_id, options_for_select(@addresses),
+          {:prompt => 'Please Select'}, { class: 'form-control'}) %>
       </div>
       <%= link_to 'Add new address', spree.account_path(spree_current_user) %>
 
       <div class="form-group">
         <%= label(:main_color_id, Spree.t(:main_color)) %>
-        <%= f.select(:main_color_id, options_for_select(@main_colors), :prompt => 'Select', class: 'form-control') %>
+        <%= f.select(:main_color_id, options_for_select(@main_colors),
+          {:prompt => 'Please Select'}, { class: 'form-control'}) %>
       </div>
 
       <div class="form-group">
         <%= label(:payment_method, Spree.t(:payment_method)) %>
         <%= f.select(:payment_method, options_for_select(
           [['Credit Card','Credit Card'],['Check','Check']]),
-          :prompt => 'Select') %>
+          {:prompt => 'Please Select'}, { class: 'form-control'}) %>
       </div>
 
       <div class="form-actions" data-hook="buttons">

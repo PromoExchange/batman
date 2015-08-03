@@ -86,3 +86,8 @@ en:
     asi_number: 'ASI number'
     sign_up: 'Sign up'
     zipcode: 'Zipcode'
+    logos: 'Logos'
+    add_logo: 'Add Logo'
+    marketplace: 'Marketplace'
+    about: 'About'
+    favorites: 'Favorites'

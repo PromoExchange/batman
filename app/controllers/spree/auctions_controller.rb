@@ -51,6 +51,8 @@ class Spree::AuctionsController < Spree::StoreController
       .joins(:imprint_method)
       .where(product_id: @auction.product.id)
       .pluck(:name, :imprint_method_id)
+
+    @user = spree_current_user
   end
 
   def create
@@ -63,7 +65,8 @@ class Spree::AuctionsController < Spree::StoreController
       imprint_method_id: auction_data[:imprint_method_id],
       main_color_id: auction_data[:main_color_id],
       shipping_address_id: auction_data[:shipping_address_id],
-      payment_method: auction_data[:payment_method]
+      payment_method: auction_data[:payment_method],
+      logo_id: auction_data[:logo_id]
     )
 
     unless params[:auction][:pms_colors].nil?

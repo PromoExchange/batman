@@ -44,4 +44,15 @@ Rails.application.configure do
 
   # Send mail to letter_opener
   config.action_mailer.delivery_method = :letter_opener
+
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_credentials: {
+      bucket: ENV['S3_IMAGE_BUCKET'],
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+    },
+    url: ':s3_domain_url',
+    path: '/:class/:attachment/:id_partition/:style/:filename'
+  }
 end

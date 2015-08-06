@@ -1,10 +1,10 @@
-$(function(){
+$(function() {
   $("#auction_logo_id").imagepicker({
-    hide_select : false
+    hide_select: false
   });
 
-  $('.swatch-clickable').each(function () {
-      $(this).attr('title', $(this).attr('name'));
+  $('.swatch-clickable').each(function() {
+    $(this).attr('title', $(this).attr('name'));
   });
 
   $('.swatch-clickable').tooltip();
@@ -16,6 +16,9 @@ $(function(){
   });
 
   $(".swatch-clickable").click(function() {
-    $('#pms-colors').tagsinput('add', { id: $(this).attr('id'), text: $(this).attr('name') });
+    $('#pms-colors').tagsinput('add', {
+      id: $(this).attr('id'),
+      text: $(this).attr('name')
+    });
   });
 });

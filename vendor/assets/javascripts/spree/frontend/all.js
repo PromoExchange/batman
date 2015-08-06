@@ -19,7 +19,9 @@
 $(function() {
   $('.title').on('keyup change', function(e) {
     var qty = parseInt($(this).val());
-    if (allPrices === undefined || allPrices.length === 0) { return null; }
+    if (allPrices === undefined || allPrices.length === 0) {
+      return null;
+    }
 
     if (qty <= allPrices.length) {
       $('span.price.selling').text('$' + allPrices[qty - 1]);

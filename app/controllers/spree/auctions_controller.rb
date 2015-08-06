@@ -78,14 +78,14 @@ class Spree::AuctionsController < Spree::StoreController
       end
     end
 
-    redirect_to('/dashboards', flash: { notice: 'Auction was created successfully.' })
+    redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
   rescue
-    redirect_to(products_path, flash: { error: 'Failed to create an auction' })
+    redirect_to products_path, flash: { error: 'Failed to create an auction' }
   end
 
   def destroy
     @auction.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
-    redirect_to dashboards_path
+    redirect_to dashboards_path, flash: { notice: 'Auction was cancelled successfully.' }
   end
 
   private

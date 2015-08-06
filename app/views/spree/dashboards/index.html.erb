@@ -5,7 +5,7 @@
         <ul class="nav nav-pills nav-stacked">
           <% active_me = 'active' %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-            <li class="<%= active_me %>"><a href="#exchange" id="auction-tab" data-toggle="tab"><%= Spree.t(:exchange) %></a></li>
+            <li class="<%= active_me %>"><a href="#exchange" id="auction-tab" data-toggle="tab"><%= Spree.t(:marketplace) %></a></li>
             <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>

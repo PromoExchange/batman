@@ -59,7 +59,7 @@
         <%= f.select(:shipping_address_id, options_for_select(@addresses),
           { :prompt => 'Please Select' }, { class: 'form-control' }) %>
       </div>
-      <%= link_to 'Add new address', spree.account_path(spree_current_user) %>
+      <!-- <%= link_to 'Add new address', spree.account_path(spree_current_user) %> -->
 
       <div class="form-group">
         <%= label(:main_color_id, Spree.t(:main_color)) %>

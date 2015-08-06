@@ -1,4 +1,4 @@
-$(function(){
+$(function() {
   $('.accept-link').click(function(e) {
     e.preventDefault();
     var key = $('#show-auction').attr('data-key');
@@ -8,14 +8,14 @@ $(function(){
       type: 'POST',
       contentType: "application/json",
       url: url,
-      headers:{
+      headers: {
         'X-Spree-Token': key
       },
-      success: function(data){
+      success: function(data) {
         alert('bid accepted');
         window.location = "/dashboards";
       },
-      error: function(data){
+      error: function(data) {
         alert('Failed to accept bid, please contact support');
         console.log(data);
       }

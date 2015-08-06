@@ -20,6 +20,7 @@ gem 'redis'
 gem 'resque'
 gem 'resque-scheduler', '~> 3.1.0'
 gem 'paperclip'
+gem 'stripe'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

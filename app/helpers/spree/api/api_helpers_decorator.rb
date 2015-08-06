@@ -39,6 +39,7 @@ Spree::Api::ApiHelpers.module_eval do
       :per_unit_bid,
       :order_id,
       :bid,
+      :seller_fee,
       :prebid_id,
       :status
     ])

@@ -1,6 +1,6 @@
-$(function(){
+$(function() {
   $("#user-logo-select").imagepicker({
-    hide_select : false,
-    show_label  : false
+    hide_select: false,
+    show_label: false
   });
 });

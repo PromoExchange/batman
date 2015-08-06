@@ -1,4 +1,4 @@
-$(function(){
+$(function() {
   $('#message-submit').click(function(e) {
     var key = $("#request-info").attr("data-id");
     var owner = $("#buyer-id").val();
@@ -16,10 +16,10 @@ $(function(){
       contentType: "application/json",
       data: JSON.stringify(message),
       url: '/api/messages',
-      headers:{
+      headers: {
         'X-Spree-Token': key
       },
-      success: function(data){
+      success: function(data) {
         $("#request-info").modal('hide');
       }
     });

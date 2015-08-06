@@ -1,7 +1,7 @@
-$(function () {
+$(function() {
   var key = $('#seller-live-auction-table').attr('data-key');
 
-  function get_auction (auction_id) {
+  function get_auction(auction_id) {
     var auction_url = '/api/auctions/' + auction_id;
 
     $.ajax({
@@ -10,24 +10,24 @@ $(function () {
       headers: {
         'X-Spree-Token': key
       },
-      success: function (data) {
+      success: function(data) {
         $('.modal-body #quantity-requested').text(data.quantity);
         $('.modal-body #payment-method').text(data.payment_method);
         var num_bids = data.bids.length;
         var low_bid = 'no bids';
         if (num_bids > 0) {
           low_bid = data.bids[0].bid;
-          $('.modal-body #lowest-per-unit-price').text(low_bid / data.quantity );
+          $('.modal-body #lowest-per-unit-price').text(low_bid / data.quantity);
           $('.modal-body #lowest-total-price').text(low_bid);
         }
         $('.modal-body #per-unit-price').val(data.product_unit_price);
         calc_prices('per-unit-price');
         stop_download();
-      }}
-    );
+      }
+    });
   }
 
-  function calc_prices (anchor_field) {
+  function calc_prices(anchor_field) {
     var per_unit_price = 0;
     var total_price = 0;
     var per_unit_price_shown = 0;
@@ -35,7 +35,7 @@ $(function () {
     var quantity = parseFloat($('.modal-body #quantity-requested').text());
 
     var processing_markup = 0.015;
-    if($('.modal-body #payment-method').text() === 'Credit Card') {
+    if ($('.modal-body #payment-method').text() === 'Credit Card') {
       processing_markup = 0.022;
     }
 
@@ -90,11 +90,12 @@ $(function () {
     $('.modal-body #total-price-shown').val(+total_price_shown.toFixed(2));
     var s = flash_fields.join(',');
     $(s).stop().css("background-color", "#FFFF9C")
-      .animate({ backgroundColor: "#FFFFFF"}, 500);
+      .animate({
+        backgroundColor: "#FFFFFF"
+      }, 500);
   }
 
-  function start_download(data)
-  {
+  function start_download(data) {
     $('.fa-spinner').show();
     $('.modal-footer button').prop('disabled', true);
     $('input.bid-edit').prop('disabled', true);
@@ -137,20 +138,20 @@ $(function () {
       contentType: "application/json",
       data: JSON.stringify(bid_message),
       url: '/api/bids',
-      headers:{
+      headers: {
         'X-Spree-Token': key
       },
-      success: function(data){
-        alert('bid created!!');
+      success: function(data) {
+        alert('bid created!');
         $('#seller-live-auction-tab').trigger('click');
       },
-      error: function(data){
+      error: function(data) {
         console.log(data);
       }
     });
   });
 
-  $('tbody').on('click','button.open-bid', function(e) {
+  $('tbody').on('click', 'button.open-bid', function(e) {
     start_download();
     var auction_id = $(this).data('id');
     $('#auction-id').val(auction_id);

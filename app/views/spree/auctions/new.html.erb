@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:auction) %>
+<%= Spree.t(:auction) %>
 <% end %>
 
 <div class="row" id="new-auction">
@@ -18,33 +18,34 @@
       <div class="form-group" id="imprint-methods">
         <%= f.label(:imprint_method_id, Spree.t(:imprint_method)) %>
         <%= f.select :imprint_method_id, options_for_select(@imprint_methods),
-          {:prompt => 'Please Select'}, {class: 'form-control'} %>
+          { prompt: 'Please Select'}, {class: 'form-control' } %>
       </div>
 
       <div class="form-group">
         <%= f.label :logo_id, Spree.t(:logo) %>
         <%= f.select :logo_id,
           @user.logos.map { |l| [ l.logo_file_file_name, l.id,
-            { 'data-img-src' => l.logo_file.url(:thumb)}]},
-            { :prompt => 'Please Select'} , { class: 'image-picker form-control'} %>
+            { 'data-img-src' => l.logo_file.url(:thumb) }] },
+            { prompt: 'Please Select'} , { class: 'image-picker form-control' } %>
       </div>
 
       <div class="form-group">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
-        <table id="pms_color_swatch" class="table">
+        <table class="table" id="pms_color_swatch">
           <tbody>
             <% @pms_colors.in_groups_of(6,false) do |row| %>
             <tr>
               <% for cell in row %>
-                <td><div id="<%= cell[:pms_color_id] %>" name="<%= cell[:name] %>" class="swatch swatch-clickable" style="background-color:<%= cell[:hex] %>"></div>
-                  <span class="pms-text"><%= cell[:display_name] %><br/><%= cell[:pantone] unless cell[:display_name] == cell[:pantone] %></span>
-                </td>
+              <td>
+                <div class="swatch swatch-clickable" id="<%= cell[:pms_color_id] %>" name="<%= cell[:name] %>" style="background-color:<%= cell[:hex] %>"></div>
+                <span class="pms-text"><%= cell[:display_name] %><br/><%= cell[:pantone] unless cell[:display_name] == cell[:pantone] %></span>
+              </td>
               <% end %>
             </tr>
             <% end %>
           </tbody>
         </table>
-        <input type='text' class="form-control tagsinput" data-role="tagsinput" id="pms-colors" name="auction[pms_colors]"></input>
+        <input class="form-control tagsinput" data-role="tagsinput" id="pms-colors" name="auction[pms_colors]" type='text'></input>
         <p>Maxmimum number of PMS imprint colors: 2</p>
       </div>
 
@@ -56,21 +57,21 @@
       <div class="form-group">
         <%= label(:shipping_address_id, Spree.t(:shipping_address)) %>
         <%= f.select(:shipping_address_id, options_for_select(@addresses),
-          {:prompt => 'Please Select'}, { class: 'form-control'}) %>
+          { :prompt => 'Please Select' }, { class: 'form-control' }) %>
       </div>
       <%= link_to 'Add new address', spree.account_path(spree_current_user) %>
 
       <div class="form-group">
         <%= label(:main_color_id, Spree.t(:main_color)) %>
         <%= f.select(:main_color_id, options_for_select(@main_colors),
-          {:prompt => 'Please Select'}, { class: 'form-control'}) %>
+          { :prompt => 'Please Select'}, { class: 'form-control' }) %>
       </div>
 
       <div class="form-group">
         <%= label(:payment_method, Spree.t(:payment_method)) %>
         <%= f.select(:payment_method, options_for_select(
           [['Credit Card','Credit Card'],['Check','Check']]),
-          {:prompt => 'Please Select'}, { class: 'form-control'}) %>
+          { :prompt => 'Please Select' }, { class: 'form-control' }) %>
       </div>
 
       <div class="form-actions" data-hook="buttons">

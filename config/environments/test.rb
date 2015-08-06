@@ -45,4 +45,15 @@ Rails.application.configure do
 
   # Send mail to file for tests
   config.action_mailer.delivery_method = :test
+
+  config.paperclip_defaults = {
+    storage: :s3,
+    s3_credentials: {
+      bucket: ENV['S3_LOGO_BUCKET'],
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+    },
+    url: ':s3_domain_url',
+    path: '/:class/:attachment/:id_partition/:style/:filename'
+  }
 end

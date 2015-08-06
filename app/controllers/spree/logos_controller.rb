@@ -1,6 +1,5 @@
 class Spree::LogosController < Spree::StoreController
   def create
-    byebug
     @logo = Spree::Logo.new(logo_params)
 
     if @logo.save

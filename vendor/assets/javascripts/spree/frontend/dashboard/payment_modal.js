@@ -28,6 +28,7 @@ $(function() {
         },
         success: function(data) {
           $('#payment-form')[0].reset();
+          $("body").css("cursor", "default");
           $("#payment-submit").prop('disabled', false);
           $('#pay-invoice').modal('hide');
           $('#seller-won-auction-tab').click();
@@ -35,6 +36,7 @@ $(function() {
         },
         error: function(data) {
           console.log(data);
+          $("body").css("cursor", "default");
           $("#payment-submit").prop('disabled', false);
           $form.find('.payment-errors').text("Unsucessful charge");
         }
@@ -44,6 +46,7 @@ $(function() {
 
   $('#payment-form').submit(function(event) {
     var $form = $(this);
+    $("body").css("cursor", "progress");
     $("#payment-submit").prop('disabled', true);
     Stripe.card.createToken($form, stripeResponseHandler);
     return false;

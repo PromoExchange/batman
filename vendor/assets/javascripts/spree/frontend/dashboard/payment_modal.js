@@ -7,7 +7,7 @@ $(function() {
     if (response.error) {
       // Show the errors on the form
       $form.find('.payment-errors').text(response.error.message);
-      $form.find('button').prop('disabled', false);
+      $("#payment-submit").prop('disabled', false);
     } else {
       // response contains id and card, which contains additional card details
       var token = response.id;
@@ -35,6 +35,7 @@ $(function() {
         },
         error: function(data) {
           console.log(data);
+          $("#payment-submit").prop('disabled', false);
           $form.find('.payment-errors').text("Unsucessful charge");
         }
       });

@@ -17,6 +17,10 @@ Rails.application.routes.draw do
     controller: 'spree/pxusers',
     as: 'pxusers'
 
+  resources :pxaccounts,
+    controller: 'spree/pxaccounts',
+    as: 'pxaccounts'
+
   resources :auctions,
     controller: 'spree/auctions',
     as: 'auctions'

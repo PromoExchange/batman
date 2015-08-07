@@ -4,8 +4,9 @@ class Spree::DashboardsController < Spree::StoreController
     @favorites = Spree::Favorite.where(buyer: current_spree_user)
       .includes(:product)
 
-    @user = spree_current_user
     @logo = Spree::Logo.new
+    @user = spree_current_user
+    @pxaccount = Spree::Pxaccount.new(@user)
   end
 
   private

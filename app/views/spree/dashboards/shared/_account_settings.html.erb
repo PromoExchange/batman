@@ -3,17 +3,19 @@
 <% end %>
 
 <ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="#account-contact-tab" role="tab" data-toggle="tab"><%=Spree.t(:account_and_contact)%></a></li>
+  <li class="active"><a href="#contact-information" role="tab" data-toggle="tab"><%=Spree.t(:contact_information)%></a></li>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
     <li><a href="#logo-tab" role="tab" data-toggle="tab"><%=Spree.t(:logos)%></a></li>
   <% end %>
 </ul>
 
-<div class="tab-content" id="account-settings">
-  <div class="tab-pane active" id="account-contact-tab">
-    <%= render partial: 'spree/dashboards/shared/account_contact_tab' %>
+<div class="tab-content" id="contact-information">
+  <div class="tab-pane active" id="contact-tab">
+    <%= render partial: 'spree/dashboards/shared/contact_tab' %>
   </div>
+  <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
   <div class="tab-pane" id="logo-tab">
     <%= render partial: 'spree/dashboards/buyer/logos_tab' %>
   </div>
+  <% end %>
 </div>

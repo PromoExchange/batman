@@ -92,7 +92,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         length
         width
         height
-        carton_weight
         carton_qty
         standard_production_time
       ).each do |w|

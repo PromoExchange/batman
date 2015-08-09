@@ -141,7 +141,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       properties << "Additional Info: #{hashed[:additional_info]}" if hashed[:additional_info]
       properties << "FOB: #{hashed[:fob]}" if hashed[:fob]
       properties << "Shipping Quantity: #{hashed[:shipping_quantity]}" if hashed[:shipping_quantity]
-      properties << "Shipping Dimensions: #{hashed[:shipping_dimensions]}" if hashed[:shipping_dimensions]
       properties << "Available Colors: #{hashed[:available_colors]}" if hashed[:available_colors]
 
       properties.each do |property|

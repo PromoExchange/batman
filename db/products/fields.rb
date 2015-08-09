@@ -116,10 +116,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         additional_colorspositions
         additional_colors
         additional_positions
-        carton_weight_lbs
-        carton_width
-        carton_height
-        carton_length
         units_per_carton
       ).each do |w|
         properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]

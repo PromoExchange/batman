@@ -127,11 +127,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         packagingdetails: 'Packaging Details',
         catalogweight: 'Weight',
         disclaimers: 'Disclaimers',
-        standard_master_carton_width: 'Carton width',
-        standard_master_carton_length: 'Carton length',
-        standard_master_carton_depth: 'Carton Depth',
-        standard_master_carton_quantity: 'Carton Quantity',
-        standard_master_carton_actual_weight: 'Carton weight'
+        standard_master_carton_quantity: 'Carton Quantity'
       }.each do |k, v|
         properties << "#{v}: #{hashed[k]}" if hashed[k]
       end

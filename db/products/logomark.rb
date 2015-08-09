@@ -149,9 +149,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         decoration_methods
         item_size
         catalog_page
-        box_weight
         quantity_per_box
-        box_length
         production_time
       ).each do |w|
         properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]

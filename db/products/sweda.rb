@@ -122,7 +122,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       %w(
         sizecode
         sizedesc
-        colorcode
         colordesc
         grossweight
         note

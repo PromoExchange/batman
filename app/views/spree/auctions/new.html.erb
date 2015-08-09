@@ -50,7 +50,7 @@
           </tbody>
         </table>
         <input class="form-control tagsinput" data-role="tagsinput" id="pms-colors" name="auction[pms_colors]" type='text'></input>
-        <p>Maxmimum number of PMS imprint colors: 2</p>
+        <p>Maxmimum Number of PMS Imprint Colors: 2</p>
       </div>
 
       <div class="form-group">
@@ -59,26 +59,27 @@
       </div>
 
       <div class="form-group">
-        <%= label(:shipping_address_id, Spree.t(:shipping_address)) %>
+        <%= f.label(:shipping_address_id, 'Shipping Address') %>
         <%= f.select(:shipping_address_id, options_for_select(@addresses),
           { prompt: 'Please Select' }, { class: 'form-control' }) %>
       </div>
+      <%= link_to 'Add New Address', spree.account_path(spree_current_user) %>
 
       <div class="form-group">
-        <%= label(:main_color_id, Spree.t(:main_color)) %>
+        <%= f.label(:main_color_id, 'Product Color') %>
         <%= f.select(:main_color_id, options_for_select(@main_colors),
           { prompt: 'Please Select'}, { class: 'form-control' }) %>
       </div>
 
       <div class="form-group">
-        <%= label(:payment_method, Spree.t(:payment_method)) %>
+        <%= f.label(:payment_method, 'Payment Method') %>
         <%= f.select(:payment_method, options_for_select(
           [['Credit Card', 'Credit Card'],['Check', 'Check']]),
           { prompt: 'Please Select' }, { class: 'form-control' }) %>
       </div>
 
       <div class="form-actions" data-hook="buttons">
-        <%= button 'Start Auction', 'ok', 'submit', {class: 'btn-success'} %>
+        <%= button 'Start Auction', 'ok', 'submit', { class: 'btn-success' } %>
         <span class="or"><%= Spree.t(:or) %></span>
         <%= button_link_to Spree.t('actions.cancel'), products_path, :icon => 'remove' %>
       </div>

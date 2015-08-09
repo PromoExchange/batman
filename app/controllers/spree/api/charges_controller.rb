@@ -1,18 +1,15 @@
 class  Spree::Api::ChargesController < Spree::Api::BaseController
   def charge
-    Stripe.api_key = ENV['STRIPE_TEST_SECRET_KEY']
-
-    token = params[:token]
     bid = Spree::Bid.find(params[:bid_id])
     amount = bid.seller_fee.round(2) * 100
 
     description = "Auction ID: #{bid.auction.reference}, Seller: #{bid.seller.email}"
 
     begin
-      charge = Stripe::Charge.create(
+      Stripe::Charge.create(
         amount: amount.to_i,
         currency: 'usd',
-        source: token,
+        source: params[:token],
         description: description
       )
 
@@ -25,8 +22,8 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
       Spree::OrderUpdater.new(@bid.order).update
 
       redirect_to main_app.dashboards_path, flash: { notice: 'Credit card charged sucessfully' }
-    rescue Stripe::CardError => e
-      redirect_to main_app.dashboards_path, flash: { error: 'Error in processing charge' }
+    rescue Stripe::CardError => _e
+      redirect_to main_app.dashboards_path, flash: { error: 'Error occurred processing charge' }
     end
   end
 

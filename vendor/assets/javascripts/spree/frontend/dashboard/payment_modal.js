@@ -3,9 +3,9 @@ $(function() {
   function stripeResponseHandler(status, response) {
     var $form = $('#payment-form');
     var key = $('#seller-won-auction-table').attr('data-key');
-
     if (response.error) {
       // Show the errors on the form
+      $("body").css("cursor", "default");
       $form.find('.payment-errors').text(response.error.message);
       $("#payment-submit").prop('disabled', false);
     } else {

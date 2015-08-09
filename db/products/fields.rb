@@ -105,7 +105,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       properties = []
 
       %w(
-        fob
         colors
         imprint
         weight

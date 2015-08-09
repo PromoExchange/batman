@@ -149,9 +149,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         selections
         item_color_charges
         additional_product_information
-        fob_ship_from_city
-        fob_ship_from_state
-        fob_ship_from_zip
       ).each do |w|
         properties << "#{w.titleize}: #{hashed[w.to_sym]}" if hashed[w.to_sym]
       end

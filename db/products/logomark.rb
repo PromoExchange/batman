@@ -148,7 +148,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         finish__material
         decoration_methods
         item_size
-        catalog_page
         quantity_per_box
         production_time
       ).each do |w|

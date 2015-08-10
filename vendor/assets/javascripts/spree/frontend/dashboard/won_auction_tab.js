@@ -21,7 +21,7 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<td><button type='button' class='btn btn-success open-invoice' data-toggle='modal' data-target='#pay-invoice' data-id='${auction_id}'>Pay</button></td>");
+          action_template = _.template("<td><button type='button' class='btn btn-default open-invoice' data-toggle='modal' data-target='#pay-invoice' data-id='${auction_id}'>Pay</button></td>");
           your_bid_template = _.template("<td id='your_bid_${auction_id}'>no bid</td>");
 
           $.each(data, function(i, item) {

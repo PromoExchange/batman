@@ -27,6 +27,7 @@ Spree::Price.class_eval do
   end
 
   def self.discount_price(code, price)
+    return price if code.nil?
     discount = Spree::Price.discount_codes[code.to_sym]
     discount.nil? ? price : (price * discount)
   end

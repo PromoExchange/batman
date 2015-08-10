@@ -46,7 +46,7 @@ describe 'Prebids API' do
     expect(response).to be_success
   end
 
-  it 'should not create a duplicate prebid' do |member|
+  it 'should not create a duplicate prebid' do
     prebid = FactoryGirl.create(:prebid)
 
     post '/api/prebids', prebid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"

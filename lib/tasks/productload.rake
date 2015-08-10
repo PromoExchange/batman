@@ -59,7 +59,8 @@ namespace :product do
 
     desc 'Vitronic Load'
     task vitronic: :environment do
-      load_files('vitronic')
+      ProductLoader.load('upcharges', 'vitronic')
+      # load_files('vitronic')
     end
 
     desc 'Product Load'

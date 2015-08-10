@@ -56,7 +56,6 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def create
-    # TODO: Fix this nasty code
     auction_data = params[:auction]
     @auction = Spree::Auction.create(
       product_id: auction_data[:product_id],
@@ -78,9 +77,11 @@ class Spree::AuctionsController < Spree::StoreController
       end
     end
 
+    CreatePrebids.perform(auction_id: @auction.id)
+
     redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
   rescue
-    redirect_to products_path, flash: { error: 'Failed to create an auction' }
+    redirect_to '/dashboards', flash: { error: 'Failed to create an auction' }
   end
 
   def destroy

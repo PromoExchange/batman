@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150810171359) do
+ActiveRecord::Schema.define(version: 20150813201555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,9 @@ ActiveRecord::Schema.define(version: 20150810171359) do
     t.string   "reference"
     t.datetime "cancelled_date"
     t.integer  "logo_id"
+    t.boolean  "pms_color_match",     default: false
+    t.boolean  "change_ink",          default: false
+    t.boolean  "no_under_over",       default: false
   end
 
   add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree
@@ -532,11 +535,9 @@ ActiveRecord::Schema.define(version: 20150810171359) do
   add_index "spree_pms_colors_suppliers", ["supplier_id"], name: "index_spree_pms_colors_suppliers_on_supplier_id", using: :btree
 
   create_table "spree_prebids", force: :cascade do |t|
-    t.integer  "seller_id",   null: false
-    t.string   "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "product_id",  null: false
+    t.integer "seller_id",  null: false
+    t.integer "product_id", null: false
+    t.decimal "markup"
   end
 
   create_table "spree_preferences", force: :cascade do |t|
@@ -1099,6 +1100,7 @@ ActiveRecord::Schema.define(version: 20150810171359) do
     t.boolean  "show_rate_in_label",                         default: true
     t.datetime "deleted_at"
     t.integer  "user_id"
+    t.boolean  "include_in_sandh"
   end
 
   add_index "spree_tax_rates", ["deleted_at"], name: "index_spree_tax_rates_on_deleted_at", using: :btree
@@ -1199,14 +1201,15 @@ ActiveRecord::Schema.define(version: 20150810171359) do
   end
 
   create_table "spree_upcharges", force: :cascade do |t|
-    t.integer "upcharge_type_id", null: false
-    t.string  "related_type",     null: false
-    t.integer "related_id",       null: false
-    t.string  "value",            null: false
+    t.integer "upcharge_type_id",  null: false
+    t.integer "related_id",        null: false
+    t.string  "value",             null: false
     t.string  "range"
     t.string  "actual"
     t.string  "price_code"
     t.integer "position"
+    t.integer "imprint_method_id"
+    t.string  "type"
   end
 
   create_table "spree_users", force: :cascade do |t|

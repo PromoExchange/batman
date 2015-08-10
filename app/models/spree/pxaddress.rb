@@ -16,6 +16,8 @@ class Spree::Pxaddress
       address = user.bill_address
     end
 
+    return unless address
+
     fields = %w(
       company
       firstname

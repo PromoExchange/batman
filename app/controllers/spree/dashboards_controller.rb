@@ -18,7 +18,7 @@ class Spree::DashboardsController < Spree::StoreController
 
   def create_taxrates
     return if spree_current_user.tax_rates.count > 0
-    
+
     usa_country = Spree::Country.where(iso3: 'USA').first
     default_tax_category = Spree::TaxCategory.where(name: 'Default').first
     usa_country.states.each do |state|
@@ -30,7 +30,8 @@ class Spree::DashboardsController < Spree::StoreController
         included_in_price: false,
         name: "#{current_spree_user.email}:#{state.name}",
         show_rate_in_label: false,
-        user_id: current_spree_user.id
+        user_id: current_spree_user.id,
+        include_in_sandh: false
       )
       tax_rate.calculator = Spree::Calculator::DefaultTax.create!
       tax_rate.save!

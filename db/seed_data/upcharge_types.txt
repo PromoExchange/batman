@@ -4,4 +4,8 @@ no_under_over
 less_than_minimum
 setup
 run
+additional_location_run
+second_color_run
+additional_color_run
+multiple_color_run
 rush

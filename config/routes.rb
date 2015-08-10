@@ -13,6 +13,10 @@ Rails.application.routes.draw do
 
   post '/charges', to: 'spree/api/charges#charge'
 
+  resources :pxtaxrates,
+    controller: 'spree/pxtaxrates',
+    as: 'pxtaxrates'
+
   resources :pxusers,
     controller: 'spree/pxusers',
     as: 'pxusers'

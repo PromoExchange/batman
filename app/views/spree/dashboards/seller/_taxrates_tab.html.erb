@@ -1,0 +1,28 @@
+<% content_for :page_title do %>
+<%= Spree.t(:tax_rates) %>
+<% end %>
+
+<div class="tab-pane" id="tax-rates-pane">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <table class="table table-striped" id="tax-rates-table">
+        <thead>
+          <tr>
+            <th>State</th>
+            <th>Sales Tax Rate</th>
+            <th>Also charge Sales Tax on S&amp;H</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @tax_rates.each do |t| %>
+            <tr>
+              <td><%= t.zone.name %></td>
+              <td><%= t.amount %></td>
+              <td><%= t.included_in_price %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

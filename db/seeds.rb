@@ -6,6 +6,14 @@ Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 puts 'Tax Categories'
 Spree::TaxCategory.create!(name: 'Default', is_default: true)
 
+usa_country = Spree::Country.where(iso3: 'USA').first
+
+# For each state, create a tax zone with a single member
+usa_country.states.each do |s|
+  z = Spree::Zone.create(name: s.name, description: "Tax zone for #{s.name}")
+  Spree::ZoneMember.create(zoneable_id: s.id, zoneable_type: 'Spree::State', zone_id: z.id)
+end
+
 def seed_path(fname)
   f = File.join(Rails.root, 'db', 'seed_data', fname)
   fail StandardError "File #{f} does not exist" unless File.exist?(f)

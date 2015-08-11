@@ -79,7 +79,8 @@ puts 'Users'
   ['spencer.applegate@thepromoexchange.com', 'admin'],
   ['buyer@thepromoexchange.com', 'buyer'],
   ['seller@thepromoexchange.com', 'seller'],
-  ['supplier@thepromoexchange.com', 'supplier']
+  ['buyer2@thepromoexchange.com', 'buyer'],
+  ['seller2@thepromoexchange.com', 'seller']
 ].each do |r|
   user = Spree::User.create(email: r[0],
                             login: r[0],
@@ -88,7 +89,7 @@ puts 'Users'
   user.spree_roles << Spree::Role.find_by_name(r[1])
   user.generate_spree_api_key!
 
-  ship_address = Spree::Address.create(
+  user.ship_address = Spree::Address.create(
     company: 'Shippy',
     firstname: 'Donald',
     lastname: 'Duck',
@@ -100,7 +101,7 @@ puts 'Users'
     phone: '555-555-5555'
   )
 
-  bill_address = Spree::Address.create(
+  user.bill_address = Spree::Address.create(
     company: 'Billy',
     firstname: 'Donald',
     lastname: 'Duck',
@@ -112,8 +113,6 @@ puts 'Users'
     phone: '555-555-5555'
   )
 
-  user.bill_address = bill_address
-  user.ship_address = ship_address
   user.save!
 end
 

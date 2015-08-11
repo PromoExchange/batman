@@ -1,11 +1,15 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:account_settings) %>
+<%= Spree.t(:account_settings) %>
 <% end %>
 
 <ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="#contact-information" role="tab" data-toggle="tab"><%=Spree.t(:contact_information)%></a></li>
+  <li class="active">
+    <a data-toggle="tab" href="#contact-information" role="tab"><%= Spree.t(:contact_information) %></a>
+  </li>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-    <li><a href="#logo-tab" role="tab" data-toggle="tab"><%=Spree.t(:logos)%></a></li>
+  <li>
+    <a data-toggle="tab" href="#logo-tab" role="tab"><%= Spree.t(:logos) %></a>
+  </li>
   <% end %>
 </ul>
 

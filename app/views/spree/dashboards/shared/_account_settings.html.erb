@@ -8,9 +8,9 @@
     <li><a href="#taxrates-tab" role="tab" data-toggle="tab"><%=Spree.t(:tax_rates)%></a></li>
   <% end %>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-  <li>
-    <a data-toggle="tab" href="#logo-tab" role="tab"><%= Spree.t(:logos) %></a>
-  </li>
+    <li>
+      <a data-toggle="tab" href="#logo-tab" role="tab"><%= Spree.t(:logos) %></a>
+    </li>
   <% end %>
 </ul>
 
@@ -19,13 +19,13 @@
     <%= render partial: 'spree/dashboards/shared/contact_tab' %>
   </div>
   <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-  <div class="tab-pane" id="taxrates-tab">
-    <%= render partial: 'spree/dashboards/seller/taxrates_tab' %>
-  </div>
+    <div class="tab-pane" id="taxrates-tab">
+      <%= render partial: 'spree/dashboards/seller/taxrates_tab' %>
+    </div>
   <% end %>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-  <div class="tab-pane" id="logo-tab">
-    <%= render partial: 'spree/dashboards/buyer/logos_tab' %>
-  </div>
+    <div class="tab-pane" id="logo-tab">
+      <%= render partial: 'spree/dashboards/buyer/logos_tab' %>
+    </div>
   <% end %>
 </div>

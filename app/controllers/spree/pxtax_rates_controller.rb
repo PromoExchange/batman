@@ -15,11 +15,11 @@ class Spree::PxtaxRatesController < Spree::StoreController
   def pxtaxrate_params
     params.require(:pxtaxrates).permit(
       :id,
-      tax_rate:[
-        {
+      tax_rate: [
+        [
           :zoneable_id,
           :rate
-        }
+        ]
       ]
     )
   end

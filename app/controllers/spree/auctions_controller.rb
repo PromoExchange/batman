@@ -76,12 +76,17 @@ class Spree::AuctionsController < Spree::StoreController
         )
       end
     end
-
-    Resque.enqueue(CreatePrebids, auction_id: @auction.id)
+    send_prebid_request @auction.id
 
     redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
   rescue
     redirect_to '/dashboards', flash: { error: 'Failed to create an auction' }
+  end
+
+  def send_prebid_request(auction_id)
+    embroidery_imprint_method_id = Spree::ImprintMethod.where(name: 'Embroidery').first.id
+    return if embroidery_imprint_method_id == params[:auction][:imprint_method_id].to_i
+    Resque.enqueue(CreatePrebids, auction_id: @auction.id)
   end
 
   def destroy

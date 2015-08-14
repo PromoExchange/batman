@@ -144,7 +144,7 @@ class Spree::Prebid < Spree::Base
     if auction.payment_method == 'Check'
       payment_processing_commission = 0.015
     else
-      payment_processing_commission = 0.0299
+      payment_processing_commission = 0.029
     end
 
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - payment_processing_commission=#{payment_processing_commission}")

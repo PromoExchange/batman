@@ -77,7 +77,7 @@ class Spree::AuctionsController < Spree::StoreController
       end
     end
 
-    CreatePrebids.perform(auction_id: @auction.id)
+    Resque.enqueue(CreatePrebids, auction_id: @auction.id)
 
     redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
   rescue

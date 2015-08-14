@@ -107,7 +107,25 @@ class Spree::Prebid < Spree::Base
     end
     # Additional costs added to unit price
 
-    # Apply tax from raxrate table (check for post shipping)
+    # Apply tax from raxrate table
+    tax_rate = 0.0
+    unless auction.buyer.ship_address.nil?
+      buyers_state_id = auction.buyer.ship_address.state_id
+      Rails.logger.debug(
+        "PREBID - A:#{auction_id} P:#{id} - buyers shipping state =#{auction.buyer.ship_address.state.name}")
+
+      tax_zone_id = Spree::ZoneMember
+        .where(zoneable_id: buyers_state_id)
+        .includes(:zone)
+        .pluck('spree_zones.id').first
+
+      tax_rate_record = Spree::TaxRate.where(user_id: seller_id, zone_id: tax_zone_id).first
+
+      tax_rate = tax_rate_record.amount.to_f unless tax_rate_record.nil?
+    end
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - tax_rate=#{tax_rate}")
+    running_unit_price /= (1 - tax_rate)
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     # Shipping based on buyers zip
 

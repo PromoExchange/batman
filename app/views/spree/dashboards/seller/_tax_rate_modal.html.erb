@@ -1,0 +1,31 @@
+<div class="modal" data-id="<%=spree_current_user.spree_api_key%>" id="tax-rate-edit-modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Tax Rate</h4>
+        </div>
+        <form class="form" id="tax-rate-form" action="#" method="post">
+          <%= hidden_field_tag id='taxrate-id', 0 %>
+          <div class="modal-body">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="form-group">
+                  <label for="tax-rate-edit"><%= Spree.t(:tax_rate) %></label></br>
+                  <input class="tax-rate-edit" type="text" name="tax-rate-edit" id="tax-rate-edit">
+                </div>
+                <div class="form-group">
+                  <label for="include-sandh-edit">Also Charge Sales Tax on S&amp;H</label></br>
+                  <input class="include-sandh-edit" type="checkbox" name="include-sandh-edit" id="include-sandh-edit">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" id="tax-rate-submit" data-dismiss="modal">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </form>
+  </div>
+</div>

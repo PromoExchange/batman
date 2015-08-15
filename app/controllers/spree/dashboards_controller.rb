@@ -11,7 +11,7 @@ class Spree::DashboardsController < Spree::StoreController
     return unless spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin)
 
     create_taxrates
-    @tax_rates = Spree::TaxRate.where(user: current_spree_user).includes(:zone)
+    @tax_rates = Spree::TaxRate.where(user: current_spree_user).includes(:zone).order(:name)
   end
 
   private

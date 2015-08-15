@@ -55,5 +55,6 @@ Rails.application.routes.draw do
     resources :messages, controller: 'spree/api/messages', as: 'api_messages'
     resources :prebids, controller: 'spree/api/prebids', as: 'api_prebids'
     resources :upcharges, controller: 'spree/api/upcharges', as: 'api_upcharges'
+    resources :taxrates, controller: 'spree/api/taxrates', as: 'api_taxrates'
   end
 end

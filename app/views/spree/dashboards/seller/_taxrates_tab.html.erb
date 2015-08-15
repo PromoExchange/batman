@@ -10,15 +10,17 @@
           <tr>
             <th>State</th>
             <th>Sales Tax Rate</th>
-            <th>Also charge Sales Tax on S&amp;H</th>
+            <th>Also Charge Sales Tax on S&amp;H</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <% @tax_rates.each do |t| %>
-            <tr>
-              <td><%= t.zone.name %></td>
-              <td><%= t.amount %></td>
-              <td><%= t.include_in_sandh %></td>
+            <tr data-id="<%= t.id %>" id="taxrate-<%= t.id %>">
+              <td class="rate-name"><%= t.zone.name %></td>
+              <td class="rate-amount"><%= t.amount %></td>
+              <td class="rate-includesandh"><%= t.include_in_sandh %></td>
+              <td><button type="button" class="btn btn-success open-tax-rate" data-toggle="modal" data-target="#tax-rate-edit-modal">Edit</button></td>
             </tr>
           <% end %>
         </tbody>
@@ -26,3 +28,4 @@
     </div>
   </div>
 </div>
+<%= render partial: 'spree/dashboards/seller/tax_rate_modal' %>

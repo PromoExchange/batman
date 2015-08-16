@@ -44,7 +44,6 @@ $(function() {
         alert('Tax rate updated');
       },
       error: function(data) {
-        console.log(date);
         alert('Failed to update tax rate');
       }
     });

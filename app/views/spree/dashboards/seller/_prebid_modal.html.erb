@@ -1,0 +1,35 @@
+<div class="modal" data-id="<%=spree_current_user.spree_api_key%>" id="prebid-edit-modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Prebid settings</h4>
+        </div>
+        <form class="form" id="prebid-form" action="#" method="post">
+          <%= hidden_field_tag id='seller-id', 0 %>
+          <div class="modal-body">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="form-group">
+                  <label for="eqp-flag">EQP</label></br>
+                  <input class="eqp-flag-edit" type="checkbox" name="eqp-flag-edit" id="eqp-flag-edit">
+                </div>
+                <div class="form-group">
+                  <label for="eqp-discount-edit">Discount from EQP (0.8 = 80%)</label></br>
+                  <input class="eqp-discount-edit" type="text" name="eqp-discount-edit" id="eqp-discount-edit">
+                </div>
+                <div class="form-group">
+                  <label for="markup-edit">Markup (0.08 = 8%)</label></br>
+                  <input class="markup-edit" type="text" name="markup-edit" id="markup-edit">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" id="prebid-submit" data-dismiss="modal">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </form>
+  </div>
+</div>

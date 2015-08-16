@@ -1,5 +1,5 @@
 class Spree::Api::PrebidsController < Spree::Api::BaseController
-  before_action :fetch_prebid, except: [:index, :create]
+  before_action :fetch_prebid, except: [:index, :create, :factory_prebid]
 
   def index
     if params[:buyer_id].present?
@@ -13,6 +13,24 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
     end
 
     render 'spree/api/prebids/index'
+  end
+
+  def factory_prebid
+    # TODO: f it
+    # For this seller, every factory (we only have one ATM), every product
+    # hack a prebid record
+    Spree::Prebid.where(seller_id: params[:seller_id]).destroy_all
+    products = Spree::Product.all
+    products.each do |p|
+      Spree::Prebid.create(
+        seller_id: params[:seller_id],
+        product_id: p.id,
+        eqp: params[:eqp_flag],
+        eqp_discount: params[:eqp_discount],
+        markup: params[:markup]
+      )
+    end
+    render nothing: true, status: :ok
   end
 
   def show

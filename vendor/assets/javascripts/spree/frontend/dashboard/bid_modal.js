@@ -36,10 +36,12 @@ $(function() {
 
     var processing_markup = 0.015;
     if ($('.modal-body #payment-method').text() === 'Credit Card') {
-      processing_markup = 0.022;
+      processing_markup = 0.029;
     }
 
-    var px_markup = 0.0299;
+    processing_flat_fee = 0.35;
+
+    var px_markup = 0.0499;
     var total_markup = (processing_markup + px_markup);
     var flash_fields = [];
 
@@ -48,6 +50,7 @@ $(function() {
       total_price = per_unit_price * quantity;
       per_unit_price_shown = (per_unit_price / (1 - total_markup));
       total_price_shown = per_unit_price_shown * quantity;
+      total_price_shown += processing_flat_fee;
       flash_fields.push(
         '.modal-body #total-price',
         '.modal-body #per-unit-price-shown',
@@ -58,6 +61,7 @@ $(function() {
       per_unit_price = total_price / quantity;
       per_unit_price_shown = (per_unit_price / (1 - total_markup));
       total_price_shown = per_unit_price_shown * quantity;
+      total_price_shown += processing_flat_fee;
       flash_fields.push(
         '.modal-body #per-unit-price',
         '.modal-body #per-unit-price-shown',
@@ -66,6 +70,7 @@ $(function() {
     } else if (anchor_field === 'per-unit-price-shown') {
       per_unit_price_shown = parseFloat($('.modal-body #per-unit-price-shown').val());
       total_price_shown = per_unit_price_shown * quantity;
+      total_price_shown += processing_flat_fee;
       per_unit_price = per_unit_price_shown * (1 - total_markup);
       total_price = per_unit_price * quantity;
       flash_fields.push(

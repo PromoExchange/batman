@@ -10,7 +10,7 @@ $(function() {
     $("#include-sandh-edit").prop("checked", (include_sandh==='true'));
   });
 
-  $('#tax-rate-submit').click(function(e){
+  $('#tax-rate-submit').click(function(e) {
     var key = $('#seller-live-auction-table').attr('data-key');
     var taxrate_id = $('#tax-rate-form > #taxrate-id').val();
     var taxrate_value = $("#tax-rate-edit").val();

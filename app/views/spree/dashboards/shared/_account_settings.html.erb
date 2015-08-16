@@ -6,6 +6,7 @@
   <li class="active"><a href="#contact-tab" role="tab" data-toggle="tab"><%=Spree.t(:contact_information)%></a></li>
   <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
     <li><a href="#taxrates-tab" role="tab" data-toggle="tab"><%=Spree.t(:tax_rates)%></a></li>
+    <li><a href="#prebids-tab" role="tab" data-toggle="tab"><%=Spree.t(:prebids)%></a></li>
   <% end %>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
     <li>
@@ -21,6 +22,9 @@
   <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
     <div class="tab-pane" id="taxrates-tab">
       <%= render partial: 'spree/dashboards/seller/taxrates_tab' %>
+    </div>
+    <div class="tab-pane" id="prebids-tab">
+      <%= render partial: 'spree/dashboards/seller/prebids_tab' %>
     </div>
   <% end %>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>

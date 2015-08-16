@@ -1,0 +1,31 @@
+<% content_for :page_title do %>
+<%= Spree.t(:prebid_settings) %>
+<% end %>
+
+<div class="tab-pane" id="prebid-pane">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <table class="table table-striped" id="prebid-table">
+        <thead>
+          <tr>
+            <th>Factory</th>
+            <th>EQP</th>
+            <th>Discount from EQP</th>
+            <th>Markup</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-id="<%= spree_current_user.id %>" id="prebid-<%= spree_current_user.id %>">
+            <td class="factory" data-id><%= @hacked_factory.product.supplier.name %></td>
+            <td class="eqp-flag"><%= @hacked_factory.eqp %></td>
+            <td class="eqp-discount"><%= @hacked_factory.eqp_discount.to_f %></td>
+            <td class="markup"><%= @hacked_factory.markup.to_f %></td>
+            <td><button type="button" class="btn btn-success open-prebid" data-toggle="modal" data-target="#prebid-edit-modal">Edit</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%= render partial: 'spree/dashboards/seller/prebid_modal' %>

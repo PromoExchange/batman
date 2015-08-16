@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   mount Spree::Core::Engine, at: '/'
 
   post '/charges', to: 'spree/api/charges#charge'
+  post '/factoryprebid', to: 'spree/api/prebids#factory_prebid'
 
   resources :pxtaxrates,
     controller: 'spree/pxtaxrates',

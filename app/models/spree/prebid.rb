@@ -18,6 +18,7 @@ class Spree::Prebid < Spree::Base
     base_unit_price = auction.product_unit_price
     running_unit_price = base_unit_price
 
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - product_name=#{auction.product.name}")
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - base_unit_price=#{base_unit_price}")
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - quantity=#{auction.quantity}")
 
@@ -129,6 +130,11 @@ class Spree::Prebid < Spree::Base
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     # Shipping based on buyers zip
+    # Package needs weight, height, width and depth
+    shipping_cost = calculate_shipping auction
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - shipping_cost=#{shipping_cost}")
+    running_unit_price += (shipping_cost / auction.quantity)
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     # Seller markup
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - markup=#{markup.to_f}")
@@ -149,13 +155,17 @@ class Spree::Prebid < Spree::Base
     end
     payment_processing_flat_fee = 0.30
 
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - payment_processing_commission=#{payment_processing_commission}")
+    Rails.logger.debug(
+      "PREBID - A:#{auction_id} P:#{id} - payment_processing_commission=#{payment_processing_commission}")
     running_unit_price /= (1 - payment_processing_commission)
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+    Rails.logger.debug(
+      "PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - payment_processing_flat_fee=#{payment_processing_flat_fee}")
+    Rails.logger.debug(
+      "PREBID - A:#{auction_id} P:#{id} - payment_processing_flat_fee=#{payment_processing_flat_fee}")
     running_unit_price += (payment_processing_flat_fee / auction.quantity)
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+    Rails.logger.debug(
+      "PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     Spree::Bid.transaction do
       bid = Spree::Bid.create(
@@ -179,5 +189,71 @@ class Spree::Prebid < Spree::Base
 
       bid.save
     end
+  end
+
+  def calculate_shipping(auction)
+    shipping_weight_id = Spree::Property.where(name: 'shipping_weight').first.id
+    shipping_dimensions_id = Spree::Property.where(name: 'shipping_dimensions').first.id
+    shipping_quantity_id = Spree::Property.where(name: 'shipping_quantity').first.id
+
+    property = auction.product.product_properties.where(property_id: shipping_weight_id).first
+    fail "Shipping weight is nil" if property.nil?
+    shipping_weight = property.value
+
+    property = auction.product.product_properties.where(property_id: shipping_dimensions_id).first.value
+    fail "Shipping dimensions is nil" if property.nil?
+    shipping_dimensions = property.value
+
+    property = auction.product.product_properties.where(property_id: shipping_quantity_id).first.value
+    fail "Shipping quantity is nil" if property.nil?
+    shipping_quantity = property.value
+
+    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_weight=#{shipping_weight}")
+    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_dimensions=#{shipping_dimensions}")
+    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_quantity=#{shipping_quantity}")
+
+    number_of_packages = (auction.quantity / shipping_quantity.to_f).ceil
+
+    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - number_of_packages=#{number_of_packages}")
+
+    dimensions = shipping_dimensions.gsub(/[A-Z]/, '').gsub(/ /, '').split('x')
+    package = ActiveShipping::Package.new(
+      shipping_weight.to_i * 16,
+      dimensions.map(&:to_i),
+      units: :imperial
+    )
+
+    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_origin zipcode=#{seller.shipping_address.zipcode}")
+
+    origin = ActiveShipping::Location.new(
+      country: seller.shipping_address.country.iso,
+      state: seller.shipping_address.state.abbr,
+      city: seller.shipping_address.city,
+      zip: seller.shipping_address.zipcode
+    )
+
+    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.buyer.shipping_address.zipcode}")
+
+    destination = ActiveShipping::Location.new(
+      country: auction.buyer.shipping_address.country.iso,
+      state: auction.buyer.shipping_address.state.abbr,
+      city: auction.buyer.shipping_address.city,
+      zip: auction.buyer.shipping_address.zipcode
+    )
+
+    ups = ActiveShipping::UPS.new(
+      login: ENV['UPS_API_USERID'],
+      password: ENV['UPS_API_PASSWORD'],
+      key: ENV['UPS_API_KEY']
+    )
+    response = ups.find_rates(origin, destination, package)
+
+    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price] }
+
+    (ups_rates[0][1] * number_of_packages.to_f) / 100
+  rescue => e
+    Rails.logger.error("PREBID - A:#{auction.id} P:#{id} - Failed to calculate shipping")
+    Rails.logger.error("PREBID - A:#{auction.id} P:#{id} - #{e.message}")
+    0.0
   end
 end

@@ -86,7 +86,9 @@ class Spree::AuctionsController < Spree::StoreController
   def send_prebid_request(auction_id)
     embroidery_imprint_method_id = Spree::ImprintMethod.where(name: 'Embroidery').first.id
     return if embroidery_imprint_method_id == params[:auction][:imprint_method_id].to_i
-    Resque.enqueue(CreatePrebids, auction_id: @auction.id)
+    # Used for debuging, i.e. Direct call
+    # CreatePrebids.perform(auction_id)
+    Resque.enqueue(CreatePrebids, auction_id: auction_id)
   end
 
   def destroy

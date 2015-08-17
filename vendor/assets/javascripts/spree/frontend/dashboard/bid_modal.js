@@ -50,7 +50,6 @@ $(function() {
       total_price = per_unit_price * quantity;
       per_unit_price_shown = (per_unit_price / (1 - px_markup) / (1 - processing_markup)) + processing_flat_fee / quantity;
       total_price_shown = per_unit_price_shown * quantity;
-      total_price_shown += processing_flat_fee;
       flash_fields.push(
         '.modal-body #total-price',
         '.modal-body #per-unit-price-shown',
@@ -61,7 +60,6 @@ $(function() {
       per_unit_price = total_price / quantity;
       per_unit_price_shown = (per_unit_price / (1 - px_markup) / (1 - processing_markup)) + processing_flat_fee / quantity;
       total_price_shown = per_unit_price_shown * quantity;
-      total_price_shown += processing_flat_fee;
       flash_fields.push(
         '.modal-body #per-unit-price',
         '.modal-body #per-unit-price-shown',

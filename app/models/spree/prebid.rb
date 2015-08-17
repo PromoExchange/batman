@@ -97,10 +97,11 @@ class Spree::Prebid < Spree::Base
       Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - upcharge_value=#{upcharge_value}")
 
       # TODO: parse price code string for ranges
-      discounted_upcharge_value = Spree::Price.discount_price('G',c[4].to_f)
-      per_unit_product_run_charge = c[4].to_f / auction.quantity
+      discounted_upcharge_value = Spree::Price.discount_price('G', c[4].to_f)
+      per_unit_product_run_charge = discounted_upcharge_value / auction.quantity
 
-      Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - per_unit_product_run_charge=#{per_unit_product_run_charge}")
+      Rails.logger.debug(
+        "PREBID - A:#{auction_id} P:#{id} - per_unit_product_run_charge=#{per_unit_product_run_charge}")
 
       running_unit_price += per_unit_product_run_charge
       Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
@@ -131,7 +132,7 @@ class Spree::Prebid < Spree::Base
 
     # Seller markup
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - markup=#{markup.to_f}")
-    running_unit_price /= (1 - markup.to_f)
+    running_unit_price *= (1 + markup.to_f)
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     # Promo exchange commission
@@ -142,13 +143,18 @@ class Spree::Prebid < Spree::Base
 
     # Payment processing cost
     if auction.payment_method == 'Check'
-      payment_processing_commission = 0.015
+      payment_processing_commission = 0.0
     else
-      payment_processing_commission = 0.029
+      payment_processing_commission = 0.03
     end
+    payment_processing_flat_fee = 0.30
 
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - payment_processing_commission=#{payment_processing_commission}")
-    running_unit_price *= (1 + payment_processing_commission)
+    running_unit_price /= (1 - payment_processing_commission)
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - payment_processing_flat_fee=#{payment_processing_flat_fee}")
+    running_unit_price += (payment_processing_flat_fee / auction.quantity)
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     Spree::Bid.transaction do

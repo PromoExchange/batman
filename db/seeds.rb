@@ -66,6 +66,11 @@ CSV.foreach(seed_path('pms_colors.csv'), headers: true, header_converters: :symb
   Spree::PmsColor.create(row.to_hash)
 end
 
+puts 'Product Properties'
+CSV.foreach(seed_path('product_properties.csv'), headers: true, header_converters: :symbol) do |row|
+  Spree::Property.create(row.to_hash)
+end
+
 puts 'Roles'
 Spree::Role.where(name: 'admin').first_or_create
 Spree::Role.where(name: 'user').first_or_create

@@ -27,5 +27,25 @@ Spree::Product.class_eval do
     volume_prices.first.amount.to_f
   end
 
+  def set_nondisplay_property(property_name, property_value)
+    ActiveRecord::Base.transaction do
+      # Works around spree_i18n #301
+      property = if Property.exists?(name: property_name)
+        Property.where(name: property_name).first
+      else
+        Property.create(name: property_name, presentation: 'NON DISPLAY')
+      end
+
+      product_property = ProductProperty.where(
+        product: self,
+        property: property
+      ).first_or_initialize
+
+      product_property.value = property_value
+      product_property.do_not_display = true
+      product_property.save!
+    end
+  end
+
   delegate :upcharges, to: :option_values
 end

@@ -131,15 +131,18 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         end
       end
 
-      # Properties
+      # Properties (Seeded to be displayable or not)
       properties = []
-      properties << "Country of Origin: #{hashed[:origin]}" if hashed[:origin]
-      properties << "Imprint Area: #{hashed[:imprint_area]}" if hashed[:imprint_area]
-      properties << "Price Includes: #{hashed[:price_includes]}" if hashed[:price_includes]
-      properties << "Product Size: #{hashed[:product_size]}" if hashed[:product_size]
-      properties << "Additional Info: #{hashed[:additional_info]}" if hashed[:additional_info]
-      properties << "Shipping Quantity: #{hashed[:shipping_quantity]}" if hashed[:shipping_quantity]
-      properties << "Available Colors: #{hashed[:available_colors]}" if hashed[:available_colors]
+      properties << "country_of_origin:#{hashed[:origin]}" if hashed[:origin]
+      properties << "imprint_area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
+      properties << "price_includes:#{hashed[:price_includes]}" if hashed[:price_includes]
+      properties << "product_size:#{hashed[:product_size]}" if hashed[:product_size]
+      properties << "additional_info:#{hashed[:additional_info]}" if hashed[:additional_info]
+      properties << "shipping_quantity:#{hashed[:shipping_quantity]}" if hashed[:shipping_quantity]
+      properties << "available_colors:#{hashed[:available_colors]}" if hashed[:available_colors]
+      properties << "shipping_weight:#{hashed[:shipping_weight_lbs]}" if hashed[:shipping_weight_lbs]
+      properties << "shipping_dimensions:#{hashed[:shipping_dimensions_inch]}" if hashed[:shipping_dimensions_inch]
+      properties << "fob: #{hashed[:fob]}" if hashed[:fob]
 
       properties.each do |property|
         property_vals = property.split(':')
@@ -194,7 +197,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       ['Photo Magic', 'Photo Magic'],
       ['Blank', 'Blank']
     ].each do |w|
-      if (imprint_method.include?(w[0]))
+      if imprint_method.include?(w[0])
         imprint = Spree::ImprintMethod.where(name: w[1]).first
         unless imprint.nil?
           Spree::ImprintMethodsProduct.create(

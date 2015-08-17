@@ -1,0 +1,11 @@
+name,presentation,do_not_display
+country_of_origin,"Country of Origin",false
+imprint_area,"Imprint Area",false
+price_includes,"Price Includes",false
+product_size,"Size",false
+additional_info,"Additional Info",false
+shipping_quantity,"Shipping Quantity",false
+available_colors,"Available Colors",false
+shipping_weight,"Shipping weight",true
+shipping_dimensions,"Shipping Dimensions",true
+fob,"FOB",true

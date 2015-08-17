@@ -6,7 +6,7 @@ $(function() {
     var markup = row.find('td.markup').html();
     var seller_id = row.attr('data-id');
     $('#prebid-form > #seller-id').val(seller_id);
-    $("#eqp-flag-edit").prop("checked", (eqp_flag==='true'));
+    $("#eqp-flag-edit").prop("checked", (eqp_flag === 'true'));
     $("#eqp-discount-edit").val(eqp_discount);
     $("#markup-edit").val(markup);
   });

@@ -46,10 +46,10 @@ $(function() {
         } else {
           $(eqp_flag_cell_id).html('false');
         }
-        alert('Tax rate updated');
+        alert('Prebid settings updated');
       },
       error: function(data) {
-        alert('Failed to update tax rate');
+        alert('Failed to update prebid settings');
       }
     });
   });

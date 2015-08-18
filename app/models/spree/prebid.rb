@@ -204,11 +204,11 @@ class Spree::Prebid < Spree::Base
     fail 'Shipping weight is nil' if property.nil?
     shipping_weight = property.value
 
-    property = auction.product.product_properties.where(property_id: shipping_dimensions_id).first.value
+    property = auction.product.product_properties.where(property_id: shipping_dimensions_id).first
     fail 'Shipping dimensions is nil' if property.nil?
     shipping_dimensions = property.value
 
-    property = auction.product.product_properties.where(property_id: shipping_quantity_id).first.value
+    property = auction.product.product_properties.where(property_id: shipping_quantity_id).first
     fail 'Shipping quantity is nil' if property.nil?
     shipping_quantity = property.value
 

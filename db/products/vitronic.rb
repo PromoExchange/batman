@@ -1,7 +1,6 @@
 require 'csv'
 require 'open-uri'
 require 'work_queue'
-require 'thread'
 
 puts 'Loading Vitronic products'
 
@@ -29,9 +28,6 @@ load_fail = 0
 image_fail = 0
 count = 0
 beginning_time = Time.zone.now
-wq = WorkQueue.new 4
-
-semaphore = Mutex.new
 
 category_map = {
   'Headwear': 'Headwear-Caps',
@@ -50,115 +46,107 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   next unless hashed[:item_name].length >= 3
 
   count += 1
-  wq.enqueue_b do
-    begin
-      desc = hashed[:product_description]
-      [
-        '&bull;'
-      ].each do |s|
-        desc.gsub!(s, '. ')
-      end
 
-      product_attrs = {
-        sku: hashed[:sku],
-        name: hashed[:item_name],
-        description: desc,
-        price: 1.0,
-        supplier_id: supplier.id
-      }
-
-      product = Spree::Product.create!(default_attrs.merge(product_attrs))
-
-      # Image
-      if Rails.configuration.x.load_images
-        begin
-          image_uri = "http://www.vitronicpromotional.com/image.php?sz=viewitem_lg&itemno=#{hashed[:sku]}"
-          product.images << Spree::Image.create!(
-            attachment: open(URI.parse(image_uri)),
-            viewable: product)
-        rescue => e
-          ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
-          image_fail += 1
-        end
-      end
-
-      # Main Product Color
-      colors = hashed[:available_colors]
-      if colors
-        colors.split(',').each do |c|
-          color = c.strip
-          Spree::ColorProduct.create(product_id: product.id, color: color)
-
-          # Map to the PX Colors taxons
-          begin
-            # We do not know if multiple colors in the product
-            # list end up mapping to the same PX colors.
-            # It is actually quite likely they will.
-            main_color_map[color.to_sym].each do |px_color|
-              semaphore.synchronize do
-                taxon = Spree::Taxon.where(name: px_color).first
-                product.taxons << taxon
-              end
-            end
-          rescue
-            puts 'Duplicate taxon detected'
-          end
-        end
-      else
-        Spree::ColorProduct.create(product_id: product.id, color: 'Default')
-      end
-
-      # Categories
-      product_category = hashed[:product_categories]
-      categories = product_category.split(',') unless product_category.nil?
-
-      unless categories.nil?
-        categories.each do |c|
-          taxon_key = category_map[c.strip.to_sym]
-
-          if taxon_key.nil?
-            puts "Category Warning: #{hashed[:sku]} - #{hashed[:product_categories]}"
-            next
-          end
-
-          taxon = Spree::Taxon.where(name: taxon_key).first
-
-          semaphore.synchronize do
-            Spree::Classification.where(
-              taxon_id: taxon.id,
-              product_id: product.id).first_or_create
-          end
-        end
-      end
-
-      # Properties (Seeded to be displayable or not)
-      properties = []
-      properties << "country_of_origin:#{hashed[:origin]}" if hashed[:origin]
-      properties << "imprint_area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
-      properties << "price_includes:#{hashed[:price_includes]}" if hashed[:price_includes]
-      properties << "product_size:#{hashed[:product_size]}" if hashed[:product_size]
-      properties << "additional_info:#{hashed[:additional_info]}" if hashed[:additional_info]
-      properties << "shipping_quantity:#{hashed[:shipping_quantity]}" if hashed[:shipping_quantity]
-      properties << "available_colors:#{hashed[:available_colors]}" if hashed[:available_colors]
-      properties << "shipping_weight:#{hashed[:shipping_weight_lbs]}" if hashed[:shipping_weight_lbs]
-      properties << "shipping_dimensions:#{hashed[:shipping_dimensions_inch]}" if hashed[:shipping_dimensions_inch]
-      properties << "fob: #{hashed[:fob]}" if hashed[:fob]
-
-      properties.each do |property|
-        property_vals = property.split(':')
-        product.set_property(property_vals[0].strip, property_vals[1].strip)
-      end
-    rescue => e
-      load_fail += 1
-      ap "Error in #{hashed[:sku]} product data: #{e}"
-    ensure
-      ActiveRecord::Base.clear_active_connections!
+  begin
+    desc = hashed[:product_description]
+    [
+      '&bull;'
+    ].each do |s|
+      desc.gsub!(s, '. ')
     end
+
+    product_attrs = {
+      sku: hashed[:sku],
+      name: hashed[:item_name],
+      description: desc,
+      price: 1.0,
+      supplier_id: supplier.id
+    }
+
+    product = Spree::Product.create!(default_attrs.merge(product_attrs))
+
+    # Image
+    if Rails.configuration.x.load_images
+      begin
+        image_uri = "http://www.vitronicpromotional.com/image.php?sz=viewitem_lg&itemno=#{hashed[:sku]}"
+        product.images << Spree::Image.create!(
+          attachment: open(URI.parse(image_uri)),
+          viewable: product)
+      rescue => e
+        ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
+        image_fail += 1
+      end
+    end
+
+    # Main Product Color
+    colors = hashed[:available_colors]
+    if colors
+      colors.split(',').each do |c|
+        color = c.strip
+        Spree::ColorProduct.create(product_id: product.id, color: color)
+
+        # Map to the PX Colors taxons
+        begin
+          # We do not know if multiple colors in the product
+          # list end up mapping to the same PX colors.
+          # It is actually quite likely they will.
+          main_color_map[color.to_sym].each do |px_color|
+            taxon = Spree::Taxon.where(name: px_color).first
+            product.taxons << taxon
+          end
+        rescue
+          # Just swallow it
+        end
+      end
+    else
+      Spree::ColorProduct.create(product_id: product.id, color: 'Default')
+    end
+
+    # Categories
+    product_category = hashed[:product_categories]
+    categories = product_category.split(',') unless product_category.nil?
+
+    unless categories.nil?
+      categories.each do |c|
+        taxon_key = category_map[c.strip.to_sym]
+
+        if taxon_key.nil?
+          puts "Category Warning: #{hashed[:sku]} - #{hashed[:product_categories]}"
+          next
+        end
+
+        taxon = Spree::Taxon.where(name: taxon_key).first
+
+        Spree::Classification.where(
+          taxon_id: taxon.id,
+          product_id: product.id).first_or_create
+      end
+    end
+
+    # Properties (Seeded to be displayable or not)
+    properties = []
+    properties << "country_of_origin:#{hashed[:origin]}" if hashed[:origin]
+    properties << "imprint_area:#{hashed[:imprint_area]}" if hashed[:imprint_area]
+    properties << "price_includes:#{hashed[:price_includes]}" if hashed[:price_includes]
+    properties << "product_size:#{hashed[:product_size]}" if hashed[:product_size]
+    properties << "additional_info:#{hashed[:additional_info]}" if hashed[:additional_info]
+    properties << "shipping_quantity:#{hashed[:shipping_quantity]}" if hashed[:shipping_quantity]
+    properties << "available_colors:#{hashed[:available_colors]}" if hashed[:available_colors]
+    properties << "shipping_weight:#{hashed[:shipping_weight_lbs]}" if hashed[:shipping_weight_lbs]
+    properties << "shipping_dimensions:#{hashed[:shipping_dimensions_inch]}" if hashed[:shipping_dimensions_inch]
+    properties << "fob: #{hashed[:fob]}" if hashed[:fob]
+
+    properties.each do |property|
+      property_vals = property.split(':')
+      product.set_property(property_vals[0].strip, property_vals[1].strip)
+    end
+  rescue => e
+    load_fail += 1
+    ap "Error in #{hashed[:sku]} product data: #{e}"
+  ensure
+    ActiveRecord::Base.clear_active_connections!
   end
 end
-
-# Join product threads
-wq.join
 
 # Pricing
 def get_last_break(hashed, root, limit)

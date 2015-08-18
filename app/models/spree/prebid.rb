@@ -156,16 +156,20 @@ class Spree::Prebid < Spree::Base
     payment_processing_flat_fee = 0.30
 
     Rails.logger.debug(
-      "PREBID - A:#{auction_id} P:#{id} - payment_processing_commission=#{payment_processing_commission}")
+      "PREBID - A:#{auction_id} P:#{id} - payment_processing_commission=#{payment_processing_commission}"
+    )
     running_unit_price /= (1 - payment_processing_commission)
     Rails.logger.debug(
-      "PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+      "PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}"
+    )
 
     Rails.logger.debug(
-      "PREBID - A:#{auction_id} P:#{id} - payment_processing_flat_fee=#{payment_processing_flat_fee}")
+      "PREBID - A:#{auction_id} P:#{id} - payment_processing_flat_fee=#{payment_processing_flat_fee}"
+    )
     running_unit_price += (payment_processing_flat_fee / auction.quantity)
     Rails.logger.debug(
-      "PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+      "PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}"
+    )
 
     Spree::Bid.transaction do
       bid = Spree::Bid.create(
@@ -197,15 +201,15 @@ class Spree::Prebid < Spree::Base
     shipping_quantity_id = Spree::Property.where(name: 'shipping_quantity').first.id
 
     property = auction.product.product_properties.where(property_id: shipping_weight_id).first
-    fail "Shipping weight is nil" if property.nil?
+    fail 'Shipping weight is nil' if property.nil?
     shipping_weight = property.value
 
     property = auction.product.product_properties.where(property_id: shipping_dimensions_id).first.value
-    fail "Shipping dimensions is nil" if property.nil?
+    fail 'Shipping dimensions is nil' if property.nil?
     shipping_dimensions = property.value
 
     property = auction.product.product_properties.where(property_id: shipping_quantity_id).first.value
-    fail "Shipping quantity is nil" if property.nil?
+    fail 'Shipping quantity is nil' if property.nil?
     shipping_quantity = property.value
 
     Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_weight=#{shipping_weight}")
@@ -232,7 +236,9 @@ class Spree::Prebid < Spree::Base
       zip: seller.shipping_address.zipcode
     )
 
-    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.buyer.shipping_address.zipcode}")
+    Rails.logger.debug(
+      "PREBID - A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.buyer.shipping_address.zipcode}"
+    )
 
     destination = ActiveShipping::Location.new(
       country: auction.buyer.shipping_address.country.iso,

@@ -151,7 +151,7 @@ class Spree::Prebid < Spree::Base
     if auction.payment_method == 'Check'
       payment_processing_commission = 0.0
     else
-      payment_processing_commission = 0.03
+      payment_processing_commission = 0.029
     end
     payment_processing_flat_fee = 0.30
 

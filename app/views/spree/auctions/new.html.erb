@@ -16,6 +16,14 @@
   <div class="col-md-6 well">
     <h2><%= @auction.product.name %></h2>
     <%= form_for @auction, url: main_app.auctions_path, class: 'form' do |f| %>
+    <% if @auction.errors.any? %>
+      <p class="alert alert-error">Errors</p>
+      <ul>
+        <% @auction.errors.messages.each do |k,v| %>
+          <li class="error"><%= "#{k.to_s.humanize} #{v.to_s.humanize}" %></li>
+        <% end %>
+      </ul>
+    <% end %>
     <%= f.hidden_field :product_id, value: @auction.product.id %>
     <%= f.hidden_field :buyer_id, value: @auction.buyer_id %>
     <fieldset>
@@ -51,6 +59,11 @@
         </table>
         <input class="form-control tagsinput" data-role="tagsinput" id="pms-colors" name="auction[pms_colors]" type='text'></input>
         <p>Maxmimum Number of PMS Imprint Colors: 2</p>
+      </div>
+
+      <div class="form-group">
+        <%= f.label(:custom_pms_colors, Spree.t(:custom_pms_colors)) %>
+        <%= f.text_field(:custom_pms_colors, class: 'form-control')%>
       </div>
 
       <div class="form-group">

@@ -26,9 +26,11 @@ class Spree::Auction < Spree::Base
   validates :main_color_id, presence: true
   validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
+  validates :imprint_method_id, presence: true
   validates :quantity, presence: true
   validates_inclusion_of :status, in: %w(open waiting closed ended cancelled unpaid completed)
   validates :shipping_address_id, presence: true
+  validates_numericality_of :quantity, only_integer: true, greater_than: 0
 
   delegate :name, to: :product
 
@@ -56,7 +58,7 @@ class Spree::Auction < Spree::Base
   end
 
   def winning_bid
-    Spree::Bid.where(auction_id: id, status: ['accepted','completed'] ).first
+    Spree::Bid.where(auction_id: id, status: %w(accepted completed)).first
   end
 
   def set_default_dates

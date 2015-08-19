@@ -43,6 +43,8 @@ class Spree::AuctionsController < Spree::StoreController
       started: Time.zone.now
     )
 
+    @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
+
     @auction.save!
 
     unless params[:auction][:pms_colors].nil?

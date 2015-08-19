@@ -80,6 +80,8 @@ Rails.application.configure do
   # Seed data, load image files
   config.x.load_images = true
 
+  config.action_mailer.delivery_method = :smtp
+
   config.paperclip_defaults = {
     storage: :s3,
     s3_credentials: {

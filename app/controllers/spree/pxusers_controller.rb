@@ -46,6 +46,13 @@ class Spree::PxusersController < Spree::StoreController
         render :new
       end
     end
+
+    if pxuser_params[:buyer_seller] == 'buyer'
+      Resque.enqueue(SendBuyerRegistration, user_id: user.id)
+    else
+      Resque.enqueue(SendSellerRegistration, user_id: user.id)
+    end
+
     redirect_to login_url
   rescue
     @pxuser = Spree::Pxuser.new

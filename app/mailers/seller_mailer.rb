@@ -8,4 +8,9 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange invoice')
   end
+
+  def seller_registration(user)
+    @user = user
+    mail(to: @user.email, subject: 'Welcome to PromoExchange!')
+  end
 end

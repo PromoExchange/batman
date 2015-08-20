@@ -13,6 +13,6 @@ RSpec.describe SellerMailer, type: :mailer do
   end
 
   it 'renders the not paid sender email' do
-    expect(invoice_not_paid_mail.from).to eql(['support@thepromoexchange.com'])
+    expect(invoice_not_paid_mail.from).to eql(['hello@thepromoexchange.com'])
   end
 end

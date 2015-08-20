@@ -12,7 +12,8 @@ $(function() {
   $('#pms-colors').tagsinput({
     itemValue: 'id',
     itemText: 'text',
-    maxTags: 2
+    maxTags: 2,
+    freeInput: false
   });
 
   $(".swatch-clickable").click(function() {

@@ -57,6 +57,20 @@ class Spree::AuctionsController < Spree::StoreController
     end
     send_prebid_request @auction.id
 
+    unless auction_data[:invited_sellers].nil?
+      auction_data[:invited_sellers].split(';').each do |s|
+        unless s.blank?
+          invited_seller = Spree::User.where( email: s ).first
+          unless invited_seller.nil?
+            Spree::AuctionsUser.create(
+              auction_id: @auction.id,
+              user_id: invited_seller.id
+            )
+          end
+        end
+      end
+    end
+
     redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
   rescue
     supporting_data
@@ -132,8 +146,7 @@ class Spree::AuctionsController < Spree::StoreController
       :shipping_address_id,
       :payment_method,
       :ended,
-      :page,
-      :per_page
+      :invited_sellers
     )
   end
 end

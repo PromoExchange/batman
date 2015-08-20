@@ -26,6 +26,7 @@
     <% end %>
     <%= f.hidden_field :product_id, value: @auction.product.id %>
     <%= f.hidden_field :buyer_id, value: @auction.buyer_id %>
+    <%= f.hidden_field :invited_sellers, value: '' %>
     <fieldset>
       <div class="form-group" id="imprint-methods">
         <%= f.label(:imprint_method_id, Spree.t(:imprint_method)) %>
@@ -90,6 +91,8 @@
           { prompt: 'Please Select' }, { class: 'form-control' }) %>
       </div>
 
+      <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>
+
       <div class="form-actions" data-hook="buttons">
         <%= button 'Start Auction', 'ok', 'submit', { class: 'btn-success' } %>
         <span class="or"><%= Spree.t(:or) %></span>
@@ -99,3 +102,4 @@
     <% end %>
   </div>
 </div>
+<%= render partial: 'spree/auctions/invite_sellers_modal' %>

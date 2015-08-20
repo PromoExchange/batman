@@ -10,13 +10,19 @@ class Spree::Auction < Spree::Base
 
   has_many :adjustments, as: :adjustable
   has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }
+
+  has_many :auctions_users, class_name: 'Spree::AuctionsUser'
+  has_many :invited_sellers, through: :auctions_users, source: :user
+
   belongs_to :buyer, class_name: 'Spree::User'
   belongs_to :imprint_method
   belongs_to :logo
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
   has_one :order
+
   has_many :auctions_pms_colors, class_name: 'Spree::AuctionPmsColor'
   has_many :pms_colors, through: :auctions_pms_colors
+
   belongs_to :product
   belongs_to :shipping_address, class_name: 'Spree::Address'
 
@@ -51,6 +57,10 @@ class Spree::Auction < Spree::Base
       end
     end
     unit_price
+  end
+
+  def preferred?(seller)
+    auctions_users.where(user: seller).first.nil? ? false : true
   end
 
   def buyer_email

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819172025) do
+ActiveRecord::Schema.define(version: 20150820161838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,6 +124,14 @@ ActiveRecord::Schema.define(version: 20150819172025) do
 
   add_index "spree_auctions_pms_colors", ["auction_id"], name: "index_spree_auctions_pms_colors_on_auction_id", using: :btree
   add_index "spree_auctions_pms_colors", ["pms_color_id"], name: "index_spree_auctions_pms_colors_on_pms_color_id", using: :btree
+
+  create_table "spree_auctions_users", id: false, force: :cascade do |t|
+    t.integer "auction_id", null: false
+    t.integer "user_id",    null: false
+  end
+
+  add_index "spree_auctions_users", ["auction_id"], name: "index_spree_auctions_users_on_auction_id", using: :btree
+  add_index "spree_auctions_users", ["user_id"], name: "index_spree_auctions_users_on_user_id", using: :btree
 
   create_table "spree_bids", force: :cascade do |t|
     t.integer  "auction_id",                      null: false

@@ -149,7 +149,9 @@ class Spree::Prebid < Spree::Base
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     # Promo exchange commission
-    px_commission = seller.px_rate.to_f
+    px_commission = 0.0499
+    px_commission = 0.0299 if auction.preferred?(seller)
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - auction.preferred?(seller)=#{auction.preferred?(seller)}")
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - px_commission=#{px_commission}")
     running_unit_price /= (1 - px_commission)
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")

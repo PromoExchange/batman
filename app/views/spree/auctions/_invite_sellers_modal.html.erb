@@ -1,0 +1,61 @@
+<div class="modal" data-id="<%=spree_current_user.spree_api_key%>" id="invite-sellers-modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Invite Sellers</h4>
+      </div>
+      <form class="form" id="invite-sellers-form" action="#" method="post">
+        <div class="modal-body">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="form-group">
+                <label for="seller_address1">Seller 1 email</label>
+                <%= email_field(:seller, :address1) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address2">Seller 2 email</label>
+                <%= email_field(:seller, :address2) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address3">Seller 3 email</label>
+                <%= email_field(:seller, :address3) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address4">Seller 4 email</label>
+                <%= email_field(:seller, :address4) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address5">Seller 5 email</label>
+                <%= email_field(:seller, :address5) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address6">Seller 6 email</label>
+                <%= email_field(:seller, :address6) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address7">Seller 7 email</label>
+                <%= email_field(:seller, :address7) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address8">Seller 8 email</label>
+                <%= email_field(:seller, :address8) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address9">Seller 9 email</label>
+                <%= email_field(:seller, :address9) %>
+              </div>
+              <div class="form-group">
+                <label for="seller_address10">Seller 10 email</label>
+                <%= email_field(:seller, :address10) %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="invite-sellers-submit" data-dismiss="modal">Invite</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

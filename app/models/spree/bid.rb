@@ -28,6 +28,8 @@ class Spree::Bid < Spree::Base
   end
 
   def seller_fee
-    (order.total * seller.px_rate).round(2)
+    rate = 0.0499
+    rate = 0.0299 if auction.preferred?(seller)
+    (order.total * rate).round(2)
   end
 end

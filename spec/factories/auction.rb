@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :auction, class: Spree::Auction do
     association :product, factory: :product
     association :buyer, factory: :user
+    association :logo, factory: :logo
     quantity 1111
     started 5.days.ago
     ended nil

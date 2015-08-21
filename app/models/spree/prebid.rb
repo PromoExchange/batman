@@ -14,6 +14,8 @@ class Spree::Prebid < Spree::Base
 
     return if auction.bids.where(prebid_id: id).present?
 
+    return if auction.quantity > (auction.product.maximum_quantity * 2)
+
     # Get Base price from Volume pricing
     base_unit_price = auction.product_unit_price
     running_unit_price = base_unit_price

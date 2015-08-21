@@ -94,12 +94,12 @@ describe 'Auctions API' do
   end
 
   it 'should update an auction' do
-    auction = FactoryGirl.create(:auction, quantity: 10000)
+    auction = FactoryGirl.create(:auction, quantity: 1000)
 
     put "/api/auctions/#{auction.id}", auction.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
-    expect(json['quantity']).to eq(10000)
+    expect(json['quantity']).to eq(1000)
   end
 
   it 'should not create a duplication auction' do

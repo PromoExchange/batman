@@ -9,15 +9,14 @@ $(function() {
 
   $('.swatch-clickable').tooltip();
 
-  $('#pms-colors').tagsinput({
+  $('#auction_pms_colors').tagsinput({
     itemValue: 'id',
     itemText: 'text',
-    maxTags: 2,
-    freeInput: false
+    maxTags: 2
   });
 
   $(".swatch-clickable").click(function() {
-    $('#pms-colors').tagsinput('add', {
+    $('#auction_pms_colors').tagsinput('add', {
       id: $(this).attr('id'),
       text: $(this).attr('name')
     });

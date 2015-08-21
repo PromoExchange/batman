@@ -1,6 +1,8 @@
 class  Spree::Api::ChargesController < Spree::Api::BaseController
   def charge
-    bid = Spree::Bid.find(params[:bid_id])
+    auction = Spree::Auction.find(params[:auction_id])
+    bid = auction.winning_bid
+
     amount = bid.seller_fee.round(2) * 100
 
     description = "Auction ID: #{bid.auction.reference}, Seller: #{bid.seller.email}"
@@ -13,13 +15,12 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
         description: description
       )
 
-      @bid = Spree::Bid.find(params[:bid_id])
-      @bid.transaction do
-        @bid.update_attributes(status: 'completed')
-        @bid.auction.update_attributes(status: 'completed')
-        @bid.order.update_attributes(payment_state: 'completed')
+      bid.transaction do
+        bid.update_attributes(status: 'completed')
+        bid.auction.update_attributes(status: 'completed')
+        bid.order.update_attributes(payment_state: 'completed')
       end
-      Spree::OrderUpdater.new(@bid.order).update
+      Spree::OrderUpdater.new(bid.order).update
 
       redirect_to main_app.dashboards_path, flash: { notice: 'Credit card charged sucessfully' }
     rescue Stripe::CardError => _e
@@ -30,6 +31,6 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
   private
 
   def charge_params
-    params.require(:charge).permit(:token, :bid_id)
+    params.require(:charge).permit(:token, :auction_id)
   end
 end

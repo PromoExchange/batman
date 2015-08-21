@@ -14,7 +14,7 @@
         <% row_class = 'preferred' if @auction.preferred?(b.seller) %>
         <tr class="<%= row_class %>">
           <td><%= b.email %></td>
-          <td><%= b.bid %></td>
+          <td><%= '%.2f' % b.bid %></td>
           <td><a href="#" class="accept-link" data-id='<%= b.id %>'>Accept</a></td>
         </tr>
       <% end %>

@@ -51,7 +51,7 @@ $(function() {
             }
 
             trHTML += simple_template({
-              value: winning_bid
+              value: parseFloat(winning_bid).toFixed(2)
             });
             trHTML += "</tr>";
           });

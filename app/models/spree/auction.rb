@@ -29,6 +29,11 @@ class Spree::Auction < Spree::Base
   accepts_nested_attributes_for :auctions_pms_colors
 
   validates :buyer_id, presence: true
+  validates :logo_id, presence: true, unless: -> {
+    imprint_method = Spree::ImprintMethod.where(name: 'Blank').first
+    return true if imprint_method.nil? # Needed for testing, do not seed db:test
+    imprint_method_id == imprint_method.id
+  }
   validates :main_color_id, presence: true
   validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
@@ -36,7 +41,17 @@ class Spree::Auction < Spree::Base
   validates :quantity, presence: true
   validates_inclusion_of :status, in: %w(open waiting closed ended cancelled unpaid completed)
   validates :shipping_address_id, presence: true
-  validates_numericality_of :quantity, only_integer: true, greater_than: 0
+  validates_numericality_of :quantity, only_integer: true
+  validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) {
+    50 if auction.product.nil?
+    auction.product.minimum_quantity
+  }
+
+  # validates_numericality_of :quantity,
+  #   only_integer: true,
+  #   greater_than_or_equal_to: -> { product.minumum_value },
+  #   less_than_or_equal_to: -> { product.maximum_value * 2 },
+  #   message: 'Quantity must be above minimum and below 2 times EQP'
 
   delegate :name, to: :product
 

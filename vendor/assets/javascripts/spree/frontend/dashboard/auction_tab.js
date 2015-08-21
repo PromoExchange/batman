@@ -37,7 +37,7 @@ $(function() {
             var num_bids = item.bids.length;
             var low_bid = 'no bids';
             if (num_bids > 0) {
-              low_bid = item.bids[0].bid;
+              low_bid = parseFloat(item.bids[0].bid).toFixed(2);
               if (low_bid === null) {
                 low_bid = 'no bids';
               }

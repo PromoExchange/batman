@@ -22,6 +22,7 @@ gem 'resque-scheduler', '~> 3.1.0'
 gem 'paperclip'
 gem 'stripe'
 gem 'active_shipping'
+gem 'humanize_boolean'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

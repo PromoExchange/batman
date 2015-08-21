@@ -47,6 +47,8 @@ class Spree::AuctionsController < Spree::StoreController
 
     @auction.save!
 
+    byebug
+    
     unless params[:auction][:pms_colors].nil?
       params[:auction][:pms_colors].split(',').each do |pms_color|
         Spree::AuctionPmsColor.create(

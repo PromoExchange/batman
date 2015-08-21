@@ -4,8 +4,20 @@ Spree::Product.class_eval do
   has_and_belongs_to_many :option_values
   has_many :upcharges, as: :related
 
-  # TODO: Removed because sample data will not load
-  # validates :supplier_id, presence: true
+  def minimum_quantity
+    lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).first
+    return 50 if lowest_price_range.nil?
+    lower_value = lowest_price_range.split('..')[0]
+    lower_value.gsub(/\(/, '').to_i
+  end
+
+  def maximum_quantity
+    highest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).last
+    return 2500 if highest_price_range.nil?
+    return 2500 if highest_price_range.include? '+'
+    highest_value = highest_price_range.split('..')[1]
+    highest_value.gsub(/\)/, '').to_i
+  end
 
   def all_prices
     price_ranges = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range)

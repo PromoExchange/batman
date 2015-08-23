@@ -25,7 +25,7 @@ class Spree::PxusersController < Spree::StoreController
         .pluck(:country_id, :id)
         .first
 
-      address = Spree::Address.create(
+      ship_address = Spree::Address.create(
         firstname: pxuser_params[:first_name],
         lastname: pxuser_params[:last_name],
         address1: pxuser_params[:address_line1],
@@ -39,7 +39,24 @@ class Spree::PxusersController < Spree::StoreController
         phone: pxuser_params[:phonenumber]
       )
 
-      user.ship_address = address
+      user.ship_address = ship_address
+
+      bill_address = Spree::Address.create(
+        firstname: pxuser_params[:first_name],
+        lastname: pxuser_params[:last_name],
+        address1: pxuser_params[:address_line1],
+        address2: pxuser_params[:address_line2],
+        company: pxuser_params[:company],
+        city: pxuser_params[:city],
+        zipcode: pxuser_params[:zipcode],
+        state_name: pxuser_params[:state],
+        state_id: ids[1],
+        country_id: ids[0],
+        phone: pxuser_params[:phonenumber]
+      )
+
+      user.bill_address = bill_address
+
       if user.save
         user.generate_spree_api_key!
       else

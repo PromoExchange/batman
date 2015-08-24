@@ -54,10 +54,6 @@ class Spree::PxusersController < Spree::StoreController
         country_id: ids[0],
         phone: pxuser_params[:phonenumber]
       )
-<<<<<<< HEAD
-
-=======
->>>>>>> Create billing address during registration
       user.bill_address = bill_address
 
       if user.save

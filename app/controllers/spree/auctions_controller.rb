@@ -47,8 +47,6 @@ class Spree::AuctionsController < Spree::StoreController
 
     @auction.save!
 
-    byebug
-    
     unless params[:auction][:pms_colors].nil?
       params[:auction][:pms_colors].split(',').each do |pms_color|
         Spree::AuctionPmsColor.create(
@@ -62,7 +60,7 @@ class Spree::AuctionsController < Spree::StoreController
     unless auction_data[:invited_sellers].nil?
       auction_data[:invited_sellers].split(';').each do |s|
         unless s.blank?
-          invited_seller = Spree::User.where( email: s ).first
+          invited_seller = Spree::User.where(email: s).first
           unless invited_seller.nil?
             Spree::AuctionsUser.create(
               auction_id: @auction.id,

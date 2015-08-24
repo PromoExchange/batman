@@ -12,22 +12,33 @@ class Spree::Prebid < Spree::Base
 
     auction = Spree::Auction.find(auction_id)
 
+    # Do not create a duplicate prebid
     return if auction.bids.where(prebid_id: id).present?
 
+    # Do not prebid if the Quantity > 2 * EQP
     return if auction.quantity > (auction.product.maximum_quantity * 2)
+
+    # (TEMP) Do not prebid if this seller is not preferred
+    return unless auction.preferred?(seller)
 
     # Get Base price from Volume pricing
     base_unit_price = auction.product_unit_price
     running_unit_price = base_unit_price
 
+    auction_data = {
+      base_price: auction.product_unit_price,
+      running_unit_price: auction.product_unit_price,
+      quantity: auction.quantity
+    }
+
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - product_name=#{auction.product.name}")
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - base_unit_price=#{base_unit_price}")
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - quantity=#{auction.quantity}")
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - base_unit_price=#{auction_data[:base_unit_price]}")
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - quantity=#{auction_data[:quantity]}")
 
     # Apply discount to base price
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - Vitronic hack, all prices have C discount code")
+    # apply_price_discount(auction_data, 'C')
     running_unit_price = Spree::Price.discount_price('C', base_unit_price)
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     # Run cost added to unit price
     # Supplier level
@@ -204,6 +215,18 @@ class Spree::Prebid < Spree::Base
 
       bid.save
     end
+  end
+
+  # rspec access
+  def self.apply_price_discount_public(auction_data, discount_code)
+    apply_price_discount(auction_data, discount_code)
+  end
+
+  private
+
+  def apply_price_discount(auction_data, discount_code)
+    auction_data[:running_unit_price] = Spree::Price.discount_price(discount_code, auction_data[:base_unit_price])
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{auction_data[:running_unit_price]}")
   end
 
   def calculate_shipping(auction)

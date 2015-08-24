@@ -26,6 +26,7 @@ $(function() {
         var trHTML = '';
         if (data.length > 0) {
           action_template = _.template("<td><button type='button' class='btn btn-success open-bid' data-toggle='modal' data-target='#place-bid' data-id='<%= auction_id %>'>Bid</button></td>");
+          non_action_template = _.template("<td><button type='button' class='btn btn-success open-view'>Bid</button></td>");
           your_bid_template = _.template("<td id='your_bid_<%= auction_id %>'>no bid</td>");
 
           $.each(data, function(i, item) {
@@ -78,9 +79,23 @@ $(function() {
               bid2: bid2_val,
               bid3: bid3_val
             });
-            trHTML += action_template({
-              auction_id: item.id
+
+            // Check to see if this seller is preferred
+            var is_preferred = false;
+            $.each(item.invited_sellers, function(index, value) {
+              if(value.id === parseInt(seller_id)) {
+                is_preferred = true;
+              }
             });
+
+            if( is_preferred === true ) {
+              trHTML += action_template({
+                auction_id: item.id
+              });
+            } else {
+              trHTML += non_action_template();
+            }
+
             trHTML += "</tr>";
           });
         } else {
@@ -186,4 +201,8 @@ $(function() {
     return false;
   });
   $('#seller-live-auction-tab').trigger('click');
+
+  $('#seller-live-auction-table > tbody').on('click', 'button.open-view', function(e) {
+    alert("We're sorry. Only sellers that are invited to this auction can bid. Open auctions to the public are coming soon!");
+  });
 });

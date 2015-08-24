@@ -44,7 +44,7 @@
 
       <p><a href="/dashboards" >Add Logo</a></p>
 
-      <div class="form-group">
+      <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
         <table class="table" id="pms_color_swatch">
           <tbody>
@@ -64,7 +64,7 @@
         <p>Maxmimum Number of PMS Imprint Colors: 2</p>
       </div>
 
-      <div class="form-group">
+      <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:custom_pms_colors, Spree.t(:custom_pms_colors)) %>
         <%= f.text_field(:custom_pms_colors, class: 'form-control')%>
       </div>

@@ -47,12 +47,6 @@ class Spree::Auction < Spree::Base
     auction.product.minimum_quantity
   }
 
-  # validates_numericality_of :quantity,
-  #   only_integer: true,
-  #   greater_than_or_equal_to: -> { product.minumum_value },
-  #   less_than_or_equal_to: -> { product.maximum_value * 2 },
-  #   message: 'Quantity must be above minimum and below 2 times EQP'
-
   delegate :name, to: :product
 
   def self.user_auctions

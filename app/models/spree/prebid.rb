@@ -14,6 +14,8 @@ class Spree::Prebid < Spree::Base
 
     return if auction.bids.where(prebid_id: id).present?
 
+    return if auction.quantity > (auction.product.maximum_quantity * 2)
+
     # Get Base price from Volume pricing
     base_unit_price = auction.product_unit_price
     running_unit_price = base_unit_price
@@ -49,6 +51,7 @@ class Spree::Prebid < Spree::Base
           "PREBID - A:#{auction_id} P:#{id} - pms_color_match, auction.pms_color_match=#{auction.pms_color_match}"
         )
         if auction.pms_color_match?
+          "PREBID - A:#{auction_id} P:#{id} - pms_color_match, auction.pms_color_match=#{auction.pms_color_match}"
           supplier_upcharge_value = Spree::Price.discount_price(s[2], s[3].to_f)
         end
       when 'ink_change'
@@ -69,8 +72,14 @@ class Spree::Prebid < Spree::Base
         Rails.logger.error("PREBID - A:#{auction_id} P:#{id} - Error, unknown supplier upcharge=#{s[1]}")
       end
 
-      running_unit_price += (supplier_upcharge_value / auction.quantity)
-      Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+      if supplier_upcharge_value > 0.0
+        Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - upcharge_code=#{s[2]}")
+        Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - upcharge_value=#{s[3].to_f}")
+        running_unit_price += (supplier_upcharge_value / auction.quantity)
+        Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+      else
+        Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - Supplier upcharge not applied")
+      end
     end
 
     # Product level
@@ -142,7 +151,9 @@ class Spree::Prebid < Spree::Base
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
 
     # Promo exchange commission
-    px_commission = seller.px_rate.to_f
+    px_commission = 0.0499
+    px_commission = 0.0299 if auction.preferred?(seller)
+    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - auction.preferred?(seller)=#{auction.preferred?(seller)}")
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - px_commission=#{px_commission}")
     running_unit_price /= (1 - px_commission)
     Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")

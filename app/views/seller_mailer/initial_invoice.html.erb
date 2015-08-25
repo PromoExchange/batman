@@ -11,6 +11,7 @@
   <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>
   <tr><td>Main Color:</td><td><%= @auction.main_color.color %></td></tr>
   <tr><td>Payment Method:</td><td><%= @auction.payment_method %></td></tr>
+  <tr><td>Custom PMS Colors:</td><td><%= @auction.custom_pms_colors %></td></tr>
   <tr>
     <td>Imprint Colors:</td>
     <td>
@@ -25,3 +26,5 @@
 </table>
 
 <h2>Your fee: <%= (@auction.winning_bid.bid * 0.0299).round(2) %></h2>
+
+<img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo">

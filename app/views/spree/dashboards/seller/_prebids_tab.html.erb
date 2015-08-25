@@ -18,7 +18,7 @@
         <tbody>
           <tr data-id="<%= spree_current_user.id %>" id="prebid-<%= spree_current_user.id %>">
             <td class="factory" data-id><%= @hacked_factory.product.supplier.name %></td>
-            <td class="eqp-flag"><%= @hacked_factory.eqp %></td>
+            <td class="eqp-flag"><%= @hacked_factory.eqp.humanize %></td>
             <td class="eqp-discount"><%= @hacked_factory.eqp_discount.to_f %></td>
             <td class="markup"><%= @hacked_factory.markup.to_f %></td>
             <td><button type="button" class="btn btn-success open-prebid" data-toggle="modal" data-target="#prebid-edit-modal">Edit</button></td>

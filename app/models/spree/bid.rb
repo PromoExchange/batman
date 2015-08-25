@@ -1,4 +1,9 @@
 class Spree::Bid < Spree::Base
+  scope :open, -> { where(status: :open) }
+  scope :accepted, -> { where(status: :accepted) }
+  scope :cancelled, -> { where(status: :cancelled) }
+  scope :completed, -> { where(status: :completed) }
+
   before_create :build_order
 
   belongs_to :auction
@@ -11,6 +16,7 @@ class Spree::Bid < Spree::Base
   validates_inclusion_of :status, in: %w(open accepted cancelled completed)
 
   delegate :email, to: :seller
+  delegate :total, to: :order
 
   def bid
     order.total
@@ -22,6 +28,8 @@ class Spree::Bid < Spree::Base
   end
 
   def seller_fee
-    (order.total * seller.px_rate).round(2)
+    rate = 0.0499
+    rate = 0.0299 if auction.preferred?(seller)
+    (order.total * rate).round(2)
   end
 end

@@ -11,11 +11,11 @@ $(function() {
     } else {
       // response contains id and card, which contains additional card details
       var token = response.id;
-      var bid_id = $('#invoice-bid-id').val();
+      var auction_id = $('#invoice-auction-id').val();
 
       var message = {
         token: token,
-        bid_id: bid_id
+        auction_id: auction_id
       };
 
       $.ajax({
@@ -53,7 +53,7 @@ $(function() {
   });
 
   $('tbody').on('click', 'button.open-invoice', function(e) {
-    var bid_id = $(this).data('id');
-    $('#invoice-bid-id').val(bid_id);
+    var auction_id = $(this).data('id');
+    $('#invoice-auction-id').val(auction_id);
   });
 });

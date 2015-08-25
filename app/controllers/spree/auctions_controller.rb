@@ -25,6 +25,82 @@ class Spree::AuctionsController < Spree::StoreController
       buyer_id: current_spree_user.id,
       started: Time.zone.now)
 
+    supporting_data
+  end
+
+  def create
+    auction_data = params[:auction]
+    @auction = Spree::Auction.new(
+      product_id: auction_data[:product_id],
+      buyer_id: auction_data[:buyer_id],
+      quantity: auction_data[:quantity],
+      imprint_method_id: auction_data[:imprint_method_id],
+      main_color_id: auction_data[:main_color_id],
+      shipping_address_id: auction_data[:shipping_address_id],
+      payment_method: auction_data[:payment_method],
+      logo_id: auction_data[:logo_id],
+      custom_pms_colors: auction_data[:custom_pms_colors],
+      started: Time.zone.now
+    )
+
+    @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
+
+    @auction.save!
+
+    unless params[:auction][:pms_colors].nil?
+      params[:auction][:pms_colors].split(',').each do |pms_color|
+        Spree::AuctionPmsColor.create(
+          auction_id: @auction.id,
+          pms_color_id: pms_color
+        )
+      end
+    end
+    send_prebid_request @auction.id
+
+    unless auction_data[:invited_sellers].nil?
+      auction_data[:invited_sellers].split(';').each do |s|
+        unless s.blank?
+          invited_seller = Spree::User.where( email: s ).first
+          unless invited_seller.nil?
+            Spree::AuctionsUser.create(
+              auction_id: @auction.id,
+              user_id: invited_seller.id
+            )
+          end
+        end
+      end
+    end
+
+    redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
+  rescue
+    supporting_data
+    render :new
+  end
+
+  def send_prebid_request(auction_id)
+    embroidery_imprint_method_id = Spree::ImprintMethod.where(name: 'Embroidery').first.id
+    return if embroidery_imprint_method_id == params[:auction][:imprint_method_id].to_i
+    # Used for debuging, i.e. Direct call
+    # CreatePrebids.perform(auction_id)
+    Resque.enqueue(CreatePrebids, auction_id: auction_id)
+  end
+
+  def destroy
+    @auction.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
+    redirect_to dashboards_path, flash: { notice: 'Auction was cancelled successfully.' }
+  end
+
+  private
+
+  def fetch_auction
+    @auction = Spree::Auction.find(params[:id])
+  end
+
+  def require_login
+    redirect_to login_url unless current_spree_user
+  end
+
+  def supporting_data
     @addresses = []
     @addresses << [
       "#{@auction.buyer.shipping_address}",
@@ -55,72 +131,22 @@ class Spree::AuctionsController < Spree::StoreController
     @user = spree_current_user
   end
 
-  def create
-    auction_data = params[:auction]
-    @auction = Spree::Auction.create(
-      product_id: auction_data[:product_id],
-      buyer_id: auction_data[:buyer_id],
-      quantity: auction_data[:quantity],
-      imprint_method_id: auction_data[:imprint_method_id],
-      main_color_id: auction_data[:main_color_id],
-      shipping_address_id: auction_data[:shipping_address_id],
-      payment_method: auction_data[:payment_method],
-      logo_id: auction_data[:logo_id]
-    )
-
-    unless params[:auction][:pms_colors].nil?
-      params[:auction][:pms_colors].split(',').each do |pms_color|
-        Spree::AuctionPmsColor.create(
-          auction_id: @auction.id,
-          pms_color_id: pms_color
-        )
-      end
-    end
-    send_prebid_request @auction.id
-
-    redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
-  rescue
-    redirect_to '/dashboards', flash: { error: 'Failed to create an auction' }
-  end
-
-  def send_prebid_request(auction_id)
-    embroidery_imprint_method_id = Spree::ImprintMethod.where(name: 'Embroidery').first.id
-    return if embroidery_imprint_method_id == params[:auction][:imprint_method_id].to_i
-    # Used for debuging, i.e. Direct call
-    # CreatePrebids.perform(auction_id)
-    Resque.enqueue(CreatePrebids, auction_id: auction_id)
-  end
-
-  def destroy
-    @auction.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
-    redirect_to dashboards_path, flash: { notice: 'Auction was cancelled successfully.' }
-  end
-
-  private
-
-  def fetch_auction
-    @auction = Spree::Auction.find(params[:id])
-  end
-
-  def require_login
-    redirect_to login_url unless current_spree_user
-  end
-
   def auction_params
     params.require(:auction).permit(
       :auction_id,
       :product_id,
       :buyer_id,
+      :logo_id,
       :started,
       :pms_colors,
+      :custom_pms_colors,
       :quantity,
       :imprint_method_id,
       :main_color_id,
       :shipping_address_id,
       :payment_method,
       :ended,
-      :page,
-      :per_page
+      :invited_sellers
     )
   end
 end

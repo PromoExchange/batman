@@ -50,7 +50,7 @@ $(function() {
             var low_bid = 'no bids';
             if (num_bids > 0) {
               auction_ids.push(item.id);
-              low_bid = item.bids[0].bid;
+              low_bid = parseFloat(item.bids[0].bid).toFixed(2);
               if (low_bid === null) {
                 low_bid = 'no bids';
               }
@@ -64,14 +64,14 @@ $(function() {
             var bid3_val = 'no bid';
 
             if (num_bids > 2) {
-              bid3_val = item.bids[2].bid;
-              bid2_val = item.bids[1].bid;
-              bid1_val = item.bids[0].bid;
+              bid3_val = parseFloat(item.bids[2].bid).toFixed(2);
+              bid2_val = parseFloat(item.bids[1].bid).toFixed(2);
+              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
             } else if (num_bids > 1) {
-              bid2_val = item.bids[1].bid;
-              bid1_val = item.bids[0].bid;
+              bid2_val = parseFloat(item.bids[1].bid).toFixed(2);
+              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
             } else if (num_bids == 1) {
-              bid1_val = item.bids[0].bid;
+              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
             }
             trHTML += top3_template({
               bid1: bid1_val,
@@ -102,7 +102,7 @@ $(function() {
           success: function(data) {
             if (data.length > 0) {
               var selector = '#your_bid_' + data[0].auction_id;
-              $(selector).text(data[0].bid);
+              $(selector).text(parseFloat(data[0].bid).toFixed(2));
               $(selector).stop().css("background-color", "#FFFF9C")
                 .animate({
                   backgroundColor: "#FFFFFF"
@@ -146,7 +146,7 @@ $(function() {
             var num_bids = item.bids.length;
             var low_bid = 'no bids';
             if (num_bids > 0) {
-              low_bid = item.bids[0].bid;
+              low_bid = parseFloat(item.bids[0].bid).toFixed(2);
               if (low_bid === null) {
                 low_bid = 'no bids';
               }
@@ -160,14 +160,14 @@ $(function() {
             var bid3_val = 'no bid';
 
             if (num_bids > 2) {
-              bid3_val = item.bids[2].bid;
-              bid2_val = item.bids[1].bid;
-              bid1_val = item.bids[0].bid;
+              bid3_val = parseFloat(item.bids[2].bid).toFixed(2);
+              bid2_val = parseFloat(item.bids[1].bid).toFixed(2);
+              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
             } else if (num_bids > 1) {
-              bid2_val = item.bids[1].bid;
-              bid1_val = item.bids[0].bid;
+              bid2_val = parseFloat(item.bids[1].bid).toFixed(2);
+              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
             } else if (num_bids == 1) {
-              bid1_val = item.bids[0].bid;
+              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
             }
             trHTML += top3_template({
               bid1: bid1_val,

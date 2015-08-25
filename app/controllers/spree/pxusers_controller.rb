@@ -38,7 +38,6 @@ class Spree::PxusersController < Spree::StoreController
         country_id: ids[0],
         phone: pxuser_params[:phonenumber]
       )
-
       user.ship_address = ship_address
 
       bill_address = Spree::Address.create(
@@ -54,7 +53,6 @@ class Spree::PxusersController < Spree::StoreController
         country_id: ids[0],
         phone: pxuser_params[:phonenumber]
       )
-
       user.bill_address = bill_address
 
       if user.save
@@ -63,6 +61,13 @@ class Spree::PxusersController < Spree::StoreController
         render :new
       end
     end
+
+    if pxuser_params[:buyer_seller] == 'buyer'
+      Resque.enqueue(SendBuyerRegistration, user_id: user.id)
+    else
+      Resque.enqueue(SendSellerRegistration, user_id: user.id)
+    end
+
     redirect_to login_url
   rescue
     @pxuser = Spree::Pxuser.new

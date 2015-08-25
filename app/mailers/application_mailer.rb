@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'support@thepromoexchange.com'
+  default from: 'hello@thepromoexchange.com'
   layout 'mailer'
 end

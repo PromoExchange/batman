@@ -40,12 +40,28 @@ category_map = {
   'Andrew Philips': 'Executive' # Technically a Brand
 }
 
+def validate_record(row)
+  fail 'Name too short' if row[:item_name].length < 3
+  fail 'No shipping quantity' if row[:shipping_quantity].blank?
+  fail 'No shipping weight' if row[:shipping_weight_lbs].blank?
+  fail 'No shipping dimensions' if row[:shipping_dimensions_inch].blank?
+  true
+rescue => e
+  puts "Validation Error: #{row[:sku]}:#{row[:item_name]} - #{e.message}"
+  false
+end
+
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   next unless hashed[:item_name].length >= 3
 
+  # Validate
+  next if validate_record(hashed) == false
+
   count += 1
+
+  puts "Products loaded: #{count}" if (count % 10).zero?
 
   begin
     desc = hashed[:product_description]

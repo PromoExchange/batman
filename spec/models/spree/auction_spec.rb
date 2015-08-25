@@ -9,11 +9,6 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.save).to be_falsey
   end
 
-  it 'should not save with a nil product' do
-    a = FactoryGirl.build(:auction, product_id: nil)
-    expect(a.save).to be_falsey
-  end
-
   it 'should generate a reference' do
     a = FactoryGirl.create(:no_ref_auction)
     expect(a.reference).not_to be_empty

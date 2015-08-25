@@ -6,7 +6,7 @@ $(function() {
     var markup = row.find('td.markup').html();
     var seller_id = row.attr('data-id');
     $('#prebid-form > #seller-id').val(seller_id);
-    $("#eqp-flag-edit").prop("checked", (eqp_flag === 'true'));
+    $("#eqp-flag-edit").prop("checked", (eqp_flag === 'Yes'));
     $("#eqp-discount-edit").val(eqp_discount);
     $("#markup-edit").val(markup);
   });
@@ -42,9 +42,9 @@ $(function() {
         $(markup_cell_id).html(markup);
         $(eqp_discount_cell_id).html(eqp_discount);
         if(eqp_flag === true) {
-          $(eqp_flag_cell_id).html('true');
+          $(eqp_flag_cell_id).html('Yes');
         } else {
-          $(eqp_flag_cell_id).html('false');
+          $(eqp_flag_cell_id).html('No');
         }
         alert('Prebid settings updated');
       },

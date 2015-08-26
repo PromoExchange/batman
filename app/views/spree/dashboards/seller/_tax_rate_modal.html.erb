@@ -9,9 +9,10 @@
           <div class="modal-body">
             <div class="panel panel-default">
               <div class="panel-body">
+                <p>You're responsible for complying with all applicable tax laws. Contact a tax professional to determine whether you need to charge sales tax on your PromoExchange sales, or if you have questions about any other taxes. We can't provide tax advice. Also, we can't guarantee that our sales tax features meet all tax requirements.</p>
                 <div class="form-group">
                   <label for="tax-rate-edit"><%= Spree.t(:tax_rate) %></label></br>
-                  <input class="tax-rate-edit" type="text" name="tax-rate-edit" id="tax-rate-edit">
+                  <input class="tax-rate-edit" type="number" name="tax-rate-edit" id="tax-rate-edit"><span>%</span>
                 </div>
                 <div class="form-group">
                   <label for="include-sandh-edit">Also Charge Sales Tax on S&amp;H</label></br>

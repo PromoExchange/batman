@@ -22,6 +22,16 @@ $(function() {
     });
   });
 
+  $("#auction_imprint_method_id").change(function(e) {
+    var selected = $("#auction_imprint_method_id option:selected").text();
+    var found_index = $.inArray(selected, ['Blank','Deboss','Engrave']);
+    if( found_index === -1 ) {
+      $("div.color-hideable").show(750);
+    } else {
+      $("div.color-hideable").hide(750);
+    }
+  });
+
   $("#invite-sellers-link").click(function() {
     $("invite-sellers-form")[0].reset();
     var invited_sellers = $("auction_invited_sellers").val();

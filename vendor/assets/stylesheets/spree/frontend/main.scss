@@ -57,3 +57,7 @@
   overflow: scroll;
   height: 600px;
 }
+
+.pct::after {
+  content: '%';
+}

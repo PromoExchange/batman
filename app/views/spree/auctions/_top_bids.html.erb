@@ -9,14 +9,18 @@
       </tr>
     </thead>
     <tbody>
+      <% seen = [] %>
       <% @auction.bids.each do |b| %>
         <% row_class = '' %>
         <% row_class = 'preferred' if @auction.preferred?(b.seller) %>
-        <tr class="<%= row_class %>">
-          <td><%= b.email %></td>
-          <td><%= '%.2f' % b.bid %></td>
-          <td><a href="#" class="accept-link" data-id='<%= b.id %>'>Accept</a></td>
-        </tr>
+        <% unless seen.include? b.seller %>
+          <% seen.push(b.seller) %>
+          <tr class="<%= row_class %>">
+            <td><%= b.email %></td>
+            <td><%= '%.2f' % b.bid %></td>
+            <td><a href="#" class="accept-link" data-id='<%= b.id %>'>Accept</a></td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>

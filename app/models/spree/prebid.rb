@@ -19,30 +19,29 @@ class Spree::Prebid < Spree::Base
     return if auction.quantity > (auction.product.maximum_quantity * 2)
 
     # (TEMP) Do not prebid if this seller is not preferred
-    return unless auction.preferred?(seller)
-
-    # Get Base price from Volume pricing
-    base_unit_price = auction.product_unit_price
-    running_unit_price = base_unit_price
+    # return unless auction.preferred?(seller)
 
     auction_data = {
-      base_price: auction.product_unit_price,
+      auction_id: auction_id,
+      prebid_id: id,
+      base_unit_price: auction.product_unit_price,
       running_unit_price: auction.product_unit_price,
-      quantity: auction.quantity
+      quantity: auction.quantity,
+      num_locations: auction.num_locations,
+      num_colors: auction.num_colors,
+      rush: auction.rush?
     }
 
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - product_name=#{auction.product.name}")
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - base_unit_price=#{auction_data[:base_unit_price]}")
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - quantity=#{auction_data[:quantity]}")
+    log_debug(auction_data, "product_name=#{auction.product.name}")
+    log_debug(auction_data, "base_unit_price=#{auction_data[:base_unit_price]}")
+    log_debug(auction_data, "quantity=#{auction_data[:quantity]}")
 
     # Apply discount to base price
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - Vitronic hack, all prices have C discount code")
-    # apply_price_discount(auction_data, 'C')
-    running_unit_price = Spree::Price.discount_price('C', base_unit_price)
+    log_debug(auction_data, 'Vitronic hack, all prices have C discount code')
+    apply_price_discount(auction_data, 'C')
 
-    # Run cost added to unit price
     # Supplier level
-    supplier_upcharges = Spree::UpchargeSupplier.where(related_id: 1)
+    auction_data[:supplier_upcharges] = Spree::UpchargeSupplier.where(related_id: 1)
       .includes(:upcharge_type)
       .pluck(
         'spree_upcharge_types.id',
@@ -51,90 +50,42 @@ class Spree::Prebid < Spree::Base
         :value
       )
 
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - supplier_upcharges.count=#{supplier_upcharges.count}")
-
-    supplier_upcharges.each do |s|
-      supplier_upcharge_value = 0.0
-      Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - supplier_upcharges.value=#{s[1]}")
-      case s[1]
-      when 'pms_color_match'
-        Rails.logger.debug(
-          "PREBID - A:#{auction_id} P:#{id} - pms_color_match, auction.pms_color_match=#{auction.pms_color_match}"
-        )
-        if auction.pms_color_match?
-          "PREBID - A:#{auction_id} P:#{id} - pms_color_match, auction.pms_color_match=#{auction.pms_color_match}"
-          supplier_upcharge_value = Spree::Price.discount_price(s[2], s[3].to_f)
-        end
-      when 'ink_change'
-        Rails.logger.debug(
-          "PREBID - A:#{auction_id} P:#{id} - ink_change, auction.change_ink=#{auction.change_ink}"
-        )
-        if auction.change_ink?
-          supplier_upcharge_value = Spree::Price.discount_price(s[2], s[3].to_f)
-        end
-      when 'no_under_over'
-        Rails.logger.debug(
-          "PREBID - A:#{auction_id} P:#{id} - no_under_over, auction.no_under_over=#{auction.no_under_over}"
-        )
-        if auction.no_under_over?
-          supplier_upcharge_value = Spree::Price.discount_price(s[2], s[3].to_f)
-        end
-      else
-        Rails.logger.error("PREBID - A:#{auction_id} P:#{id} - Error, unknown supplier upcharge=#{s[1]}")
-      end
-
-      if supplier_upcharge_value > 0.0
-        Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - upcharge_code=#{s[2]}")
-        Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - upcharge_value=#{s[3].to_f}")
-        running_unit_price += (supplier_upcharge_value / auction.quantity)
-        Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
-      else
-        Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - Supplier upcharge not applied")
-      end
-    end
+    log_debug(auction_data, "auction_data[:supplier_upcharges].count=#{auction_data[:supplier_upcharges].count}")
+    auction_data[:flags] = {
+      pms_color_match: auction.pms_color_match,
+      change_ink: auction.change_ink,
+      no_under_over: auction.no_under_over
+    }
+    apply_supplier_upcharges(auction_data)
 
     # Product level
-    product_upcharges = Spree::UpchargeProduct.where(
+    auction_data[:product_upcharges] = Spree::UpchargeProduct.where(
       related_id: auction.product.id,
       imprint_method_id: auction.imprint_method_id
     ).includes(:upcharge_type)
+      .order(:position)
       .pluck(
         'spree_upcharge_types.id',
         'spree_upcharge_types.name',
         :actual,
         :price_code,
-        :value
+        :value,
+        :range
       )
 
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - product_run_charge_count=#{product_upcharges.count}")
+    log_debug(auction_data, "product_run_charge_count=#{auction_data[:product_upcharges].count}")
+    apply_product_upcharges(auction_data)
 
     # Decoration cost added to unit price
     # PMS Color match added to unit price
     # Setup cost added to unit price
-    product_upcharges.each do |c|
-      Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - upcharge=#{c[2]}")
-
-      upcharge_value = c[4].to_f
-      Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - upcharge_value=#{upcharge_value}")
-
-      # TODO: parse price code string for ranges
-      discounted_upcharge_value = Spree::Price.discount_price('G', c[4].to_f)
-      per_unit_product_run_charge = discounted_upcharge_value / auction.quantity
-
-      Rails.logger.debug(
-        "PREBID - A:#{auction_id} P:#{id} - per_unit_product_run_charge=#{per_unit_product_run_charge}")
-
-      running_unit_price += per_unit_product_run_charge
-      Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
-    end
     # Additional costs added to unit price
 
     # Apply tax from raxrate table
     tax_rate = 0.0
     unless auction.buyer.ship_address.nil?
       buyers_state_id = auction.buyer.ship_address.state_id
-      Rails.logger.debug(
-        "PREBID - A:#{auction_id} P:#{id} - buyers shipping state =#{auction.buyer.ship_address.state.name}")
+      log_debug(auction_data, "buyers shipping state =#{auction.buyer.ship_address.state.name}")
 
       tax_zone_id = Spree::ZoneMember
         .where(zoneable_id: buyers_state_id)
@@ -145,29 +96,29 @@ class Spree::Prebid < Spree::Base
 
       tax_rate = tax_rate_record.amount.to_f unless tax_rate_record.nil?
     end
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - tax_rate=#{tax_rate}")
-    running_unit_price /= (1 - tax_rate)
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+    log_debug(auction_data, "tax_rate=#{tax_rate}")
+    auction_data[:running_unit_price] /= (1 - tax_rate)
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
 
     # Shipping based on buyers zip
     # Package needs weight, height, width and depth
     shipping_cost = calculate_shipping auction
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - shipping_cost=#{shipping_cost}")
-    running_unit_price += (shipping_cost / auction.quantity)
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+    log_debug(auction_data, "shipping_cost=#{shipping_cost}")
+    auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
 
     # Seller markup
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - markup=#{markup.to_f}")
-    running_unit_price *= (1 + markup.to_f)
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+    log_debug(auction_data, "markup=#{markup.to_f}")
+    auction_data[:running_unit_price] *= (1 + markup.to_f)
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
 
     # Promo exchange commission
     px_commission = 0.0499
     px_commission = 0.0299 if auction.preferred?(seller)
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - auction.preferred?(seller)=#{auction.preferred?(seller)}")
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - px_commission=#{px_commission}")
-    running_unit_price /= (1 - px_commission)
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}")
+    log_debug(auction_data, "auction.preferred?(seller)=#{auction.preferred?(seller)}")
+    log_debug(auction_data, "px_commission=#{px_commission}")
+    auction_data[:running_unit_price] /= (1 - px_commission)
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
 
     # Payment processing cost
     if auction.payment_method == 'Check'
@@ -177,21 +128,13 @@ class Spree::Prebid < Spree::Base
     end
     payment_processing_flat_fee = 0.30
 
-    Rails.logger.debug(
-      "PREBID - A:#{auction_id} P:#{id} - payment_processing_commission=#{payment_processing_commission}"
-    )
-    running_unit_price /= (1 - payment_processing_commission)
-    Rails.logger.debug(
-      "PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}"
-    )
+    log_debug(auction_data, "payment_processing_commission=#{payment_processing_commission}")
+    auction_data[:running_unit_price] /= (1 - payment_processing_commission)
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
 
-    Rails.logger.debug(
-      "PREBID - A:#{auction_id} P:#{id} - payment_processing_flat_fee=#{payment_processing_flat_fee}"
-    )
-    running_unit_price += (payment_processing_flat_fee / auction.quantity)
-    Rails.logger.debug(
-      "PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{running_unit_price}"
-    )
+    log_debug(auction_data, "payment_processing_flat_fee=#{payment_processing_flat_fee}")
+    auction_data[:running_unit_price] += (payment_processing_flat_fee / auction.quantity)
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
 
     Spree::Bid.transaction do
       bid = Spree::Bid.create(
@@ -207,7 +150,7 @@ class Spree::Prebid < Spree::Base
         variant: bid.auction.product.master
       )
 
-      li.price = running_unit_price
+      li.price = auction_data[:running_unit_price]
       li.save!
 
       order_updater = Spree::OrderUpdater.new(bid.order)
@@ -217,16 +160,151 @@ class Spree::Prebid < Spree::Base
     end
   end
 
-  # rspec access
-  def self.apply_price_discount_public(auction_data, discount_code)
-    apply_price_discount(auction_data, discount_code)
+  private
+
+  def log_format(auction_data, level, message)
+    "PREBID #{level} A:#{auction_data[:auction_id]} P:#{auction_data[:prebid_id]} - #{message}"
   end
 
-  private
+  def log_error(auction_data, message)
+    Rails.logger.error(log_format(auction_data, 'ERROR', message))
+  end
+
+  def log_debug(auction_data, message)
+    Rails.logger.debug(log_format(auction_data, 'DEBUG', message))
+  end
 
   def apply_price_discount(auction_data, discount_code)
     auction_data[:running_unit_price] = Spree::Price.discount_price(discount_code, auction_data[:base_unit_price])
-    Rails.logger.debug("PREBID - A:#{auction_id} P:#{id} - running_unit_price=#{auction_data[:running_unit_price]}")
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+  end
+
+  def apply_supplier_upcharges(auction_data)
+    auction_data[:supplier_upcharges].each do |supplier_upcharge|
+      supplier_upcharge_value = 0.0
+      log_debug(auction_data, "supplier_upcharges.value=#{supplier_upcharge[1]}")
+
+      # [0] = spree_upcharge_types.id
+      # [1] = spree_upcharge_types.name
+      # [2] = price_code,
+      # [3] = value
+      case supplier_upcharge[1]
+      when 'pms_color_match'
+        log_debug(auction_data, "[:flags][:pms_color_match]=#{auction_data[:flags][:pms_color_match]}")
+        if auction_data[:flags][:pms_color_match] == true
+          supplier_upcharge_value = Spree::Price.discount_price(supplier_upcharge[2], supplier_upcharge[3].to_f)
+        end
+      when 'ink_change'
+        log_debug(auction_data, "[:flags][:change_ink]=#{auction_data[:flags][:change_ink]}")
+        if auction_data[:flags][:change_ink] == true
+          supplier_upcharge_value = Spree::Price.discount_price(supplier_upcharge[2], supplier_upcharge[3].to_f)
+        end
+      when 'no_under_over'
+        log_debug(auction_data, "auction_data[:flags][:no_under_over]=#{auction_data[:flags][:no_under_over]}")
+        if auction_data[:flags][:no_under_over] == true
+          supplier_upcharge_value = Spree::Price.discount_price(supplier_upcharge[2], supplier_upcharge[3].to_f)
+        end
+      else
+        log_error(auction_data, "unknown supplier id = #{supplier_upcharge[0]}, upcharge=#{supplier_upcharge[1]}")
+      end
+
+      if supplier_upcharge_value > 0.0
+        log_debug(auction_data, "upcharge_code=#{supplier_upcharge[2]}")
+        log_debug(auction_data, "upcharge_value=#{supplier_upcharge[3].to_f}")
+        auction_data[:running_unit_price] += (supplier_upcharge_value / auction_data[:quantity])
+        log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+      else
+        log_debug(auction_data, 'Supplier upcharge not applied')
+      end
+    end
+  end
+
+  def apply_product_upcharges(auction_data)
+    auction_data[:product_upcharges].each do |product_upcharge|
+      # [0] = 'spree_upcharge_types.id',
+      # [1] = 'spree_upcharge_types.name',
+      # [2] = :actual,
+      # [3] = :price_code,
+      # [4] = :value
+      # [5] = :range
+      log_debug(auction_data, "upcharge=#{product_upcharge[2]}")
+
+      upcharge_value = product_upcharge[4].to_f
+      log_debug(auction_data, "upcharge_value=#{upcharge_value}")
+
+      price_code = product_upcharge[3].gsub(/[1-9]/, '')
+
+      in_range = false
+      unless product_upcharge[5].nil?
+        bounds = []
+        # Is it open ended
+        if product_upcharge[5].include? '+'
+          bounds[0] = product_upcharge[5].gsub(/\+/, '').to_i
+          bounds[1] = bounds[0] * 2
+        else
+          bounds = product_upcharge[5].gsub(/[()]/, '').split('..').map(&:to_i)
+        end
+        range = Range.new(bounds[0], bounds[1])
+        in_range = range.member?(auction_data[:quantity])
+      end
+
+      log_debug(auction_data, "range=#{product_upcharge[5]}")
+      log_debug(auction_data, "in_range=#{in_range}")
+      log_debug(auction_data, "product_upcharge[1]=#{product_upcharge[1]}")
+
+      case product_upcharge[1]
+      when 'setup'
+        # No ranges
+        setup_charge = product_upcharge[4].to_f
+        log_debug(auction_data, "setup upcharge #{setup_charge}")
+        log_debug(auction_data, "setup upcharge discount #{price_code}")
+        auction_data[:running_unit_price] += (
+          Spree::Price.discount_price(price_code, setup_charge) / auction_data[:quantity]
+        )
+        log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+      when 'run'
+        next unless in_range
+        run_charge = product_upcharge[4].to_f
+        log_debug(auction_data, "run upcharge #{run_charge}")
+        log_debug(auction_data, "run upcharge discount #{price_code}")
+        auction_data[:running_unit_price] += (
+          Spree::Price.discount_price(price_code, run_charge)
+        )
+        log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+      when 'additional_location_run'
+        next unless in_range
+        if auction_data[:num_locations] > 1
+          additional_location_charge = product_upcharge[4].to_f
+          log_debug(auction_data, "additional location upcharge #{additional_location_charge}")
+          log_debug(auction_data, "additional location upcharge discount #{price_code}")
+          auction_data[:running_unit_price] += (
+            Spree::Price.discount_price(price_code, additional_location_charge)
+          )
+          log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+        end
+      when 'second_color_run', 'additional_color_run', 'multiple_color_run'
+        next unless in_range
+        log_debug(auction_data, "auction_data[:num_colors]=#{auction_data[:num_colors]}")
+        if auction_data[:num_colors] > 1
+          multiple_colors_charge = product_upcharge[4].to_f
+          log_debug(auction_data, "multiple colors upcharge #{multiple_colors_charge}")
+          log_debug(auction_data, "multiple colors upcharge discount #{price_code}")
+          auction_data[:running_unit_price] += (
+            Spree::Price.discount_price(price_code, multiple_colors_charge)
+          )
+          log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+        end
+      when 'rush'
+        # No ranges
+        rush_charge = product_upcharge[4].to_f
+        log_debug(auction_data, "rush upcharge #{rush_charge}")
+        log_debug(auction_data, "rush upcharge discount #{price_code}")
+        auction_data[:running_unit_price] += (
+          Spree::Price.discount_price(price_code, rush_charge) / auction_data[:quantity]
+        )
+        log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+      end
+    end
   end
 
   def calculate_shipping(auction)
@@ -246,13 +324,13 @@ class Spree::Prebid < Spree::Base
     fail 'Shipping quantity is nil' if property.nil?
     shipping_quantity = property.value
 
-    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_weight=#{shipping_weight}")
-    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_dimensions=#{shipping_dimensions}")
-    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_quantity=#{shipping_quantity}")
+    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_weight=#{shipping_weight}")
+    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_dimensions=#{shipping_dimensions}")
+    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_quantity=#{shipping_quantity}")
 
     number_of_packages = (auction.quantity / shipping_quantity.to_f).ceil
 
-    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - number_of_packages=#{number_of_packages}")
+    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - number_of_packages=#{number_of_packages}")
 
     dimensions = shipping_dimensions.gsub(/[A-Z]/, '').gsub(/ /, '').split('x')
     package = ActiveShipping::Package.new(
@@ -261,7 +339,7 @@ class Spree::Prebid < Spree::Base
       units: :imperial
     )
 
-    Rails.logger.debug("PREBID - A:#{auction.id} P:#{id} - shipping_origin zipcode=#{seller.shipping_address.zipcode}")
+    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_origin zipcode=#{seller.shipping_address.zipcode}")
 
     origin = ActiveShipping::Location.new(
       country: seller.shipping_address.country.iso,
@@ -271,7 +349,7 @@ class Spree::Prebid < Spree::Base
     )
 
     Rails.logger.debug(
-      "PREBID - A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.buyer.shipping_address.zipcode}"
+      "PREBID DEBUG A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.buyer.shipping_address.zipcode}"
     )
 
     destination = ActiveShipping::Location.new(
@@ -292,8 +370,8 @@ class Spree::Prebid < Spree::Base
 
     (ups_rates[0][1] * number_of_packages.to_f) / 100
   rescue => e
-    Rails.logger.error("PREBID - A:#{auction.id} P:#{id} - Failed to calculate shipping")
-    Rails.logger.error("PREBID - A:#{auction.id} P:#{id} - #{e.message}")
+    Rails.logger.error("PREBID ERROR A:#{auction.id} P:#{id} - Failed to calculate shipping")
+    Rails.logger.error("PREBID ERROR A:#{auction.id} P:#{id} - #{e.message}")
     0.0
   end
 end

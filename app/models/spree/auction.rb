@@ -29,11 +29,11 @@ class Spree::Auction < Spree::Base
   accepts_nested_attributes_for :auctions_pms_colors
 
   validates :buyer_id, presence: true
-  validates :logo_id, presence: true, unless: -> {
+  validates :logo_id, presence: true, unless: -> do
     imprint_method = Spree::ImprintMethod.where(name: 'Blank').first
     return true if imprint_method.nil? # Needed for testing, do not seed db:test
     imprint_method_id == imprint_method.id
-  }
+  end
   validates :main_color_id, presence: true
   validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
@@ -42,10 +42,10 @@ class Spree::Auction < Spree::Base
   validates_inclusion_of :status, in: %w(open waiting closed ended cancelled unpaid completed)
   validates :shipping_address_id, presence: true
   validates_numericality_of :quantity, only_integer: true
-  validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) {
+  validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) do
     50 if auction.product.nil?
     auction.product.minimum_quantity
-  }
+  end
 
   delegate :name, to: :product
 
@@ -66,6 +66,18 @@ class Spree::Auction < Spree::Base
       end
     end
     unit_price
+  end
+
+  def num_locations
+    1
+  end
+
+  def num_colors
+    pms_colors.count
+  end
+
+  def rush?
+    false
   end
 
   def preferred?(seller)

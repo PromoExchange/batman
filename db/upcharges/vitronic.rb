@@ -26,8 +26,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       upcharge_type: 'additional_location_run'
     },
     'Image Lock Additional Color Run Charge': {
-      imprint_method: 'Vivid Expression',
-      upcharge_type: 'additional_location_run'
+      imprint_method: 'Image Lock',
+      upcharge_type: 'additional_color_run'
     },
     'Screen Print Setup Charge': {
       imprint_method: 'Screen Print',
@@ -78,7 +78,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       upcharge_type: 'setup'
     }
   }
-
 
   imprint_method = upcharge_map[hashed[:charge_name].to_sym][:imprint_method]
   imprint_method_id = Spree::ImprintMethod.where(name: imprint_method).first.id

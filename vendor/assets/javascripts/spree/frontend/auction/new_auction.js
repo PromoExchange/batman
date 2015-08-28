@@ -25,9 +25,9 @@ $(function() {
   $("#auction_imprint_method_id").change(function(e) {
     $("div.imprint_swatch").hide();
     var val = $("#auction_imprint_method_id option:selected").val();
-    var show_swatches = "div.imprint_swatch_"
-    if(val == 21) {
-      show_swatches += val
+    var show_swatches = "div.imprint_swatch_";
+    if(val == 21 || val == 2 || val == 19) {
+      show_swatches += val;
     }
     $(show_swatches).show();
 

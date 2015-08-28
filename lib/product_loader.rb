@@ -15,7 +15,7 @@ module ProductLoader
 
   def self.pms_load(file, supplier_id)
     imprint_methods = Spree::ImprintMethod.pluck(:name, :id)
-    imprint_methods.push(["all",nil])
+    imprint_methods.push(['all', nil])
     file_name = File.join(Rails.root, "db/product_data/#{file}")
     CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       hashed = row.to_hash
@@ -23,12 +23,13 @@ module ProductLoader
       if pms.nil?
         puts "Warning: Unable to locate #{hashed[:slug]} in pms master list"
       else
-        imprint = imprint_methods.select { |name, id| name == hashed[:imprint_method] }
+        imprint = imprint_methods.select { |name, _id| name == hashed[:imprint_method] }
         Spree::PmsColorsSupplier.create(
           supplier_id: supplier_id,
           pms_color_id: pms.id,
           display_name: hashed[:display_name],
-          imprint_method_id: imprint[0][1])
+          imprint_method_id: imprint[0][1]
+        )
       end
     end
   end

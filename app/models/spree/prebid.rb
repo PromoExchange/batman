@@ -19,7 +19,7 @@ class Spree::Prebid < Spree::Base
     return if auction.quantity > (auction.product.maximum_quantity * 2)
 
     # (TEMP) Do not prebid if this seller is not preferred
-    # return unless auction.preferred?(seller)
+    return unless auction.preferred?(seller)
 
     auction_data = {
       auction_id: auction_id,

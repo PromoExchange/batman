@@ -80,7 +80,7 @@ class Spree::AuctionsController < Spree::StoreController
   def send_prebid_request(auction_id)
     embroidery_imprint_method_id = Spree::ImprintMethod.where(name: 'Embroidery').first.id
     return if embroidery_imprint_method_id == params[:auction][:imprint_method_id].to_i
-    # Used for debuging, i.e. Direct call
+    # Used for debugging, i.e. Direct call
     # CreatePrebids.perform(auction_id)
     Resque.enqueue(CreatePrebids, auction_id: auction_id)
   end
@@ -108,7 +108,7 @@ class Spree::AuctionsController < Spree::StoreController
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
 
-    # TODO: pluck it
+    # TODO: Only send colors that this product can use
     @pms_colors = Spree::PmsColorsSupplier
       .where(supplier_id: @auction.product.supplier)
       .joins(:pms_color)
@@ -121,15 +121,6 @@ class Spree::AuctionsController < Spree::StoreController
         :name,
         :imprint_method_id
       )
-    # @pms_colors = Spree::PmsColorsSupplier
-    #   .select(
-    #     'pms_color_id,
-    #     display_name,
-    #     spree_pms_colors.hex,
-    #     spree_pms_colors.pantone,
-    #     spree_pms_colors.name')
-    #   .joins(:pms_color)
-    #   .where(supplier_id: @auction.product.supplier)
 
     @main_colors = Spree::ColorProduct
       .where(product_id: @auction.product.id)

@@ -23,6 +23,14 @@ $(function() {
   });
 
   $("#auction_imprint_method_id").change(function(e) {
+    $("div.imprint_swatch").hide();
+    var val = $("#auction_imprint_method_id option:selected").val();
+    var show_swatches = "div.imprint_swatch_"
+    if(val == 21) {
+      show_swatches += val
+    }
+    $(show_swatches).show();
+
     var selected = $("#auction_imprint_method_id option:selected").text();
     var found_index = $.inArray(selected, ['Blank','Deboss','Engrave']);
     if( found_index === -1 ) {

@@ -110,14 +110,26 @@ class Spree::AuctionsController < Spree::StoreController
 
     # TODO: pluck it
     @pms_colors = Spree::PmsColorsSupplier
-      .select(
-        'pms_color_id,
-        display_name,
-        spree_pms_colors.hex,
-        spree_pms_colors.pantone,
-        spree_pms_colors.name')
-      .joins(:pms_color)
       .where(supplier_id: @auction.product.supplier)
+      .joins(:pms_color)
+      .order(:imprint_method_id)
+      .pluck(
+        :pms_color_id,
+        :display_name,
+        :hex,
+        :pantone,
+        :name,
+        :imprint_method_id
+      )
+    # @pms_colors = Spree::PmsColorsSupplier
+    #   .select(
+    #     'pms_color_id,
+    #     display_name,
+    #     spree_pms_colors.hex,
+    #     spree_pms_colors.pantone,
+    #     spree_pms_colors.name')
+    #   .joins(:pms_color)
+    #   .where(supplier_id: @auction.product.supplier)
 
     @main_colors = Spree::ColorProduct
       .where(product_id: @auction.product.id)

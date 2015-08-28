@@ -1,6 +1,6 @@
 name,pantone,hex
 black,426,#25282B
-white,White,#FFFFFF
+white,000,#FFFFFF
 red202,202,#862633
 green356,356,#007a33
 purple268,268,#582c83
@@ -8,12 +8,12 @@ blue281,281,#00205b
 copper876,876,#8b634b
 green320,320,#009ca6
 red186,186,#c8102e
-process_blue,"Process Blue",#0085ca
+process_blue,"Blue",#0085ca
 gold123,123,#ffc72c
 jute,Brown,#cca36e
 red032,032,#ef3340
 reflex_blue,"Reflex Blue",#001489
-gold873,Gold,#896e4b
+gold873,873,#896e4b
 orange151,151,#ff8200
 silver877,877,#8a8d8f
 blue286,286,#228866
@@ -44,7 +44,7 @@ teal322,322,#007377
 green348,348,#00843d
 green350,350,#2c5234
 yellow116,116,#ffcd00
-grey423,423,#898d8d
+gray423,423,#898d8d
 yellow1235,1235,#ffb81c
 red1787,1787,#f4364c
 red199,199,#d50032
@@ -68,10 +68,39 @@ teal316,316,#004851
 green365,365,#c2e189
 purple2587,2587,#936db7
 brown1545,1545,#7a5f48
-grey424,424,#707372
+gray424,424,#707372
 gold872,872,#ac936e
 green8203,8203,#3177a3
 purple8085,8085,#a13769
 teal328,328,#007367
-silver878,"Metallic Silver",#887788
+silver878,878,#887788
 red1797,1797,#cb333b
+brown466,466,#c1a67f
+green582,582,#919145
+red200,200,#bd4f5c
+fluorescent_blue,"Blue",#15f4ee
+blue2995,2995,#0d9ddb
+gold109,109,#ffc700
+maroon209,209,#825864
+rubine,"Rubine",#db487e
+blue295,295,#375172
+warm_red,"Warm Red",#ff665e
+gray422,422,#9ea1a2
+brown477,477,#7d6556
+green334,334,#00957e
+purple273,273,#645d9b
+brown155,155,#f7c995
+red188,188,#895559
+brown439,439,#736869
+blue2728,2728,#5268c2
+brown4625,4625,#715845
+green357,357,#215732
+blue534,534,#1b365d
+red1805,1805,#b45858
+blue289,289,#0c2340
+ivory1205,1205,#f8e08e
+red504,504,#7f5d62
+orange179,179,#e03c31
+gray431,431,#737b82
+pink673,673,#df8cba
+yellow124,124,#d79133

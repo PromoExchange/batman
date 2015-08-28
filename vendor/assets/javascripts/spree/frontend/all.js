@@ -15,6 +15,7 @@
 //= require bootstrap-tagsinput/dist/bootstrap-tagsinput.min
 //= require lodash/lodash.min
 //= require jquery-color/jquery.color.js
+//= require accounting/accounting.min
 
 $(function() {
   $('.title').on('keyup change', function(e) {

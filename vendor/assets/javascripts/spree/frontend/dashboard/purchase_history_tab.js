@@ -51,7 +51,7 @@ $(function() {
             }
 
             trHTML += simple_template({
-              value: parseFloat(winning_bid).toFixed(2)
+              value: accounting.formatMoney(parseFloat(winning_bid))
             });
             trHTML += "</tr>";
           });

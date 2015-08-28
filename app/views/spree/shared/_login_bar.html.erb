@@ -2,6 +2,6 @@
   <li><%= link_to Spree.t(:my_account), main_app.dashboards_path %></li>
   <li><%= link_to Spree.t(:logout), spree.logout_path %></li>
 <% else %>
-  <li id="link-to-login"><%= link_to Spree.t(:login), spree.login_path %></li>
+  <li id="link-to-login"><%= link_to Spree.t(:login_register), spree.login_path %></li>
 <% end %>
 <li><a href="/about"><%= Spree.t(:about) %></li>

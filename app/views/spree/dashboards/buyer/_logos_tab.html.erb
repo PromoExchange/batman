@@ -6,6 +6,7 @@
         <div class="form-group">
           <%= f.label :logo_file, Spree.t(:add_logo) %>
           <%= f.file_field :logo_file, class: 'form-control' %>
+          <p>Acceptable file formats: (jpeg,png)</p>
           <%= button 'Upload', 'ok', 'submit', {class: 'btn-success'} %>
         </div>
       <% end %>

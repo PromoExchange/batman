@@ -132,6 +132,8 @@ class Spree::AuctionsController < Spree::StoreController
       .pluck(:name, :imprint_method_id)
 
     @user = spree_current_user
+
+    @logo = Spree::Logo.new
   end
 
   def auction_params

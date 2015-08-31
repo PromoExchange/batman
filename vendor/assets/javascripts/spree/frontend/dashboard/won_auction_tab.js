@@ -9,7 +9,7 @@ $(function() {
     var date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='${date}'>${date}</time></td>");
     var image_template = _.template("<td><a href='/auctions/${auction_id}'><img itemprop='image' alt='${name}' src='${image}'></a></td>");
 
-    $.ajax({
+    $.ajax( {
       type: 'GET',
       data: {
         format: 'json'
@@ -48,7 +48,9 @@ $(function() {
             if (item.status === 'unpaid') {
               status_text = 'Invoice payment required';
               action = simple_template({
-                value: action_template({auction_id: item.id})
+                value: action_template({
+                  auction_id: item.id
+                })
               });
             }
             trHTML += simple_template({

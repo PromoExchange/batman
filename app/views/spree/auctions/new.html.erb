@@ -44,7 +44,7 @@
             { prompt: 'Please Select' } , { class: 'image-picker form-control' } %>
       </div>
 
-      <p><a href="/dashboards" >Add Logo</a></p>
+      <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
 
       <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
@@ -101,3 +101,4 @@
 </div>
 <%= render partial: 'spree/auctions/invite_sellers_modal' %>
 <%= render partial: 'spree/auctions/imprint_definitions_modal' %>
+<%= render partial: 'spree/auctions/new_logo_modal' %>

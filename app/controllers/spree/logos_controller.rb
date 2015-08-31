@@ -1,9 +1,10 @@
 class Spree::LogosController < Spree::StoreController
   def create
+    session[:return_to] ||= request.referer
     @logo = Spree::Logo.new(logo_params)
 
     if @logo.save
-      redirect_to main_app.dashboards_path, flash: { notice: 'Logo upload sucessfully.' }
+      redirect_to session.delete(:return_to), flash: { notice: 'Logo upload sucessfully.' }
     else
       redirect_to main_app.dashboards_path, flash: { error: 'Failed to upload logo.' }
     end

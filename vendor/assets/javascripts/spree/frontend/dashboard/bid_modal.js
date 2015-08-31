@@ -131,10 +131,11 @@ $(function() {
     var auction_id = $('#auction-id').val();
     var seller_id = $('#seller-id').val();
     var bid = $('#per-unit-price-shown').val();
+
     var bid_message = {
       seller_id: parseInt(seller_id, 10),
       auction_id: parseInt(auction_id, 10),
-      per_unit_bid: parseFloat(bid)
+      per_unit_bid: parseFloat(bid.replace(/\$/gi,''))
     };
     $.ajax({
       type: 'POST',

@@ -16,6 +16,7 @@ class Spree::InvoicesController < Spree::StoreController
   end
 
   def show
+    @auction_id = params[:id]
     render 'spree/invoices/show'
   end
 

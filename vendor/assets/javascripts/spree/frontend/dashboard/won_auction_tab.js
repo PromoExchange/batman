@@ -4,10 +4,10 @@ $(function() {
     var seller_id = $("#seller-won-auction").attr("data-id");
     var auction_url = '/api/auctions?status=unpaid,completed&seller_id=' + seller_id;
 
-    var reference_template = _.template("<td><a href='/auctions/${auction_id}'>${ reference }</a></td>");
+    var reference_template = _.template("<td><a href='/invoices/${auction_id}'>${ reference }</a></td>");
     var simple_template = _.template("<td>${value}</td>");
     var date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='${date}'>${date}</time></td>");
-    var image_template = _.template("<td><a href='/auctions/${auction_id}'><img itemprop='image' alt='${name}' src='${image}'></a></td>");
+    var image_template = _.template("<td><a href='/invoices/${auction_id}'><img itemprop='image' alt='${name}' src='${image}'></a></td>");
 
     $.ajax( {
       type: 'GET',
@@ -21,7 +21,7 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<td><button type='button' class='btn btn-success open-invoice' data-toggle='modal' data-target='#pay-invoice' data-id='${auction_id}'>Pay</button></td>");
+          action_template = _.template("<td><a class='btn btn-success' href='/invoices/${auction_id}'>Pay</button></td>");
           your_bid_template = _.template("<td id='your_bid_${auction_id}'>no bid</td>");
 
           $.each(data, function(i, item) {
@@ -57,7 +57,7 @@ $(function() {
               value: status_text
             });
             trHTML += simple_template({
-              value: accounting.formatMoney(parseFloat(item.winning_bid.seller_fee))
+              value: accounting.formatMoney((parseFloat(item.winning_bid.seller_fee) / (1 - 0.029)) + 0.30)
             });
             trHTML += action;
             trHTML += "</tr>";

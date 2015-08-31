@@ -1,16 +1,18 @@
 <h1>Your invoice</h1>
 
-<table class="table">
+<p>Congratulations! You have been awarded the following project on the PromoExchange:</p>
+
+<table>
   <tr><td>Auction #:</td><td><%= @auction.reference %></td></tr>
   <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>
   <tr><td>Factory:</td><td><%= @auction.product.supplier.name %></td></tr>
   <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
   <tr><td>Buyer:</td><td><%= @auction.buyer.billing_address.full_name %></td></tr>
-  <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></td></tr>
+  <tr><td>Auction Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></td></tr>
   <tr><td>Quantity:</td><td><%= @auction.quantity %></td></tr>
   <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>
   <tr><td>Main Color:</td><td><%= @auction.main_color.color %></td></tr>
-  <tr><td>Payment Method:</td><td><%= @auction.payment_method %></td></tr>
+  <tr><td>Total Payment amount:</td><td><%= @auction.winning_bid.bid %></td></tr>
   <tr><td>Custom PMS Colors:</td><td><%= @auction.custom_pms_colors %></td></tr>
   <tr>
     <td>Imprint Colors:</td>
@@ -25,6 +27,13 @@
   <% end %>
 </table>
 
-<h2>Your fee: <%= (@auction.winning_bid.bid * 0.0299).round(2) %></h2>
+<p>Your fee:</p>
+<p><a href="<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>"><%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %> if paid by Credit Card</a></p>
+<p><a href="<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>"><%= (@auction.winning_bid.seller_fee / (1 - 0.015)).round(2) %> if paid by Web Check/ACH</a></p>
+
+<p>Payment is due by <%= (Date.today + 10.days).strftime("%D") %></p>
+
+<p>Please contact the Buyer (<%= @auction.buyer.bill_address.phone %>/<%= @auction.buyer.email %>) by the end of the next business day to begin making delivery and payment arrangements.</p>
+<p>Failure to do so can cause this order to be awarded to another Seller and can jeopardize your membership in the PromoExchange community.</p>
 
 <img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo">

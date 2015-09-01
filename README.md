@@ -30,6 +30,10 @@ Running the App
 3. `bundle exec rails s`
 4. Navigate to `http://localhost:3000` in your browser
 
+Running specs
+-------------
+- `bundle exec rspec` from the root directory of the application
+
 Documentation
 -------------
 - Documentation is available via the project [wiki](https://github.com/PromoExchange/batman/wiki)

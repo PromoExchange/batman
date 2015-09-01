@@ -5,7 +5,7 @@ PromoExchange
 
 Batman is the main application for PromoExchange's promotional products auction platform. It houses product, auction, and user information.
 
-Requirments
+Requirements
 -------------
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [Ruby 2.2.2](https://github.com/sstephenson/rbenv)

@@ -30,6 +30,12 @@ Running the App
 3. `bundle exec rails s`
 4. Navigate to `http://localhost:3000` in your browser
 
+Post Installation
+-----------------
+1. Sign in as spree@example.com/spree123
+2. Navigate to `http://localhost:3000/admin`
+3. Under general configuration set the site url to `http://localhost:3000`
+
 Running specs
 -------------
 - `bundle exec rspec` from the root directory of the application

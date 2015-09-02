@@ -6,8 +6,4 @@ class ApplicationController < ActionController::Base
   def ping
     render json: { ping: 'pong' }
   end
-
-  def after_sign_out_path_for(_resource_or_scope)
-    request.referrer
-  end
 end

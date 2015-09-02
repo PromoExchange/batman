@@ -26,6 +26,7 @@ $(function() {
         var trHTML = '';
         if (data.length > 0) {
           action_template = _.template("<td><button type='button' class='btn btn-success open-bid' data-toggle='modal' data-target='#place-bid' data-id='<%= auction_id %>'>Bid</button></td>");
+          non_action_template = _.template("<td><button type='button' class='btn btn-success open-view'>Bid</button></td>");
           your_bid_template = _.template("<td id='your_bid_<%= auction_id %>'>no bid</td>");
 
           $.each(data, function(i, item) {
@@ -50,7 +51,7 @@ $(function() {
             var low_bid = 'no bids';
             if (num_bids > 0) {
               auction_ids.push(item.id);
-              low_bid = parseFloat(item.bids[0].bid).toFixed(2);
+              low_bid = accounting.formatMoney(parseFloat(item.bids[0].bid));
               if (low_bid === null) {
                 low_bid = 'no bids';
               }
@@ -64,23 +65,37 @@ $(function() {
             var bid3_val = 'no bid';
 
             if (num_bids > 2) {
-              bid3_val = parseFloat(item.bids[2].bid).toFixed(2);
-              bid2_val = parseFloat(item.bids[1].bid).toFixed(2);
-              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
+              bid3_val = accounting.formatMoney(parseFloat(item.bids[2].bid));
+              bid2_val = accounting.formatMoney(parseFloat(item.bids[1].bid));
+              bid1_val = accounting.formatMoney(parseFloat(item.bids[0].bid));
             } else if (num_bids > 1) {
-              bid2_val = parseFloat(item.bids[1].bid).toFixed(2);
-              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
+              bid2_val = accounting.formatMoney(parseFloat(item.bids[1].bid));
+              bid1_val = accounting.formatMoney(parseFloat(item.bids[0].bid));
             } else if (num_bids == 1) {
-              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
+              bid1_val = accounting.formatMoney(parseFloat(item.bids[0].bid));
             }
             trHTML += top3_template({
               bid1: bid1_val,
               bid2: bid2_val,
               bid3: bid3_val
             });
-            trHTML += action_template({
-              auction_id: item.id
+
+            // Check to see if this seller is preferred
+            var is_preferred = false;
+            $.each(item.invited_sellers, function(index, value) {
+              if(value.id === parseInt(seller_id)) {
+                is_preferred = true;
+              }
             });
+
+            if( is_preferred === true ) {
+              trHTML += action_template({
+                auction_id: item.id
+              });
+            } else {
+              trHTML += non_action_template();
+            }
+
             trHTML += "</tr>";
           });
         } else {
@@ -102,7 +117,7 @@ $(function() {
           success: function(data) {
             if (data.length > 0) {
               var selector = '#your_bid_' + data[0].auction_id;
-              $(selector).text(parseFloat(data[0].bid).toFixed(2));
+              $(selector).text(accounting.formatMoney(parseFloat(data[0].bid)));
               $(selector).stop().css("background-color", "#FFFF9C")
                 .animate({
                   backgroundColor: "#FFFFFF"
@@ -146,7 +161,7 @@ $(function() {
             var num_bids = item.bids.length;
             var low_bid = 'no bids';
             if (num_bids > 0) {
-              low_bid = parseFloat(item.bids[0].bid).toFixed(2);
+              low_bid = accounting.formatMoney(parseFloat(item.bids[0].bid));
               if (low_bid === null) {
                 low_bid = 'no bids';
               }
@@ -160,14 +175,14 @@ $(function() {
             var bid3_val = 'no bid';
 
             if (num_bids > 2) {
-              bid3_val = parseFloat(item.bids[2].bid).toFixed(2);
-              bid2_val = parseFloat(item.bids[1].bid).toFixed(2);
-              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
+              bid3_val = accounting.formatMoney(parseFloat(item.bids[2].bid));
+              bid2_val = accounting.formatMoney(parseFloat(item.bids[1].bid));
+              bid1_val = accounting.formatMoney(parseFloat(item.bids[0].bid));
             } else if (num_bids > 1) {
-              bid2_val = parseFloat(item.bids[1].bid).toFixed(2);
-              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
+              bid2_val = accounting.formatMoney(parseFloat(item.bids[1].bid));
+              bid1_val = accounting.formatMoney(parseFloat(item.bids[0].bid));
             } else if (num_bids == 1) {
-              bid1_val = parseFloat(item.bids[0].bid).toFixed(2);
+              bid1_val = accounting.formatMoney(parseFloat(item.bids[0].bid));
             }
             trHTML += top3_template({
               bid1: bid1_val,
@@ -186,4 +201,8 @@ $(function() {
     return false;
   });
   $('#seller-live-auction-tab').trigger('click');
+
+  $('#seller-live-auction-table > tbody').on('click', 'button.open-view', function(e) {
+    alert("We're sorry. Only sellers that are invited to this auction can bid. Open auctions to the public are coming soon!");
+  });
 });

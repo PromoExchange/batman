@@ -12,19 +12,19 @@ class Spree::DashboardsController < Spree::StoreController
 
     create_taxrates
     @tax_rates = Spree::TaxRate.where(user: current_spree_user).includes(:zone).order(:name)
+
     @hacked_factory = Spree::Prebid.where(seller_id: current_spree_user).first
-    if @hacked_factory.nil?
-      products = Spree::Product.all
-      products.each do |p|
-        Spree::Prebid.create(
-          seller: current_spree_user,
-          product_id: p.id,
-          eqp: false,
-          eqp_discount: 0.0,
-          markup: 0.0
-        )
-        @hacked_factory = Spree::Prebid.where(seller_id: current_spree_user).first
-      end
+    return unless @hacked_factory.nil?
+    products = Spree::Product.all
+    products.each do |p|
+      Spree::Prebid.create(
+        seller: current_spree_user,
+        product_id: p.id,
+        eqp: false,
+        eqp_discount: 0.0,
+        markup: 0.0
+      )
+      @hacked_factory = Spree::Prebid.where(seller_id: current_spree_user).first
     end
   end
 

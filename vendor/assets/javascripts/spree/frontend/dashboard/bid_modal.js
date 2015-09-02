@@ -16,7 +16,7 @@ $(function() {
         var num_bids = data.bids.length;
         var low_bid = 'no bids';
         if (num_bids > 0) {
-          low_bid = parseFloat(data.bids[0].bid).toFixed(2);
+          low_bid = accounting.formatMoney(parseFloat(data.bids[0].bid));
           $('.modal-body #lowest-per-unit-price').text(low_bid / data.quantity);
           $('.modal-body #lowest-total-price').text(low_bid);
         }
@@ -87,10 +87,10 @@ $(function() {
         '.modal-body #per-unit-price-shown'
       );
     }
-    $('.modal-body #per-unit-price').val(+per_unit_price.toFixed(2));
-    $('.modal-body #total-price').val(+total_price.toFixed(2));
-    $('.modal-body #per-unit-price-shown').val(+per_unit_price_shown.toFixed(2));
-    $('.modal-body #total-price-shown').val(+total_price_shown.toFixed(2));
+    $('.modal-body #per-unit-price').val(accounting.formatMoney(per_unit_price));
+    $('.modal-body #total-price').val(accounting.formatMoney(total_price));
+    $('.modal-body #per-unit-price-shown').val(accounting.formatMoney(per_unit_price_shown));
+    $('.modal-body #total-price-shown').val(accounting.formatMoney(total_price_shown));
     var s = flash_fields.join(',');
     $(s).stop().css("background-color", "#FFFF9C")
       .animate({
@@ -131,10 +131,11 @@ $(function() {
     var auction_id = $('#auction-id').val();
     var seller_id = $('#seller-id').val();
     var bid = $('#per-unit-price-shown').val();
+
     var bid_message = {
       seller_id: parseInt(seller_id, 10),
       auction_id: parseInt(auction_id, 10),
-      per_unit_bid: parseFloat(bid)
+      per_unit_bid: parseFloat(bid.replace(/\$/gi,''))
     };
     $.ajax({
       type: 'POST',

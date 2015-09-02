@@ -1,23 +1,41 @@
 require 'rails_helper'
 
 RSpec.describe Spree::Price, type: :model do
-  it 'should have A discount by 50%' do
-    t = Spree::Price::discount_codes[:A]
-    expect(t).to eq 0.50
+  it 'should have discount [A-K]' do
+    discount = 0.50
+    ('A'..'K').each do |l|
+      t = Spree::Price.discount_codes[l.to_sym]
+      expect((discount - t).abs).to be < 0.0001
+      discount += 0.05
+    end
   end
 
-  it 'should have Z discount by 100%' do
-    t = Spree::Price::discount_codes[:Z]
-    expect(t).to eq 1.00
+  it 'should have discount [P-Z]' do
+    discount = 0.50
+    ('P'..'Z').each do |l|
+      t = Spree::Price.discount_codes[l.to_sym]
+      expect((discount - t).abs).to be < 0.0001
+      discount += 0.05
+    end
   end
 
-  it 'should discount price' do
-    t = Spree::Price.discount_price('A', 1200)
-    expect(t).to eq 600
+  it 'should discount price [A-K]' do
+    discount = 0.50
+    value = 1200
+    ('A'..'K').each do |l|
+      t = Spree::Price.discount_price(l, value)
+      expect(((value * discount) - t).abs).to be < 0.0001
+      discount += 0.05
+    end
   end
 
-  it 'should not discount price' do
-    t = Spree::Price.discount_price('L', 100)
-    expect(t).to eq 100
+  it 'should discount price [P-Z]' do
+    discount = 0.50
+    value = 1200
+    ('P'..'Z').each do |l|
+      t = Spree::Price.discount_price(l, value)
+      expect(((value * discount) - t).abs).to be < 0.0001
+      discount += 0.05
+    end
   end
 end

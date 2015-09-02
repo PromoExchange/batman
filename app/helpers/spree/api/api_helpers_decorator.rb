@@ -45,6 +45,13 @@ Spree::Api::ApiHelpers.module_eval do
     ])
   mattr_reader :bid_attributes
 
+  class_variable_set(:@@user_attributes,
+    [
+      :id,
+      :email
+    ])
+  mattr_reader :user_attributes
+
   class_variable_set(:@@prebid_attributes,
     [
       :id,

@@ -62,6 +62,16 @@ namespace :product do
       load_files('vitronic')
     end
 
+    desc 'Gildan Load'
+    task gildan: :environment do
+      ProductLoader.load('products', 'gildan')
+    end
+
+    desc 'Alternative Apparel Load'
+    task alternative_apparel: :environment do
+      ProductLoader.load('products', 'alternative_apparel')
+    end
+
     desc 'Product Load'
     task all: [
       'environment',
@@ -74,7 +84,9 @@ namespace :product do
       'product:load:primeline',
       'product:load:sweda',
       'product:load:starline',
-      'product:load:vitronic'
+      'product:load:vitronic',
+      'product:load:gildan',
+      'product:load:alternative_apparel'
     ]
   end
 end

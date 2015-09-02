@@ -6,3 +6,6 @@ end
 child bids: :bids do
   attributes(*bid_attributes)
 end
+child invited_sellers: :invited_sellers do
+  attributes(*user_attributes)
+end

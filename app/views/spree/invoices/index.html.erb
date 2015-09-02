@@ -23,7 +23,7 @@
             <td><%= a.buyer_email %></td>
             <td><%= a.quantity %></td>
             <td><%= a.winning_bid.bid unless a.winning_bid.nil?%></td>
-            <td><%= (a.winning_bid.bid * 0.0299).round(2) unless a.winning_bid.nil? %></td>
+            <td><%= ((a.winning_bid.seller_fee / (1-0.029))+0.30).round(2) unless a.winning_bid.nil? %></td>
             <td><a href='/invoices/<%= a.id %>'>Pay Invoice</a></td>
           </tr>
         <% end %>

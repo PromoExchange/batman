@@ -63,6 +63,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
       :description,
       :started,
       :filter,
+      :only_preferred,
       :ended,
       :status,
       :page,

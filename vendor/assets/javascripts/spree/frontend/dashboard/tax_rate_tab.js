@@ -17,6 +17,8 @@ $(function() {
     var taxrate_include = $("#include-sandh-edit").prop('checked');
     var taxrate_url = '/api/taxrates/' + taxrate_id;
 
+    taxrate_value /= 100;
+
     var message = {
       id: taxrate_id,
       amount: taxrate_value,
@@ -33,7 +35,7 @@ $(function() {
       },
       success: function(data) {
         var taxrate_cell_id = "#taxrate-" + taxrate_id + " > td.rate-amount";
-        $(taxrate_cell_id).html(taxrate_value);
+        $(taxrate_cell_id).html((taxrate_value * 100).toFixed(2));
 
         var include_cell_id = "#taxrate-" + taxrate_id + " > td.rate-includesandh";
         if(taxrate_include === true) {

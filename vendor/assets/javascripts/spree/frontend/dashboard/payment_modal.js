@@ -2,7 +2,7 @@ $(function() {
 
   function stripeResponseHandler(status, response) {
     var $form = $('#payment-form');
-    var key = $('#seller-won-auction-table').attr('data-key');
+    var key = $('#show-invoice').attr('data-key');
     if (response.error) {
       // Show the errors on the form
       $("body").css("cursor", "default");
@@ -30,9 +30,8 @@ $(function() {
           $('#payment-form')[0].reset();
           $("body").css("cursor", "default");
           $("#payment-submit").prop('disabled', false);
-          $('#pay-invoice').modal('hide');
-          $('#seller-won-auction-tab').click();
           alert('Payment processed, thank you');
+          window.location.href = "/dashboards";
         },
         error: function(data) {
           console.log(data);

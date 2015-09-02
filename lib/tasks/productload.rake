@@ -73,6 +73,14 @@ namespace :product do
     end
 
     desc 'Product Load'
+    task work: [
+      'environment',
+      'product:load:vitronic',
+      'product:load:gildan',
+      'product:load:alternative_apparel'
+    ]
+
+    desc 'Product Load'
     task all: [
       'environment',
       'product:load:gemline',

@@ -61,3 +61,12 @@
 .pct::after {
   content: '%';
 }
+.batman-nav-pills{
+  .nav-pills{
+    li.active > a{
+      background-color: #5a606c;
+      outline: none;
+    }
+  }
+}
+    

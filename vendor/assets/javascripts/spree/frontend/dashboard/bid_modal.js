@@ -16,8 +16,8 @@ $(function() {
         var num_bids = data.bids.length;
         var low_bid = 'no bids';
         if (num_bids > 0) {
-          low_bid = accounting.formatMoney(parseFloat(data.bids[0].bid));
-          $('.modal-body #lowest-per-unit-price').text(low_bid / data.quantity);
+          low_bid = parseFloat(data.bids[0].bid);
+          $('.modal-body #lowest-per-unit-price').text(accounting.formatMoney(low_bid / data.quantity));
           $('.modal-body #lowest-total-price').text(low_bid);
         }
         $('.modal-body #per-unit-price').val(data.product_unit_price);

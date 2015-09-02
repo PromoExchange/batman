@@ -23,7 +23,7 @@ default_attrs = {
   available_on: Time.zone.now
 }
 
-file_name = File.join(Rails.root, 'db/product_data/gildan.csv')
+file_name = File.join(Rails.root, 'db/product_data/alternative_apparel.csv')
 load_fail = 0
 image_fail = 0
 count = 0
@@ -32,6 +32,7 @@ beginning_time = Time.zone.now
 category_map = {
   'Headwear': 'Headwear-Caps',
   'T-Shirts': 'T-Shirts',
+  'Sweatshirts': 'Sweatshirts',
   'Lifestyle': 'Personal-Healthcare',
   'Totes & Bags': 'Bags-Coolers-Totes',
   'Business': 'Business Supplies',
@@ -85,7 +86,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     # Image
     if Rails.configuration.x.load_images
       begin
-        image_path = File.join(Rails.root, "db/product_images/gildan/#{product_attrs[:sku]}.png")
+        image_path = File.join(Rails.root, "db/product_images/alternative_apparel/#{product_attrs[:sku]}.png")
         product.images << Spree::Image.create!(
           attachment: open(image_path),
           viewable: product)
@@ -177,7 +178,7 @@ end
 
 last_product = 0
 
-file_name = File.join(Rails.root, 'db/product_data/gildan_pricing.csv')
+file_name = File.join(Rails.root, 'db/product_data/alternative_apparel_pricing.csv')
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 

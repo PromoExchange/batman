@@ -32,6 +32,7 @@ beginning_time = Time.zone.now
 category_map = {
   'Headwear': 'Headwear-Caps',
   'T-Shirts': 'T-Shirts',
+  'Sweatshirts': 'Sweatshirts',
   'Lifestyle': 'Personal-Healthcare',
   'Totes & Bags': 'Bags-Coolers-Totes',
   'Business': 'Business Supplies',

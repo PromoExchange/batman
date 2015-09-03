@@ -121,20 +121,7 @@ class Spree::Prebid < Spree::Base
     log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
 
     # Payment processing cost
-    if auction.payment_method == 'Check'
-      payment_processing_commission = 0.0
-    else
-      payment_processing_commission = 0.029
-    end
-    payment_processing_flat_fee = 0.30
-
-    log_debug(auction_data, "payment_processing_commission=#{payment_processing_commission}")
-    auction_data[:running_unit_price] /= (1 - payment_processing_commission)
-    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
-
-    log_debug(auction_data, "payment_processing_flat_fee=#{payment_processing_flat_fee}")
-    auction_data[:running_unit_price] += (payment_processing_flat_fee / auction.quantity)
-    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+    apply_processing_fee(auction, auction_data)
 
     Spree::Bid.transaction do
       bid = Spree::Bid.create(
@@ -156,11 +143,33 @@ class Spree::Prebid < Spree::Base
       order_updater = Spree::OrderUpdater.new(bid.order)
       order_updater.update
 
-      bid.save
+      bid.save!
     end
   end
 
   private
+
+  def apply_processing_fee(auction, auction_data)
+    if auction.preferred?(seller)
+      log_debug(auction_data, 'Skipping processing fee for preferred seller')
+      return
+    end
+
+    if auction.payment_method == 'Check'
+      payment_processing_commission = 0.0
+    else
+      payment_processing_commission = 0.029
+    end
+    payment_processing_flat_fee = 0.30
+
+    log_debug(auction_data, "payment_processing_commission=#{payment_processing_commission}")
+    auction_data[:running_unit_price] /= (1 - payment_processing_commission)
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+
+    log_debug(auction_data, "payment_processing_flat_fee=#{payment_processing_flat_fee}")
+    auction_data[:running_unit_price] += (payment_processing_flat_fee / auction.quantity)
+    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+  end
 
   def log_format(auction_data, level, message)
     "PREBID #{level} A:#{auction_data[:auction_id]} P:#{auction_data[:prebid_id]} - #{message}"

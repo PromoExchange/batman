@@ -7,7 +7,7 @@ puts 'Loading Alternative Apparel Products'
 # Load the main color map
 main_color_map = ProductLoader.main_color_map_load('db/product_data/alternative_apparel_main_color_map.csv')
 
-supplier = Spree::Supplier.where(name: 'Alternitive Apparel').first_or_create
+supplier = Spree::Supplier.where(name: 'Alternative Apparel').first_or_create
 
 # PMS Colors
 ProductLoader.pms_load('alternative_apparel_pms_colors.csv', supplier.id)

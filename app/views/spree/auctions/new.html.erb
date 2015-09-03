@@ -85,7 +85,7 @@
       <div class="form-group">
         <%= f.label(:payment_method, 'Payment Method') %>
         <%= f.select(:payment_method, options_for_select(
-          [['Credit Card', 'Credit Card'],['Check', 'Check']]),
+          [['Credit Card', 'Credit Card'],['Web Check', 'Check']]),
           { prompt: 'Please Select' }, { class: 'form-control' }) %>
       </div>
       <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>

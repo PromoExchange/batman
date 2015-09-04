@@ -10,7 +10,7 @@
     border: 2px solid #666;
   }
 
-  .swatch-clickable:hover {
+  .swatch-clickable:hover, .custom-swatch-clickable:hover {
     border: 2px solid #000;
     cursor: pointer;
   }
@@ -26,5 +26,15 @@
     display: inline-block;
     margin-left: 10px;
     margin-right: 10px;
+    min-height: 100px;
+    float: left;
   }
+
+  span.glyphicon.glyphicon-plus {
+    text-align: center;
+    position: relative;
+    left: 18px;
+    top: 16px;
+    font-size: 20px;
+  }  
 }

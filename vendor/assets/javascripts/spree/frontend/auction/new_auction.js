@@ -30,6 +30,7 @@ $(function() {
       show_swatches += val;
     }
     $(show_swatches).show();
+    $("div.imprint_swatch_custom").show();
 
     var selected = $("#auction_imprint_method_id option:selected").text();
     var found_index = $.inArray(selected, ['Blank','Deboss','Engrave']);
@@ -38,6 +39,8 @@ $(function() {
     } else {
       $("div.color-hideable").hide(750);
     }
+
+    $("div.custom-color-hideable").hide(750);
   });
 
   $("#invite-sellers-link").click(function() {
@@ -61,4 +64,10 @@ $(function() {
     }
     $("#auction_invited_sellers").val(email_aggregation);
   });
+
+  $('.custom-swatch-clickable').click(function() {
+    $("div.custom-color-hideable").show(750);
+  });
+
+  $('.custom-swatch-clickable').tooltip();
 });

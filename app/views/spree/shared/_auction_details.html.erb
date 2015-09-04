@@ -27,6 +27,7 @@
             <% end %>
         </td>
       </tr>
+      <tr><td>Expected Delivery Date:</td><td><time data-format='%B %e, %Y' data-local='time' datetime='<%= 15.days.from_now %>'><%= 15.days.from_now %></time></td></tr>
       <% unless @auction.logo.nil? %>
         <tr><td>Logo:</td><td><%= image_tag(@auction.logo.logo_file.url(:thumb), { itemprop: "image", alt: @auction.logo.logo_file_file_name }) %></td></tr>
       <% end %>

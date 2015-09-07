@@ -68,7 +68,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     [
       '&bull;'
     ].each do |s|
-      desc.gsub!(s, '. ')
+      desc.gsub!(s, ' ')
     end
 
     product_attrs = {

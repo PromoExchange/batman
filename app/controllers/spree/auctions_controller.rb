@@ -1,5 +1,6 @@
 class Spree::AuctionsController < Spree::StoreController
-  before_action :require_login, only: [:new, :edit]
+  before_filter :store_location
+  before_action :require_login, only: [:new, :edit, :show]
   before_action :fetch_auction, except: [:index, :create, :new]
 
   def index
@@ -58,15 +59,26 @@ class Spree::AuctionsController < Spree::StoreController
     send_prebid_request @auction.id
 
     unless auction_data[:invited_sellers].nil?
-      auction_data[:invited_sellers].split(';').each do |s|
-        unless s.blank?
-          invited_seller = Spree::User.where(email: s).first
-          unless invited_seller.nil?
+      auction_data[:invited_sellers].split(';').each do |seller_email|
+        unless seller_email.blank?
+          email_type = :is
+          invited_seller = Spree::User.where(email: seller_email).first
+
+          if invited_seller.nil?
+            email_type = :non
+          else
             Spree::AuctionsUser.create(
               auction_id: @auction.id,
               user_id: invited_seller.id
             )
           end
+
+          Resque.enqueue(
+            SellerInvite,
+            auction_id: @auction.id,
+            type: email_type,
+            email_address: seller_email
+          )
         end
       end
     end

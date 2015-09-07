@@ -13,4 +13,11 @@ class SellerMailer < ApplicationMailer
     @user = user
     mail(to: @user.email, subject: 'Welcome to PromoExchange!')
   end
+
+  def seller_invite(auction, type, email_address)
+    @auction = auction
+    @type = type
+    @email_address = email_address
+    mail(to: @email_address, subject: 'PromoExchange Auction Invite')
+  end
 end

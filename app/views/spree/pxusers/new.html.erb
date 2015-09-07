@@ -7,18 +7,26 @@
       <div class="col-md-3">&nbsp;</div>
       <div class="col-md-6">
         <ul class="nav nav-pills">
-          <li class="active"><a href="#buyer" id="pxusers-buyer-tab" data-toggle="tab"><%= Spree.t(:register_as_buyer) %></a></li>
-          <li><a href="#seller" id="pxusers-seller-tab" data-toggle="tab"><%= Spree.t(:register_as_seller) %></a></li>
+          <% active_me = '' %>
+          <% active_me = 'active' if @is_buyer %>
+          <li class="<%= active_me %>"><a href="#buyer" id="pxusers-buyer-tab" data-toggle="tab"><%= Spree.t(:register_as_buyer) %></a></li>
+          <% active_me = '' %>
+          <% active_me = 'active' unless @is_buyer %>
+          <li class="<%= active_me %>"><a href="#seller" id="pxusers-seller-tab" data-toggle="tab"><%= Spree.t(:register_as_seller) %></a></li>
         </ul>
         <div class="tab-content">
-          <div class="tab-pane active" id="buyer">
+          <% active_me = '' %>
+          <% active_me = 'active' if @is_buyer %>
+          <div class="tab-pane <%= active_me %>" id="buyer">
             <h4><%= Spree.t(:buyer_registration) %></h4>
             <%= form_for @pxuser, url: '/pxusers', method: :post, class: 'form' do |f| %>
               <%= render 'spree/shared/error_messages', :object => @pxuser %>
               <%= render partial: 'spree/pxusers/address_form', locals: { f: f, :type => 'buyer' } %>
             <% end %>
           </div>
-          <div class="tab-pane" id="seller">
+          <% active_me = '' %>
+          <% active_me = 'active' unless @is_buyer  %>
+          <div class="tab-pane <%= active_me %>" id="seller">
             <h4><%= Spree.t(:seller_registration) %></h4>
             <%= form_for @pxuser, url: '/pxusers', method: :post, class: 'form' do |f| %>
               <%= render 'spree/shared/error_messages', :object => @pxuser %>

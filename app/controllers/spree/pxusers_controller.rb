@@ -1,6 +1,9 @@
 class Spree::PxusersController < Spree::StoreController
+  before_filter :store_auction_location
+
   def new
     @pxuser = Spree::Pxuser.new
+    @is_buyer = params[:auction_ref].nil?
   end
 
   def index
@@ -78,6 +81,14 @@ class Spree::PxusersController < Spree::StoreController
     render :new
   end
 
+  def store_auction_location
+    session[:previous_urls] ||= []
+    unless params[:auction_ref].nil?
+      session[:previous_urls].prepend params[:auction_ref]
+      session[:previous_urls].pop if session[:previous_urls].count > 3
+    end
+  end
+
   def pxuser_params
     params.require(:pxuser).permit(
       :first_name,
@@ -93,7 +104,8 @@ class Spree::PxusersController < Spree::StoreController
       :zipcode,
       :phonenumber,
       :asi_number,
-      :buyer_seller
+      :buyer_seller,
+      :auction_ref
     )
   end
 end

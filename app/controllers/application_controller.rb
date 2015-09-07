@@ -6,4 +6,11 @@ class ApplicationController < ActionController::Base
   def ping
     render json: { ping: 'pong' }
   end
+
+  def after_sign_in_path_for(_resource)
+    return root_path if session[:previous_urls].nil?
+    @url = session[:previous_urls].reverse.first
+    return @url unless @url.nil?
+    root_path
+  end
 end

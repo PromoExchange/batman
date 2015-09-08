@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+  <div class="panel-body" id="address-panel-edit"
+        data-key="<%= spree_current_user.spree_api_key %>"
+        data-id="<%= spree_current_user.id %>">
+    <div class="addresses-div">
+      <% @user.addresses.each do |address| %>
+        <% if address.deleted_at.nil? %>
+          <div class="col-md-4" id="address-div-<%= address.id %>">
+            <div class="panel panel-default">
+              <div class="panel-body address-panel">
+                <ul class="display-address-ul">
+                  <li id='address-company-<%=address.id%>'><b><%= address.company || '<br/>'%></b></li>
+                  <li><span id='address-firstname-<%=address.id%>'><%= address.firstname %></span>&nbsp;<span id='address-lastname-<%=address.id%>'><%= address.lastname %></span></li>
+                  <li id='address-address1-<%=address.id%>'><%= address.address1 %></li>
+                  <li id='address-address2-<%=address.id%>'><%= address.address2 %></li>
+                  <li id='address-city-<%=address.id%>'><%= address.city %></li>
+                  <li id='address-state-<%=address.id%>'><%= address.state_text %></li>
+                  <li id='address-zipcode-<%=address.id%>'><%= address.zipcode %></li>
+                  <li id='address-phone-<%=address.id%>'><%= address.phone %></li>
+                </ul>
+                <p>Default:</p>
+                <input type="radio" name="ship-type" class="ship-type-radio" value="ship-<%=address.id%>" <%= "checked='true'" if address.ship? %> data-id="<%=address.id%>">
+                <label for="ship_type_shipping">Shipping</label>
+                <input type="radio" name="bill-type" class="bill-type-radio" value="bill-<%=address.id%>" <%= "checked='true'" if address.bill? %> data-id="<%=address.id%>">
+                <label for="ship_type_shipping">Billing</label>
+              </div>
+              <div class="panel-footer">
+                <button type='button' class='btn btn-success address-edit-button' data-toggle='modal' data-target='#edit-address' data-id="<%=address.id%>">Edit</button>
+                <button type='button' class='btn btn-success address-delete-button' id="address-delete-button-<%=address.id%>" data-id="<%=address.id%>">Delete</button>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <div id="address-panel-actions">
+      <button type='button' class='btn btn-success' id="address-new-button" data-toggle='modal' data-target='#edit-address'>New</button>
+    </div>
+  </div>
+  <%= render partial: 'spree/dashboards/shared/address_modal' %>
+</div>

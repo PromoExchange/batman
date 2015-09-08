@@ -12,6 +12,26 @@ Spree::Api::ApiHelpers.module_eval do
     ])
   mattr_reader :message_attributes
 
+  class_variable_set(:@@address_attributes,
+    [
+      :id,
+      :company,
+      :firstname,
+      :lastname,
+      :address1,
+      :address2,
+      :city,
+      :state_name,
+      :country,
+      :state_id,
+      :country_id,
+      :zipcode,
+      :phone,
+      :is_bill,
+      :is_ship
+    ])
+  mattr_reader :address_attributes
+
   class_variable_set(:@@auction_attributes,
     [
       :id,

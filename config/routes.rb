@@ -57,5 +57,7 @@ Rails.application.routes.draw do
     resources :prebids, controller: 'spree/api/prebids', as: 'api_prebids'
     resources :upcharges, controller: 'spree/api/upcharges', as: 'api_upcharges'
     resources :taxrates, controller: 'spree/api/taxrates', as: 'api_taxrates'
+    resources :pxaddresses, controller: 'spree/api/pxaddresses', as: 'api_addresses'
+    match '/pxaddresses/:id/type' => 'spree/api/pxaddresses#type', via: :post
   end
 end

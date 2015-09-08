@@ -7,12 +7,20 @@ class Spree::DashboardsController < Spree::StoreController
     @logo = Spree::Logo.new
     @user = spree_current_user
     @pxaccount = Spree::Pxaccount.new(@user)
+    @pxaddress = Spree::Pxaddress.new
+    @tab = params[:tab]
 
     return unless spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin)
 
     create_taxrates
     @tax_rates = Spree::TaxRate.where(user: current_spree_user).includes(:zone).order(:name)
 
+    create_prebids
+  end
+
+  private
+
+  def create_prebids
     @hacked_factory = Spree::Prebid.where(seller_id: current_spree_user).first
     return unless @hacked_factory.nil?
     products = Spree::Product.all
@@ -27,8 +35,6 @@ class Spree::DashboardsController < Spree::StoreController
       @hacked_factory = Spree::Prebid.where(seller_id: current_spree_user).first
     end
   end
-
-  private
 
   def create_taxrates
     return if spree_current_user.tax_rates.count > 0

@@ -1,0 +1,38 @@
+<div class="form-group">
+  <label class="control-label" for="pxaddress_company">Company</label>
+  <input type="text" id="address_edit_company">
+</div>
+<div class="form-group">
+  <label class="control-label" for="pxaddress_firstname">Firstname</label>
+  <input type="text" id="address_edit_firstname">
+</div>
+<div class="form-group">
+  <label class="control-label" for="pxaddress_lastname">Lastname</label>
+  <input type="text" id="address_edit_lastname">
+</div>
+<div class="form-group">
+  <label class="control-label" for="pxaddress_address1">Address</label>
+  <input type="text" id="address_edit_address1" maxlength="50" size="50">
+</div>
+<div class="form-group">
+  <label class="control-label" for="pxaddress_address2">Address (contd.)</label>
+  <input type="text" id="address_edit_address2" maxlength="50" size="50">
+</div>
+<div class="form-group">
+  <label class="control-label" for="pxaddress_city" class="col-sm-3">City</label>
+  <input type="text" id="address_edit_city" maxlength="50" size="50">
+</div>
+<div class="form-group">
+  <label for="pxaddress_state"><%= Spree.t(:state) %></label>
+  <select id="address_edit_state">
+    <%= render partial: 'spree/pxusers/us_states' %>
+  </select>
+</div>
+<div class="form-group">
+  <label class="control-label" for="pxaddress_zipcode">Zip</label>
+  <input type="text" id="address_edit_zipcode">
+</div>
+<div class="form-group">
+  <label class="control-label" for="pxaddress_phone">Phone</label>
+  <input type="text" id="address_edit_phone">
+</div>

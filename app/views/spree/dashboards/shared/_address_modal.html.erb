@@ -1,0 +1,30 @@
+<div class="modal" data-id="<%=spree_current_user.spree_api_key%>" id="edit-address" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <form role="form" action="/api/pxaddress" id="edit-address-modal-form" method="post" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Address</h4>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid form-horizontal">
+            <%= form_for @pxaddress, url: main_app.api_addresses_path do |user_fields| %>
+              <%= hidden_field_tag id='user-id', spree_current_user.id %>
+              <%= hidden_field_tag id='is_edit',0 %>
+              <%= hidden_field_tag id='address_id',0 %>
+              <div id="address-errors-div" style="display: none;">
+                <div class="alert alert-error"><p id="address-errors-msg"></p></div>
+                </ul>
+              </div>
+              <%= user_fields.hidden_field :id, value: spree_current_user.id %>
+              <%= render partial: 'spree/dashboards/shared/address_form_horz' %>
+            <% end %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="edit-address-save">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

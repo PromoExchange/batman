@@ -83,8 +83,8 @@ class Spree::Prebid < Spree::Base
 
     # Apply tax from raxrate table
     tax_rate = 0.0
-    unless auction.buyer.ship_address.nil?
-      buyers_state_id = auction.buyer.ship_address.state_id
+    unless auction.shipping_address_id.nil?
+      buyers_state_id = auction.shipping_address.state_id
       log_debug(auction_data, "buyers shipping state =#{auction.buyer.ship_address.state.name}")
 
       tax_zone_id = Spree::ZoneMember
@@ -358,14 +358,14 @@ class Spree::Prebid < Spree::Base
     )
 
     Rails.logger.debug(
-      "PREBID DEBUG A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.buyer.shipping_address.zipcode}"
+      "PREBID DEBUG A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.shipping_address.zipcode}"
     )
 
     destination = ActiveShipping::Location.new(
-      country: auction.buyer.shipping_address.country.iso,
-      state: auction.buyer.shipping_address.state.abbr,
-      city: auction.buyer.shipping_address.city,
-      zip: auction.buyer.shipping_address.zipcode
+      country: auction.shipping_address.country.iso,
+      state: auction.shipping_address.state.abbr,
+      city: auction.shipping_address.city,
+      zip: auction.shipping_address.zipcode
     )
 
     ups = ActiveShipping::UPS.new(

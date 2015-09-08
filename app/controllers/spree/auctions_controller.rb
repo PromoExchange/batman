@@ -114,9 +114,17 @@ class Spree::AuctionsController < Spree::StoreController
 
   def supporting_data
     @addresses = []
-    @addresses << [
-      "#{@auction.buyer.shipping_address}",
-      @auction.buyer.shipping_address.id] unless @auction.buyer.shipping_address.nil?
+    @auction.buyer.addresses.active.each do |address|
+      add = true
+      add = false if address.bill?
+      add = true if address.ship?
+
+      if add
+        @addresses << [
+          "#{address}",
+          address.id]
+      end
+    end
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
 
@@ -146,6 +154,8 @@ class Spree::AuctionsController < Spree::StoreController
     @user = spree_current_user
 
     @logo = Spree::Logo.new
+
+    @pxaddress = Spree::Pxaddress.new
   end
 
   def auction_params

@@ -10,19 +10,6 @@ class Spree::PxaccountsController < Spree::StoreController
   def create
     user = Spree::User.find(spree_current_user.id)
 
-    unless params[:pxaccount][:ship_address][:firstname][0].nil?
-      user.ship_address = Spree::Address.new if user.ship_address.nil?
-      update_address(user.ship_address, params[:pxaccount][:ship_address])
-    end
-
-    unless params[:pxaccount][:bill_address][:firstname][0].nil?
-      user.bill_address = Spree::Address.new if user.bill_address.nil?
-      update_address(user.bill_address, params[:pxaccount][:bill_address])
-    end
-
-    params[:pxaccount].delete(:ship_address)
-    params[:pxaccount].delete(:bill_address)
-
     if user.update_attributes(pxaccount_params)
       if params[:pxaccount][:password].present?
         user = Spree::User.reset_password_by_token(pxaccount_params)

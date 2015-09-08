@@ -3,7 +3,12 @@
 <% end %>
 
 <ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="#contact-tab" role="tab" data-toggle="tab"><%=Spree.t(:contact_information)%></a></li>
+  <% active_me = nil %>
+  <% active_me = 'active' if @tab.nil? %>
+  <li class="<%= active_me %>"><a href="#contact-tab" role="tab" data-toggle="tab"><%=Spree.t(:contact_information)%></a></li>
+  <% active_me = nil %>
+  <% active_me = 'active' if @tab == 'address' %>
+  <li class="<%= active_me %>"><a href="#address-tab" role="tab" data-toggle="tab"><%=Spree.t(:Addresses)%></a></li>
   <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
     <li><a href="#taxrates-tab" role="tab" data-toggle="tab"><%=Spree.t(:tax_rates)%></a></li>
     <li><a href="#prebids-tab" role="tab" data-toggle="tab"><%=Spree.t(:prebids)%></a></li>
@@ -15,9 +20,16 @@
   <% end %>
 </ul>
 
-<div class="tab-content" id="contact-information">
-  <div class="tab-pane active" id="contact-tab">
+<div class="tab-content">
+  <% active_me = nil %>
+  <% active_me = 'active' if @tab.nil? %>
+  <div class="tab-pane <%= active_me %>" id="contact-tab">
     <%= render partial: 'spree/dashboards/shared/contact_tab' %>
+  </div>
+  <% active_me = nil %>
+  <% active_me = 'active' if @tab == 'address' %>
+  <div class="tab-pane <%= active_me %>" id="address-tab">
+    <%= render partial: 'spree/dashboards/shared/address_tab' %>
   </div>
   <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
     <div class="tab-pane" id="taxrates-tab">

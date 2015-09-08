@@ -6,4 +6,15 @@
   #user-panel-display {
     display: none;
   }
+
+  .display-address-ul {
+    list-style-type: none;
+    text-align: left;
+    margin-left: -20px;
+  }
+
+  #address-panel-actions {
+    clear: both;
+    float: left;
+  }
 }

@@ -18,7 +18,11 @@
           <tr class="<%= row_class %>">
             <td><%= b.email %></td>
             <td><%= '$%.2f' % b.bid %></td>
-            <td><a href="#" class="accept-link" data-id='<%= b.id %>'>Accept</a></td>
+            <% unless @auction.status == 'open' %>
+              <td>Completed</td>
+            <% else %>
+              <td><%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id} %></td>
+            <% end %>
           </tr>
         <% end %>
       <% end %>

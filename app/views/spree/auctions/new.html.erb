@@ -52,7 +52,7 @@
           <% @pms_colors.each do |cell| %>
             <div class="imprint_swatch imprint_swatch_<%= cell[5] %>">
               <div class="swatch swatch-clickable" id="<%= cell[0] %>" name="<%= cell[4] %>" style="background-color:<%= cell[2] %>"></div>
-              <span class="pms-text"><%= cell[1] %><br/><%= cell[3] unless cell[1] == cell[3] %></span>
+              <span class="pms-text"><%= cell[1] %><br/><%= cell[3] %></span>
             </div>
           <% end %>
           <div class="imprint_swatch imprint_swatch_custom">

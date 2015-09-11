@@ -18,6 +18,7 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     @type = type
     @email_address = email_address
+    @buyer = @auction.buyer.bill_address
     mail(to: @email_address, subject: 'PromoExchange Auction Invite')
   end
 end

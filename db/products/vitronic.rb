@@ -200,7 +200,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       ['Four Color Process', 'Four Color Process'],
       ['Hot Stamp', 'Hot Stamp'],
       ['Full Color', 'Full Color'],
-      ['Photo Magic', 'Photo Magic'],
       ['Blank', 'Blank']
     ].each do |w|
       if imprint_method.include?(w[0])

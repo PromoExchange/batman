@@ -66,10 +66,12 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   begin
     desc = hashed[:product_description]
     [
-      '&bull;'
+      '    &bull;'
     ].each do |s|
-      desc.gsub!(s, ' ')
+      desc.gsub!(s, '.')
     end
+
+    desc.gsub!('&bull;', '')
 
     product_attrs = {
       sku: hashed[:sku],

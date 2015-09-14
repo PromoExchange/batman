@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150910173011) do
+ActiveRecord::Schema.define(version: 20150915210427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 20150910173011) do
     t.boolean  "change_ink",          default: false
     t.boolean  "no_under_over",       default: false
     t.string   "custom_pms_colors"
+    t.string   "state"
   end
 
   add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree
@@ -144,6 +145,7 @@ ActiveRecord::Schema.define(version: 20150910173011) do
     t.integer  "prebid_id"
     t.string   "status",         default: "open"
     t.datetime "cancelled_date"
+    t.string   "state"
   end
 
   create_table "spree_calculators", force: :cascade do |t|

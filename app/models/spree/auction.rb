@@ -47,6 +47,48 @@ class Spree::Auction < Spree::Base
     auction.product.minimum_quantity
   end
 
+  state_machine initial: :open do
+    event :end do
+      transition open: :ended
+    end
+
+    event :cancel do
+      transition open: :cancelled
+    end
+
+    event :accept do
+      transition open: :waiting_confirmation
+    end
+
+    event :confirm do
+      transition waiting_confirmation: :order_confirmed
+    end
+
+    event :late_confirm do
+      transition waiting_confirmation: :order_lost
+    end
+
+    event :in_production do
+      transition order_confirmed: :in_production
+    end
+
+    event :enter_tracking do
+      transition in_production: :confirm_receipt
+    end
+
+    event :enter_tracking do
+      transition in_production: :confirm_receipt
+    end
+
+    event :confirm_shipment do
+      transition confirm_receipt: :waiting_for_rating
+    end
+
+    event :rate_seller do
+      transition waiting_for_rating: :complete
+    end
+  end
+
   delegate :name, to: :product
 
   def self.user_auctions

@@ -15,6 +15,20 @@ class Spree::Bid < Spree::Base
   validates :seller_id, presence: true
   validates_inclusion_of :status, in: %w(open accepted cancelled completed)
 
+  state_machine initial: :open do
+    event :accept do
+      transition open: :accepted
+    end
+
+    event :cancel do
+      transition open: :cancelled
+    end
+
+    event :pay do
+      transition accepted: :completed
+    end
+  end
+
   delegate :email, to: :seller
   delegate :total, to: :order
 

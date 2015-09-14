@@ -544,6 +544,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    state_machine (1.2.0)
     state_machines (0.2.2)
     state_machines-activemodel (0.1.2)
       activemodel (~> 4.1)
@@ -662,6 +663,7 @@ DEPENDENCIES
   spree_volume_pricing!
   spring
   spring-commands-rspec
+  state_machine
   stripe
   terminal-notifier-guard (~> 1.6.1)
   turbolinks

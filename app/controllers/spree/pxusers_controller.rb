@@ -61,6 +61,7 @@ class Spree::PxusersController < Spree::StoreController
       if user.save
         user.generate_spree_api_key!
       else
+        @is_buyer = pxuser_params[:buyer_seller] == "buyer"
         render :new
       end
     end

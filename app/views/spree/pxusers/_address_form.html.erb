@@ -1,9 +1,9 @@
 <%= f.hidden_field :buyer_seller, value: type %>
-<% if type == 'seller' %>
 <div class="form-group">
   <label for="pxuser_company"><%= Spree.t(:company) %></label>
   <input class="form-control" type="text" name="pxuser[company]" id="pxuser_company" value="<%= @pxuser.company %>">
 </div>
+<% if type == 'seller' %>
 <div class="form-group">
   <label for="pxuser_asi_number"><%= Spree.t(:asi_number) %></label>
   <input class="form-control" type="text" name="pxuser[asi_number]" id="pxuser_asi_number" value="<%= @pxuser.asi_number %>">

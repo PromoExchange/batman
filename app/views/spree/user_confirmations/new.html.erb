@@ -1,0 +1,23 @@
+<div class="col-md-6 col-md-offset-3 confirm_min_height">
+  <div class="panel panel-default confirm_center">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= Spree.t(:resend_confirmation_instructions) %></h3>
+    </div>
+    <div id="existing-customer" class="panel-body" data-hook="confirmation">
+      <% unless resource.errors.empty? %>
+        <div class="alert alert-danger"><%= resource.errors.full_messages.first %></div>
+      <% end %>
+      <%= form_for(resource, as: resource_name, url: spree_user_confirmation_path, html: { method: :post }) do |f| %>
+        <div id="password-credentials">
+          <p>
+            <%= f.label :email %><br />
+            <%= f.email_field :email, class: "form-control", autofocus: true, tabindex: "1" %>
+          </p>
+        </div>
+        <p>
+          <%= f.submit "Resend confirmation instructions", class: "btn btn-lg btn-success btn-block", tabindex: "4" %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -93,3 +93,7 @@ en:
     favorites: 'Favorites'
     custom_pms_colors: 'Custom PMS Colors'
     login_register: 'Login / Register'
+  devise:
+    user_confirmations:
+      spree_user:
+        confirmed: 'Account has been confirmed'

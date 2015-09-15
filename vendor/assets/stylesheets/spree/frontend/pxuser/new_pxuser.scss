@@ -1,3 +1,24 @@
 #pxusers-new-view {
   margin-bottom: 10px;
 }
+#confirmation-modal {
+  .modal-dialog .modal-content {
+    border: 2px #000 solid;
+    border-radius: 0px;
+    text-align: center;
+  }
+  .modal-dialog .modal-content .modal-body {
+    padding: 15px 103px
+  }
+  .modal-dialog {
+    width: 532px;
+  }
+  .modal-dialog .modal-content .modal-body h1 {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .modal-dialog .modal-content .modal-body p {
+    margin: 0px;
+    padding: 10px 0px;
+  }
+}

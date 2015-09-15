@@ -127,6 +127,7 @@ puts 'Users'
   )
 
   user.save!
+  user.confirm!
 end
 
 puts 'Pages'

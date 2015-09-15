@@ -1,7 +1,4 @@
 <div id="pxusers-new-view">
-  <% flash.each do |name, msg| %>
-    <%= content_tag :div, msg, class: name %>
-  <% end %>
   <div class="container">
     <div class="row">
       <div class="col-md-3">&nbsp;</div>
@@ -52,3 +49,22 @@
     </div>
   </div>
 </div>
+
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <%= render partial: 'spree/pxusers/confirmation_modal' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  <% if flash["success"] %>
+    $('#confirmation-modal').modal('show')
+  <% end %>
+</script>

@@ -59,6 +59,8 @@ class Spree::PxusersController < Spree::StoreController
       user.bill_address = bill_address
 
       if user.save
+        session[:user_info] = pxuser_params[:buyer_seller] + "_" + ship_address.company_name
+        flash[:success] = "Registered successfully"
         user.generate_spree_api_key!
       else
         @is_buyer = pxuser_params[:buyer_seller] == "buyer"
@@ -72,7 +74,8 @@ class Spree::PxusersController < Spree::StoreController
       Resque.enqueue(SendSellerRegistration, user_id: user.id)
     end
 
-    redirect_to login_url
+    redirect_to main_app.new_pxuser_path
+
   rescue
     @pxuser = Spree::Pxuser.new
     params[:pxuser].each do |k, v|

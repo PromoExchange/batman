@@ -21,6 +21,9 @@ class Spree::Prebid < Spree::Base
     # (TEMP) Do not prebid if this seller is not preferred
     return unless auction.preferred?(seller)
 
+    # No prebids from banned users
+    return if seller.banned?
+
     auction_data = {
       auction_id: auction_id,
       prebid_id: id,

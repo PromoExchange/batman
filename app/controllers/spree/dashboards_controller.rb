@@ -1,4 +1,5 @@
 class Spree::DashboardsController < Spree::StoreController
+  before_filter :banned?
   before_action :require_login
   def index
     @favorites = Spree::Favorite.where(buyer: current_spree_user)
@@ -60,5 +61,14 @@ class Spree::DashboardsController < Spree::StoreController
 
   def require_login
     redirect_to login_url unless current_spree_user
+  end
+
+  def banned?
+    return if spree_current_user.nil?
+    if spree_current_user.banned?
+      sign_out spree_current_user
+      flash[:error] = 'This account has been suspended....'
+      root_path
+    end
   end
 end

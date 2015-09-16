@@ -4,15 +4,15 @@ class Spree::LogosController < Spree::StoreController
     @logo = Spree::Logo.new(logo_params)
 
     if @logo.save
-      redirect_to session.delete(:return_to), flash: { notice: 'Logo upload sucessfully.' }
+      redirect_to main_app.dashboards_path(tab: 'logo'), flash: { notice: 'Logo upload sucessfully.' }
     else
-      redirect_to main_app.dashboards_path, flash: { error: 'Failed to upload logo.' }
+      redirect_to main_app.dashboards_path(tab: 'logo'), flash: { error: 'Failed to upload logo.' }
     end
   end
 
   def destroy
     Spree::Logo.destroy(params[:id])
-    redirect_to main_app.dashboards_path, flash: { notice: 'Logo deleted sucessfully.' }
+    redirect_to main_app.dashboards_path(tab: 'logo'), flash: { notice: 'Logo deleted sucessfully.' }
   end
 
   private

@@ -14,9 +14,9 @@
     <li><a href="#prebids-tab" role="tab" data-toggle="tab"><%=Spree.t(:prebids)%></a></li>
   <% end %>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-    <li>
-      <a data-toggle="tab" href="#logo-tab" role="tab"><%= Spree.t(:logos) %></a>
-    </li>
+    <% active_me = nil %>
+    <% active_me = 'active' if @tab == 'logo' %>
+    <li class="<%= active_me %>"><a data-toggle="tab" href="#logo-tab" role="tab"><%= Spree.t(:logos) %></a></li>
   <% end %>
 </ul>
 
@@ -40,7 +40,9 @@
     </div>
   <% end %>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-    <div class="tab-pane" id="logo-tab">
+    <% active_me = nil %>
+    <% active_me = 'active' if @tab == 'logo' %>
+    <div class="tab-pane <%= active_me %>" id="logo-tab">
       <%= render partial: 'spree/dashboards/buyer/logos_tab' %>
     </div>
   <% end %>

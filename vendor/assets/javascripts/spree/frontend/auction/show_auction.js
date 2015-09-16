@@ -15,7 +15,6 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        alert('bid accepted');
         window.location = "/dashboards";
       },
       error: function(data) {

@@ -15,6 +15,7 @@
             <th><%= Spree.t(:date) %></th>
             <th><%= Spree.t(:quantity) %></th>
             <th><%= Spree.t(:total) %></th>
+            <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
@@ -24,3 +25,4 @@
     </div>
   </div>
 </div>
+<%= render partial: 'spree/dashboards/buyer/pay_modal' %>

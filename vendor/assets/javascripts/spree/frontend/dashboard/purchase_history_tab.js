@@ -49,10 +49,21 @@ $(function() {
                 return b.state == 'accepted';
               }), 'bid');
             }
+            var action = simple_template({
+              value: 'Not completed'
+            });
+            if (item.state === 'unpaid') {
+              action = simple_template({
+                value: action_template({
+                  auction_id: item.id
+                })
+              });
+            }
 
             trHTML += simple_template({
               value: accounting.formatMoney(parseFloat(winning_bid))
             });
+            trHTML += action;
             trHTML += "</tr>";
           });
         } else {
@@ -61,5 +72,15 @@ $(function() {
         $("#buyer-purchase-history-table > tbody").html(trHTML);
       }
     });
+  });
+
+  $(document).on('click', '#buyer-purchase-history-table button', function() {
+    var id = $(this).data('id');
+    $('#invoice-auction-id').val(id);
+    $('#pay-buyer').show('modal');
+  });
+
+  $(document).on('click', '#payment-close', function() {
+    $('#pay-buyer').hide('modal');
   });
 });

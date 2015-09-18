@@ -10,6 +10,7 @@ class Spree::Bid < Spree::Base
   validates :seller_id, presence: true
 
   state_machine initial: :open do
+    after_transition on: :accept, do: :notification_for_waiting_confirmation
     event :accept do
       transition open: :accepted
     end
@@ -25,6 +26,14 @@ class Spree::Bid < Spree::Base
 
   delegate :email, to: :seller
   delegate :total, to: :order
+
+  def notification_for_waiting_confirmation
+    Resque.enqueue(
+      WaitingForConfirmation,
+      auction_id: auction.id,
+      email_address: seller.email
+    )
+  end
 
   def bid
     order.total

@@ -30,18 +30,18 @@ describe 'Auctions API' do
     expect(json.length).to eq(10)
   end
 
-  it 'should get a list of auctions with multiple stati' do
+  it 'should get a list of auctions with multiple states' do
     FactoryGirl.create(:auction)
-    FactoryGirl.create(:completed_auction)
+    FactoryGirl.create(:waiting_confirmation)
 
-    get '/api/auctions?state=open,completed', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get '/api/auctions?state=open,waiting_confirmation', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
     expect(json.length).to eq(2)
   end
 
   it 'should not get a list of open auctions' do
-    FactoryGirl.create(:completed_auction)
+    FactoryGirl.create(:waiting_confirmation)
 
     get '/api/auctions?state=open', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
@@ -59,9 +59,9 @@ describe 'Auctions API' do
   end
 
   it 'should get a list of completed auctions' do
-    FactoryGirl.create_list(:completed_auction, 10)
+    FactoryGirl.create_list(:waiting_confirmation, 10)
 
-    get '/api/auctions?state=completed', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get '/api/auctions?state=waiting_confirmation', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
     expect(json.length).to eq(10)

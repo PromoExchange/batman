@@ -22,8 +22,8 @@ FactoryGirl.define do
     bids { build_list :bid, 1 }
   end
 
-  factory :completed_auction, parent: :auction do
-    state 'completed'
+  factory :waiting_confirmation, parent: :auction do
+    state 'waiting_confirmation'
   end
 
   factory :no_ref_auction, parent: :auction do

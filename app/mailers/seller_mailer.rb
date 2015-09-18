@@ -21,4 +21,9 @@ class SellerMailer < ApplicationMailer
     @buyer = @auction.buyer.bill_address
     mail(to: @email_address, subject: 'PromoExchange Auction Invite')
   end
+
+  def waiting_for_confirmation(auction)
+    @auction = auction
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction waiting for your confirmation')
+  end
 end

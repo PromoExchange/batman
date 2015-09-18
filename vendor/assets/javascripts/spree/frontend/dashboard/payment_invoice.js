@@ -1,8 +1,8 @@
 $(function() {
 
-  function stripeResponseHandlerBuyer(status, response) {
-    var $form = $('#buyer-form');
-    var key = $('#pay-buyer').attr('data-id');
+  function stripeResponseHandler(status, response) {
+    var $form = $('#payment-form');
+    var key = $('#show-invoice').attr('data-key');
     if (response.error) {
       // Show the errors on the form
       $("body").css("cursor", "default");
@@ -22,12 +22,12 @@ $(function() {
         type: 'POST',
         contentType: "application/json",
         data: JSON.stringify(message),
-        url: '/buyercharges',
+        url: '/charges',
         headers: {
           'X-Spree-Token': key
         },
         success: function(data) {
-          $('#buyer-form')[0].reset();
+          $('#payment-form')[0].reset();
           $("body").css("cursor", "default");
           $("#payment-submit").prop('disabled', false);
           alert('Payment processed, thank you');
@@ -43,11 +43,17 @@ $(function() {
     }
   }
 
-  $('#buyer-form').submit(function(event) {
+  $('#payment-form').submit(function(event) {
     var $form = $(this);
     $("body").css("cursor", "progress");
     $("#payment-submit").prop('disabled', true);
-    Stripe.card.createToken($form, stripeResponseHandlerBuyer);
+    Stripe.card.createToken($form, stripeResponseHandler);
     return false;
   });
+
+  $('tbody').on('click', 'button.open-invoice', function(e) {
+    var auction_id = $(this).data('id');
+    $('#invoice-auction-id').val(auction_id);
+  });
+
 });

@@ -65,7 +65,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :invoice_paid do
-      transition unpaid: :completed
+      transition unpaid: :waiting_confirmation
     end
 
     event :confirm_order do
@@ -135,7 +135,7 @@ class Spree::Auction < Spree::Base
   end
 
   def winning_bid
-    Spree::Bid.where(auction_id: id, state: %w(accepted completed)).first
+    Spree::Bid.where(auction_id: id, state: %w(accepted completed waiting_confirmation)).first
   end
 
   def set_default_dates

@@ -1,0 +1,47 @@
+<% content_for :head do %>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+  Stripe.setPublishableKey('<%= ENV["STRIPE_TEST_PUBLISHABLE_KEY"] %>');
+</script>
+<% end %>
+
+<div aria-hidden="true" aria-labelledby="basicModal" class="modal" data-id="<%=spree_current_user.spree_api_key%>" id="pay-buyer" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Pay Buyer</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/buyercharges" id="buyer-form" method="POST" class="form">
+          <%= hidden_field_tag id='invoice-auction-id', 0 %>
+          <span class="payment-errors"></span>
+          <div class="form-group">
+            <label>
+              <span>Card Number</span>
+              <input data-stripe="number" size="20" type="text" class="form-control"/>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <span>CVC</span>
+              <input data-stripe="cvc" size="4" type="text" class="form-control"/>
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <span>Expiration (MM/YYYY)</span>
+              <input data-stripe="exp-month" size="2" type="text"/>
+              <span>/</span>
+              <input data-stripe="exp-year" size="4" type="text"/>
+            </label>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-success" id="payment-submit" type="submit">Submit Payment</button>
+            <span>or</span>
+            <button type="button" class="btn btn-default" id="payment-close" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

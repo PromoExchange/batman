@@ -127,7 +127,7 @@ RSpec.describe Spree::Auction, type: :model do
     a = FactoryGirl.build(:auction)
     a.unpaid
     a.invoice_paid
-    expect(a.state).to eq 'completed'
+    expect(a.state).to eq 'waiting_confirmation'
   end
 
   it 'should go to order_confirmed from confirm_order event' do

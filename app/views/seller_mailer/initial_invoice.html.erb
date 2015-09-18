@@ -42,8 +42,8 @@
 </table>
 
 <p>Your fee:</p>
-<p><a href="<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>"><%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %> if paid by Credit Card</a></p>
-<p><a href="<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>"><%= (@auction.winning_bid.seller_fee / (1 - 0.015)).round(2) %> if paid by Web Check/ACH</a></p>
+<p><a href="<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>?tab=pay"><%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %> if paid by Credit Card</a></p>
+<p><a href="<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>?tab=pay"><%= (@auction.winning_bid.seller_fee / (1 - 0.015)).round(2) %> if paid by Web Check/ACH</a></p>
 
 <p>Payment is due by <%= (Date.today + 10.days).strftime("%D") %></p>
 

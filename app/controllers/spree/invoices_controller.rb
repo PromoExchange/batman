@@ -16,7 +16,9 @@ class Spree::InvoicesController < Spree::StoreController
   end
 
   def show
-    @auction_id = params[:id]
+    if params[:tab].present? && params[:tab].include?('pay')
+      flash.now[:notice] = 'Already Paid' unless @auction.unpaid?
+    end
     render 'spree/invoices/show'
   end
 

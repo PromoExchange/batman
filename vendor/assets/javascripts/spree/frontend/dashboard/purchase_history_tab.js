@@ -97,14 +97,4 @@ $(function() {
       }
     });
   });
-
-  $(document).on('click', '#buyer-purchase-history-table button', function() {
-    var id = $(this).data('id');
-    $('#invoice-auction-id').val(id);
-    $('#pay-buyer').show('modal');
-  });
-
-  $(document).on('click', '#payment-close', function() {
-    $('#pay-buyer').hide('modal');
-  });
 });

@@ -43,6 +43,15 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       if @bid.auction.preferred?(@bid.seller)
         @bid.preferred_accept
       else
+        description = "Auction ID: #{@bid.auction.reference}, Buyer: #{@bid.auction.buyer.email}"
+        
+        Stripe::Charge.create(
+          amount: @bid.bid.to_i,
+          currency: 'usd',
+          source: params[:token],
+          description: description
+        )
+
         @bid.non_preferred_accept
       end
       @bid.auction.accept

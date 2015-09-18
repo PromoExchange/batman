@@ -12,8 +12,8 @@
         <h4>Pay Buyer</h4>
       </div>
       <div class="modal-body">
-        <form action="/buyercharges" id="buyer-form" method="POST" class="form">
-          <%= hidden_field_tag id='invoice-auction-id', 0 %>
+        <form action="/accept" id="buyer-form" method="POST" class="form">
+          <%= hidden_field_tag id='bid-id', 0 %>
           <span class="payment-errors"></span>
           <div class="form-group">
             <label>

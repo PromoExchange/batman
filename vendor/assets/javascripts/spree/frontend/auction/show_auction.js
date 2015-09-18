@@ -7,20 +7,11 @@ $(function() {
     var bid_id = $(this).data('id');
     var url = '/api/bids/' + bid_id + '/accept';
     if (!accept){ return false; }
-    $.ajax({
-      type: 'POST',
-      contentType: "application/json",
-      url: url,
-      headers: {
-        'X-Spree-Token': key
-      },
-      success: function(data) {
-        window.location = "/dashboards";
-      },
-      error: function(data) {
-        alert('Failed to accept bid, please contact support');
-        console.log(data);
-      }
-    });
+    $('#bid-id').val(bid_id);
+    $('#pay-buyer').show('modal');
+  });
+
+  $('#payment-close').click(function() {
+    $('#pay-buyer').hide('modal');
   });
 });

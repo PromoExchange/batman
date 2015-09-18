@@ -8,21 +8,21 @@ $(function() {
       $("body").css("cursor", "default");
       $form.find('.payment-errors').text(response.error.message);
       $("#payment-submit").prop('disabled', false);
+      $("#payment-close").prop('disabled', false);
     } else {
       // response contains id and card, which contains additional card details
       var token = response.id;
-      var auction_id = $('#invoice-auction-id').val();
+      var bid_id = $('#bid-id').val();
 
       var message = {
-        token: token,
-        auction_id: auction_id
+        token: token
       };
 
       $.ajax({
         type: 'POST',
         contentType: "application/json",
         data: JSON.stringify(message),
-        url: '/buyercharges',
+        url: '/api/bids/' + bid_id + '/accept',
         headers: {
           'X-Spree-Token': key
         },
@@ -47,6 +47,7 @@ $(function() {
     var $form = $(this);
     $("body").css("cursor", "progress");
     $("#payment-submit").prop('disabled', true);
+    $("#payment-close").prop('disabled', true);
     Stripe.card.createToken($form, stripeResponseHandlerBuyer);
     return false;
   });

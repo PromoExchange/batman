@@ -147,6 +147,6 @@ describe 'Bids API' do
 
     expect(response).to be_success
     a = Spree::Bid.find(bid.id)
-    expect(a.status).to eq('accepted')
+    expect(a.state).to eq('accepted')
   end
 end

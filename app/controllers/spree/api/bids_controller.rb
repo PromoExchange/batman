@@ -4,12 +4,12 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   def index
     params[:seller_id] = {} if params[:seller_id].blank?
     params[:auction_id] = {} if params[:auction_id].blank?
-    params[:status] = {} if params[:status].blank?
+    params[:state] = {} if params[:state].blank?
 
     @bids = Spree::Bid.search(
       seller_id_eq: params[:seller_id],
       auction_id_eq: params[:auction_id],
-      status_eq: params[:status]
+      state_eq: params[:state]
     ).result
       .includes(:seller)
 
@@ -34,14 +34,14 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   end
 
   def destroy
-    @bid.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
+    @bid.update_attributes(state: 'cancelled', cancelled_date: Time.zone.now)
     render nothing: true, status: :ok
   end
 
   def accept
     @bid.transaction do
-      @bid.update_attributes(status: 'accepted')
-      @bid.auction.update_attributes(status: 'unpaid')
+      @bid.update_attributes(state: 'accepted')
+      @bid.auction.update_attributes(state: 'unpaid')
       @bid.order.update_attributes(payment_state: 'balance_due')
     end
     Spree::OrderUpdater.new(@bid.order).update
@@ -94,7 +94,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       :prebid_id,
       :per_unit_bid,
       :order_id,
-      :status
+      :state
     )
   end
 end

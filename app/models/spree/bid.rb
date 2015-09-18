@@ -1,9 +1,4 @@
 class Spree::Bid < Spree::Base
-  scope :open, -> { where(status: :open) }
-  scope :accepted, -> { where(status: :accepted) }
-  scope :cancelled, -> { where(status: :cancelled) }
-  scope :completed, -> { where(status: :completed) }
-
   before_create :build_order
 
   belongs_to :auction
@@ -13,7 +8,6 @@ class Spree::Bid < Spree::Base
 
   validates :auction_id, presence: true
   validates :seller_id, presence: true
-  validates_inclusion_of :status, in: %w(open accepted cancelled completed)
 
   state_machine initial: :open do
     event :accept do

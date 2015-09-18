@@ -81,21 +81,10 @@ $(function() {
             });
 
             // Check to see if this seller is preferred
-            var is_preferred = false;
-            $.each(item.invited_sellers, function(index, value) {
-              if(value.id === parseInt(seller_id)) {
-                is_preferred = true;
-              }
+
+            trHTML += action_template({
+              auction_id: item.id
             });
-
-            if( is_preferred === true ) {
-              trHTML += action_template({
-                auction_id: item.id
-              });
-            } else {
-              trHTML += non_action_template();
-            }
-
             trHTML += "</tr>";
           });
         } else {

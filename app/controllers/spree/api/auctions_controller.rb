@@ -4,14 +4,14 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   def index
     params[:buyer_id] = {} if params[:buyer_id].blank?
     params[:seller_id] = {} if params[:seller_id].blank?
-    params[:status] = 'open' if params[:status].blank?
+    params[:state] = 'open' if params[:state].blank?
 
-    statuses = params[:status].split(',')
+    states = params[:state].split(',')
 
     @auctions = Spree::Auction.search(
       bids_seller_id_eq: params[:seller_id],
       buyer_id_eq: params[:buyer_id],
-      status_in: statuses
+      state_in: states
     ).result
 
     render 'spree/api/auctions/index'
@@ -35,7 +35,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   end
 
   def destroy
-    @auction.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
+    @auction.update_attributes(state: 'cancelled', cancelled_date: Time.zone.now)
     render nothing: true, status: :ok
   end
 
@@ -65,7 +65,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
       :filter,
       :only_preferred,
       :ended,
-      :status,
+      :state,
       :page,
       :per_page
     )

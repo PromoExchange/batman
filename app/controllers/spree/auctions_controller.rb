@@ -9,7 +9,7 @@ class Spree::AuctionsController < Spree::StoreController
         .includes(:bids, :product)
         .where.not(status: 'cancelled')
     else
-      @auctions = Spree::Auction.where.not(status: 'cancelled').includes(:bids, :product)
+      @auctions = Spree::Auction.where.not(status: 'cancelled').includes(:product)
     end
   end
 

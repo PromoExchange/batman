@@ -43,7 +43,7 @@ Spree::Api::ApiHelpers.module_eval do
       :image_uri,
       :started,
       :ended,
-      :status,
+      :state,
       :reference,
       :product_unit_price,
       :payment_method
@@ -61,7 +61,7 @@ Spree::Api::ApiHelpers.module_eval do
       :bid,
       :seller_fee,
       :prebid_id,
-      :status
+      :state
     ])
   mattr_reader :bid_attributes
 

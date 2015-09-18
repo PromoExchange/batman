@@ -10,7 +10,7 @@ FactoryGirl.define do
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     payment_method 'Credit Card'
-    status 'open'
+    state 'open'
     reference SecureRandom.hex(3)
   end
 
@@ -22,8 +22,8 @@ FactoryGirl.define do
     bids { build_list :bid, 1 }
   end
 
-  factory :waiting_auction, parent: :auction do
-    status 'waiting'
+  factory :completed_auction, parent: :auction do
+    state 'completed'
   end
 
   factory :no_ref_auction, parent: :auction do

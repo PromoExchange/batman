@@ -16,7 +16,7 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
       )
 
       bid.transaction do
-        bid.update_attributes(status: 'completed')
+        bid.update_attributes(state: 'completed')
         bid.auction.update_attributes(status: 'completed')
         bid.order.update_attributes(payment_state: 'completed')
       end

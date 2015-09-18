@@ -39,7 +39,6 @@ class Spree::Auction < Spree::Base
   validates :product_id, presence: true
   validates :imprint_method_id, presence: true
   validates :quantity, presence: true
-  validates_inclusion_of :status, in: %w(open waiting closed ended cancelled unpaid completed)
   validates :shipping_address_id, presence: true
   validates_numericality_of :quantity, only_integer: true
   validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) do
@@ -53,27 +52,32 @@ class Spree::Auction < Spree::Base
     end
 
     event :cancel do
-      transition open: :cancelled
+      transition [:open, :waiting_confirmation] => :cancelled
     end
 
     event :accept do
       transition open: :waiting_confirmation
     end
 
-    event :confirm do
+    # Technically this is accept for preferred sellers
+    event :unpaid do
+      transition [:open, :waiting_confirmation] => :unpaid
+    end
+
+    event :invoice_paid do
+      transition unpaid: :completed
+    end
+
+    event :confirm_order do
       transition waiting_confirmation: :order_confirmed
     end
 
-    event :late_confirm do
+    event :no_confirm_late do
       transition waiting_confirmation: :order_lost
     end
 
     event :in_production do
       transition order_confirmed: :in_production
-    end
-
-    event :enter_tracking do
-      transition in_production: :confirm_receipt
     end
 
     event :enter_tracking do
@@ -131,7 +135,7 @@ class Spree::Auction < Spree::Base
   end
 
   def winning_bid
-    Spree::Bid.where(auction_id: id, status: %w(accepted completed)).first
+    Spree::Bid.where(auction_id: id, state: %w(accepted completed)).first
   end
 
   def set_default_dates

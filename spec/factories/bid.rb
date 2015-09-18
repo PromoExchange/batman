@@ -5,6 +5,6 @@ FactoryGirl.define do
     association :seller, factory: :user
     association :order, factory: :order
     association :prebid, factory: :prebid
-    status 'open'
+    state 'open'
   end
 end

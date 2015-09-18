@@ -54,7 +54,7 @@
     </div>
   </div>
   <div class="col-md-6">
-    <% if @auction.status == 'completed' %>
+    <% if @auction.state == 'completed' %>
       <h2>Invoice has been paid, thank you</h2>
     <% else %>
       <h2>Fee: $<%= "%.2f" % ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30) %> </h2>

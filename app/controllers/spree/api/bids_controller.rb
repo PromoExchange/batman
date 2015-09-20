@@ -40,8 +40,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
 
   def accept
     @bid.transaction do
-      @bid.update_attributes(state: 'accepted')
-      @bid.auction.update_attributes(state: 'unpaid')
+      @bid.accept
+      @bid.auction.accept
       @bid.order.update_attributes(payment_state: 'balance_due')
     end
     Spree::OrderUpdater.new(@bid.order).update

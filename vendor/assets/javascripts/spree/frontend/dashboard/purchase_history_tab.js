@@ -2,7 +2,7 @@ $(function() {
   $('#purchase-history-tab').click(function() {
     var key = $("#buyer-purchase-history-table").attr("data-key");
     var buyer_id = $("#buyer-purchase-history-table").attr("data-id");
-    var auction_url = '/api/auctions?status=unpaid,completed&buyer_id=' + buyer_id;
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation&buyer_id=' + buyer_id;
 
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");
@@ -46,7 +46,7 @@ $(function() {
             var winning_bid = 'no bids';
             if (num_bids > 0) {
               winning_bid = _.result(_.find(item.bids, function(b) {
-                return b.status == 'accepted';
+                return b.state == 'accepted';
               }), 'bid');
             }
 

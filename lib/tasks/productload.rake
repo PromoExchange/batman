@@ -72,12 +72,18 @@ namespace :product do
       ProductLoader.load('products', 'alternative_apparel')
     end
 
+    desc 'Spector Load'
+    task spector: :environment do
+      load_files('spector')
+    end
+
     desc 'Product Load'
     task work: [
       'environment',
       'product:load:vitronic',
       'product:load:gildan',
-      'product:load:alternative_apparel'
+      'product:load:alternative_apparel',
+      'product:load:spector'
     ]
 
     desc 'Product Load'

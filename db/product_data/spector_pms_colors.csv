@@ -1,0 +1,65 @@
+slug,display_name,imprint_method
+process_blue,"Process Blue",all
+blue286,"Royal Blue",all
+blue301,"Deep Blue",all
+reflex_blue,"Blue",all
+blue2695,"Indigo",all
+blue294,"Navy",all
+green7480,"Light Green",all
+green3295,"Green",all
+green348,"Grass Green",all
+green3425,"Forest Green",all
+teal321,"Teal",all
+red187,"Red",all
+red216,"Burgundy",all
+purple259,Purple,all
+purple2415,Magenta,all
+teal237,Pink,all
+brown469,Brown,all
+orange166,Orange,all
+yellow380,"Light Yellow",all
+yellow110,"Med. Yellow",all
+gold123,Yellow,all
+white,"White",all
+gray424,Gray,all
+black,"Black",all
+silver877,Silver,all
+gold871,Gold,all
+process_blue,"Process Blue","Screen Print"
+blue286,"Royal Blue","Screen Print"
+reflex_blue,"Blue","Screen Print"
+blue2695,"Indigo","Screen Print"
+blue294,"Navy","Screen Print"
+green7480,"Light Green","Screen Print"
+green3295,"Green","Screen Print"
+green3425,"Forest Green","Screen Print"
+teal321,"Teal","Screen Print"
+red187,"Red","Screen Print"
+red216,"Burgundy","Screen Print"
+purple259,Purple,"Screen Print"
+purple2415,Magenta,"Screen Print"
+teal237,Pink,"Screen Print"
+brown469,Brown,"Screen Print"
+orange166,Orange,"Screen Print"
+yellow380,"Light Yellow","Screen Print"
+yellow110,"Med. Yellow","Screen Print"
+white,"White","Screen Print"
+gray424,Gray,"Screen Print"
+black,"Black","Screen Print"
+silver877,Silver,"Screen Print"
+gold871,Gold,"Screen Print"
+blue294,"Navy","Pad Print"
+green3295,"Green","Pad Print"
+red187,"Red","Pad Print"
+red216,"Burgundy","Pad Print"
+purple2415,Magenta,"Pad Print"
+teal237,Pink,"Pad Print"
+brown469,Brown,"Pad Print"
+orange166,Orange,"Pad Print"
+yellow110,"Med. Yellow","Pad Print"
+gold123,Yellow,"Pad Print"
+white,"White","Pad Print"
+gray424,Gray,"Pad Print"
+black,"Black","Pad Print"
+silver877,Silver,"Pad Print"
+gold871,Gold,"Pad Print"

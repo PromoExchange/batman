@@ -39,6 +39,20 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :ok
   end
 
+  def order_confirm
+    @auction.confirm_order!
+    render nothing: true, status: :ok
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
+  def in_production
+    @auction.in_production!
+    render nothing: true, status: :ok
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
   private
 
   def fetch_auction

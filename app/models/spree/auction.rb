@@ -47,6 +47,8 @@ class Spree::Auction < Spree::Base
   end
 
   state_machine initial: :open do
+    after_transition on: :in_production, do: :notification_for_in_production
+      
     event :end do
       transition open: :ended
     end
@@ -94,6 +96,13 @@ class Spree::Auction < Spree::Base
   end
 
   delegate :name, to: :product
+
+  def notification_for_in_production
+    Resque.enqueue(
+      InProduction,
+      auction_id: id
+    )
+  end
 
   def self.user_auctions
     Spree::Auctions.where(buyer_id: current_spree_user.id)

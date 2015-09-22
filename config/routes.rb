@@ -60,5 +60,7 @@ Rails.application.routes.draw do
     resources :taxrates, controller: 'spree/api/taxrates', as: 'api_taxrates'
     resources :pxaddresses, controller: 'spree/api/pxaddresses', as: 'api_addresses'
     match '/pxaddresses/:id/type' => 'spree/api/pxaddresses#type', via: :post
+    match '/auctions/:id/order_confirm' => 'spree/api/auctions#order_confirm', via: :post
+    match '/auctions/:id/in_production' => 'spree/api/auctions#in_production', via: :post
   end
 end

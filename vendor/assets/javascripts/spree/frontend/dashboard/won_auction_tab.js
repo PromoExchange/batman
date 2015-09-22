@@ -2,7 +2,7 @@ $(function() {
   $('#seller-won-auction-tab').click(function() {
     var key = $("#seller-won-auction").attr("data-key");
     var seller_id = $("#seller-won-auction").attr("data-id");
-    var auction_url = '/api/auctions?status=unpaid,completed&seller_id=' + seller_id;
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,order_confirmed,in_production&seller_id=' + seller_id;
 
     var reference_template = _.template("<td><a href='/invoices/${auction_id}'>${ reference }</a></td>");
     var simple_template = _.template("<td>${value}</td>");
@@ -21,7 +21,7 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<td><a class='btn btn-success' href='/invoices/${auction_id}'>Pay</button></td>");
+          action_template = _.template("<td><a class='btn btn-success ${auction_class}' data-id='${auction_id}' href='${url}'>${auction_value}</button></td>");
           your_bid_template = _.template("<td id='your_bid_${auction_id}'>no bid</td>");
 
           $.each(data, function(i, item) {
@@ -41,18 +41,43 @@ $(function() {
             trHTML += simple_template({
               value: item.quantity
             });
-            var status_text = 'Complete';
-            var action = simple_template({
-              value: 'No Action required'
-            });
-            if (item.status === 'unpaid') {
-              status_text = 'Invoice payment required';
-              action = simple_template({
+
+            if(item.state === 'unpaid') {
+              var status_text = 'Invoice payment required';
+              var action = simple_template({
                 value: action_template({
-                  auction_id: item.id
+                  url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Pay', auction_class: 'pay'
                 })
               });
             }
+
+            if(item.state === 'waiting_confirmation') {
+              var status_text = 'Waiting for confirmation';
+              var action = simple_template({
+                value: action_template({
+                  url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Confirm', auction_class: 'confirm'
+                })
+              });
+            }
+
+            if(item.state === 'order_confirmed') {
+              var status_text = 'Waiting for production';
+              var action = simple_template({
+                value: action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Start Production?', auction_class: 'start_production'
+                })
+              });
+            }
+
+            if(item.state === 'in_production') {
+              var status_text = 'In Production';
+              var action = simple_template({
+                value: action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Input tracking number', auction_class: 'tracking_number'
+                })
+              });
+            }            
+
             trHTML += simple_template({
               value: status_text
             });
@@ -69,4 +94,51 @@ $(function() {
       }
     });
   });
+  
+  $('#confirm-order-submit').click(function(){
+    var auction_id = $(this).data('id');
+    var key = $('#show-invoice').attr('data-key');
+    var url = '/api/auctions/' + auction_id + '/order_confirm';
+    var accept = confirm("Are you sure you want to Confirm this Order");
+    if (!accept){ return false; }
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        alert('Order Confirm');
+        window.location = "/dashboards";
+      },
+      error: function(data) {
+        alert('Failed to order, please contact support');
+      }
+    });
+  });
+
+  $('tbody').on('click', '.start_production', function(){
+    var auction_id = $(this).data('id');
+    var key = $('#seller-won-auction').attr('data-key');
+    var url = '/api/auctions/' + auction_id + '/in_production';
+    var accept = confirm("Are you sure you want to Start Production this Order");
+    if (!accept){ return false; }
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        alert('Start Production');
+        window.location = "/dashboards";
+      },
+      error: function(data) {
+        alert('Failed to Production, please contact support');
+      }
+    });
+  });
+
 });

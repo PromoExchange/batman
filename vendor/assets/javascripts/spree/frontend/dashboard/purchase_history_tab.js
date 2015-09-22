@@ -2,7 +2,7 @@ $(function() {
   $('#purchase-history-tab').click(function() {
     var key = $("#buyer-purchase-history-table").attr("data-key");
     var buyer_id = $("#buyer-purchase-history-table").attr("data-id");
-    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation&buyer_id=' + buyer_id;
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,order_confirmed,in_production&buyer_id=' + buyer_id;
 
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");
@@ -59,6 +59,24 @@ $(function() {
                 })
               });
             }
+
+            if (item.state === 'waiting_confirmation') {
+              var action = simple_template({
+                value: 'Awaiting Confirmation'
+              });
+            } 
+
+            if (item.state === 'order_confirmed') {
+              var action = simple_template({
+                value: 'Waiting for production'
+              });
+            } 
+
+            if (item.state === 'in_production') {
+              var action = simple_template({
+                value: 'In production'
+              });
+            }                                      
 
             trHTML += simple_template({
               value: accounting.formatMoney(parseFloat(winning_bid))

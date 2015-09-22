@@ -38,6 +38,8 @@ Your fee:
 
 Payment is due by <%= (Date.today + 10.days).strftime("%D") %>
 
+<a href="<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>">Confirm</a>
+
 Please contact the Buyer (<%= @auction.buyer.bill_address.phone %>/<%= @auction.buyer.email %>) by the end of the next business day to begin making delivery and payment arrangements.
 Failure to do so can cause this order to be awarded to another Seller and can jeopardize your membership in the PromoExchange community.
 

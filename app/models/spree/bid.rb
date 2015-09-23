@@ -10,8 +10,14 @@ class Spree::Bid < Spree::Base
   validates :seller_id, presence: true
 
   state_machine initial: :open do
-    after_transition on: :accept, do: :notification_for_waiting_confirmation
-    event :accept do
+    after_transition on: :non_preferred_accept, do: :notification_for_waiting_confirmation
+    after_transition on: :preferred_accept, do: :send_invoice
+
+    event :preferred_accept do
+      transition open: :accepted
+    end
+
+    event :non_preferred_accept do
       transition open: :accepted
     end
 
@@ -38,6 +44,18 @@ class Spree::Bid < Spree::Base
       ConfirmOrderTimeExpire,
       auction_id: auction.id,
       email_address: seller.email
+    )
+  end
+
+  def send_invoice
+    Resque.enqueue_at(
+      3.days.from_now,
+      UnpaidInvoice,
+      auction_id: auction.id
+    )
+    Resque.enqueue(
+      SendInvoice,
+      auction_id: auction.id
     )
   end
 

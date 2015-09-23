@@ -46,9 +46,29 @@ class Spree::Auction < Spree::Base
     auction.product.minimum_quantity
   end
 
+  # preferred
+  #   open
+  #   accept -> unpaid
+  #   preferred_pay -> complete
+
+  # non preferred
+  #   open
+  #   accept -> waiting_confirmation
+  #   confirm -> order_confirmed
+  #   in_production -> in_production
+  #   enter_tracking -> confirm_receipt
+  #   confirm_receipt -> complete
+  #
+  #   non_preferred_pay -> as before
+
+  #   rate, any time, not really a state
+  #   cancel, only valid before accept
+  #   end, At the end of the auctions time
+
   state_machine initial: :open do
     after_transition on: :in_production, do: :notification_for_in_production
-      
+
+    # TODO: When auction created, schedule job to end it
     event :end do
       transition open: :ended
     end
@@ -86,7 +106,7 @@ class Spree::Auction < Spree::Base
       transition in_production: :confirm_receipt
     end
 
-    event :confirm_shipment do
+    event :confirm_receipt do
       transition confirm_receipt: :waiting_for_rating
     end
 

@@ -167,7 +167,7 @@ RSpec.describe Spree::Auction, type: :model do
     a.confirm_order
     a.in_production
     a.enter_tracking
-    a.confirm_shipment
+    a.confirm_receipt
     expect(a.state).to eq 'waiting_for_rating'
   end
 
@@ -177,7 +177,7 @@ RSpec.describe Spree::Auction, type: :model do
     a.confirm_order
     a.in_production
     a.enter_tracking
-    a.confirm_shipment
+    a.confirm_receipt
     a.rate_seller
     expect(a.state).to eq 'complete'
   end

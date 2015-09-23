@@ -44,7 +44,7 @@ RSpec.describe Spree::Bid, type: :model do
 
   it 'should go to accepted after accept event' do
     b = FactoryGirl.build(:bid)
-    b.accept
+    b.non_preferred_accept
     expect(b.state).to eq 'accepted'
   end
 
@@ -62,14 +62,14 @@ RSpec.describe Spree::Bid, type: :model do
 
   it 'should not go to accepted after cancel event (if cancelled)' do
     b = FactoryGirl.build(:bid)
-    b.accept
+    b.non_preferred_accept
     b.cancel
     expect(b.state).to eq 'accepted'
   end
 
   it 'should go to completed after pay event' do
     b = FactoryGirl.build(:bid)
-    b.accept
+    b.non_preferred_accept
     b.pay
     expect(b.state).to eq 'completed'
   end

@@ -33,6 +33,12 @@ class Spree::Bid < Spree::Base
       auction_id: auction.id,
       email_address: seller.email
     )
+    Resque.enqueue_at(
+      Time.zone.tomorrow.midnight,
+      ConfirmOrderTimeExpire,
+      auction_id: auction.id,
+      email_address: seller.email
+    )
   end
 
   def bid

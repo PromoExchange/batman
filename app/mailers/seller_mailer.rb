@@ -26,4 +26,9 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction waiting for your confirmation')
   end
+
+  def confirm_order_time_expire(auction)
+    @auction = auction
+    mail(to: [@auction.winning_bid.email, 'michael.goldstein@thepromoexchange.com'], subject: 'Seller Auction Withdrawal Due to Unresponsiveness')
+  end
 end

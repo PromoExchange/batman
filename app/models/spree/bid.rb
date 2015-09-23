@@ -48,13 +48,13 @@ class Spree::Bid < Spree::Base
   end
 
   def send_invoice
+    Resque.enqueue(
+      SendInvoice,
+      auction_id: auction.id
+    )
     Resque.enqueue_at(
       3.days.from_now,
       UnpaidInvoice,
-      auction_id: auction.id
-    )
-    Resque.enqueue(
-      SendInvoice,
       auction_id: auction.id
     )
   end

@@ -2,7 +2,7 @@ $(function() {
   $('#seller-won-auction-tab').click(function() {
     var key = $("#seller-won-auction").attr("data-key");
     var seller_id = $("#seller-won-auction").attr("data-id");
-    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,order_confirmed,in_production&seller_id=' + seller_id;
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,order_confirmed,in_production,confirm_receipt&seller_id=' + seller_id;
 
     var reference_template = _.template("<td><a href='/invoices/${auction_id}'>${ reference }</a></td>");
     var simple_template = _.template("<td>${value}</td>");
@@ -73,7 +73,16 @@ $(function() {
               var status_text = 'In Production';
               var action = simple_template({
                 value: action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Input tracking number', auction_class: 'tracking_number'
+                  url: '#', auction_id: item.id, auction_value: 'Input Tracking Number', auction_class: 'tracking_number'
+                })
+              });
+            }
+
+            if(item.state === 'confirm_receipt') {
+              var status_text = 'Track Shipment';
+              var action = simple_template({
+                value: action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
               });
             }            
@@ -141,4 +150,41 @@ $(function() {
     });
   });
 
+  $('tbody').on('click', '.tracking_number', function(){
+    var auction_id = $(this).data('id');
+    $('#tracking-auction-id').val(auction_id);
+    $('#tracking-number').show('modal');
+  });
+
+  $('#tracking-close').click(function(){
+    $('#tracking-number').hide('modal');
+    $('#trackig-url').val('');
+  });
+
+  $('#tracking-submit').click(function(){
+    var auction_id = $('#tracking-auction-id').val();
+    var key = $('#tracking-number').attr('data-key');
+    var tracking_url = $('#trackig-url').val();
+    var url = '/api/auctions/' + auction_id + '/enter_tracking';
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: {"tracking_url": tracking_url, format: 'json'},
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        if (data.error_msg.length) {
+          alert(data.error_msg);
+        } else {
+          alert('Tracking url successfully updated.');
+          window.location = "/dashboards";          
+        }
+      },
+      error: function(data) {
+        alert('Failed to Tracking, please contact support');
+        $('#tracking-close').click();
+      }
+    });
+  });
 });

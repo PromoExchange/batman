@@ -53,6 +53,18 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :internal_server_error
   end
 
+  def enter_tracking
+    if params[:tracking_url].present?
+      @auction.update_attributes(tracking_url: params[:tracking_url])
+      @auction.enter_tracking!
+      render json: { nothing: true, status: :ok, error_msg: "" }
+    else
+      render json: { nothing: true, status: :ok, error_msg: "Tracking url must be required." }  
+    end
+  rescue
+    render json: { nothing: true, status: :internal_server_error }
+  end
+
   private
 
   def fetch_auction

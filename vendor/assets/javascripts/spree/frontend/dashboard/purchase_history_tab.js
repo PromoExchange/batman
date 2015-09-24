@@ -2,7 +2,7 @@ $(function() {
   $('#purchase-history-tab').click(function() {
     var key = $("#buyer-purchase-history-table").attr("data-key");
     var buyer_id = $("#buyer-purchase-history-table").attr("data-id");
-    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,order_confirmed,in_production&buyer_id=' + buyer_id;
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,order_confirmed,in_production,confirm_receipt&buyer_id=' + buyer_id;
 
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");
@@ -74,8 +74,14 @@ $(function() {
 
             if (item.state === 'in_production') {
               var action = simple_template({
-                value: 'In production'
+                value: 'In Production'
               });
+            }
+
+            if(item.state === 'confirm_receipt') {
+              var action = simple_template({
+                value: 'Track Shipment'
+              })
             }                                      
 
             trHTML += simple_template({

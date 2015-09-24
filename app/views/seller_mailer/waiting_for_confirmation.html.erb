@@ -1,8 +1,6 @@
-<h1>Your invoice</h1>
+<h1>Auction Won Notification</h1>
 
-<p>Congratulations! You have been awarded the following project on the PromoExchange:</p>
-
-<p>You have 24hr to confirm the order </p>
+<p>Congratulations! You are the winning bidder on the auction for <%= @auction.product.name %> posted by <%= @auction.shipping_address.company %>. Click on the link below to confirm your acceptance.  You have until 12 AM of the next business day to do so. If you do not confirm the order within that time you will be at risk of losing the project.</p>
 
 <table>
   <tr><td>Auction #:</td><td><%= @auction.reference %></td></tr>
@@ -49,9 +47,11 @@
 
 <p>Payment is due by <%= (Date.today + 10.days).strftime("%D") %></p>
 
-<p><a href="<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>">Confirm</a></p>
-
 <p>Please contact the Buyer (<%= @auction.buyer.bill_address.phone %>/<%= @auction.buyer.email %>) by the end of the next business day to begin making delivery and payment arrangements.</p>
 <p>Failure to do so can cause this order to be awarded to another Seller and can jeopardize your membership in the PromoExchange community.</p>
+
+<p><a href="<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>">
+  <button style="width: 120px; height: 40px; font-size: 20px; background: #4CAE4C;">Confirm</button>
+</a></p>
 
 <img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo">

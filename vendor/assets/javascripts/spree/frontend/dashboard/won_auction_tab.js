@@ -42,9 +42,12 @@ $(function() {
               value: item.quantity
             });
 
+            var status_text = ''
+            var action = ''
+
             if(item.state === 'unpaid') {
-              var status_text = 'Invoice payment required';
-              var action = simple_template({
+              status_text = 'Invoice payment required';
+              action = simple_template({
                 value: action_template({
                   url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Pay', auction_class: 'pay'
                 })
@@ -52,8 +55,8 @@ $(function() {
             }
 
             if(item.state === 'waiting_confirmation') {
-              var status_text = 'Waiting for confirmation';
-              var action = simple_template({
+              status_text = 'Waiting for confirmation';
+              action = simple_template({
                 value: action_template({
                   url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Confirm', auction_class: 'confirm'
                 })
@@ -61,8 +64,8 @@ $(function() {
             }
 
             if(item.state === 'order_confirmed') {
-              var status_text = 'Waiting for production';
-              var action = simple_template({
+              status_text = 'Waiting for production';
+              action = simple_template({
                 value: action_template({
                   url: '#', auction_id: item.id, auction_value: 'Start Production?', auction_class: 'start_production'
                 })
@@ -70,8 +73,8 @@ $(function() {
             }
 
             if(item.state === 'in_production') {
-              var status_text = 'In Production';
-              var action = simple_template({
+              status_text = 'In Production';
+              action = simple_template({
                 value: action_template({
                   url: '#', auction_id: item.id, auction_value: 'Input Tracking Number', auction_class: 'tracking_number'
                 })
@@ -79,8 +82,8 @@ $(function() {
             }
 
             if(item.state === 'confirm_receipt') {
-              var status_text = 'Track Shipment';
-              var action = simple_template({
+              status_text = 'Track Shipment';
+              action = simple_template({
                 value: action_template({
                   url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
@@ -122,7 +125,7 @@ $(function() {
         window.location = "/dashboards";
       },
       error: function(data) {
-        alert('Failed to order, please contact support');
+        alert('Failed to confirm order, please contact support');
       }
     });
   });

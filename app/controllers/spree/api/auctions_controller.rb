@@ -41,6 +41,11 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   def order_confirm
     @auction.confirm_order!
+    Resque.enqueue_at(
+      Time.zone.now + 15.days,
+      TrackingReminder,
+      auction_id: @auction.id
+    )
     render nothing: true, status: :ok
   rescue
     render nothing: true, status: :internal_server_error

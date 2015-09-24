@@ -48,8 +48,8 @@ Rails.application.routes.draw do
   scope :api do
     resources :auctions, controller: 'spree/api/auctions' do
       member do
-        post 'enter_tracking'
-      end  
+        post 'tracking'
+      end
       resources :bids, controller: 'spree/api/bids' do
         post 'accept'
       end

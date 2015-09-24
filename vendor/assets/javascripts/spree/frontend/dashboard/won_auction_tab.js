@@ -85,7 +85,7 @@ $(function() {
                   url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
               });
-            }            
+            }
 
             trHTML += simple_template({
               value: status_text
@@ -103,7 +103,7 @@ $(function() {
       }
     });
   });
-  
+
   $('#confirm-order-submit').click(function(){
     var auction_id = $(this).data('id');
     var key = $('#show-invoice').attr('data-key');
@@ -158,18 +158,18 @@ $(function() {
 
   $('#tracking-close').click(function(){
     $('#tracking-number').hide('modal');
-    $('#trackig-url').val('');
+    $('#trackig-number').val('');
   });
 
   $('#tracking-submit').click(function(){
     var auction_id = $('#tracking-auction-id').val();
     var key = $('#tracking-number').attr('data-key');
-    var tracking_url = $('#trackig-url').val();
-    var url = '/api/auctions/' + auction_id + '/enter_tracking';
+    var tracking_number = $('#trackig-number').val();
+    var url = '/api/auctions/' + auction_id + '/tracking';
     $.ajax({
       type: 'POST',
       url: url,
-      data: {"tracking_url": tracking_url, format: 'json'},
+      data: {"tracking_number": tracking_number, format: 'json'},
       headers: {
         'X-Spree-Token': key
       },
@@ -177,12 +177,12 @@ $(function() {
         if (data.error_msg.length) {
           alert(data.error_msg);
         } else {
-          alert('Tracking url successfully updated.');
-          window.location = "/dashboards";          
+          alert('Tracking number successfully updated.');
+          window.location = "/dashboards";
         }
       },
       error: function(data) {
-        alert('Failed to Tracking, please contact support');
+        alert('Failed to add tracking, please contact support');
         $('#tracking-close').click();
       }
     });

@@ -12,6 +12,7 @@ class Spree::Bid < Spree::Base
   state_machine initial: :open do
     after_transition on: :non_preferred_accept, do: :notification_for_waiting_confirmation
     after_transition on: :preferred_accept, do: :send_invoice
+    after_transition on: [:preferred_accept, :non_preferred_accept], do: :other_bids_lost
 
     event :preferred_accept do
       transition open: :accepted
@@ -25,6 +26,10 @@ class Spree::Bid < Spree::Base
       transition open: :cancelled
     end
 
+    event :lose do
+      transition open: :lost
+    end
+
     event :pay do
       transition accepted: :completed
     end
@@ -32,6 +37,12 @@ class Spree::Bid < Spree::Base
 
   delegate :email, to: :seller
   delegate :total, to: :order
+
+  def bid
+    order.total
+  end
+
+  private
 
   def notification_for_waiting_confirmation
     Resque.enqueue(
@@ -47,6 +58,10 @@ class Spree::Bid < Spree::Base
     )
   end
 
+  def other_bids_lost
+    Spree::Bid.where(auction_id: auction.id, state: 'open').each(&:lose)
+  end
+
   def send_invoice
     Resque.enqueue(
       SendInvoice,
@@ -57,10 +72,6 @@ class Spree::Bid < Spree::Base
       UnpaidInvoice,
       auction_id: auction.id
     )
-  end
-
-  def bid
-    order.total
   end
 
   def build_order

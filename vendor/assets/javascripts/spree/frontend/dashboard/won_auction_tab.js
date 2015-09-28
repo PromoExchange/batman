@@ -63,15 +63,6 @@ $(function() {
               });
             }
 
-            if(item.state === 'order_confirmed') {
-              status_text = 'Waiting for production';
-              action = simple_template({
-                value: action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Start Production?', auction_class: 'start_production'
-                })
-              });
-            }
-
             if(item.state === 'in_production') {
               status_text = 'In Production';
               action = simple_template({
@@ -121,34 +112,10 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        alert('Order Confirm');
         window.location = "/dashboards";
       },
       error: function(data) {
         alert('Failed to confirm order, please contact support');
-      }
-    });
-  });
-
-  $('tbody').on('click', '.start_production', function(){
-    var auction_id = $(this).data('id');
-    var key = $('#seller-won-auction').attr('data-key');
-    var url = '/api/auctions/' + auction_id + '/in_production';
-    var accept = confirm("Are you sure you want to Start Production this Order");
-    if (!accept){ return false; }
-    $.ajax({
-      type: 'POST',
-      contentType: "application/json",
-      url: url,
-      headers: {
-        'X-Spree-Token': key
-      },
-      success: function(data) {
-        alert('Start Production');
-        window.location = "/dashboards";
-      },
-      error: function(data) {
-        alert('Failed to Production, please contact support');
       }
     });
   });

@@ -134,7 +134,7 @@ RSpec.describe Spree::Auction, type: :model do
     a = FactoryGirl.build(:auction)
     a.accept
     a.confirm_order
-    expect(a.state).to eq 'order_confirmed'
+    expect(a.state).to eq 'in_production'
   end
 
   it 'should go to order_lost from no_confirm_late event' do
@@ -144,19 +144,11 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.state).to eq 'order_lost'
   end
 
-  it 'should go to in_production from in_production event' do
-    a = FactoryGirl.build(:auction)
-    a.accept
-    a.confirm_order
-    a.in_production
-    expect(a.state).to eq 'in_production'
-  end
 
   it 'should go to confirm_receipt from enter_tracking event' do
     a = FactoryGirl.build(:auction)
     a.accept
     a.confirm_order
-    a.in_production
     a.enter_tracking
     expect(a.state).to eq 'confirm_receipt'
   end
@@ -165,7 +157,6 @@ RSpec.describe Spree::Auction, type: :model do
     a = FactoryGirl.build(:auction)
     a.accept
     a.confirm_order
-    a.in_production
     a.enter_tracking
     a.confirm_receipt
     expect(a.state).to eq 'waiting_for_rating'
@@ -175,7 +166,6 @@ RSpec.describe Spree::Auction, type: :model do
     a = FactoryGirl.build(:auction)
     a.accept
     a.confirm_order
-    a.in_production
     a.enter_tracking
     a.confirm_receipt
     a.rate_seller

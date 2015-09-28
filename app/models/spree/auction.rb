@@ -55,7 +55,6 @@ class Spree::Auction < Spree::Base
   #   open
   #   accept -> waiting_confirmation
   #   confirm -> order_confirmed
-  #   in_production -> in_production
   #   enter_tracking -> confirm_receipt
   #   confirm_receipt -> complete
   #
@@ -91,15 +90,11 @@ class Spree::Auction < Spree::Base
     end
 
     event :confirm_order do
-      transition waiting_confirmation: :order_confirmed
+      transition waiting_confirmation: :in_production
     end
 
     event :no_confirm_late do
       transition waiting_confirmation: :order_lost
-    end
-
-    event :in_production do
-      transition order_confirmed: :in_production
     end
 
     event :enter_tracking do

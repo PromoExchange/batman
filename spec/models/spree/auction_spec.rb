@@ -137,14 +137,6 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.state).to eq 'in_production'
   end
 
-  it 'should go to order_lost from no_confirm_late event' do
-    a = FactoryGirl.build(:auction)
-    a.accept
-    a.no_confirm_late
-    expect(a.state).to eq 'order_lost'
-  end
-
-
   it 'should go to confirm_receipt from enter_tracking event' do
     a = FactoryGirl.build(:auction)
     a.accept

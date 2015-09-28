@@ -93,10 +93,6 @@ class Spree::Auction < Spree::Base
       transition waiting_confirmation: :in_production
     end
 
-    event :no_confirm_late do
-      transition waiting_confirmation: :order_lost
-    end
-
     event :enter_tracking do
       transition in_production: :confirm_receipt
     end
@@ -156,6 +152,12 @@ class Spree::Auction < Spree::Base
 
   def buyer_email
     Spree::User.find(buyer_id).email
+  end
+
+  def buyer_company
+    buyer = Spree::User.find(buyer_id)
+    return '' unless buyer.shipping_address
+    Spree::User.find(buyer_id).shipping_address.company
   end
 
   def winning_bid

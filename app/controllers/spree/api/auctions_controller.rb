@@ -8,12 +8,18 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
     states = params[:state].split(',')
 
-    @auctions = Spree::Auction.search(
-      bids_seller_id_eq: params[:seller_id],
-      buyer_id_eq: params[:buyer_id],
-      state_in: states
-    ).result
-
+    if params[:lost].nil?
+      @auctions = Spree::Auction.search(
+        bids_seller_id_eq: params[:seller_id],
+        buyer_id_eq: params[:buyer_id],
+        state_in: states
+      ).result
+    else
+      @auctions = Spree::Auction.search(
+        bids_seller_id_eq: params[:seller_id],
+        bids_state_eq: 'lost'
+      ).result
+    end
     render 'spree/api/auctions/index'
   end
 
@@ -98,7 +104,8 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
       :ended,
       :state,
       :page,
-      :per_page
+      :per_page,
+      :lost
     )
   end
 end

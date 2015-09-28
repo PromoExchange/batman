@@ -39,6 +39,7 @@ Spree::Api::ApiHelpers.module_eval do
       :name,
       :buyer_id,
       :buyer_email,
+      :buyer_company,
       :quantity,
       :image_uri,
       :started,

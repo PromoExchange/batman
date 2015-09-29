@@ -17,7 +17,7 @@ common: &default_settings
   # New Relic service.
   license_key: '<%= ENV["NEW_RELIC_LICENSE_KEY"] %>'
 
-  # Production: c80b85c8ebaa33f78ddda9636691f7ae4cb882c4
+  # Production: a0c1997b010d200bde20d97248ba44163c403008
   # Stage: cdad862984172411dfd234d4dfbe58260ba8355e
 
   # Agent Enabled (Ruby/Rails Only)

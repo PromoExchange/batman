@@ -46,7 +46,7 @@ $(function() {
             var action = ''
 
             if(item.state === 'unpaid') {
-              status_text = 'Invoice payment required';
+              status_text = 'Invoice Payment Required';
               action = simple_template({
                 value: action_template({
                   url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Pay', auction_class: 'pay'
@@ -55,7 +55,7 @@ $(function() {
             }
 
             if(item.state === 'waiting_confirmation') {
-              status_text = 'Waiting for confirmation';
+              status_text = 'Waiting for Confirmation';
               action = simple_template({
                 value: action_template({
                   url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Confirm', auction_class: 'confirm'
@@ -82,13 +82,20 @@ $(function() {
             }
 
             if(item.state === 'confirm_receipt') {
-              status_text = 'Awaiting Rating';
+              status_text = 'Awaiting for Confirm Receipt';
               action = simple_template({
                 value: action_template({
                   url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
               });
             }
+
+            if(item.state === 'complete') {
+              status_text = 'Completed'
+              action = simple_template({
+                value: ''
+              })
+            } 
 
             trHTML += simple_template({
               value: status_text

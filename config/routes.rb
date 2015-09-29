@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     resources :auctions, controller: 'spree/api/auctions' do
       member do
         post 'tracking'
+        post 'confirmed_delivery'
       end
       resources :bids, controller: 'spree/api/bids' do
         post 'accept'

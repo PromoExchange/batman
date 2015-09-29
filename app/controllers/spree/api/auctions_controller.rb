@@ -76,6 +76,13 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render json: { nothing: true, status: :internal_server_error }
   end
 
+  def confirmed_delivery
+    @auction.delivery_confirmed!
+    render nothing: true, status: :ok
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
   private
 
   def fetch_auction

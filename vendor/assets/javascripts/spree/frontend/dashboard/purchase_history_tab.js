@@ -77,7 +77,7 @@ $(function() {
             } 
 
             if(item.state === 'confirm_receipt') {
-              status_text = 'Confirm item receipt and rate seller'
+              status_text = 'Awaiting for Confirm Receipt'
               action = simple_template({
                 value: action_template({
                   url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
@@ -85,7 +85,14 @@ $(function() {
                   url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
               })
-            }                                     
+            }  
+
+            if(item.state === 'complete') {
+              status_text = 'Completed'
+              action = simple_template({
+                value: ''
+              })
+            }                                   
 
             trHTML += simple_template({
               value: accounting.formatMoney(parseFloat(winning_bid))
@@ -102,6 +109,28 @@ $(function() {
           trHTML += "<tr><td class='text-center' colspan='7'>No auctions found!</td></tr>";
         }
         $("#buyer-purchase-history-table > tbody").html(trHTML);
+      }
+    });
+  });
+  
+  $('tbody').on('click', '.confirm_receipt', function(){
+    var auction_id = $(this).data('id');
+    var key = $('#buyer-purchase-history-table').attr('data-key');
+    var url = '/api/auctions/' + auction_id + '/confirmed_delivery';
+    var accept = confirm("Are you sure, Confirm Receipt");
+    if (!accept){ return false; }
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        window.location = "/dashboards";
+      },
+      error: function(data) {
+        alert('Failed to Confirmed Receipt, please contact support');
       }
     });
   });

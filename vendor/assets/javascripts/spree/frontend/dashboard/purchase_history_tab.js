@@ -2,7 +2,7 @@ $(function() {
   $('#purchase-history-tab').click(function() {
     var key = $("#buyer-purchase-history-table").attr("data-key");
     var buyer_id = $("#buyer-purchase-history-table").attr("data-id");
-    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,order_confirmed,in_production,confirm_receipt&buyer_id=' + buyer_id;
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,in_production,send_for_delivery,confirm_receipt,complete&buyer_id=' + buyer_id;
 
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");
@@ -21,7 +21,7 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<td><button type='button' class='btn btn-success' data-id='<%= auction_id %>'>Pay</button></td>");
+          action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' href='${url}'>${auction_value}</a>");
           your_bid_template = _.template("<td id='your_bid_<%= auction_id %>'>no bid</td>");
 
           $.each(data, function(i, item) {
@@ -42,6 +42,9 @@ $(function() {
               value: item.quantity
             });
 
+            var status_text = ''
+            var action = ''
+
             var num_bids = item.bids.length;
             var winning_bid = 'no bids';
             if (num_bids > 0) {
@@ -49,44 +52,49 @@ $(function() {
                 return b.state == 'accepted';
               }), 'bid');
             }
-            var action = simple_template({
-              value: 'Not completed'
-            });
-            if (item.state === 'unpaid') {
-              action = simple_template({
-                value: action_template({
-                  auction_id: item.id
-                })
-              });
-            }
 
             if (item.state === 'waiting_confirmation') {
-              var action = simple_template({
-                value: 'Awaiting Confirmation'
-              });
-            } 
-
-            if (item.state === 'order_confirmed') {
-              var action = simple_template({
-                value: 'Waiting for production'
-              });
-            } 
+              status_text = 'Awaiting Confirmation'
+              action = simple_template({
+                value: ''
+              })
+            }  
 
             if (item.state === 'in_production') {
-              var action = simple_template({
-                value: 'In Production'
-              });
+              status_text = 'In Production'
+              action = simple_template({
+                value: ''
+              })
             }
 
-            if(item.state === 'confirm_receipt') {
-              var action = simple_template({
-                value: 'Track Shipment'
+            if(item.state === 'send_for_delivery') {
+              status_text = 'Track Shipment'
+              action = simple_template({
+                value: action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                })
               })
-            }                                      
+            } 
+
+            if(item.state === 'confirm_receipt') {
+              status_text = 'Confirm item receipt and rate seller'
+              action = simple_template({
+                value: action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
+                }) + action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                })
+              })
+            }                                     
 
             trHTML += simple_template({
               value: accounting.formatMoney(parseFloat(winning_bid))
             });
+
+            trHTML += simple_template({
+              value: status_text
+            });
+
             trHTML += action;
             trHTML += "</tr>";
           });

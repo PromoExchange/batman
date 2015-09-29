@@ -65,7 +65,8 @@ class Spree::Auction < Spree::Base
   #   end, At the end of the auctions time
 
   state_machine initial: :open do
-    after_transition on: :in_production, do: :notification_for_in_production
+    after_transition on: :confirm_order, do: :notification_for_in_production
+    after_transition on: :delivered, do: :notification_for_product_delivered
 
     # TODO: When auction created, schedule job to end it
     event :end do
@@ -94,15 +95,15 @@ class Spree::Auction < Spree::Base
     end
 
     event :enter_tracking do
-      transition in_production: :confirm_receipt
+      transition in_production: :send_for_delivery 
     end
 
-    event :confirm_receipt do
-      transition confirm_receipt: :waiting_for_rating
-    end
+    event :delivered do
+      transition send_for_delivery: :confirm_receipt
+    end  
 
-    event :rate_seller do
-      transition waiting_for_rating: :complete
+    event :delivery_confirmed do
+      transition confirm_receipt: :complete
     end
   end
 
@@ -111,6 +112,13 @@ class Spree::Auction < Spree::Base
   def notification_for_in_production
     Resque.enqueue(
       InProduction,
+      auction_id: id
+    )
+  end
+
+  def notification_for_product_delivered
+    Resque.enqueue(
+      ProductDelivered,
       auction_id: id
     )
   end

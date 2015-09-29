@@ -2,7 +2,7 @@ $(function() {
   $('#seller-won-auction-tab').click(function() {
     var key = $("#seller-won-auction").attr("data-key");
     var seller_id = $("#seller-won-auction").attr("data-id");
-    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,order_confirmed,in_production,confirm_receipt&seller_id=' + seller_id;
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,in_production,send_for_delivery,confirm_receipt,complete&seller_id=' + seller_id;
 
     var reference_template = _.template("<td><a href='/invoices/${auction_id}'>${ reference }</a></td>");
     var simple_template = _.template("<td>${value}</td>");
@@ -21,7 +21,7 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<td><a class='btn btn-success ${auction_class}' data-id='${auction_id}' href='${url}'>${auction_value}</button></td>");
+          action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' href='${url}'>${auction_value}</a>");
           your_bid_template = _.template("<td id='your_bid_${auction_id}'>no bid</td>");
 
           $.each(data, function(i, item) {
@@ -72,8 +72,17 @@ $(function() {
               });
             }
 
-            if(item.state === 'confirm_receipt') {
+            if(item.state === 'send_for_delivery') {
               status_text = 'Track Shipment';
+              action = simple_template({
+                value: action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                })
+              });
+            }
+
+            if(item.state === 'confirm_receipt') {
+              status_text = 'Awaiting Rating';
               action = simple_template({
                 value: action_template({
                   url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'

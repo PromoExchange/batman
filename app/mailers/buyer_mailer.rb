@@ -8,4 +8,9 @@ class BuyerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.buyer.email, subject: 'PromoExchange Auction Order In Production')
   end
+
+  def product_delivered(auction)
+    @auction = auction
+    mail(to: @auction.buyer.email, subject: 'PromoExchange Auction Product Delivered and Project Closed')
+  end
 end

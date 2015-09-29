@@ -103,7 +103,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :delivery_confirmed do
-      transition confirm_receipt: :complete
+      transition [:confirm_receipt, :send_for_delivery] => :complete
     end
   end
 

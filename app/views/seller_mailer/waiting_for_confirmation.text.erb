@@ -33,8 +33,8 @@ Shipping Address:
 <%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %>
 
 Your fee:
-<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>?tab=pay"><%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %> if paid by Credit Card
-<%= Spree::Store.first.url %>/invoices/<%= @auction.id %>?tab=pay"><%= (@auction.winning_bid.seller_fee / (1 - 0.015)).round(2) %> if paid by Web Check/ACH
+<%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %> if paid by Credit Card
+<%= (@auction.winning_bid.seller_fee / (1 - 0.015)).round(2) %> if paid by Web Check/ACH
 
 Payment is due by <%= (Date.today + 10.days).strftime("%D") %>
 

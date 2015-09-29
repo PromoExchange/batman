@@ -42,6 +42,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
     @bid.transaction do
       if @bid.auction.preferred?(@bid.seller)
         @bid.preferred_accept
+        @bid.auction.unpaid
       else
         description = "Auction ID: #{@bid.auction.reference}, Buyer: #{@bid.auction.buyer.email}"
 
@@ -53,8 +54,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
         )
 
         @bid.non_preferred_accept
+        @bid.auction.accept
       end
-      @bid.auction.accept
       @bid.order.update_attributes(payment_state: 'balance_due')
     end
     Spree::OrderUpdater.new(@bid.order).update

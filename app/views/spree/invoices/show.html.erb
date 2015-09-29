@@ -63,8 +63,8 @@
         <h2>Invoice has been paid, thank you</h2>
       <% else %>
         <h2>Fee: $<%= "%.2f" % ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30) %> </h2>
-        <form action="/charges" id="payment-form" method="POST" class="form">
-          <%= hidden_field_tag id='invoice-auction-id', @auction_id %>
+        <form action="/order_confirm" id="payment-form" method="POST" class="form">
+          <%= hidden_field_tag id='invoice-auction-id', @auction.id %>
           <span class="payment-errors"></span>
           <div class="form-group">
             <label>

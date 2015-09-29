@@ -51,12 +51,31 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   end
 
   def order_confirm
-    @auction.confirm_order!
-    Resque.enqueue_at(
-      Time.zone.now + 15.days,
-      TrackingReminder,
-      auction_id: @auction.id
-    )
+    winning_bid = @auction.winning_bid
+
+    winning_bid.transaction do
+      if @auction.preferred?(winning_bid.seller)
+        amount = winning_bid.seller_fee.round(2) * 100
+        description = "Auction ID: #{@auction.reference}, Seller: #{winning_bid.seller.email}"
+
+        Stripe::Charge.create(
+          amount: amount.to_i,
+          currency: 'usd',
+          source: params[:token],
+          description: description
+        )
+
+        winning_bid.order.update_attributes(payment_state: 'completed')
+        Spree::OrderUpdater.new(winning_bid.order).update
+      end
+      
+      @auction.confirm_order!
+      Resque.enqueue_at(
+        Time.zone.now + 15.days,
+        TrackingReminder,
+        auction_id: @auction.id
+      )
+    end
     render nothing: true, status: :ok
   rescue
     render nothing: true, status: :internal_server_error

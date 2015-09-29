@@ -52,13 +52,21 @@ $(function() {
                 return b.state == 'accepted';
               }), 'bid');
             }
+            var action = simple_template({
+              value: 'Not completed'
+            });
 
-            if (item.state === 'waiting_confirmation') {
-              status_text = 'Awaiting Confirmation'
-              action = simple_template({
-                value: ''
-              })
-            }  
+            if (item.state === 'waiting_confirmation' || 'unpaid') {
+              var action = simple_template({
+                value: 'Awaiting Confirmation'
+              });
+            }
+
+            if (item.state === 'order_confirmed') {
+              var action = simple_template({
+                value: 'Waiting for production'
+              });
+            }
 
             if (item.state === 'in_production') {
               status_text = 'In Production'
@@ -74,7 +82,7 @@ $(function() {
                   url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
               })
-            } 
+            }
 
             if(item.state === 'confirm_receipt') {
               status_text = 'Awaiting for Confirm Receipt'
@@ -85,14 +93,14 @@ $(function() {
                   url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
               })
-            }  
+            }
 
             if(item.state === 'complete') {
               status_text = 'Completed'
               action = simple_template({
                 value: ''
               })
-            }                                   
+            }
 
             trHTML += simple_template({
               value: accounting.formatMoney(parseFloat(winning_bid))
@@ -112,7 +120,7 @@ $(function() {
       }
     });
   });
-  
+
   $('tbody').on('click', '.confirm_receipt', function(){
     var auction_id = $(this).data('id');
     var key = $('#buyer-purchase-history-table').attr('data-key') || $('#show-invoice').attr('data-key');

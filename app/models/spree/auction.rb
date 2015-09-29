@@ -87,12 +87,16 @@ class Spree::Auction < Spree::Base
       transition [:open, :waiting_confirmation] => :unpaid
     end
 
-    event :invoice_paid do
-      transition unpaid: :waiting_confirmation
+    event :confirm_order do
+      transition [:waiting_confirmation, :unpaid] => :order_confirmed
     end
 
-    event :confirm_order do
-      transition waiting_confirmation: :in_production
+    event :no_confirm_late do
+      transition waiting_confirmation: :order_lost
+    end
+
+    event :in_production do
+      transition order_confirmed: :in_production
     end
 
     event :enter_tracking do

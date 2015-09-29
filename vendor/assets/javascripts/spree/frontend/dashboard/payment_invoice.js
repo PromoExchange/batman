@@ -22,7 +22,7 @@ $(function() {
         type: 'POST',
         contentType: "application/json",
         data: JSON.stringify(message),
-        url: '/charges',
+        url: '/api/auctions/' + auction_id + '/order_confirm',
         headers: {
           'X-Spree-Token': key
         },

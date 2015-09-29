@@ -95,12 +95,12 @@ class Spree::Auction < Spree::Base
     end
 
     event :enter_tracking do
-      transition in_production: :send_for_delivery 
+      transition in_production: :send_for_delivery
     end
 
     event :delivered do
       transition send_for_delivery: :confirm_receipt
-    end  
+    end
 
     event :delivery_confirmed do
       transition confirm_receipt: :complete

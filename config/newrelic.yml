@@ -15,7 +15,10 @@ common: &default_settings
   # You must specify the license key associated with your New Relic
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
-  license_key: 'c80b85c8ebaa33f78ddda9636691f7ae4cb882c4'
+  license_key: '<%= ENV["NEW_RELIC_LICENSE_KEY"] %>'
+
+  # Production: c80b85c8ebaa33f78ddda9636691f7ae4cb882c4
+  # Stage: cdad862984172411dfd234d4dfbe58260ba8355e
 
   # Agent Enabled (Ruby/Rails Only)
   # Use this setting to force the agent to run or not run.
@@ -49,7 +52,7 @@ common: &default_settings
   # See https://newrelic.com/docs/site/renaming-applications for more details
   # on renaming your New Relic applications.
   #
-  app_name: Batman
+  app_name: <%= ENV["NEW_RELIC_APP_NAME"] %>
 
   # When "true", the agent collects performance data about your
   # application and reports this data to the New Relic service at
@@ -219,4 +222,5 @@ production:
 # here.  By default, the staging environment has the agent turned on.
 staging:
   <<: *default_settings
-  monitor_mode: false
+  monitor_mode: true
+  app_name: <%= ENV["NEW_RELIC_APP_NAME"] %> (Staging)

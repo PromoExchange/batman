@@ -54,7 +54,7 @@ class Spree::Auction < Spree::Base
   # non preferred
   #   open
   #   accept -> waiting_confirmation
-  #   confirm -> order_confirmed
+  #   confirm -> in_production
   #   enter_tracking -> confirm_receipt
   #   confirm_receipt -> complete
   #
@@ -83,20 +83,22 @@ class Spree::Auction < Spree::Base
     end
 
     # Technically this is accept for preferred sellers
+    # Preferred flow
     event :unpaid do
       transition [:open, :waiting_confirmation] => :unpaid
     end
 
+    event :invoice_paid do
+      transition unpaid: :complete
+    end
+
+    # Non preferred flow
     event :confirm_order do
-      transition [:waiting_confirmation, :unpaid] => :order_confirmed
+      transition [:waiting_confirmation, :unpaid] => :in_production
     end
 
     event :no_confirm_late do
       transition waiting_confirmation: :order_lost
-    end
-
-    event :in_production do
-      transition order_confirmed: :in_production
     end
 
     event :enter_tracking do

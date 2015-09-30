@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   post '/charges', to: 'spree/api/charges#charge'
   post '/factoryprebid', to: 'spree/api/prebids#factory_prebid'
+  get 'accept/:bid_id', to: 'spree/auctions#auction_payment'
 
   resources :pxtaxrates,
     controller: 'spree/pxtaxrates',

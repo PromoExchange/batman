@@ -1,7 +1,7 @@
 class Spree::AuctionsController < Spree::StoreController
   before_filter :store_location
   before_action :require_login, only: [:new, :edit, :show]
-  before_action :fetch_auction, except: [:index, :create, :new]
+  before_action :fetch_auction, except: [:index, :create, :new, :auction_payment]
 
   def index
     if params[:buyer_id].present?
@@ -100,6 +100,10 @@ class Spree::AuctionsController < Spree::StoreController
   def destroy
     @auction.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
     redirect_to dashboards_path, flash: { notice: 'Auction was cancelled successfully.' }
+  end
+
+  def auction_payment
+    @bid = Spree::Bid.find(params[:bid_id])
   end
 
   private

@@ -21,7 +21,7 @@
             <% unless @auction.state == 'open' %>
               <td>Completed</td>
             <% else %>
-              <td><%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid} %></td>
+              <td><%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %></td>
             <% end %>
           </tr>
         <% end %>

@@ -2,13 +2,12 @@ $(function() {
 
   function stripeResponseHandlerBuyer(status, response) {
     var $form = $('#buyer-form');
-    var key = $('#pay-buyer').attr('data-id');
+    var key = $('#show-invoice').attr('data-key');
     if (response.error) {
       // Show the errors on the form
       $("body").css("cursor", "default");
       $form.find('.payment-errors').text(response.error.message);
       $("#payment-submit").prop('disabled', false);
-      $("#payment-close").prop('disabled', false);
     } else {
       // response contains id and card, which contains additional card details
       var token = response.id;
@@ -47,7 +46,6 @@ $(function() {
     var $form = $(this);
     $("body").css("cursor", "progress");
     $("#payment-submit").prop('disabled', true);
-    $("#payment-close").prop('disabled', true);
     Stripe.card.createToken($form, stripeResponseHandlerBuyer);
     return false;
   });

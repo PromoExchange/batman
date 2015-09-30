@@ -1,0 +1,84 @@
+<% content_for :head do %>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+  Stripe.setPublishableKey('<%= ENV["STRIPE_TEST_PUBLISHABLE_KEY"] %>');
+</script>
+<% end %>
+
+<div class="row" id="show-invoice" data-key="<%= spree_current_user.spree_api_key %>">
+  <div class="col-md-6 well">
+    <div class="auction-details">
+      <h4><%= Spree::t(:auction_details) %></h4>
+      <table class="table">
+        <tr><td>Auction #:</td><td><%= @bid.auction.reference %></td></tr>
+        <tr><td>Product:</td><td><%= @bid.auction.product.name %></td></tr>
+        <tr><td>Factory:</td><td><%= @bid.auction.product.supplier.name %></td></tr>
+        <tr><td>SKU:</td><td><%= @bid.auction.product.sku %></td></tr>
+        <tr><td>Buyer:</td><td><%= @bid.auction.buyer.billing_address.full_name %></td></tr>
+        <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @bid.auction.started %>'><%= @bid.auction.started %></time></td></tr>
+        <tr><td>Quantity:</td><td><%= @bid.auction.quantity %></td></tr>
+        <tr><td>Imprint Method:</td><td><%= @bid.auction.imprint_method.name %></td></tr>
+        <tr><td>Main Color:</td><td><%= @bid.auction.main_color.color %></td></tr>
+        <tr><td>Total Payment amount:</td><td>$<%= @bid.bid %></td></tr>
+        <tr><td>Payment Method:</td><td><%= @bid.auction.payment_method %></td></tr>
+        <tr><td>Custom PMS Colors:</td><td><%= @bid.auction.custom_pms_colors %></td></tr>
+        <tr>
+          <td>Imprint Colors:</td>
+          <td>
+            <% @bid.auction.pms_colors.each do |c| %>
+              <p><%= c.name %>/<%= c.pantone %></p>
+              <% end %>
+          </td>
+        </tr>
+        <tr><td>Expected Delivery Date:</td><td><time data-format='%B %e, %Y' data-local='time' datetime='<%= @bid.auction.created_at + 15.days %>'></time></td></tr>
+        <% unless @bid.auction.logo.nil? %>
+          <tr><td>Logo:</td><td><%= image_tag(@bid.auction.logo.logo_file.url(:thumb), { itemprop: "image", alt: @bid.auction.logo.logo_file_file_name }) %></td></tr>
+        <% end %>
+        <tr>
+          <td>Shipping Address:</td>
+          <td>
+            <ul class="display-address-ul">
+              <li><%= @bid.auction.shipping_address.firstname %>&nbsp;<%= @bid.auction.shipping_address.lastname %></li>
+              <li><%= @bid.auction.shipping_address.company %></li>
+              <li><%= @bid.auction.shipping_address.address1 %></li>
+              <li><%= @bid.auction.shipping_address.address2 %></li>
+              <li><%= @bid.auction.shipping_address.city %></li>
+              <li><%= @bid.auction.shipping_address.state_text %>&nbsp;<%= @bid.auction.shipping_address.zipcode %></li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <h2>Payment: $<%= @bid.bid %> </h2>
+    <form action="/accept" id="buyer-form" method="POST" class="form">
+      <%= hidden_field_tag id='bid-id', @bid.id %>
+      <span class="payment-errors"></span>
+      <div class="form-group">
+        <label>
+          <span>Card Number</span>
+          <input data-stripe="number" size="20" type="text" class="form-control"/>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <span>CVC</span>
+          <input data-stripe="cvc" size="4" type="text" class="form-control"/>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <span>Expiration (MM/YYYY)</span>
+          <input data-stripe="exp-month" size="2" type="text"/>
+          <span>/</span>
+          <input data-stripe="exp-year" size="4" type="text"/>
+        </label>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-success" id="payment-submit" type="submit">Submit Payment</button>
+      </div>
+    </form>
+  </div>
+</div>

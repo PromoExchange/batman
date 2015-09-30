@@ -2,3 +2,8 @@ Heartbeat:
   every: 5m
   queue: :heartbeat
   description: "Heartbeat"
+
+TriggerDeliveredEvent:
+  every: 5m
+  queue: :trigger_delivered_event
+  description: "TriggerDeliveredEvent"

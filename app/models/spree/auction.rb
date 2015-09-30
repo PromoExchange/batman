@@ -185,4 +185,16 @@ class Spree::Auction < Spree::Base
     retry if @reference_attempts < 5
     raise e, 'Retries exhausted'
   end
+
+  def product_delivered?
+    ups = ActiveShipping::UPS.new(
+      login: ENV['UPS_API_USERID'],
+      password: ENV['UPS_API_PASSWORD'],
+      key: ENV['UPS_API_KEY']
+    )
+    response = ups.find_tracking_info(tracking_number, test: true) 
+    response.is_delivered?  
+  rescue
+    return false 
+  end
 end

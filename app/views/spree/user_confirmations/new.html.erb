@@ -11,13 +11,21 @@
         <div id="password-credentials">
           <p>
             <%= f.label :email %><br />
-            <%= f.email_field :email, class: "form-control", autofocus: true, tabindex: "1" %>
+            <%= f.email_field :email, class: "form-control user-email", autofocus: true, tabindex: "1" %>
           </p>
         </div>
-        <p>
-          <%= f.submit "Resend confirmation instructions", class: "btn btn-lg btn-success btn-block", tabindex: "4" %>
-        </p>
+        <% unless resource.errors.full_messages.include?('Email was already confirmed') %>
+          <p>
+            <%= f.submit "Resend confirmation instructions", class: "btn btn-lg btn-success btn-block", tabindex: "4" %>
+          </p>
+        <% end %>
       <% end %>
     </div>
   </div>
 </div>
+
+<script>
+  $("form :input.user-email").on("keypress", function(e) {
+      return e.keyCode != 13;
+  });
+</script>

@@ -41,7 +41,7 @@ $(function() {
 
     processing_flat_fee = 0.30;
 
-    var px_markup = 0.0499;
+    var px_markup = 0.0899;
     var total_markup = (processing_markup + px_markup);
     var flash_fields = [];
 

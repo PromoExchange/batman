@@ -116,7 +116,7 @@ class Spree::Prebid < Spree::Base
     log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
 
     # Promo exchange commission
-    px_commission = 0.0499
+    px_commission = 0.0899
     px_commission = 0.0299 if auction.preferred?(seller)
     log_debug(auction_data, "auction.preferred?(seller)=#{auction.preferred?(seller)}")
     log_debug(auction_data, "px_commission=#{px_commission}")

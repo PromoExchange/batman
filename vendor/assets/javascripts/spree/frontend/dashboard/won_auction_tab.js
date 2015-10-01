@@ -91,11 +91,11 @@ $(function() {
             }
 
             if(item.state === 'complete') {
-              status_text = 'Completed'
+              status_text = 'Completed';
               action = simple_template({
                 value: ''
-              })
-            } 
+              });
+            }
 
             trHTML += simple_template({
               value: status_text

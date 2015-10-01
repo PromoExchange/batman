@@ -1,4 +1,4 @@
-$(function() { 
+$(function() {
   $('tbody').on('click', '.track_shipment', function(){
     var auction_id = $(this).data('id');
     var key = $('.table').attr('data-key');
@@ -32,14 +32,14 @@ $(function() {
               message: item.message
             });
             trHTML += "</ul>";
-          })
+          });
         } else {
           trHTML = 'Tracking information not available';
         }
         $("#tracking-information-view").html(trHTML);
       },
       error: function(data) {
-        alert('Failed to add tracking information, please contact support');
+        alert('Failed to get tracking information, please contact support');
       }
     });
   });

@@ -186,10 +186,10 @@ class Spree::Auction < Spree::Base
     raise e, 'Retries exhausted'
   end
 
-  def product_delivered? 
-    ups_response.is_delivered?  
+  def product_delivered?
+    ups_response.is_delivered?
   rescue
-    return false 
+    return false
   end
 
   def ups_response

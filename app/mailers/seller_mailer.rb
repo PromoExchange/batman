@@ -29,11 +29,14 @@ class SellerMailer < ApplicationMailer
 
   def confirm_order_time_expire(auction)
     @auction = auction
-    mail(to: [@auction.winning_bid.email, 'michael.goldstein@thepromoexchange.com'], subject: 'Auction Withdrawal Due to Unresponsiveness')
+    mail(
+      to: [@auction.winning_bid.email, 'michael.goldstein@thepromoexchange.com'],
+      subject: 'PromoExchange Auction Withdrawal Due to Unresponsiveness'
+    )
   end
 
   def tracking_reminder(auction)
     @auction = auction
-    mail(to: @auction.winning_bid.email, subject: 'Auction tracking number reminder')
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction tracking number reminder')
   end
 end

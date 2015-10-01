@@ -121,6 +121,11 @@ class Spree::Auction < Spree::Base
       ProductDelivered,
       auction_id: id
     )
+    Resque.enqueue_at(
+      Time.zone.now + 3.days,
+      ConfirmReceiptReminder,
+      auction_id: id
+    )
   end
 
   def self.user_auctions

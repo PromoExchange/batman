@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       member do
         post 'tracking'
         post 'confirmed_delivery'
+        get 'tracking_information'
       end
       resources :bids, controller: 'spree/api/bids' do
         post 'accept'

@@ -186,15 +186,18 @@ class Spree::Auction < Spree::Base
     raise e, 'Retries exhausted'
   end
 
-  def product_delivered?
+  def product_delivered? 
+    ups_response.is_delivered?  
+  rescue
+    return false 
+  end
+
+  def ups_response
     ups = ActiveShipping::UPS.new(
       login: ENV['UPS_API_USERID'],
       password: ENV['UPS_API_PASSWORD'],
       key: ENV['UPS_API_KEY']
     )
-    response = ups.find_tracking_info(tracking_number, test: true) 
-    response.is_delivered?  
-  rescue
-    return false 
+    ups.find_tracking_info(tracking_number, test: true)
   end
 end

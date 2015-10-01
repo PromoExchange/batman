@@ -83,6 +83,13 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :internal_server_error
   end
 
+  def tracking_information
+    response = @auction.ups_response.shipment_events
+    render json: response
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
   private
 
   def fetch_auction

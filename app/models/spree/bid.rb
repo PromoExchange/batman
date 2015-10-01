@@ -42,6 +42,12 @@ class Spree::Bid < Spree::Base
     order.total
   end
 
+  def seller_fee
+    rate = 0.0499
+    rate = 0.0299 if auction.preferred?(seller)
+    (order.total * rate).round(2)
+  end
+
   private
 
   def notification_for_waiting_confirmation
@@ -77,11 +83,5 @@ class Spree::Bid < Spree::Base
   def build_order
     o = Spree::Order.create
     self.order_id = o.id
-  end
-
-  def seller_fee
-    rate = 0.0499
-    rate = 0.0299 if auction.preferred?(seller)
-    (order.total * rate).round(2)
   end
 end

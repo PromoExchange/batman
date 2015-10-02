@@ -15,6 +15,7 @@
       <h4><%= Spree::t(:auction_details) %></h4>
       <table class="table">
         <tr><td>Auction #:</td><td><%= @auction.reference %></td></tr>
+        <tr><td>Winning Bid:</td><td>$<%= @auction.winning_bid.bid %></td></tr>
         <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>
         <tr><td>Factory:</td><td><%= @auction.product.supplier.name %></td></tr>
         <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
@@ -51,7 +52,7 @@
           </td>
         </tr>
         <% if @auction.waiting_confirmation? %>
-          <tr><td colspan='2'><button class="btn btn-success" id="confirm-order-submit" data-id="<%= @auction.id %>" type="submit">Order Confirm</button></td></tr>
+          <tr><td colspan='2'><button class="btn btn-success" id="confirm-order-submit" data-id="<%= @auction.id %>" type="submit">Confirm Order</button></td></tr>
         <% end %>
       </table>
     </div>

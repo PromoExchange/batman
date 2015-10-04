@@ -15,10 +15,15 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         state_in: states
       ).result(distinct: true)
     else
-      @auctions = Spree::Auction.search(
+      lost_auctions = Spree::Auction.search(
         bids_seller_id_eq: params[:seller_id],
         bids_state_eq: 'lost'
-      ).result(distinct: true)
+      ).result
+      won_auctions = Spree::Auction.search(
+        bids_seller_id_eq: params[:seller_id],
+        bids_state_eq: 'accepted'
+      ).result
+      @auctions = lost_auctions - won_auctions
     end
     render 'spree/api/auctions/index'
   end

@@ -57,7 +57,7 @@ class Spree::Bid < Spree::Base
       email_address: seller.email
     )
     Resque.enqueue_at(
-      Time.zone.now + 24.hours,
+      Time.zone.tomorrow.midnight,
       ConfirmOrderTimeExpire,
       auction_id: auction.id,
       email_address: seller.email

@@ -114,6 +114,10 @@ $(function() {
     });
   });
 
+  if ($($('#seller-won-auction-tab').parent()[0]).hasClass('active')) {
+    $('#seller-won-auction-tab').trigger('click');
+  }
+
   $('#confirm-order-submit').click(function(){
     var auction_id = $(this).data('id');
     var key = $('#show-invoice').attr('data-key');
@@ -164,7 +168,7 @@ $(function() {
           alert(data.error_msg);
         } else {
           alert('Tracking number successfully updated.');
-          window.location = "/dashboards";
+          window.location = "/dashboards?tab=won_auction";
         }
       },
       error: function(data) {

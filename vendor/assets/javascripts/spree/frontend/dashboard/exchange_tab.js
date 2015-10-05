@@ -189,7 +189,10 @@ $(function() {
     $(this).tab('show');
     return false;
   });
-  $('#seller-live-auction-tab').trigger('click');
+
+  if ($($('#seller-live-auction-tab').parent()[0]).hasClass('active')) {
+    $('#seller-live-auction-tab').trigger('click');
+  }
 
   $('#seller-live-auction-table > tbody').on('click', 'button.open-view', function(e) {
     alert("We're sorry. Only sellers that are invited to this auction can bid. Open auctions to the public are coming soon!");

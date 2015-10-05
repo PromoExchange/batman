@@ -4,7 +4,7 @@
 
 <ul class="nav nav-tabs" role="tablist">
   <% active_me = nil %>
-  <% active_me = 'active' if @tab.nil? %>
+  <% active_me = 'active' unless ['address', 'logo'].include? @tab %>
   <li class="<%= active_me %>"><a href="#contact-tab" role="tab" data-toggle="tab"><%=Spree.t(:contact_information)%></a></li>
   <% active_me = nil %>
   <% active_me = 'active' if @tab == 'address' %>
@@ -22,7 +22,7 @@
 
 <div class="tab-content">
   <% active_me = nil %>
-  <% active_me = 'active' if @tab.nil? %>
+  <% active_me = 'active' unless ['address', 'logo'].include? @tab %>
   <div class="tab-pane <%= active_me %>" id="contact-tab">
     <%= render partial: 'spree/dashboards/shared/contact_tab' %>
   </div>

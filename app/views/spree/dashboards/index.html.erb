@@ -5,6 +5,7 @@
         <ul class="nav nav-pills nav-stacked">
           <% active_me = 'active' if @tab.nil? %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
+            <% active_me = 'active' if ['won_auction', nil].include? @tab %>
             <li class="<%= active_me %>"><a href="#exchange" id="auction-tab" data-toggle="tab"><%= Spree.t(:marketplace) %></a></li>
             <% active_me = nil %>
           <% end %>
@@ -24,6 +25,7 @@
           <% active_me = nil %>
           <% active_me = 'active' if @tab.nil? %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
+            <% active_me = 'active' if ['won_auction', nil].include? @tab %>
             <div class="tab-pane <%= active_me %>" id="exchange"><%= render partial: 'spree/dashboards/seller/exchange' %></div>
             <% active_me = nil %>
           <% end %>

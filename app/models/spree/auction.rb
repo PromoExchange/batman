@@ -129,7 +129,7 @@ class Spree::Auction < Spree::Base
       auction_id: id
     )
     Resque.enqueue_at(
-      Time.zone.now + 3.days,
+      EmailHelpers.email_delay(Time.zone.now + 3.days),
       ConfirmReceiptReminder,
       auction_id: id
     )

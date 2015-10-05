@@ -47,38 +47,43 @@
             </ul>
           </td>
         </tr>
+        <% if @bid.auction.confirm_receipt? %>
+          <tr><td colspan='2'><button class="btn btn-success confirm_receipt" data-id="<%= @bid.auction.id %>" type="submit">Confirm Receipt</button></td></tr>
+        <% end %>
       </table>
     </div>
   </div>
 
-  <div class="col-md-6">
-    <h2>Payment: $<%= number_with_precision(@bid.bid,precision: 2) %> </h2>
-    <form action="/accept" id="buyer-form" method="POST" class="form">
-      <%= hidden_field_tag id='bid-id', @bid.id %>
-      <span class="payment-errors"></span>
-      <div class="form-group">
-        <label>
-          <span>Card Number</span>
-          <input data-stripe="number" size="20" type="text" class="form-control"/>
-        </label>
-      </div>
-      <div class="form-group">
-        <label>
-          <span>CVC</span>
-          <input data-stripe="cvc" size="4" type="text" class="form-control"/>
-        </label>
-      </div>
-      <div class="form-group">
-        <label>
-          <span>Expiration (MM/YYYY)</span>
-          <input data-stripe="exp-month" size="2" type="text"/>
-          <span>/</span>
-          <input data-stripe="exp-year" size="4" type="text"/>
-        </label>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-success" id="payment-submit" type="submit">Submit Payment</button>
-      </div>
-    </form>
-  </div>
+  <% if @bid.open? %>
+    <div class="col-md-6">
+      <h2>Payment: $<%= @bid.bid %> </h2>
+      <form action="/accept" id="buyer-form" method="POST" class="form">
+        <%= hidden_field_tag id='bid-id', @bid.id %>
+        <span class="payment-errors"></span>
+        <div class="form-group">
+          <label>
+            <span>Card Number</span>
+            <input data-stripe="number" size="20" type="text" class="form-control"/>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <span>CVC</span>
+            <input data-stripe="cvc" size="4" type="text" class="form-control"/>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <span>Expiration (MM/YYYY)</span>
+            <input data-stripe="exp-month" size="2" type="text"/>
+            <span>/</span>
+            <input data-stripe="exp-year" size="4" type="text"/>
+          </label>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" id="payment-submit" type="submit">Submit Payment</button>
+        </div>
+      </form>
+    </div>
+  <% end %>
 </div>

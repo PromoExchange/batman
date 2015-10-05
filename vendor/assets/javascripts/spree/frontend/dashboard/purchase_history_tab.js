@@ -115,7 +115,7 @@ $(function() {
   
   $('tbody').on('click', '.confirm_receipt', function(){
     var auction_id = $(this).data('id');
-    var key = $('#buyer-purchase-history-table').attr('data-key');
+    var key = $('#buyer-purchase-history-table').attr('data-key') || $('#show-invoice').attr('data-key');
     var url = '/api/auctions/' + auction_id + '/confirmed_delivery';
     var accept = confirm("Are you sure, Confirm Receipt");
     if (!accept){ return false; }

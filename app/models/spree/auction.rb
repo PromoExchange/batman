@@ -92,7 +92,19 @@ class Spree::Auction < Spree::Base
 
     # Non preferred flow
     event :confirm_order do
-      transition [:waiting_confirmation, :unpaid] => :in_production
+      transition [:waiting_confirmation, :unpaid] => :create_proof
+    end
+
+    event :upload_proof do
+      transition create_proof: :waiting_proof_approval
+    end
+
+    event :approve_proof do
+      transition waiting_proof_approval: :in_production
+    end
+
+    event :reject_proof do
+      transition waiting_proof_approval: :create_proof
     end
 
     event :no_confirm_late do

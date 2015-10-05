@@ -130,17 +130,45 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.state).to eq 'complete'
   end
 
-  it 'should go to order_confirmed from confirm_order event' do
+  it 'should go to create_proof from confirm_order event' do
     a = FactoryGirl.build(:auction)
     a.accept
     a.confirm_order
+    expect(a.state).to eq 'create_proof'
+  end
+
+  it 'should go to waiting_proof_approval from upload_proof event' do
+    a = FactoryGirl.build(:auction)
+    a.accept
+    a.confirm_order
+    a.upload_proof
+    expect(a.state).to eq 'waiting_proof_approval'
+  end
+
+  it 'should go to in_production from approve_proof event' do
+    a = FactoryGirl.build(:auction)
+    a.accept
+    a.confirm_order
+    a.upload_proof
+    a.approve_proof
     expect(a.state).to eq 'in_production'
+  end
+
+  it 'should go to create_proof from reject_proof event' do
+    a = FactoryGirl.build(:auction)
+    a.accept
+    a.confirm_order
+    a.upload_proof
+    a.reject_proof
+    expect(a.state).to eq 'create_proof'
   end
 
   it 'should go to confirm_receipt from enter_tracking event' do
     a = FactoryGirl.build(:auction)
     a.accept
     a.confirm_order
+    a.upload_proof
+    a.approve_proof
     a.enter_tracking
     expect(a.state).to eq 'send_for_delivery'
   end
@@ -149,18 +177,22 @@ RSpec.describe Spree::Auction, type: :model do
     a = FactoryGirl.build(:auction)
     a.accept
     a.confirm_order
+    a.upload_proof
+    a.approve_proof
     a.enter_tracking
     a.delivered
     expect(a.state).to eq 'confirm_receipt'
   end
 
-  xit 'should go to complete from rate_seller event' do
+  it 'should go to complete from rate_seller event' do
     a = FactoryGirl.build(:auction)
     a.accept
     a.confirm_order
+    a.upload_proof
+    a.approve_proof
     a.enter_tracking
     a.delivered
-    a.rate_seller
+    a.delivery_confirmed
     expect(a.state).to eq 'complete'
   end
 end

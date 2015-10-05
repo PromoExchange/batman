@@ -1,8 +1,8 @@
 <p>RE: Auction <%= @auction.reference %></p>
 
-<h1>Buyer Product Delivered and Project Closed</h1>
-
-<p>It looks like your order for <%= @auction.product.name %> from <%= @auction.winning_bid.seller.shipping_address.company %>&nbsp;<%= @auction.winning_bid.seller.shipping_address.lastname %> was recently delivered. Please head over to your dashboard to confirm receipt and accuracy of the order.  We’d also appreciate your participation in rating your Seller to ensure we are providing all of our Buyers the best Sellers in the industry to work with.</p>
+<p>It looks like your order for <%= @auction.product.name %> from <%= @auction.winning_bid.seller.shipping_address.company %> was recently delivered.</p>
+<p>Please head over to your dashboard to confirm receipt and accuracy of the order.</p>
+<p>We’d also appreciate your participation in rating your Seller to ensure we are providing all of our Buyers the best Sellers in the industry to work with.</p>
 
 <p><a href="<%= Spree::Store.current.url %>/accept/<%= @auction.winning_bid.id %>">
   <button style="width: 170px; height: 40px; font-size: 20px; background: #4CAE4C;">Confirm Receipt</button>

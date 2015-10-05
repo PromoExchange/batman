@@ -1,8 +1,7 @@
 RE: Auction <%= @auction.reference %>
 
-Buyer Product Delivered and Project Closed
-
-It looks like your order for <%= @auction.product.name %> from <%= @auction.winning_bid.seller.shipping_address.firstname %> <%= @auction.winning_bid.seller.shipping_address.lastname %> was recently delivered. Please head over to your dashboard to confirm receipt and accuracy of the order.  We’d also appreciate your participation in rating your Seller to ensure we are providing all of our Buyers the best Sellers in the industry to work with.
+It looks like your order for <%= @auction.product.name %> from <%= @auction.winning_bid.seller.shipping_address.company %> was recently delivered.
+Please head over to your dashboard to confirm receipt and accuracy of the order.  We’d also appreciate your participation in rating your Seller to ensure we are providing all of our Buyers the best Sellers in the industry to work with.
 
 <a href="<%= Spree::Store.current.url %>/accept/<%= @auction.winning_bid.id %>"><button>Confirm Receipt</button></a>
 

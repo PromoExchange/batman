@@ -67,6 +67,7 @@ class Spree::Auction < Spree::Base
   state_machine initial: :open do
     after_transition on: :confirm_order, do: :notification_for_in_production
     after_transition on: :delivered, do: :notification_for_product_delivered
+    after_transition on: :delivery_confirmed, do: :notification_for_confirm_received
 
     # TODO: When auction created, schedule job to end it
     event :end do
@@ -124,6 +125,13 @@ class Spree::Auction < Spree::Base
     Resque.enqueue_at(
       Time.zone.now + 3.days,
       ConfirmReceiptReminder,
+      auction_id: id
+    )
+  end
+
+  def notification_for_confirm_received
+    Resque.enqueue(
+      ConfirmReceived,
       auction_id: id
     )
   end

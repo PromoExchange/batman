@@ -39,4 +39,14 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction tracking number reminder')
   end
+
+  def product_delivered(auction)
+    @auction = auction
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Product Delivered')
+  end
+
+  def confirm_received(auction)
+    @auction = auction
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Product Confirm Received')
+  end
 end

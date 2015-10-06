@@ -57,8 +57,6 @@ class Spree::Auction < Spree::Base
   #   confirm -> in_production
   #   enter_tracking -> confirm_receipt
   #   confirm_receipt -> complete
-  #
-  #   non_preferred_pay -> as before
 
   #   rate, any time, not really a state
   #   cancel, only valid before accept
@@ -115,36 +113,6 @@ class Spree::Auction < Spree::Base
   end
 
   delegate :name, to: :product
-
-  def notification_for_in_production
-    Resque.enqueue(
-      InProduction,
-      auction_id: id
-    )
-  end
-
-  def notification_for_product_delivered
-    Resque.enqueue(
-      ProductDelivered,
-      auction_id: id
-    )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 3.days),
-      ConfirmReceiptReminder,
-      auction_id: id
-    )
-  end
-
-  def notification_for_confirm_received
-    Resque.enqueue(
-      ConfirmReceived,
-      auction_id: id
-    )
-  end
-
-  def self.user_auctions
-    Spree::Auctions.where(buyer_id: current_spree_user.id)
-  end
 
   def image_uri
     product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
@@ -218,5 +186,37 @@ class Spree::Auction < Spree::Base
       key: ENV['UPS_API_KEY']
     )
     ups.find_tracking_info(tracking_number, test: true)
+  end
+
+  private
+
+  def notification_for_in_production
+    Resque.enqueue(
+      InProduction,
+      auction_id: id
+    )
+  end
+
+  def notification_for_product_delivered
+    Resque.enqueue(
+      ProductDelivered,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 3.days),
+      ConfirmReceiptReminder,
+      auction_id: id
+    )
+  end
+
+  def notification_for_confirm_received
+    Resque.enqueue(
+      ConfirmReceived,
+      auction_id: id
+    )
+    Resque.enqueue(
+      ClaimPayment,
+      auction_id: id
+    )
   end
 end

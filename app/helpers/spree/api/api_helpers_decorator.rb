@@ -45,6 +45,7 @@ Spree::Api::ApiHelpers.module_eval do
       :started,
       :ended,
       :state,
+      :payment_claimed,
       :reference,
       :product_unit_price,
       :payment_method

@@ -92,6 +92,9 @@ $(function() {
 
             if(item.state === 'complete') {
               status_text = 'Completed';
+              if(item.payment_claimed === false ) {
+                status_text = 'Claim payment';
+              }
               action = simple_template({
                 value: ''
               });

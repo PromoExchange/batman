@@ -2,8 +2,7 @@ $(function() {
   $('#seller-won-auction-tab').click(function() {
     var key = $("#seller-won-auction").attr("data-key");
     var seller_id = $("#seller-won-auction").attr("data-id");
-    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,in_production,send_for_delivery,confirm_receipt,complete&seller_id=' + seller_id;
-
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,create_proof,waiting_proof_approval,in_production,send_for_delivery,confirm_receipt,complete&seller_id=' + seller_id;
     var reference_template = _.template("<td><a href='/invoices/${auction_id}'>${ reference }</a></td>");
     var simple_template = _.template("<td>${value}</td>");
     var date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='${date}'>${date}</time></td>");
@@ -59,6 +58,24 @@ $(function() {
               action = simple_template({
                 value: action_template({
                   url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Confirm', auction_class: 'confirm'
+                })
+              });
+            }
+
+            if (item.state === 'create_proof') {
+              status_text = 'Upload Proof';
+              action = simple_template({
+                value: action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Upload Proof', auction_class: 'upload_proof'
+                })
+              });
+            }
+
+            if (item.state === 'waiting_proof_approval') {
+              status_text = 'View Proof';
+              action = simple_template({
+                value: action_template({
+                  url: '/auctions/'+item.id+'/download_proof', auction_id: item.id, auction_value: 'View Virtual Proof', auction_class: 'view_proof'
                 })
               });
             }
@@ -243,5 +260,11 @@ $(function() {
         $('#tracking-close').click();
       }
     });
+  });
+
+  $('tbody').on('click', '.upload_proof', function(){
+    var auction_id = $(this).data('id');
+    $('#id').val(auction_id);
+    $('#proof-modal').modal('show');
   });
 });

@@ -2,7 +2,7 @@ $(function() {
   $('#purchase-history-tab').click(function() {
     var key = $("#buyer-purchase-history-table").attr("data-key");
     var buyer_id = $("#buyer-purchase-history-table").attr("data-id");
-    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,in_production,send_for_delivery,confirm_receipt,complete&buyer_id=' + buyer_id;
+    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,create_proof,waiting_proof_approval,in_production,send_for_delivery,confirm_receipt,complete&buyer_id=' + buyer_id;
 
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");
@@ -57,14 +57,36 @@ $(function() {
             });
 
             if (item.state === 'waiting_confirmation' || 'unpaid') {
+              status_text = 'Awaiting Confirmation';
               var action = simple_template({
-                value: 'Awaiting Confirmation'
+                value: ''
+              });
+            }
+
+            if (item.state === 'create_proof') {
+              status_text = 'Awaiting Virtual Proof';
+              action = simple_template({
+                value: ''
+              });
+            }
+
+            if (item.state === 'waiting_proof_approval') {
+              status_text = 'View Proof';
+              action = simple_template({
+                value: action_template({
+                  url: '/auctions/'+item.id+'/download_proof', auction_id: item.id, auction_value: 'View Virtual Proof', auction_class: 'view_proof'
+                }) + action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Approve', auction_class: 'approve_proof'
+                }) + action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Reject', auction_class: 'btn-danger reject_proof'
+                })
               });
             }
 
             if (item.state === 'order_confirmed') {
+              status_text = 'Waiting for production'
               var action = simple_template({
-                value: 'Waiting for production'
+                value: ''
               });
             }
 
@@ -136,6 +158,62 @@ $(function() {
       },
       success: function(data) {
         window.location = "/dashboards";
+      },
+      error: function(data) {
+        alert('Failed to Confirmed Receipt, please contact support');
+      }
+    });
+  });
+
+  $('tbody').on('click', '.approve_proof', function(){
+    var auction_id = $(this).data('id');
+    var key = $('#buyer-purchase-history-table').attr('data-key');
+    var url = '/api/auctions/' + auction_id + '/approve_proof';
+    var accept = confirm("Are you sure, Approve Proof");
+    if (!accept){ return false; }
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        window.location = "/dashboards";
+      },
+      error: function(data) {
+        alert('Failed to Confirmed Receipt, please contact support');
+      }
+    });
+  });
+
+  $('tbody').on('click', '.reject_proof', function(){
+    var auction_id = $(this).data('id');
+    var accept = confirm("Are you sure, Reject Proof");
+    if (!accept){ return false; }
+    $('#feedback-auction-id').val(auction_id)
+    $('#reject-proof').modal('show')
+  });
+
+  $('#feedback-submit').click(function(){
+    var auction_id = $('#feedback-auction-id').val();
+    var key = $('#buyer-purchase-history-table').attr('data-key');
+    var text = $('#reject-proof textarea').val();
+    var url = '/api/auctions/' + auction_id + '/reject_proof';
+    $.ajax({
+      type: 'POST',
+      data: {"proof_feedback": text, format: 'json'},
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        if (data.error_msg.length) {
+          alert(data.error_msg);
+        } else {
+          alert('Proof Rejected.');
+          window.location = "/dashboards";
+        }
       },
       error: function(data) {
         alert('Failed to Confirmed Receipt, please contact support');

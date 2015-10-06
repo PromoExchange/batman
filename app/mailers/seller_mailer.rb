@@ -60,4 +60,9 @@ class SellerMailer < ApplicationMailer
     @params = params
     mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange Claim Payment Request')
   end
+
+  def reject_proof(auction)
+    @auction = auction
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Proof Rejected')
+  end
 end

@@ -106,6 +106,20 @@ class Spree::AuctionsController < Spree::StoreController
     @bid = Spree::Bid.find(params[:bid_id])
   end
 
+  def upload_proof
+    @auction.update(proof_file: params[:proof_file])
+    @auction.upload_proof!
+    redirect_to '/dashboards', flash: { notice: 'Your document uploaded successfully.' }
+  rescue
+    redirect_to '/dashboards', flash: { error: 'Unable to upload your document.' }
+  end
+
+  def download_proof
+    send_data open(@auction.proof_file.url).read,
+              :filename => @auction.proof_file_file_name,
+              :disposition => 'attachment'
+  end
+
   private
 
   def fetch_auction

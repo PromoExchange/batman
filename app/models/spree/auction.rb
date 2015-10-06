@@ -28,6 +28,12 @@ class Spree::Auction < Spree::Base
 
   accepts_nested_attributes_for :auctions_pms_colors
 
+  has_attached_file :proof_file,
+    path: '/proof_file/:id/:basename.:extension'
+
+  validates_attachment_content_type :proof_file,
+    content_type: %w(image/jpeg image/jpg image/png image/gif application/pdf)
+
   validates :buyer_id, presence: true
   validates :logo_id, presence: true, unless: -> do
     imprint_method = Spree::ImprintMethod.where(name: 'Blank').first
@@ -66,6 +72,7 @@ class Spree::Auction < Spree::Base
     after_transition on: :confirm_order, do: :notification_for_in_production
     after_transition on: :delivered, do: :notification_for_product_delivered
     after_transition on: :delivery_confirmed, do: :notification_for_confirm_received
+    after_transition on: :reject_proof, do: :notification_for_reject_proof
 
     # TODO: When auction created, schedule job to end it
     event :end do
@@ -228,6 +235,13 @@ class Spree::Auction < Spree::Base
     )
     Resque.enqueue(
       ClaimPayment,
+      auction_id: id
+    )
+  end
+
+  def notification_for_reject_proof
+    Resque.enqueue(
+      RejectProof,
       auction_id: id
     )
   end

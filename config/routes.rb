@@ -29,7 +29,14 @@ Rails.application.routes.draw do
 
   resources :auctions,
     controller: 'spree/auctions',
-    as: 'auctions'
+    as: 'auctions' do
+      collection do
+        post 'upload_proof'
+      end
+      member do
+        get 'download_proof'
+      end  
+    end
 
   resources :dashboards,
     controller: 'spree/dashboards',
@@ -51,6 +58,8 @@ Rails.application.routes.draw do
         post 'tracking'
         post 'confirmed_delivery'
         get 'tracking_information'
+        post 'approve_proof'
+        post 'reject_proof'
       end
       resources :bids, controller: 'spree/api/bids' do
         post 'accept'

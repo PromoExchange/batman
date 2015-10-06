@@ -130,6 +130,25 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :internal_server_error
   end
 
+  def approve_proof
+    @auction.approve_proof!
+    render nothing: true, status: :ok
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
+  def reject_proof
+    if params[:proof_feedback].present?
+      @auction.update(proof_feedback: params[:proof_feedback])
+      @auction.reject_proof!
+      render json: { nothing: true, status: :ok, error_msg: '' }
+    else
+      render json: { nothing: true, status: :ok, error_msg: 'Your feedback is required.' }
+    end
+  rescue
+    render json: { nothing: true, status: :internal_server_error }
+  end
+
   private
 
   def fetch_auction

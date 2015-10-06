@@ -92,12 +92,17 @@ $(function() {
 
             if(item.state === 'complete') {
               status_text = 'Completed';
-              if(item.payment_claimed === false ) {
-                status_text = 'Claim payment';
-              }
               action = simple_template({
                 value: ''
               });
+              if(item.payment_claimed === false ) {
+                status_text = 'Payment ready';
+                action = simple_template({
+                  value: action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Claim', auction_class: 'claim-payment'
+                  })
+                });
+              }
             }
 
             trHTML += simple_template({
@@ -121,7 +126,7 @@ $(function() {
     $('#seller-won-auction-tab').trigger('click');
   }
 
-  $('#confirm-order-submit').click(function(){
+  $('#confirm-order-submit').click(function() {
     var auction_id = $(this).data('id');
     var key = $('#show-invoice').attr('data-key');
     var url = '/api/auctions/' + auction_id + '/order_confirm';
@@ -143,18 +148,73 @@ $(function() {
     });
   });
 
-  $('tbody').on('click', '.tracking_number', function(){
+  $('tbody').on('click', '.claim-payment', function(){
+    var auction_id = $(this).data('id');
+    $('#claim-payment-auction-id').val(auction_id);
+    $('#claim-payment-submit').prop('disabled', false);
+    $('#claim-payment-modal').show('modal');
+  });
+
+  $('#claim-payment-close').click(function() {
+    $('#claim-payment-modal').hide('modal');
+    $('.bank-field').val('');
+  });
+
+  $('#paymenttype_paper_check').click(function() {
+    $('.bank-field').prop('disabled', true);
+  });
+
+  $('#paymenttype_ach_transfer').click(function() {
+    $('.bank-field').prop('disabled', false);
+  });
+
+  $('#claim-payment-submit').click(function() {
+    $('#claim-payment-submit').prop('disabled', true);
+    var auction_id = $('#claim-payment-auction-id').val();
+    var key = $('#claim-payment-modal').attr('data-key');
+    var bank_name = $('#bank-name').val();
+    var bank_branch = $('#bank-branch').val();
+    var bank_routing = $('#bank-routing').val();
+    var bank_acct_number = $('#bank-acct-number').val();
+    var url = '/api/auctions/' + auction_id + '/claim_payment';
+    var message = {
+      payment_type: $('input[name=paymenttype]:checked').val(),
+      bank_name: $('#bank-name').val(),
+      bank_branch: $('#bank-branch').val(),
+      bank_routing: $('#bank-routing').val(),
+      bank_acct_number: $('#bank-acct-number').val()
+    };
+    $.ajax({
+      type: 'POST',
+      url: url,
+      contentType: 'application/json',
+      data: JSON.stringify(message),
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        alert('Payment claim requested.');
+        window.location = "/dashboards?tab=won_auction";
+      },
+      error: function(data) {
+        alert('Failed to process payment claim, please contact support');
+        $('#claim-payment-close').click();
+      }
+    });
+  });
+
+  $('tbody').on('click', '.tracking_number', function() {
     var auction_id = $(this).data('id');
     $('#tracking-auction-id').val(auction_id);
     $('#tracking-number').show('modal');
   });
 
-  $('#tracking-close').click(function(){
+  $('#tracking-close').click(function() {
     $('#tracking-number').hide('modal');
     $('#trackig-number').val('');
   });
 
-  $('#tracking-submit').click(function(){
+  $('#tracking-submit').click(function() {
     var auction_id = $('#tracking-auction-id').val();
     var key = $('#tracking-number').attr('data-key');
     var tracking_number = $('#trackig-number').val();

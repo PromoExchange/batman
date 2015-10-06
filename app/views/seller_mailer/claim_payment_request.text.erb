@@ -1,0 +1,13 @@
+RE: Auction <%= @auction.reference %>
+
+Payment request
+
+<%= @auction.winning_bid.seller.shipping_address.company %> has requested a payment request.
+
+Product:</td><td><%= @auction.product.name %>
+Factory:</td><td><%= @auction.product.supplier.name %>
+SKU:</td><td><%= @auction.product.sku %>
+Buyer:</td><td><%= @auction.buyer.billing_address.full_name %>
+Quantity:</td><td><%= @auction.quantity %>
+Total Payment amount:</td><td><%= @auction.winning_bid.bid %>
+PX Fee:</td><td><%= @auction.winning_bid.seller_fee %>

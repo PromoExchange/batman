@@ -67,5 +67,6 @@ Rails.application.routes.draw do
     match '/pxaddresses/:id/type' => 'spree/api/pxaddresses#type', via: :post
     match '/auctions/:id/order_confirm' => 'spree/api/auctions#order_confirm', via: :post
     match '/auctions/:id/in_production' => 'spree/api/auctions#in_production', via: :post
+    match '/auctions/:id/claim_payment' => 'spree/api/auctions#claim_payment', via: :post
   end
 end

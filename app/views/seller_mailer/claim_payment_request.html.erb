@@ -1,0 +1,25 @@
+<p>RE: Auction <%= @auction.reference %></p>
+
+<p>Payment request</p>
+
+<p><%= @auction.winning_bid.seller.shipping_address.company %> has requested a payment request.</p>
+
+<h2>Auction details</h2>
+<table>
+  <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>
+  <tr><td>Factory:</td><td><%= @auction.product.supplier.name %></td></tr>
+  <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
+  <tr><td>Buyer:</td><td><%= @auction.buyer.billing_address.full_name %></td></tr>
+  <tr><td>Quantity:</td><td><%= @auction.quantity %></td></tr>
+  <tr><td>Total Payment amount:</td><td><%= @auction.winning_bid.bid %></td></tr>
+  <tr><td>PX Fee:</td><td><%= @auction.winning_bid.seller_fee %></td></tr>
+</table>
+
+<h2>Payment information</h2>
+<table>
+  <tr><td>Payment Type:</td><td><%= @params['payment_type'].humanize %></td></tr>
+  <tr><td>Bank Name:</td><td><%= @params['bank_name'] %></td></tr>
+  <tr><td>Bank Branch:</td><td><%= @params['bank_branch'] %></td></tr>
+  <tr><td>Routing Number:</td><td><%= @params['bank_routing'] %></td></tr>
+  <tr><td>Account Number:</td><td><%= @params['bank_acct_number'] %></td></tr>
+</table>

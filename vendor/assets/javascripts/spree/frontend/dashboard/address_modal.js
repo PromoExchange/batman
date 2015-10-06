@@ -55,7 +55,7 @@ $(function() {
     };
     $.ajax({
       type: type,
-      contentType: "application/json",
+      contentType: 'application/json',
       data: JSON.stringify(pxaddress),
       url: address_url,
       headers: {

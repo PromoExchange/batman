@@ -54,4 +54,10 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Claim Payment')
   end
+
+  def claim_payment_request(params, auction)
+    @auction = auction
+    @params = params
+    mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange Claim Payment Request')
+  end
 end

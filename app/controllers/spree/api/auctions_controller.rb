@@ -88,13 +88,29 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :internal_server_error
   end
 
+  def claim_payment
+    Resque.enqueue(
+      ClaimPaymentRequest,
+      auction_id: @auction.id,
+      payment_type: params['payment_type'],
+      bank_name: params['bank_name'],
+      bank_branch: params['bank_branch'],
+      bank_routing: params['bank_routing'],
+      bank_acct_number: params['bank_acct_number']
+    )
+    @auction.update_attributes(payment_claimed: true)
+    render nothing: true, status: :ok
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
   def tracking
     if params[:tracking_number].present?
       @auction.update_attributes(tracking_number: params[:tracking_number])
       @auction.enter_tracking!
       render json: { nothing: true, status: :ok, error_msg: '' }
     else
-      render json: { nothing: true, status: :ok, error_msg: 'Tracking number is required.' }
+      render json: { nothing: true, status: :bad_request, error_msg: 'Tracking number is required.' }
     end
   rescue
     render json: { nothing: true, status: :internal_server_error }

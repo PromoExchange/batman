@@ -1,0 +1,40 @@
+<div aria-hidden="true" aria-labelledby="basicModal" class="modal" data-key="<%=spree_current_user.spree_api_key%>" id="claim-payment-modal" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Input Payment Information</h4>
+      </div>
+      <div class="modal-body">
+        <%= hidden_field_tag id='claim-payment-auction-id', 0 %>
+        <div class="btn-group">
+          <%= radio_button_tag 'paymenttype', 'ach_transfer', true %>
+          <%= label(:paymenttype_ach_transfer, 'ACH').upcase.html_safe %>
+          <%= radio_button_tag 'paymenttype', 'paper_check' %>
+          <%= label :paymenttype_paper_check, 'Paper Check' %>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="bank-name">Bank Name</label>
+          <input type="text" name="bank-name" id="bank-name" class="form-control bank-field" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="bank-branch">Bank Branch</label>
+          <input type="text" name="bank-branch" id="bank-branch" class="form-control bank-field" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="bank-routing">Routing Number</label>
+          <input type="text" name="bank-routing" id="bank-routing" class="form-control bank-field" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="bank-acct-number">Account Number</label>
+          <input type="text" name="bank-acct-number" id="bank-acct-number" class="form-control bank-field" />
+        </div>
+        <%= image_tag('check_routing.png') %>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" id="claim-payment-submit" type="submit">Submit</button>
+        <span>or</span>
+        <button type="button" class="btn btn-default" id="claim-payment-close" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

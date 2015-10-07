@@ -227,6 +227,20 @@ class Spree::Auction < Spree::Base
     )
   end
 
+  def notification_for_approve_proof
+    Resque.enqueue(
+      ApproveProof,
+      auction_id: id
+    )
+  end
+
+  def notification_for_upload_proof
+    Resque.enqueue(
+      UploadProof,
+      auction_id: id
+    )
+  end
+
   def self.user_auctions
     Spree::Auctions.where(buyer_id: current_spree_user.id)
   end

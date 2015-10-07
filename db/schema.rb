@@ -96,23 +96,23 @@ ActiveRecord::Schema.define(version: 20151006174813) do
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
 
   create_table "spree_auctions", force: :cascade do |t|
-    t.integer  "product_id",                          null: false
-    t.integer  "buyer_id",                            null: false
-    t.integer  "quantity",                            null: false
+    t.integer  "product_id",                              null: false
+    t.integer  "buyer_id",                                null: false
+    t.integer  "quantity",                                null: false
     t.datetime "started"
     t.datetime "ended"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.integer  "imprint_method_id",                   null: false
-    t.integer  "shipping_address_id",                 null: false
-    t.integer  "main_color_id",                       null: false
-    t.string   "payment_method",                      null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.integer  "imprint_method_id",                       null: false
+    t.integer  "shipping_address_id",                     null: false
+    t.integer  "main_color_id",                           null: false
+    t.string   "payment_method",                          null: false
     t.string   "reference"
     t.datetime "cancelled_date"
     t.integer  "logo_id"
-    t.boolean  "pms_color_match",     default: false
-    t.boolean  "change_ink",          default: false
-    t.boolean  "no_under_over",       default: false
+    t.boolean  "pms_color_match",         default: false
+    t.boolean  "change_ink",              default: false
+    t.boolean  "no_under_over",           default: false
     t.string   "custom_pms_colors"
     t.string   "state"
     t.string   "tracking_number"

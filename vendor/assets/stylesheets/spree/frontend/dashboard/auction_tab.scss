@@ -8,4 +8,21 @@
   .confirm_receipt {
     margin-bottom: 5px;
   }
+  a.btn {
+    padding:2px 6px;
+  }
+  .reject_proof {
+    margin-top: 8px;
+    margin-left: 16px;
+  }
+  .approve_proof {
+    margin-left: 10px;
+    padding:2px 6px;
+  }
+}
+
+#seller-won-auction {
+  .btn {
+    margin: 2px;
+  }
 }

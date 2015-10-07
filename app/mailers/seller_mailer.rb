@@ -65,4 +65,9 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Proof Rejected')
   end
+
+  def approve_proof(auction)
+    @auction = auction
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Proof Approve')
+  end
 end

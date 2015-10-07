@@ -18,4 +18,9 @@ class BuyerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.buyer.email, subject: 'PromoExchange Confirm order receipt reminder')
   end
+
+  def upload_proof(auction)
+    @auction = auction
+    mail(to: @auction.buyer.email, subject: 'PromoExchange Auction Proof is available')
+  end
 end

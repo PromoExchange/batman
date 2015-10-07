@@ -107,11 +107,14 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def upload_proof
-    @auction.update(proof_file: params[:proof_file])
-    @auction.upload_proof!
-    redirect_to '/dashboards', flash: { notice: 'Your document uploaded successfully.' }
+    if params[:proof_file].present? and @auction.update(proof_file: params[:proof_file], proof_feedback: '')
+      @auction.upload_proof!
+      redirect_to "/invoices/#{@auction.id}", flash: { notice: 'Your document uploaded successfully.' }
+    else
+      redirect_to :back, flash: { error: "Document is required." }
+    end
   rescue
-    redirect_to '/dashboards', flash: { error: 'Unable to upload your document.' }
+    redirect_to :back, flash: { error: "Unable to upload your document." }
   end
 
   def download_proof

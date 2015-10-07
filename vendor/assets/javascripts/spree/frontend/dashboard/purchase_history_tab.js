@@ -65,6 +65,9 @@ $(function() {
 
             if (item.state === 'create_proof') {
               status_text = 'Awaiting Virtual Proof';
+              if (item.proof_feedback) {
+                status_text = 'Awaiting New Proof';
+              }
               action = simple_template({
                 value: ''
               });
@@ -74,11 +77,11 @@ $(function() {
               status_text = 'View Proof';
               action = simple_template({
                 value: action_template({
-                  url: '/auctions/'+item.id+'/download_proof', auction_id: item.id, auction_value: 'View Virtual Proof', auction_class: 'view_proof'
+                  url: '/auctions/'+item.id+'/download_proof', auction_id: item.id, auction_value: 'View Proof', auction_class: 'view_proof'
                 }) + action_template({
                   url: '#', auction_id: item.id, auction_value: 'Approve', auction_class: 'approve_proof'
                 }) + action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Reject', auction_class: 'btn-danger reject_proof'
+                  url: '#', auction_id: item.id, auction_value: 'Request Changes', auction_class: 'btn-danger reject_proof'
                 })
               });
             }

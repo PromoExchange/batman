@@ -73,6 +73,8 @@ class Spree::Auction < Spree::Base
     after_transition on: :delivered, do: :notification_for_product_delivered
     after_transition on: :delivery_confirmed, do: :notification_for_confirm_received
     after_transition on: :reject_proof, do: :notification_for_reject_proof
+    after_transition on: :approve_proof, do: :notification_for_approve_proof
+    after_transition on: :upload_proof, do: :notification_for_upload_proof
 
     # TODO: When auction created, schedule job to end it
     event :end do
@@ -242,6 +244,20 @@ class Spree::Auction < Spree::Base
   def notification_for_reject_proof
     Resque.enqueue(
       RejectProof,
+      auction_id: id
+    )
+  end
+
+  def notification_for_approve_proof
+    Resque.enqueue(
+      ApproveProof,
+      auction_id: id
+    )
+  end
+
+  def notification_for_upload_proof
+    Resque.enqueue(
+      UploadProof,
       auction_id: id
     )
   end

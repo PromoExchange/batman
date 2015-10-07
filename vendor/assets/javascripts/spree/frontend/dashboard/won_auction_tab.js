@@ -20,7 +20,7 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' href='${url}'>${auction_value}</a>");
+          action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' data-feedback='${feedback}' href='${url}'>${auction_value}</a>");
           your_bid_template = _.template("<td id='your_bid_${auction_id}'>no bid</td>");
 
           $.each(data, function(i, item) {
@@ -48,7 +48,7 @@ $(function() {
               status_text = 'Invoice Payment Required';
               action = simple_template({
                 value: action_template({
-                  url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Pay', auction_class: 'pay'
+                  feedback: '', url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Pay', auction_class: 'pay'
                 })
               });
             }
@@ -57,7 +57,7 @@ $(function() {
               status_text = 'Waiting for Confirmation';
               action = simple_template({
                 value: action_template({
-                  url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Confirm', auction_class: 'confirm'
+                  feedback: '', url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Confirm', auction_class: 'confirm'
                 })
               });
             }
@@ -66,16 +66,27 @@ $(function() {
               status_text = 'Upload Proof';
               action = simple_template({
                 value: action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Upload Proof', auction_class: 'upload_proof'
+                  feedback: '', url: '#', auction_id: item.id, auction_value: 'Upload Proof', auction_class: 'upload_proof'
                 })
-              });
+              })
+              
+              if (item.proof_feedback) {
+                status_text = 'Upload New Proof';
+                action = simple_template({
+                  value: action_template({
+                    feedback: '', url: '#', auction_id: item.id, auction_value: 'Upload New Proof', auction_class: 'upload_proof'
+                  }) + action_template({
+                    feedback: item.proof_feedback, url: '#', auction_id: item.id, auction_value: 'Feedback', auction_class: 'view_feedback'
+                  })
+                })
+              }
             }
 
             if (item.state === 'waiting_proof_approval') {
               status_text = 'View Proof';
               action = simple_template({
                 value: action_template({
-                  url: '/auctions/'+item.id+'/download_proof', auction_id: item.id, auction_value: 'View Virtual Proof', auction_class: 'view_proof'
+                  feedback: '', url: '/auctions/'+item.id+'/download_proof', auction_id: item.id, auction_value: 'View Proof', auction_class: 'view_proof'
                 })
               });
             }
@@ -84,7 +95,7 @@ $(function() {
               status_text = 'In Production';
               action = simple_template({
                 value: action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Input Tracking Number', auction_class: 'tracking_number'
+                  feedback: '', url: '#', auction_id: item.id, auction_value: 'Input Tracking Number', auction_class: 'tracking_number'
                 })
               });
             }
@@ -93,7 +104,7 @@ $(function() {
               status_text = 'Track Shipment';
               action = simple_template({
                 value: action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                  feedback: '', url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
               });
             }
@@ -102,7 +113,7 @@ $(function() {
               status_text = 'Awaiting for Confirm Receipt';
               action = simple_template({
                 value: action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                  feedback: '', url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                 })
               });
             }
@@ -121,7 +132,6 @@ $(function() {
                 });
               }
             }
-
             trHTML += simple_template({
               value: status_text
             });
@@ -266,5 +276,13 @@ $(function() {
     var auction_id = $(this).data('id');
     $('#id').val(auction_id);
     $('#proof-modal').modal('show');
+  });
+
+  $('tbody').on('click', '.view_feedback', function(){
+    var auction_id = $(this).data('id');
+    var feedback = $(this).data('feedback');
+    $('#view-feedback').html('"' + feedback + '"');
+    $('#feedback-button').attr('href', '/auctions/'+ auction_id+'/download_proof');
+    $('#proof-feedback').modal('show');
   });
 });

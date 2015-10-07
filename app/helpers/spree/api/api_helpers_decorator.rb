@@ -48,7 +48,8 @@ Spree::Api::ApiHelpers.module_eval do
       :payment_claimed,
       :reference,
       :product_unit_price,
-      :payment_method
+      :payment_method,
+      :proof_feedback
     ])
   mattr_reader :auction_attributes
 

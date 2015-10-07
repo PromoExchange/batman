@@ -116,13 +116,20 @@ ActiveRecord::Schema.define(version: 20151012183409) do
     t.string   "custom_pms_colors"
     t.string   "state"
     t.string   "tracking_number"
+<<<<<<< HEAD
+=======
+    t.boolean  "payment_claimed",         default: false
+>>>>>>> Add Schema after migration
     t.string   "proof_file_file_name"
     t.string   "proof_file_content_type"
     t.integer  "proof_file_file_size"
     t.datetime "proof_file_updated_at"
     t.string   "proof_feedback"
+<<<<<<< HEAD
     t.boolean  "payment_claimed",         default: false
     t.string   "shipping_agent",          default: "ups"
+=======
+>>>>>>> Add Schema after migration
   end
 
   add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree

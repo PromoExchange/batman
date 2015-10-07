@@ -12,6 +12,7 @@ FactoryGirl.define do
     payment_method 'Credit Card'
     state 'open'
     reference SecureRandom.hex(3)
+    proof_file { File.new(Rails.root.join('spec', 'fixtures', 'batman.jpeg')) }
   end
 
   factory :auction_with_bids, parent: :auction do

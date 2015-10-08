@@ -96,7 +96,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :no_confirm_late do
-      transition waiting_confirmation: :order_lost
+      transition waiting_confirmation: :open
     end
 
     event :enter_tracking do

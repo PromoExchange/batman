@@ -215,6 +215,11 @@ class Spree::Auction < Spree::Base
       UploadProof,
       auction_id: id
     )
+    Resque.enqueue_at(
+      Time.zone.now + 24.hours,
+      ProofAvailable,
+      auction_id: id
+    )
   end
 
   def self.user_auctions

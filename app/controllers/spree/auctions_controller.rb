@@ -107,7 +107,7 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def upload_proof
-    if params[:proof_file].present? and @auction.update(proof_file: params[:proof_file], proof_feedback: '')
+    if params[:proof_file].present? and @auction.update_attributes(proof_file: params[:proof_file], proof_feedback: '')
       @auction.upload_proof!
       redirect_to "/invoices/#{@auction.id}", flash: { notice: 'Your document uploaded successfully.' }
     else

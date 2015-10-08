@@ -1,6 +1,12 @@
-<h1> Proof is available </h1>
+<h1> Proof Available </h1>
 
-<p> Proof is available for review </p>
+<p> Good news! Your proof for the <%= @auction.product.name %> is available for review.  Check out the attached. </p>
+
+<p> After you have reviewed the attached proof, please click on the link below which will take you over to the project in your dashboard. You will be able to approve or reject the proof and provide feedback if necessary. </p>
+
+<p><a href="<%= Spree::Store.current.url %>/dashboards">
+  <button style="width: 120; height: 40px; font-size: 20px; background: #4CAE4C;">Dashboard</button>
+</a></p>
 
 <p> The PromoExchange Team </p>
 

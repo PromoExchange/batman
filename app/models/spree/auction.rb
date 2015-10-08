@@ -135,6 +135,82 @@ class Spree::Auction < Spree::Base
 
   delegate :name, to: :product
 
+  def notification_for_in_production
+    Resque.enqueue(
+      InProduction,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      Time.zone.now + 48.hours,
+      SellerFailedUploadProof,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      Time.zone.now + 48.hours,
+      ProofNeededImmediately,
+      auction_id: id
+    )
+  end
+
+  def notification_for_product_delivered
+    Resque.enqueue(
+      ProductDelivered,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      Time.zone.now + 3.days,
+      ConfirmReceiptReminder,
+      auction_id: id
+    )
+  end
+
+  def notification_for_confirm_received
+    Resque.enqueue(
+      ConfirmReceived,
+      auction_id: id
+    )
+  end
+
+  def notification_for_reject_proof
+    Resque.enqueue(
+      RejectProof,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      Time.zone.now + 48.hours,
+      SellerFailedUploadProof,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      Time.zone.now + 48.hours,
+      ProofNeededImmediately,
+      auction_id: id
+    )
+  end
+
+  def notification_for_approve_proof
+    Resque.enqueue(
+      ApproveProof,
+      auction_id: id
+    )
+  end
+
+  def notification_for_upload_proof
+    Resque.enqueue(
+      UploadProof,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      Time.zone.now + 24.hours,
+      ProofAvailable,
+      auction_id: id
+    )
+  end
+
+  def self.user_auctions
+    Spree::Auctions.where(buyer_id: current_spree_user.id)
+  end
+
   def image_uri
     product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
   end

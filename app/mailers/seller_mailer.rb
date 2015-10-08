@@ -70,4 +70,14 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Proof Approve')
   end
+
+  def seller_failed_upload_proof(auction)
+    @auction = auction
+    mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange Auction Seller failure to upload proof')
+  end
+
+  def proof_needed_immediately(auction)
+    @auction = auction
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Proof needed immediately')
+  end
 end

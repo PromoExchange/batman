@@ -43,14 +43,14 @@
   <input class="form-control" type="text" name="pxuser[city]" id="pxuser_city" value="<%= @pxuser.city %>">
 </div>
 <div class="form-group">
-  <label for="pxuser_zipcode"><%= Spree.t(:zipcode) %></label>
-  <input class="form-control" type="text" name="pxuser[zipcode]" id="pxuser_zipcode" value="<%= @pxuser.zipcode %>">
-</div>
-<div class="form-group">
   <label for="pxuser_state"><%= Spree.t(:state) %></label>
   <select class="form-control" name="pxuser[state]" id="pxuser_state" data-value="<%= @pxuser.state %>">
     <%= render partial: 'spree/pxusers/us_states' %>
   </select>
+</div>
+<div class="form-group">
+  <label for="pxuser_zipcode"><%= Spree.t(:zipcode) %></label>
+  <input class="form-control" type="text" name="pxuser[zipcode]" id="pxuser_zipcode" value="<%= @pxuser.zipcode %>">
 </div>
 <div class="form-group">
   <label for="pxuser_phonenumber"><%= Spree.t(:phonenumber) %></label>

@@ -12,23 +12,28 @@
           <%= radio_button_tag 'paymenttype', 'paper_check' %>
           <%= label :paymenttype_paper_check, 'Paper Check' %>
         </div>
-        <div class="form-group">
-          <label class="control-label" for="bank-name">Bank Name</label>
-          <input type="text" name="bank-name" id="bank-name" class="form-control bank-field" />
+        <div id="ach_payment_div">
+          <div class="form-group">
+            <label class="control-label" for="bank-name">Bank Name</label>
+            <input type="text" name="bank-name" id="bank-name" class="form-control bank-field" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="bank-branch">Bank Branch</label>
+            <input type="text" name="bank-branch" id="bank-branch" class="form-control bank-field" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="bank-routing">Routing Number</label>
+            <input type="text" name="bank-routing" id="bank-routing" class="form-control bank-field" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="bank-acct-number">Account Number</label>
+            <input type="text" name="bank-acct-number" id="bank-acct-number" class="form-control bank-field" />
+          </div>
+          <%= image_tag('check_routing.png') %>
         </div>
-        <div class="form-group">
-          <label class="control-label" for="bank-branch">Bank Branch</label>
-          <input type="text" name="bank-branch" id="bank-branch" class="form-control bank-field" />
+        <div id="paper_payment_div" style="display: none;">
+          <h3>Congratulations, you should receive your funds in 5 - 10 business days at the address you have provided in your Account Settings</h3>
         </div>
-        <div class="form-group">
-          <label class="control-label" for="bank-routing">Routing Number</label>
-          <input type="text" name="bank-routing" id="bank-routing" class="form-control bank-field" />
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="bank-acct-number">Account Number</label>
-          <input type="text" name="bank-acct-number" id="bank-acct-number" class="form-control bank-field" />
-        </div>
-        <%= image_tag('check_routing.png') %>
       </div>
       <div class="modal-footer">
         <button class="btn btn-success" id="claim-payment-submit" type="submit">Submit</button>

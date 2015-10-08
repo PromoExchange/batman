@@ -162,10 +162,14 @@ $(function() {
 
   $('#paymenttype_paper_check').click(function() {
     $('.bank-field').prop('disabled', true);
+    $('#paper_payment_div').show();
+    $('#ach_payment_div').hide();
   });
 
   $('#paymenttype_ach_transfer').click(function() {
     $('.bank-field').prop('disabled', false);
+    $('#paper_payment_div').hide();
+    $('#ach_payment_div').show();
   });
 
   $('#claim-payment-submit').click(function() {

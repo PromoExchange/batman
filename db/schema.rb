@@ -116,7 +116,12 @@ ActiveRecord::Schema.define(version: 20151006174813) do
     t.string   "custom_pms_colors"
     t.string   "state"
     t.string   "tracking_number"
-    t.boolean  "payment_claimed",     default: false
+    t.boolean  "payment_claimed",         default: false
+    t.string   "proof_file_file_name"
+    t.string   "proof_file_content_type"
+    t.integer  "proof_file_file_size"
+    t.datetime "proof_file_updated_at"
+    t.string   "proof_feedback"
   end
 
   add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree

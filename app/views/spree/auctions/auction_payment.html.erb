@@ -47,13 +47,11 @@
             </ul>
           </td>
         </tr>
-        <% if @bid.auction.confirm_receipt? %>
-          <tr><td colspan='2'><button class="btn btn-success confirm_receipt" data-id="<%= @bid.auction.id %>" type="submit">Confirm Receipt</button></td></tr>
-        <% end %>
       </table>
     </div>
   </div>
-  <% if @bid.open? %>
+  
+  <% if spree_current_user.has_spree_role?(:buyer) and @bid.open? %>
     <div class="col-md-6">
       <h2>Payment: $<%= "%.2f" % @bid.bid %> </h2>
       <form action="/accept" id="buyer-form" method="POST" class="form">

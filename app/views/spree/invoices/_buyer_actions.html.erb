@@ -1,0 +1,27 @@
+<div class="col-md-6" id="buyer-purchase-history-table" data-key="<%= spree_current_user.spree_api_key %>"> 
+  <table>
+    <% if @auction.waiting_proof_approval? %>
+      <tr>
+        <td class="col-md-1">
+          <%= link_to "View Proof", "/auctions/#{@auction.id}/download_proof", class: "btn btn-success view_proof", data: {id: @auction.id} %>
+        </td>
+        <td class="col-md-1">
+          <%= button_tag "Approve", class: "btn btn-success approve_proof", data: {id: @auction.id} %>
+        </td>
+        <td>
+          <%= button_tag "Request Changes", class: "btn btn-danger reject_proof", data: {id: @auction.id} %>
+        </td>
+      </tr>
+    <% end %>
+
+    <tr>
+      <% if @auction.confirm_receipt? %>
+        <td>
+          <%= button_tag "Confirm Receipt", class: "btn btn-success confirm_receipt", data: {id: @auction.id} %>
+        </td>
+      <% end %>
+    </tr>
+  </table>
+</div>
+
+<%= render partial: 'spree/dashboards/buyer/reject_proof_feedback_modal' %>

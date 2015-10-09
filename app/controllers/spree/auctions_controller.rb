@@ -1,6 +1,6 @@
 class Spree::AuctionsController < Spree::StoreController
   before_filter :store_location
-  before_action :require_login, only: [:new, :edit, :show]
+  before_action :require_login, only: [:new, :edit, :show, :auction_payment]
   before_action :fetch_auction, except: [:index, :create, :new, :auction_payment]
 
   def index
@@ -107,11 +107,12 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def upload_proof
-    if params[:proof_file].present? and @auction.update_attributes(proof_file: params[:proof_file], proof_feedback: '')
+    redirect_to :back, flash: { error: "Document is required." } if params[:proof_file].blank?
+    if @auction.update_attributes(proof_file: params[:proof_file], proof_feedback: '')
       @auction.upload_proof!
       redirect_to "/invoices/#{@auction.id}", flash: { notice: 'Your document uploaded successfully.' }
     else
-      redirect_to :back, flash: { error: "Document is required." }
+      redirect_to :back, flash: { error: @auction.errors.full_messages.join(" and also ") }
     end
   rescue
     redirect_to :back, flash: { error: "Unable to upload your document." }

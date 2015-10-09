@@ -121,14 +121,14 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   def confirmed_delivery
     @auction.delivery_confirmed! if @auction.confirm_receipt?
-    
+
     if params[:status][:status] == 'submit'
       @review = Spree::Review.new(
-        rating: params[:rating], 
+        rating: params[:rating],
         auction_id: @auction.id,
         user_id: @auction.winning_bid.seller.id,
         review: params[:review],
-        ip_address: request.remote_ip 
+        ip_address: request.remote_ip
       )
       if @review.save
         Resque.enqueue(ReviewRating, auction_id: @auction.id)

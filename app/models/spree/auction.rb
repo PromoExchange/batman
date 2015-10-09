@@ -189,6 +189,11 @@ class Spree::Auction < Spree::Base
       ApproveProof,
       auction_id: id
     )
+    Resque.enqueue_at(
+      Time.zone.now + 15.days,
+      TrackingReminder,
+      auction_id: id
+    )
   end
 
   def notification_for_upload_proof

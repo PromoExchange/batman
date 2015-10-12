@@ -180,7 +180,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        window.location = "/dashboards";
+        $('#purchase-history-tab').click();
       },
       error: function(data) {
         alert('Failed to Confirmed Receipt, please contact support');

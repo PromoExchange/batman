@@ -1,6 +1,6 @@
 <p>Congratulations! <%= @buyer.company.present? ? @buyer.company : "#{@buyer.firstname} #{@buyer.lastname}" %> has invited you to participate in a PromoExchange auction.</p>
 
-<p>Accepting this invitation gives you a leg up on the competition because your PX fee is only 2.99% for this auction.</p>
+<p>Accepting this invitation gives you a leg up on the competition because your PX fee is only 3.99% for this auction.</p>
 
 <% if @type == 'non' %>
   <p><a href="<%= Spree::Store.first.url %>/pxusers/new?auction_ref=<%= Spree::Store.first.url %>/auctions/<%= @auction.id %>">Click here to accept the invitation and view the auction!</a></p>

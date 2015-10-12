@@ -116,12 +116,12 @@ ActiveRecord::Schema.define(version: 20151012183409) do
     t.string   "custom_pms_colors"
     t.string   "state"
     t.string   "tracking_number"
-    t.boolean  "payment_claimed",         default: false
     t.string   "proof_file_file_name"
     t.string   "proof_file_content_type"
     t.integer  "proof_file_file_size"
     t.datetime "proof_file_updated_at"
     t.string   "proof_feedback"
+    t.boolean  "payment_claimed",         default: false
     t.string   "shipping_agent",          default: "ups"
   end
 
@@ -887,6 +887,17 @@ ActiveRecord::Schema.define(version: 20151012183409) do
   add_index "spree_return_items", ["customer_return_id"], name: "index_return_items_on_customer_return_id", using: :btree
   add_index "spree_return_items", ["exchange_inventory_unit_id"], name: "index_spree_return_items_on_exchange_inventory_unit_id", using: :btree
 
+  create_table "spree_reviews", force: :cascade do |t|
+    t.integer  "auction_id"
+    t.integer  "user_id"
+    t.integer  "rating"
+    t.text     "review"
+    t.string   "ip_address"
+    t.boolean  "approved",   default: true
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
   create_table "spree_roles", force: :cascade do |t|
     t.string "name"
   end
@@ -1243,8 +1254,8 @@ ActiveRecord::Schema.define(version: 20151012183409) do
     t.string   "persistence_token"
     t.string   "reset_password_token"
     t.string   "perishable_token"
-    t.integer  "sign_in_count",                      default: 0,     null: false
-    t.integer  "failed_attempts",                    default: 0,     null: false
+    t.integer  "sign_in_count",                                              default: 0,     null: false
+    t.integer  "failed_attempts",                                            default: 0,     null: false
     t.datetime "last_request_at"
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
@@ -1257,8 +1268,8 @@ ActiveRecord::Schema.define(version: 20151012183409) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.datetime "reset_password_sent_at"
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at",                                                                 null: false
+    t.datetime "updated_at",                                                                 null: false
     t.string   "spree_api_key",          limit: 48
     t.datetime "remember_created_at"
     t.datetime "deleted_at"
@@ -1266,8 +1277,10 @@ ActiveRecord::Schema.define(version: 20151012183409) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "asi_number"
-    t.boolean  "invited",                            default: false
-    t.boolean  "banned",                             default: false
+    t.boolean  "invited",                                                    default: false
+    t.boolean  "banned",                                                     default: false
+    t.decimal  "avg_rating",                         precision: 7, scale: 5, default: 0.0,   null: false
+    t.integer  "reviews_count",                                              default: 0,     null: false
   end
 
   add_index "spree_users", ["deleted_at"], name: "index_spree_users_on_deleted_at", using: :btree

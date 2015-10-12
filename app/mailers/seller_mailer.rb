@@ -80,4 +80,9 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Proof needed immediately')
   end
+
+  def review_rating(auction)
+    @auction = auction
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Review Rating')
+  end
 end

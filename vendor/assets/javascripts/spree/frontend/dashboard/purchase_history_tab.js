@@ -145,6 +145,13 @@ $(function() {
               action = simple_template({
                 value: ''
               });
+              if(!item.review){
+                action = simple_template({
+                  value: action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Review Rating', auction_class: 'review_rating'
+                  })
+                })
+              }
             }
 
             trHTML += simple_template({
@@ -168,13 +175,37 @@ $(function() {
 
   $('tbody').on('click', '.confirm_receipt', function(){
     var auction_id = $(this).data('id');
-    var key = $('#buyer-purchase-history-table').attr('data-key') || $('#show-invoice').attr('data-key');
-    var url = '/api/auctions/' + auction_id + '/confirmed_delivery';
     var accept = confirm("Are you sure, Confirm Receipt");
     if (!accept){ return false; }
+    $('#rating-auction-id').val(auction_id);
+    $('#rating-seller').show('modal')
+  });
+
+  $('tbody').on('click', '.review_rating', function(){
+    var auction_id = $(this).data('id');
+    $('#rating-auction-id').val(auction_id);
+    $('#rating-seller').show('modal')
+  });
+
+  $('#rating').on('click', '.star a', function(){
+    var rating = $(this).attr('title')
+    $('#select-rating').val(rating);
+  });
+
+  $('#rating-submit').on('click', 'button', function(){
+    var status = $(this).data(status)
+    var auction_id = $('#rating-auction-id').val();
+    var key = $('#rating-seller').attr('data-key');
+    var url = '/api/auctions/' + auction_id + '/confirmed_delivery';
+    var message = {
+      rating: $('#select-rating').val(),
+      review: $('#rating-review').val(),
+      status: status
+    };
     $.ajax({
       type: 'POST',
       contentType: "application/json",
+      data: JSON.stringify(message),
       url: url,
       headers: {
         'X-Spree-Token': key

@@ -9,3 +9,6 @@ end
 child invited_sellers: :invited_sellers do
   attributes(*user_attributes)
 end
+child review: :review do
+  attributes(*review_attributes)
+end

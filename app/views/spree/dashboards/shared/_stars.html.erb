@@ -1,0 +1,13 @@
+<% if defined? edit_enabled
+    state = ''
+    name  = 'review[rating]'
+  else
+    state = 'disabled'
+    name  = defined?(review).nil? ? Time.now.tv_usec.to_s : "review_#{review}"
+  end %>
+<% for i in 1..5 %>
+  <input name="<%= name %>"
+         type="radio" class="star"
+         value="<%= i %>" <%= state %>
+         <%= 'checked' if i == stars %> />
+<% end %>

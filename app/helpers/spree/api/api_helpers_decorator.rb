@@ -77,6 +77,13 @@ Spree::Api::ApiHelpers.module_eval do
     ])
   mattr_reader :user_attributes
 
+  class_variable_set(:@@review_attributes,
+    [
+      :id,
+      :rating
+    ])
+  mattr_reader :review_attributes
+
   class_variable_set(:@@prebid_attributes,
     [
       :id,

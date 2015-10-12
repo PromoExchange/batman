@@ -4,6 +4,7 @@
     <thead>
       <tr>
         <th><%= Spree.t(:seller) %></th>
+        <th><%= Spree.t(:rating) %></th>
         <th><%= Spree.t(:bid) %></th>
         <th class="actions"><%= Spree.t(:action_col) %></th>
       </tr>
@@ -17,6 +18,7 @@
           <% seen.push(b.seller) %>
           <tr class="<%= row_class %>">
             <td><%= b.email %></td>
+            <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars %></td>
             <td><%= '$%.2f' % b.bid %></td>
             <% unless @auction.state == 'open' %>
               <td>Completed</td>

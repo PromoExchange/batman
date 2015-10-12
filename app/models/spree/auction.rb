@@ -19,6 +19,8 @@ class Spree::Auction < Spree::Base
   belongs_to :product
   belongs_to :shipping_address, class_name: 'Spree::Address'
 
+  has_one :review
+
   accepts_nested_attributes_for :auctions_pms_colors
 
   has_attached_file :proof_file,

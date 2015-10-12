@@ -2,6 +2,7 @@ Spree::User.class_eval do
   has_many :logos
   has_many :tax_rates
   has_many :addresses
+  has_many :review
 
   def ban
     cancel_bids
@@ -14,5 +15,19 @@ Spree::User.class_eval do
 
   def cancel_bids
     Spree::Bid.where(seller_id: id, state: 'open').map(&:cancel)
+  end
+
+  def stars
+    avg_rating.try(:round) || 0
+  end
+
+  def recalculate_rating
+    self[:reviews_count] = review.reload.approved.count
+    if reviews_count > 0
+      self[:avg_rating] = review.approved.sum(:rating).to_f / reviews_count
+    else
+      self[:avg_rating] = 0
+    end
+    save
   end
 end

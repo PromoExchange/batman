@@ -128,12 +128,23 @@ $(function() {
             }
 
             if(item.state === 'complete') {
-              status_text = 'Completed';
+              var rating_status = ''
+              if(item.review) {
+                for (var i = 1; i < 6; i++) {
+                  if(i <= item.review.rating){
+                    rating_status += '<span class="star won-star">☆</span>'
+                  } else {
+                    rating_status += '<span class="star">☆</span>'
+                  }
+                };
+              }
+
+              status_text = 'Completed <br>' + rating_status;
               action = simple_template({
                 value: ''
               });
               if(item.payment_claimed === false ) {
-                status_text = 'Payment ready';
+                status_text = 'Payment ready <br>' + rating_status;
                 action = simple_template({
                   value: action_template({
                     feedback: '',url: '#', auction_id: item.id, auction_value: 'Claim Payment', auction_class: 'claim-payment'

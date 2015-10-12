@@ -49,7 +49,9 @@ Spree::Api::ApiHelpers.module_eval do
       :reference,
       :product_unit_price,
       :payment_method,
-      :proof_feedback
+      :proof_feedback,
+      :shipping_agent,
+      :tracking_number
     ])
   mattr_reader :auction_attributes
 

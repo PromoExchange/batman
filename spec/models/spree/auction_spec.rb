@@ -60,11 +60,6 @@ RSpec.describe Spree::Auction, type: :model do
     expect(t.macro).to eq :has_one
   end
 
-  it 'should have many adjustments' do
-    t = Spree::Auction.reflect_on_association(:adjustments)
-    expect(t.macro).to eq :has_many
-  end
-
   it 'should belong to one imprint method' do
     t = Spree::Auction.reflect_on_association(:imprint_method)
     expect(t.macro).to eq :belongs_to
@@ -194,5 +189,15 @@ RSpec.describe Spree::Auction, type: :model do
     a.delivered
     a.delivery_confirmed
     expect(a.state).to eq 'complete'
+  end
+
+  it 'should not allow invalid shipping agent' do
+    a = FactoryGirl.build(:auction, shipping_agent: 'usps')
+    expect(a.save).to be_falsey
+  end
+
+  it 'should allow a valid shipping agent' do
+    a = FactoryGirl.build(:auction, shipping_agent: 'fedex')
+    expect(a.save).to be_truthy
   end
 end

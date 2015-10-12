@@ -106,7 +106,10 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   def tracking
     if params[:tracking_number].present?
-      @auction.update_attributes(tracking_number: params[:tracking_number])
+      @auction.update_attributes(
+        tracking_number: params[:tracking_number],
+        shipping_agent: params[:agent_type]
+      )
       @auction.enter_tracking!
       render json: { nothing: true, status: :ok, error_msg: '' }
     else

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151009082657) do
+ActiveRecord::Schema.define(version: 20151012133749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 20151009082657) do
     t.integer  "proof_file_file_size"
     t.datetime "proof_file_updated_at"
     t.string   "proof_feedback"
+    t.string   "shipping_agent",          default: "ups"
   end
 
   add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree

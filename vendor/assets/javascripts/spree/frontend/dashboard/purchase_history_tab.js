@@ -42,8 +42,8 @@ $(function() {
               value: item.quantity
             });
 
-            var status_text = ''
-            var action = ''
+            var status_text = '';
+            var action = '';
 
             var num_bids = item.bids.length;
             var winning_bid = 'no bids';
@@ -52,13 +52,13 @@ $(function() {
                 return b.state == 'accepted';
               }), 'bid');
             }
-            var action = simple_template({
+            action = simple_template({
               value: 'Not completed'
             });
 
             if (item.state === 'waiting_confirmation' || 'unpaid') {
               status_text = 'Awaiting Confirmation';
-              var action = simple_template({
+              action = simple_template({
                 value: ''
               });
             }
@@ -87,44 +87,64 @@ $(function() {
             }
 
             if (item.state === 'order_confirmed') {
-              status_text = 'Waiting for production'
-              var action = simple_template({
+              status_text = 'Waiting for production';
+              action = simple_template({
                 value: ''
               });
             }
 
             if (item.state === 'in_production') {
-              status_text = 'In Production'
+              status_text = 'In Production';
               action = simple_template({
                 value: ''
-              })
+              });
             }
 
             if(item.state === 'send_for_delivery') {
-              status_text = 'Track Shipment'
-              action = simple_template({
-                value: action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
-                })
-              })
+              status_text = 'Track Shipment';
+              if(item.shipping_agent === 'ups') {
+                action = simple_template({
+                  value: action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                  })
+                });
+              } else {
+                var url = 'http://www.fedex.com/Tracking?action=track&tracknumbers=' + item.tracking_number;
+                action = simple_template({
+                  value: action_template({
+                    url: url, auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment_fedex'
+                  })
+                });
+              }
             }
 
             if(item.state === 'confirm_receipt') {
-              status_text = 'Awaiting for Confirm Receipt'
-              action = simple_template({
-                value: action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
-                }) + action_template({
-                  url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
-                })
-              })
+              status_text = 'Awaiting for Confirm Receipt';
+              if( item.shipping_agent === 'ups') {
+                action = simple_template({
+                  value: action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
+                  }) + action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                  })
+                });
+              } else {
+                var url = 'http://www.fedex.com/Tracking?action=track&tracknumbers=' + item.tracking_number;
+                action = simple_template({
+                  value: action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
+                  }) + action_template({
+                    url: url, auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment_fedex'
+                  })
+                });
+              }
             }
 
             if(item.state === 'complete') {
-              status_text = 'Completed'
+              status_text = 'Completed';
               action = simple_template({
                 value: ''
-              })
+              });
             }
 
             trHTML += simple_template({
@@ -194,8 +214,8 @@ $(function() {
     var auction_id = $(this).data('id');
     var accept = confirm("Are you sure, Reject Proof");
     if (!accept){ return false; }
-    $('#feedback-auction-id').val(auction_id)
-    $('#reject-proof').modal('show')
+    $('#feedback-auction-id').val(auction_id);
+    $('#reject-proof').modal('show');
   });
 
   $('#feedback-submit').click(function(){

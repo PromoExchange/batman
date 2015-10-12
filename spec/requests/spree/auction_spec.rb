@@ -130,7 +130,7 @@ describe 'Auctions API' do
   it 'should add a tracking number' do
     auction = FactoryGirl.create(:auction)
 
-    post "/api/auctions/#{auction.id}/tracking", {"tracking_number": '1234', format: 'json'}, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    post "/api/auctions/#{auction.id}/tracking", {"tracking_number": '1234', "agent_type": "ups", format: 'json'}, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     a = Spree::Auction.find(auction.id)
 

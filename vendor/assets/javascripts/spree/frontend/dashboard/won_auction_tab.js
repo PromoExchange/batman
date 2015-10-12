@@ -41,8 +41,8 @@ $(function() {
               value: item.quantity
             });
 
-            var status_text = ''
-            var action = ''
+            var status_text = '';
+            var action = '';
 
             if(item.state === 'unpaid') {
               status_text = 'Invoice Payment Required';
@@ -68,8 +68,8 @@ $(function() {
                 value: action_template({
                   feedback: '', url: '#', auction_id: item.id, auction_value: 'Upload Proof', auction_class: 'upload_proof'
                 })
-              })
-              
+              });
+
               if (item.proof_feedback) {
                 status_text = 'Upload New Proof';
                 action = simple_template({
@@ -78,7 +78,7 @@ $(function() {
                   }) + action_template({
                     feedback: item.proof_feedback, url: '#', auction_id: item.id, auction_value: 'Feedback', auction_class: 'view_feedback'
                   })
-                })
+                });
               }
             }
 
@@ -102,11 +102,20 @@ $(function() {
 
             if(item.state === 'send_for_delivery') {
               status_text = 'Track Shipment';
-              action = simple_template({
-                value: action_template({
-                  feedback: '', url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
-                })
-              });
+              if(item.shipping_agent === 'ups') {
+                action = simple_template({
+                  value: action_template({
+                    feedback: '', url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                  })
+                });
+              } else {
+                var url = 'http://www.fedex.com/Tracking?action=track&tracknumbers=' + item.tracking_number;
+                action = simple_template({
+                  value: action_template({
+                    feedback: '', url: url, auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment_fedex'
+                  })
+                });
+              }
             }
 
             if(item.state === 'confirm_receipt') {
@@ -248,12 +257,16 @@ $(function() {
   $('#tracking-submit').click(function() {
     var auction_id = $('#tracking-auction-id').val();
     var key = $('#tracking-number').attr('data-key');
-    var tracking_number = $('#trackig-number').val();
     var url = '/api/auctions/' + auction_id + '/tracking';
+    var message = {
+      agent_type: $('input[name=agenttype]:checked').val(),
+      tracking_number: $('#trackig-number').val()
+    };
     $.ajax({
       type: 'POST',
       url: url,
-      data: {"tracking_number": tracking_number, format: 'json'},
+      contentType: 'application/json',
+      data: JSON.stringify(message),
       headers: {
         'X-Spree-Token': key
       },

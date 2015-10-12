@@ -6,9 +6,17 @@
       </div>
       <div class="modal-body">
         <%= hidden_field_tag id='tracking-auction-id', 0 %>
+        <div class="btn-group">
+          <%= radio_button_tag 'agenttype', 'ups', true %>
+          <%= label(:agenttype_ach_transfer, 'UPS').upcase.html_safe %>
+          <%= radio_button_tag 'agenttype', 'fedex' %>
+          <%= label :agenttype_paper_check, 'FedEx' %>
+        </div>
         <div class="form-group">
           <input type="text" name="tracking_number" id="trackig-number" class="form-control" />
         </div>
+      </div>
+      <div class="modal-footer">
         <div class="form-group">
           <button class="btn btn-success" id="tracking-submit" type="submit">Submit</button>
           <span>or</span>

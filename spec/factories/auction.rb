@@ -11,6 +11,7 @@ FactoryGirl.define do
     association :main_color, factory: :color_product
     payment_method 'Credit Card'
     state 'open'
+    shipping_agent 'ups'
     reference SecureRandom.hex(3)
     proof_file { File.new(Rails.root.join('spec', 'fixtures', 'batman.jpeg')) }
   end

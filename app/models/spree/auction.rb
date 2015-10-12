@@ -1,14 +1,7 @@
 class Spree::Auction < Spree::Base
-  scope :open, -> { where(status: :open) }
-  scope :waiting, -> { where(status: :waiting) }
-  scope :closed, -> { where(status: :closed) }
-  scope :ended, -> { where(status: :ended) }
-  scope :cancelled, -> { where(status: :cancelled) }
-
   before_create :set_default_dates
   after_create :generate_reference
 
-  has_many :adjustments, as: :adjustable
   has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }
 
   has_many :auctions_users, class_name: 'Spree::AuctionsUser'
@@ -51,6 +44,7 @@ class Spree::Auction < Spree::Base
     50 if auction.product.nil?
     auction.product.minimum_quantity
   end
+  validates_inclusion_of :shipping_agent, in: %w(ups fedex)
 
   # preferred
   #   open

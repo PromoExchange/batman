@@ -115,13 +115,13 @@
               <%= link_to "View Proof", "/auctions/#{@auction.id}/download_proof", class: 'btn btn-success' %>
             </td>
           </tr>
-        </table>  
-      </div>   
+        </table>
+      </div>
     <% end %>
 
     <% if @auction.complete? and @auction.review.present? %>
       <div class="col-sm-6">
-        <h4> Feedback Review </h4>
+        <h4> Rating </h4>
         <div class="form-group">
           <%= render 'spree/dashboards/shared/stars', stars: @auction.review.rating %>
         </div>

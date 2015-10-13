@@ -1,6 +1,6 @@
 <h1> Preview Rating </h1>
 
-<p> Good news! The buyer for <%= @auction.buyer.billing_address.full_name %> and their auction <%= @auction.reference %> has been given review rating </p>
+<p> Good news! The buyer for <%= @auction.buyer.billing_address.company %> and their auction <%= @auction.reference %> has has rated your service. </p>
 
 <p class="star-rating">
   <% for i in 1..5 %>
@@ -14,7 +14,6 @@
 
 <img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo">
 
-<!-- CSS -->
 <style>
   p.star-rating span{
     display: inline-block;

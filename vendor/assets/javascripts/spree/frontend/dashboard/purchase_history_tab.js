@@ -150,7 +150,7 @@ $(function() {
                   value: action_template({
                     url: '#', auction_id: item.id, auction_value: 'Review Rating', auction_class: 'review_rating'
                   })
-                })
+                });
               }
             }
 
@@ -178,22 +178,22 @@ $(function() {
     var accept = confirm("Are you sure, Confirm Receipt");
     if (!accept){ return false; }
     $('#rating-auction-id').val(auction_id);
-    $('#rating-seller').show('modal')
+    $('#rating-seller').show('modal');
   });
 
   $('tbody').on('click', '.review_rating', function(){
     var auction_id = $(this).data('id');
     $('#rating-auction-id').val(auction_id);
-    $('#rating-seller').show('modal')
+    $('#rating-seller').show('modal');
   });
 
   $('#rating').on('click', '.star a', function(){
-    var rating = $(this).attr('title')
+    var rating = $(this).attr('title');
     $('#select-rating').val(rating);
   });
 
   $('#rating-submit').on('click', 'button', function(){
-    var status = $(this).data(status)
+    var status = $(this).data(status);
     var auction_id = $('#rating-auction-id').val();
     var key = $('#rating-seller').attr('data-key');
     var url = '/api/auctions/' + auction_id + '/confirmed_delivery';
@@ -202,6 +202,7 @@ $(function() {
       review: $('#rating-review').val(),
       status: status
     };
+    $('#rating-seller').hide('modal');
     $.ajax({
       type: 'POST',
       contentType: "application/json",
@@ -214,7 +215,7 @@ $(function() {
         $('#purchase-history-tab').click();
       },
       error: function(data) {
-        alert('Failed to Confirmed Receipt, please contact support');
+        alert('Failed to Submit Rating, please contact support');
       }
     });
   });

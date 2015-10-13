@@ -55,7 +55,7 @@
   </div>
   <% if @bid.open? %>
     <div class="col-md-6">
-      <h2>Payment: $<%= @bid.bid %> </h2>
+      <h2>Payment: $<%= "%.2f" % @bid.bid %> </h2>
       <form action="/accept" id="buyer-form" method="POST" class="form">
         <%= hidden_field_tag id='bid-id', @bid.id %>
         <span class="payment-errors"></span>

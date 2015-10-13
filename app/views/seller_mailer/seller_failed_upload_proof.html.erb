@@ -1,7 +1,7 @@
-<h1> Customer Service alert of Seller failure to upload proof <h1>
+<p>RE: Auction <%= @auction.reference %></p>
 
-<p> 
-  <%= @auction.winning_bid.seller.shipping_address.full_name %> has not uploaded the proof for <%= @auction.reference %> for <%= @auction.buyer.billing_address.full_name %> of <%= @auction.product.name %>. 
+<p>
+  <%= @auction.winning_bid.seller.shipping_address.company %> has not uploaded the proof for <%= @auction.reference %> for <%= @auction.buyer.billing_address.full_name %> of <%= @auction.product.name %>. 
 </p>
 
 <h3> Seller Contact Info :</h3>
@@ -31,7 +31,7 @@
 </p>
 
 <h3> Auction Details :</h3>
-<p>  
+<p>
   <table>
     <tr><td>Auction #:</td><td><%= @auction.reference %></td></tr>
     <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>

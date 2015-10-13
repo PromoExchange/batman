@@ -84,7 +84,7 @@ $(function() {
             }
 
             if (item.state === 'waiting_proof_approval') {
-              status_text = 'View Proof';
+              status_text = 'Awaiting proof review';
               action = simple_template({
                 value: action_template({
                   feedback: '', url: '/auctions/'+item.id+'/download_proof', auction_id: item.id, auction_value: 'View Proof', auction_class: 'view_proof'
@@ -120,7 +120,7 @@ $(function() {
             }
 
             if(item.state === 'confirm_receipt') {
-              status_text = 'Awaiting for Confirm Receipt';
+              status_text = 'Delivered';
               action = simple_template({
                 value: action_template({
                   feedback: '', url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'

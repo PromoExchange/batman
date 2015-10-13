@@ -120,7 +120,7 @@ $(function() {
             }
 
             if(item.state === 'confirm_receipt') {
-              status_text = 'Awaiting for Confirm Receipt';
+              status_text = 'Awaiting receipt confirmation';
               if( item.shipping_agent === 'ups') {
                 action = simple_template({
                   value: action_template({

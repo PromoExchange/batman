@@ -136,7 +136,7 @@ $(function() {
                 status_text = 'Payment ready';
                 action = simple_template({
                   value: action_template({
-                    url: '#', auction_id: item.id, auction_value: 'Claim Payment', auction_class: 'claim-payment'
+                    feedback: '',url: '#', auction_id: item.id, auction_value: 'Claim Payment', auction_class: 'claim-payment'
                   })
                 });
               }

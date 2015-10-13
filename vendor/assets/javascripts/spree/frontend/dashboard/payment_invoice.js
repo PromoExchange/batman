@@ -37,7 +37,7 @@ $(function() {
           console.log(data);
           $("body").css("cursor", "default");
           $("#payment-submit").prop('disabled', false);
-          $form.find('.payment-errors').text("Unsucessful charge");
+          $form.find('.payment-errors').text("Unsuccessful charge");
         }
       });
     }

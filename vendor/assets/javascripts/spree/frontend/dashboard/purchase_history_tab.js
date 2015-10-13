@@ -22,6 +22,7 @@ $(function() {
         var trHTML = '';
         if (data.length > 0) {
           action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' href='${url}'>${auction_value}</a>");
+          new_window_action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' target='_blank' href='${url}'>${auction_value}</a>");
           your_bid_template = _.template("<td id='your_bid_<%= auction_id %>'>no bid</td>");
 
           $.each(data, function(i, item) {
@@ -111,7 +112,7 @@ $(function() {
               } else {
                 var url = 'http://www.fedex.com/Tracking?action=track&tracknumbers=' + item.tracking_number;
                 action = simple_template({
-                  value: action_template({
+                  value: new_window_action_template({
                     url: url, auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment_fedex'
                   })
                 });

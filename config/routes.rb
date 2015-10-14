@@ -11,6 +11,12 @@ Rails.application.routes.draw do
   # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
   mount Spree::Core::Engine, at: '/'
 
+  #### TESTING ONLY
+  #### IF YOU ADD ITEMS HERE YOU BETTER ADD A GUARD SPEC!
+  #### i.e. expect(get: '/memory_load').not_to be_routable
+  # get '/memory_load', to: 'spree/api/testers#memory_load'
+  #### TESTING ONLY
+
   post '/charges', to: 'spree/api/charges#charge'
   post '/factoryprebid', to: 'spree/api/prebids#factory_prebid'
   get 'accept/:bid_id', to: 'spree/auctions#auction_payment'
@@ -35,7 +41,7 @@ Rails.application.routes.draw do
       end
       member do
         get 'download_proof'
-      end  
+      end
     end
 
   resources :dashboards,

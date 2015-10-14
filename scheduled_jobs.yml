@@ -4,6 +4,6 @@ Heartbeat:
   description: "Heartbeat"
 
 TriggerDeliveredEvent:
-  every: 5m
+  every: 15m
   queue: :trigger_delivered_event
   description: "TriggerDeliveredEvent"

@@ -1,5 +1,6 @@
 class Spree::Api::TestersController < Spree::Api::BaseController
   def memory_load
-    @test = Spree::Auction.all
+    @tax_rates = Spree::TaxRate.where(user: 10).order(:name)
+    render nothing: true, status: :ok
   end
 end

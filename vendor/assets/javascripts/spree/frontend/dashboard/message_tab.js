@@ -15,7 +15,7 @@ $(function() {
         var trHTML = '';
         if (data.length > 0) {
           $.each(data, function(i, item) {
-            var crate = new Date(item.created_at)
+            var crate = new Date(item.created_at);
             trHTML += "<tr><td><input type='checkbox'></td>";
             trHTML += "<td>" + crate.toLocaleString() + "</td>";
             trHTML += "<td>" + item.subject + "</td>";

@@ -129,15 +129,15 @@ $(function() {
             }
 
             if(item.state === 'complete') {
-              var rating_status = ''
+              var rating_status = '';
               if(item.review) {
                 for (var i = 1; i < 6; i++) {
-                  if(i <= item.review.rating){
-                    rating_status += '<span class="star won-star">☆</span>'
+                  if(i <= item.review.rating) {
+                    rating_status += '<span class="star won-star">☆</span>';
                   } else {
-                    rating_status += '<span class="star">☆</span>'
+                    rating_status += '<span class="star">☆</span>';
                   }
-                };
+                }
               }
 
               status_text = 'Completed <br>' + rating_status;

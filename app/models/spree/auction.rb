@@ -208,44 +208,6 @@ class Spree::Auction < Spree::Base
     )
   end
 
-  def notification_for_approve_proof
-    Resque.enqueue(
-      ApproveProof,
-      auction_id: id
-    )
-  end
-
-  def notification_for_upload_proof
-    Resque.enqueue(
-      UploadProof,
-      auction_id: id
-    )
-    Resque.enqueue_at(
-      Time.zone.now + 24.hours,
-      ProofAvailable,
-      auction_id: id
-    )
-  end
-
-  def notification_for_approve_proof
-    Resque.enqueue(
-      ApproveProof,
-      auction_id: id
-    )
-  end
-
-  def notification_for_upload_proof
-    Resque.enqueue(
-      UploadProof,
-      auction_id: id
-    )
-    Resque.enqueue_at(
-      Time.zone.now + 24.hours,
-      ProofAvailable,
-      auction_id: id
-    )
-  end
-
   def self.user_auctions
     Spree::Auctions.where(buyer_id: current_spree_user.id)
   end
@@ -322,58 +284,5 @@ class Spree::Auction < Spree::Base
       key: ENV['UPS_API_KEY']
     )
     ups.find_tracking_info(tracking_number, test: true)
-  end
-
-  private
-
-  def notification_for_in_production
-    Resque.enqueue(
-      InProduction,
-      auction_id: id
-    )
-  end
-
-  def notification_for_product_delivered
-    Resque.enqueue(
-      ProductDelivered,
-      auction_id: id
-    )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 3.days),
-      ConfirmReceiptReminder,
-      auction_id: id
-    )
-  end
-
-  def notification_for_confirm_received
-    Resque.enqueue(
-      ConfirmReceived,
-      auction_id: id
-    )
-    Resque.enqueue(
-      ClaimPayment,
-      auction_id: id
-    )
-  end
-
-  def notification_for_reject_proof
-    Resque.enqueue(
-      RejectProof,
-      auction_id: id
-    )
-  end
-
-  def notification_for_approve_proof
-    Resque.enqueue(
-      ApproveProof,
-      auction_id: id
-    )
-  end
-
-  def notification_for_upload_proof
-    Resque.enqueue(
-      UploadProof,
-      auction_id: id
-    )
   end
 end

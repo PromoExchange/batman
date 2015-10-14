@@ -1,11 +1,10 @@
-<p>Congratulations! You selected <%= @auction.winning_bid.seller.shipping_address.firstname %>&nbsp;<%= @auction.winning_bid.seller.shipping_address.lastname %> to process your <%= @auction.product.name %> order.</p>
+<p>RE: Auction <%= @auction.reference %></p>
+
+<p>Congratulations! You selected <%= @auction.winning_bid.seller.shipping_address.company %> to process your <%= @auction.product.name %> order.</p>
 
 <p><%= @auction.winning_bid.seller.shipping_address.firstname %>&nbsp;<%= @auction.winning_bid.seller.shipping_address.lastname %> will begin processing your order immediately and updating the project status in your dashboard. All communications, proofs, and shipping details will be provided there.</p>
 
 <p>Thank you for using the PromoExchange! We look forward to hearing about your experience.</p>
-
-
-
 
 <p>The PromoExchange Team</p>
 

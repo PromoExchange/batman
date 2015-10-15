@@ -137,12 +137,12 @@ class Spree::Auction < Spree::Base
       auction_id: id
     )
     Resque.enqueue_at(
-      Time.zone.now + 48.hours,
+      EmailHelpers.email_delay(Time.zone.now + 48.hours),
       SellerFailedUploadProof,
       auction_id: id
     )
     Resque.enqueue_at(
-      Time.zone.now + 48.hours,
+      EmailHelpers.email_delay(Time.zone.now + 48.hours),
       ProofNeededImmediately,
       auction_id: id
     )
@@ -154,7 +154,7 @@ class Spree::Auction < Spree::Base
       auction_id: id
     )
     Resque.enqueue_at(
-      Time.zone.now + 3.days,
+      EmailHelpers.email_delay(Time.zone.now + 3.days),
       ConfirmReceiptReminder,
       auction_id: id
     )
@@ -173,12 +173,12 @@ class Spree::Auction < Spree::Base
       auction_id: id
     )
     Resque.enqueue_at(
-      Time.zone.now + 48.hours,
+      EmailHelpers.email_delay(Time.zone.now + 48.hours),
       SellerFailedUploadProof,
       auction_id: id
     )
     Resque.enqueue_at(
-      Time.zone.now + 48.hours,
+      EmailHelpers.email_delay(Time.zone.now + 48.hours),
       ProofNeededImmediately,
       auction_id: id
     )
@@ -190,7 +190,7 @@ class Spree::Auction < Spree::Base
       auction_id: id
     )
     Resque.enqueue_at(
-      Time.zone.now + 15.days,
+      EmailHelpers.email_delay(Time.zone.now + 15.days),
       TrackingReminder,
       auction_id: id
     )
@@ -202,7 +202,7 @@ class Spree::Auction < Spree::Base
       auction_id: id
     )
     Resque.enqueue_at(
-      Time.zone.now + 24.hours,
+      EmailHelpers.email_delay(Time.zone.now + 24.hours),
       ProofAvailable,
       auction_id: id
     )

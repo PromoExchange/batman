@@ -67,7 +67,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   private
 
   def fetch_bid
-    @bid = Spree::Bid.find(params[:id]).includes(:auction, :seller)
+    @bid = Spree::Bid.find(params[:id])
   end
 
   def save_bid

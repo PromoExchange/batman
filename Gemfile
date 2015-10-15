@@ -66,6 +66,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'dotenv-rails'
   gem 'launchy'
+  gem 'bullet'
 end
 
 group :production, :staging do

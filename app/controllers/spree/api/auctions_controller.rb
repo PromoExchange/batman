@@ -14,6 +14,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         buyer_id_eq: params[:buyer_id],
         state_in: states
       ).result(distinct: true)
+        .includes(:invited_sellers, :review, :bids)
     else
       lost_auctions = Spree::Auction.search(
         bids_seller_id_eq: params[:seller_id],

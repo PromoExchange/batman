@@ -11,7 +11,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       auction_id_eq: params[:auction_id],
       state_eq: params[:state]
     ).result
-      .includes(:seller, :auction)
+      .includes(:seller, :auction, :order)
 
     render 'spree/api/bids/index'
   end

@@ -93,27 +93,26 @@ $(function() {
         $("#seller-live-auction-table > tbody").html(trHTML);
       }
     }).then(function() {
-      $.each(auction_ids, function(index, value) {
-        // Your Bid
-        var your_bid_url = '/api/bids?seller_id=' + seller_id + '&auction_id=' + value;
-        $.ajax({
-          type: 'GET',
-          dataType: 'json',
-          url: your_bid_url,
-          headers: {
-            'X-Spree-Token': key
-          },
-          success: function(data) {
-            if (data.length > 0) {
-              var selector = '#your_bid_' + data[0].auction_id;
-              $(selector).text(accounting.formatMoney(parseFloat(data[0].bid)));
+      var your_bid_url = '/api/bids?state=open&seller_id=' + seller_id;
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: your_bid_url,
+        headers: {
+          'X-Spree-Token': key
+        },
+        success: function(data) {
+          if (data.length > 0) {
+            $.each(data, function(i, item) {
+              var selector = '#your_bid_' + item.auction_id;
+              $(selector).text(accounting.formatMoney(parseFloat(item.bid)));
               $(selector).stop().css("background-color", "#FFFF9C")
                 .animate({
                   backgroundColor: "#FFFFFF"
-                }, 500);
-            }
+                }, 300);
+            });
           }
-        });
+        }
       });
     });
 

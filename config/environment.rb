@@ -13,3 +13,5 @@ ActionMailer::Base.smtp_settings = {
   authentication: :plain,
   enable_starttls_auto: true
 }
+
+Rails.logger = Le.new('f3bdad76-8089-43e9-b594-93b3a0fa0e2c', :debug => true, :local => true)

@@ -1,0 +1,46 @@
+#product_request_listing {
+  .buyer-listing {
+    border-bottom: 2px #000 solid;
+    padding: 20px;
+  }
+
+  ul {
+    padding: 0px;
+    display: inline-block;
+    width: 100%;
+  }
+
+  ul li {
+    list-style-type: none;
+  }
+
+  ul:first-child li {
+    float: left;
+    padding: 0px 10px;
+    font-weight: 700;
+  }
+
+  span.remove_idea {
+    font-size: 20px;
+    color: #f00;
+    cursor: pointer;
+  }
+
+  span.glyphicon-ok-sign {
+    color: green;
+    font-size: 25px;
+  }
+
+  ul.request_description {
+    border-bottom: 1px gray solid;
+    padding: 10px;
+  }
+
+  li.request_sample {
+    background: gray;
+  }
+
+  li.product_id {
+    text-align: center;
+  }
+}

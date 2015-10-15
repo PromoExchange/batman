@@ -1,0 +1,33 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <% if spree_current_user %>
+        <div class="modal-body">
+          <%= form_for :product_request, url: main_app.product_requests_path, class: 'form' do |f| %>
+            <%= f.hidden_field :buyer_id, value: spree_current_user.id %>
+            <div class="form-group">
+              <%= f.label :request, "Need help coming up with product ideas for your event, company, team or school? Give us details about the types of products or occassion and our swag pros will come up with a range of ideas, price points and product qualities for you too choose from within a couple of days. The more detail you can give us, the better!" %>
+              <%= f.text_area :request, class: 'form-control' %>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <%= f.submit 'Submit', class: "btn btn-primary" %>
+          <% end %>
+          <%= button_tag "Close", class: "btn btn-default", data: {dismiss: "modal"} %>
+        </div>
+      <% else %>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>
+              "Need help coming up with product ideas for your event, company, team or school? Give us details about the types of products or occassion and our swag pros will come up with a range of ideas, price points and product qualities for you too choose from within a couple of days. You need to be a member of the PromoExchange community to use this service"
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <%= link_to "Loging", spree.login_path, class: "btn btn-primary" %>
+          <%= link_to "Register", main_app.new_pxuser_path, class: "btn btn-success" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -43,9 +43,9 @@ Spree::Product.class_eval do
     ActiveRecord::Base.transaction do
       # Works around spree_i18n #301
       property = if Property.exists?(name: property_name)
-        Property.where(name: property_name).first
-      else
-        Property.create(name: property_name, presentation: 'NON DISPLAY')
+                   Property.find_by(name: property_name)
+                 else
+                   Property.create(name: property_name, presentation: 'NON DISPLAY')
       end
 
       product_property = ProductProperty.where(

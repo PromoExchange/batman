@@ -1,0 +1,17 @@
+<h4> Sample Request </h4>
+
+<p> User's Name : <%= @request_idea.product_request.buyer.shipping_address.full_name %> </p>
+<p>Shipping Address :</p>
+<p>  
+  <ul style='list-style-type: none;'>
+    <li> <%= @request_idea.product_request.buyer.shipping_address.company %> </li>
+    <li> <%= @request_idea.product_request.buyer.shipping_address.address1 %> </li>
+    <li> <%= @request_idea.product_request.buyer.shipping_address.address2 %> </li>
+    <li> <%= @request_idea.product_request.buyer.shipping_address.city %> </li>
+    <li> <%= @request_idea.product_request.buyer.shipping_address.state_text %>&nbsp;<%= @request_idea.product_request.buyer.shipping_address.zipcode %> </li>
+  </ul>
+</p>
+<p> Contact Information : <%= @request_idea.product_request.buyer.shipping_address.phone %> </p>
+<p> Product ID : <%= @request_idea.product_id %> </p>
+
+<img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo">

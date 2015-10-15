@@ -1,5 +1,5 @@
 class Spree::AuctionsController < Spree::StoreController
-  before_filter :store_location
+  before_action :store_location
   before_action :require_login, only: [:new, :edit, :show, :auction_payment]
   before_action :fetch_auction, except: [:index, :create, :new, :auction_payment]
 
@@ -47,6 +47,10 @@ class Spree::AuctionsController < Spree::StoreController
     @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
 
     @auction.save!
+
+    idea = @auction.request_idea_obj
+
+    idea.update_attributes(auction_id: @auction.id) if idea
 
     unless params[:auction][:pms_colors].nil?
       params[:auction][:pms_colors].split(',').each do |pms_color|
@@ -108,21 +112,21 @@ class Spree::AuctionsController < Spree::StoreController
 
   def upload_proof
     if params[:proof_file].blank?
-      redirect_to :back, flash: { error: "Document is required." } 
+      redirect_to :back, flash: { error: 'Document is required.' }
     elsif @auction.update_attributes(proof_file: params[:proof_file], proof_feedback: '')
       @auction.upload_proof!
       redirect_to "/invoices/#{@auction.id}", flash: { notice: 'Your document uploaded successfully.' }
     else
-      redirect_to :back, flash: { error: @auction.errors.full_messages.join(" and also ") }
+      redirect_to :back, flash: { error: @auction.errors.full_messages.join(' and also ') }
     end
   rescue
-    redirect_to :back, flash: { error: "Unable to upload your document." }
+    redirect_to :back, flash: { error: 'Unable to upload your document.' }
   end
 
   def download_proof
     send_data open(@auction.proof_file.url).read,
-              :filename => @auction.proof_file_file_name,
-              :disposition => 'attachment'
+      filename: @auction.proof_file_file_name,
+      disposition: 'attachment'
   end
 
   private

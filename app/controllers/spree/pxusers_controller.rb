@@ -1,5 +1,5 @@
 class Spree::PxusersController < Spree::StoreController
-  before_filter :store_auction_location
+  before_action :store_auction_location
 
   def new
     @pxuser = Spree::Pxuser.new
@@ -59,11 +59,11 @@ class Spree::PxusersController < Spree::StoreController
       user.bill_address = bill_address
 
       if user.save
-        session[:user_info] = pxuser_params[:buyer_seller] + "_" + ship_address.company_name
-        flash[:success] = "Registered successfully"
+        session[:user_info] = pxuser_params[:buyer_seller] + '_' + ship_address.company_name
+        flash[:success] = 'Registered successfully'
         user.generate_spree_api_key!
       else
-        @is_buyer = pxuser_params[:buyer_seller] == "buyer"
+        @is_buyer = pxuser_params[:buyer_seller] == 'buyer'
         render :new
       end
     end

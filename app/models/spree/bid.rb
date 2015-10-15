@@ -65,7 +65,7 @@ class Spree::Bid < Spree::Base
   end
 
   def other_bids_lost
-    Spree::Bid.where(auction_id: auction.id, state: 'open').each(&:lose)
+    Spree::Bid.where(auction_id: auction.id, state: 'open').find_each(&:lose)
   end
 
   def send_invoice

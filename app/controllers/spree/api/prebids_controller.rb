@@ -18,7 +18,7 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
   def factory_prebid
     # TODO: f it
     # For this seller, every factory (we only have one ATM), every product
-    # hack a prebid record
+    # HACK: a prebid record
     Spree::Prebid.where(seller_id: params[:seller_id]).destroy_all
     products = Spree::Product.all
     products.each do |p|

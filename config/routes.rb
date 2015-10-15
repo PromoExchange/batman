@@ -58,6 +58,11 @@ Rails.application.routes.draw do
     controller: 'spree/logos',
     as: 'logos'
 
+  resources :product_requests,
+    controller: 'spree/product_requests',
+    as: 'product_requests',
+    only: [:create]
+
   scope :api do
     resources :auctions, controller: 'spree/api/auctions' do
       member do
@@ -83,5 +88,25 @@ Rails.application.routes.draw do
     match '/auctions/:id/order_confirm' => 'spree/api/auctions#order_confirm', via: :post
     match '/auctions/:id/in_production' => 'spree/api/auctions#in_production', via: :post
     match '/auctions/:id/claim_payment' => 'spree/api/auctions#claim_payment', via: :post
+
+    resources :request_ideas, controller: 'spree/api/request_ideas' do
+      member do
+        post 'sample_request'
+      end
+    end
   end
+
+  match 'product_requests/:request_idea_id/destroy' => 'spree/admin/product_requests#destroy_idea', via: :post
+  match 'product_requests/:request_idea_id/update' => 'spree/admin/product_requests#update_idea', via: :post
+
+  Spree::Core::Engine.routes.draw do
+    namespace :admin do
+      resources :product_requests do
+        member do
+          post 'generate_notification'
+        end
+      end
+    end
+  end
+
 end

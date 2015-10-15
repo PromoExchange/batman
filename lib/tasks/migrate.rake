@@ -14,9 +14,7 @@ namespace :migrate do
 
     desc 'Email confirmation for existing users'
     task email_confirmation: :environment do
-      Spree::User.all.each do |user|
-        user.confirm!
-      end
+      Spree::User.all.each(&:confirm!)
     end
 
     desc 'Run all migration tasks'

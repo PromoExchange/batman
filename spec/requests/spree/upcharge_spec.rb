@@ -5,7 +5,7 @@ describe 'Upcharge API' do
   include_context 'spree_shared'
 
   it 'must require an api key' do
-    get "/api/upcharges?product_id=1"
+    get '/api/upcharges?product_id=1'
     expect(response).to have_http_status(401)
   end
 
@@ -36,7 +36,7 @@ describe 'Upcharge API' do
     expect(json['value']).to eq('test')
   end
 
-  xit 'should not create a duplicate upcharge' do |member|
+  xit 'should not create a duplicate upcharge' do |_member|
     upcharge = FactoryGirl.create(:upcharge)
 
     post '/api/upcharges', upcharge.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"

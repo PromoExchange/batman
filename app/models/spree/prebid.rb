@@ -95,7 +95,7 @@ class Spree::Prebid < Spree::Base
         .includes(:zone)
         .pluck('spree_zones.id').first
 
-      tax_rate_record = Spree::TaxRate.where(user_id: seller_id, zone_id: tax_zone_id).first
+      tax_rate_record = Spree::TaxRate.find_by(user_id: seller_id, zone_id: tax_zone_id)
 
       tax_rate = tax_rate_record.amount.to_f unless tax_rate_record.nil?
     end
@@ -320,19 +320,19 @@ class Spree::Prebid < Spree::Base
   end
 
   def calculate_shipping(auction)
-    shipping_weight_id = Spree::Property.where(name: 'shipping_weight').first.id
-    shipping_dimensions_id = Spree::Property.where(name: 'shipping_dimensions').first.id
-    shipping_quantity_id = Spree::Property.where(name: 'shipping_quantity').first.id
+    shipping_weight_id = Spree::Property.find_by(name: 'shipping_weight').id
+    shipping_dimensions_id = Spree::Property.find_by(name: 'shipping_dimensions').id
+    shipping_quantity_id = Spree::Property.find_by(name: 'shipping_quantity').id
 
-    property = auction.product.product_properties.where(property_id: shipping_weight_id).first
+    property = auction.product.product_properties.find_by(property_id: shipping_weight_id)
     fail 'Shipping weight is nil' if property.nil?
     shipping_weight = property.value
 
-    property = auction.product.product_properties.where(property_id: shipping_dimensions_id).first
+    property = auction.product.product_properties.find_by(property_id: shipping_dimensions_id)
     fail 'Shipping dimensions is nil' if property.nil?
     shipping_dimensions = property.value
 
-    property = auction.product.product_properties.where(property_id: shipping_quantity_id).first
+    property = auction.product.product_properties.find_by(property_id: shipping_quantity_id)
     fail 'Shipping quantity is nil' if property.nil?
     shipping_quantity = property.value
 

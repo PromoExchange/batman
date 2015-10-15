@@ -20,6 +20,7 @@ class Spree::Auction < Spree::Base
   belongs_to :shipping_address, class_name: 'Spree::Address'
 
   has_one :review
+  has_one :request_idea
 
   accepts_nested_attributes_for :auctions_pms_colors
 
@@ -31,7 +32,7 @@ class Spree::Auction < Spree::Base
 
   validates :buyer_id, presence: true
   validates :logo_id, presence: true, unless: -> do
-    imprint_method = Spree::ImprintMethod.where(name: 'Blank').first
+    imprint_method = Spree::ImprintMethod.find_by(name: 'Blank')
     return true if imprint_method.nil? # Needed for testing, do not seed db:test
     imprint_method_id == imprint_method.id
   end
@@ -71,6 +72,7 @@ class Spree::Auction < Spree::Base
     after_transition on: :reject_proof, do: :notification_for_reject_proof
     after_transition on: :approve_proof, do: :notification_for_approve_proof
     after_transition on: :upload_proof, do: :notification_for_upload_proof
+    after_transition on: :cancel, do: :remove_request_idea
 
     # TODO: When auction created, schedule job to end it
     event :end do
@@ -241,7 +243,7 @@ class Spree::Auction < Spree::Base
   end
 
   def preferred?(seller)
-    auctions_users.where(user: seller).first.nil? ? false : true
+    auctions_users.find_by(user: seller).nil? ? false : true
   end
 
   def buyer_company
@@ -250,7 +252,7 @@ class Spree::Auction < Spree::Base
   end
 
   def winning_bid
-    Spree::Bid.where(auction_id: id, state: %w(accepted completed waiting_confirmation)).first
+    Spree::Bid.find_by(auction_id: id, state: %w(accepted completed waiting_confirmation))
   end
 
   def set_default_dates
@@ -280,5 +282,18 @@ class Spree::Auction < Spree::Base
       key: ENV['UPS_API_KEY']
     )
     ups.find_tracking_info(tracking_number, test: true)
+  end
+
+  def request_idea_obj
+    buyer.product_request.request_ideas.with_states.find_by(product_id: product_id) rescue nil
+  end
+
+  def request_idea?
+    !!request_idea_obj
+  end
+
+  def remove_request_idea
+    update_attributes(cancelled_date: Time.zone.now)
+    request_idea.auction_close! if request_idea.present?
   end
 end

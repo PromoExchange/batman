@@ -30,4 +30,14 @@ class BuyerMailer < ApplicationMailer
     attachments["#{@auction.proof_file_file_name}"] = open("#{@auction.proof_file.url}").read
     mail(to: @auction.buyer.email, subject: 'PromoExchange Auction Proof is available')
   end
+
+  def sample_request(request_idea)
+    @request_idea = request_idea
+    mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange Sample Request')
+  end
+
+  def new_request_idea(product_request)
+    @product_request = product_request
+    mail(to: @product_request.buyer.email, subject: 'You have new product ideas from PromoExchange!')
+  end
 end

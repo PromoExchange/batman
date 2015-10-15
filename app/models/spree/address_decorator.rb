@@ -3,7 +3,7 @@ Spree::Address.class_eval do
   has_one :ship_user, class_name: 'User', foreign_key: 'ship_address_id'
   belongs_to :user
   validates :company, presence: true
-  
+
   alias_attribute :is_bill, :bill?
   alias_attribute :is_ship, :ship?
 
@@ -12,7 +12,7 @@ Spree::Address.class_eval do
   end
 
   def self.active
-    where( deleted_at: nil )
+    where(deleted_at: nil)
   end
 
   def ship?

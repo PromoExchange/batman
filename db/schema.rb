@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151012183409) do
+ActiveRecord::Schema.define(version: 20151016085924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -617,6 +617,14 @@ ActiveRecord::Schema.define(version: 20151012183409) do
   add_index "spree_product_property_translations", ["locale"], name: "index_spree_product_property_translations_on_locale", using: :btree
   add_index "spree_product_property_translations", ["spree_product_property_id"], name: "index_0968f57fbd8fb9f31050820cbb66109a266c516a", using: :btree
 
+  create_table "spree_product_requests", force: :cascade do |t|
+    t.integer  "buyer_id",   null: false
+    t.string   "request"
+    t.string   "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "spree_product_translations", force: :cascade do |t|
     t.integer  "spree_product_id"
     t.string   "locale"
@@ -842,6 +850,16 @@ ActiveRecord::Schema.define(version: 20151012183409) do
 
   add_index "spree_reimbursements", ["customer_return_id"], name: "index_spree_reimbursements_on_customer_return_id", using: :btree
   add_index "spree_reimbursements", ["order_id"], name: "index_spree_reimbursements_on_order_id", using: :btree
+
+  create_table "spree_request_ideas", force: :cascade do |t|
+    t.integer  "product_request_id",               null: false
+    t.integer  "product_id",                       null: false
+    t.decimal  "cost",               default: 0.0, null: false
+    t.string   "state"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "auction_id"
+  end
 
   create_table "spree_return_authorization_reasons", force: :cascade do |t|
     t.string   "name"

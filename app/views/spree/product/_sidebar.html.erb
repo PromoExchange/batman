@@ -13,4 +13,11 @@
       </div>
     <% end %>
   </div>
+  <% unless spree_current_user.has_spree_role?(:seller) %>
+    <div>
+      <%= button_tag "Please have a PromoExchange rep generate product ideas for me", data: {toggle: "modal", target: "#myModal"} %>
+    </div>
+  <% end %>
 </div>
+
+<%= render partial: "spree/product/product_request_modal" %>

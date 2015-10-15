@@ -1,0 +1,60 @@
+<div id="product_request_listing">
+  <% @product_requests.each do |product_request| %>
+    <div class="buyer-listing">
+
+      <ul data-id="<%= product_request.id %>" class="row">
+        <li class="col-md-3"> <%= product_request.buyer.shipping_address.full_name %> </li>
+        <li class="col-md-2"> <%= product_request.buyer.shipping_address.phone %> </li>
+        <li class="col-md-3"> <%= product_request.buyer.email %> </li>
+        <li class="col-md-3"> <%= button_tag 'Generate Notification E-mail', class: 'btn-primary generate-notification' %> </li>
+        <li class="col-md-1">
+          <% if product_request.complete? %>
+            <span class="glyphicon glyphicon-ok-sign"></span>
+          <% end %>
+        </li>
+      </ul>
+
+      <ul class="request_description"> 
+        <li> <%= product_request.request %> </li>
+      </ul>
+
+      <% product_request.request_ideas.each do |request_idea| %>
+        <ul data-id="<%= request_idea.id %>" class="row">
+          <li class="col-md-3 product_id"> 
+            <a href='products/<%= request_idea.product.slug %>'>
+              <img itemprop='image' alt='<%= request_idea.product.name %>' src='<%= request_idea.image_uri %>'>
+              <p><%= request_idea.product.name %></p>
+            </a> 
+          </li>
+          <% if request_idea.complete? %>
+            <li class="sample_cost col-md-2"> <%= request_idea.cost %> </li>
+          <% else %>
+            <li class="sample_cost col-md-2 request_sample"> <%= request_idea.cost %> </li>
+          <% end %>
+          <li class="col-md-1"> </li>
+          <li class="col-md-3"> 
+            <% if request_idea.cancelled? %>
+              "Deleted by buyer"
+            <% elsif request_idea.closed? %>
+              "Closed Auction"
+            <% end %>
+           </li>
+          <li class="action_button col-md-2"> <%= button_tag 'Edit', class: 'btn-danger edit-idea' %> </li>
+          <li class="col-md-1"> <span class="glyphicon glyphicon-remove-sign remove_idea"></span> </li>
+        </ul>
+      <% end %>
+
+      <ul>
+        <li class='text-center'><%= button_tag 'Add New Product', class: 'add_product btn-success' %> </li>
+      </ul>
+
+      <ul class="product-request row">
+        <%= hidden_field_tag :product_request_id, product_request.id  %>
+        <li class="col-md-4"> <%= text_field_tag :product_id, nil, placeholder: 'Product Id' %> </li>
+        <li class="col-md-4"> <%= text_field_tag :sample_cost, nil, placeholder: 'Sample Cost' %> </li>
+        <li class="col-md-4"> <%= button_tag 'Save', class: 'btn-success create_idea' %> </li>
+      </ul>
+
+    </div>
+  <% end %>
+</div>

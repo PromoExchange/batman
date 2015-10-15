@@ -24,7 +24,7 @@ module ImprintUpchargeLoader
 
       attrs = {
         upcharge_type_id: (is_setup ? setup_type : run_type),
-        related_type: 'Spree::ImprintMethod',
+        related_type: 'Spree::ImprintMethod'
       }
       attrs[:related_id] = imprint.id
       attrs[:price_code] = hashed[:price_code]

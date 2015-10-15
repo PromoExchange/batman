@@ -99,4 +99,22 @@ Spree::Api::ApiHelpers.module_eval do
       :product_id
     ])
   mattr_reader :favorite_attributes
+
+  class_variable_set(:@@request_idea_attributes,
+    [
+      :id,
+      :product_id,
+      :image_uri,
+      :state,
+      :auction_id
+    ])
+  mattr_reader :request_idea_attributes
+
+  class_variable_set(:@@product_attributes,
+    [
+      :id,
+      :name,
+      :slug
+    ])
+  mattr_reader :product_attributes
 end

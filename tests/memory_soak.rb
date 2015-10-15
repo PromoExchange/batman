@@ -1,9 +1,9 @@
-require "net/http"
+require 'net/http'
 
 def start_server
   # Remove the X to enable the parameters for tuning.
   # These are the default values as of Ruby 2.2.0.
-  @child = spawn(<<-EOC.split.join(" "))
+  @child = spawn(<<-EOC.split.join(' '))
     XRUBY_GC_HEAP_FREE_SLOTS=4096
     XRUBY_GC_HEAP_INIT_SLOTS=10000
     XRUBY_GC_HEAP_GROWTH_FACTOR=1.8
@@ -21,11 +21,11 @@ def start_server
 end
 
 def alive?
-  system("curl http://localhost:3009/ &> /dev/null")
+  system('curl http://localhost:3009/ &> /dev/null')
 end
 
 def stop_server
-  Process.kill "HUP", server_pid
+  Process.kill 'HUP', server_pid
   Process.wait @child
 end
 
@@ -42,14 +42,14 @@ end
 # seconds to do the request to these .local things, so we
 # will use Net::HTTP for moar speed.
 def do_request
-  uri = URI("http://localhost:3009/memory_load")
+  uri = URI('http://localhost:3009/memory_load')
   req = Net::HTTP::Get.new(uri)
   # Remove the next line if you don't need HTTP basic authentication.
   # req.basic_auth("user@example.com", "password")
-  req["Content-Type"] = "application/json"
-  req["X-Spree-Token"] = "d13fe3d99cd5ad84d20ceb345a43d4ce56d41f36d8c4d29c"
+  req['Content-Type'] = 'application/json'
+  req['X-Spree-Token'] = 'd13fe3d99cd5ad84d20ceb345a43d4ce56d41f36d8c4d29c'
 
-  Net::HTTP.start("localhost", uri.port) do |http|
+  Net::HTTP.start('localhost', uri.port) do |http|
     http.read_timeout = 60
     http.request(req)
   end

@@ -36,9 +36,9 @@ describe 'Bids API' do
   end
 
   it 'should get a list of bids (root)' do
-    FactoryGirl.create_list(:bid,5)
+    FactoryGirl.create_list(:bid, 5)
 
-    get "/api/bids", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get '/api/bids', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
 
     expect(response).to be_success
     expect(json.length).to eq(5)
@@ -54,7 +54,7 @@ describe 'Bids API' do
   end
 
   it 'should find one auction' do
-    auctions = FactoryGirl.create_list(:auction,10)
+    auctions = FactoryGirl.create_list(:auction, 10)
 
     get "/api/bids?auction_id=#{auctions[2].id}",
       nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"

@@ -313,6 +313,7 @@ GEM
     notiffany (0.0.6)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    oj (2.12.14)
     orm_adapter (0.5.0)
     paperclip (4.2.1)
       activemodel (>= 3.0.0)
@@ -635,6 +636,7 @@ DEPENDENCIES
   letter_opener_web (~> 1.2.0)
   local_time
   newrelic_rpm
+  oj
   paperclip
   pg
   pry

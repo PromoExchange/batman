@@ -14,4 +14,8 @@ ActionMailer::Base.smtp_settings = {
   enable_starttls_auto: true
 }
 
-Rails.logger = Le.new(ENV['LOGENTRIES_KEY'], :debug => true, :local => true)
+if !Rails.env.development?
+  Rails.logger = Le.new(ENV['LOGENTRIES_KEY'])
+else
+  Rails.logger = Le.new(ENV['LOGENTRIES_KEY'], debug: true, local: true)
+end

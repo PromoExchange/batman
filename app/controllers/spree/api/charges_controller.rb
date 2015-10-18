@@ -15,6 +15,8 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
         description: description
       )
 
+      Rails.logger.info("CHARGE: Seller pays C:#{amount.to_i}, D:#{description}")
+
       bid.transaction do
         bid.update_attributes(state: 'completed')
         bid.auction.update_attributes(state: 'completed')
@@ -27,7 +29,7 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
       redirect_to main_app.dashboards_path, flash: { error: 'Error occurred processing charge' }
     end
   end
-  
+
   private
 
   def charge_params

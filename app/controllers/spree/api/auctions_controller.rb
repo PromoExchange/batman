@@ -5,6 +5,8 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     params[:buyer_id] = {} if params[:buyer_id].blank?
     params[:seller_id] = {} if params[:seller_id].blank?
     params[:state] = 'open' if params[:state].blank?
+    params[:page] = 1 if params[:page].blank?
+    params[:per_page] = 250 if params[:per_page].blank?
 
     states = params[:state].split(',')
 
@@ -15,6 +17,8 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         state_in: states
       ).result(distinct: true)
         .includes(:invited_sellers, :review, :bids)
+        .page(params[:page])
+        .per(params[:per_page])
     else
       lost_auctions = Spree::Auction.search(
         bids_seller_id_eq: params[:seller_id],

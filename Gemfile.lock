@@ -637,6 +637,7 @@ DEPENDENCIES
   humanize_boolean
   jbuilder (~> 2.0)
   jquery-rails
+  kaminari
   launchy
   le
   letter_opener

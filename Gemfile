@@ -26,6 +26,7 @@ gem 'humanize_boolean'
 gem 'state_machine'
 gem 'oj'
 gem 'le'
+gem 'kaminari'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

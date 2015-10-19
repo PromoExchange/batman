@@ -130,6 +130,7 @@ class Spree::Auction < Spree::Base
   end
 
   delegate :name, to: :product
+  delegate :email, to: :buyer, prefix: true
 
   def notification_for_in_production
     Resque.enqueue(
@@ -243,14 +244,9 @@ class Spree::Auction < Spree::Base
     auctions_users.where(user: seller).first.nil? ? false : true
   end
 
-  def buyer_email
-    Spree::User.find(buyer_id).email
-  end
-
   def buyer_company
-    buyer = Spree::User.find(buyer_id)
     return '' unless buyer.shipping_address
-    Spree::User.find(buyer_id).shipping_address.company
+    buyer.shipping_address.company
   end
 
   def winning_bid

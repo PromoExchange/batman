@@ -16,7 +16,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         buyer_id_eq: params[:buyer_id],
         state_in: states
       ).result(distinct: true)
-        .includes(:invited_sellers, :review, :bids)
+        .includes(:invited_sellers, :review, :bids, :product)
         .page(params[:page])
         .per(params[:per_page])
     else

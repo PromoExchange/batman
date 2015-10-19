@@ -5,6 +5,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
     params[:seller_id] = {} if params[:seller_id].blank?
     params[:auction_id] = {} if params[:auction_id].blank?
     params[:state] = {} if params[:state].blank?
+    params[:page] = 1 if params[:page].blank?
+    params[:per_page] = 250 if params[:per_page].blank?
 
     @bids = Spree::Bid.search(
       seller_id_eq: params[:seller_id],
@@ -12,6 +14,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       state_eq: params[:state]
     ).result
       .includes(:seller, :auction, :order)
+      .page(params[:page])
+      .per(params[:per_page])
 
     render 'spree/api/bids/index'
   end
@@ -106,7 +110,9 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       :prebid_id,
       :per_unit_bid,
       :order_id,
-      :state
+      :state,
+      :page,
+      :per_page
     )
   end
 end

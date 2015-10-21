@@ -49,6 +49,9 @@ class Spree::Auction < Spree::Base
   end
   validates_inclusion_of :shipping_agent, in: %w(ups fedex)
 
+  delegate :name, to: :product
+  delegate :email, to: :buyer, prefix: true
+
   # preferred
   #   open
   #   accept -> unpaid
@@ -73,6 +76,7 @@ class Spree::Auction < Spree::Base
     after_transition on: :approve_proof, do: :notification_for_approve_proof
     after_transition on: :upload_proof, do: :notification_for_upload_proof
     after_transition on: :cancel, do: :remove_request_idea
+    after_transition on: :delivery_confirmed, do: :rating_reminder
 
     # TODO: When auction created, schedule job to end it
     event :end do
@@ -131,8 +135,79 @@ class Spree::Auction < Spree::Base
     end
   end
 
-  delegate :name, to: :product
-  delegate :email, to: :buyer, prefix: true
+  def image_uri
+    product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
+  end
+
+  def product_unit_price
+    unit_price = product.price
+    product.master.volume_prices.each do |v|
+      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
+        unit_price = v.amount
+        break
+      end
+    end
+    unit_price
+  end
+
+  def num_locations
+    1
+  end
+
+  def num_colors
+    pms_colors.count
+  end
+
+  def rush?
+    false
+  end
+
+  def preferred?(seller)
+    auctions_users.find_by(user: seller).nil? ? false : true
+  end
+
+  def buyer_company
+    return '' unless buyer.shipping_address
+    buyer.shipping_address.company
+  end
+
+  def winning_bid
+    Spree::Bid.find_by(auction_id: id, state: %w(accepted completed waiting_confirmation))
+  end
+
+  def product_delivered?
+    ups_response.is_delivered?
+  rescue
+    return false
+  end
+
+  def reviewed?
+    !review.nil?
+  end
+
+  private
+
+  def ups_response
+    ups = ActiveShipping::UPS.new(
+      login: ENV['UPS_API_USERID'],
+      password: ENV['UPS_API_PASSWORD'],
+      key: ENV['UPS_API_KEY']
+    )
+    ups.find_tracking_info(tracking_number, test: true)
+  end
+
+  def request_idea_obj
+    buyer.product_request.request_ideas.with_states.find_by(product_id: product_id) rescue nil
+  end
+
+  def request_idea?
+    !request_idea_obj.nil?
+  end
+
+  def remove_request_idea
+    update_attributes(cancelled_date: Time.zone.now)
+    request_idea.auction_close! if request_idea.present?
+  end
 
   def notification_for_in_production
     Resque.enqueue(
@@ -211,53 +286,12 @@ class Spree::Auction < Spree::Base
     )
   end
 
-  def self.user_auctions
-    Spree::Auctions.where(buyer_id: current_spree_user.id)
-  end
-
-  def image_uri
-    product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
-  end
-
-  def product_unit_price
-    unit_price = product.price
-    product.master.volume_prices.each do |v|
-      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
-        unit_price = v.amount
-        break
-      end
-    end
-    unit_price
-  end
-
-  def num_locations
-    1
-  end
-
-  def num_colors
-    pms_colors.count
-  end
-
-  def rush?
-    false
-  end
-
-  def preferred?(seller)
-    auctions_users.find_by(user: seller).nil? ? false : true
-  end
-
-  def buyer_company
-    return '' unless buyer.shipping_address
-    buyer.shipping_address.company
-  end
-
-  def winning_bid
-    Spree::Bid.find_by(auction_id: id, state: %w(accepted completed waiting_confirmation))
-  end
-
-  def set_default_dates
-    self.started = Time.zone.now
-    self.ended = started + 21.days
+  def rating_reminder
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 3.days),
+      RatingReminder,
+      auction_id: id
+    )
   end
 
   def generate_reference
@@ -269,31 +303,8 @@ class Spree::Auction < Spree::Base
     raise e, 'Retries exhausted'
   end
 
-  def product_delivered?
-    ups_response.is_delivered?
-  rescue
-    return false
-  end
-
-  def ups_response
-    ups = ActiveShipping::UPS.new(
-      login: ENV['UPS_API_USERID'],
-      password: ENV['UPS_API_PASSWORD'],
-      key: ENV['UPS_API_KEY']
-    )
-    ups.find_tracking_info(tracking_number, test: true)
-  end
-
-  def request_idea_obj
-    buyer.product_request.request_ideas.with_states.find_by(product_id: product_id) rescue nil
-  end
-
-  def request_idea?
-    !!request_idea_obj
-  end
-
-  def remove_request_idea
-    update_attributes(cancelled_date: Time.zone.now)
-    request_idea.auction_close! if request_idea.present?
+  def set_default_dates
+    self.started = Time.zone.now
+    self.ended = started + 21.days
   end
 end

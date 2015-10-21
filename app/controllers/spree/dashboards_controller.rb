@@ -1,7 +1,7 @@
 class Spree::DashboardsController < Spree::StoreController
   before_action :banned?
   before_action :require_login
-  
+
   def index
     @favorites = Spree::Favorite.where(buyer: current_spree_user)
       .includes(:product)

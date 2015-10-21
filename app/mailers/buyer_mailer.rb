@@ -40,4 +40,9 @@ class BuyerMailer < ApplicationMailer
     @product_request = product_request
     mail(to: @product_request.buyer.email, subject: 'You have new product ideas from PromoExchange!')
   end
+
+  def rating_reminder(auction)
+    @auction = auction
+    mail(to: @auction.buyer.email, subject: 'PromoExchange Rating Reminder')
+  end
 end

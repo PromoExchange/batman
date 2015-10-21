@@ -6,7 +6,7 @@
           <%= form_for :product_request, url: main_app.product_requests_path, class: 'form' do |f| %>
             <%= f.hidden_field :buyer_id, value: spree_current_user.id %>
             <div class="form-group">
-              <%= f.label :request, "Need help coming up with product ideas for your event, company, team or school? Give us details about the types of products or occassion and our swag pros will come up with a range of ideas, price points and product qualities for you too choose from within a couple of days. The more detail you can give us, the better!" %>
+              <%= f.label :request, "It’s okay, we all need help some times. Let our swag pros give you some great unique product ideas based on the details you provide. What do we need to know? Glad you asked. What is the purpose of the product? Do you have a budget in mind? Do you need made in the USA products? Let us know anything and everything you had in mind and we’ll get back to you within 2 days. The more detail you can give us, the better!" %>
               <%= f.text_area :request, class: 'form-control' %>
             </div>
         </div>
@@ -19,12 +19,12 @@
         <div class="modal-body">
           <div class="form-group">
             <label>
-              "Need help coming up with product ideas for your event, company, team or school? Give us details about the types of products or occassion and our swag pros will come up with a range of ideas, price points and product qualities for you too choose from within a couple of days. You need to be a member of the PromoExchange community to use this service"
+              "It’s okay, we all need help some times. Let our swag pros give you some great unique product ideas based on the details you provide. What do we need to know? Glad you asked. What is the purpose of the product? Do you have a budget in mind? Do you need made in the USA products? Let us know anything and everything you had in mind and we’ll get back to you within 2 days. The more detail you can give us, the better!"
             </label>
           </div>
         </div>
         <div class="modal-footer">
-          <%= link_to "Loging", spree.login_path, class: "btn btn-primary" %>
+          <%= link_to "Login", spree.login_path, class: "btn btn-primary" %>
           <%= link_to "Register", main_app.new_pxuser_path, class: "btn btn-success" %>
         </div>
       <% end %>

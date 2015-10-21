@@ -45,4 +45,9 @@ class BuyerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.buyer.email, subject: 'PromoExchange Rating Reminder')
   end
+
+  def ideation_request(product_request)
+    @product_request = product_request
+    mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange product Ideation Request')
+  end
 end

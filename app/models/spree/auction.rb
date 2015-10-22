@@ -185,17 +185,6 @@ class Spree::Auction < Spree::Base
     !review.nil?
   end
 
-  private
-
-  def ups_response
-    ups = ActiveShipping::UPS.new(
-      login: ENV['UPS_API_USERID'],
-      password: ENV['UPS_API_PASSWORD'],
-      key: ENV['UPS_API_KEY']
-    )
-    ups.find_tracking_info(tracking_number, test: true)
-  end
-
   def request_idea_obj
     buyer.product_request.request_ideas.with_states.find_by(product_id: product_id) rescue nil
   end
@@ -207,6 +196,17 @@ class Spree::Auction < Spree::Base
   def remove_request_idea
     update_attributes(cancelled_date: Time.zone.now)
     request_idea.auction_close! if request_idea.present?
+  end
+
+  private
+
+  def ups_response
+    ups = ActiveShipping::UPS.new(
+      login: ENV['UPS_API_USERID'],
+      password: ENV['UPS_API_PASSWORD'],
+      key: ENV['UPS_API_KEY']
+    )
+    ups.find_tracking_info(tracking_number, test: true)
   end
 
   def notification_for_in_production

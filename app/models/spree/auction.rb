@@ -84,7 +84,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :cancel do
-      transition [:open, :waiting_confirmation] => :cancelled
+      transition [:open, :waiting_confirmation, :in_dispute] => :cancelled
     end
 
     event :accept do
@@ -128,6 +128,14 @@ class Spree::Auction < Spree::Base
 
     event :delivered do
       transition send_for_delivery: :confirm_receipt
+    end
+
+    event :order_rejected do
+      transition [:confirm_receipt, :send_for_delivery] => :in_dispute
+    end
+
+    event :dispute_resolved do
+      transition :in_dispute => :complete
     end
 
     event :delivery_confirmed do

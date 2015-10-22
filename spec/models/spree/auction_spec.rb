@@ -191,6 +191,44 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.state).to eq 'complete'
   end
 
+  it 'should go to in_dispute from reject order event' do
+    a = FactoryGirl.build(:auction)
+    a.accept
+    a.confirm_order
+    a.upload_proof
+    a.approve_proof
+    a.enter_tracking
+    a.delivered
+    a.order_rejected
+    expect(a.state).to eq 'in_dispute'
+  end
+
+  it 'should go to cancelled from cancel order event' do
+    a = FactoryGirl.build(:auction)
+    a.accept
+    a.confirm_order
+    a.upload_proof
+    a.approve_proof
+    a.enter_tracking
+    a.delivered
+    a.order_rejected
+    a.cancel
+    expect(a.state).to eq 'cancelled'
+  end
+
+  it 'should go to complete from dispute resolved event' do
+    a = FactoryGirl.build(:auction)
+    a.accept
+    a.confirm_order
+    a.upload_proof
+    a.approve_proof
+    a.enter_tracking
+    a.delivered
+    a.order_rejected
+    a.dispute_resolved
+    expect(a.state).to eq 'complete'
+  end
+
   it 'should not allow invalid shipping agent' do
     a = FactoryGirl.build(:auction, shipping_agent: 'usps')
     expect(a.save).to be_falsey

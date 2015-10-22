@@ -83,6 +83,6 @@ class SellerMailer < ApplicationMailer
 
   def review_rating(auction)
     @auction = auction
-    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Review Rating')
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Rate Seller')
   end
 end

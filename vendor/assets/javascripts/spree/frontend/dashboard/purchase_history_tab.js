@@ -149,7 +149,7 @@ $(function() {
               if(!item.review){
                 action = simple_template({
                   value: action_template({
-                    url: '#', auction_id: item.id, auction_value: 'Review Rating', auction_class: 'review_rating'
+                    url: '#', auction_id: item.id, auction_value: 'Rate Seller', auction_class: 'review_rating'
                   })
                 });
               }

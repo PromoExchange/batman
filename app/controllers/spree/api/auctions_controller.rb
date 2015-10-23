@@ -59,6 +59,12 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   def reject_order
     @auction.order_rejected!
+    params[:rejection_reason] = '' if params[:rejection_reason].blank?
+    Resque.enqueue(
+      RejectOrder,
+      auction_id: params[:id],
+      rejection_reason: params[:rejection_reason]
+    )
     render nothing: true, status: :ok
   rescue
     render nothing: true, status: :internal_server_error
@@ -217,7 +223,8 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
       :state,
       :page,
       :per_page,
-      :lost
+      :lost,
+      :rejection_reason
     )
   end
 end

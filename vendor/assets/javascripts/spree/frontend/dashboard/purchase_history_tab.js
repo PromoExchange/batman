@@ -191,22 +191,10 @@ $(function() {
 
   $('tbody').on('click', '.reject_order', function(){
     var auction_id = $(this).data('id');
-    var url = '/api/auctions/' + auction_id + '/reject_order';
-    var key = $('#buyer-purchase-history-table').attr('data-key');
-    $.ajax({
-      type: 'POST',
-      contentType: "application/json",
-      url: url,
-      headers: {
-        'X-Spree-Token': key
-      },
-      success: function(data) {
-        $('#purchase-history-tab').click();
-      },
-      error: function(data) {
-        alert('Failed to reject order, please contact support');
-      }
-    });
+    var reject = confirm("Are you sure, Reject Order?");
+    if (!reject){ return false; }
+    $('#reject-order-auction-id').val(auction_id);
+    $('#reject-order-modal').show('modal');
   });
 
   $('tbody').on('click', '.dispute_resolved', function(){
@@ -268,6 +256,31 @@ $(function() {
     return false;
   });
 
+  $('#reject-order-submit').on('click', 'button', function(){
+    var auction_id = $('#reject-order-auction-id').val();
+    var key = $('#reject-order-modal').attr('data-key');
+    var url = '/api/auctions/' + auction_id + '/reject_order';
+    var message = {
+      rejection_reason: $('#rejection-reason').val()
+    };
+    $('#reject-order-modal').hide('modal');
+    if( $('#rejection-reason').val() === '') return false;
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      data: JSON.stringify(message),
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        $('#purchase-history-tab').click();
+      },
+      error: function(data) {
+        alert('Failed to reject order, please contact support');
+      }
+    });
+  });
 
   $('#rating-submit').on('click', 'button', function(){
     var status = $(this).data(status);

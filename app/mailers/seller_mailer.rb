@@ -85,4 +85,10 @@ class SellerMailer < ApplicationMailer
     @auction = auction
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Rate Seller')
   end
+
+  def reject_order(auction_id, rejection_reason)
+    @auction = Spree::Auction.find(auction_id)
+    @rejection_reason = rejection_reason
+    mail(to: @auction.winning_bid.email, subject: 'PromoExchange Order Rejected')
+  end
 end

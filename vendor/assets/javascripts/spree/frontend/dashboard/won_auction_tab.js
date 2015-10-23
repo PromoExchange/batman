@@ -128,6 +128,13 @@ $(function() {
               });
             }
 
+            if(item.state === 'in_dispute') {
+              status_text = 'Order being disputed';
+              action = simple_template({
+                value: ''
+              });
+            }
+
             if(item.state === 'complete') {
               var rating_status = '';
               if(item.review) {
@@ -144,7 +151,7 @@ $(function() {
               action = simple_template({
                 value: ''
               });
-              if(item.payment_claimed === false ) {
+              if(item.payment_claimed === false) {
                 status_text = 'Payment ready <br>' + rating_status;
                 action = simple_template({
                   value: action_template({

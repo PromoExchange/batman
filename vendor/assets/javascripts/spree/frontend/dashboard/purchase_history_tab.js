@@ -2,7 +2,7 @@ $(function() {
   $('#purchase-history-tab').click(function() {
     var key = $("#buyer-purchase-history-table").attr("data-key");
     var buyer_id = $("#buyer-purchase-history-table").attr("data-id");
-    var auction_url = '/api/auctions?state=unpaid,waiting_confirmation,create_proof,waiting_proof_approval,in_production,send_for_delivery,confirm_receipt,complete&buyer_id=' + buyer_id;
+    var auction_url = '/api/auctions?state=unpaid,in_dispute,waiting_confirmation,create_proof,waiting_proof_approval,in_production,send_for_delivery,confirm_receipt,complete&buyer_id=' + buyer_id;
 
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");
@@ -21,7 +21,7 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' href='${url}'>${auction_value}</a>");
+          action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' href='${url}'>${auction_value}</a><br/>");
           new_window_action_template = _.template("<a class='btn btn-success ${auction_class}' data-id='${auction_id}' target='_blank' href='${url}'>${auction_value}</a>");
           your_bid_template = _.template("<td id='your_bid_<%= auction_id %>'>no bid</td>");
 
@@ -127,6 +127,8 @@ $(function() {
                     url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
                   }) + action_template({
                     url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                  }) + action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Reject Order', auction_class: 'reject_order'
                   })
                 });
               } else {
@@ -136,9 +138,22 @@ $(function() {
                     url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
                   }) + action_template({
                     url: url, auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment_fedex'
+                  }) + action_template({
+                    url: url, auction_id: item.id, auction_value: 'Reject Order', auction_class: 'reject_order'
                   })
                 });
               }
+            }
+
+            if (item.state === 'in_dispute') {
+              status_text = 'Order being disputed';
+              action = simple_template({
+                value: action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Dispute Resolved', auction_class: 'dispute_resolved'
+                }) + action_template({
+                  url: '#', auction_id: item.id, auction_value: 'Cancel', auction_class: 'cancel_order'
+                })
+              });
             }
 
             if(item.state === 'complete') {
@@ -174,6 +189,46 @@ $(function() {
     });
   });
 
+  $('tbody').on('click', '.reject_order', function(){
+    var auction_id = $(this).data('id');
+    var url = '/api/auctions/' + auction_id + '/reject_order';
+    var key = $('#buyer-purchase-history-table').attr('data-key');
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        $('#purchase-history-tab').click();
+      },
+      error: function(data) {
+        alert('Failed to reject order, please contact support');
+      }
+    });
+  });
+
+  $('tbody').on('click', '.dispute_resolved', function(){
+    var auction_id = $(this).data('id');
+    var url = '/api/auctions/' + auction_id + '/resolve_dispute';
+    var key = $('#buyer-purchase-history-table').attr('data-key');
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        $('#purchase-history-tab').click();
+      },
+      error: function(data) {
+        alert('Failed to resolve dispute, please contact support');
+      }
+    });
+  });
+
   $('tbody').on('click', '.confirm_receipt', function(){
     var auction_id = $(this).data('id');
     var accept = confirm("Are you sure, Confirm Receipt");
@@ -192,6 +247,27 @@ $(function() {
     var rating = $(this).attr('title');
     $('#select-rating').val(rating);
   });
+
+  $('tbody').on('click', '.cancel_order', function(e) {
+    var auction_id = $(this).attr('data-id');
+    var auction_url = '/api/auctions/' + auction_id;
+    var key = $('#buyer-purchase-history-table').attr('data-key');
+    $.ajax( {
+      type: 'DELETE',
+      url: auction_url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        $('#purchase-history-tab').click();
+      },
+      error: function(data) {
+        alert('Failed to cancel order, please contact support');
+      }
+    });
+    return false;
+  });
+
 
   $('#rating-submit').on('click', 'button', function(){
     var status = $(this).data(status);

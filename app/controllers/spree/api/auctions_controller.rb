@@ -57,6 +57,20 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :internal_server_error
   end
 
+  def reject_order
+    @auction.order_rejected!
+    render nothing: true, status: :ok
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
+  def resolve_dispute
+    @auction.dispute_resolved!
+    render nothing: true, status: :ok
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
   def order_confirm
     winning_bid = @auction.winning_bid
 

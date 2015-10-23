@@ -135,7 +135,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :dispute_resolved do
-      transition :in_dispute => :complete
+      transition in_dispute: :complete
     end
 
     event :delivery_confirmed do

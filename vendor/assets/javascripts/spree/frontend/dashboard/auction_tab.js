@@ -60,7 +60,7 @@ $(function() {
             trHTML += "</tr>";
           });
         } else {
-          trHTML += "<tr><td class='text-center' colspan='5'>No auctions found!</td></tr>";
+          trHTML += "<tr><td class='text-center' colspan='7'>No auctions found!</td></tr>";
         }
         $("#live-auction-table > tbody").html(trHTML);
       }

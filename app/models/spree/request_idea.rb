@@ -20,7 +20,7 @@ class Spree::RequestIdea < Spree::Base
     end
 
     event :auction_close do
-      transition [:open, :complete] => :closed
+      transition [:open, :cancelled, :complete] => :closed
     end
   end
 

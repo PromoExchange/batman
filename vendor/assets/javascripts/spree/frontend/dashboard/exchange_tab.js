@@ -80,8 +80,6 @@ $(function() {
               bid3: bid3_val
             });
 
-            // Check to see if this seller is preferred
-
             trHTML += action_template({
               auction_id: item.id
             });

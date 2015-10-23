@@ -33,7 +33,7 @@ $(function() {
             });
             trHTML += image_template({
               image: item.image_uri,
-              id: item.name,
+              name: item.name,
               auction_id: item.id
             });
             trHTML += date_template({

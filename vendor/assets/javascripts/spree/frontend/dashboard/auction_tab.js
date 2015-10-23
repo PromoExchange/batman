@@ -31,7 +31,7 @@ $(function() {
             trHTML += image_template({
               auction_id: item.id,
               image: item.image_uri,
-              id: item.name
+              name: item.name
             });
 
             var num_bids = item.bids.length;

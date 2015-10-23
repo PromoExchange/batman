@@ -135,7 +135,7 @@ $(function() {
             });
             trHTML += image_template({
               image: item.image_uri,
-              id: item.name
+              name: item.name
             });
             trHTML += date_template({
               date: item.started

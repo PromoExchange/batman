@@ -3,7 +3,7 @@ Spree::User.class_eval do
   has_many :tax_rates
   has_many :addresses
   has_many :review
-  has_one :product_request, foreign_key: 'buyer_id'
+  has_many :product_requests, foreign_key: 'buyer_id'
 
   def ban
     cancel_bids

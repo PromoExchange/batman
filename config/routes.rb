@@ -96,6 +96,8 @@ Rails.application.routes.draw do
         post 'sample_request'
       end
     end
+
+    resources :product_requests, controller: 'spree/api/product_requests'
   end
 
   match 'product_requests/:request_idea_id/destroy' => 'spree/admin/product_requests#destroy_idea', via: :post

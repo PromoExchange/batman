@@ -24,9 +24,13 @@
         <% end %>
       </ul>
     <% end %>
+
+    <% @request_idea_id ||= params[:request_idea_id] %>
+    
     <%= f.hidden_field :product_id, value: @auction.product.id %>
     <%= f.hidden_field :buyer_id, value: @auction.buyer_id %>
     <%= f.hidden_field :invited_sellers, value: '' %>
+    <%= f.hidden_field :request_idea, value: @request_idea_id %>
     <fieldset>
       <div class="form-group" id="imprint-methods">
         <%= f.label(:imprint_method_id, Spree.t(:imprint_method)) %>
@@ -96,7 +100,7 @@
           [['Credit Card', 'Credit Card'],['Web Check', 'Check']]),
           { prompt: 'Please Select' }, { class: 'form-control' }) %>
       </div>
-      <% unless @auction.request_idea? %>
+      <% if @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>
       <% end %>
       <p>Estimated delivery date: <time data-format='%B %e, %Y' data-local='time' datetime='<%= 15.days.from_now %>'><%= 15.days.from_now %></time></p>

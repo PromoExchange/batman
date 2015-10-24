@@ -100,6 +100,13 @@ Spree::Api::ApiHelpers.module_eval do
     ])
   mattr_reader :favorite_attributes
 
+  class_variable_set(:@@product_request_attributes,
+    [
+      :id,
+      :title
+    ])
+  mattr_reader :product_request_attributes
+
   class_variable_set(:@@request_idea_attributes,
     [
       :id,

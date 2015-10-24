@@ -193,14 +193,6 @@ class Spree::Auction < Spree::Base
     !review.nil?
   end
 
-  def request_idea_obj
-    buyer.product_request.request_ideas.with_states.find_by(product_id: product_id) rescue nil
-  end
-
-  def request_idea?
-    !request_idea_obj.nil?
-  end
-
   def remove_request_idea
     update_attributes(cancelled_date: Time.zone.now)
     request_idea.auction_close! if request_idea.present?

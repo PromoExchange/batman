@@ -32,7 +32,6 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        console.log(data)
         alert('Delete this entry');
         $this.parents('tr').hide('slow', function() {
           $(this).remove();
@@ -46,10 +45,7 @@ $(function() {
     });
   });
 
-  // create customer using stripe
-
   function stripeResponseHandlerCustomer(status, response) {
-
     var $form = $('#customer-form');
     var key = $('#customer-method').attr('data-key');
 
@@ -95,10 +91,7 @@ $(function() {
     return false;
   });
 
-  // create account using stripe
-
   function stripeResponseHandlerAccount(status, response) {
-
     var $form = $('#account-form');
     var nick_name = $form.find('.nick_name').val();
 

@@ -4,6 +4,20 @@ Spree::Product.class_eval do
   has_and_belongs_to_many :option_values
   has_many :upcharges, as: :related
 
+  state_machine initial: :active do
+    event :loading do
+      transition active: :loading
+    end
+
+    event :loaded do
+      transition loading: :active
+    end
+
+    event :deleted do
+      transition active: :deleted
+    end
+  end
+
   def minimum_quantity
     lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).first
     return 50 if lowest_price_range.nil?
@@ -46,7 +60,7 @@ Spree::Product.class_eval do
                    Property.find_by(name: property_name)
                  else
                    Property.create(name: property_name, presentation: 'NON DISPLAY')
-      end
+                 end
 
       product_property = ProductProperty.where(
         product: self,

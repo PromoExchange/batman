@@ -115,7 +115,8 @@ Rails.application.routes.draw do
           post 'generate_notification'
         end
       end
+      match '/product_loads/destroy_factory' => 'product_loads#destroy_factory', via: :delete
+      resources :product_loads
     end
   end
-
 end

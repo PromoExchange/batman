@@ -5,7 +5,6 @@ Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 
 puts 'Tax Categories'
 Spree::TaxCategory.create!(name: 'Default', is_default: true)
-
 usa_country = Spree::Country.where(iso3: 'USA').first
 
 # For each state, create a tax zone with a single member
@@ -28,6 +27,27 @@ class TaxonLoader
     load_taxon_tree(category_root, category_taxonomy, category_taxonomy)
   end
 
+  def self.load_dc_categories
+    category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create
+    tree = Spree::DC::Category.category_tree
+    tree.each do |parent|
+      parent_taxon = Spree::Taxon.create(
+        name: parent.name,
+        dc_category_guid: parent.guid,
+        parent_id: category_taxonomy.id,
+        taxonomy_id: category_taxonomy.id
+      )
+      parent.children.each do |child|
+        Spree::Taxon.create(
+          name: child.name,
+          dc_category_guid: child.guid,
+          parent_id: parent_taxon.id,
+          taxonomy_id: category_taxonomy.id
+        )
+      end
+    end
+  end
+
   def self.load_colors(file_name)
     color_taxonomy = Spree::Taxonomy.where(name: 'Colors').first_or_create
     File.open(file_name).each do |color|
@@ -48,7 +68,7 @@ class TaxonLoader
   end
 end
 
-TaxonLoader.load_categories(seed_path('categories.yml'))
+TaxonLoader.load_dc_categories
 TaxonLoader.load_colors(seed_path('px_colors.txt'))
 
 puts 'Upcharge types'

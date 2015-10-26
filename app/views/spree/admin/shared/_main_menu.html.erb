@@ -30,7 +30,13 @@
 
 <% if can? :admin, Spree::ProductRequest %>
   <ul class="nav nav-sidebar">
-    <%= tab :product_ideas, url: spree.admin_product_requests_path %>
+    <%= tab :product_ideas, url: spree.admin_product_requests_path, icon: 'file' %>
+  </ul>
+<% end %>
+
+<% if can? :admin, Spree::ProductLoad %>
+  <ul class="nav nav-sidebar">
+    <%= tab :product_load, url: spree.admin_product_loads_path, icon: 'file' %>
   </ul>
 <% end %>
 

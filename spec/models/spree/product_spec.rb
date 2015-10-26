@@ -10,4 +10,28 @@ RSpec.describe Spree::Product, type: :model do
     t = Spree::Product.reflect_on_association(:imprint_methods)
     expect(t.macro).to eq :has_and_belongs_to_many
   end
+
+  it 'should start with an active state' do
+    a = FactoryGirl.build(:product)
+    expect(a.state).to eq 'active'
+  end
+
+  it 'should go to loading with an loading event' do
+    a = FactoryGirl.build(:product)
+    a.loading!
+    expect(a.state).to eq 'loading'
+  end
+
+  it 'should go to active with an loaded event' do
+    a = FactoryGirl.build(:product)
+    a.loading!
+    a.loaded!
+    expect(a.state).to eq 'active'
+  end
+
+  it 'should go to deleted state with an deleted event' do
+    a = FactoryGirl.build(:product)
+    a.deleted!
+    expect(a.state).to eq 'deleted'
+  end
 end

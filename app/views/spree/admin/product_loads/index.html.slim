@@ -1,0 +1,57 @@
+h2 Product Load
+.well
+    h4 Current Stats
+    table.table
+      tbody
+        tr
+          td Factories loaded
+          td = @num_factories
+        tr
+          td Products In Database
+          td = @num_database
+        tr
+          td In Factory Load Queue
+          td = @num_factory_queue
+        tr
+          td In Product Update Queue
+          td = @num_product_queue
+.well
+    h4 Factories Loaded
+    .scrolling
+      table.table
+        thead
+          tr
+            th Factory
+            th Products Loaded
+            th Action
+        tbody
+          - @loaded_factories.each do |k,v|
+            tr
+              td = k
+              td = v
+              td = button_to 'Delete', spree.admin_product_loads_destroy_factory_path, params: {factory_name: k} , method: :delete, class: "btn btn-success"
+.well
+    h4 Available Factories
+    table.table.table-condensed
+      thead
+        tr
+          th Factory
+          th DC #
+          th URL
+          th State
+          th Action
+      tbody
+        - cache do
+          - @dc_suppliers.each do |supplier|
+            tr
+              td = supplier.company_name
+              td = supplier.dc_acct_num
+              td
+                a href="http://#{supplier.url}" #{supplier.url}
+              td = supplier.state
+              td
+                = button_to 'Load',
+                  spree.admin_product_loads_path,
+                  params: {factory_name: supplier.company_name, dc_acct_num: supplier.dc_acct_num},
+                  method: :post,
+                  class: "btn btn-success btn-xs"

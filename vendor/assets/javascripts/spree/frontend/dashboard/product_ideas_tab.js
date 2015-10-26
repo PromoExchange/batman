@@ -1,5 +1,5 @@
 $(function() {
-  
+
   $('#product-ideas-tab').click(function() {
     var key = $("#buyer-product-ideas-table").attr("data-key");
     var url = 'api/product_requests';
@@ -18,9 +18,9 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          
+
           action_template = _.template("<a class='product_request_title' data-id='${product_request_id}'><span class='glyphicon glyphicon-chevron-right'></span>${name}</a>");
-          
+
           $.each(data, function(i, item) {
             trHTML += "<tr>";
 
@@ -58,7 +58,7 @@ $(function() {
       var url = 'api/request_ideas?state=open,complete&product_request_id='+product_request_id;
 
       var simple_template = _.template("<td><%= value %></td>");
-      var image_template = _.template("<td class='image_idea'><a href='${url}'><img itemprop='image' alt='${name}' src='${image}'><p>${value}</p></a></td>");
+      var image_template = _.template("<td class='image_idea'><a href='${url}'><img itemprop='image' data-toggle='tooltip' title='${name}' alt='${name}' src='${image}'><p>${value}</p></a></td>");
 
       $.ajax({
         type: 'GET',
@@ -72,9 +72,9 @@ $(function() {
         success: function(data) {
           var trHTML = '';
           if (data.length > 0) {
-            
+
             action_template = _.template("<a class='btn ${product_class}' data-id='${request_idea_id}' href='${url}'>${name}</a>");
-            
+
             $.each(data, function(i, item) {
               trHTML += "<tr>";
 

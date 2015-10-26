@@ -7,7 +7,7 @@ $(function() {
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");
     var date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= date %>'><%= date %></time></td>");
-    var image_template = _.template("<td><a href='/auctions/<%= auction_id %>'><img itemprop='image' alt='<%= name %>' src='<%= image %>'></a></td>");
+    var image_template = _.template("<td><a href='/auctions/<%= auction_id %>'><img itemprop='image' data-toggle='tooltip' title='<%= name %>' alt='<%= name %>' src='<%= image %>'></a></td>");
 
     $.ajax({
       type: 'GET',

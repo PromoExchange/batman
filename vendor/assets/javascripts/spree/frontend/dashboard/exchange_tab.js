@@ -6,7 +6,7 @@ $(function() {
 
     var reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
     var simple_template = _.template("<td><%= value %></td>");
-    var image_template = _.template("<td><a href='/auctions/<%= auction_id %>'><img itemprop='image' alt='<%= name %>' src='<%= image %>'></a></td>");
+    var image_template = _.template("<td><a href='/auctions/<%= auction_id %>'><img itemprop='image' data-toggle='tooltip' title='<%= name %>' data-toggle='tooltip' title='<%= name %>' alt='<%= name %>' src='<%= image %>'></a></td>");
     var date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= date %>'><%= date %></time></td>");
     var top3_template = _.template("<td><ul><li><%= bid1 %></li><li><%= bid2 %></li><li><%= bid3 %></li></ul></td>");
 
@@ -37,7 +37,7 @@ $(function() {
             });
             trHTML += image_template({
               image: item.image_uri,
-              id: item.name,
+              name: item.name,
               auction_id: item.id
             });
             trHTML += date_template({

@@ -4,8 +4,13 @@
 
 <ul class="nav nav-tabs" role="tablist">
   <% active_me = nil %>
-  <% active_me = 'active' unless ['address', 'logo'].include? @tab %>
+  <% active_me = 'active' unless ['address', 'logo', 'payment_method'].include? @tab %>
   <li class="<%= active_me %>"><a href="#contact-tab" role="tab" data-toggle="tab"><%=Spree.t(:contact_information)%></a></li>
+  <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
+    <% active_me = nil %>
+    <% active_me = 'active' if @tab == 'payment_method' %>
+    <li class="<%= active_me %>"><a href="#payment-method-tab" role="tab" data-toggle="tab"><%=Spree.t(:payment_methods)%></a></li>
+  <% end %>
   <% active_me = nil %>
   <% active_me = 'active' if @tab == 'address' %>
   <li class="<%= active_me %>"><a href="#address-tab" role="tab" data-toggle="tab"><%=Spree.t(:Addresses)%></a></li>
@@ -22,10 +27,17 @@
 
 <div class="tab-content">
   <% active_me = nil %>
-  <% active_me = 'active' unless ['address', 'logo'].include? @tab %>
+  <% active_me = 'active' unless ['address', 'logo', 'payment_method'].include? @tab %>
   <div class="tab-pane <%= active_me %>" id="contact-tab">
     <%= render partial: 'spree/dashboards/shared/contact_tab' %>
   </div>
+  <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
+    <% active_me = nil %>
+    <% active_me = 'active' if @tab == 'payment_method' %>
+    <div class="tab-pane <%= active_me %>" id="payment-method-tab">
+      <%= render partial: 'spree/dashboards/buyer/payment_method_tab' %>
+    </div>
+  <% end %>
   <% active_me = nil %>
   <% active_me = 'active' if @tab == 'address' %>
   <div class="tab-pane <%= active_me %>" id="address-tab">

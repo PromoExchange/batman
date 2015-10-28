@@ -22,6 +22,8 @@ class Spree::Auction < Spree::Base
   has_one :review
   has_one :request_idea
 
+  belongs_to :customer
+
   accepts_nested_attributes_for :auctions_pms_colors
 
   has_attached_file :proof_file,

@@ -96,12 +96,28 @@
 
       <%= f.hidden_field :payment_method, value: 'Credit Card' %>
 
-      <!-- <div class="form-group">
+      <div class="form-group">
         <%= f.label(:payment_method, 'Payment Method') %>
         <%= f.select(:payment_method, options_for_select(
-          [['Credit Card', 'Credit Card'],['Web Check', 'Check']]),
-          { prompt: 'Please Select' }, { class: 'form-control' }) %>
-      </div> -->
+          [['Credit Card', 'Credit Card'],['Web Check', 'Check']], @auction.payment_method),
+          { prompt: 'Please Select' }, { class: 'form-control' }) %> 
+          <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="They are not charged until they accept a bid and close auction"></span>
+      </div>
+
+      <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
+
+      <div class="form-group customer-hideable" style="display: none;">
+        <% if @user.customers.present? %>
+        <ul class="list-group">
+          <% @user.customers.each do |customer| %>
+            <li class="list-group-item"><%= f.radio_button :customer_id, customer.id %> <%= f.label :customer_id, "#{customer.brand} #{customer.last_4_digits}" %></li>
+          <% end %>
+        </ul>
+        <% else %>
+          <p> Add Credit Card </p>
+        <% end %>
+      </div>
+
       <% if @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>
       <% end %>

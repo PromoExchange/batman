@@ -1,0 +1,9 @@
+#payment-method-tab {
+  #add-account, #add-card, .remove-account, .remove-card {
+    cursor: pointer;
+  }
+
+  #add-account-field, #add-card-field {
+    display: none;
+  }
+}

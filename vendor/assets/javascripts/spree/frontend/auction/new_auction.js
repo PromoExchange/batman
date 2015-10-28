@@ -43,6 +43,21 @@ $(function() {
     $("div.custom-color-hideable").hide(750);
   });
 
+  $("#auction_payment_method").change(function(e) {
+    var val = $("#auction_payment_method option:selected").val();
+    if(val == 'Credit Card') {
+      $('.customer-hideable').show();
+    } else {
+      $('.customer-hideable').hide();
+    }
+  });
+
+  if ($("#auction_payment_method option:selected").val() == 'Credit Card') {
+    $('.customer-hideable').show();
+  }
+
+  $('.payment-question').tooltip();
+
   $("#invite-sellers-link").click(function() {
     $("invite-sellers-form")[0].reset();
     var invited_sellers = $("auction_invited_sellers").val();

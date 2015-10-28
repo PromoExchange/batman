@@ -4,6 +4,7 @@ Spree::User.class_eval do
   has_many :addresses
   has_many :review
   has_many :product_requests, foreign_key: 'buyer_id'
+  has_many :customers
 
   def ban
     cancel_bids

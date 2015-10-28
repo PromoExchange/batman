@@ -1,3 +1,10 @@
+<% content_for :head do %>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+  Stripe.setPublishableKey('<%= ENV["STRIPE_TEST_PUBLISHABLE_KEY"] %>');
+</script>
+<% end %>
+
 <div class="batman-user-dashboard batman-nav-pills">
   <div class="container">
     <div class="row">
@@ -16,7 +23,7 @@
             <li><a href="#favorite-items" data-toggle="tab"><%= Spree.t(:favorite_items) %></a></li>
             <% active_me = nil %>
           <% end %>
-          <% active_me = 'active' if ['address', 'logo'].include? @tab %>
+          <% active_me = 'active' if ['address', 'logo', 'payment_method'].include? @tab %>
           <li class="<%= active_me %>"><a href="#account-settings" data-toggle="tab"><%= Spree.t(:account_settings) %></a></li>
           <li><a href="#support" data-toggle="tab"><%= Spree.t(:support) %></a></li>
         </ul>
@@ -39,7 +46,7 @@
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
             <div class="tab-pane" id="favorite-items"><%= render partial: 'spree/dashboards/buyer/favorite_items' %></div>
           <% end %>
-          <% active_me = 'active' if ['address', 'logo'].include? @tab %>
+          <% active_me = 'active' if ['address', 'logo', 'payment_method'].include? @tab %>
           <div class="tab-pane <%= active_me %>" id="account-settings"><%= render partial: 'spree/dashboards/shared/account_settings' %></div>
           <div class="tab-pane" id="support"><%= render partial: 'spree/dashboards/shared/support' %></div>
         </div>

@@ -1,0 +1,22 @@
+<form action="/customer" method="POST" id="customer-form" class="form">
+  <span class="payment-errors"></span>
+  <table class="table text-center">
+    <tr>
+      <td><input type="text" size="20" placeholder="Card Number" data-stripe="number"/></td>
+      <td><input type="text" size="4" placeholder="CVC" data-stripe="cvc"/></td>
+      <td>
+        <input type="text" size="2" placeholder="MM" data-stripe="exp-month"/>
+        <span> / </span>
+        <input type="text" size="4" placeholder="YY" data-stripe="exp-year"/>
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+        <button class='pull-left btn btn-success' id='payment-submit' type="submit">Submit</button>
+        <span class='pull-right btn btn-danger cancel-card'>Cancel</span>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</form>

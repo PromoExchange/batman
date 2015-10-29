@@ -198,8 +198,6 @@ class Spree::Auction < Spree::Base
     request_idea.auction_close! if request_idea.present?
   end
 
-  private
-
   def ups_response
     ups = ActiveShipping::UPS.new(
       login: ENV['UPS_API_USERID'],
@@ -208,6 +206,8 @@ class Spree::Auction < Spree::Base
     )
     ups.find_tracking_info(tracking_number, test: true)
   end
+
+  private
 
   def notification_for_in_production
     Resque.enqueue(

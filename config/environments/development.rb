@@ -55,9 +55,4 @@ Rails.application.configure do
     url: ':s3_domain_url',
     path: '/:class/:attachment/:id_partition/:style/:filename'
   }
-
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.bullet_logger = true
-  end
 end

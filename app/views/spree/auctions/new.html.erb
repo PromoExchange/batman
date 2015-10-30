@@ -106,15 +106,27 @@
 
       <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
 
-      <div class="form-group customer-hideable" style="display: none;">
-        <% if @user.customers.present? %>
+      <div class="form-group credit-card-hideable" style="display: none;">
+        <% if @user.customers.credit_card.present? %>
         <ul class="list-group">
-          <% @user.customers.each do |customer| %>
+          <% @user.customers.credit_card.each do |customer| %>
             <li class="list-group-item"><%= f.radio_button :customer_id, customer.id %> <%= f.label :customer_id, "#{customer.brand} #{customer.last_4_digits}" %></li>
           <% end %>
         </ul>
         <% else %>
           <p> Add Credit Card </p>
+        <% end %>
+      </div>
+
+      <div class="form-group web-check-hideable" style="display: none;">
+        <% if @user.customers.web_check.verified.present? %>
+          <ul class="list-group">
+            <% @user.customers.web_check.verified.each do |customer| %>
+              <li class="list-group-item"><%= f.radio_button :customer_id, customer.id %> <%= f.label :customer_id, "#{customer.brand}##{customer.last_4_digits}" %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p> Add Account </p>
         <% end %>
       </div>
 

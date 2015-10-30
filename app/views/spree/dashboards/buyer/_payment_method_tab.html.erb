@@ -1,52 +1,58 @@
 <div class="panel panel-default" id="customer-method" data-key="<%= spree_current_user.spree_api_key %>">
   <div class="panel-body">
-    <div>
-      <div class="pull-left">Checking Account (save an additional 2.9% on most transactions)</div>
-      <div class="pull-right text-center" id="add-account"><span class="glyphicon glyphicon-plus-sign"></span><br>Add Checking Account</div>
+    <div class="panel-head-block">
+      <div class="pull-left"><h3>Checking Account (save an additional 2.9% on most transactions)</h3></div>
+      <div class="pull-right text-center right-btn" id="add-account">
+        <button class="btn btn-primary add-account">
+        Add Checking Account<span class="glyphicon glyphicon-plus-sign"></span>
+      </button>
+      </div>
     </div>
 
-    <table class="table" id="checking-account">
-      <% if true %>
-        <% (1..3).each do %>
+    <table class="table checking-act" id="checking-account">
+      <% if @user.customers.web_check.present? %>
+        <% @user.customers.web_check.each do |customer| %>
           <tr>
-            <td>Nickname #1234</td>
-            <td><span class="glyphicon glyphicon-remove-sign remove-account pull-right"></span></td>
+            <td><%= "#{customer.brand}##{customer.last_4_digits}" %></td>
+            <td><span class="glyphicon glyphicon-remove-sign remove-customer pull-right" data-id="<%= customer.id %>"></span></td>
           </tr>
+          <% unless customer.status == 'verified' %>
+            <tr class="confirm_tr">
+              <td colspan="2">
+                <%= render partial: 'spree/dashboards/buyer/confirm_deposit', locals: {customer_id: customer.token} %>
+              </td>
+            </tr>
+          <% end %>
         <% end %>
       <% else %>
         <tr><td> No Checking Accounts Added </td></tr>
       <% end %>
     </table>
 
-    <table class="table text-center" id="add-account-field">
-      <tr>
-        <td><%= text_field_tag :nick_name, nil, placeholder: 'Account Nickname' %></td>
-        <td><%= text_field_tag :routing_number, nil, placeholder: 'Routing Number' %></td>
-        <td><%= text_field_tag :account_number, nil, placeholder: 'Account Number' %></td>
-      </tr>
-      <tr>
-        <td>&nbsp;</td>
-        <td>
-          <%= button_tag 'Submit', class: 'pull-left btn-success' %>
-          <%= button_tag 'Cancel', class: 'pull-right btn-danger cancel-account' %>
-        </td>
-        <td>&nbsp;</td>
-      </tr>
-    </table>
+    <%= render partial: 'spree/dashboards/buyer/account_form' %>
+    <div id="confirm_deposit">
+      <%= render partial: 'spree/dashboards/buyer/confirm_deposit', locals: {customer_id: ''} %>
+    </div>
   </div>
 
+  <!-- Credit/Debit Cards Detail -->
   <div class="panel-body">
-    <div>
-      <div class="pull-left">Credit & Debit Cards</div>
-      <div class="pull-right text-center" id="add-card"><span class="glyphicon glyphicon-plus-sign"></span><br>Add Credit/Debit Card</div>
+    <div class="panel-head-block">
+      <div class="pull-left"><h3>Credit & Debit Cards</h3></div>
+      <div class="pull-right text-center" id="add-card">
+        <button class="btn btn-primary">
+          Add Credit/Debit Card
+          <span class="glyphicon glyphicon-plus-sign"></span>
+        </button>
+        </div>
     </div>
 
-    <table class="table" id="credit-card">
-      <% if @user.customers.present? %>
-        <% @user.customers.each do |customer| %>
+    <table class="table checking-act" id="credit-card">
+      <% if @user.customers.credit_card.present? %>
+        <% @user.customers.credit_card.each do |customer| %>
           <tr>
             <td><%= "#{customer.brand} #{customer.last_4_digits}" %></td>
-            <td><span class="glyphicon glyphicon-remove-sign remove-card pull-right" data-id="<%= customer.id %>"></span></td>
+            <td><span class="glyphicon glyphicon-remove-sign remove-customer pull-right" data-id="<%= customer.id %>"></span></td>
           </tr>
         <% end %>
       <% else %>
@@ -54,7 +60,7 @@
       <% end %>
     </table>
 
-    <div  id="add-card-field">
+    <div id="add-card-field">
       <%= render partial: 'spree/dashboards/buyer/customer_form' %>
     </div>
   </div>

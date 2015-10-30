@@ -46,14 +46,23 @@ $(function() {
   $("#auction_payment_method").change(function(e) {
     var val = $("#auction_payment_method option:selected").val();
     if(val == 'Credit Card') {
-      $('.customer-hideable').show();
+      $('.credit-card-hideable').show();
+      $('.web-check-hideable').hide();
+    } else if(val == 'Check') {
+      $('.web-check-hideable').show();
+      $('.credit-card-hideable').hide();
     } else {
-      $('.customer-hideable').hide();
+      $('.web-check-hideable').hide();
+      $('.credit-card-hideable').hide();
     }
   });
 
   if ($("#auction_payment_method option:selected").val() == 'Credit Card') {
-    $('.customer-hideable').show();
+    $('.credit-card-hideable').show();
+  }
+
+  if ($("#auction_payment_method option:selected").val() == 'Check') {
+    $('.web-check-hideable').show();
   }
 
   $('.payment-question').tooltip();

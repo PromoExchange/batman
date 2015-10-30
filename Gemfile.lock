@@ -629,6 +629,7 @@ DEPENDENCIES
   guard-livereload
   guard-rails
   guard-rspec
+  httparty
   humanize_boolean
   jbuilder (~> 2.0)
   jquery-rails
@@ -677,3 +678,6 @@ DEPENDENCIES
   unicorn-worker-killer
   web-console (~> 2.0)
   work_queue
+
+BUNDLED WITH
+   1.10.6

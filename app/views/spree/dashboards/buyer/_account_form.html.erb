@@ -1,0 +1,54 @@
+<div id="add-account-field">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form action="/customer" method="POST" id="account-form" class="form">
+        <span class="payment-errors"></span>
+        <p class="well">Add Account Detail</p>
+        <div class="row account-block">
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="input-group">
+              <input type="text" placeholder="Nick Name" class="nick_name"/>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="input-group">
+              <input type="hidden" placeholder="Country" data-stripe="country" value="US"/>
+              <input type="text"   placeholder="Routing Number" data-stripe="routing-number"/>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="input-group">
+              <input type="text"  placeholder="Account Number" class="account_number" data-stripe="account-number"/>
+            </div>
+          </div>
+        </div>
+        <div class="row submit-btn">
+            <button class=' btn btn-success' id='account-submit' type="submit">Submit</button>
+              <span class=' btn btn-danger cancel-account'>Cancel</span>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="confirm-account-field">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p class="well">Add Confirm Account Number</p>
+      <div class="row account-block">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="input-group">
+              <input type="hidden" class="account_token" />
+            <input type="text" class="confirm_number" placeholder="Confirm Account Number"/>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="row submit-btn">
+            <button class=' btn btn-success' id='confirm-submit' type="submit">Submit</button>
+              <span class=' btn btn-danger confirm-cancel'>Cancel</span>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

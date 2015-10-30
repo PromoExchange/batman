@@ -36,14 +36,19 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
       email: current_spree_user.email
     )
 
+    brand = (params[:payment_type] == 'cc' ? customer.sources.data.first.brand : params[:nick_name])
+    status = (params[:payment_type] == 'wc' ? customer.sources.data.first.status : 'cc' )
+
     Spree::Customer.create(
       user_id: current_spree_user.id,
       token: customer.id,
-      brand: customer.sources.data.first.brand,
-      last_4_digits: customer.sources.data.first.last4
+      brand: brand,
+      last_4_digits: customer.sources.data.first.last4,
+      payment_type: params[:payment_type],
+      status: status
     )
 
-    render nothing: true, status: :ok
+    render nothing: true, status: :ok, json: customer
   rescue
     render nothing: true, status: :internal_server_error
   end
@@ -51,14 +56,27 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
   def delete_customer
     customer = Spree::Customer.find(params[:customer_id])
     cu = Stripe::Customer.retrieve(customer.token)
-    if cu.delete
-      customer.delete 
-    else
-      render json: { nothing: true, status: :ok, error_msg: 'Not Delete' }
-    end
-    render json: { nothing: true, status: :ok, error_msg: '' }
+    
+    customer.delete if cu.delete
+    
+    render nothing: true, status: :ok
   rescue
-    render json: { nothing: true, status: :internal_server_error }
+    render nothing: true, status: :internal_server_error
+  end
+
+  def confirm_deposit
+    customer = Stripe::Customer.retrieve(params[:customer_id])
+    bank_id = customer.sources.data.first.id
+    amount = "amounts[]=#{params[:amount_first]}&amounts[]=#{params[:amount_second]}"
+    auth = { username: ENV["STRIPE_TEST_SECRET_KEY"] } 
+    response = HTTParty.post("https://api.stripe.com/v1/customers/#{customer.id}/sources/#{bank_id}/verify?#{amount}",basic_auth: auth)
+   
+    if response["status"].present?
+      Spree::Customer.find_by_token(customer.id).update(status: response["status"])
+    end
+    render nothing: true, status: :ok, json: response
+  rescue
+    render nothing: true, status: :internal_server_error
   end
 
   private

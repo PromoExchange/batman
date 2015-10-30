@@ -27,6 +27,7 @@ gem 'state_machine'
 gem 'oj'
 gem 'le'
 gem 'kaminari'
+gem 'httparty'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

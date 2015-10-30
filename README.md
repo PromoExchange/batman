@@ -14,6 +14,20 @@ Requirements
 - [Postgres 9+](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
 - [Redis](http://redis.io/topics/quickstart)
 
+Windows Installation
+--------------------
+The following installation links are for a Microsoft Windows Environment.
+N.B. These are untested as I do not have access to a Windows machine
+- [Git CLI Installation](https://git-scm.com/download/win). This also includes a bash prompt.
+- [Github UI Installation](https://desktop.github.com/). The official GIT github UI.
+- [Redis](https://github.com/MSOpenTech/redis/releases)
+- [Atom Editor](https://atom.io/). This is recommended, but use an editor you are most familiar with.
+- [Ruby](http://rubyinstaller.org/)
+- [Postgres](http://www.postgresql.org/download/windows/)
+- [Bundler](http://bundler.io/)
+- [node](https://nodejs.org/en/download/) N.B. Select 'include NPM' in the installation options.
+- [Bower](http://bower.io/#install-bower)
+
 Installation
 ------------
 1. `git clone git@github.com:PromoExchange/batman.git`
@@ -26,8 +40,8 @@ Installation
 Running the App
 ---------------
 1. Ensure postgres and redis-server are running
-2. `bundle exec rake resque:work QUEUE=*`
-3. `bundle exec rails s`
+2. `bundle exec rake resque:work QUEUE=*` in one command
+3. `bundle exec rails s` in another command
 4. Navigate to `http://localhost:3000` in your browser
 
 Post Installation

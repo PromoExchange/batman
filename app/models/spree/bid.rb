@@ -84,4 +84,10 @@ class Spree::Bid < Spree::Base
     o = Spree::Order.create
     self.order_id = o.id
   end
+
+  def seller_fee
+    rate = 0.0899
+    rate = 0.0299 if auction.preferred?(seller)
+    (order.total * rate).round(2)
+  end
 end

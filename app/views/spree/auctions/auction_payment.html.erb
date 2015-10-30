@@ -1,7 +1,7 @@
 <% content_for :head do %>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
-  Stripe.setPublishableKey('<%= ENV["STRIPE_TEST_PUBLISHABLE_KEY"] %>');
+  Stripe.setPublishableKey('<%= ENV["STRIPE_PUBLISHABLE_KEY"] %>');
 </script>
 <% end %>
 
@@ -50,7 +50,7 @@
       </table>
     </div>
   </div>
-  
+
   <% if spree_current_user.has_spree_role?(:buyer) and @bid.open? %>
     <div class="col-md-6">
       <h2>Payment: $<%= "%.2f" % @bid.bid %> </h2>

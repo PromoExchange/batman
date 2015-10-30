@@ -28,10 +28,10 @@
     "SECRET_KEY_BASE":{
       "required":true
     },
-    "STRIPE_TEST_PUBLISHABLE_KEY":{
+    "STRIPE_PUBLISHABLE_KEY":{
       "required":true
     },
-    "STRIPE_TEST_SECRET_KEY":{
+    "STRIPE_SECRET_KEY":{
       "required":true
     },
     "UPS_API_KEY":{

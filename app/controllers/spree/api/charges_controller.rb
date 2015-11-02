@@ -86,7 +86,7 @@ class Spree::Api::ChargesController < Spree::Api::BaseController
     customer = Stripe::Customer.retrieve(params[:customer_id])
     bank_id = customer.sources.data.first.id
     amount = "amounts[]=#{params[:amount_first]}&amounts[]=#{params[:amount_second]}"
-    auth = { username: ENV['STRIPE_TEST_SECRET_KEY'] }
+    auth = { username: ENV['STRIPE_SECRET_KEY'] }
     response = HTTParty.post(
       "https://api.stripe.com/v1/customers/#{customer.id}/sources/#{bank_id}/verify?#{amount}",
       basic_auth: auth

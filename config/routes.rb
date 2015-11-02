@@ -101,6 +101,8 @@ Rails.application.routes.draw do
     end
 
     resources :product_requests, controller: 'spree/api/product_requests'
+
+    resources :charges, controller: 'spree/api/charges', only: [:index]
   end
 
   match 'product_requests/:request_idea_id/destroy' => 'spree/admin/product_requests#destroy_idea', via: :post

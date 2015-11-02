@@ -50,15 +50,18 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       else
         description = "Auction ID: #{@bid.auction.reference}, Buyer: #{@bid.auction.buyer.email}"
 
-        Stripe::Charge.create(
+        stripe = Stripe::Charge.create(
           amount: @bid.bid.to_i,
           currency: 'usd',
-          source: params[:token],
+          customer: @bid.auction.customer.token,
           description: description
         )
-
-        @bid.non_preferred_accept
-        @bid.auction.accept
+        
+        if ["succeeded", "pending"].include?(stripe.status)
+          @bid.auction_payments.create(status: stripe.status, charge_id: stripe.id)
+          @bid.non_preferred_accept
+          @bid.auction.accept
+        end
       end
       @bid.order.update_attributes(payment_state: 'balance_due')
     end

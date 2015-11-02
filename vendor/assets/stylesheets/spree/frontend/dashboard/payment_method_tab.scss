@@ -43,10 +43,6 @@
     font-size:17px;
   }
 
-  .panel-body form p.well {
-    border-color:#000;
-    border-radius:0px;
-  }
   .account-block{
     width:100%;
     display:inline-block;
@@ -74,22 +70,6 @@
     margin:0px 63px 0px 33px;
   }
 
-  #confirm-account-field .panel-body p.well {
-    border-color:#000;
-    border-radius:0px;
-  }
-  .deposit-field p.well {
-    border-color:#000 !Important;
-    border-radius:0px;
-  }
-
-  #add-card-field .panel-body p {
-    border-color:#000 !important;
-    border-radius:0px;
-    border-width:1px;
-    border-style:solid;
-  }
-
   #add-card-field .row {
     display:inline-block;
     width:100%;
@@ -98,6 +78,10 @@
 
   #add-card-field .row .input-group {
     display:inline-block;
+  }
+
+  .panel-body .panel-default {
+    border-color:#000;
   }
       
 }

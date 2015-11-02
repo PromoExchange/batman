@@ -2,7 +2,7 @@
 <%= Spree.t(:auction) %>
 <% end %>
 
-<div class="row" id="new-auction">
+<div class="row" id="new-auction" data-key="<%= spree_current_user.spree_api_key %>">
   <div class="col-md-6">
     <% url = spree.product_url(@auction.product) %>
     <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url' %><br/>
@@ -94,40 +94,19 @@
           { prompt: 'Please Select'}, { class: 'form-control' }) %>
       </div>
 
-      <%= f.hidden_field :payment_method, value: 'Credit Card' %>
-
       <div class="form-group">
         <%= f.label(:payment_method, 'Payment Method') %>
         <%= f.select(:payment_method, options_for_select(
           [['Credit Card', 'Credit Card'],['Web Check', 'Check']], @auction.payment_method),
           { prompt: 'Please Select' }, { class: 'form-control' }) %> 
-          <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="They are not charged until they accept a bid and close auction"></span>
+          <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
       </div>
 
       <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
 
-      <div class="form-group credit-card-hideable" style="display: none;">
-        <% if @user.customers.credit_card.present? %>
-        <ul class="list-group">
-          <% @user.customers.credit_card.each do |customer| %>
-            <li class="list-group-item"><%= f.radio_button :customer_id, customer.id %> <%= f.label :customer_id, "#{customer.brand} #{customer.last_4_digits}" %></li>
-          <% end %>
+      <div class="form-group customer-hideable" style="display: none;">
+        <ul class="list-group customer-listing">
         </ul>
-        <% else %>
-          <p> Add Credit Card </p>
-        <% end %>
-      </div>
-
-      <div class="form-group web-check-hideable" style="display: none;">
-        <% if @user.customers.web_check.verified.present? %>
-          <ul class="list-group">
-            <% @user.customers.web_check.verified.each do |customer| %>
-              <li class="list-group-item"><%= f.radio_button :customer_id, customer.id %> <%= f.label :customer_id, "#{customer.brand}##{customer.last_4_digits}" %></li>
-            <% end %>
-          </ul>
-        <% else %>
-          <p> Add Account </p>
-        <% end %>
       </div>
 
       <% if @request_idea_id.blank? %>

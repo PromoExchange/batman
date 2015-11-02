@@ -43,26 +43,73 @@ $(function() {
     $("div.custom-color-hideable").hide(750);
   });
 
+  function customerList(url) {
+    var key = $("#new-auction").data("key");
+    var simple_template = _.template("<li class='list-group-item'>${value}</li>");
+
+    $.ajax( {
+      type: 'GET',
+      data: {
+        format: 'json'
+      },
+      url: url,
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        var trHTML = '';
+        if (data.length > 0) { 
+          action_template = _.template("<input type='radio' value='${customer_id}' name='auction[customer_id]' id='auction_customer_id_${customer_id}'/> <label for='auction_customer_id'>${name}</label>");
+          $.each(data, function(i, item) { 
+            if (item.payment_type == 'cc') {
+              var name = item.brand+' '+item.last_4_digits;
+            } else {
+              var name = item.brand+'#'+item.last_4_digits;
+            }
+
+            trHTML += simple_template({ 
+              value: action_template ({
+                customer_id: item.id,
+                name: name
+              })
+            });
+          })
+        } else {
+          trHTML += simple_template({ 
+            value: 'Add Account'
+          });
+        }
+        $("#new-auction ul.customer-listing").html(trHTML);
+      } 
+    });
+  }
+
   $("#auction_payment_method").change(function(e) {
     var val = $("#auction_payment_method option:selected").val();
+
     if(val == 'Credit Card') {
-      $('.credit-card-hideable').show();
-      $('.web-check-hideable').hide();
+      $('.customer-hideable').show();
+      var url = '/api/charges?type=credit_card';
+      customerList(url)
     } else if(val == 'Check') {
-      $('.web-check-hideable').show();
-      $('.credit-card-hideable').hide();
+      $('.customer-hideable').show();
+      var url = '/api/charges?type=check'
+      customerList(url)
     } else {
-      $('.web-check-hideable').hide();
-      $('.credit-card-hideable').hide();
+      $('.customer-hideable').hide();
     }
   });
 
   if ($("#auction_payment_method option:selected").val() == 'Credit Card') {
-    $('.credit-card-hideable').show();
+    $('.customer-hideable').show();
+    var url = '/api/charges?type=credit_card';
+    customerList(url)
   }
 
   if ($("#auction_payment_method option:selected").val() == 'Check') {
-    $('.web-check-hideable').show();
+    $('.customer-hideable').show();
+    var url = '/api/charges?type=check'
+    customerList(url)
   }
 
   $('.payment-question').tooltip();

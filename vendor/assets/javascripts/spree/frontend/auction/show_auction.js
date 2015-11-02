@@ -26,4 +26,31 @@ $(function() {
       window.location = "/accept/" + bid_id ;
     }
   });
+
+  $('#accept-bid').click(function() {
+    var key = $('#show-invoice').attr('data-key');
+    var bid_id = $(this).data('bid');
+    $("body").css("cursor", "progress");
+    $("#accept-bid").prop('disabled', true);
+
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      url: '/api/bids/' + bid_id + '/accept',
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        $("body").css("cursor", "default");
+        $("#accept-bid").prop('disabled', false);
+        alert('Bid accept successfully');
+        window.location.href = "/dashboards";
+      },
+      error: function(data) {
+        $("body").css("cursor", "default");
+        $("#accept-bid").prop('disabled', false);
+        alert("Unsuccessful accept");
+      }
+    });
+  });
 });

@@ -50,4 +50,9 @@ class BuyerMailer < ApplicationMailer
     @product_request = product_request
     mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange product Ideation Request')
   end
+
+  def confirm_checking_account(customer)
+    @customer = customer
+    mail(to: @customer.user.email, subject: 'PromoExchange Confirm Checking Account')
+  end
 end

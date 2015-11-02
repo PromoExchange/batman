@@ -1,4 +1,15 @@
 class  Spree::Api::ChargesController < Spree::Api::BaseController
+
+  def index
+    @customers = current_spree_user.customers
+    if params[:type] == 'credit_card'
+      customers = @customers.credit_card
+    else
+      customers = @customers.web_check.verified
+    end
+    render nothing: true, status: :ok, json: customers
+  end
+
   def charge
     auction = Spree::Auction.find(params[:auction_id])
     bid = auction.winning_bid
@@ -30,25 +41,33 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
   end
 
   def create_customer
-    customer = Stripe::Customer.create(
+    stripe_customer = Stripe::Customer.create(
       source: params[:token],
       description: "User Name : #{current_spree_user.shipping_address.full_name}",
       email: current_spree_user.email
     )
 
-    brand = (params[:payment_type] == 'cc' ? customer.sources.data.first.brand : params[:nick_name])
-    status = (params[:payment_type] == 'wc' ? customer.sources.data.first.status : 'cc' )
+    brand = (params[:payment_type] == 'cc' ? stripe_customer.sources.data.first.brand : params[:nick_name])
+    status = (params[:payment_type] == 'wc' ? stripe_customer.sources.data.first.status : 'cc' )
 
-    Spree::Customer.create(
+    customer = Spree::Customer.create(
       user_id: current_spree_user.id,
-      token: customer.id,
+      token: stripe_customer.id,
       brand: brand,
-      last_4_digits: customer.sources.data.first.last4,
+      last_4_digits: stripe_customer.sources.data.first.last4,
       payment_type: params[:payment_type],
       status: status
     )
 
-    render nothing: true, status: :ok, json: customer
+    if params[:payment_type] == 'wc'
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 3.days),
+        ConfirmCheckingAccount,
+        customer_id:  customer.id
+      )
+    end
+
+    render nothing: true, status: :ok, json: stripe_customer
   rescue
     render nothing: true, status: :internal_server_error
   end

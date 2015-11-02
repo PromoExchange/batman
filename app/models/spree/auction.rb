@@ -50,6 +50,7 @@ class Spree::Auction < Spree::Base
     auction.product.minimum_quantity
   end
   validates_inclusion_of :shipping_agent, in: %w(ups fedex)
+  validates :customer_id, presence: { message: "Payment Option can't be blank" }, if: -> { payment_method.present? }
 
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true

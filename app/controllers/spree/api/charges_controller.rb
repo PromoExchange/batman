@@ -48,7 +48,7 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
     )
 
     brand = (params[:payment_type] == 'cc' ? stripe_customer.sources.data.first.brand : params[:nick_name])
-    status = (params[:payment_type] == 'wc' ? stripe_customer.sources.data.first.status : 'cc' )
+    status = (params[:payment_type] == 'wc' ? stripe_customer.sources.data.first.status : 'cc')
 
     customer = Spree::Customer.create(
       user_id: current_spree_user.id,
@@ -75,9 +75,9 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
   def delete_customer
     customer = Spree::Customer.find(params[:customer_id])
     cu = Stripe::Customer.retrieve(customer.token)
-    
+
     customer.delete if cu.delete
-    
+
     render nothing: true, status: :ok
   rescue
     render nothing: true, status: :internal_server_error
@@ -87,11 +87,14 @@ class  Spree::Api::ChargesController < Spree::Api::BaseController
     customer = Stripe::Customer.retrieve(params[:customer_id])
     bank_id = customer.sources.data.first.id
     amount = "amounts[]=#{params[:amount_first]}&amounts[]=#{params[:amount_second]}"
-    auth = { username: ENV["STRIPE_TEST_SECRET_KEY"] } 
-    response = HTTParty.post("https://api.stripe.com/v1/customers/#{customer.id}/sources/#{bank_id}/verify?#{amount}",basic_auth: auth)
-   
-    if response["status"].present?
-      Spree::Customer.find_by_token(customer.id).update(status: response["status"])
+    auth = { username: ENV['STRIPE_TEST_SECRET_KEY'] }
+    response = HTTParty.post(
+      "https://api.stripe.com/v1/customers/#{customer.id}/sources/#{bank_id}/verify?#{amount}",
+      basic_auth: auth
+    )
+
+    if response['status'].present?
+      Spree::Customer.find_by_token(customer.id).update(status: response['status'])
     end
     render nothing: true, status: :ok, json: response
   rescue

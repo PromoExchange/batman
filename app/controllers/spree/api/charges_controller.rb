@@ -1,5 +1,4 @@
-class  Spree::Api::ChargesController < Spree::Api::BaseController
-
+class Spree::Api::ChargesController < Spree::Api::BaseController
   def index
     @customers = current_spree_user.customers
     if params[:type] == 'credit_card'

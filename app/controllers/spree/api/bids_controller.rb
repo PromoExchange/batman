@@ -56,8 +56,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
           customer: @bid.auction.customer.token,
           description: description
         )
-        
-        if ["succeeded", "pending"].include?(stripe.status)
+
+        if %w(succeeded pending).include?(stripe.status)
           @bid.auction_payments.create(status: stripe.status, charge_id: stripe.id)
           @bid.non_preferred_accept
           @bid.auction.accept

@@ -12,6 +12,5 @@ module ConfirmCheckingAccount
         customer_id:  @customer.id
       )
     end
-
-  end  
+  end
 end

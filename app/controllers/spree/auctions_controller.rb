@@ -48,7 +48,7 @@ class Spree::AuctionsController < Spree::StoreController
     @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
     @request_idea_id = auction_data[:request_idea] if auction_data[:request_idea].present?
     @auction.save!
-    
+
     idea = Spree::RequestIdea.where(id: @request_idea_id).take
     idea.update_attributes(auction_id: @auction.id) if idea
 

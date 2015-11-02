@@ -344,7 +344,7 @@ class Spree::Prebid < Spree::Base
 
     Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - number_of_packages=#{number_of_packages}")
 
-    dimensions = shipping_dimensions.gsub(/[A-Z]/, '').gsub(/ /, '').split('x')
+    dimensions = shipping_dimensions.gsub(/[A-Z]/, '').delete(' ').split('x')
     package = ActiveShipping::Package.new(
       shipping_weight.to_i * 16,
       dimensions.map(&:to_i),

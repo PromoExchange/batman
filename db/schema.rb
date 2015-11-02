@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151023063735) do
+ActiveRecord::Schema.define(version: 20151102123236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,14 @@ ActiveRecord::Schema.define(version: 20151023063735) do
   add_index "spree_assets", ["viewable_id"], name: "index_assets_on_viewable_id", using: :btree
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
 
+  create_table "spree_auction_payments", force: :cascade do |t|
+    t.integer  "bid_id"
+    t.string   "charge_id"
+    t.string   "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "spree_auctions", force: :cascade do |t|
     t.integer  "product_id",                              null: false
     t.integer  "buyer_id",                                null: false
@@ -123,6 +131,7 @@ ActiveRecord::Schema.define(version: 20151023063735) do
     t.string   "proof_feedback"
     t.boolean  "payment_claimed",         default: false
     t.string   "shipping_agent",          default: "ups"
+    t.integer  "customer_id"
   end
 
   add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree
@@ -208,6 +217,17 @@ ActiveRecord::Schema.define(version: 20151023063735) do
     t.integer  "stock_location_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+  end
+
+  create_table "spree_customers", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "token"
+    t.string   "brand"
+    t.string   "last_4_digits"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "payment_type"
+    t.string   "status"
   end
 
   create_table "spree_favorites", force: :cascade do |t|

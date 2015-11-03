@@ -19,8 +19,8 @@
     <% if @auction.errors.any? %>
       <p class="alert alert-error">Errors</p>
       <ul>
-        <% @auction.errors.messages.each do |k,v| %>
-          <li class="error"><%= "#{k.to_s.humanize} #{v.to_s.humanize}" %></li>
+        <% @auction.errors.full_messages.each do |message| %>
+          <li class="error"><%= message %></li>
         <% end %>
       </ul>
     <% end %>

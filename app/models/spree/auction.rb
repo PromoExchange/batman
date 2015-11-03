@@ -51,6 +51,7 @@ class Spree::Auction < Spree::Base
   end
   validates_inclusion_of :shipping_agent, in: %w(ups fedex)
   validates :customer_id, presence: { message: "Payment Option can't be blank" }, if: -> { payment_method.present? }
+  validate :credit_card_presense, if: -> { customer_id.present? }, on: :create
 
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true
@@ -309,5 +310,9 @@ class Spree::Auction < Spree::Base
   def set_default_dates
     self.started = Time.zone.now
     self.ended = started + 21.days
+  end
+
+  def credit_card_presense
+    errors.add(:base, 'Credit Card is required') unless buyer.customers.map(&:payment_type).include?('cc')
   end
 end

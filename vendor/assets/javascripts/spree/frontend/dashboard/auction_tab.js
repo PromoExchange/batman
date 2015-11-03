@@ -85,32 +85,39 @@ $(function() {
       },
       success: function(data) {
         var trHTML = '';
+        
         if (data.length > 0) {
-          image_row = _.template("<tr><td colspan='3'><img itemprop='image' alt='<%= name %>' src='<%= image %>'><p><%= name %></p></td></tr>");
-          bid_cell = _.template("<td><%= email %></td><td><%= bid %></td>");
-          action_template = _.template("<td><ul><li><a rel='nofollow' data-method='get' href='/bids/<%= bid_id %>Accept bid</a></li></ul></td>");
+          image_row = _.template("<td><img itemprop='image' alt='<%= name %>' src='<%= image %>'><p><%= name %></p></td>");
+          bid_cell = _.template("<li><%= email %></li><li><%= bid %></li>");
+          action_template = _.template("<li><a rel='nofollow' data-method='get' href='/bids/<%= bid_id %>'>Accept bid</a></li>");
 
           $.each(data, function(i, item) {
+            trHTML += "<tr>"
             trHTML += image_row({
               image: item.image_uri,
               name: item.name
             });
-            trHTML += "<tr><td>BIDS</td><td colspan='2'>&nbsp;</td></tr>";
+            
+            var ulHTML = '';
+
             if (item.bids.length === 0) {
-              trHTML += "<tr><td colspan='3'>NO BIDS</td></tr>";
+              ulHTML += "<ul><li>NO BIDS</li></ul>";
             } else {
               $.each(item.bids, function(i, bitem) {
-                trHTML += '<tr>';
-                trHTML += bid_cell({
+                ulHTML += '<ul>';
+                ulHTML += bid_cell({
                   email: bitem.email,
                   bid: bitem.bid
                 });
-                trHTML += action_template({
+                ulHTML += action_template({
                   bid_id: item.id
                 });
-                trHTML += '</tr>';
+                ulHTML += '</ul>';
               });
             }
+
+            trHTML += "<td><h4>BIDS</h4>"+ulHTML+"</td>";
+            trHTML += "</tr>"
           });
         } else {
           trHTML += "<tr><td class='text-center' colspan='3'>No auctions found!</td></tr>";

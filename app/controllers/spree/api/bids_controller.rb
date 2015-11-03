@@ -79,29 +79,38 @@ class Spree::Api::BidsController < Spree::Api::BaseController
 
   def save_bid
     json = JSON.parse(request.body.read)
-    @bid.assign_attributes(
-      auction_id: json['auction_id'],
-      seller_id: json['seller_id']
-    )
-    @bid.save
+    @auction = Spree::Auction.find(json['auction_id'])
+    quantity = @auction.quantity
     price = json['per_unit_bid'].to_s
-    quantity = @bid.auction.quantity
-    unless json['per_unit_bid'].nil?
-      li = Spree::LineItem.create(
-        currency: 'USD',
-        order_id: @bid.order.id,
-        quantity: quantity,
-        variant: @bid.auction.product.master
+    total = quantity*price.to_f
+
+    if @auction.bids.where(seller_id: json['seller_id']).map(&:order).map(&:total).map(&:to_f).include?(total)
+      message = "Bid already created!"
+    else
+      @bid.assign_attributes(
+        auction_id: json['auction_id'],
+        seller_id: json['seller_id']
       )
+      @bid.save
+      
+      unless json['per_unit_bid'].nil?
+        li = Spree::LineItem.create(
+          currency: 'USD',
+          order_id: @bid.order.id,
+          quantity: quantity,
+          variant: @bid.auction.product.master
+        )
 
-      li.price = price
-      li.save
+        li.price = price
+        li.save
 
-      order_updater = Spree::OrderUpdater.new(@bid.order)
-      order_updater.update
+        order_updater = Spree::OrderUpdater.new(@bid.order)
+        order_updater.update
+      end
+
+      message = "bid created!"
     end
-
-    render 'spree/api/bids/show'
+    render 'spree/api/bids/show', json: {message: message}
   rescue
     render nothing: true, status: :bad_request
   end

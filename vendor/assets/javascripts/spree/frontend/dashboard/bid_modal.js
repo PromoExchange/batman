@@ -146,7 +146,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        alert('bid created!');
+        alert(data.message);
         $('#seller-live-auction-tab').trigger('click');
       },
       error: function(data) {

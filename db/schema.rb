@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151102123236) do
+ActiveRecord::Schema.define(version: 20151103114630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -638,12 +638,15 @@ ActiveRecord::Schema.define(version: 20151102123236) do
   add_index "spree_product_property_translations", ["spree_product_property_id"], name: "index_0968f57fbd8fb9f31050820cbb66109a266c516a", using: :btree
 
   create_table "spree_product_requests", force: :cascade do |t|
-    t.integer  "buyer_id",   null: false
+    t.integer  "buyer_id",     null: false
     t.string   "request"
     t.string   "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.string   "title"
+    t.decimal  "budget"
+    t.integer  "quantity"
+    t.string   "request_type"
   end
 
   create_table "spree_product_translations", force: :cascade do |t|

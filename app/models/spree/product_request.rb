@@ -4,6 +4,9 @@ class Spree::ProductRequest < Spree::Base
 
   validates :title, presence: true
   validates :request, presence: true
+  validates :quantity, presence: true
+  validates :budget, presence: true
+  validates :request_type, presence: true
 
   state_machine initial: :open do
     after_transition on: :generate_notification, do: :notification_for_new_request_idea

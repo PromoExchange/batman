@@ -16,7 +16,10 @@
 
       <ul class="request_description"> 
         <li> Project Title: <%= product_request.title %> <li>
-        <li> <%= product_request.request %> </li>
+        <li> Budget: <%= "$#{product_request.budget}" %> <li>
+        <li> Quantity: <%= product_request.quantity %> <li>
+        <li> Type: <%= product_request.request_type %> <li>
+        <li> Description: <%= product_request.request %> </li>
       </ul>
 
       <% product_request.request_ideas.each do |request_idea| %>

@@ -1,4 +1,4 @@
-$(function() { 
+$(function() {
 
   $('#add-account').on('click', '.add-account', function() {
     $('#add-account-field').show();
@@ -43,7 +43,7 @@ $(function() {
       error: function(data) {
         alert("Unsuccessful delete");
       }
-    }); 
+    });
   });
 
   // create customer using stripe
@@ -103,7 +103,7 @@ $(function() {
     var nick_name = $form.find('.nick_name').val();
 
     if (!nick_name) {
-      $form.find('.payment-errors').text('Nickname is blank')
+      $form.find('.payment-errors').text('Nickname is blank');
     }
     else if (response.error) {
       $form.find('.payment-errors').text(response.error.message);
@@ -166,9 +166,9 @@ $(function() {
           $("#confirm-submit").prop('disabled', false);
         }
       });
-      $('#account-form').find('.payment-errors').text("")
+      $('#account-form').find('.payment-errors').text("");
     } else {
-      $('#account-form').find('.payment-errors').text("Account numbers did not match")
+      $('#account-form').find('.payment-errors').text("Account numbers did not match");
       $('#add-account-field').show();
       $('.confirm_number').val('');
       $("#confirm-submit").prop('disabled', false);
@@ -203,16 +203,16 @@ $(function() {
       },
       success: function(data) {
         if (data.error) {
-          error_msg = data.error.message
+          error_msg = data.error.message;
           if(error_msg == 'Array must contain only valid integer_strings') {
-            error_msg = 'Input Valid Integer Value';
+            error_msg = 'Enter only the number of cents (e.g. 42 = $0.42)';
           }
           $this.find('.payment-errors').text(error_msg);
           $("body").css("cursor", "default");
           $(".amount-submit").prop('disabled', false);
         } else {
-          alert('Confirm Account')
-          window.location.href = "/dashboards?tab=payment_method"
+          alert('Confirm Account');
+          window.location.href = "/dashboards?tab=payment_method";
         }
       },
       error: function(data) {
@@ -222,5 +222,4 @@ $(function() {
       }
     });
   });
-
 });

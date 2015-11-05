@@ -203,7 +203,11 @@ $(function() {
       },
       success: function(data) {
         if (data.error) {
-          $this.find('.payment-errors').text(data.error.message);
+          error_msg = data.error.message
+          if(error_msg == 'Array must contain only valid integer_strings') {
+            error_msg = 'Input Valid Integer Value';
+          }
+          $this.find('.payment-errors').text(error_msg);
           $("body").css("cursor", "default");
           $(".amount-submit").prop('disabled', false);
         } else {

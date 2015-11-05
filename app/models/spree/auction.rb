@@ -313,6 +313,6 @@ class Spree::Auction < Spree::Base
   end
 
   def credit_card_presense
-    errors.add(:base, 'Credit Card is required') unless buyer.customers.map(&:payment_type).include?('cc')
+    errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
   end
 end

@@ -12,62 +12,55 @@
   }
 
   .panel-head-block {
-    display:inline-block;
-    width:100%;
-    vertical-align:top;
-    background:#090909;
-    padding:10px;
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    background: #090909;
+    padding: 10px;
   }
 
   h3 {
-    font-size:18px;
-    color:#fff;
-    margin:0px;
-    line-height:35px;
+    font-size: 18px;
+    color: #fff;
+    margin: 0px;
+    line-height: 35px;
   }
 
-  .right-btn {
-    color:#fff;
-  }
 
   button {
     span {
-      padding-left:10px;
-      display:block;
-      padding-top:3px;
-      float:right;
+      padding-left: 10px;
+      display :block;
+      padding-top: 3px;
+      float: right;
     }
   }
 
   table.checking-act tr td span {
-    font-size:17px;
+    font-size: 17px;
   }
 
   .account-block{
-    width:100%;
-    display:inline-block;
-    text-align:center
+    width: 100%;
+    display: inline-block;
+    text-align: center;
   }
   .account-block .input-group { 
     width:100%;    
   }
 
   input {
-    padding-left:10px;
-    border-color:#000;
-    border-width:1px;
+    text-align: center;
     height:34px;
   }
 
   .submit-btn {
-    display:inline-block;
     width:100%;
     text-align:center;
-    margin-top:10px;
   }
 
   .submit-btn button,.submit-btn span {
-    margin:0px 63px 0px 33px;
+    margin:0px 64px 0px 46px;
   }
 
   #add-card-field .row {

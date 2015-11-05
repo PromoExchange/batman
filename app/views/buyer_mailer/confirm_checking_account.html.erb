@@ -1,5 +1,12 @@
-<p>Hello <%= @customer.user.shipping_address.full_name %></p>
+<p>Hello <%= @customer.user.shipping_address.full_name %>,</p>
 
-<p>  Pelase confirm their checking account using the deposits recently put in their account by Stripe </p>
+<p>Please confirm click on the link below to go over to your dashboard with the amount the transaction that was deposited into your account from Stripe.<br>
+Once both transactions are confirmed you will be able to use your account to pay for all of your auctions using your checking account.</p>
+
+<p>
+  <a href="<%= Spree::Store.current.url %>/dashboards?tab=payment_method">
+    <button style="width: 120; height: 40px; font-size: 20px; background: #4CAE4C;">Dashboard</button>
+  </a>
+</p>
 
 <img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo">

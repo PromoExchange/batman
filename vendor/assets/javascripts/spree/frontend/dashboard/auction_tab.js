@@ -85,19 +85,19 @@ $(function() {
       },
       success: function(data) {
         var trHTML = '';
-        
+
         if (data.length > 0) {
           image_row = _.template("<td><img itemprop='image' alt='<%= name %>' src='<%= image %>'><p><%= name %></p></td>");
           bid_cell = _.template("<li><%= email %></li><li><%= bid %></li>");
           action_template = _.template("<li><a rel='nofollow' data-method='get' href='/bids/<%= bid_id %>'>Accept bid</a></li>");
 
           $.each(data, function(i, item) {
-            trHTML += "<tr>"
+            trHTML += "<tr>";
             trHTML += image_row({
               image: item.image_uri,
               name: item.name
             });
-            
+
             var ulHTML = '';
 
             if (item.bids.length === 0) {
@@ -107,7 +107,7 @@ $(function() {
                 ulHTML += '<ul>';
                 ulHTML += bid_cell({
                   email: bitem.email,
-                  bid: bitem.bid
+                  bid: accounting.formatMoney(parseFloat(bitem.bid))
                 });
                 ulHTML += action_template({
                   bid_id: item.id
@@ -117,7 +117,7 @@ $(function() {
             }
 
             trHTML += "<td><h4>BIDS</h4>"+ulHTML+"</td>";
-            trHTML += "</tr>"
+            trHTML += "</tr>";
           });
         } else {
           trHTML += "<tr><td class='text-center' colspan='3'>No auctions found!</td></tr>";

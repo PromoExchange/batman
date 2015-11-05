@@ -82,17 +82,18 @@ class Spree::Api::BidsController < Spree::Api::BaseController
     @auction = Spree::Auction.find(json['auction_id'])
     quantity = @auction.quantity
     price = json['per_unit_bid'].to_s
-    total = quantity*price.to_f
+    total = quantity * price.to_f
 
+    # TODO: Not sure about this, this is a float to float comparison
     if @auction.bids.where(seller_id: json['seller_id']).map(&:order).map(&:total).map(&:to_f).include?(total)
-      message = "Bid already created!"
+      message = 'Bid already created!'
     else
       @bid.assign_attributes(
         auction_id: json['auction_id'],
         seller_id: json['seller_id']
       )
       @bid.save
-      
+
       unless json['per_unit_bid'].nil?
         li = Spree::LineItem.create(
           currency: 'USD',
@@ -108,9 +109,9 @@ class Spree::Api::BidsController < Spree::Api::BaseController
         order_updater.update
       end
 
-      message = "bid created!"
+      message = 'Bid created!'
     end
-    render 'spree/api/bids/show', json: {message: message}
+    render 'spree/api/bids/show', json: { message: message }
   rescue
     render nothing: true, status: :bad_request
   end

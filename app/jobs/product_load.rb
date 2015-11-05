@@ -13,6 +13,25 @@ module ProductLoad
 
     dc_product = Spree::DC::FullProduct.retrieve(supplier_item_guid)
 
+    # Update attributes
+    px_product.update_attributes(
+      description: dc_product.description,
+      size: dc_product.size,
+      weight: dc_product.weight
+    )
+
+    # Properties
+    properties = []
+    properties << "country_of_origin: #{dc_product.country_name}" if dc_product.country_name
+    properties << "production_time: #{dc_product.production_time}" if dc_product.production_time
+    properties << "size: #{dc_product.size}" if dc_product.size
+    properties << "weight: #{dc_product.weight}" if dc_product.weight
+    properties << "add_info: #{dc_product.add_info}" if dc_product.add_info
+    properties.each do |property|
+      property_vals = property.split(':')
+      px_product.set_property(property_vals[0].strip.humanize, property_vals[1].strip)
+    end
+
     # Image
     if Rails.configuration.x.load_images
       begin
@@ -24,9 +43,26 @@ module ProductLoad
           viewable: px_product
         )
       rescue StandardError => e
-        Rails.logger.warn("Warning: Unable to load product image [#{supplier_item_guid}], #{e.message}")
+        Rails.logger.warn("PLOAD: Warning: Unable to load product image [#{supplier_item_guid}], #{e.message}")
       end
     end
+
+    # Category
+    Rails.logger.info("PLOAD: Loading #{dc_product.categories.count} categories")
+    dc_product.categories.each do |category|
+      begin
+        taxon = Spree::Taxon.where(name: category.name).first
+
+        Spree::Classification.where(
+          taxon_id: taxon.id,
+          product_id: px_product.id).first_or_create
+
+      rescue StandardError => e
+        Rails.logger.warn("PLOAD: Unable to associate []#{category.name}]. Reason: #{e.message}")
+      end
+    end
+
+    # Price
 
     # :prices,
     # :options,

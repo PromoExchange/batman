@@ -35,7 +35,7 @@ module ProductLoadFactory
           supplier_id: supplier.id
         }
 
-        Rails.logger.info("PLOAD: Product loading #{product.item_name}/#{product.supplier_item_num}")
+        Rails.logger.info("PLOAD: Product queueing #{product.item_name}/#{product.supplier_item_num}")
         p = Spree::Product.where(supplier_item_guid: product.supplier_item_guid).first
         p = Spree::Product.create!(default_attrs.merge(product_attrs)) if p.nil?
 

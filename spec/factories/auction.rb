@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :auction, class: Spree::Auction do
     association :product, factory: :product
-    association :buyer, factory: :user
+    association :buyer, factory: :px_user
     association :logo, factory: :logo
     quantity 1111
     started 5.days.ago
@@ -14,7 +14,7 @@ FactoryGirl.define do
     shipping_agent 'ups'
     reference SecureRandom.hex(3)
     proof_file { File.new(Rails.root.join('spec', 'fixtures', 'batman.jpeg')) }
-    customer_id 1
+    association :customer, factory: :customer
   end
 
   factory :auction_with_bids, parent: :auction do

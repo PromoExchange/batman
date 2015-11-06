@@ -51,7 +51,7 @@ module ProductLoadFactory
           supplier_item_num: product.supplier_item_num,
           supplier_item_guid: product.supplier_item_guid
         }
-        p.update_attributes!(additional_attrs)
+        p.update_attributes!(default_attrs.merge(additional_attrs))
         p.save
         p.loading! unless p.state == 'loading'
 

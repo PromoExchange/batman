@@ -14,6 +14,11 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=3D0F1C12-E3F6-11D3-896A-00105A7027AA
     dc_product = Spree::DC::FullProduct.retrieve(supplier_item_guid)
 
+    unless dc_product.valid?
+      px_product.invalid
+      return
+    end
+
     # Update attributes
     px_product.update_attributes(
       description: dc_product.description,
@@ -33,22 +38,14 @@ module ProductLoad
       px_product.set_property(property_vals[0].strip.humanize, property_vals[1].strip)
     end
 
-    # Image
-    if Rails.configuration.x.load_images
-      begin
-        px_product.images.destroy_all
-        image_uri = "http://www.distributorcentral.com/resources/productimage.cfm?Prod=#{supplier_item_guid}&size=large"
-        # http://www.distributorcentral.com/resources/productimage.cfm?Prod=3D0F1C12-E3F6-11D3-896A-00105A7027AA&size=large
-        px_product.images << Spree::Image.create!(
-          attachment: open(URI.parse(image_uri)),
-          viewable: px_product
-        )
-      rescue StandardError => e
-        Rails.logger.warn("PLOAD: Warning: Unable to load product image [#{supplier_item_guid}], #{e.message}")
-      end
-    end
+    Spree::ColorProduct.where(
+      product_id: px_product.id,
+      color: px_product.supplier_display_name
+    ).first_or_create
 
-    # Category
+    # Image
+    dc_product.load_image supplier_item_guid
+
     Rails.logger.debug("PLOAD: Loading #{dc_product.categories.count} categories")
     dc_product.categories.each do |category|
       begin
@@ -110,8 +107,49 @@ module ProductLoad
       discount_type: 'price'
     )
 
-    # :options,
-    # :categories,
+    # Options
+    Rails.logger.debug("PLOAD: Loading #{dc_product.options.count} options")
+    dc_product.options.each do |option|
+      if option.type = 'Decoration Information'
+        option_detail = Spree::DC::OptionDetail.retrieve(option.guid)
+
+        next if /Embroidery|Additional|Proof/ =~ option_detail.name
+
+        imprint_method = Spree::ImprintMethod.where(
+          name: option_detail.name
+        ).first_or_create
+
+        option_detail.option_choices.each do |option_choice|
+          pantone = option_choice.name.scan(/\((.*?)\)/)[0]
+          pantone ||= ''
+
+          names = option_choice.name.scan(/(.*?)\(/)
+          name = ''
+          name = names[0][0].strip if names.count > 0
+
+          pms_color = Spree::PmsColor.where(
+            name: name,
+            pantone: pantone,
+            hex: "##{option_choice.hex_num}"
+          ).first_or_create
+
+          Spree::PmsColorsSupplier.where(
+            pms_color_id: pms_color.id,
+            display_name: pantone,
+            supplier_id: px_product.supplier_id,
+            imprint_method_id: imprint_method.id
+          ).first_or_create
+
+          Spree::ImprintMethodsProduct.where(
+            imprint_method_id: imprint_method.id,
+            product_id: px_product.id
+          ).first_or_create
+        end
+      else
+        Rails.logger.warn("PLOAD: *** Unseen option type [#{option.type}]")
+      end
+    end
+
     # :imprint_areas,
     # :packaging
     elapsed = (Time.zone.now - beginning_time) * 1000

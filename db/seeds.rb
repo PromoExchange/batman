@@ -76,15 +76,15 @@ File.open(seed_path('upcharge_types.txt')).each do |n|
   Spree::UpchargeType.create(name: n.strip)
 end
 
-puts 'Imprint methods'
-File.open(seed_path('imprint_methods.txt')).each do |n|
-  Spree::ImprintMethod.create(name: n.strip)
-end
+# puts 'Imprint methods'
+# File.open(seed_path('imprint_methods.txt')).each do |n|
+#   Spree::ImprintMethod.create(name: n.strip)
+# end
 
-puts 'PMS Colors'
-CSV.foreach(seed_path('pms_colors.csv'), headers: true, header_converters: :symbol) do |row|
-  Spree::PmsColor.create(row.to_hash)
-end
+# puts 'PMS Colors'
+# CSV.foreach(seed_path('pms_colors.csv'), headers: true, header_converters: :symbol) do |row|
+#   Spree::PmsColor.create(row.to_hash)
+# end
 
 puts 'Product Properties'
 CSV.foreach(seed_path('product_properties.csv'), headers: true, header_converters: :symbol) do |row|

@@ -26,9 +26,17 @@ class Spree::DC::FullProduct
     :imprint_areas,
     :packaging
 
+  def valid?
+    valid = (prices.count > 0 && categories.count > 0 && options.count > 0)
+    unless valid
+      Rails.logger.warn("PLOAD: Prices[#{prices.count}] Categories[#{categories.count}] Options[#{options.count}]")
+    end
+    valid
+  end
+
   base_uri 'http://www.distributorcentral.com/resources/xml/item_information.cfm'
 
-  # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=A2A4B3F2-9FD2-43DA-BCAF-A83E29AA3EF8
+  # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=83FD5374-E463-4B8B-B0C9-899FDD88C59D
 
   def self.retrieve(supplier_item_guid)
     uri = "#{base_uri}?acctwebguid="\
@@ -61,12 +69,12 @@ class Spree::DC::FullProduct
     end
 
     product_rec.options = []
-    doc.xpath('product/option').each do |option|
+    doc.xpath('product/options/option').each do |option|
       product_rec.options << Spree::DC::Option.extract(option)
     end
 
     product_rec.categories = []
-    doc.xpath('product/PRODUCTCATEGORY').each do |option|
+    doc.xpath('product/PRODUCTCATEGORIES/PRODUCTCATEGORY').each do |option|
       product_rec.categories << Spree::DC::ItemCategory.extract(option)
     end
 
@@ -80,5 +88,21 @@ class Spree::DC::FullProduct
     product_rec
   rescue StandardError => e
     Rails.logger.error("PLOAD: Failed to load product #{supplier_item_guid} Reason: #{e.message}")
+  end
+
+  def load_image(supplier_item_guid)
+    return unless Rails.configuration.x.load_images
+    px_product = Spree::Product.find_by(supplier_item_guid: supplier_item_guid)
+    return unless px_product
+    begin
+      px_product.images.destroy_all
+      image_uri = "http://www.distributorcentral.com/resources/productimage.cfm?Prod=#{supplier_item_guid}&size=large"
+      px_product.images << Spree::Image.create!(
+        attachment: open(URI.parse(image_uri)),
+        viewable: px_product
+      )
+    rescue StandardError => e
+      Rails.logger.warn("PLOAD: Warning: Unable to load product image [#{supplier_item_guid}], #{e.message}")
+    end
   end
 end

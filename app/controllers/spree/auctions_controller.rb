@@ -165,7 +165,6 @@ class Spree::AuctionsController < Spree::StoreController
         :pms_color_id,
         :display_name,
         :hex,
-        :pantone,
         :name,
         :imprint_method_id
       )

@@ -9,6 +9,10 @@ Spree::Product.class_eval do
       transition active: :loading
     end
 
+    event :invalid do
+      transition loading: :invalid
+    end
+
     event :loaded do
       transition loading: :active
     end

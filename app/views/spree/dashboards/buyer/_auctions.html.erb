@@ -27,11 +27,17 @@
       </tbody>
     </table>
   </div>
+  
   <div class="tab-pane scrolling" id="awaiting-selection">
     <table class="table table-striped" id="waiting-auction-table">
       <thead>
         <tr>
+          <th><%= Spree.t(:auction_hash) %></th>
           <th><%= Spree.t(:product) %></th>
+          <th><%= Spree.t(:lowest_bid) %></th>
+          <th><%= Spree.t(:quantity) %></th>
+          <th><%= Spree.t(:start_date) %></th>
+          <th><%= Spree.t(:end_date) %></th>
           <th class="actions"><%= Spree.t(:action_col) %></th>
         </tr>
       </thead>

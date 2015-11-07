@@ -38,22 +38,3 @@
     font-size: 15px;
   }
 }
-
-#awaiting-selection {
-  td ul {
-    padding: 0px;
-    margin: 0px;
-  }
-
-  td ul li:first-child {
-    text-align:left !important;
-  }
-
-  td ul li {
-    float: left;
-    list-style-type: none;
-    padding: 10px;
-    width: 174px;
-    text-align: center;
-  }
-}

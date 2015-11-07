@@ -1,4 +1,56 @@
 $(function() {
+  function getAcutionDetail(data) {
+    var trHTML = '';
+    if (data.length > 0) {
+      reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
+      simple_template = _.template("<td><%= value %></td>");
+      image_template = _.template("<td><a href='/auctions/<%= auction_id %>'><img itemprop='image' data-toggle='tooltip' title='<%= name %>' alt='<%= name %>' src='<%= image %>'</a></td>");
+      date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= date %>'><%= date %></time></td>");
+      action_template = _.template("<td><ul><li><a href='/auctions/<%= auction_id %>' data-id='<%= auction_id %>'>Go to Auction</a></li><li><a class='cancel' data-confirm='Are you sure?' href='#' data-id='<%= auction_id %>'>Cancel</a></li></ul></td>");
+
+      $.each(data, function(i, item) {
+        trHTML += "<tr>";
+        trHTML += reference_template({
+          reference: item.reference,
+          auction_id: item.id
+        });
+        trHTML += image_template({
+          auction_id: item.id,
+          image: item.image_uri,
+          name: item.name
+        });
+
+        var num_bids = item.bids.length;
+        var low_bid = 'no bids';
+        if (num_bids > 0) {
+          low_bid = accounting.formatMoney(parseFloat(item.bids[0].bid));
+          if (low_bid === null) {
+            low_bid = 'no bids';
+          }
+        }
+        trHTML += simple_template({
+          value: low_bid
+        });
+        trHTML += simple_template({
+          value: item.quantity
+        });
+        trHTML += date_template({
+          date: item.started
+        });
+        trHTML += date_template({
+          date: item.ended
+        });
+        trHTML += action_template({
+          auction_id: item.id
+        });
+        trHTML += "</tr>";
+      });
+    } else {
+      trHTML += "<tr><td class='text-center' colspan='7'>No auctions found!</td></tr>";
+    }
+    return trHTML;
+  }
+
   $('#live-auction-tab').click(function(e) {
     $("#live-auction-table > tbody").html("<tr><td class='text-center' colspan='7'><i class='fa fa-spinner fa-pulse fa-3x'></i></td></tr>");
     var key = $("#live-auction-table").attr("data-key");
@@ -14,55 +66,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        var trHTML = '';
-        if (data.length > 0) {
-          reference_template = _.template("<td><a href='/auctions/<%= auction_id %>'><%= reference %></a></td>");
-          simple_template = _.template("<td><%= value %></td>");
-          image_template = _.template("<td><a href='/auctions/<%= auction_id %>'><img itemprop='image' data-toggle='tooltip' title='<%= name %>' alt='<%= name %>' src='<%= image %>'</a></td>");
-          date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= date %>'><%= date %></time></td>");
-          action_template = _.template("<td><ul><li><a href='/auctions/<%= auction_id %>' data-id='<%= auction_id %>'>Go to Auction</a></li><li><a class='cancel' data-confirm='Are you sure?' href='#' data-id='<%= auction_id %>'>Cancel</a></li></ul></td>");
-
-          $.each(data, function(i, item) {
-            trHTML += "<tr>";
-            trHTML += reference_template({
-              reference: item.reference,
-              auction_id: item.id
-            });
-            trHTML += image_template({
-              auction_id: item.id,
-              image: item.image_uri,
-              name: item.name
-            });
-
-            var num_bids = item.bids.length;
-            var low_bid = 'no bids';
-            if (num_bids > 0) {
-              low_bid = accounting.formatMoney(parseFloat(item.bids[0].bid));
-              if (low_bid === null) {
-                low_bid = 'no bids';
-              }
-            }
-            trHTML += simple_template({
-              value: low_bid
-            });
-            trHTML += simple_template({
-              value: item.quantity
-            });
-            trHTML += date_template({
-              date: item.started
-            });
-            trHTML += date_template({
-              date: item.ended
-            });
-            trHTML += action_template({
-              auction_id: item.id
-            });
-            trHTML += "</tr>";
-          });
-        } else {
-          trHTML += "<tr><td class='text-center' colspan='7'>No auctions found!</td></tr>";
-        }
-        $("#live-auction-table > tbody").html(trHTML);
+        $("#live-auction-table > tbody").html(getAcutionDetail(data));
       }
     });
     $(this).tab('show');
@@ -84,45 +88,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        var trHTML = '';
-
-        if (data.length > 0) {
-          image_row = _.template("<td><img itemprop='image' alt='<%= name %>' src='<%= image %>'><p><%= name %></p></td>");
-          bid_cell = _.template("<li><%= email %></li><li><%= bid %></li>");
-          action_template = _.template("<li><a rel='nofollow' data-method='get' href='/bids/<%= bid_id %>'>Accept bid</a></li>");
-
-          $.each(data, function(i, item) {
-            trHTML += "<tr>";
-            trHTML += image_row({
-              image: item.image_uri,
-              name: item.name
-            });
-
-            var ulHTML = '';
-
-            if (item.bids.length === 0) {
-              ulHTML += "<ul><li>NO BIDS</li></ul>";
-            } else {
-              $.each(item.bids, function(i, bitem) {
-                ulHTML += '<ul>';
-                ulHTML += bid_cell({
-                  email: bitem.email,
-                  bid: accounting.formatMoney(parseFloat(bitem.bid))
-                });
-                ulHTML += action_template({
-                  bid_id: item.id
-                });
-                ulHTML += '</ul>';
-              });
-            }
-
-            trHTML += "<td><h4>BIDS</h4>"+ulHTML+"</td>";
-            trHTML += "</tr>";
-          });
-        } else {
-          trHTML += "<tr><td class='text-center' colspan='3'>No auctions found!</td></tr>";
-        }
-        $("#waiting-auction-table > tbody").html(trHTML);
+        $("#waiting-auction-table > tbody").html(getAcutionDetail(data));
       }
     });
     $(this).tab('show');

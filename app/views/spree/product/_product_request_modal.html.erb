@@ -3,8 +3,9 @@
     <div class="modal-content">
       <% if spree_current_user %>
         <div class="modal-body">
-          <%= form_for :product_request, url: main_app.product_requests_path, class: 'form' do |f| %>
+          <%= form_for :product_request, url: main_app.product_requests_path, html: {id: 'product_request', class: 'form'}, remote: true do |f| %>
             <%= f.hidden_field :buyer_id, value: spree_current_user.id %>
+            <span class="payment-errors"><ul></ul></span>
             <div class="form-group">
               <label> It’s okay, we all need help some times. Let our swag pros give you some great unique product ideas based on the details you provide. What do we need to know? Glad you asked. What is the purpose of the product? Do you have a budget in mind? Do you need made in the USA products? Let us know anything and everything you had in mind and we’ll get back to you within 2 days. The more detail you can give us, the better! </label>
             </div>
@@ -26,8 +27,17 @@
             </div>
 
             <div class="form-group">
-              <%= f.radio_button :request_type, 'Union Made' %> <%= f.label :request_type, 'Union Made' %>
-              <%= f.radio_button :request_type, 'Made in the USA' %> <%= f.label :request_type, 'Made in the USA' %>
+              <label class="checkbox-inline">
+                <%= check_box_tag 'product_request[request_type][]', 'Union Made' %> Union Made
+              </label>
+            
+              <label class="checkbox-inline">
+                <%= check_box_tag 'product_request[request_type][]', 'Made in the USA' %> Made in the USA
+              </label>
+
+              <label class="checkbox-inline">
+                <%= check_box_tag 'product_request[request_type][]', 'Eco Friendly' %> Eco Friendly
+              </label>
             </div>
 
             <div class="form-group">

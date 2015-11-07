@@ -1,4 +1,6 @@
 class Spree::ProductRequest < Spree::Base
+  before_create :set_request_type
+
   has_many :request_ideas
   belongs_to :buyer, class_name: 'Spree::User'
 
@@ -25,5 +27,11 @@ class Spree::ProductRequest < Spree::Base
       NewRequestIdea,
       product_request_id: id
     )
+  end
+
+  private
+
+  def set_request_type
+    self.request_type.gsub!(/[\[\]\"]/, "") if attribute_present?("request_type")
   end
 end

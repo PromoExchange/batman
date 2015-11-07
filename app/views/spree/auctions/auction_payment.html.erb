@@ -51,11 +51,23 @@
     </div>
   </div>
 
-  <% if spree_current_user.has_spree_role?(:buyer) and @bid.open? %>
+  <% if spree_current_user.has_spree_role?(:buyer) %>
     <div class="col-md-6">
-      <div class="form-group">
-        <button class="btn btn-success" id="accept-bid" data-bid="<%= @bid.id %>">Accept Bid</button>
-      </div>
+      <% if @bid.open? %>
+        <div class="form-group">
+          <button class="btn btn-success" id="accept-bid" data-bid="<%= @bid.id %>">Accept Bid</button>
+        </div>
+      <% end %>
+
+      <% if @bid.accepted? and @bid.auction.waiting_confirmation? %>
+        <div class="form-group">
+          <p>"Thanks for your order! We will be processing your payment and <%= @bid.seller.shipping_address.full_name %> will be confirming and processing your order shortly." </p>
+        </div>
+        <div class="form-group text-center">
+          <%= link_to 'Dashboard', '/dashboards', class: 'btn btn-success' %>
+        </div>
+      <% end %>
     </div>
   <% end %>
+
 </div>

@@ -43,8 +43,7 @@ $(function() {
       success: function(data) {
         $("body").css("cursor", "default");
         $("#accept-bid").prop('disabled', false);
-        alert('Bid accept successfully');
-        window.location.href = "/dashboards";
+        window.location.reload();
       },
       error: function(data) {
         $("body").css("cursor", "default");

@@ -61,10 +61,10 @@
 
       <% if @bid.accepted? and @bid.auction.waiting_confirmation? %>
         <div class="form-group">
-          <p>"Thanks for your order! We will be processing your payment and <%= @bid.seller.shipping_address.full_name %> will be confirming and processing your order shortly." </p>
+          <p>Thanks for your order! We will be processing your payment and <%= @bid.seller.shipping_address.full_name %> will be confirming and processing your order shortly. </p>
         </div>
         <div class="form-group text-center">
-          <%= link_to 'Dashboard', '/dashboards', class: 'btn btn-success' %>
+          <%= link_to 'Dashboard', '/dashboards?tab=purchase_history', class: 'btn btn-success' %>
         </div>
       <% end %>
     </div>

@@ -189,6 +189,10 @@ $(function() {
     });
   });
 
+  if ($($('#purchase-history-tab').parent()[0]).hasClass('active')) {
+    $('#purchase-history-tab').trigger('click');
+  }
+
   $('tbody').on('click', '.reject_order', function(){
     var auction_id = $(this).data('id');
     var reject = confirm("Are you sure, Reject Order?");

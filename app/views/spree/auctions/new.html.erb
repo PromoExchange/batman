@@ -54,8 +54,8 @@
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
         <div>
           <% @pms_colors.each do |cell| %>
-            <div class="imprint_swatch imprint_swatch_<%= cell[5] %>">
-              <div class="swatch swatch-clickable" id="<%= cell[0] %>" name="<%= cell[4] %>" style="background-color:<%= cell[2] %>"></div>
+            <div class="imprint_swatch imprint_swatch_<%= cell[4] %>">
+              <div class="swatch swatch-clickable" id="<%= cell[0] %>" name="<%= cell[1] %>" style="background-color:<%= cell[2] %>"></div>
               <span class="pms-text"><%= cell[1] %><br/><%= cell[3] %></span>
             </div>
           <% end %>
@@ -98,7 +98,7 @@
         <%= f.label(:payment_method, 'Payment Method') %>
         <%= f.select(:payment_method, options_for_select(
           [['Credit Card', 'Credit Card'],['Web Check', 'Check']], @auction.payment_method),
-          { prompt: 'Please Select' }, { class: 'form-control' }) %> 
+          { prompt: 'Please Select' }, { class: 'form-control' }) %>
           <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
       </div>
 

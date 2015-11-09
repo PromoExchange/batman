@@ -26,9 +26,7 @@ $(function() {
     $("div.imprint_swatch").hide();
     var val = $("#auction_imprint_method_id option:selected").val();
     var show_swatches = "div.imprint_swatch_";
-    if(val == 21 || val == 2 || val == 19) {
-      show_swatches += val;
-    }
+    show_swatches += val;
     $(show_swatches).show();
     $("div.imprint_swatch_custom").show();
 
@@ -58,16 +56,16 @@ $(function() {
       },
       success: function(data) {
         var trHTML = '';
-        if (data.length > 0) { 
+        if (data.length > 0) {
           action_template = _.template("<input type='radio' value='${customer_id}' name='auction[customer_id]' id='auction_customer_id_${customer_id}'/> <label for='auction_customer_id'>${name}</label>");
-          $.each(data, function(i, item) { 
+          $.each(data, function(i, item) {
             if (item.payment_type == 'cc') {
               var name = item.brand+' '+item.last_4_digits;
             } else {
               var name = item.brand+'#'+item.last_4_digits;
             }
 
-            trHTML += simple_template({ 
+            trHTML += simple_template({
               value: action_template ({
                 customer_id: item.id,
                 name: name
@@ -75,12 +73,12 @@ $(function() {
             });
           })
         } else {
-          trHTML += simple_template({ 
+          trHTML += simple_template({
             value: 'Add Account'
           });
         }
         $("#new-auction ul.customer-listing").html(trHTML);
-      } 
+      }
     });
   }
 

@@ -12,6 +12,8 @@ module ProductLoad
     fail 'Unable to locate DB record' if px_product.nil?
 
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=3D0F1C12-E3F6-11D3-896A-00105A7027AA
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=90A5528D-E38E-46B7-BE27-7EB1489D0C7B
+
     dc_product = Spree::DC::FullProduct.retrieve(supplier_item_guid)
 
     unless dc_product.valid?
@@ -114,7 +116,19 @@ module ProductLoad
         option_detail = Spree::DC::OptionDetail.retrieve(option.guid)
 
         next if /Embroidery|Additional|Proof/ =~ option_detail.name
+        next if /Drop Shipment/ =~ option_detail.name
 
+        if option_detail.name == 'Product Color'
+          option_detail.option_choices.each do |option_choice|
+            Spree::ColorProduct.where(
+              product_id: px_product.id,
+              color: option_choice.name
+            ).first_or_create
+          end
+          next
+        end
+
+        # Imprint Methods
         imprint_method = Spree::ImprintMethod.where(
           name: option_detail.name
         ).first_or_create

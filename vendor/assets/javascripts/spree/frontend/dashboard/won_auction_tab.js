@@ -317,4 +317,15 @@ $(function() {
     $('#feedback-button').attr('href', '/auctions/'+ auction_id+'/download_proof');
     $('#proof-feedback').modal('show');
   });
+
+  $('.upload_proof').on('ajax:success', function(xhr, data, status) {
+    alert('Your document uploaded successfully.');
+  }).on('ajax:error', function(xhr, data, status) { 
+    $('#proof-modal').find('.payment-errors').text(data.responseText);
+  });
+
+  $('#proof_file').click(function() {
+    $('#proof-modal').find('.payment-errors').text('');
+  });
+
 });

@@ -16,6 +16,7 @@
 //= require lodash/lodash.min
 //= require jquery-color/jquery.color.js
 //= require accounting/accounting.min
+//= require jquery.remotipart
 
 $(function() {
   $('.title').on('keyup change', function(e) {

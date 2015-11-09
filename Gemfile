@@ -28,6 +28,7 @@ gem 'oj'
 gem 'le'
 gem 'kaminari'
 gem 'httparty'
+gem 'remotipart'
 
 # spree ecommerce
 gem 'spree', '3.0.1'

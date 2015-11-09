@@ -112,15 +112,16 @@ class Spree::AuctionsController < Spree::StoreController
 
   def upload_proof
     if params[:proof_file].blank?
-      redirect_to :back, flash: { error: 'Document is required.' }
+      render nothing: true, status: :unprocessable_entity, json: 'This is not a supported file format'
     elsif @auction.update_attributes(proof_file: params[:proof_file], proof_feedback: '')
       @auction.upload_proof!
-      redirect_to "/invoices/#{@auction.id}", flash: { notice: 'Your document uploaded successfully.' }
+      flash[:notice] = "Your document uploaded successfully."
+      render :js => "window.location = '/invoices/#{@auction.id}'"
     else
-      redirect_to :back, flash: { error: @auction.errors.full_messages.join(' and also ') }
+      render nothing: true, status: :unprocessable_entity, json: 'This is not a supported file format'
     end
   rescue
-    redirect_to :back, flash: { error: 'Unable to upload your document.' }
+    render nothing: true, status: :unprocessable_entity, json: 'Unable to upload your document.'
   end
 
   def download_proof

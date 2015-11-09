@@ -1,4 +1,4 @@
-<div class="modal fade" id="proof-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="proof-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-key="<%= spree_current_user.spree_api_key %>">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -6,7 +6,8 @@
         <h4 class="modal-title" id="myModalLabel">Upload Proof</h4>
       </div>
       <div class="modal-body">
-        <%= form_tag main_app.upload_proof_auctions_path, multipart: true , class: 'form' do %>
+        <%= form_tag main_app.upload_proof_auctions_path, multipart: true, remote: true,format: :json , class: 'form upload_proof' do %>
+          <span class='payment-errors'></span>
           <%= hidden_field_tag id='id', 0 %>
           <div class="form-group">
             <%= label_tag :proof_file, Spree.t(:add_proof) %>

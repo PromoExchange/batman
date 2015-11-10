@@ -30,7 +30,7 @@ module ProductLoadFactory
       begin
         product_attrs = {
           sku: product.supplier_item_num,
-          name: product.item_name,
+          name: product.item_name.titleize,
           price: 1.0,
           supplier_id: supplier.id
         }

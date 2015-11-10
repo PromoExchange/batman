@@ -7,3 +7,8 @@ TriggerDeliveredEvent:
   every: 15m
   queue: :trigger_delivered_event
   description: "TriggerDeliveredEvent"
+
+AchAccountStatus:
+  every: 12h
+  queue: :ach_account_status
+  description: "Update ACH Account"

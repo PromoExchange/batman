@@ -59,5 +59,9 @@ class BuyerMailer < ApplicationMailer
   def confirm_order_expire(auction)
     @auction = auction
     mail(to: @auction.buyer.email, subject: 'PromoExchange Seller did not accept order')
+
+  def ach_account_status(auction_payment)
+    @auction_payment = auction_payment
+    mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange ACH Account payment status')
   end
 end

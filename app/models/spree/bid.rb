@@ -54,6 +54,30 @@ class Spree::Bid < Spree::Base
     (order.total * rate).round(2)
   end
 
+  def create_payment(token)
+    description = "Auction ID: #{auction.reference}, Buyer: #{auction.buyer.email}"
+    customer_token = token ? token : auction.customer.token
+    amount = bid.round(2) * 100
+
+    stripe = Stripe::Charge.create(
+      amount: amount.to_i,
+      currency: 'usd',
+      customer: customer_token,
+      description: description
+    )
+    if %w(succeeded pending).include?(stripe.status)
+      auction_payments.create(
+        status: stripe.status,
+        charge_id: stripe.id,
+        failure_code: stripe.failure_code,
+        failure_message: stripe.failure_message
+      )
+    end
+    return stripe.status
+  rescue => e
+    return e
+  end
+
   private
 
   def notification_for_waiting_confirmation

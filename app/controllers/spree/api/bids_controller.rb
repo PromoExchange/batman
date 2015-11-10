@@ -48,17 +48,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
         @bid.preferred_accept
         @bid.auction.unpaid
       else
-        description = "Auction ID: #{@bid.auction.reference}, Buyer: #{@bid.auction.buyer.email}"
-
-        stripe = Stripe::Charge.create(
-          amount: @bid.bid.to_i,
-          currency: 'usd',
-          customer: @bid.auction.customer.token,
-          description: description
-        )
-
-        if %w(succeeded pending).include?(stripe.status)
-          @bid.auction_payments.create(status: stripe.status, charge_id: stripe.id)
+        @status = @bid.create_payment(nil)
+        if %w(succeeded pending).include?(@status)
           @bid.non_preferred_accept
           @bid.auction.accept
         end
@@ -66,7 +57,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
       @bid.order.update_attributes(payment_state: 'balance_due')
     end
     Spree::OrderUpdater.new(@bid.order).update
-    render nothing: true, status: :ok
+    message = !%w(succeeded pending).include?(@status) ? @status.message : @status
+    render nothing: true, status: :ok, json: {message: message}
   rescue
     render nothing: true, status: :internal_server_error
   end

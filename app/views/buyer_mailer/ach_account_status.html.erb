@@ -1,0 +1,15 @@
+<p>RE: Auction <%= @auction_payment.bid.auction.reference %></p>
+
+<p>Buyer: <%= @auction_payment.bid.auction.buyer.shipping_address.full_name %></p>
+<p>Seller: <%= @auction_payment.bid.seller.shipping_address.full_name %></p>
+
+
+<p>Payment Status: <%= @auction_payment.status %></p>
+
+<% if @auction_payment.status == 'failed' %>
+  <p>Failure Code: <%= @auction_payment.failure_code %></p>
+  <p>Failure Message: <%= @auction_payment.failure_message %></p>
+<% end %>
+
+<p>The PromoExchange Team</p>
+<img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo">

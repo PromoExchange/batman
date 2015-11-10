@@ -21,7 +21,7 @@ $(function() {
         error: function(data) {
           alert('Failed to accept bid, please contact support');
         }
-      });  
+      });
     } else {
       window.location = "/accept/" + bid_id ;
     }
@@ -41,12 +41,19 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        window.location.reload();
+        if((data.message == 'succeeded') || (data.message == 'pending')) {
+          alert('Bid accept successfully');
+          window.location.reload();
+        } else {
+          $("body").css("cursor", "default");
+          $("#accept-bid").prop('disabled', false);
+          $('#bid-error').find('.payment-errors').text(data.message);
+        }
       },
       error: function(data) {
         $("body").css("cursor", "default");
         $("#accept-bid").prop('disabled', false);
-        alert("Unsuccessful accept");
+        $('#bid-error').find('.payment-errors').text("Unsuccessful Accept");
       }
     });
   });

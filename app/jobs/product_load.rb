@@ -13,6 +13,7 @@ module ProductLoad
 
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=3D0F1C12-E3F6-11D3-896A-00105A7027AA
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=90A5528D-E38E-46B7-BE27-7EB1489D0C7B
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0681AC44-CCBB-4FFA-A231-8211A328F98C
 
     dc_product = Spree::DC::FullProduct.retrieve(supplier_item_guid)
 
@@ -35,6 +36,12 @@ module ProductLoad
     properties << "size: #{dc_product.size}" if dc_product.size
     properties << "weight: #{dc_product.weight}" if dc_product.weight
     properties << "add_info: #{dc_product.add_info}" if dc_product.add_info
+
+    # N.B. Needed for prebid
+    properties << "shipping_weight: #{dc_product.packaging.weight}" if dc_product.packaging.weight
+    properties << "shipping_dimensions: #{dc_product.packaging.dimensions}" if dc_product.packaging.dimensions
+    properties << "shipping_quantity: #{dc_product.packaging.quantity}" if dc_product.packaging.quantity
+
     properties.each do |property|
       property_vals = property.split(':')
       px_product.set_property(property_vals[0].strip.humanize, property_vals[1].strip)

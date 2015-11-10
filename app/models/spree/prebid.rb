@@ -140,7 +140,7 @@ class Spree::Prebid < Spree::Base
         variant: bid.auction.product.master
       )
 
-      li.price = auction_data[:running_unit_price] * bid.auction.quantity
+      li.price = auction_data[:running_unit_price] * auction.quantity
       li.save!
 
       order_updater = Spree::OrderUpdater.new(bid.order)

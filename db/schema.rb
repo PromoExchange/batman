@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151103114630) do
+ActiveRecord::Schema.define(version: 20151104105100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,8 +99,10 @@ ActiveRecord::Schema.define(version: 20151103114630) do
     t.integer  "bid_id"
     t.string   "charge_id"
     t.string   "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "failure_code"
+    t.string   "failure_message"
   end
 
   create_table "spree_auctions", force: :cascade do |t|
@@ -667,7 +669,7 @@ ActiveRecord::Schema.define(version: 20151103114630) do
   add_index "spree_product_translations", ["spree_product_id"], name: "index_spree_product_translations_on_spree_product_id", using: :btree
 
   create_table "spree_products", force: :cascade do |t|
-    t.string   "name",                 default: "",   null: false
+    t.string   "name",                  default: "",   null: false
     t.text     "description"
     t.datetime "available_on"
     t.datetime "deleted_at"
@@ -676,11 +678,26 @@ ActiveRecord::Schema.define(version: 20151103114630) do
     t.string   "meta_keywords"
     t.integer  "tax_category_id"
     t.integer  "shipping_category_id"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.boolean  "promotionable",        default: true
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.boolean  "promotionable",         default: true
     t.string   "meta_title"
     t.integer  "supplier_id"
+    t.decimal  "max_retail"
+    t.integer  "min_qty"
+    t.decimal  "min_retail"
+    t.integer  "production_time"
+    t.boolean  "rush_available"
+    t.string   "supplier_display_name"
+    t.string   "supplier_display_num"
+    t.string   "supplier_item_num"
+    t.string   "supplier_item_guid"
+    t.string   "country_name"
+    t.string   "dc_increment"
+    t.datetime "last_update_date"
+    t.datetime "size"
+    t.datetime "weight"
+    t.string   "state"
   end
 
   add_index "spree_products", ["available_on"], name: "index_spree_products_on_available_on", using: :btree
@@ -1150,6 +1167,7 @@ ActiveRecord::Schema.define(version: 20151103114630) do
     t.string   "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "dc_acct_num"
   end
 
   create_table "spree_tax_categories", force: :cascade do |t|
@@ -1240,6 +1258,7 @@ ActiveRecord::Schema.define(version: 20151103114630) do
     t.string   "meta_description"
     t.string   "meta_keywords"
     t.integer  "depth"
+    t.string   "dc_category_guid"
   end
 
   add_index "spree_taxons", ["parent_id"], name: "index_taxons_on_parent_id", using: :btree

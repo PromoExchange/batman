@@ -1,7 +1,7 @@
 <p>RE: Auction <%= @auction_payment.bid.auction.reference %></p>
 
-<p>Buyer: <%= @auction_payment.bid.auction.buyer.shipping_address.full_name %></p>
-<p>Seller: <%= @auction_payment.bid.seller.shipping_address.full_name %></p>
+<p>Buyer: <%= @auction_payment.bid.auction.buyer.billing_address.company %></p>
+<p>Seller: <%= @auction_payment.bid.seller.billing_address.company %></p>
 
 
 <p>Payment Status: <%= @auction_payment.status %></p>

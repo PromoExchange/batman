@@ -21,7 +21,7 @@ class Spree::Bid < Spree::Base
     end
 
     event :non_preferred_accept do
-      transition open: :accepted
+      transition [:open, :lost] => :accepted
     end
 
     event :cancel do
@@ -34,6 +34,10 @@ class Spree::Bid < Spree::Base
 
     event :pay do
       transition accepted: :completed
+    end
+
+    event :reject do
+      transition accepted: :rejected
     end
   end
 

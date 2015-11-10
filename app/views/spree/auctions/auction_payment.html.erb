@@ -51,9 +51,10 @@
     </div>
   </div>
 
+
   <% if spree_current_user.has_spree_role?(:buyer) %>
     <div class="col-md-6">
-      <% if @bid.open? %>
+      <% if @bid.auction.open? and ( @bid.open? or @bid.lost?) %>
         <div class="form-group">
           <button class="btn btn-success" id="accept-bid" data-bid="<%= @bid.id %>">Accept Bid</button>
         </div>

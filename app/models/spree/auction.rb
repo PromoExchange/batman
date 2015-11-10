@@ -81,6 +81,7 @@ class Spree::Auction < Spree::Base
     after_transition on: :upload_proof, do: :notification_for_upload_proof
     after_transition on: :cancel, do: :remove_request_idea
     after_transition on: :delivery_confirmed, do: :rating_reminder
+    after_transition on: :no_confirm_late, do: :refund_payment
 
     # TODO: When auction created, schedule job to end it
     event :end do
@@ -184,7 +185,15 @@ class Spree::Auction < Spree::Base
   end
 
   def winning_bid
-    Spree::Bid.find_by(auction_id: id, state: %w(accepted completed waiting_confirmation))
+    bids.find_by(state: %w(accepted completed))
+  end
+
+  def rejected_bid
+    bids.find_by(state: %w(rejected))
+  end
+
+  def open_bids
+    bids.where.not(state: %w(rejected))
   end
 
   def product_delivered?
@@ -314,5 +323,13 @@ class Spree::Auction < Spree::Base
 
   def credit_card_presense
     errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
+  end
+
+  def refund_payment
+    charge_id = winning_bid.auction_payments.where.not(status: "failed").take.charge_id
+    charge = Stripe::Charge.retrieve(charge_id)
+    charge.refund unless charge.status == "failed"
+  rescue
+    return false
   end
 end

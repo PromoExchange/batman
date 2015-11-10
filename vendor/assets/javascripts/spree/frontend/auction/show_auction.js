@@ -41,8 +41,6 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        $("body").css("cursor", "default");
-        $("#accept-bid").prop('disabled', false);
         window.location.reload();
       },
       error: function(data) {

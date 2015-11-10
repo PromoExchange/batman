@@ -55,4 +55,9 @@ class BuyerMailer < ApplicationMailer
     @customer = customer
     mail(to: @customer.user.email, subject: 'PromoExchange Confirm Checking Account')
   end
+
+  def confirm_order_expire(auction)
+    @auction = auction
+    mail(to: @auction.buyer.email, subject: 'PromoExchange Seller did not accept order')
+  end
 end

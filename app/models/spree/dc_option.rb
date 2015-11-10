@@ -1,4 +1,5 @@
-class Spree::DC::Option
+# Distributor Central
+class Spree::DcOption
   include ActiveModel::Validations
   include ActiveModel::Conversion
   extend ActiveModel::Naming
@@ -9,7 +10,7 @@ class Spree::DC::Option
     :choices
 
   def self.extract(node)
-    rec = Spree::DC::Option.new
+    rec = Spree::DcOption.new
     rec.name = node.xpath('OPTIONNAME').text
     rec.guid = node.xpath('OPTIONGUID').text
     rec.type = node.xpath('OPTIONTYPE').text

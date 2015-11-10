@@ -1,4 +1,5 @@
-class Spree::DC::FullProduct
+# Distributor Central
+class Spree::DcFullProduct
   include HTTParty
   include ActiveModel::Validations
   include ActiveModel::Conversion
@@ -45,7 +46,7 @@ class Spree::DC::FullProduct
     response = get(uri)
     doc = Nokogiri::XML(response.body)
 
-    product_rec = Spree::DC::FullProduct.new
+    product_rec = Spree::DcFullProduct.new
     product_rec.acct_guid = doc.xpath('product/maininfo/ACCTGUID').text
     product_rec.add_info = doc.xpath('product/maininfo/ADDINFO').text
     product_rec.company_name = doc.xpath('product/maininfo/COMPANYNAME').text
@@ -65,25 +66,25 @@ class Spree::DC::FullProduct
 
     product_rec.prices = []
     doc.xpath('product/pricing').each do |dc_price|
-      product_rec.prices << Spree::DC::Price.extract(dc_price)
+      product_rec.prices << Spree::DcPrice.extract(dc_price)
     end
 
     product_rec.options = []
     doc.xpath('product/options/option').each do |option|
-      product_rec.options << Spree::DC::Option.extract(option)
+      product_rec.options << Spree::DcOption.extract(option)
     end
 
     product_rec.categories = []
     doc.xpath('product/PRODUCTCATEGORIES/PRODUCTCATEGORY').each do |option|
-      product_rec.categories << Spree::DC::ItemCategory.extract(option)
+      product_rec.categories << Spree::DcItemCategory.extract(option)
     end
 
     product_rec.imprint_areas = []
     doc.xpath('product/IMPRINTAREA').each do |imprint_area|
-      product_rec.imprint_areas << Spree::DC::ImprintArea.extract(imprint_area)
+      product_rec.imprint_areas << Spree::DcImprintArea.extract(imprint_area)
     end
 
-    product_rec.packaging = Spree::DC::Packaging.extract(doc.xpath('product/PACKAGING'))
+    product_rec.packaging = Spree::DcPackaging.extract(doc.xpath('product/PACKAGING'))
 
     product_rec
   rescue StandardError => e

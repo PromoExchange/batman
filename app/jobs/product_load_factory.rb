@@ -25,7 +25,7 @@ module ProductLoadFactory
       tax_category: tax_category
     }
 
-    products = Spree::DC::BaseProduct.product_list factory_name
+    products = Spree::DcBaseProduct.product_list factory_name
     products.each do |product|
       begin
         product_attrs = {

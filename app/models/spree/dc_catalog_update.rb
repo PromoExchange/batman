@@ -1,4 +1,5 @@
-class Spree::DC::CatalogUpdate
+# Distributor Central
+class Spree::DcCatalogUpdate
   include HTTParty
   include ActiveModel::Validations
   include ActiveModel::Conversion
@@ -29,7 +30,7 @@ class Spree::DC::CatalogUpdate
     coll = []
 
     doc.xpath('PRODUCTS/PRODUCT').each do |update|
-      rec = Spree::DC::CatalogUpdate.new
+      rec = Spree::DcCatalogUpdate.new
       rec.acct_guid = update.xpath('ACCTGUID').text
       rec.date_added_search = update.xpath('ADDEDTOSEARCHDATE').text
       rec.company_name = update.xpath('COMPANYNAME').text

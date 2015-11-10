@@ -15,7 +15,7 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=90A5528D-E38E-46B7-BE27-7EB1489D0C7B
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0681AC44-CCBB-4FFA-A231-8211A328F98C
 
-    dc_product = Spree::DC::FullProduct.retrieve(supplier_item_guid)
+    dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
     unless dc_product.valid?
       px_product.invalid
@@ -120,7 +120,7 @@ module ProductLoad
     Rails.logger.debug("PLOAD: Loading #{dc_product.options.count} options")
     dc_product.options.each do |option|
       if option.type = 'Decoration Information'
-        option_detail = Spree::DC::OptionDetail.retrieve(option.guid)
+        option_detail = Spree::DcOptionDetail.retrieve(option.guid)
 
         next if /Embroidery|Additional|Proof/ =~ option_detail.name
         next if /Drop Shipment/ =~ option_detail.name

@@ -1,4 +1,5 @@
-class Spree::DC::Price
+# Distributor Central
+class Spree::DcPrice
   include ActiveModel::Validations
   include ActiveModel::Conversion
   extend ActiveModel::Naming
@@ -11,7 +12,7 @@ class Spree::DC::Price
     :unit_of_measure
 
   def self.extract(node)
-    rec = Spree::DC::Price.new
+    rec = Spree::DcPrice.new
     rec.code = node.xpath('CODE').text
     rec.issetup = node.xpath('ISSETUP').text
     rec.net = node.xpath('NET').text

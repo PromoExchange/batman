@@ -29,7 +29,7 @@ class TaxonLoader
 
   def self.load_dc_categories
     category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create
-    tree = Spree::DC::Category.category_tree
+    tree = Spree::DcCategory.category_tree
     tree.each do |parent|
       parent_taxon = Spree::Taxon.create(
         name: parent.name,

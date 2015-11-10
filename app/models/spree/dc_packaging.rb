@@ -1,4 +1,5 @@
-class Spree::DC::Packaging
+# Distributor Central
+class Spree::DcPackaging
   include ActiveModel::Validations
   include ActiveModel::Conversion
   extend ActiveModel::Naming
@@ -9,7 +10,7 @@ class Spree::DC::Packaging
     :weight
 
   def self.extract(node)
-    rec = Spree::DC::Packaging.new
+    rec = Spree::DcPackaging.new
     rec.orig_zip = node.xpath('ORIGZIP').text
     rec.quantity = node.xpath('QTY').text
     rec.weight = node.xpath('WEIGHT').text

@@ -1,4 +1,5 @@
-class Spree::DC::OptionDetail
+# Distributor Central
+class Spree::DcOptionDetail
   include HTTParty
   include ActiveModel::Validations
   include ActiveModel::Conversion
@@ -30,7 +31,7 @@ class Spree::DC::OptionDetail
     response = get("#{base_uri}?acctwebguid=#{ENV['DISTRIBUTOR_CENTRAL_WEBACCTID']}&optionguid=#{option_guid}")
     doc = Nokogiri::XML(response.body)
 
-    option_rec = Spree::DC::OptionDetail.new
+    option_rec = Spree::DcOptionDetail.new
     option_rec.supplier_item_num = doc.xpath('option/maininfo/SuplItemOptionNo').text
     option_rec.name = doc.xpath('option/maininfo/OptionName').text
     option_rec.description = doc.xpath('option/maininfo/OptionDescription').text
@@ -49,12 +50,12 @@ class Spree::DC::OptionDetail
 
     option_rec.pricing = []
     doc.xpath('option/pricing').each do |price|
-      option_rec.pricing << Spree::DC::Price.extract(price)
+      option_rec.pricing << Spree::DcPrice.extract(price)
     end
 
     option_rec.option_choices = []
     doc.xpath('option/choices/choice').each do |choice|
-      option_rec.option_choices << Spree::DC::OptionChoice.extract(choice)
+      option_rec.option_choices << Spree::DcOptionChoice.extract(choice)
     end
     option_rec
   end

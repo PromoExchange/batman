@@ -1,4 +1,5 @@
-class Spree::DC::Category
+# Distributor Central
+class Spree::DcCategory
   include HTTParty
   include ActiveModel::Validations
   include ActiveModel::Conversion
@@ -19,12 +20,12 @@ class Spree::DC::Category
     doc = Nokogiri::XML(response.body)
 
     doc.xpath('MASTERCATEGORIES/MASTERCATEGORY').each do |item|
-      rec = Spree::DC::Category.new
+      rec = Spree::DcCategory.new
       rec.name = item.xpath('MASTERCATEGORYNAME').text
       rec.guid = item.xpath('MASTERCATEGORYGUID').text
       rec.children = []
       item.xpath('PRODUCTCATEGORIES/PRODUCTCATEGORY').each do |child|
-        child_rec = Spree::DC::Category.new
+        child_rec = Spree::DcCategory.new
         child_rec.name = child.xpath('PRODUCTCATEGORYNAME').text
         child_rec.guid = child.xpath('PRODUCTCATEGORYGUID').text
         child_rec.children = nil

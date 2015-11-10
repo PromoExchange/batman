@@ -1,4 +1,5 @@
-class Spree::DC::ImprintArea
+# Distributor Central
+class Spree::DcImprintArea
   include ActiveModel::Validations
   include ActiveModel::Conversion
   extend ActiveModel::Naming
@@ -16,7 +17,7 @@ class Spree::DC::ImprintArea
     :options
 
   def self.extract(node)
-    rec = Spree::DC::ImprintArea.new
+    rec = Spree::DcImprintArea.new
     rec.name = node.xpath('ImprintAreaName').text
     rec.description = node.xpath('ImprintAreaDescription').text
     rec.required = node.xpath('Required').text

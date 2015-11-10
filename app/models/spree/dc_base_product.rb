@@ -1,4 +1,5 @@
-class Spree::DC::BaseProduct
+# Distributor Central
+class Spree::DcBaseProduct
   include HTTParty
   include ActiveModel::Validations
   include ActiveModel::Conversion
@@ -36,7 +37,7 @@ class Spree::DC::BaseProduct
       doc = Nokogiri::XML(response.body)
 
       doc.xpath('products/product').each do |product|
-        product_rec = Spree::DC::BaseProduct.new
+        product_rec = Spree::DcBaseProduct.new
         product_rec.company_name = product.xpath('COMPANYNAME').text
         product_rec.item_name = product.xpath('ITEMNAME').text
         product_rec.max_retail = product.xpath('MAXRETAIL').text

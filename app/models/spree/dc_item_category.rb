@@ -1,4 +1,5 @@
-class Spree::DC::ItemCategory
+# Distributor Central
+class Spree::DcItemCategory
   include ActiveModel::Validations
   include ActiveModel::Conversion
   extend ActiveModel::Naming
@@ -6,7 +7,7 @@ class Spree::DC::ItemCategory
   attr_accessor :guid, :name
 
   def self.extract(node)
-    rec = Spree::DC::ItemCategory.new
+    rec = Spree::DcItemCategory.new
     rec.guid = node.xpath('PRODUCTCATEGORYGUID').text
     rec.name = node.xpath('PRODUCTCATEGORYNAME').text
     rec

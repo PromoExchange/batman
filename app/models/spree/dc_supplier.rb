@@ -1,4 +1,5 @@
-class Spree::DC::Supplier
+# Distributor Central
+class Spree::DcSupplier
   include HTTParty
   include ActiveModel::Validations
   include ActiveModel::Conversion
@@ -26,7 +27,7 @@ class Spree::DC::Supplier
     doc = Nokogiri::XML(response.body)
 
     doc.xpath('//SUPPLIER').each do |item|
-      rec = Spree::DC::Supplier.new
+      rec = Spree::DcSupplier.new
       rec.acct_guid = item.xpath('ACCTGUID').text
       rec.add1 = item.xpath('ADD1').text
       rec.add2 = item.xpath('ADD2').text

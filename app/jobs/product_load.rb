@@ -58,7 +58,7 @@ module ProductLoad
     Rails.logger.debug("PLOAD: Loading #{dc_product.categories.count} categories")
     dc_product.categories.each do |category|
       begin
-        taxon = Spree::Taxon.where(name: category.name).first
+        taxon = Spree::Taxon.where(guid: category.guid).first
 
         Spree::Classification.where(
           taxon_id: taxon.id,

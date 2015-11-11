@@ -6,7 +6,7 @@ Spree::Product.class_eval do
 
   state_machine initial: :active do
     event :loading do
-      transition active: :loading
+      transition [:active, :loading, :invalid, :deleted] => :loading
     end
 
     event :invalid do

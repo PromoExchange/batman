@@ -57,6 +57,11 @@ namespace :product do
       load_files('starline')
     end
 
+    desc 'Jornik Load'
+    task jornik: :environment do
+      load_files('jornik')
+    end
+
     desc 'Vitronic Load'
     task vitronic: :environment do
       load_files('vitronic')
@@ -100,6 +105,7 @@ namespace :product do
       'product:load:starline',
       'product:load:vitronic',
       'product:load:gildan',
+      'product:load:jornik',
       'product:load:alternative_apparel'
     ]
   end

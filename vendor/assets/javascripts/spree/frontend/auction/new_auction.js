@@ -12,7 +12,7 @@ $(function() {
   $('#auction_pms_colors').tagsinput({
     itemValue: 'id',
     itemText: 'text',
-    maxTags: 2
+    maxTags: 4
   });
 
   $(".swatch-clickable").click(function() {

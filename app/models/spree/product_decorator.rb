@@ -57,6 +57,10 @@ Spree::Product.class_eval do
     volume_prices.first.amount.to_f
   end
 
+  def remove_all_properties
+    ProductProperty.where(product: self).destroy_all
+  end
+
   def set_nondisplay_property(property_name, property_value)
     ActiveRecord::Base.transaction do
       # Works around spree_i18n #301

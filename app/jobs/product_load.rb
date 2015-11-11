@@ -4,8 +4,8 @@ module ProductLoad
   def self.perform(params)
     beginning_time = Time.zone.now
 
-    supplier_item_guid = params['supplier_item_guid']
-    # supplier_item_guid = params[:supplier_item_guid]
+    # supplier_item_guid = params['supplier_item_guid']
+    supplier_item_guid = params[:supplier_item_guid]
     Rails.logger.info("PLOAD: Product loading #{supplier_item_guid}")
 
     px_product = Spree::Product.where(supplier_item_guid: supplier_item_guid).first
@@ -32,10 +32,10 @@ module ProductLoad
     # Properties
     properties = []
     properties << "country_of_origin: #{dc_product.country_name}" if dc_product.country_name
-    properties << "production_time: #{dc_product.production_time}" if dc_product.production_time
+    properties << "production_time: #{dc_product.production_time} business days" if dc_product.production_time
     properties << "size: #{dc_product.size}" if dc_product.size
     properties << "weight: #{dc_product.weight}" if dc_product.weight
-    properties << "add_info: #{dc_product.add_info}" if dc_product.add_info
+    properties << "additional_info: #{dc_product.add_info}" if dc_product.add_info
 
     # N.B. Needed for prebid
     properties << "shipping_weight: #{dc_product.packaging.weight}" if dc_product.packaging.weight
@@ -58,7 +58,7 @@ module ProductLoad
     Rails.logger.debug("PLOAD: Loading #{dc_product.categories.count} categories")
     dc_product.categories.each do |category|
       begin
-        taxon = Spree::Taxon.where(guid: category.guid).first
+        taxon = Spree::Taxon.where(dc_category_guid: category.guid).first
 
         Spree::Classification.where(
           taxon_id: taxon.id,

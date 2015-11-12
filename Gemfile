@@ -31,8 +31,6 @@ gem 'httparty'
 gem 'remotipart'
 gem 'slim', '~> 3.0', '>= 3.0.6'
 gem 'nokogiri'
-gem 'slim', '~> 3.0', '>= 3.0.6'
-gem 'nokogiri'
 gem 'ruby-prof'
 
 # spree ecommerce

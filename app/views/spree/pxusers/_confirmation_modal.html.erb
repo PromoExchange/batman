@@ -1,7 +1,7 @@
 <% if session[:user_info].present? %>
   <h1> Thanks for registering with us! </h1>
 
-  <p> You will receive an email shortly confirming your <%= session[:user_info].split('_')[1] %> PromoExchange <%= session[:user_info].split('_')[0] %> account.</p>
+  <p> You will receive an email shortly confirming your <%= session[:user_info].split('_')[1] %> Promo Exchange <%= session[:user_info].split('_')[0] %> account.</p>
   <p> Please verify your email address by clicking the link in the email to complete the signup process. </p>
 
   <p> Didn't receive the email? Click here to <%= link_to 'resend', spree.new_spree_user_confirmation_path %> </p>

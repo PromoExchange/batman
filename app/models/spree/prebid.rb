@@ -271,7 +271,7 @@ class Spree::Prebid < Spree::Base
         log_debug(auction_data, "setup upcharge #{setup_charge}")
         log_debug(auction_data, "setup upcharge discount #{price_code}")
         auction_data[:running_unit_price] += (
-          Spree::Price.discount_price(price_code, setup_charge) / auction_data[:quantity]
+          (Spree::Price.discount_price(price_code, setup_charge) * auction_data[:num_colors]) / auction_data[:quantity]
         )
         log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
       when 'run'
@@ -320,9 +320,9 @@ class Spree::Prebid < Spree::Base
   end
 
   def calculate_shipping(auction)
-    shipping_weight_id = Spree::Property.find_by(name: 'shipping_weight').id
-    shipping_dimensions_id = Spree::Property.find_by(name: 'shipping_dimensions').id
-    shipping_quantity_id = Spree::Property.find_by(name: 'shipping_quantity').id
+    shipping_weight_id = Spree::Property.where(name: 'shipping_weight').first.id
+    shipping_dimensions_id = Spree::Property.where(name: 'shipping_dimensions').first.id
+    shipping_quantity_id = Spree::Property.where(name: 'shipping_quantity').first.id
 
     property = auction.product.product_properties.find_by(property_id: shipping_weight_id)
     fail 'Shipping weight is nil' if property.nil?

@@ -4,8 +4,8 @@ module ProductLoad
   def self.perform(params)
     beginning_time = Time.zone.now
 
-    # supplier_item_guid = params['supplier_item_guid']
-    supplier_item_guid = params[:supplier_item_guid]
+    supplier_item_guid = params['supplier_item_guid']
+    # supplier_item_guid = params[:supplier_item_guid]
     Rails.logger.info("PLOAD: Product loading #{supplier_item_guid}")
 
     px_product = Spree::Product.where(supplier_item_guid: supplier_item_guid).first
@@ -14,6 +14,7 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=3D0F1C12-E3F6-11D3-896A-00105A7027AA
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=90A5528D-E38E-46B7-BE27-7EB1489D0C7B
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0681AC44-CCBB-4FFA-A231-8211A328F98C
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=9B6B9F09-B658-4A7B-A904-52A46A5CBEDE
 
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
@@ -30,6 +31,7 @@ module ProductLoad
     )
 
     # Properties
+    px_product.remove_all_properties
     properties = []
     properties << "country_of_origin: #{dc_product.country_name}" if dc_product.country_name
     properties << "production_time: #{dc_product.production_time} business days" if dc_product.production_time
@@ -170,6 +172,10 @@ module ProductLoad
         Rails.logger.warn("PLOAD: *** Unseen option type [#{option.type}]")
       end
     end
+
+    px_product.set_validity
+
+    px_product.loaded
 
     # :imprint_areas,
     # :packaging

@@ -7,7 +7,16 @@ h2 Product Load
           td Factories loaded
           td = @num_factories
         tr
-          td Products In Database
+          td Active Products In Database
+          td = @num_active
+        tr
+          td Loading Products In Database
+          td = @num_loading
+        tr
+          td Invalid Products In Database
+          td = @num_invalid
+        tr
+          td Total Products In Database
           td = @num_database
         tr
           td In Factory Load Queue

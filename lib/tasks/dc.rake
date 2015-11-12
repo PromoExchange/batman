@@ -1,7 +1,7 @@
 namespace :dc do
   namespace :product do
     desc 'Reload All products in database'
-    task reload: :environment do
+    task reload_all: :environment do
       Spree::Product.all.each do |product|
         product.loading
         Resque.enqueue(
@@ -9,6 +9,22 @@ namespace :dc do
           supplier_item_guid: product.supplier_item_guid
         )
       end
+    end
+
+    desc 'Reload invalid products in database'
+    task reload_invalid: :environment do
+      Spree::Product.where(state: 'invalid').each do |product|
+        product.loading
+        Resque.enqueue(
+          ProductLoad,
+          supplier_item_guid: product.supplier_item_guid
+        )
+      end
+    end
+
+    desc 'Set product validity'
+    task validity: :environment do
+      Spree::Product.all.map(&:check_validity)
     end
   end
 

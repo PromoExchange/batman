@@ -5,6 +5,9 @@ Spree::Product.class_eval do
   has_many :upcharges, as: :related
 
   state_machine initial: :active do
+    after_transition on: :invalid, do: :unavailable
+    after_transition on: :loaded, do: :available
+
     event :loading do
       transition [:active, :loading, :invalid, :deleted] => :loading
     end
@@ -79,6 +82,34 @@ Spree::Product.class_eval do
       product_property.do_not_display = true
       product_property.save!
     end
+  end
+
+  def check_validity
+    # Needs at least 1 imprint Method
+    no_imprint = Spree::ImprintMethodsProduct.where(product: self).nil?
+
+    shipping_weight_id = Spree::Property.where(name: 'shipping_weight').first.id
+    shipping_dimensions_id = Spree::Property.where(name: 'shipping_dimensions').first.id
+    shipping_quantity_id = Spree::Property.where(name: 'shipping_quantity').first.id
+
+    no_shipping_weight = product_properties.find_by(property_id: shipping_weight_id).nil?
+    no_shipping_dimensions = product_properties.find_by(property_id: shipping_dimensions_id).nil?
+    no_shipping_quantity = product_properties.find_by(property_id: shipping_quantity_id).nil?
+
+    if no_imprint || no_shipping_weight || no_shipping_dimensions || no_shipping_quantity
+      invalid
+    end
+  rescue
+    Rails.logger.warn('Failed to test for validity, assume invalid')
+    invalid
+  end
+
+  def unavailable
+    update_attribute(:available_on, 100.years.from_now)
+  end
+
+  def available
+    update_attribute(:available_on, Time.zone.now)
   end
 
   delegate :upcharges, to: :option_values

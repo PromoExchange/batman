@@ -61,19 +61,22 @@ Spree::Product.class_eval do
   end
 
   def remove_all_properties
-    ProductProperty.where(product: self).destroy_all
+    Spree::ProductProperty.where(product: self).destroy_all
   end
 
   def set_nondisplay_property(property_name, property_value)
     ActiveRecord::Base.transaction do
       # Works around spree_i18n #301
-      property = if Property.exists?(name: property_name)
-                   Property.find_by(name: property_name)
+      property = if Spree::Property.exists?(name: property_name)
+                   Spree::Property.find_by(name: property_name)
                  else
-                   Property.create(name: property_name, presentation: 'NON DISPLAY')
+                   Spree::Property.create(
+                    name: property_name,
+                    presentation: 'NON DISPLAY'
+                  )
                  end
 
-      product_property = ProductProperty.where(
+      product_property = Spree::ProductProperty.where(
         product: self,
         property: property
       ).first_or_initialize

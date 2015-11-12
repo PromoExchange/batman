@@ -173,9 +173,9 @@ module ProductLoad
       end
     end
 
-    px_product.set_validity
+    px_product.check_validity
 
-    px_product.loaded
+    px_product.loaded if px_product.state == 'loading'
 
     # :imprint_areas,
     # :packaging
@@ -183,5 +183,8 @@ module ProductLoad
     Rails.logger.info("PLOAD: [#{supplier_item_guid}] Load took: #{elapsed.round(3)}ms")
   rescue StandardError => e
     Rails.logger.error("PLOAD: Failed to load [#{supplier_item_guid}] Reason: #{e.message}")
+    supplier_item_guid = params['supplier_item_guid']
+    px_product = Spree::Product.where(supplier_item_guid: supplier_item_guid).first
+    px_product.invalid if px_product
   end
 end

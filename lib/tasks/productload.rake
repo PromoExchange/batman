@@ -62,6 +62,11 @@ namespace :product do
       load_files('jornik')
     end
 
+    desc 'Bullet Load'
+    task bullet: :environment do
+      load_files('bullet')
+    end
+
     desc 'Vitronic Load'
     task vitronic: :environment do
       load_files('vitronic')
@@ -106,6 +111,7 @@ namespace :product do
       'product:load:vitronic',
       'product:load:gildan',
       'product:load:jornik',
+      'product:load:bullet',
       'product:load:alternative_apparel'
     ]
   end

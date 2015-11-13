@@ -31,6 +31,7 @@ class Spree::AuctionsController < Spree::StoreController
 
   def create
     auction_data = params[:auction]
+
     @auction = Spree::Auction.new(
       product_id: auction_data[:product_id],
       buyer_id: auction_data[:buyer_id],
@@ -43,46 +44,43 @@ class Spree::AuctionsController < Spree::StoreController
       custom_pms_colors: auction_data[:custom_pms_colors],
       started: Time.zone.now
     )
-
     @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
-    @request_idea_id = auction_data[:request_idea] if auction_data[:request_idea].present?
-    @auction.save!
-    
-    idea = Spree::RequestIdea.where(id: @request_idea_id).take
-    idea.update_attributes(auction_id: @auction.id) if idea
 
     unless params[:auction][:pms_colors].nil?
       params[:auction][:pms_colors].split(',').each do |pms_color|
-        Spree::AuctionPmsColor.create(
-          auction_id: @auction.id,
-          pms_color_id: pms_color
-        )
+        @auction.pms_colors << Spree::PmsColor.find(pms_color)
       end
     end
+    @auction.save!
+
+    @request_idea_id = auction_data[:request_idea] if auction_data[:request_idea].present?
+    idea = Spree::RequestIdea.where(id: @request_idea_id).take
+    idea.update_attributes(auction_id: @auction.id) if idea
+
     send_prebid_request @auction.id
 
     unless auction_data[:invited_sellers].nil?
       auction_data[:invited_sellers].split(';').each do |seller_email|
-        unless seller_email.blank?
-          email_type = :is
-          invited_seller = Spree::User.where(email: seller_email).first
+        next if seller_email.blank?
 
-          if invited_seller.nil?
-            email_type = :non
-          else
-            Spree::AuctionsUser.create(
-              auction_id: @auction.id,
-              user_id: invited_seller.id
-            )
-          end
+        email_type = :is
+        invited_seller = Spree::User.where(email: seller_email).first
 
-          Resque.enqueue(
-            SellerInvite,
+        if invited_seller.nil?
+          email_type = :non
+        else
+          Spree::AuctionsUser.create(
             auction_id: @auction.id,
-            type: email_type,
-            email_address: seller_email
+            user_id: invited_seller.id
           )
         end
+
+        Resque.enqueue(
+          SellerInvite,
+          auction_id: @auction.id,
+          type: email_type,
+          email_address: seller_email
+        )
       end
     end
 
@@ -95,8 +93,6 @@ class Spree::AuctionsController < Spree::StoreController
   def send_prebid_request(auction_id)
     embroidery_imprint_method_id = Spree::ImprintMethod.where(name: 'Embroidery').first.id
     return if embroidery_imprint_method_id == params[:auction][:imprint_method_id].to_i
-    # Used for debugging, i.e. Direct call
-    # CreatePrebids.perform(auction_id)
     Resque.enqueue(CreatePrebids, auction_id: auction_id)
   end
 
@@ -145,11 +141,11 @@ class Spree::AuctionsController < Spree::StoreController
       add = false if address.bill?
       add = true if address.ship?
 
-      if add
-        @addresses << [
-          "#{address}",
-          address.id]
-      end
+      next unless add
+
+      @addresses << [
+        "#{address}",
+        address.id]
     end
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)

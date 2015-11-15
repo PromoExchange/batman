@@ -93,6 +93,7 @@ en:
     favorites: 'Favorites'
     custom_pms_colors: 'Custom PMS Colors'
     login_register: 'Login / Register'
+    px_fee: 'PX Fee'
   devise:
     user_confirmations:
       spree_user:

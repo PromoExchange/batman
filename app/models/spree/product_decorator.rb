@@ -4,6 +4,8 @@ Spree::Product.class_eval do
   has_and_belongs_to_many :option_values
   has_many :upcharges, as: :related
 
+  delegate :upcharges, to: :option_values
+
   state_machine initial: :active do
     after_transition on: :invalid, do: :unavailable
     after_transition on: :loaded, do: :available
@@ -115,5 +117,31 @@ Spree::Product.class_eval do
     update_attribute(:available_on, Time.zone.now)
   end
 
-  delegate :upcharges, to: :option_values
+  def load_image(supplier_item_guid)
+    return unless Rails.configuration.x.load_images
+    begin
+      images.destroy_all # Only one image allowed
+      images << Spree::Image.create!(
+        attachment: Spree::DcImage.retrieve(supplier_item_guid),
+        viewable: px_product
+      )
+    rescue StandardError => e
+      Rails.logger.warn("PLOAD: Warning: Unable to load product image [#{supplier_item_guid}], #{e.message}")
+    end
+  end
+
+  def remove_all_categories
+    Spree::Classification.where(product_id: id).destroy_all
+  end
+
+  def add_category(category_guid)
+    taxon = Spree::Taxon.where(dc_category_guid: category_guid).first
+
+    return if taxon.nil?
+
+    Spree::Classification.where(
+      taxon_id: taxon.id,
+      product_id: id
+    ).first_or_create
+  end
 end

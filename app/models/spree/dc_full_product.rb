@@ -90,20 +90,4 @@ class Spree::DcFullProduct
   rescue StandardError => e
     Rails.logger.error("PLOAD: Failed to load product #{supplier_item_guid} Reason: #{e.message}")
   end
-
-  def load_image(supplier_item_guid)
-    return unless Rails.configuration.x.load_images
-    px_product = Spree::Product.find_by(supplier_item_guid: supplier_item_guid)
-    return unless px_product
-    begin
-      px_product.images.destroy_all
-      image_uri = "http://www.distributorcentral.com/resources/productimage.cfm?Prod=#{supplier_item_guid}&size=large"
-      px_product.images << Spree::Image.create!(
-        attachment: open(URI.parse(image_uri)),
-        viewable: px_product
-      )
-    rescue StandardError => e
-      Rails.logger.warn("PLOAD: Warning: Unable to load product image [#{supplier_item_guid}], #{e.message}")
-    end
-  end
 end

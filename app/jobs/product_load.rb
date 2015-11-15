@@ -14,7 +14,6 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=3D0F1C12-E3F6-11D3-896A-00105A7027AA
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=90A5528D-E38E-46B7-BE27-7EB1489D0C7B
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0681AC44-CCBB-4FFA-A231-8211A328F98C
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=9B6B9F09-B658-4A7B-A904-52A46A5CBEDE
 
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
@@ -55,17 +54,14 @@ module ProductLoad
     ).first_or_create
 
     # Image
-    dc_product.load_image supplier_item_guid
+    px_product.load_image supplier_item_guid
 
+    # Categories
     Rails.logger.debug("PLOAD: Loading #{dc_product.categories.count} categories")
+    px_product.remove_all_categories
     dc_product.categories.each do |category|
       begin
-        taxon = Spree::Taxon.where(dc_category_guid: category.guid).first
-
-        Spree::Classification.where(
-          taxon_id: taxon.id,
-          product_id: px_product.id).first_or_create
-
+        px_product.add_category(category.guid)
       rescue StandardError => e
         Rails.logger.warn("PLOAD: [#{supplier_item_guid}] Unable to associate [#{category.name}]. Reason: #{e.message}")
       end
@@ -121,21 +117,11 @@ module ProductLoad
     # Options
     Rails.logger.debug("PLOAD: Loading #{dc_product.options.count} options")
     dc_product.options.each do |option|
-      if option.type = 'Decoration Information'
+      if option.type == 'Decoration Information'
         option_detail = Spree::DcOptionDetail.retrieve(option.guid)
 
         next if /Embroidery|Additional|Proof/ =~ option_detail.name
         next if /Drop Shipment/ =~ option_detail.name
-
-        if option_detail.name == 'Product Color'
-          option_detail.option_choices.each do |option_choice|
-            Spree::ColorProduct.where(
-              product_id: px_product.id,
-              color: option_choice.name
-            ).first_or_create
-          end
-          next
-        end
 
         # Imprint Methods
         imprint_method = Spree::ImprintMethod.where(
@@ -166,6 +152,18 @@ module ProductLoad
           Spree::ImprintMethodsProduct.where(
             imprint_method_id: imprint_method.id,
             product_id: px_product.id
+          ).first_or_create
+        end
+      elsif option.type == 'Product Color Information'
+        Spree::ColorProduct.where(
+          product_id: px_product.id
+        ).destroy_all
+
+        option_detail = Spree::DcOptionDetail.retrieve(option.guid)
+        option_detail.option_choices.each do |option_choice|
+          Spree::ColorProduct.where(
+            product_id: px_product.id,
+            color: option_choice.name
           ).first_or_create
         end
       else

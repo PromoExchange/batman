@@ -185,7 +185,7 @@ $(function() {
     var auction_id = $(this).data('id');
     var key = $('#show-invoice').attr('data-key');
     var url = '/api/auctions/' + auction_id + '/order_confirm';
-    var accept = confirm("Are you sure you want to Confirm this Order");
+    var accept = confirm("Are you sure you want to accept this order?");
     if (!accept){ return false; }
     $.ajax({
       type: 'POST',
@@ -320,7 +320,7 @@ $(function() {
 
   $('.upload_proof').on('ajax:success', function(xhr, data, status) {
     alert('Your document uploaded successfully.');
-  }).on('ajax:error', function(xhr, data, status) { 
+  }).on('ajax:error', function(xhr, data, status) {
     $('#proof-modal').find('.payment-errors').text(data.responseText);
   });
 

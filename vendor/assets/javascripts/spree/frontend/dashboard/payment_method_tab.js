@@ -21,7 +21,7 @@ $(function() {
     var $this = $(this);
     var customer_id = $this.data('id');
     var key = $('#customer-method').attr('data-key');
-    var accept = confirm("are you sure? you want to Remove this Entry");
+    var accept = confirm("Are you sure you want to remove this account?");
     if (!accept){ return false; }
     $("body").css("cursor", "progress");
     $.ajax({

@@ -123,7 +123,7 @@ Spree::Product.class_eval do
       images.destroy_all # Only one image allowed
       images << Spree::Image.create!(
         attachment: Spree::DcImage.retrieve(supplier_item_guid),
-        viewable: px_product
+        viewable: self
       )
     rescue StandardError => e
       Rails.logger.warn("PLOAD: Warning: Unable to load product image [#{supplier_item_guid}], #{e.message}")

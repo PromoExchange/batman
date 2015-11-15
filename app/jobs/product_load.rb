@@ -1,6 +1,13 @@
 module ProductLoad
   @queue = :product_load
 
+  def self.clean_color_name(name)
+    bits = name.split('-')
+    return name unless bits.count > 1
+    return bits[1].strip! unless bits[1].strip.empty?
+    bits[0].strip
+  end
+
   def self.perform(params)
     beginning_time = Time.zone.now
 
@@ -14,6 +21,8 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=3D0F1C12-E3F6-11D3-896A-00105A7027AA
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=90A5528D-E38E-46B7-BE27-7EB1489D0C7B
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0681AC44-CCBB-4FFA-A231-8211A328F98C
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=AEE7C80E-AEFC-4656-BC40-DA9E024215C8
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=6C4141E9-7928-4077-820B-064FD2A7D1FF
 
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
@@ -161,9 +170,10 @@ module ProductLoad
 
         option_detail = Spree::DcOptionDetail.retrieve(option.guid)
         option_detail.option_choices.each do |option_choice|
+          cleaned_color_name = clean_color_name(option_choice.name)
           Spree::ColorProduct.where(
             product_id: px_product.id,
-            color: option_choice.name
+            color: cleaned_color_name
           ).first_or_create
         end
       else

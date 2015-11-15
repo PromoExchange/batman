@@ -12,7 +12,7 @@
           <div class="form-group">
             <%= label_tag :proof_file, Spree.t(:add_proof) %>
             <%= file_field_tag :proof_file, class: 'form-control' %>
-            <p>Acceptable file formats: (jpeg,png,pdf)</p>
+            <p>Acceptable file formats: (.jpeg,.png,.pdf)</p>
             <%= button 'Upload', 'ok', 'submit', {class: 'btn-success'} %>
           </div>
         <% end %>

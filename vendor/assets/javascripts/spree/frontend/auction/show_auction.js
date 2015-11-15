@@ -42,7 +42,7 @@ $(function() {
       },
       success: function(data) {
         if((data.message == 'succeeded') || (data.message == 'pending')) {
-          alert('Bid accept successfully');
+          alert('Bid accepted successfully');
           window.location.reload();
         } else {
           $("body").css("cursor", "default");

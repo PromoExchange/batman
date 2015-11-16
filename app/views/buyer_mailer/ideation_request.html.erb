@@ -4,7 +4,7 @@
   <li>Company: <%= @product_request.buyer.shipping_address.company %> </li>
   <li>Request: <%= @product_request.request %> </li>
   <li>Project: <%= @product_request.title %> </li>
-  <li>Budget: <%= @product_request.budget %> </li>
+  <li>Budget: <%= "From $#{@product_request.budget_from} To $#{@product_request.budget_to}" %> </li>
   <li>Quantity: <%= @product_request.quantity %> </li>
   <li>Request type: <%= @product_request.request_type %> </li>
 </ul>

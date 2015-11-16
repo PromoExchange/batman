@@ -17,6 +17,6 @@ class Spree::ProductRequestsController < Spree::StoreController
   private
 
   def product_request_params
-    params.require(:product_request).permit(:buyer_id, :title, :request, :budget, :quantity, request_type:[])
+    params.require(:product_request).permit(:buyer_id, :title, :request, :budget_from, :budget_to, :quantity, request_type:[])
   end
 end

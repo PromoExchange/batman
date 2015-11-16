@@ -5,10 +5,12 @@ class Spree::ProductRequest < Spree::Base
   belongs_to :buyer, class_name: 'Spree::User'
 
   validates :title, presence: true
-  validates :request, presence: true
   validates :quantity, presence: true
-  validates :budget, presence: true
+  validates :budget_from, presence: true
+  validates :budget_to, presence: true
+  validates_numericality_of :budget_to, greater_than: :budget_from, if: -> { budget_from.present? and budget_to.present? }
   validates :request_type, presence: true
+  validates :request, presence: true
 
   state_machine initial: :open do
     after_transition on: :generate_notification, do: :notification_for_new_request_idea

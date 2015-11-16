@@ -21,7 +21,11 @@
             <div class="form-group">
               <div class="input-group">
                 <div class="input-group-addon">$</div>
-                <%= f.text_field :budget, class: 'form-control', placeholder: 'Budget' %>
+                <%= f.text_field :budget_from, class: 'form-control', placeholder: 'From' %>
+                <div class="input-group-addon">.00</div>
+                <div class="budget-space"></div>
+                <div class="input-group-addon">$</div>
+                <%= f.text_field :budget_to, class: 'form-control', placeholder: 'To' %>
                 <div class="input-group-addon">.00</div>
               </div>
             </div>

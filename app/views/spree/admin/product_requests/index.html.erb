@@ -14,9 +14,9 @@
         </li>
       </ul>
 
-      <ul class="request_description"> 
+      <ul class="request_description">
         <li> Project Title: <%= product_request.title %> <li>
-        <li> Budget: <%= "From $#{product_request.budget_from} To $#{product_request.budget_to}" %> <li>
+        <li> Budget: From <%= number_to_currency(product_request.budget_from)%> To <%= number_to_currency(product_request.budget_to) %> <li>
         <li> Quantity: <%= product_request.quantity %> <li>
         <li> Type: <%= product_request.request_type %> <li>
         <li> Description: <%= product_request.request %> </li>
@@ -24,11 +24,11 @@
 
       <% product_request.request_ideas.each do |request_idea| %>
         <ul data-id="<%= request_idea.id %>" class="row">
-          <li class="col-md-3 product_id"> 
+          <li class="col-md-3 product_id">
             <a href='products/<%= request_idea.product.slug %>'>
               <img itemprop='image' alt='<%= request_idea.product.name %>' src='<%= request_idea.image_uri %>'>
               <p><%= request_idea.product.name %></p>
-            </a> 
+            </a>
           </li>
           <% if request_idea.complete? %>
             <li class="sample_cost col-md-2"> <%= request_idea.cost %> </li>
@@ -36,7 +36,7 @@
             <li class="sample_cost col-md-2 request_sample"> <%= request_idea.cost %> </li>
           <% end %>
           <li class="col-md-1"> </li>
-          <li class="col-md-3"> 
+          <li class="col-md-3">
             <% if request_idea.cancelled? %>
               "Deleted by buyer"
             <% elsif request_idea.closed? %>

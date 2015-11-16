@@ -73,9 +73,9 @@ Spree::Product.class_eval do
                    Spree::Property.find_by(name: property_name)
                  else
                    Spree::Property.create(
-                    name: property_name,
-                    presentation: 'NON DISPLAY'
-                  )
+                     name: property_name,
+                     presentation: 'NON DISPLAY'
+                   )
                  end
 
       product_property = Spree::ProductProperty.where(
@@ -115,7 +115,7 @@ Spree::Product.class_eval do
   end
 
   def check_validity!
-    invalid if Spree::ImprintMethodsProduct.where(product: self).nil?
+    invalid if Spree::ImprintMethodsProduct.where(product: self).empty?
   rescue
     Rails.logger.warn('Failed to test for validity, assume invalid')
     invalid

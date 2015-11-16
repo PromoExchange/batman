@@ -23,7 +23,8 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0681AC44-CCBB-4FFA-A231-8211A328F98C
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=AEE7C80E-AEFC-4656-BC40-DA9E024215C8
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=6C4141E9-7928-4077-820B-064FD2A7D1FF
-    # 3E3E44F2-2D59-4DA6-AC2B-EB3BA070581B
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=7F293612-7779-4BB6-B2D1-1E0F390CEA50
+    # 7F293612-7779-4BB6-B2D1-1E0F390CEA50
 
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
@@ -154,11 +155,11 @@ module ProductLoad
           'Deboss Imprint',
           'Photopatch Imprint',
           'Imprint Color',
-          'Gemphoto Imprint'].includes? option_detail.name
+          'Gemphoto Imprint'].include? option_detail.name
 
         imprint_name = option_detail.name
 
-        imprint_name = 'Screen Print' if ['1 Color Screenprinting', 'Imprint Color'].includes? imprint_name
+        imprint_name = 'Screen Print' if ['1 Color Screenprinting', 'Imprint Color'].include? imprint_name
         imprint_name = 'Deboss' if 'Deboss Imprint' == imprint_name
         imprint_name = 'Logopatch' if 'Logopatch Colors' == imprint_name
         imprint_name = 'Photopatch' if 'Photopatch Imprint' == imprint_name

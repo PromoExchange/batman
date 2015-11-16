@@ -197,10 +197,6 @@ class Spree::Auction < Spree::Base
     bids.find_by(state: %w(rejected))
   end
 
-  def open_bids
-    bids.where.not(state: %w(rejected))
-  end
-
   def product_delivered?
     ups_response.is_delivered?
   rescue

@@ -175,6 +175,7 @@ $(function() {
         $("#seller-won-auction-table > tbody").html(trHTML);
       }
     });
+    window.history.pushState({}, null, '/dashboards?tab=won_auction');
   });
 
   if ($($('#seller-won-auction-tab').parent()[0]).hasClass('active')) {
@@ -195,7 +196,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        window.location = "/dashboards";
+        window.location = "/dashboards?tab=won_auction";
       },
       error: function(data) {
         alert('Failed to confirm order, please contact support');
@@ -294,7 +295,8 @@ $(function() {
           alert(data.error_msg);
         } else {
           alert('Tracking number successfully updated.');
-          window.location = "/dashboards?tab=won_auction";
+          $('#seller-won-auction-tab').trigger('click');
+          $('#tracking-close').click();
         }
       },
       error: function(data) {

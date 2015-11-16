@@ -120,5 +120,9 @@ $(function() {
     return false;
   });
 
+  $('#auction-tab').click(function(){
+    window.history.pushState({}, null, '/dashboards');
+  });
+
   $('#live-auction-tab').trigger('click');
 });

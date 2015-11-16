@@ -187,6 +187,7 @@ $(function() {
         $("#buyer-purchase-history-table > tbody").html(trHTML);
       }
     });
+    window.history.pushState({}, null, '/dashboards?tab=purchase_history');
   });
 
   if ($($('#purchase-history-tab').parent()[0]).hasClass('active')) {
@@ -328,7 +329,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        window.location = "/dashboards";
+        $('#purchase-history-tab').click();
       },
       error: function(data) {
         alert('Failed to Confirmed Receipt, please contact support');
@@ -361,7 +362,9 @@ $(function() {
           alert(data.error_msg);
         } else {
           alert('Proof Rejected.');
-          window.location = "/dashboards";
+          $('#purchase-history-tab').click();
+          $('#reject-proof').modal('hide');
+          $('#reject-proof textarea').val('');
         }
       },
       error: function(data) {

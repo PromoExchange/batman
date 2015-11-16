@@ -185,6 +185,7 @@ $(function() {
         $("#inthelead-auction-table > tbody").html(trHTML);
       }
     });
+    window.history.pushState({}, null, '/dashboards');
     $(this).tab('show');
     return false;
   });

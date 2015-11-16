@@ -89,21 +89,33 @@ Spree::Product.class_eval do
     end
   end
 
-  def check_validity
-    # Needs at least 1 imprint Method
-    no_imprint = Spree::ImprintMethodsProduct.where(product: self).nil?
+  def get_property_value(key)
+    shipping_weight_id = Spree::Property.all.find_by_name(key).id
+    return if shipping_weight_id.nil?
+    prop = product_properties.find_by(property_id: shipping_weight_id)
+    return if prop.nil?
+    prop.value
+  end
 
-    shipping_weight_id = Spree::Property.where(name: 'shipping_weight').first.id
-    shipping_dimensions_id = Spree::Property.where(name: 'shipping_dimensions').first.id
-    shipping_quantity_id = Spree::Property.where(name: 'shipping_quantity').first.id
+  def prebid_ability!
+    self.shipping_weight ||= get_property_value('shipping_weight')
+    self.shipping_dimensions ||= get_property_value('shipping_dimensions')
+    self.shipping_quantity ||= get_property_value('shipping_quantity')
+    save!
 
-    no_shipping_weight = product_properties.find_by(property_id: shipping_weight_id).nil?
-    no_shipping_dimensions = product_properties.find_by(property_id: shipping_dimensions_id).nil?
-    no_shipping_quantity = product_properties.find_by(property_id: shipping_quantity_id).nil?
+    got_shipping_weight = self.shipping_weight.present?
+    got_shipping_dimensions = self.shipping_dimensions.present?
+    got_shipping_quantity = self.shipping_quantity.present?
+    got_originating_zip = self.originating_zip.present?
 
-    if no_imprint || no_shipping_weight || no_shipping_dimensions || no_shipping_quantity
-      invalid
-    end
+    got_shipping_weight &&
+      got_shipping_dimensions &&
+      got_shipping_quantity &&
+      got_originating_zip
+  end
+
+  def check_validity!
+    invalid if Spree::ImprintMethodsProduct.where(product: self).nil?
   rescue
     Rails.logger.warn('Failed to test for validity, assume invalid')
     invalid

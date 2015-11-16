@@ -23,6 +23,7 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0681AC44-CCBB-4FFA-A231-8211A328F98C
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=AEE7C80E-AEFC-4656-BC40-DA9E024215C8
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=6C4141E9-7928-4077-820B-064FD2A7D1FF
+    # 3E3E44F2-2D59-4DA6-AC2B-EB3BA070581B
 
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
@@ -48,9 +49,20 @@ module ProductLoad
     properties << "additional_info: #{dc_product.add_info}" if dc_product.add_info
 
     # N.B. Needed for prebid
-    properties << "shipping_weight: #{dc_product.packaging.weight}" if dc_product.packaging.weight
-    properties << "shipping_dimensions: #{dc_product.packaging.dimensions}" if dc_product.packaging.dimensions
-    properties << "shipping_quantity: #{dc_product.packaging.quantity}" if dc_product.packaging.quantity
+    if dc_product.packaging.weight
+      properties << "shipping_weight: #{dc_product.packaging.weight}"
+      px_product.shipping_weight = dc_product.packaging.weight
+    end
+
+    if dc_product.packaging.dimensions
+      properties << "shipping_dimensions: #{dc_product.packaging.dimensions}" if dc_product.packaging.dimensions
+      px_product.shipping_dimensions = dc_product.packaging.dimensions
+    end
+
+    if dc_product.packaging.quantity
+      properties << "shipping_quantity: #{dc_product.packaging.quantity}" if dc_product.packaging.quantity
+      px_product.shipping_quantity = dc_product.packaging.quantity
+    end
 
     properties.each do |property|
       property_vals = property.split(':')
@@ -129,12 +141,33 @@ module ProductLoad
       if option.type == 'Decoration Information'
         option_detail = Spree::DcOptionDetail.retrieve(option.guid)
 
-        next if /Embroidery|Additional|Proof/ =~ option_detail.name
-        next if /Drop Shipment/ =~ option_detail.name
+        Rails.logger.debug("PLOAD: Option name [#{option_detail.name}]")
+
+        next unless [
+          '1 Color Screenprinting',
+          'Deboss',
+          'Logomagic',
+          'Blank Product - No Imprint',
+          'Laser Engraving',
+          'Gemphoto',
+          'Logopatch Colors',
+          'Deboss Imprint',
+          'Photopatch Imprint',
+          'Imprint Color',
+          'Gemphoto Imprint'].includes? option_detail.name
+
+        imprint_name = option_detail.name
+
+        imprint_name = 'Screen Print' if ['1 Color Screenprinting', 'Imprint Color'].includes? imprint_name
+        imprint_name = 'Deboss' if 'Deboss Imprint' == imprint_name
+        imprint_name = 'Logopatch' if 'Logopatch Colors' == imprint_name
+        imprint_name = 'Photopatch' if 'Photopatch Imprint' == imprint_name
+        imprint_name = 'Gemphoto' if 'Gemphoto Imprint' == imprint_name
+        imprint_name = 'Blank' if 'Blank Product - No Imprint' == imprint_name
 
         # Imprint Methods
         imprint_method = Spree::ImprintMethod.where(
-          name: option_detail.name
+          name: imprint_name
         ).first_or_create
 
         option_detail.option_choices.each do |option_choice|
@@ -181,12 +214,18 @@ module ProductLoad
       end
     end
 
-    px_product.check_validity
-
-    px_product.loaded if px_product.state == 'loading'
-
     # :imprint_areas,
     # :packaging
+    Rails.logger.debug("PLOAD: Loading #{dc_product.options.count} packaging")
+    px_product.originating_zip = dc_product.packaging.orig_zip if dc_product.packaging.orig_zip
+    px_product.shipping_quantity = dc_product.packaging.quantity if dc_product.packaging.quantity
+    px_product.shipping_weight = dc_product.packaging.weight if dc_product.packaging.weight
+    px_product.shipping_dimensions = dc_product.packaging.dimensions if dc_product.packaging.dimensions
+
+    px_product.save!
+    px_product.check_validity!
+    px_product.loaded if px_product.state == 'loading'
+
     elapsed = (Time.zone.now - beginning_time) * 1000
     Rails.logger.info("PLOAD: [#{supplier_item_guid}] Load took: #{elapsed.round(3)}ms")
   rescue StandardError => e

@@ -18,6 +18,9 @@ class Spree::Prebid < Spree::Base
     # Do not prebid if the Quantity > 2 * EQP
     return if auction.quantity > (auction.product.maximum_quantity * 2)
 
+    # Cannot prebid if no shipping/packaging data
+    return unless auction.product.prebid_ability!
+
     # (TEMP) Do not prebid if this seller is not preferred
     # return unless auction.preferred?(seller)
 

@@ -24,7 +24,7 @@ namespace :dc do
 
     desc 'Set product validity'
     task validity: :environment do
-      Spree::Product.all.map(&:check_validity)
+      Spree::Product.all.map(&:check_validity!)
     end
   end
 

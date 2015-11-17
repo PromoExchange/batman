@@ -167,7 +167,7 @@ class Spree::AuctionsController < Spree::StoreController
 
     @main_colors = Spree::ColorProduct
       .where(product_id: @auction.product.id)
-      .pluck(:color, :product_id)
+      .pluck(:color, :id)
 
     @imprint_methods = Spree::ImprintMethodsProduct
       .joins(:imprint_method)

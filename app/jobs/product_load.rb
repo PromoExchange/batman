@@ -13,7 +13,7 @@ module ProductLoad
 
     supplier_item_guid = params['supplier_item_guid']
     # supplier_item_guid = params[:supplier_item_guid]
-    Rails.logger.info("PLOAD: Product loading #{supplier_item_guid}")
+    Rails.logger.info("PLOAD: Product loading [#{supplier_item_guid}]")
 
     px_product = Spree::Product.where(supplier_item_guid: supplier_item_guid).first
     fail 'Unable to locate DB record' if px_product.nil?
@@ -24,8 +24,10 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=AEE7C80E-AEFC-4656-BC40-DA9E024215C8
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=6C4141E9-7928-4077-820B-064FD2A7D1FF
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=7F293612-7779-4BB6-B2D1-1E0F390CEA50
-    # 7F293612-7779-4BB6-B2D1-1E0F390CEA50
+    # DEBOSS:
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=293A3099-FE80-4125-B88C-E1835073D365
 
+    byebug
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
     unless dc_product.valid?
@@ -137,6 +139,7 @@ module ProductLoad
     )
 
     # Options
+    byebug
     Rails.logger.debug("PLOAD: Loading #{dc_product.options.count} options")
     dc_product.options.each do |option|
       if option.type == 'Decoration Information'
@@ -165,6 +168,7 @@ module ProductLoad
         imprint_name = 'Photopatch' if 'Photopatch Imprint' == imprint_name
         imprint_name = 'Gemphoto' if 'Gemphoto Imprint' == imprint_name
         imprint_name = 'Blank' if 'Blank Product - No Imprint' == imprint_name
+        byebug
 
         # Imprint Methods
         imprint_method = Spree::ImprintMethod.where(
@@ -191,12 +195,11 @@ module ProductLoad
             supplier_id: px_product.supplier_id,
             imprint_method_id: imprint_method.id
           ).first_or_create
-
-          Spree::ImprintMethodsProduct.where(
-            imprint_method_id: imprint_method.id,
-            product_id: px_product.id
-          ).first_or_create
         end
+        Spree::ImprintMethodsProduct.where(
+          imprint_method_id: imprint_method.id,
+          product_id: px_product.id
+        ).first_or_create
       elsif option.type == 'Product Color Information'
         Spree::ColorProduct.where(
           product_id: px_product.id

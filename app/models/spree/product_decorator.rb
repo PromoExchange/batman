@@ -19,7 +19,7 @@ Spree::Product.class_eval do
     end
 
     event :loaded do
-      transition loading: :active
+      transition [:invalid, :loading] => :active
     end
 
     event :deleted do

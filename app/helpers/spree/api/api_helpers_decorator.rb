@@ -110,10 +110,11 @@ Spree::Api::ApiHelpers.module_eval do
   class_variable_set(:@@request_idea_attributes,
     [
       :id,
-      :product_id,
+      :sku,
       :image_uri,
       :state,
-      :auction_id
+      :auction_id,
+      :product_variant
     ])
   mattr_reader :request_idea_attributes
 

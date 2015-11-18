@@ -25,9 +25,9 @@
       <% product_request.request_ideas.each do |request_idea| %>
         <ul data-id="<%= request_idea.id %>" class="row">
           <li class="col-md-3 product_id">
-            <a href='products/<%= request_idea.product.slug %>'>
-              <img itemprop='image' alt='<%= request_idea.product.name %>' src='<%= request_idea.image_uri %>'>
-              <p><%= request_idea.product.name %></p>
+            <a href='products/<%= request_idea.variant.product.slug %>'>
+              <img itemprop='image' alt='<%= request_idea.variant.product.name %>' src='<%= request_idea.image_uri %>'>
+              <p><%= request_idea.variant.product.name %></p>
             </a>
           </li>
           <% if request_idea.complete? %>
@@ -54,7 +54,7 @@
 
       <ul class="product-request row">
         <%= hidden_field_tag :product_request_id, product_request.id  %>
-        <li class="col-md-4"> <%= text_field_tag :product_id, nil, placeholder: 'Product Id' %> </li>
+        <li class="col-md-4"> <%= text_field_tag :sku, nil, placeholder: 'Product Sku' %> </li>
         <li class="col-md-4"> <%= text_field_tag :sample_cost, nil, placeholder: 'Sample Cost' %> </li>
         <li class="col-md-4"> <%= button_tag 'Save', class: 'btn-success create_idea' %> </li>
       </ul>

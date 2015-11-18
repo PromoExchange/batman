@@ -8,13 +8,13 @@ $(function() {
 
   $('ul').on('click', '.create_idea' ,function(){
     var $this = $(this).parent().parent();
-    var product_id = $this.find('#product_id').val();
+    var sku = $this.find('#sku').val();
     var sample_cost = $this.find('#sample_cost').val();
     var product_request_id = $this.find('#product_request_id').val();
     var url = '/admin/product_requests';
     var message = {
       id: product_request_id,
-      product_id: product_id,
+      sku: sku,
       cost: sample_cost
     };
     $.ajax({

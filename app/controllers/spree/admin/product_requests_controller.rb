@@ -9,7 +9,7 @@ class Spree::Admin::ProductRequestsController < Spree::Admin::BaseController
     params[:cost] = 0 if params[:cost].blank?
 
     @request_idea = @product_request.request_ideas.new(
-      product_id: params[:product_id],
+      sku: params[:sku],
       cost: params[:cost]
     )
 

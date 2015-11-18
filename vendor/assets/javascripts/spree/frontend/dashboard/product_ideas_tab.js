@@ -98,7 +98,7 @@ $(function() {
               start_auction = action_template({
                 product_class: 'btn-success start_auction',
                 request_idea_id: item.id,
-                url: '/auctions/new?product_id='+item.product_id+'&request_idea_id='+item.id,
+                url: '/auctions/new?product_id='+item.product_variant.id+'&request_idea_id='+item.id,
                 name: 'Start Auction'
               });
 
@@ -119,10 +119,10 @@ $(function() {
               });
 
               trHTML += image_template({
-                url: 'products/'+item.product.slug,
+                url: 'products/'+item.product_variant.slug,
                 name: item.name,
                 image: item.image_uri,
-                value: item.product.name
+                value: item.product_variant.name
               });
 
               trHTML += simple_template({

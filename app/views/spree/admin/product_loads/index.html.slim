@@ -4,17 +4,17 @@ h2 Product Load
     table.table
       tbody
         tr
-          td Factories loaded
+          td Factories defined
           td = @num_factories
         tr
           td Active Products In Database
-          td = @num_active
+          td = @num_states['active'].nil? ? 0 : @num_states['active']
         tr
           td Loading Products In Database
-          td = @num_loading
+          td = @num_states['loading'].nil? ? 0 : @num_states['loading']
         tr
           td Invalid Products In Database
-          td = @num_invalid
+          td = @num_states['invalid'].nil? ? 0 : @num_states['invalid']
         tr
           td Total Products In Database
           td = @num_database
@@ -25,20 +25,20 @@ h2 Product Load
           td In Product Update Queue
           td = @num_product_queue
 .well
-    h4 Factories Loaded
+    h4 By Factory/State
     .scrolling
       table.table
         thead
           tr
             th Factory
-            th Products Loaded
-            th Action
+            th State
+            th Number
         tbody
           - @loaded_factories.each do |k,v|
             tr
-              td = k
+              td = k[0]
+              td = k[1].humanize
               td = v
-              td = button_to 'Delete', spree.admin_product_loads_destroy_factory_path, params: {factory_name: k} , method: :delete, class: "btn btn-success"
 .well
     h4 Available Factories
     table.table.table-condensed

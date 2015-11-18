@@ -26,6 +26,7 @@ module ProductLoad
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=7F293612-7779-4BB6-B2D1-1E0F390CEA50
     # DEBOSS:
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=293A3099-FE80-4125-B88C-E1835073D365
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0C9BEC85-87F4-46CF-B7E5-1345A76D59CB
 
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 

@@ -1,13 +1,14 @@
 class Spree::Admin::ProductLoadsController < Spree::Admin::BaseController
   def index
     @num_database = Spree::Product.count
-    @num_active = Spree::Product.where(state: 'active').count
-    @num_loading = Spree::Product.where(state: 'loading').count
-    @num_invalid = Spree::Product.where(state: 'invalid').count
+    @num_states = Spree::Product.group(:state).count
     @num_product_queue = Resque.size(:product_load)
     @num_factory_queue = Resque.size(:product_load_factory)
     @num_factories = Spree::Supplier.count
-    @loaded_factories = Spree::Product.joins(:supplier).group('spree_suppliers.name').count
+    @loaded_factories = Spree::Product.joins(:supplier)
+      .group('spree_suppliers.name', :state)
+      .order('spree_suppliers.name')
+      .count
     @dc_suppliers = Spree::DcSupplier.supplier_list
   end
 

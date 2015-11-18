@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   post '/customer', to: 'spree/api/charges#create_customer'
   post '/delete_customer/:customer_id', to: 'spree/api/charges#delete_customer'
   post '/confirm', to: 'spree/api/charges#confirm_deposit'
-  
+
   resources :pxtaxrates,
     controller: 'spree/pxtaxrates',
     as: 'pxtaxrates'
@@ -115,8 +115,9 @@ Rails.application.routes.draw do
           post 'generate_notification'
         end
       end
-      match '/product_loads/destroy_factory' => 'product_loads#destroy_factory', via: :delete
+      # match '/product_loads/destroy_factory' => 'product_loads#destroy_factory', via: :delete
       resources :product_loads
+      resources :pms_colors
     end
   end
 end

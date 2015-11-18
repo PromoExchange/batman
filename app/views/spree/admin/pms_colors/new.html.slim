@@ -1,0 +1,12 @@
+= render partial: 'spree/admin/shared/error_messages', locals: { target: @pms_color }
+
+- content_for :page_title do
+  = "New PMS Color"
+
+= form_for [:admin, @pms_color] do |f|
+  fieldset
+    = render partial: 'form', locals: { f: f }
+    .form-actions
+      = button Spree.t('actions.create'), 'ok', 'submit', {class: 'btn-success'}
+      span.or= Spree.t(:or)
+      = button_link_to Spree.t('actions.cancel'), admin_pms_colors_path, :icon => 'remove'

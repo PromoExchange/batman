@@ -319,7 +319,7 @@ $(function() {
     var auction_id = $(this).data('id');
     var key = $('#buyer-purchase-history-table').attr('data-key');
     var url = '/api/auctions/' + auction_id + '/approve_proof';
-    var accept = confirm("Are you sure you want to confirm your order was received accurate and in full?");
+    var accept = confirm("Are you sure you want to approve this proof?");
     if (!accept){ return false; }
     $.ajax({
       type: 'POST',

@@ -224,7 +224,7 @@ $(function() {
 
   $('tbody').on('click', '.confirm_receipt', function(){
     var auction_id = $(this).data('id');
-    var accept = confirm("Are you sure, Confirm Receipt");
+    var accept = confirm("Are you sure you want to confirm your order was received accurate and in full?");
     if (!accept){ return false; }
     $('#rating-auction-id').val(auction_id);
     $('#rating-seller').show('modal');

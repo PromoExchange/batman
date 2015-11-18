@@ -3,28 +3,44 @@ $(function() {
     e.preventDefault();
     var bid = $(this).data('bid');
     var accept = confirm("Are you sure you want to accept this bid of " + accounting.formatMoney(parseFloat(bid))+"?");
-    var key = $('#show-auction').attr('data-key');
     var bid_id = $(this).data('id');
     var preferred = $(this).data('preferred');
     if (!accept){ return false; }
     if (preferred) {
-      $.ajax({
-        type: 'POST',
-        contentType: "application/json",
-        url: '/api/bids/' + bid_id + '/accept',
-        headers: {
-          'X-Spree-Token': key
-        },
-        success: function(data) {
-          window.location = "/dashboards";
-        },
-        error: function(data) {
-          alert('Failed to accept bid, please contact support');
-        }
-      });
+      $('#manage_bid_id').val(bid_id);
+      $('#manage-workflow').show('modal');
     } else {
       window.location = "/accept/" + bid_id ;
     }
+  });
+
+  $('#manage-workflow input').click(function(){
+    var status = $(this).val(); 
+    $('#manage_status').val(status);
+  });
+
+  $('#workflow-submit').click(function(){
+    var key = $('#show-auction').attr('data-key');
+    var bid_id = $('#manage_bid_id').val();
+    var message = { 
+      manage_workflow: $('#manage_status').val()
+    };
+    $.ajax({
+      type: 'POST',
+      contentType: "application/json",
+      data: JSON.stringify(message),
+      url: '/api/bids/' + bid_id + '/accept',
+      headers: {
+        'X-Spree-Token': key
+      },
+      success: function(data) {
+        alert("Bid Accept " + data.message)
+        window.location = "/dashboards?tab=won_auction";
+      },
+      error: function(data) {
+        alert('Failed to accept bid, please contact support');
+      }
+    });
   });
 
   $('#accept-bid').click(function() {

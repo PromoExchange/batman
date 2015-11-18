@@ -94,14 +94,14 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
         winning_bid.order.update_attributes(payment_state: 'completed')
         Spree::OrderUpdater.new(winning_bid.order).update
+        if winning_bid.manage_workflow
+          @auction.confirm_order!
+        else
+          @auction.invoice_paid!
+        end
+      else
+        @auction.confirm_order!
       end
-
-      @auction.confirm_order!
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 15.days),
-        TrackingReminder,
-        auction_id: @auction.id
-      )
     end
     render nothing: true, status: :ok
   rescue

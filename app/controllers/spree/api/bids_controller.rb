@@ -45,8 +45,10 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   def accept
     @bid.transaction do
       if @bid.auction.preferred?(@bid.seller)
+        @bid.update_attributes(manage_workflow: params[:manage_workflow])
         @bid.preferred_accept
         @bid.auction.unpaid
+        @status = 'succeeded'
       else
         @status = @bid.create_payment(nil)
         if %w(succeeded pending).include?(@status)

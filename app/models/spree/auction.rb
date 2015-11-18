@@ -228,16 +228,18 @@ class Spree::Auction < Spree::Base
       InProduction,
       auction_id: id
     )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
-      SellerFailedUploadProof,
-      auction_id: id
-    )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
-      ProofNeededImmediately,
-      auction_id: id
-    )
+    unless winning_bid.manage_workflow
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 48.hours),
+        SellerFailedUploadProof,
+        auction_id: id
+      )
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 48.hours),
+        ProofNeededImmediately,
+        auction_id: id
+      )
+    end
   end
 
   def notification_for_product_delivered
@@ -245,11 +247,13 @@ class Spree::Auction < Spree::Base
       ProductDelivered,
       auction_id: id
     )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 3.days),
-      ConfirmReceiptReminder,
-      auction_id: id
-    )
+    unless winning_bid.manage_workflow
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 3.days),
+        ConfirmReceiptReminder,
+        auction_id: id
+      )
+    end
   end
 
   def notification_for_confirm_received
@@ -264,16 +268,18 @@ class Spree::Auction < Spree::Base
       RejectProof,
       auction_id: id
     )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
-      SellerFailedUploadProof,
-      auction_id: id
-    )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
-      ProofNeededImmediately,
-      auction_id: id
-    )
+    unless winning_bid.manage_workflow
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 48.hours),
+        SellerFailedUploadProof,
+        auction_id: id
+      )
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 48.hours),
+        ProofNeededImmediately,
+        auction_id: id
+      )
+    end
   end
 
   def notification_for_approve_proof
@@ -281,11 +287,13 @@ class Spree::Auction < Spree::Base
       ApproveProof,
       auction_id: id
     )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 15.days),
-      TrackingReminder,
-      auction_id: id
-    )
+    unless winning_bid.manage_workflow
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 15.days),
+        TrackingReminder,
+        auction_id: id
+      )
+    end
   end
 
   def notification_for_upload_proof
@@ -293,19 +301,23 @@ class Spree::Auction < Spree::Base
       UploadProof,
       auction_id: id
     )
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 24.hours),
-      ProofAvailable,
-      auction_id: id
-    )
+    unless winning_bid.manage_workflow
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 24.hours),
+        ProofAvailable,
+        auction_id: id
+      )
+    end
   end
 
   def rating_reminder
-    Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 3.days),
-      RatingReminder,
-      auction_id: id
-    )
+    unless winning_bid.manage_workflow
+      Resque.enqueue_at(
+        EmailHelpers.email_delay(Time.zone.now + 3.days),
+        RatingReminder,
+        auction_id: id
+      )
+    end
   end
 
   def generate_reference

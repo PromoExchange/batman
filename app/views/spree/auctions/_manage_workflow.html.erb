@@ -1,0 +1,22 @@
+<div class="modal" id="manage-workflow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <p><b> Would you like to use PromoExchange's project workflow manager to follow your order throughout it's lifecycle? You can manage your proof, approve production and even track your order all in one place. </b><p>
+            <p>
+              <%= radio_button_tag 'manage_workflow', true, true %> Yes, I want to use the project workflow manager
+            </p>
+            <p>
+              <%= radio_button_tag 'manage_workflow', false %> No, thanks. We will manage the project off-site
+            </p>
+            <%= hidden_field_tag 'manage_bid_id', 0 %>
+            <%= hidden_field_tag 'manage_status', true %>
+            <button type="button" id="workflow-submit" class="btn btn-primary pull-right">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

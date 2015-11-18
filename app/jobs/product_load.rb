@@ -27,7 +27,6 @@ module ProductLoad
     # DEBOSS:
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=293A3099-FE80-4125-B88C-E1835073D365
 
-    byebug
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
     unless dc_product.valid?
@@ -139,7 +138,6 @@ module ProductLoad
     )
 
     # Options
-    byebug
     Rails.logger.debug("PLOAD: Loading #{dc_product.options.count} options")
     dc_product.options.each do |option|
       if option.type == 'Decoration Information'
@@ -168,7 +166,6 @@ module ProductLoad
         imprint_name = 'Photopatch' if 'Photopatch Imprint' == imprint_name
         imprint_name = 'Gemphoto' if 'Gemphoto Imprint' == imprint_name
         imprint_name = 'Blank' if 'Blank Product - No Imprint' == imprint_name
-        byebug
 
         # Imprint Methods
         imprint_method = Spree::ImprintMethod.where(

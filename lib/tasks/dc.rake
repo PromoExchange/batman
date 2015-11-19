@@ -1,4 +1,129 @@
+def add_pms_color(supplier, imprint_method, name , pantone, hex)
+  pms_color = Spree::PmsColor.where(
+    name: name,
+    pantone: pantone,
+    hex: hex
+  ).first_or_create
+
+  Spree::PmsColorsSupplier.where(
+    pms_color: pms_color,
+    display_name: pantone,
+    supplier: supplier,
+    imprint_method: imprint_method
+  ).first_or_create
+end
+
 namespace :dc do
+  namespace :fix do
+    desc 'Fix Garyline'
+    task garyline: :environment do
+      supplier = Spree::Supplier.where(name: 'Garyline').first_or_create
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          imprint_method,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      products = Spree::Product.where(supplier: supplier)
+
+      products.each do |product|
+        product.loading
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: imprint_method,
+          product: product
+        ).first_or_create
+
+        product.check_validity!
+        product.loaded if product.state == 'loading'
+      end
+    end
+
+    desc 'Fix Evans'
+    task evans: :environment do
+      supplier = Spree::Supplier.where(name: 'Evans Manufacturing, Inc.').first_or_create
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Ivory', '7527', '#d6d2c4'],
+        ['Grey', 'Cool Gray 10', '#63666a'],
+        ['Yellow', '123 C', '#ffc72c'],
+        ['Orange', '166 C', '#e35205'],
+        ['Red', '186 C', '#c8102e'],
+        ['Burgundy', '202 C', '#862633'],
+        ['Purple', '259 C', '#6d2077'],
+        ['Royal Blue', '286 C', '#0033a0'],
+        ['Dark Blue', '289 C', '#0c2340'],
+        ['Process Blue', '307 C', '#0085ca'],
+        ['Dark Green', '343 C', '#115740'],
+        ['Green', '343 C', '#00843d'],
+        ['Teal', '3278 C', '#009b77'],
+        ['Brown', '476 C', '#4e3629'],
+        ['Gold', '872 C', '#85714d'],
+        ['Silver', '877 C', '#8a8d8f'],
+        ['Pink', '189 C', '#f8a3bc'],
+        ['Neon Pink', '806 C', '#ff3eb5']
+      ]
+
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          imprint_method,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      products = Spree::Product.where(supplier: supplier)
+
+      products.each do |product|
+        product.loading
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: imprint_method,
+          product: product
+        ).first_or_create
+
+        product.check_validity!
+        product.loaded if product.state == 'loading'
+      end
+    end
+  end
+
   namespace :product do
     desc 'Reload All products in database'
     task reload_all: :environment do

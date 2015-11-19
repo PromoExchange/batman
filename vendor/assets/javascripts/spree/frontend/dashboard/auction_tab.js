@@ -124,5 +124,7 @@ $(function() {
     window.history.pushState({}, null, '/dashboards');
   });
 
-  $('#live-auction-tab').trigger('click');
+  if ($($('#live-auction-tab').parent()[0]).hasClass('active')) {
+    $('#live-auction-tab').trigger('click');
+  }
 });

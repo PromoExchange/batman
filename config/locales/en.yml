@@ -22,6 +22,7 @@
 en:
   spree:
     auction: 'Auction'
+    live_auctions: "Live Auctions"
     dashboard: 'Dashboard'
     my_auctions: 'My Auctions'
     purchase_history: 'Purchase History'

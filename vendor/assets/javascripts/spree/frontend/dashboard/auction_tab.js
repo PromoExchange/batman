@@ -74,7 +74,7 @@ $(function() {
   });
 
   $('#waiting-auction-tab').click(function(e) {
-    $("#waiting-auction-table > tbody").html("<tr><td class='text-center' colspan='3'><i class='fa fa-spinner fa-pulse fa-3x'></i></td></tr>");
+    $("#waiting-auction-table > tbody").html("<tr><td class='text-center' colspan='7'><i class='fa fa-spinner fa-pulse fa-3x'></i></td></tr>");
     var key = $("#live-auction-table").attr("data-key");
     var buyer_id = $("#live-auction-table").attr("data-id");
     var auction_url = '/api/auctions?status=waiting&buyer_id=' + buyer_id;

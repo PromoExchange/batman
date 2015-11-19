@@ -115,6 +115,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to create_proof from confirm_order event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     expect(a.state).to eq 'create_proof'
   end
@@ -122,6 +123,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to waiting_proof_approval from upload_proof event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     expect(a.state).to eq 'waiting_proof_approval'
@@ -130,6 +132,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to in_production from approve_proof event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     a.approve_proof
@@ -139,6 +142,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to create_proof from reject_proof event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     a.reject_proof
@@ -148,6 +152,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to confirm_receipt from enter_tracking event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     a.approve_proof
@@ -158,6 +163,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to waiting_for_rating from confirm_shipment event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     a.approve_proof
@@ -169,6 +175,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to complete from rate_seller event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     a.approve_proof
@@ -181,6 +188,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to in_dispute from reject order event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     a.approve_proof
@@ -193,6 +201,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to cancelled from cancel order event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     a.approve_proof
@@ -206,6 +215,7 @@ RSpec.describe Spree::Auction, type: :model do
   it 'should go to complete from dispute resolved event' do
     a = FactoryGirl.build(:auction)
     a.accept
+    a.bids << FactoryGirl.build(:bid, {state: 'accepted'})
     a.confirm_order
     a.upload_proof
     a.approve_proof

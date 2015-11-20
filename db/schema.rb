@@ -155,25 +155,15 @@ ActiveRecord::Schema.define(version: 20151120133844) do
   add_index "spree_auctions_users", ["user_id"], name: "index_spree_auctions_users_on_user_id", using: :btree
 
   create_table "spree_bids", force: :cascade do |t|
-<<<<<<< HEAD
-    t.integer  "auction_id",                                    null: false
-    t.integer  "seller_id",                                     null: false
-    t.datetime "created_at",      precision: 6,                 null: false
-    t.datetime "updated_at",      precision: 6,                 null: false
-    t.integer  "order_id"
-    t.integer  "prebid_id"
-    t.datetime "cancelled_date",  precision: 6
-=======
-    t.integer  "auction_id",     null: false
-    t.integer  "seller_id",      null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.integer  "auction_id",                      null: false
+    t.integer  "seller_id",                       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "order_id"
     t.integer  "prebid_id"
     t.datetime "cancelled_date"
->>>>>>> Issue ID # 106718354
     t.string   "state"
-    t.boolean  "manage_workflow",               default: false
+    t.boolean  "manage_workflow", default: false
   end
 
   create_table "spree_calculators", force: :cascade do |t|
@@ -909,14 +899,8 @@ ActiveRecord::Schema.define(version: 20151120133844) do
   add_index "spree_reimbursements", ["order_id"], name: "index_spree_reimbursements_on_order_id", using: :btree
 
   create_table "spree_request_ideas", force: :cascade do |t|
-<<<<<<< HEAD
-    t.integer  "product_request_id",                             null: false
-    t.decimal  "cost",                             default: 0.0, null: false
-=======
     t.integer  "product_request_id",               null: false
-    t.integer  "product_id",                       null: false
     t.decimal  "cost",               default: 0.0, null: false
->>>>>>> Issue ID # 106718354
     t.string   "state"
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false

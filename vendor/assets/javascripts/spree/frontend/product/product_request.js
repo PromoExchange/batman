@@ -11,5 +11,10 @@ $(function() {
     }
     $(this).find('.payment-errors ul').html(trHTML);
   });
+  
+  
+  $('#get-ideas').click(function(){
+    $('#product_request')[0].reset();
+  })
 
 });

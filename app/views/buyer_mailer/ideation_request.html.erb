@@ -6,7 +6,9 @@
   <li>Project: <%= @product_request.title %> </li>
   <li>Budget: From <%= number_to_currency(product_request.budget_from)%> To <%= number_to_currency(product_request.budget_to) %> <li>
   <li>Quantity: <%= @product_request.quantity %> </li>
-  <li>Request type: <%= @product_request.request_type %> </li>
+  <% if @product_request.request_type.present? %>
+    <li>Request type: <%= @product_request.request_type %> </li>
+  <% end %>
 </ul>
 
 <p>The PromoExchange Team</p>

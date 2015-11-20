@@ -9,7 +9,6 @@ class Spree::ProductRequest < Spree::Base
   validates :budget_from, presence: true
   validates :budget_to, presence: true
   validates_numericality_of :budget_to, greater_than: :budget_from, if: -> { budget_from.present? and budget_to.present? }
-  validates :request_type, presence: true
   validates :request, presence: true
 
   state_machine initial: :open do

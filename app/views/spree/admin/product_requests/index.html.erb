@@ -18,7 +18,9 @@
         <li> Project Title: <%= product_request.title %> <li>
         <li> Budget: From <%= number_to_currency(product_request.budget_from)%> To <%= number_to_currency(product_request.budget_to) %> <li>
         <li> Quantity: <%= product_request.quantity %> <li>
-        <li> Type: <%= product_request.request_type %> <li>
+        <% if product_request.request_type.present? %>
+          <li> Type: <%= product_request.request_type %> <li>
+        <% end %>
         <li> Description: <%= product_request.request %> </li>
       </ul>
 

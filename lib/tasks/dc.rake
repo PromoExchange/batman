@@ -13,8 +13,30 @@ def add_pms_color(supplier, imprint_method, name , pantone, hex)
   ).first_or_create
 end
 
+def wrap_string(string)
+  "\"#{string.gsub(/\"/, '""')}\""
+end
+
 namespace :dc do
   namespace :fix do
+    desc 'Get invalid CSV'
+    task invalid_report: :environment do
+      puts 'factory,name,sku,num_imprints,num_prices,num_colors'
+      Spree::Product.where(state: 'invalid').each do |product|
+        line = ''
+        line << wrap_string(product.supplier.name) << ','
+        line << wrap_string(product.name) << ','
+        line << wrap_string(product.sku) << ','
+
+        line << Spree::ImprintMethodsProduct.where(product: product).count.to_s << ','
+
+        line << Spree::VolumePrice.where(variant: product.master).count.to_s << ','
+
+        line << Spree::ColorProduct.where(product: product).count.to_s << ','
+        puts line
+      end
+    end
+
     desc 'Fix Garyline'
     task garyline: :environment do
       supplier = Spree::Supplier.where(name: 'Garyline').first_or_create
@@ -139,6 +161,17 @@ namespace :dc do
     desc 'Reload invalid products in database'
     task reload_invalid: :environment do
       Spree::Product.where(state: 'invalid').each do |product|
+        product.loading
+        Resque.enqueue(
+          ProductLoad,
+          supplier_item_guid: product.supplier_item_guid
+        )
+      end
+    end
+
+    desc 'Reload loading products in database'
+    task reload_loading: :environment do
+      Spree::Product.where(state: 'loading').each do |product|
         product.loading
         Resque.enqueue(
           ProductLoad,

@@ -30,7 +30,7 @@
               <% end %>
           </td>
         </tr>
-        <tr><td>Expected Delivery Date:</td><td><time data-format='%B %e, %Y' data-local='time' datetime='<%= @bid.auction.created_at + 15.days %>'></time></td></tr>
+        <tr><td>Expected Delivery Date:</td><td><%= (@bid.auction.created_at + 15.days).strftime('%B %e, %Y') %></td></tr>
         <% unless @bid.auction.logo.nil? %>
           <tr><td>Logo:</td><td><%= image_tag(@bid.auction.logo.logo_file.url(:thumb), { itemprop: "image", alt: @bid.auction.logo.logo_file_file_name }) %></td></tr>
         <% end %>

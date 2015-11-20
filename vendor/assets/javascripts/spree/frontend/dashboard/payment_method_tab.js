@@ -32,7 +32,6 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        alert('Delete this entry');
         $this.parents('tr').hide('slow', function() {
           $(this).remove();
           $("body").css("cursor", "default");

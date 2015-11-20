@@ -1,20 +1,51 @@
 - content_for :page_title do
- = "PMS Color"
+ = plural_resource_name(Spree::PmsColor)
+
  - content_for :page_actions do
   = button_link_to Spree.t(:new_pms_color), new_admin_pms_color_path, { :class => "btn-success", :icon => 'add', 'data-update' => 'new_pms_color', :id => 'new_pms_color_link' }
+
+- content_for :table_filter do
+  div data-hook="admin_pms_color_sidebar"
+    = search_form_for [:admin, @search] do |f|
+      - locals = {:f => f}
+      .row
+        .col.col-md-4
+          .form-group
+            = f.label :name_cont, "Spree.t(:name)"
+            = f.text_field :name_cont, :class => "form-control js-quick-search-target"
+        .col-md-4
+          .form-group
+            = f.label :pantone_cont, "Pantone"
+            = f.text_field :pantone_cont, :class => "form-control"
+        .col-md-4
+          .form-group
+            = f.label :hex_cont, "HEX"
+            = f.text_field :hex_cont, :class => "form-control"
+      .form-actions
+        = button Spree.t(:search), 'search'
+
 .well
-  h4 PMS Colors
-  table.table
-    thead
-      tr
-        th Name
-        th Pantone
-        th HEX
-        th Action
-    tbody
-      - @pms_colors.each do |pms_color|
+  - if @pms_colors.any?
+    table.table
+      thead
         tr
-          td = pms_color.name
-          td = pms_color.pantone
-          td = pms_color.hex
-          td Edit me
+          th Name
+          th Pantone
+          th HEX
+          th Action
+      tbody
+        - @pms_colors.each do |pms_color|
+          tr
+            td = pms_color.name
+            td = pms_color.pantone
+            td = pms_color.hex
+            td.actions.actions-2.text-right
+              = link_to_edit(pms_color, :no_text => true)
+              = link_to_delete(pms_color, :no_text => true)
+  - else
+    .alert.alert-info.no-objects-found
+    = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::PmsColor))
+    = ","
+    = link_to Spree.t(:add_one), new_object_url
+    = "!"
+= paginate @collection

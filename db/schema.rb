@@ -99,8 +99,8 @@ ActiveRecord::Schema.define(version: 20151120133844) do
     t.integer  "bid_id"
     t.string   "charge_id"
     t.string   "status"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",      precision: 6, null: false
+    t.datetime "updated_at",      precision: 6, null: false
     t.string   "failure_code"
     t.string   "failure_message"
   end
@@ -227,8 +227,8 @@ ActiveRecord::Schema.define(version: 20151120133844) do
     t.string   "token"
     t.string   "brand"
     t.string   "last_4_digits"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",    precision: 6, null: false
+    t.datetime "updated_at",    precision: 6, null: false
     t.string   "payment_type"
     t.string   "status"
   end
@@ -696,9 +696,9 @@ ActiveRecord::Schema.define(version: 20151120133844) do
     t.string   "supplier_item_guid"
     t.string   "country_name"
     t.string   "dc_increment"
-    t.datetime "last_update_date"
-    t.datetime "size"
-    t.datetime "weight"
+    t.datetime "last_update_date",      precision: 6
+    t.datetime "size",                  precision: 6
+    t.datetime "weight",                precision: 6
     t.string   "state"
     t.string   "shipping_quantity"
     t.string   "shipping_weight"

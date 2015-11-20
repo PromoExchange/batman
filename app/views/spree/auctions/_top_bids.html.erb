@@ -20,11 +20,11 @@
             <td><%= b.email %></td>
             <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars %></td>
             <td><%= '$%.2f' % b.bid %></td>
-            <% unless @auction.state == 'open' %>
+            <% unless (@auction.open? or @auction.waiting?) %>
               <td>Completed</td>
             <% else %>
               <td>
-                <% unless b.state == 'rejected' %>
+                <% unless b.rejected? %>
                   <%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
                 <% end %>
               </td>

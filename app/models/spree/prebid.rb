@@ -1,11 +1,11 @@
 class Spree::Prebid < Spree::Base
   belongs_to :seller, class_name: 'User'
-  belongs_to :product
+  belongs_to :supplier
   has_many :adjustments
   has_many :bids
 
   validates :seller_id, presence: true
-  validates :product_id, presence: true
+  validates :supplier_id, presence: true
 
   def create_prebid(auction_id)
     Rails.logger.info 'Prebid: creating prebid'

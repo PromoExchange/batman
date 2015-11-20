@@ -1,9 +1,9 @@
 class Spree::Api::PrebidsController < Spree::Api::BaseController
-  before_action :fetch_prebid, except: [:index, :create, :factory_prebid]
+  before_action :fetch_prebid, except: [:index, :create]
 
   def index
-    if params[:buyer_id].present?
-      @prebids = Spree::Prebid.where(buyer_id: params[:buyer_id])
+    if params[:seller_id].present?
+      @prebids = Spree::Prebid.where(seller_id: params[:seller_id])
         .page(params[:page])
         .per(params[:per_page] || Spree::Config[:orders_per_page])
     else
@@ -13,24 +13,6 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
     end
 
     render 'spree/api/prebids/index'
-  end
-
-  def factory_prebid
-    # TODO: f it
-    # For this seller, every factory (we only have one ATM), every product
-    # HACK: a prebid record
-    Spree::Prebid.where(seller_id: params[:seller_id]).destroy_all
-    products = Spree::Product.all
-    products.each do |p|
-      Spree::Prebid.create(
-        seller_id: params[:seller_id],
-        product_id: p.id,
-        eqp: params[:eqp_flag],
-        eqp_discount: params[:eqp_discount],
-        markup: params[:markup]
-      )
-    end
-    render nothing: true, status: :ok
   end
 
   def show
@@ -64,7 +46,7 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
   def save_prebid
     @json = JSON.parse(request.body.read)
     @prebid.assign_attributes(@json)
-    if @prebid.save
+    if @prebid.save!
       render 'spree/api/prebids/show'
     else
       render nothing: true, status: :bad_request
@@ -73,11 +55,10 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
 
   def prebid_params
     params.require(:prebid).permit(
-      :taxon_id,
       :seller_id,
-      :description,
-      :page,
-      :per_page
+      :supplier_id,
+      :eqp,
+      :eqp_discount
     )
   end
 end

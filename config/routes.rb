@@ -18,7 +18,6 @@ Rails.application.routes.draw do
   #### TESTING ONLY
 
   post '/charges', to: 'spree/api/charges#charge'
-  post '/factoryprebid', to: 'spree/api/prebids#factory_prebid'
   get 'accept/:bid_id', to: 'spree/auctions#auction_payment'
   post '/customer', to: 'spree/api/charges#create_customer'
   post '/delete_customer/:customer_id', to: 'spree/api/charges#delete_customer'

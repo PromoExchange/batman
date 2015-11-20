@@ -12,29 +12,23 @@ class Spree::DashboardsController < Spree::StoreController
     @pxaddress = Spree::Pxaddress.new
     @tab = params[:tab]
 
-    return unless spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin)
+    return unless spree_current_user.has_spree_role?(:seller)
 
     create_taxrates
     @tax_rates = Spree::TaxRate.where(user: current_spree_user).order(:name)
 
     create_prebids
+    @prebids = Spree::Prebid.where(seller: current_spree_user)
   end
 
   private
 
   def create_prebids
-    @hacked_factory = Spree::Prebid.where(seller_id: current_spree_user).first
-    return unless @hacked_factory.nil?
-    products = Spree::Product.all
-    products.each do |p|
-      Spree::Prebid.create(
+    Spree::Supplier.all.each do |supplier|
+      Spree::Prebid.where(
         seller: current_spree_user,
-        product_id: p.id,
-        eqp: false,
-        eqp_discount: 0.0,
-        markup: 0.0
-      )
-      @hacked_factory = Spree::Prebid.where(seller_id: current_spree_user).first
+        supplier: supplier
+      ).first_or_create
     end
   end
 

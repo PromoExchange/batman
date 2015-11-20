@@ -92,7 +92,7 @@ $(function() {
               });
 
               if (item.state == 'complete') {
-                request_sample = 'Sample Requested'
+                request_sample = 'Sample Requested';
               }
 
               start_auction = action_template({
@@ -143,7 +143,7 @@ $(function() {
             trHTML += "<tr><td class='text-center' colspan='4'>if you have submitted a request to have a PromoExchange rep come up with product suggestions, you should expect those suggestions to be displayed here within the next couple of days.</td></tr>";
           }
 
-          $this.find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down')
+          $this.find('span').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
           $this.parent().find('table').show();
           $this.parent().find(".idea-listing tbody").html(trHTML);
         }
@@ -207,5 +207,4 @@ $(function() {
       }
     });
   });
-
 });

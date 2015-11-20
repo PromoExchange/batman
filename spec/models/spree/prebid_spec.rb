@@ -27,7 +27,7 @@ RSpec.describe Spree::Prebid, type: :model do
   end
 
   it 'should belong to a product' do
-    t = Spree::Prebid.reflect_on_association(:product)
+    t = Spree::Prebid.reflect_on_association(:supplier)
     expect(t.macro).to eq :belongs_to
   end
 end

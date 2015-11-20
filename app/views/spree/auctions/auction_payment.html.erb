@@ -54,7 +54,7 @@
 
   <% if spree_current_user.has_spree_role?(:buyer) %>
     <div class="col-md-6">
-      <% if @bid.auction.open? and ( @bid.open? or @bid.lost?) %>
+      <% if (@bid.auction.open? or @bid.auction.waiting?) and ( @bid.open? or @bid.lost?) %>
         <div id="bid-error">
           <span class="payment-errors"></span>
         </div>

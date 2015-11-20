@@ -98,7 +98,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :accept do
-      transition open: :waiting_confirmation
+      transition [:open, :waiting] => :waiting_confirmation
     end
 
     # Technically this is accept for preferred sellers
@@ -129,7 +129,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :no_confirm_late do
-      transition waiting_confirmation: :open
+      transition waiting_confirmation: :waiting
     end
 
     event :enter_tracking do

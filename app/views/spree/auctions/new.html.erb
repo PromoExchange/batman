@@ -112,7 +112,7 @@
       <% if @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>
       <% end %>
-      <p>Estimated delivery date: <time data-format='%B %e, %Y' data-local='time' datetime='<%= 15.days.from_now %>'><%= 15.days.from_now %></time></p>
+      <p>Estimated delivery date: <%= 15.days.from_now.strftime('%B %e, %Y') %></p>
       <div class="form-actions" data-hook="buttons">
         <%= button 'Start Auction', 'ok', 'submit', { class: 'btn-success' } %>
         <span class="or"><%= Spree.t(:or) %></span>

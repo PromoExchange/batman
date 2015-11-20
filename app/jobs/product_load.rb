@@ -27,6 +27,7 @@ module ProductLoad
     # DEBOSS:
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=293A3099-FE80-4125-B88C-E1835073D365
     # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0C9BEC85-87F4-46CF-B7E5-1345A76D59CB
+    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=A5BCD7F2-0354-404D-A7A4-EF58A799AA29
 
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
@@ -51,7 +52,7 @@ module ProductLoad
     properties << "weight: #{dc_product.weight}" if dc_product.weight
     properties << "additional_info: #{dc_product.add_info}" if dc_product.add_info
 
-    # N.B. Needed for prebid
+    # N.B. Needed for prebid (well..as soon as prebid uses attributes)
     if dc_product.packaging.weight
       properties << "shipping_weight: #{dc_product.packaging.weight}"
       px_product.shipping_weight = dc_product.packaging.weight
@@ -72,6 +73,8 @@ module ProductLoad
       px_product.set_property(property_vals[0].strip.humanize, property_vals[1].strip)
     end
 
+    # Sets a 'default' color,
+    # If there is a PRODUCT COLORS option it will override this
     Spree::ColorProduct.where(
       product_id: px_product.id,
       color: px_product.supplier_display_name
@@ -146,22 +149,29 @@ module ProductLoad
 
         Rails.logger.debug("PLOAD: Option name [#{option_detail.name}]")
 
+        # TODO: This is going to get messy quick
+        # We need a better approach, maybe use adaptors
         next unless [
           '1 Color Screenprinting',
           'Deboss',
+          'Screenprint',
+          'Screen Print Colors - Writing Instruments',
           'Logomagic',
           'Blank Product - No Imprint',
           'Laser Engraving',
           'Gemphoto',
           'Logopatch Colors',
+          'Heat Transfer Color',
+          'Digital full color Imprint',
           'Deboss Imprint',
           'Photopatch Imprint',
           'Imprint Color',
+          'Imprint Colors',
           'Gemphoto Imprint'].include? option_detail.name
 
         imprint_name = option_detail.name
 
-        imprint_name = 'Screen Print' if ['1 Color Screenprinting', 'Imprint Color'].include? imprint_name
+        imprint_name = 'Screen Print' if ['Screenprint', '1 Color Screenprinting', 'Imprint Color', 'Imprint Colors','Screen Print Colors - Writing Instruments'].include? imprint_name
         imprint_name = 'Deboss' if 'Deboss Imprint' == imprint_name
         imprint_name = 'Logopatch' if 'Logopatch Colors' == imprint_name
         imprint_name = 'Photopatch' if 'Photopatch Imprint' == imprint_name
@@ -174,18 +184,27 @@ module ProductLoad
         ).first_or_create
 
         option_detail.option_choices.each do |option_choice|
-          pantone = option_choice.name.scan(/\((.*?)\)/)[0]
-          pantone ||= ''
+          next if option_choice.name == 'PMS Color Match'
 
-          names = option_choice.name.scan(/(.*?)\(/)
-          name = ''
-          name = names[0][0].strip if names.count > 0
+          # Try direct hit first
+          pms_color = Spree::PmsColor.where(name: option_choice.name).first
+          pantone = pms_color.pantone unless pms_color.nil?
 
-          pms_color = Spree::PmsColor.where(
-            name: name,
-            pantone: pantone,
-            hex: "##{option_choice.hex_num}"
-          ).first_or_create
+          # Disect the value, this will get lots of logic
+          if pms_color.nil?
+            pantone = option_choice.name.scan(/\((.*?)\)/)[0]
+            pantone ||= ''
+
+            names = option_choice.name.scan(/(.*?)\(/)
+            name = ''
+            name = names[0][0].strip if names.count > 0
+
+            pms_color = Spree::PmsColor.where(
+              name: name,
+              pantone: pantone,
+              hex: "##{option_choice.hex_num}"
+            ).first_or_create
+          end
 
           Spree::PmsColorsSupplier.where(
             pms_color_id: pms_color.id,

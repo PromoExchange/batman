@@ -60,7 +60,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
     end
     Spree::OrderUpdater.new(@bid.order).update
     message = !%w(succeeded pending).include?(@status) ? @status.message : @status
-    render nothing: true, status: :ok, json: {message: message}
+    render nothing: true, status: :ok, json: { message: message }
   rescue
     render nothing: true, status: :internal_server_error
   end

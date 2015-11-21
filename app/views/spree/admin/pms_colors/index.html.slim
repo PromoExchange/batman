@@ -5,13 +5,13 @@
   = button_link_to Spree.t(:new_pms_color), new_admin_pms_color_path, { :class => "btn-success", :icon => 'add', 'data-update' => 'new_pms_color', :id => 'new_pms_color_link' }
 
 - content_for :table_filter do
-  div data-hook="admin_pms_color_sidebar"
+  div
     = search_form_for [:admin, @search] do |f|
       - locals = {:f => f}
       .row
         .col.col-md-4
           .form-group
-            = f.label :name_cont, "Spree.t(:name)"
+            = f.label :name_cont, "Name"
             = f.text_field :name_cont, :class => "form-control js-quick-search-target"
         .col-md-4
           .form-group

@@ -1,5 +1,5 @@
-class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
-  before_action :load_pms_color, only: [:edit, :update]
+class Spree::Admin::ImprintMethodsController < Spree::Admin::ResourceController
+  before_action :load_imprint_method, only: [:edit, :update]
 
   respond_to :html
 
@@ -8,22 +8,18 @@ class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
   end
 
   def create
-    Spree::PmsColor.create(pms_color_params)
-    redirect_to admin_pms_colors_path
+    Spree::ImprintMethod.create(imprint_method_params)
+    redirect_to admin_imprint_methods_path
   end
 
-  def load_pms_color
-    @pms_color = Spree::PmsColor.find(params[:id])
+  def load_imprint_method
+    @imprint_method = Spree::ImprintMethod.find(params[:id])
   end
 
   private
 
-  def pms_color_params
-    params.require(:pms_color).permit(
-      :name,
-      :pantone,
-      :hex
-    )
+  def imprint_method_params
+    params.require(:imprint_method).permit(:name)
   end
 
   def collection

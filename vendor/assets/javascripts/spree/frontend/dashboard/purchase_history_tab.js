@@ -196,7 +196,7 @@ $(function() {
 
   $('tbody').on('click', '.reject_order', function(){
     var auction_id = $(this).data('id');
-    var reject = confirm("Are you sure, Reject Order?");
+    var reject = confirm("Are you sure you want to reject the order?");
     if (!reject){ return false; }
     $('#reject-order-auction-id').val(auction_id);
     $('#reject-order-modal').show('modal');

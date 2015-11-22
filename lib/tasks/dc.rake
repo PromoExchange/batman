@@ -19,6 +19,11 @@ end
 
 namespace :dc do
   namespace :fix do
+    desc 'Delete all existing prebids'
+    task delete_prebids: :environment do
+      Spree::Prebid.destroy_all
+    end
+
     desc 'Get invalid CSV'
     task invalid_report: :environment do
       puts 'factory,name,sku,num_imprints,num_prices,num_colors'

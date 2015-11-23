@@ -106,13 +106,17 @@ $(function() {
               if(item.shipping_agent === 'ups') {
                 action = simple_template({
                   value: action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
+                  }) + action_template({
                     url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                   })
                 });
               } else {
                 var url = 'http://www.fedex.com/Tracking?action=track&tracknumbers=' + item.tracking_number;
                 action = simple_template({
-                  value: new_window_action_template({
+                  value: action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
+                  }) + new_window_action_template({
                     url: url, auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment_fedex'
                   })
                 });

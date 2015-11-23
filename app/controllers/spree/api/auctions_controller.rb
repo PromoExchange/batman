@@ -147,7 +147,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   end
 
   def confirmed_delivery
-    @auction.delivery_confirmed! if @auction.confirm_receipt?
+    @auction.delivery_confirmed! if @auction.confirm_receipt? || @auction.send_for_delivery?
 
     if params[:status][:status] == 'submit'
       @review = Spree::Review.new(

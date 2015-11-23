@@ -40,7 +40,7 @@ module ProductLoadFactory
         p = Spree::Product.create!(default_attrs.merge(product_attrs)) if p.nil?
 
         additional_attrs = {
-          available_on: Time.zone.now,
+          available_on: Time.zone.now + 100.years,
           max_retail: product.max_retail,
           min_qty: product.min_qty,
           min_retail: product.min_retail,

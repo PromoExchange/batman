@@ -48,5 +48,10 @@ module Batman
 
     # Include the lib folder in the autoload paths
     config.autoload_paths << Rails.root.join('lib')
+
+    # Force SSL if envionment variable Set
+    unless ENV["FORCE_SSL"].nil?
+      config.force_ssl = true
+    end
   end
 end

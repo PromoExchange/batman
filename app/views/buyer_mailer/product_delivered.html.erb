@@ -3,11 +3,11 @@
 <p>It looks like your order for <%= @auction.product.name %> from <%= @auction.winning_bid.seller.shipping_address.company %> was recently delivered.</p>
 <p>Please head over to your dashboard to confirm receipt and accuracy of the order.</p>
 <p>We’d also appreciate your participation in rating your Seller to ensure we are providing all of our Buyers the best Sellers in the industry to work with.</p>
-
-<p><a href="<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>">
-  <button style="width: 170px; height: 40px; font-size: 14px; background: #4CAE4C;">Confirm Receipt</button>
-</a></p>
-
+<p>
+  <a href="http://<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>">
+    <button style="width: 170px; height: 40px; font-size: 14px; background: #4CAE4C;">Confirm Receipt</button>
+  </a>
+</p>
 <p>The PromoExchange Team</p>
 
 <%= render partial: 'email_signature' %>

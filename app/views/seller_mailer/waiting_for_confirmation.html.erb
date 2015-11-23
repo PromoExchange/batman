@@ -50,7 +50,7 @@
 <p>Please contact the Buyer (<%= @auction.buyer.bill_address.phone %>/<%= @auction.buyer.email %>) by the end of the next business day to begin making delivery and payment arrangements.</p>
 <p>Failure to do so can cause this order to be awarded to another Seller and can jeopardize your membership in the PromoExchange community.</p>
 
-<p><a href="<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>">
+<p><a href="http://<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>">
   <button style="width: 120px; height: 40px; font-size: 14px; background: #4CAE4C;">Confirm</button>
 </a></p>
 

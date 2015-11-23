@@ -3,6 +3,6 @@ RE: Auction <%= @auction.reference %>
 It looks like your order for <%= @auction.product.name %> from <%= @auction.winning_bid.seller.shipping_address.company %> was recently delivered.
 Please head over to your dashboard to confirm receipt and accuracy of the order.  We’d also appreciate your participation in rating your Seller to ensure we are providing all of our Buyers the best Sellers in the industry to work with.
 
-<a href="<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>"><button>Confirm Receipt</button></a>
+<a href="http://<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>"><button>Confirm Receipt</button></a>
 
 The PromoExchange Team

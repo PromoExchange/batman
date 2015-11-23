@@ -2,7 +2,7 @@
 
 <p> Looks like 2 days have passed and the virtual proof for the <%= @auction.product.name %> for <%= @auction.buyer.billing_address.full_name %> has not been uploaded for review. Please click on the link below and it will take you over to the project in your dashboard. If a proof is not uploaded immediately you will be at risk of losing the project. </p>
 
-<p><a href="<%= Spree::Store.current.url %>/dashboards?tab=won_auction">
+<p><a href="http://<%= Spree::Store.current.url %>/dashboards?tab=won_auction">
   <button style="width: 120; height: 40px; font-size: 14px; background: #4CAE4C;">Dashboard</button>
 </a></p>
 

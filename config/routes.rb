@@ -118,6 +118,7 @@ Rails.application.routes.draw do
       resources :product_loads
       resources :pms_colors
       resources :imprint_methods
+      resources :option_mappings
     end
   end
 end

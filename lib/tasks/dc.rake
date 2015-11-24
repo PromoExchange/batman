@@ -42,6 +42,63 @@ namespace :dc do
       end
     end
 
+    desc 'Fix AIO Drives'
+    task aio: :environment do
+      supplier = Spree::Supplier.where(name: 'All in One').first_or_create
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Brown', '498 C', '#00664f'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Green', '348 C', '#00843d'],
+        ['Light Blue', 'Light Blue', '#add8e6'],
+        ['Maroon', '202 C', '#862633'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Silver', '877 C', '#8a8d8f'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Purple', '259 C', '#6d2077'],
+        ['Red', '186 C', '#c8102e'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Teal', '321 C', '#008c95'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Yellow', 'Yellow C', '#fedd00']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          imprint_method,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      product_guids = [
+        'E41E27A5-DCE5-4648-9042-6527DBD4A56F',
+        '50C83239-E2AA-4297-B445-884392332F0D'
+      ]
+
+      product_guids.each do |product_guid|
+        product = Spree::Product.where(supplier_item_guid: product_guid).first
+
+        next unless product
+
+        product.loading
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: imprint_method,
+          product: product
+        ).first_or_create
+
+        product.check_validity!
+        product.loaded if product.state == 'loading'
+      end
+    end
+
     desc 'Fix Garyline'
     task garyline: :environment do
       supplier = Spree::Supplier.where(name: 'Garyline').first_or_create

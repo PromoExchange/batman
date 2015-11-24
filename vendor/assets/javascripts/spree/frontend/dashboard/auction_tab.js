@@ -69,6 +69,7 @@ $(function() {
         $("#live-auction-table > tbody").html(getAcutionDetail(data));
       }
     });
+    window.history.pushState({}, null, '/dashboards');
     $(this).tab('show');
     return false;
   });
@@ -91,6 +92,7 @@ $(function() {
         $("#waiting-auction-table > tbody").html(getAcutionDetail(data));
       }
     });
+    window.history.pushState({}, null, '/dashboards');
     $(this).tab('show');
     return false;
   });

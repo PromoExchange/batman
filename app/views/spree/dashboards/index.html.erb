@@ -10,16 +10,18 @@
     <div class="row">
       <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked">
-          <% active_me = 'active' if @tab.nil? %>
+          <% active_me = nil %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
             <% active_me = 'active' if ['won_auction', nil].include? @tab %>
             <li class="<%= active_me %>"><a href="#exchange" id="auction-tab" data-toggle="tab"><%= Spree.t(:marketplace) %></a></li>
             <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-            <% active_me = 'active' if ['purchase_history'].include? @tab %>
+            <% active_me = 'active' if ['purchase_history', nil].include? @tab %>
             <li class="<%= active_me %>"><a href="#auctions" id="auction-tab" data-toggle="tab"><%= Spree.t(:my_auctions) %></a></li>
-            <li><a href="#product-ideas" id="product-ideas-tab" data-toggle="tab"><%= Spree.t(:product_ideas) %></a></li>
+            <% active_me = nil %>
+            <% active_me = 'active' if ['product_idea'].include? @tab %>
+            <li class="<%= active_me %>"><a href="#product-ideas" id="product-ideas-tab" data-toggle="tab"><%= Spree.t(:product_ideas) %></a></li>
             <% active_me = nil %>
             <li><a href="#favorite-items" data-toggle="tab"><%= Spree.t(:favorite_items) %></a></li>
             <% active_me = nil %>
@@ -32,16 +34,18 @@
       <div class="col-md-9">
         <div class="tab-content">
           <% active_me = nil %>
-          <% active_me = 'active' if @tab.nil? %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
             <% active_me = 'active' if ['won_auction', nil].include? @tab %>
             <div class="tab-pane <%= active_me %>" id="exchange"><%= render partial: 'spree/dashboards/seller/exchange' %></div>
             <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-            <% active_me = 'active' if ['purchase_history'].include? @tab %>
+            <% active_me = nil %>
+            <% active_me = 'active' if ['purchase_history', nil].include? @tab %>
             <div class="tab-pane <%= active_me %>" id="auctions"><%= render partial: 'spree/dashboards/buyer/auctions' %></div>
-            <div class="tab-pane" id="product-ideas"><%= render partial: 'spree/dashboards/buyer/product_ideas' %></div>
+            <% active_me = nil %>
+            <% active_me = 'active' if ['product_idea'].include? @tab %>
+            <div class="tab-pane <%= active_me %>" id="product-ideas"><%= render partial: 'spree/dashboards/buyer/product_ideas' %></div>
             <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>

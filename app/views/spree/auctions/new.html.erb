@@ -39,12 +39,11 @@
       </div>
 
       <p><a href="#" data-toggle="modal" data-target="#imprint-definitions-modal">Imprint Method Definitions</a></p>
-
       <div class="form-group">
         <%= f.label :logo_id, Spree.t(:logo) %>
         <%= f.select :logo_id,
           @user.logos.map { |l| [ l.logo_file_file_name, l.id,
-            { 'data-img-src' => l.logo_file.url(:thumb) }] },
+            { 'data-img-src' => l.artwork }] },
             { prompt: 'Please Select' } , { class: 'image-picker form-control' } %>
       </div>
 

@@ -15,15 +15,10 @@ class Spree::Logo < Spree::Base
 
   validates_attachment :logo_file, presence: true
 
+  LOGO_FILE_NAME = { "pdf": "artwork/pdf.png", "ai": "artwork/ai.png", "eps": "artwork/eps.jpg",  "psd": "artwork/psd.jpg"}
+
   def artwork
-    if logo_file_file_name.include?('.pdf')
-      "artwork/pdf.png"
-    elsif logo_file_file_name.include?('.ai')
-      "artwork/ai.png"
-    elsif logo_file_file_name.include?('.eps')
-      "artwork/eps.jpg"
-    else logo_file_file_name.include?('.psd')
-      "artwork/psd.jpg"
-    end
+    extension = logo_file_file_name.split(".")[1].to_sym
+    "/assets/#{Spree::Logo::LOGO_FILE_NAME[extension]}"
   end
 end

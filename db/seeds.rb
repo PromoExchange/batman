@@ -105,9 +105,8 @@ puts 'Users'
 [
   ['jessica.swanderski@gmail.com', 'admin'],
   ['michael.goldstein@thepromoexchange.com', 'admin'],
-  ['mackie.yakaitis@thepromoexchange.com', 'admin'],
-  ['kevin.widmaier@thepromoexchange.com', 'admin'],
-  ['connor.labarge@thepromoexchange.com', 'admin'],
+  ['kevin.widmaier@thepromoexchange.com', 'buyer'],
+  ['connor.labarge@thepromoexchange.com', 'buyer'],
   ['tim.varley@thepromoexchange.com', 'admin'],
   ['spencer.applegate@thepromoexchange.com', 'admin'],
   ['buyer@thepromoexchange.com', 'buyer'],

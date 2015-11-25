@@ -38,7 +38,7 @@ class Spree::Auction < Spree::Base
     return true if blank_imprint.nil?
     imprint_method_id == blank_imprint.id
   end
-  validates :pms_colors, length: { minimum: 1, message: 'Must select at least 1 PMS color' }, unless: -> do
+  validate :pms_colors_presence, unless: -> do
     blank_imprint = Spree::ImprintMethod.find_by(name: 'Blank')
     return true if blank_imprint.nil?
     imprint_method_id == blank_imprint.id
@@ -48,7 +48,6 @@ class Spree::Auction < Spree::Base
   validates :product_id, presence: true
   validates :imprint_method_id, presence: true
   validates :quantity, presence: true
-  validates :shipping_address_id, presence: true
   validates_numericality_of :quantity, only_integer: true
   validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) do
     50 if auction.product.nil?
@@ -57,7 +56,7 @@ class Spree::Auction < Spree::Base
   validates_inclusion_of :shipping_agent, in: %w(ups fedex)
   validates :customer_id, presence: { message: "Payment Option can't be blank" }, if: -> { payment_method.present? }
   validate :credit_card_presense, if: -> { customer_id.present? }, on: :create
-
+  validate :shipping_address_presence
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true
 
@@ -330,6 +329,14 @@ class Spree::Auction < Spree::Base
 
   def credit_card_presense
     errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
+  end
+  
+  def shipping_address_presence
+    errors.add(:base, 'A shipping address is required') if shipping_address_id.blank?
+  end
+  
+  def pms_colors_presence
+    errors.add(:base, 'Must select at least one imprint color (standard or custom PMS color)' ) if pms_colors.length < 1 
   end
 
   def refund_payment

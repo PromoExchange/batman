@@ -4,7 +4,7 @@ class CreateOptionMapping < ActiveRecord::Migration
       t.string :dc_acct_num
       t.string :dc_name
       t.string :px_name
-      t.boolean :do_not_save
+      t.boolean :do_not_save, :default => true
     end
   end
 end

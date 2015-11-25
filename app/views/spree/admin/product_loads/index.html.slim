@@ -32,13 +32,15 @@
         thead
           tr
             th Factory
+            th DC Acct Num
             th State
             th Number
         tbody
           - @loaded_factories.each do |k,v|
             tr
               td = k[0]
-              td = k[1].humanize
+              td = k[1]
+              td = k[2].humanize
               td = v
 .well
     h4 Available Factories

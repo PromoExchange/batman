@@ -254,10 +254,15 @@ namespace :dc do
     namespace :option do
       desc 'Export option mappings'
       task export: :environment do
-        CSV.open(File.join(Rails.root,'db/maps/option_export.csv'),'wb') do |csv|
-          csv << Spree::OptionMapping.attribute_names
+        CSV.open(File.join(Rails.root, 'db/maps/option_export.csv'), 'wb') do |csv|
+          csv << %w(dc_acct_num dc_name px_name do_not_save)
           Spree::OptionMapping.all.each do |option_map|
-            csv << option_map.attributes.values
+            row = []
+            row << option_map.dc_acct_num
+            row << option_map.dc_name.strip
+            row << option_map.px_name.strip
+            row << option_map.do_not_save
+            csv << row
           end
         end
       end

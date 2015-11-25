@@ -147,36 +147,47 @@ module ProductLoad
       if option.type == 'Decoration Information'
         option_detail = Spree::DcOptionDetail.retrieve(option.guid)
 
-        Rails.logger.debug("PLOAD: Option name [#{option_detail.name}]")
+        imprint_name = option_detail.name.strip
 
-        # TODO: This is going to get messy quick
-        # We need a better approach, maybe use adaptors
-        next unless [
-          '1 Color Screenprinting',
-          'Deboss',
-          'Screenprint',
-          'Screen Print Colors - Writing Instruments',
-          'Logomagic',
-          'Blank Product - No Imprint',
-          'Laser Engraving',
-          'Gemphoto',
-          'Logopatch Colors',
-          'Heat Transfer Color',
-          'Digital full color Imprint',
-          'Deboss Imprint',
-          'Photopatch Imprint',
-          'Imprint Color',
-          'Imprint Colors',
-          'Gemphoto Imprint'].include? option_detail.name
+        Rails.logger.debug("PLOAD: Option name [#{imprint_name}]")
 
-        imprint_name = option_detail.name
+        dc_acct_num = px_product.supplier.dc_acct_num
 
-        imprint_name = 'Screen Print' if ['Screenprint', '1 Color Screenprinting', 'Imprint Color', 'Imprint Colors','Screen Print Colors - Writing Instruments'].include? imprint_name
-        imprint_name = 'Deboss' if 'Deboss Imprint' == imprint_name
-        imprint_name = 'Logopatch' if 'Logopatch Colors' == imprint_name
-        imprint_name = 'Photopatch' if 'Photopatch Imprint' == imprint_name
-        imprint_name = 'Gemphoto' if 'Gemphoto Imprint' == imprint_name
-        imprint_name = 'Blank' if 'Blank Product - No Imprint' == imprint_name
+        option_mapping = Spree::OptionMapping.where(
+          dc_acct_num: dc_acct_num,
+          dc_name: imprint_name
+        ).first_or_create
+
+        next if option_mapping.do_not_save?
+
+        imprint_name = option_mapping.px_name unless option_mapping.px_name.blank?
+
+        # # TODO: This is going to get messy quick
+        # # We need a better approach, maybe use adaptors
+        # next unless [
+        #   '1 Color Screenprinting',
+        #   'Deboss',
+        #   'Screenprint',
+        #   'Screen Print Colors - Writing Instruments',
+        #   'Logomagic',
+        #   'Blank Product - No Imprint',
+        #   'Laser Engraving',
+        #   'Gemphoto',
+        #   'Logopatch Colors',
+        #   'Heat Transfer Color',
+        #   'Digital full color Imprint',
+        #   'Deboss Imprint',
+        #   'Photopatch Imprint',
+        #   'Imprint Color',
+        #   'Imprint Colors',
+        #   'Gemphoto Imprint'].include? option_detail.name
+        #
+        # imprint_name = 'Screen Print' if ['Screenprint', '1 Color Screenprinting', 'Imprint Color', 'Imprint Colors','Screen Print Colors - Writing Instruments'].include? imprint_name
+        # imprint_name = 'Deboss' if 'Deboss Imprint' == imprint_name
+        # imprint_name = 'Logopatch' if 'Logopatch Colors' == imprint_name
+        # imprint_name = 'Photopatch' if 'Photopatch Imprint' == imprint_name
+        # imprint_name = 'Gemphoto' if 'Gemphoto Imprint' == imprint_name
+        # imprint_name = 'Blank' if 'Blank Product - No Imprint' == imprint_name
 
         # Imprint Methods
         imprint_method = Spree::ImprintMethod.where(
@@ -187,8 +198,12 @@ module ProductLoad
           next if option_choice.name == 'PMS Color Match'
 
           # Try direct hit first
-          pms_color = Spree::PmsColor.where(name: option_choice.name).first
-          pantone = pms_color.pantone unless pms_color.nil?
+          pms_color = Spree::PmsColor.where(
+            name: option_choice.name
+          ).first_or_create
+
+          pantone = pms_color.pantone
+          pantone ||= option_choice.name
 
           # Disect the value, this will get lots of logic
           if pms_color.nil?

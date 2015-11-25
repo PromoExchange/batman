@@ -268,8 +268,12 @@ namespace :dc do
           import_file = File.join(Rails.root,'db/maps/option_import.csv')
           fail "Option Mapping Import file is missing: #{import_file}" unless File.exists?(import_file)
           Spree::OptionMapping.destroy_all
+          count = 1
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
-            Spree::OptionMapping.create(row.to_hash)
+            hashed = row.to_hash
+            puts "Count:#{count}"
+            Spree::OptionMapping.create(hashed)
+            count += 1
           end
         rescue => e
           puts "ERROR: #{e.to_s}"

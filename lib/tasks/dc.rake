@@ -18,6 +18,7 @@ def wrap_string(string)
 end
 
 namespace :dc do
+  # Fixes
   namespace :fix do
     desc 'Delete all existing prebids'
     task delete_prebids: :environment do
@@ -248,6 +249,36 @@ namespace :dc do
     end
   end
 
+  # Maps
+  namespace :maps do
+    namespace :option do
+      desc 'Export option mappings'
+      task export: :environment do
+        CSV.open(File.join(Rails.root,'db/maps/option_export.csv'),'wb') do |csv|
+          csv << Spree::OptionMapping.attribute_names
+          Spree::OptionMapping.all.each do |option_map|
+            csv << option_map.attributes.values
+          end
+        end
+      end
+
+      desc 'Import option mappings'
+      task import: :environment do
+        begin
+          import_file = File.join(Rails.root,'db/maps/option_import.csv')
+          fail "Option Mapping Import file is missing: #{import_file}" unless File.exists?(import_file)
+          Spree::OptionMapping.destroy_all
+          CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
+            Spree::OptionMapping.create(row.to_hash)
+          end
+        rescue => e
+          puts "ERROR: #{e.to_s}"
+        end
+      end
+    end
+  end
+
+  # Categories
   namespace :category do
     desc 'Reload DC Categories'
     task reload: :environment do
@@ -263,7 +294,6 @@ namespace :dc do
 
       tree = Spree::DcCategory.category_tree
       tree.each do |parent|
-        puts "#{parent.name}"
         parent_taxon = Spree::Taxon.create(
           name: parent.name,
           dc_category_guid: parent.guid,
@@ -271,7 +301,6 @@ namespace :dc do
           taxonomy_id: category_taxonomy.id
         )
         parent.children.each do |child|
-          puts "--->#{child.name}"
           Spree::Taxon.create(
             name: child.name,
             dc_category_guid: child.guid,

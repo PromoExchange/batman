@@ -330,13 +330,13 @@ class Spree::Auction < Spree::Base
   def credit_card_presense
     errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
   end
-  
+
   def shipping_address_presence
     errors.add(:base, 'A shipping address is required') if shipping_address_id.blank?
   end
-  
+
   def pms_colors_presence
-    errors.add(:base, 'Must select at least one imprint color (standard or custom PMS color)' ) if pms_colors.length < 1 
+    errors.add(:base, 'Must select at least one imprint color (standard or custom PMS color)') if pms_colors.length < 1
   end
 
   def refund_payment

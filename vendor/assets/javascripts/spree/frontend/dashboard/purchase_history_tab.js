@@ -343,7 +343,7 @@ $(function() {
 
   $('tbody').on('click', '.reject_proof', function(){
     var auction_id = $(this).data('id');
-    var accept = confirm("Are you sure, you want to reject the proof?");
+    var accept = confirm("Are you sure you want to reject the proof?");
     if (!accept){ return false; }
     $('#feedback-auction-id').val(auction_id);
     $('#reject-proof').modal('show');

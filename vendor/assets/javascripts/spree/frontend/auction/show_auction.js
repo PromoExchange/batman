@@ -15,14 +15,14 @@ $(function() {
   });
 
   $('#manage-workflow input').click(function(){
-    var status = $(this).val(); 
+    var status = $(this).val();
     $('#manage_status').val(status);
   });
 
   $('#workflow-submit').click(function(){
     var key = $('#show-auction').attr('data-key');
     var bid_id = $('#manage_bid_id').val();
-    var message = { 
+    var message = {
       manage_workflow: $('#manage_status').val()
     };
     $.ajax({
@@ -34,7 +34,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        alert("You've selected a Seller and the use of our project management tool")
+        alert("You've selected a Seller and the use of our project management tool");
         window.location = "/dashboards?tab=won_auction";
       },
       error: function(data) {

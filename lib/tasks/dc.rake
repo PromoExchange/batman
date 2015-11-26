@@ -251,6 +251,36 @@ namespace :dc do
 
   # Maps
   namespace :maps do
+    namespace :pms do
+      desc 'Export PMS colors'
+      task export: :environment do
+        CSV.open(File.join(Rails.root, 'db/maps/pmscolor_export.csv'), 'wb') do |csv|
+          csv << %w(name pantone hex)
+          Spree::PmsColor.all.each do |pms_color|
+            row = []
+            row << pms_color.name
+            row << pms_color.pantone
+            row << pms_color.hex
+            csv << row
+          end
+        end
+      end
+
+      desc 'Import PMS Colors'
+      task import: :environment do
+        begin
+          import_file = File.join(Rails.root, 'db/maps/pmscolor_import.csv')
+          fail "PMS Color import file is missing: #{import_file}" unless File.exists?(import_file)
+          Spree::PmsColor.destroy_all
+          CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
+            hashed = row.to_hash
+            Spree::PmsColor.create(hashed)
+          end
+        rescue => e
+          puts "ERROR: #{e}"
+        end
+      end
+    end
     namespace :option do
       desc 'Export option mappings'
       task export: :environment do
@@ -270,18 +300,17 @@ namespace :dc do
       desc 'Import option mappings'
       task import: :environment do
         begin
-          import_file = File.join(Rails.root,'db/maps/option_import.csv')
-          fail "Option Mapping Import file is missing: #{import_file}" unless File.exists?(import_file)
+          import_file = File.join(Rails.root, 'db/maps/option_import.csv')
+          fail "Option Mapping import file is missing: #{import_file}" unless File.exists?(import_file)
           Spree::OptionMapping.destroy_all
           count = 1
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
             hashed = row.to_hash
-            puts "Count:#{count}"
             Spree::OptionMapping.create(hashed)
             count += 1
           end
         rescue => e
-          puts "ERROR: #{e.to_s}"
+          puts "ERROR: #{e}"
         end
       end
     end

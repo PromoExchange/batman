@@ -162,37 +162,15 @@ module ProductLoad
 
         imprint_name = option_mapping.px_name unless option_mapping.px_name.blank?
 
-        # # TODO: This is going to get messy quick
-        # # We need a better approach, maybe use adaptors
-        # next unless [
-        #   '1 Color Screenprinting',
-        #   'Deboss',
-        #   'Screenprint',
-        #   'Screen Print Colors - Writing Instruments',
-        #   'Logomagic',
-        #   'Blank Product - No Imprint',
-        #   'Laser Engraving',
-        #   'Gemphoto',
-        #   'Logopatch Colors',
-        #   'Heat Transfer Color',
-        #   'Digital full color Imprint',
-        #   'Deboss Imprint',
-        #   'Photopatch Imprint',
-        #   'Imprint Color',
-        #   'Imprint Colors',
-        #   'Gemphoto Imprint'].include? option_detail.name
-        #
-        # imprint_name = 'Screen Print' if ['Screenprint', '1 Color Screenprinting', 'Imprint Color', 'Imprint Colors','Screen Print Colors - Writing Instruments'].include? imprint_name
-        # imprint_name = 'Deboss' if 'Deboss Imprint' == imprint_name
-        # imprint_name = 'Logopatch' if 'Logopatch Colors' == imprint_name
-        # imprint_name = 'Photopatch' if 'Photopatch Imprint' == imprint_name
-        # imprint_name = 'Gemphoto' if 'Gemphoto Imprint' == imprint_name
-        # imprint_name = 'Blank' if 'Blank Product - No Imprint' == imprint_name
-
         # Imprint Methods
         imprint_method = Spree::ImprintMethod.where(
           name: imprint_name
         ).first_or_create
+
+        Spree::PmsColorsSupplier.where(
+          imprint_id: imprint_method.id,
+          supplier_id: px_product.supplier_id
+        ).destroy_all
 
         option_detail.option_choices.each do |option_choice|
           next if option_choice.name == 'PMS Color Match'
@@ -204,22 +182,6 @@ module ProductLoad
 
           pantone = pms_color.pantone
           pantone ||= option_choice.name
-
-          # Disect the value, this will get lots of logic
-          if pms_color.nil?
-            pantone = option_choice.name.scan(/\((.*?)\)/)[0]
-            pantone ||= ''
-
-            names = option_choice.name.scan(/(.*?)\(/)
-            name = ''
-            name = names[0][0].strip if names.count > 0
-
-            pms_color = Spree::PmsColor.where(
-              name: name,
-              pantone: pantone,
-              hex: "##{option_choice.hex_num}"
-            ).first_or_create
-          end
 
           Spree::PmsColorsSupplier.where(
             pms_color_id: pms_color.id,

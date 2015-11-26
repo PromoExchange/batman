@@ -34,7 +34,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        alert("Bid Accept " + data.message)
+        alert("You've selected a Seller and the use of our project management tool")
         window.location = "/dashboards?tab=won_auction";
       },
       error: function(data) {

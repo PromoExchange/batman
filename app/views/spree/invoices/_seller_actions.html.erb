@@ -68,6 +68,7 @@
       <% if @auction.proof_file.present? %>
         <td>
           <%= link_to "View Proof", "/auctions/#{@auction.id}/download_proof", class: 'btn btn-success' %>
+          <%= link_to "Dashboard", "/dashboards?tab=won_auction", class: 'btn btn-success' %>
         </td>
       <% end %>
     </tr>

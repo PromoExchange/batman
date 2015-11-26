@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       end
       member do
         get 'download_proof'
+        get 'download_logo'
       end
     end
 

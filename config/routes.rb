@@ -115,11 +115,14 @@ Rails.application.routes.draw do
           post 'generate_notification'
         end
       end
-      # match '/product_loads/destroy_factory' => 'product_loads#destroy_factory', via: :delete
       resources :product_loads
       resources :pms_colors
       resources :imprint_methods
       resources :option_mappings
+      resources :suppliers do
+        get :addresses
+        put :addresses
+      end
     end
   end
 end

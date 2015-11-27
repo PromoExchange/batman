@@ -1,0 +1,3 @@
+- content_for :page_actions do
+  = button_link_to Spree.t(:back_to_suppliers_list), admin_suppliers_path, class: 'btn-primary', icon: 'chevron-left'
+  = button_link_to Spree.t(:create_new_supplier), new_admin_supplier_path(supplier_id: @supplier.id), class: "btn-success", icon: 'add'

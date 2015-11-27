@@ -1,0 +1,48 @@
+- content_for :page_title do
+ = plural_resource_name(Spree::Supplier)
+ - content_for :page_actions do
+  = button_link_to "Supplier", new_admin_supplier_path, { \
+    class: "btn-success", \
+    icon: 'add', \
+    'data-update': 'new_supplier', \
+    id: 'new_supplier_link' }
+
+- content_for :table_filter do
+  div
+    = search_form_for [:admin, @search] do |f|
+      - locals = {:f => f}
+      .row
+        .col.col-md-6
+          .form-group
+            = f.label :name_cont, Spree.t(:name)
+            = f.text_field :name_cont, class: "form-control js-quick-search-target"
+        .col.col-md-6
+          .form-group
+            = f.label :dc_acct_num_cont, 'DC Acct Number'
+            = f.text_field :dc_acct_num_cont, class: "form-control js-quick-search-target"
+      .form-actions
+        = button Spree.t(:search), 'search'
+.well
+  - if @suppliers.any?
+    table.table
+      thead
+        tr
+          th Shipping Address
+          th Name
+          th DC Account Number
+      tbody
+        - @suppliers.each do |supplier|
+          tr
+            td = supplier.shipping_address.to_s
+            td = supplier.name
+            td = supplier.dc_acct_num
+            td.actions.actions-2.text-right
+              = link_to_edit(supplier, :no_text => true)
+              = link_to_delete(supplier, :no_text => true)
+  - else
+    .alert.alert-info.no-objects-found
+    = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Supplier))
+    = ","
+    = link_to Spree.t(:add_one), new_object_url
+    = "!"
+= paginate @collection

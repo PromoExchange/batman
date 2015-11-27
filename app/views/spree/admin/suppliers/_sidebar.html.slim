@@ -1,0 +1,6 @@
+= content_for :sidebar do
+  ul.nav.nav-pills.nav-stacked
+    li class=(current == :account ? 'active':'inactive')
+      = link_to_with_icon 'user', 'Account', edit_admin_supplier_path(@supplier)
+    li class=(current == :address ? 'active':'inactive')
+      = link_to_with_icon 'edit', 'Addresses', admin_supplier_addresses_path(@supplier)

@@ -11,8 +11,13 @@ RSpec.describe Spree::Supplier, type: :model do
     expect(s.save).to be_truthy
   end
 
-  it 'should belong to address' do
-    t = Spree::Supplier.reflect_on_association(:address)
+  it 'should belong to a shipping address' do
+    t = Spree::Supplier.reflect_on_association(:ship_address)
+    expect(t.macro).to eq :belongs_to
+  end
+
+  it 'should belong to a billing address' do
+    t = Spree::Supplier.reflect_on_association(:bill_address)
     expect(t.macro).to eq :belongs_to
   end
 

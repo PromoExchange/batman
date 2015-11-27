@@ -34,6 +34,12 @@
   </ul>
 <% end %>
 
+<% if can? :admin, Spree::Supplier %>
+  <ul class="nav nav-sidebar">
+    <%= tab :suppliers, url: spree.admin_suppliers_path, icon: 'edit' %>
+  </ul>
+<% end %>
+
 <% if can? :admin, Spree::ProductLoad %>
   <ul class="nav nav-sidebar">
     <%= tab :product_load, url: spree.admin_product_loads_path, icon: 'file' %>

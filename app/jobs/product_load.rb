@@ -18,20 +18,10 @@ module ProductLoad
     px_product = Spree::Product.where(supplier_item_guid: supplier_item_guid).first
     fail 'Unable to locate DB record' if px_product.nil?
 
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=3D0F1C12-E3F6-11D3-896A-00105A7027AA
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=90A5528D-E38E-46B7-BE27-7EB1489D0C7B
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0681AC44-CCBB-4FFA-A231-8211A328F98C
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=AEE7C80E-AEFC-4656-BC40-DA9E024215C8
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=6C4141E9-7928-4077-820B-064FD2A7D1FF
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=7F293612-7779-4BB6-B2D1-1E0F390CEA50
-    # DEBOSS:
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=293A3099-FE80-4125-B88C-E1835073D365
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=0C9BEC85-87F4-46CF-B7E5-1345A76D59CB
-    # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=A5BCD7F2-0354-404D-A7A4-EF58A799AA29
-
     dc_product = Spree::DcFullProduct.retrieve(supplier_item_guid)
 
     unless dc_product.valid?
+      Rails.logger.info("PLOAD: Retrieved DC product is invalid [#{supplier_item_guid}]")
       px_product.invalid
       return
     end

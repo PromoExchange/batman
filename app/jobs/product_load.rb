@@ -180,7 +180,7 @@ module ProductLoad
             name: option_choice.name
           ).first_or_create
 
-          pantone = pms_color.pantone
+          pantone = pms_color.display_name
           pantone ||= option_choice.name
 
           Spree::PmsColorsSupplier.where(

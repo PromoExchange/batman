@@ -12,6 +12,16 @@ class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
     redirect_to admin_pms_colors_path
   end
 
+  def update
+    @pms_color.update_attributes(pms_color_params)
+    unless pms_color_params[:display_name].blank?
+      Spree::PmsColorsSupplier.where(
+        pms_color_id: params[:id]
+      ).update_all(display_name: pms_color_params[:display_name])
+    end
+    redirect_to admin_pms_colors_path
+  end
+
   def load_pms_color
     @pms_color = Spree::PmsColor.find(params[:id])
   end
@@ -21,6 +31,7 @@ class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
   def pms_color_params
     params.require(:pms_color).permit(
       :name,
+      :display_name,
       :pantone,
       :hex
     )

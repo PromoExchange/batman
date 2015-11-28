@@ -255,10 +255,11 @@ namespace :dc do
       desc 'Export PMS colors'
       task export: :environment do
         CSV.open(File.join(Rails.root, 'db/maps/pmscolor_export.csv'), 'wb') do |csv|
-          csv << %w(name pantone hex)
+          csv << %w(name display_name pantone hex)
           Spree::PmsColor.all.each do |pms_color|
             row = []
             row << pms_color.name
+            row << pms_color.display_name
             row << pms_color.pantone
             row << pms_color.hex
             csv << row

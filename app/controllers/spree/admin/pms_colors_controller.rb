@@ -1,10 +1,14 @@
 class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
   before_action :load_pms_color, only: [:edit, :update]
 
-  respond_to :html
-
   def index
-    respond_with(@collection)
+    respond_to do |format|
+      format.html { respond_with(@collection) }
+      format.csv do
+        @pms_colors = Spree::PmsColor.all
+        send_data @pms_colors.to_csv, filename: "pms_color-#{Time.zone.today}.csv"
+      end
+    end
   end
 
   def create

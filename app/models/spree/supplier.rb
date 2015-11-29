@@ -10,7 +10,5 @@ class Spree::Supplier < Spree::Base
   belongs_to :ship_address, foreign_key: :shipping_address_id, class_name: 'Spree::Address'
   alias_attribute :shipping_address, :ship_address
 
-  accepts_nested_attributes_for :ship_address, :bill_address
-
   validates :name, presence: true
 end

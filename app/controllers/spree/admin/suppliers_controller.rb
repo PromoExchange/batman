@@ -14,7 +14,40 @@ class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
 
   def addresses
     return unless request.put?
-    if @supplier.update_attributes(supplier_params)
+
+    @supplier.build_bill_address if @supplier.build_bill_address.nil?
+
+    bill_address_data = params[:supplier][:bill_address]
+
+    @supplier.bill_address.firstname = bill_address_data[:firstname]
+    @supplier.bill_address.company = @supplier.name
+    @supplier.bill_address.lastname = bill_address_data[:lastname]
+    @supplier.bill_address.address1 = bill_address_data[:address1]
+    @supplier.bill_address.address2 = bill_address_data[:address2]
+    @supplier.bill_address.city = bill_address_data[:city]
+    @supplier.bill_address.zipcode = bill_address_data[:zipcode]
+    @supplier.bill_address.country_id = bill_address_data[:country_id]
+    @supplier.bill_address.state_id = bill_address_data[:state_id]
+    @supplier.bill_address.phone = bill_address_data[:phone]
+    @supplier.bill_address.save!
+
+    @supplier.build_ship_address if @supplier.build_ship_address.nil?
+
+    ship_address_data = params[:supplier][:ship_address]
+
+    @supplier.ship_address.firstname = ship_address_data[:firstname]
+    @supplier.ship_address.company = @supplier.name
+    @supplier.ship_address.lastname = ship_address_data[:lastname]
+    @supplier.ship_address.address1 = ship_address_data[:address1]
+    @supplier.ship_address.address2 = ship_address_data[:address2]
+    @supplier.ship_address.city = ship_address_data[:city]
+    @supplier.ship_address.zipcode = ship_address_data[:zipcode]
+    @supplier.ship_address.country_id = ship_address_data[:country_id]
+    @supplier.ship_address.state_id = ship_address_data[:state_id]
+    @supplier.ship_address.phone = ship_address_data[:phone]
+    @supplier.ship_address.save!
+
+    if @supplier.save!
       flash.now[:success] = 'Address updated'
     end
     redirect_to admin_suppliers_path

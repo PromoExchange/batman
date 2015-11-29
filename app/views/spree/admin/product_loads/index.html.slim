@@ -50,7 +50,6 @@
           th Factory
           th DC #
           th URL
-          th State
           th Action
       tbody
         - cache do
@@ -60,7 +59,6 @@
               td = supplier.dc_acct_num
               td
                 a href="http://#{supplier.url}" #{supplier.url}
-              td = supplier.state
               td
                 = button_to 'Load',
                   spree.admin_product_loads_path,

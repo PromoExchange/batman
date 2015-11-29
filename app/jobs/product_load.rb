@@ -158,14 +158,13 @@ module ProductLoad
         ).first_or_create
 
         Spree::PmsColorsSupplier.where(
-          imprint_id: imprint_method.id,
+          imprint_method_id: imprint_method.id,
           supplier_id: px_product.supplier_id
         ).destroy_all
 
         option_detail.option_choices.each do |option_choice|
           next if option_choice.name == 'PMS Color Match'
 
-          # Try direct hit first
           pms_color = Spree::PmsColor.where(
             name: option_choice.name
           ).first_or_create

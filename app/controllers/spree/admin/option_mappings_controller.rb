@@ -1,10 +1,14 @@
 class Spree::Admin::OptionMappingsController < Spree::Admin::ResourceController
   before_action :load_option_mapping, only: [:edit, :update]
 
-  respond_to :html
-
   def index
-    respond_with(@collection)
+    respond_to do |format|
+      format.html { respond_with(@collection) }
+      format.csv do
+        @option_mappings = Spree::OptionMapping.all
+        send_data @option_mappings.to_csv, filename: "option_mapping-#{Time.zone.today}.csv"
+      end
+    end
   end
 
   def create

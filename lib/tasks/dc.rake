@@ -291,7 +291,7 @@ namespace :dc do
             row = []
             row << option_map.dc_acct_num
             row << option_map.dc_name.strip
-            row << option_map.px_name.strip
+            row << option_map.px_name
             row << option_map.do_not_save
             csv << row
           end

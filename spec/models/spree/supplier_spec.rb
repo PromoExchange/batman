@@ -26,8 +26,8 @@ RSpec.describe Spree::Supplier, type: :model do
     expect(t.macro).to eq :has_many
   end
 
-  it 'should have many and belong to option values' do
-    t = Spree::Supplier.reflect_on_association(:option_values)
-    expect(t.macro).to eq :has_and_belongs_to_many
+  it 'should have many pms_color_supplier' do
+    t = Spree::Supplier.reflect_on_association(:pms_colors_supplier)
+    expect(t.macro).to eq :has_many
   end
 end

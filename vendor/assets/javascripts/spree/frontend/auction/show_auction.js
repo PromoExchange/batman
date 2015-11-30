@@ -35,7 +35,7 @@ $(function() {
       },
       success: function(data) {
         alert("You've selected a Seller and the use of our project management tool");
-        window.location = "/dashboards?tab=won_auction";
+        window.location = "/dashboards?tab=purchase_history";
       },
       error: function(data) {
         alert('Failed to accept bid, please contact support');

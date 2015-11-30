@@ -1,10 +1,16 @@
 class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
-  before_action :load_supplier, only: [:edit, :update, :addresses]
+  before_action :load_supplier, only: [:edit, :update, :addresses, :imprint_methods]
 
   respond_to :html
 
   def index
-    respond_with(@collection)
+    respond_to do |format|
+      format.html { respond_with(@collection) }
+      format.csv do
+        pms_colors_supplier = Spree::PmsColorsSupplier.all
+        send_data pms_colors_supplier.to_csv, filename: "pms_color_by_factory-#{Time.zone.today}.csv"
+      end
+    end
   end
 
   def create
@@ -51,6 +57,12 @@ class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
       flash.now[:success] = 'Address updated'
     end
     redirect_to admin_suppliers_path
+  end
+
+  def imprint_methods
+    @imprint_methods = Spree::Product.where(supplier_id: @supplier.id)
+      .joins(:imprint_methods)
+      .uniq
   end
 
   def load_supplier

@@ -4,3 +4,5 @@
       = link_to_with_icon 'user', 'Account', edit_admin_supplier_path(@supplier)
     li class=(current == :address ? 'active':'inactive')
       = link_to_with_icon 'edit', 'Addresses', admin_supplier_addresses_path(@supplier)
+    li class=(current == :imprint ? 'active':'inactive')
+      = link_to_with_icon 'edit', 'Imprint Methods', admin_supplier_imprint_methods_path(@supplier)

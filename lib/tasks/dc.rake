@@ -1,4 +1,4 @@
-def add_pms_color(supplier, imprint_method, name , pantone, hex)
+def add_pms_color(supplier, imprint_method, name, pantone, hex)
   pms_color = Spree::PmsColor.where(
     name: name,
     pantone: pantone,
@@ -267,11 +267,33 @@ namespace :dc do
         end
       end
 
+      desc 'Export PMS by Factory/Imprint colors'
+      task export_factory: :environment do
+        CSV.open(File.join(Rails.root, "db/maps/pmscolor_by_factory_export-#{Time.zone.today}.csv"), 'wb') do |csv|
+          csv << %w(supplier_name imprint_method name display_name pantone hex)
+          data = ''
+          Spree::Supplier.all.each do |factory|
+            Spree::PmsColorsSupplier.where(supplier: factory).each do |pms_color_supplier|
+              imprint_method = Spree::ImprintMethod.find(pms_color_supplier.imprint_method_id)
+              pms_color = Spree::PmsColor.find(pms_color_supplier.pms_color_id)
+              row = []
+              row << factory.name
+              row << imprint_method.name
+              row << pms_color.name
+              row << pms_color.display_name
+              row << pms_color.pantone
+              row << pms_color.hex
+              csv << row
+            end
+          end
+        end
+      end
+
       desc 'Import PMS Colors'
       task import: :environment do
         begin
           import_file = File.join(Rails.root, 'db/maps/pmscolor_import.csv')
-          fail "PMS Color import file is missing: #{import_file}" unless File.exists?(import_file)
+          fail "PMS Color import file is missing: #{import_file}" unless File.exist?(import_file)
           Spree::PmsColor.destroy_all
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
             hashed = row.to_hash
@@ -302,7 +324,7 @@ namespace :dc do
       task import: :environment do
         begin
           import_file = File.join(Rails.root, 'db/maps/option_import.csv')
-          fail "Option Mapping import file is missing: #{import_file}" unless File.exists?(import_file)
+          fail "Option Mapping import file is missing: #{import_file}" unless File.exist?(import_file)
           Spree::OptionMapping.destroy_all
           count = 1
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|

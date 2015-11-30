@@ -122,6 +122,8 @@ Rails.application.routes.draw do
       resources :suppliers do
         get :addresses
         put :addresses
+        get :imprint_methods
+        put :imprint_methods
       end
     end
   end

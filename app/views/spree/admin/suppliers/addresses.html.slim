@@ -1,12 +1,12 @@
 - content_for :page_title do
   = link_to "#{@supplier.name}", edit_admin_supplier_url(@supplier)
   = "/"
-  = Spree.t(:editing_resource, resource: plural_resource_name(Spree::Supplier))
+  = Spree.t(:editing_resource, resource: plural_resource_name(Spree::Address))
 
 = render partial: 'spree/admin/suppliers/sidebar', locals: { current: :address }
 = render partial: 'spree/admin/suppliers/supplier_page_actions'
 
-#admin_user_edit_addresses
+#admin_supplier_edit_addresses
   div
     = render partial: 'spree/admin/shared/error_messages', locals: { target: @supplier }
   div

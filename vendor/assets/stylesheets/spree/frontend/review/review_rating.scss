@@ -77,3 +77,21 @@ div.star-rating {
 }
 
 /* END jQuery.Rating Plugin CSS */
+
+.star-custom{
+  background: url("/assets/review/star.gif") no-repeat;
+  cursor: pointer;
+  display: block;
+  float: left;
+  height: 16px;
+  overflow: hidden;
+  text-indent: -999em;
+  width: 16px !important;
+}
+
+.active-star{
+  background-position: -1px -32px;
+}
+.inactive-star{
+  background-position: -1px 0px;
+}

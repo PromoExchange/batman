@@ -12,36 +12,40 @@
         <ul class="nav nav-pills nav-stacked">
           <% active_me = nil %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-            <% active_me = 'active' if ['won_auction', nil].include? @tab %>
+            <% active_me = 'active' if ['won_auction','lost_auction', nil].include? @tab %>
             <li class="<%= active_me %>"><a href="#exchange" id="auction-tab" data-toggle="tab"><%= Spree.t(:marketplace) %></a></li>
             <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-            <% active_me = 'active' if ['purchase_history', nil].include? @tab %>
+            <% active_me = 'active' if ['purchase_history', 'awaiting_selection', nil].include? @tab %>
             <li class="<%= active_me %>"><a href="#auctions" id="auction-tab" data-toggle="tab"><%= Spree.t(:my_auctions) %></a></li>
             <% active_me = nil %>
             <% active_me = 'active' if ['product_idea'].include? @tab %>
             <li class="<%= active_me %>"><a href="#product-ideas" id="product-ideas-tab" data-toggle="tab"><%= Spree.t(:product_ideas) %></a></li>
             <% active_me = nil %>
-            <li><a href="#favorite-items" data-toggle="tab"><%= Spree.t(:favorite_items) %></a></li>
+            <% active_me = 'active' if ['favorite_items'].include? @tab %>
+            <li class= "<%= active_me %>" ><a href="#favorite-items" data-toggle="tab" id="favorite-items-tab"><%= Spree.t(:favorite_items) %></a></li>
             <% active_me = nil %>
           <% end %>
-          <% active_me = 'active' if ['address', 'logo', 'payment_method'].include? @tab %>
-          <li class="<%= active_me %>"><a href="#account-settings" data-toggle="tab"><%= Spree.t(:account_settings) %></a></li>
-          <li><a href="#support" data-toggle="tab"><%= Spree.t(:support) %></a></li>
+          <% active_me = 'active' if ['address', 'logo', 'payment_method', 'account_setting', 'prebids', 'taxrates'].include? @tab %>
+          <li class="<%= active_me %>"><a href="#account-settings" data-toggle="tab" id="account-setting-tab"><%= Spree.t(:account_settings) %></a></li>
+          <% active_me = nil %>
+          <% active_me = 'active' if ['support'].include? @tab %>
+          <li class="<%= active_me %>"><a href="#support" data-toggle="tab" id="support-tab"><%= Spree.t(:support) %></a></li>
+          <% active_me = nil %>
         </ul>
       </div>
       <div class="col-md-9">
         <div class="tab-content">
           <% active_me = nil %>
           <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-            <% active_me = 'active' if ['won_auction', nil].include? @tab %>
+            <% active_me = 'active' if ['won_auction','lost_auction', nil].include? @tab %>
             <div class="tab-pane <%= active_me %>" id="exchange"><%= render partial: 'spree/dashboards/seller/exchange' %></div>
             <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
             <% active_me = nil %>
-            <% active_me = 'active' if ['purchase_history', nil].include? @tab %>
+            <% active_me = 'active' if ['purchase_history', 'awaiting_selection', nil].include? @tab %>
             <div class="tab-pane <%= active_me %>" id="auctions"><%= render partial: 'spree/dashboards/buyer/auctions' %></div>
             <% active_me = nil %>
             <% active_me = 'active' if ['product_idea'].include? @tab %>
@@ -49,11 +53,16 @@
             <% active_me = nil %>
           <% end %>
           <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-            <div class="tab-pane" id="favorite-items"><%= render partial: 'spree/dashboards/buyer/favorite_items' %></div>
+            <% active_me = 'active' if ['favorite_items'].include? @tab %>
+            <div class="tab-pane <%= active_me %>" id="favorite-items"><%= render partial: 'spree/dashboards/buyer/favorite_items' %></div>
+            <% active_me = nil %>
           <% end %>
-          <% active_me = 'active' if ['address', 'logo', 'payment_method'].include? @tab %>
+          <% active_me = 'active' if ['address', 'logo', 'payment_method', 'account_setting', 'prebids','taxrates'].include? @tab %>
           <div class="tab-pane <%= active_me %>" id="account-settings"><%= render partial: 'spree/dashboards/shared/account_settings' %></div>
-          <div class="tab-pane" id="support"><%= render partial: 'spree/dashboards/shared/support' %></div>
+          <% active_me = nil %>
+          <% active_me = 'active' if ['support'].include? @tab %>
+          <div class="tab-pane <%= active_me %>" id="support"><%= render partial: 'spree/dashboards/shared/support' %></div>
+          <% active_me = nil %>
         </div>
       </div>
     </div>

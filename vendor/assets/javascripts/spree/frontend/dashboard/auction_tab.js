@@ -92,7 +92,7 @@ $(function() {
         $("#waiting-auction-table > tbody").html(getAcutionDetail(data));
       }
     });
-    window.history.pushState({}, null, '/dashboards');
+    window.history.pushState({}, null, '/dashboards?tab=awaiting_selection');
     $(this).tab('show');
     return false;
   });
@@ -124,9 +124,15 @@ $(function() {
 
   $('#auction-tab').click(function(){
     window.history.pushState({}, null, '/dashboards');
+    $('#live-auction-tab').trigger('click');
   });
 
   if ($($('#live-auction-tab').parent()[0]).hasClass('active')) {
     $('#live-auction-tab').trigger('click');
   }
+  
+  if ($($('#waiting-auction-tab').parent()[0]).hasClass('active')) {
+    $('#waiting-auction-tab').trigger('click');
+  }
+  
 });

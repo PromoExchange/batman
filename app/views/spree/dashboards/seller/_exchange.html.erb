@@ -5,7 +5,7 @@
 <ul class="nav nav-tabs" role="tablist">
   <li class="<%= 'active' if @tab.nil? %>"><a href="#seller-live-auction" id="seller-live-auction-tab" role="tab" data-toggle="tab"><%=Spree.t(:live_auctions)%></a></li>
   <li class="<%= 'active' if @tab == 'won_auction' %>"><a href="#seller-won-auction" id="seller-won-auction-tab" role="tab" data-toggle="tab"><%=Spree.t(:auctions_won)%></a></li>
-  <li><a href="#seller-lost-auction" id="seller-lost-auction-tab" role="tab" data-toggle="tab"><%=Spree.t(:auctions_lost)%></a></li>
+  <li class="<%= 'active' if @tab == 'lost_auction' %>"><a href="#seller-lost-auction" id="seller-lost-auction-tab" role="tab" data-toggle="tab"><%=Spree.t(:auctions_lost)%></a></li>
 </ul>
 
 <div class="tab-content">

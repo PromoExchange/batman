@@ -16,7 +16,7 @@ class Spree::PxaccountsController < Spree::StoreController
         sign_in(user, event: :authentication, bypass: !Spree::Auth::Config[:signout_after_password_change])
       end
     end
-    redirect_to main_app.dashboards_url, notice: Spree.t(:account_updated)
+    redirect_to "#{main_app.dashboards_url}?tab=account_setting", notice: Spree.t(:account_updated)
 
   rescue
     @pxaccount = Spree::Pxaccount.new

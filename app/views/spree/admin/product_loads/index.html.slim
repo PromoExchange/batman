@@ -3,28 +3,40 @@
 .well
     h4 Current Stats
     table.table
+      thead
+        tr
+          th State
+          th #
+          th %
       tbody
         tr
           td Factories defined
           td = @num_factories
+          td
         tr
           td Active Products In Database
           td = @num_states['active'].nil? ? 0 : @num_states['active']
+          td = ((@num_states['active'].to_f / @num_database) * 100).round(2) if @num_database > 0
         tr
           td Loading Products In Database
           td = @num_states['loading'].nil? ? 0 : @num_states['loading']
+          td = ((@num_states['loading'].to_f / @num_database) * 100 ).round(2) if @num_database > 0
         tr
           td Invalid Products In Database
           td = @num_states['invalid'].nil? ? 0 : @num_states['invalid']
+          td = ((@num_states['invalid'].to_f / @num_database) * 100 ).round(2) if @num_database > 0
         tr
           td Total Products In Database
           td = @num_database
+          td
         tr
           td In Factory Load Queue
           td = @num_factory_queue
+          td
         tr
           td In Product Update Queue
           td = @num_product_queue
+          td
 .well
     h4 By Factory/State
     .scrolling

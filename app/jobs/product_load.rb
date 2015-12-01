@@ -27,8 +27,9 @@ module ProductLoad
     end
 
     # Update attributes
+    sanitized_string = ActionView::Base.full_sanitizer.sanitize(dc_product.description)
     px_product.update_attributes(
-      description: dc_product.description,
+      description: sanitized_string,
       size: dc_product.size,
       weight: dc_product.weight
     )

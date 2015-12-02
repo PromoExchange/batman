@@ -28,4 +28,3 @@ public/uploads/**
 /vendor/assets/bower_components
 
 .tags*
-node_modules

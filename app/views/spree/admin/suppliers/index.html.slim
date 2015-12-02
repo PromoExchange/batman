@@ -12,11 +12,15 @@
     = search_form_for [:admin, @search] do |f|
       - locals = {:f => f}
       .row
-        .col.col-md-6
+        .col.col-md-4
+          .form-group
+            = f.label :id_eq, Spree.t(:ID)
+            = f.text_field :id_eq, class: "form-control js-quick-search-target"
+        .col.col-md-4
           .form-group
             = f.label :name_cont, Spree.t(:name)
             = f.text_field :name_cont, class: "form-control js-quick-search-target"
-        .col.col-md-6
+        .col.col-md-4
           .form-group
             = f.label :dc_acct_num_cont, 'DC Acct Number'
             = f.text_field :dc_acct_num_cont, class: "form-control js-quick-search-target"
@@ -27,6 +31,7 @@
     table.table
       thead
         tr
+          th ID
           th Shipping Address
           th Name
           th DC Account Number
@@ -34,6 +39,7 @@
       tbody
         - @suppliers.each do |supplier|
           tr
+            td = supplier.id
             td = supplier.shipping_address.to_s
             td = supplier.name
             td = supplier.dc_acct_num

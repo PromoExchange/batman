@@ -46,6 +46,12 @@
   </ul>
 <% end %>
 
+<% if can? :admin, Spree::PmsColorsSupplier %>
+  <ul class="nav nav-sidebar">
+    <%= tab :pms_colors_supplier, url: spree.admin_pms_colors_suppliers_path, icon: 'file' %>
+  </ul>
+<% end %>
+
 <% if can? :admin, current_store %>
   <ul class="nav nav-sidebar">
     <%= main_menu_tree Spree.t(:configurations), icon: "wrench", sub_menu: "configuration", url: "#sidebar-configuration" %>

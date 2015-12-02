@@ -22,15 +22,6 @@ class Spree::Admin::OptionMappingsController < Spree::Admin::ResourceController
 
   private
 
-  def option_mapping_params
-    params.require(:option_mapping).permit(
-      :dc_acct_num,
-      :dc_name,
-      :px_name,
-      :do_not_save
-    )
-  end
-
   def collection
     return @collection if @collection.present?
     params[:q] = {} if params[:q].blank?
@@ -42,5 +33,14 @@ class Spree::Admin::OptionMappingsController < Spree::Admin::ResourceController
       .per(Spree::Config[:properties_per_page])
 
     @collection
+  end
+
+  def option_mapping_params
+    params.require(:option_mapping).permit(
+      :dc_acct_num,
+      :dc_name,
+      :px_name,
+      :do_not_save
+    )
   end
 end

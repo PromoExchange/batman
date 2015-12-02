@@ -1,5 +1,4 @@
 dc_acct_num,dc_name,px_name,do_not_save
-dc_acct_num,dc_name,px_name,do_not_save
 100257,1 Color Screenprinting,Screen Print,false
 100257,Imprint Color,Screen Print,false
 100257,Photopatch Imprint,Photopatch,false
@@ -47,9 +46,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100007,CMYK Side Imprint for Stik-OnCubes,"",true
 100007,Car Magnet Proof Options,"",true
 100007,Chipboard Brown Backer (22 pt),"",true
-100007,Choose Imprint for Business Card Magnet,"",true
-100007,Choose Imprint for House Shape Magnet,"",true
-100007,Choose Imprint for Your Product,"",true
 100007,Choose optional sheet imprint colors,"",true
 100007,Click to Back of Sheet Choose Imprint Color(s),"",true
 100007,Click to Choose Auto Layout,"",true
@@ -70,11 +66,7 @@ dc_acct_num,dc_name,px_name,do_not_save
 100007,Click to Choose Front of Sheet Slinky(R) Imprint Color(s),"",true
 100007,Click to Choose Heat Index Back Side Art,"",true
 100007,Click to Choose Hockey Schedule,"",true
-100007,Click to Choose Imprint Color(s) for envelope,"",true
-100007,Click to Choose Imprint Color(s),"",true
-100007,Click to Choose Imprint Color,"",true
 100007,Click to Choose Note Pad Art,"",true
-100007,Click to Choose Note Pad Imprint Color(s),"",true
 100007,Click to Choose Soccer Schedule,"",true
 100007,Click to Choose State Shape,"",true
 100007,Click to Choose Stock Art,"",true
@@ -101,6 +93,12 @@ dc_acct_num,dc_name,px_name,do_not_save
 100007,Copy Change Pads Ecomony,"",true
 100007,Copy Change Pads,"",true
 100007,Copy Change,"",true
+100007,Choose Imprint for Business Card Magnet,Screen Print,false
+100007,Choose Imprint for House Shape Magnet,Screen Print,false
+100007,Choose Imprint for Your Product,Screen Print,false
+100007,Click to Choose Imprint Color(s),Screen Print,false
+100007,Click to Choose Imprint Color,Screen Print,false
+100007,Click to Choose Note Pad Imprint Color(s),Screen Print,false
 100007,Cost for Pen Loop on 11 inch side,"",true
 100007,Cube Proof Options,"",true
 100007,Custom Booklet Sizing,"",true
@@ -311,7 +309,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100054,AB1 Binding Color,"",true
 100054,AB1 Cover Ink Color,"",true
 100054,AB2 2nd Cover Ink Color,"",true
-100054,AB2 Cover Ink Color,"",true
 100054,Additional Foil Color,"",true
 100054,BBJ21 Statement Journal Colors,"",true
 100054,BBJ30 Executive Cover Colors,"",true
@@ -320,126 +317,111 @@ dc_acct_num,dc_name,px_name,do_not_save
 100054,BBP20 Executive Cover Colors,"",true
 100054,BBP40 Cover Colors,"",true
 100054,BBP41 Cover Colors,"",true
-100054,BJ1-PS Pen Imprint Color,"",true
-100054,BJ1E-PS Pen Imprint Color,"",true
+100054,BJ1-PS Pen Imprint Color,Screen Print,false
 100054,BJ1G-PS Logo on Each Sheet,"",true
-100054,BJ1G-PS Pen Imprint Color,"",true
-100054,BJ1R4-PS Pen Imprint Color,"",true
-100054,BJ1S-PS Pen Imprint Color,"",true
 100054,BJ2-PS Additional Foil Color,"",true
-100054,BJ2-PS Cover Imprint Color,"",true
 100054,BJ2-PS Logo on Each Sheet,"",true
-100054,BJ2-PS Pen Imprint Color,"",true
-100054,BJ2E-PS Pen Imprint Color,"",true
-100054,BJ2G-PS Pen Imprint Color,"",true
-100054,BJ2R4-PS Pen Imprint Color,"",true
-100054,BJ2S-PS Pen Imprint Color,"",true
 100054,CDP1B 2nd Ink Color,"",true
-100054,CDP1B Ink Color,"",true
 100054,CN1 Cover Imprint with Bleed - Set Up,"",true
-100054,CN1 Cover Ink Color,"",true
 100054,CN1 Logo on Each Sheet Ink Color,"",true
 100054,CN14 Logo on Each Sheet Ink Color,"",true
 100054,CN1F Logo on Each Sheet Ink Color,"",true
 100054,CN1P Back Cover,"",true
 100054,CN1P Logo on Each Sheet Ink Color,"",true
-100054,CP3 Cover Colors,"",true
-100054,CP3 Standard Foil Colors,"",true
-100054,Cover Imprint- Standard Foil Colors Cover Imprint- Standard Foil Colors,"",true
-100054,DC14-PS Pen Imprint Color,"",true
-100054,DC1F-PS Pen Imprint Color,"",true
-100054,DC1P-PS Pen Imprint Color,"",true
-100054,DC24-PS Pen Imprint Color,"",true
 100054,DC2F-PS Additional Foil Color,"",true
 100054,DC2F-PS Cover Imprint Color,"",true
-100054,DC2F-PS Pen Imprint Color,"",true
 100054,DC2P-PS Cover Imprint Color,"",true
-100054,DC2P-PS Pen Imprint Color,"",true
 100054,DDP Corner Imprint Plate Charge,"",true
 100054,DDP Corner Imprint,"",true
 100054,DDP1A 2nd Ink Color,"",true
-100054,DDP1A Ink Color,"",true
 100054,DDP1B 2nd Ink Color,"",true
-100054,DDP1B Ink Color,"",true
 100054,DDP1C 2nd Ink Color,"",true
-100054,DDP1C Ink Color,"",true
 100054,DDP2A 2nd Ink Color,"",true
-100054,DDP2A Ink Color,"",true
 100054,DDP2B 2nd Ink Color,"",true
-100054,DDP2B Ink Color,"",true
 100054,DDP2C 2nd Ink Color,"",true
-100054,DDP2C Ink Color,"",true
 100054,DDP3A 2nd Ink Color,"",true
-100054,DDP3A Ink Color,"",true
 100054,DDP3B 2nd Ink Color,"",true
-100054,DDP3B Ink Color,"",true
 100054,DDP3C 2nd Ink Color,"",true
-100054,DDP3C Ink Color,"",true
-100054,DDP4B Ink Color,"",true
 100054,DDP4D 2nd Ink Color,"",true
-100054,DDP4D Ink Color,"",true
 100054,DDP5B 2nd Ink Color,"",true
-100054,DDP5B Ink Color,"",true
 100054,DDP5D 2nd Ink Color,"",true
-100054,DDP5D Ink Color,"",true
 100054,DDP6D 2nd Ink Color,"",true
-100054,DDP6D Ink Color,"",true
-100054,DJ1-PS Pen Imprint Color,"",true
-100054,DJ1E-PS Pen Imprint Color,"",true
 100054,DJ1G-PS Logo on Each Sheet,"",true
-100054,DJ1G-PS Pen Imprint Color,"",true
-100054,DJ1R4-PS Pen Imprint Color,"",true
-100054,DJ1S-PS Pen Imprint Color,"",true
-100054,DJ2-PS Pen Imprint Color,"",true
-100054,DJ2E-PS Pen Imprint Color,"",true
-100054,DJ2G-PS Pen Imprint Color,"",true
-100054,DJ2R4-PS Pen Imprint Color,"",true
-100054,DJ2S-PS Pen Imprint Color,"",true
-100054,Deluxe Covers,"",true
-100054,Deluxe and Flex Jrnl Foil Colors,"",true
 100054,ECN1 Cover Imprint with Bleed - Set Up,"",true
-100054,ECN1 Cover Ink Color,"",true
 100054,ECN1 Round Corners,"",true
 100054,ECN14 Round Corners,"",true
 100054,ECN1P Back Cover,"",true
 100054,EJ1G Logo on Each Sheet,"",true
 100054,EJ2 Logo on Each Sheet,"",true
 100054,EN10 Cover Imprint with Bleed - Set Up,"",true
-100054,EN10 Cover Ink Color,"",true
 100054,EN11 Cover Imprint with Bleed - Set Up,"",true
-100054,EN11 Cover Ink Color,"",true
 100054,ERN1 Cover Imprint with Bleed - Set Up,"",true
-100054,ERN1 Cover Ink Color,"",true
 100054,ERN1P Back Cover,"",true
 100054,ERN1P Logo on Each Sheet Ink Color,"",true
 100054,ESN1 Cover Imprint with Bleed - Set Up,"",true
-100054,ESN1 Cover Ink Color,"",true
 100054,ESN1P Back Cover,"",true
 100054,FJ1 Logo on Each Sheet,"",true
-100054,Flex Cover Colors,"",true
-100054,IDJ-PS Pen Imprint Color,"",true
 100054,IDJ4 Wire-O Binding Color,"",true
-100054,IDJ4-PS Pen Imprint Color,"",true
 100054,IDJ4-PS Wire-O Binding Color,"",true
 100054,IDJL Additional Foil Color,"",true
-100054,IDJL Cover Imprint Color,"",true
 100054,IDJL Wire-O Binding Color,"",true
 100054,IDJL-PS Additional Foil Color,"",true
 100054,IDJL-PS Cover Imprint Color,"",true
-100054,IDJL-PS Pen Imprint Color,"",true
 100054,IDJL-PS Wire-O Binding Color,"",true
-100054,IMJ-PS Pen Imprint Color,"",true
 100054,IMJ4 Wire-O Binding Color,"",true
-100054,IMJ4-PS Pen Imprint Color,"",true
 100054,IMJ4-PS Wire-O Binding Color,"",true
 100054,IMJL Additional Foil Color,"",true
 100054,IMJL Cover Imprint Color,"",true
 100054,IMJL Wire-O Binding Color,"",true
 100054,IMJL-PS Additional Foil Color,"",true
 100054,IMJL-PS Cover Imprint Color,"",true
-100054,IMJL-PS Pen Imprint Color,"",true
 100054,IMJL-PS Wire-O Binding Color,"",true
 100054,Impression Covers Impression Cover Choices,"",true
+100054,BJ1R4-PS Pen Imprint Color,Screen Print,false
+100054,BJ2-PS Cover Imprint Color,Screen Print,false
+100054,BJ2-PS Pen Imprint Color,Screen Print,false
+100054,BJ2E-PS Pen Imprint Color,Screen Print,false
+100054,BJ2R4-PS Pen Imprint Color,Screen Print,false
+100054,BJ2S-PS Pen Imprint Color,Screen Print,false
+100054,CDP1B Ink Color,Screen Print,false
+100054,CN1 Cover Ink Color,Screen Print,false
+100054,CP3 Standard Foil Colors,Foil Stamping,false
+100054,DC14-PS Pen Imprint Color,Screen Print,false
+100054,DC1F-PS Pen Imprint Color,Screen Print,false
+100054,DC1P-PS Pen Imprint Color,Screen Print,false
+100054,DC24-PS Pen Imprint Color,Screen Print,false
+100054,DC2F-PS Pen Imprint Color,Screen Print,false
+100054,DC2P-PS Pen Imprint Color,Screen Print,false
+100054,DDP1A Ink Color,Screen Print,false
+100054,DDP1C Ink Color,Screen Print,false
+100054,DDP2A Ink Color,Screen Print,false
+100054,DDP2B Ink Color,Screen Print,false
+100054,DDP3A Ink Color,Screen Print,false
+100054,DDP3B Ink Color,Screen Print,false
+100054,DDP3C Ink Color,Screen Print,false
+100054,DDP4D Ink Color,Screen Print,false
+100054,DDP5B Ink Color,Screen Print,false
+100054,DDP5D Ink Color,Screen Print,false
+100054,DJ1E-PS Pen Imprint Color,Screen Print,false
+100054,DDP6D Ink Color,Screen Print,false
+100054,DJ1G-PS Pen Imprint Color,Screen Print,false
+100054,DJ1S-PS Pen Imprint Color,Screen Print,false
+100054,DJ2-PS Pen Imprint Color,Screen Print,false
+100054,DJ2E-PS Pen Imprint Color,Screen Print,false
+100054,DJ2R4-PS Pen Imprint Color,Screen Print,false
+100054,DJ2S-PS Pen Imprint Color,Screen Print,false
+100054,Deluxe Covers,Screen Print,false
+100054,ECN1 Cover Ink Color,Screen Print,false
+100054,EN10 Cover Ink Color,Screen Print,false
+100054,EN11 Cover Ink Color,Screen Print,false
+100054,ERN1 Cover Ink Color,Screen Print,false
+100054,ESN1 Cover Ink Color,Screen Print,false
+100054,Flex Cover Colors,Flex Cover,false
+100054,IDJ4-PS Pen Imprint Color,Screen Print,false
+100054,IDJL Cover Imprint Color,Screen Print,false
+100054,IDJL-PS Pen Imprint Color,Screen Print,false
+100054,IMJ4-PS Pen Imprint Color,Screen Print,false
+100054,IMJL-PS Pen Imprint Color,Screen Print,false
 100054,JJ1-PS Pen Imprint Color,"",true
 100054,JJ1AD-PS Pen Imprint Color,"",true
 100054,JJ1E-PS Pen Imprint Color,"",true
@@ -779,7 +761,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100068,4 Color Label Available,"",true
 100068,Additional Imprint Color,"",true
 100068,Additional Imprint Location,"",true
-100068,Box Color,"",true
 100068,Bulk,"",true
 100068,Calculator Color,"",true
 100068,Candy Flavors,"",true
@@ -788,7 +769,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100068,Different Copy on 2nd Side,"",true
 100068,Gripper Color,"",true
 100068,Holder/Cutter Color,"",true
-100068,Imprint Color,"",true
 100068,Less Than Minimum,"",true
 100068,Magnet Back,"",true
 100068,Magnets,"",true
@@ -873,23 +853,17 @@ dc_acct_num,dc_name,px_name,do_not_save
 100089,4 Color Golf Setup,"",true
 100089,4 Color Setup 2,"",true
 100089,4 Color Setup,"",true
-100089,4 color process,"",true
 100089,Colorfinity Setup,"",true
 100089,Deboss Setup,"",true
 100089,Embroidery/145,"",true
-100089,Imprint Color,"",true
-100089,Laser Engrave,"",true
 100089,Laser Pen Setup,"",true
 100089,Laser Setup,"",true
 100089,MultiColor Pen Setup,"",true
 100089,MultiColor Setup,"",true
-100089,Pad Print,"",true
 100089,Patriot - Multi-color,"",true
 100089,Pen Setup,"",true
 100089,Product Color,"",true
 100089,Proof,"",true
-100089,Screen Print(50),"",true
-100089,Screen Print,"",true
 100089,Setup Spot GB,"",true
 100089,Setup Spot,"",true
 100090,Add insert,"",true
@@ -911,6 +885,11 @@ dc_acct_num,dc_name,px_name,do_not_save
 100099,H-SM Colors,"",true
 100099,H-SM-U Colors,"",true
 100101,"""Pik-Cup"" Sure Grip Cup Handles","",true
+100089,Imprint Color,Imprint Color,false
+100089,Laser Engrave,Laser Engraving,false
+100089,Screen Print,Screen Print,false
+100068,Imprint Color,Screen Print,false
+100089,Screen Print(50),Screen Print,false
 100101,"4"" x 6""Photo Mount Pre-Printed Decorations","",true
 100101,"6"" x 4"" Photo Mount Pre-Printed Decorations","",true
 100101,"Magnetic ""Rip N Clip"" Bag Clip Product Colors","",true
@@ -966,7 +945,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100101,Arch Shaped Mirror Product Colors,"",true
 100101,Attached Magnet,"",true
 100101,Aviator Sunglasses Colors,"",true
-100101,Awareness Ribbon Stress Reliever Imprint Colors,"",true
 100101,Awareness Ribbon Stress Reliever Product Colors,"",true
 100101,Baby Bottle Bank Product Colors,"",true
 100101,Baby Spoon Product Colors,"",true
@@ -1023,7 +1001,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100101,Gym Shoe Keytag Colors,"",true
 100101,Hand Clapper Product Colors,"",true
 100101,Heart Keytag Product Colors,"",true
-100101,Heart Shaped Stress Reliever Imprint Colors,"",true
 100101,House Bank Product Colors,"",true
 100101,House Clip Product Colors,"",true
 100101,House Keytag Product Colors,"",true
@@ -1031,12 +1008,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100101,House Mint Product Colors,"",true
 100101,ID Pouch Product Colors,"",true
 100101,Ice Cream Scoop Product Colors,"",true
-100101,Imprint Colors - 1 Maximum,"",true
-100101,Imprint Colors - 2 Maximum - Banks,"",true
-100101,Imprint Colors - 2 Maximum,"",true
-100101,Imprint Colors - 3 Maximum - Banks,"",true
-100101,Imprint Colors - 4 Maximum - Banks,"",true
-100101,Imprint Colors - 4 Maximum,"",true
 100101,Insert Charges,"",true
 100101,Jersey Bend a Bottle Product Colors,"",true
 100101,Jumbo Hand Clapper Product Colors,"",true
@@ -1098,7 +1069,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100101,Ribbon Keytag Product Colors,"",true
 100101,Ribbon Magnet Clip Product Colors,"",true
 100101,Round Tape Measure Product Colors,"",true
-100101,Rubber Duckie Imprint Colors,"",true
 100101,Screened Wristband Product Colors,"",true
 100101,Shatter Resistant Flat Round Ornament Product Colors,"",true
 100101,Shatter Resistant Flat Star Ornament Product Colors,"",true
@@ -1120,11 +1090,15 @@ dc_acct_num,dc_name,px_name,do_not_save
 100101,Square Magnet Clip Product Colors,"",true
 100101,Squirt Gun Product Colors,"",true
 100101,Stainless Steel Liner Product Colors,"",true
+100101,Imprint Colors - 1 Maximum,Imprint Color,false
+100101,Imprint Colors - 2 Maximum,Imprint Color,false
+100101,Imprint Colors - 3 Maximum - Banks,Imprint Color,false
+100101,Imprint Colors - 4 Maximum - Banks,Imprint Color,false
+100101,Imprint Colors - 4 Maximum,Imprint Color,false
 100101,Star Bank Product Colors,"",true
 100101,Star Keytag Product Colors,"",true
 100101,Star Magnet Clip Product Colors,"",true
 100101,Star Shaped Note Holder Product Colors,"",true
-100101,Star Stress Reliever Imprint Colors,"",true
 100101,Storm Ice Scraper and Brush Product Colors,"",true
 100101,Sunglass Product Colors,"",true
 100101,Sunglasses Photo Frame Product Colors,"",true
@@ -1224,7 +1198,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100104,Extra Sheet,"",true
 100104,Ferrule Colors,"",true
 100104,Flat Mailers,"",true
-100104,Flexograph,"",true
 100104,Foil Change,"",true
 100104,Foil Stamping,"",true
 100104,GVC Appt Packaging,"",true
@@ -1346,7 +1319,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100108,Digital Personalizations (per line),"",true
 100108,Each Additional Silkscreen Color,"",true
 100108,Imprint -5254,"",true
-100108,Imprint Colors,"",true
 100108,Laser Engraved Personalization (1st line),"",true
 100108,Laser Engraved Personalization (each additional line),"",true
 100108,Laser Engraved Personalizations (each additional line - 3 lines max),"",true
@@ -1546,7 +1518,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100108,Product Color,"",true
 100108,Product Colors,"",true
 100108,Proof Options,"",true
-100108,Standard Imprint Colors,"",true
 100108,TABLE COVERS BAG,"",true
 100109,ADDITIONAL COLOR,"",true
 100109,ADDITIONAL COLOR/LOCATION,"",true
@@ -1833,16 +1804,11 @@ dc_acct_num,dc_name,px_name,do_not_save
 100156,Copy Change,"",true
 100156,Cube Stress Reliever Colors,"",true
 100156,Drop-Split Shipments,"",true
-100156,Engraved,"",true
-100156,First Imprint Color,"",true
 100156,Flip Flop Sizes,"",true
 100156,Hangtag,"",true
 100156,Hard Hat Stress Reliever Colors,"",true
 100156,Highlighter Scale Options,"",true
-100156,Imprint Color,"",true
-100156,Imprint Colors,"",true
 100156,Laminated Hangtag,"",true
-100156,Laser Engraving Option,"",true
 100156,Lens Color,"",true
 100156,Less than Minimum,"",true
 100156,Magnet on Back,"",true
@@ -1894,6 +1860,9 @@ dc_acct_num,dc_name,px_name,do_not_save
 100164,"Pouch Imprint 1 Color, 1 Location","",true
 100164,"Pouch Imprint 1 Color, 2 Locations","",true
 100164,"Pouch Imprint 2 Color, 1 Locations","",true
+100156,Imprint Color,Screen Print,false
+100156,Imprint Colors,Screen Print,false
+100156,Laser Engraving Option,Laser Engraving,false
 100164,"Pouch Imprint 2 Color, 2 Locations","",true
 100164,"Re-order 1 Location, 1 Color Imprint","",true
 100164,"Re-order 1 Location, 1 to 3 Colors Imprint","",true
@@ -2075,13 +2044,10 @@ dc_acct_num,dc_name,px_name,do_not_save
 100166,"Candy, 481, 497, 1357","",true
 100166,$80.00 Screen charge,"",true
 100166,Additional Imprint Color(s) Steel/Acrylic,"",true
-100166,Color Fill First Color,"",true
 100166,Copy Change,"",true
 100166,Fast Glass Screen Charge,"",true
-100166,Imprint Color(s) - Side 1,"",true
 100166,Imprint Color(s) - Side 2,"",true
 100166,Imprint Color(s) - wrap,"",true
-100166,Imprint Color(s),"",true
 100166,Item Accessories,"",true
 100166,Laser Etch Set up Charge,"",true
 100166,Less Than Minimum Charge,"",true
@@ -2103,7 +2069,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100166,Second Etch Location,"",true
 100166,Sets of 3 Add'l Color Charge,"",true
 100166,Sublimation Set up Charge,"",true
-100166,sets Imprint Color(s),"",true
 100167,0100 Colors,"",true
 100167,0160 Colors,"",true
 100167,0170 Colors,"",true
@@ -2146,6 +2111,8 @@ dc_acct_num,dc_name,px_name,do_not_save
 100167,1846 Colors,"",true
 100167,1846 Shirt Sizes,"",true
 100167,1847 Colors,"",true
+100166,Imprint Color(s),Screen Print,false
+100166,sets Imprint Color(s),Screen Print,false
 100167,1847 Sizes,"",true
 100167,1848 Colors,"",true
 100167,1848 Sizes,"",true
@@ -2663,23 +2630,16 @@ dc_acct_num,dc_name,px_name,do_not_save
 100292,Silkscreen,"",true
 100292,Straight Line Text Engraving Honor Time,"",true
 100292,Straight Line Text Engraving,"",true
-100306,4-Color Process,"",true
 100306,Available Colors,"",true
 100306,Avanti Roller Ball,"",true
 100306,Color Fill,"",true
-100306,Color Stamp,"",true
 100306,Colors,"",true
-100306,Deboss,"",true
+100306,Deboss,Deboss,false
+100306,Color Stamp,Color Stamp,false
 100306,Domes,"",true
 100306,Drinkware Gift Pouch,"",true
 100306,Drop Shipments,"",true
 100306,Embroidery,"",true
-100306,Full Color,"",true
-100306,Laser Engraving,"",true
-100306,Multi-Color Imprint,"",true
-100306,Multi-Color Imprint: Plastic Pens,"",true
-100306,Multi-Color Imprint: Polypro/Non-Woven,"",true
-100306,One Color Imprint,"",true
 100306,Optional Pen,"",true
 100306,Padfolio Colors,"",true
 100306,Paper Proof,"",true
@@ -2800,6 +2760,9 @@ dc_acct_num,dc_name,px_name,do_not_save
 100313,WORD02 StockArt,"",true
 100313,WORD04 StockArt,"",true
 100313,WORD05 StockArt,"",true
+100306,Laser Engraving,Laser Engraving,false
+100306,Multi-Color Imprint,Screen Print,false
+100306,Multi-Color Imprint: Plastic Pens,Screen Print,false
 100313,WORD06 StockArt,"",true
 100313,WORD07 StockArt,"",true
 100313,WORD08 StockArt,"",true
@@ -3184,21 +3147,13 @@ dc_acct_num,dc_name,px_name,do_not_save
 100366,Trifolding,"",true
 100366,Wider Border / Filling,"",true
 100366,Zippered Vinyl Pouch,"",true
-100383,4-Color Process Printing,"",true
 100383,Black Koskin Pouch,"",true
 100383,Cello Wraps,"",true
-100383,ColorBLAST!,"",true
-100383,ColorPrint,"",true
-100383,ColorPrint-One Color Only,"",true
-100383,Colors,"",true
 100383,Deauville Pen Colors,"",true
-100383,Deboss,"",true
-100383,Direct Process,"",true
 100383,Drop Ship,"",true
 100383,Individual Cello Wraps,"",true
 100383,KK-640 Pen Barrel Color,"",true
 100383,Labeling,"",true
-100383,Laser Engraving,"",true
 100383,Less Than Minimum,"",true
 100383,Mini Pen for Jotter,"",true
 100383,Mug Trim Colors,"",true
@@ -3230,6 +3185,12 @@ dc_acct_num,dc_name,px_name,do_not_save
 100384,Softee Shape,"",true
 100391,Additonal Imprint Color,"",true
 100391,Imprint Color,"",true
+100383,ColorBLAST!,ColorBLAST!,false
+100383,ColorPrint,Screen Print,false
+100383,Colors,Screen Print,false
+100383,Deboss,Deboss,false
+100383,Laser Engraving,Laser Engraving,false
+100383,Direct Process,Screen Print,false
 100391,PC - COBS,"",true
 100413,12oz Cup Color,"",true
 100413,16oz Pint Color,"",true
@@ -3306,8 +3267,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100463,FAUX CLOTH TOTES 8x5x10,"",true
 100463,FAUX CLOTH TOTES,"",true
 100463,FISHNET POUCHES,"",true
-100463,FLEXOGRAPHY COLORS,"",true
-100463,FLEXOGRAPHY INK PLATE,"",true
 100463,FROSTY TINTED MERCHANDISE BAGS,"",true
 100463,FROSTY TINTED SHOPPING BAGS,"",true
 100463,GIFT WRAP,"",true
@@ -3352,6 +3311,8 @@ dc_acct_num,dc_name,px_name,do_not_save
 100476,Personalization,"",true
 100476,Speculative Sample,"",true
 100476,Synthesis Colors,"",true
+100554,Cup Colors,"",true
+100463,FLEXOGRAPHY COLORS,Flexograph,false
 100477,ADD PRECIOUS STONES ABELLE PROMOTIONAL TIME,"",true
 100477,ADD PRECIOUS STONES,"",true
 100477,DAKOTA ENGRAVING,"",true
@@ -3470,6 +3431,7 @@ dc_acct_num,dc_name,px_name,do_not_save
 100512,Embroidery/Laser-blankets,"",true
 100512,GeoPanel - One location included,"",true
 100512,Ink Change,"",true
+100554,Disposable Lid,"",true
 100512,Laser - One location included,"",true
 100512,Laser - Oxidation,"",true
 100512,Laser Engraving Upgrade,"",true
@@ -3592,8 +3554,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100554,1st Imprint Color,"",true
 100554,Additional Imprint Color 1,"",true
 100554,Caps,"",true
-100554,Cup Colors,"",true
-100554,Disposable Lid,"",true
 100554,Drop Shipment,"",true
 100554,Fluted Cup?,"",true
 100554,Flyer Lids & Straws with Tips,"",true
@@ -3811,7 +3771,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100642,Product Color,"",true
 100642,Rally - Product Color,"",true
 100642,Screen Print Imprint Colors,"",true
-100652,Decoration Information,"",true
 100652,Product Color,"",true
 100652,Product Colors,"",true
 100652,Product Sizes,"",true
@@ -4155,9 +4114,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100739,Tag Line,"",true
 100739,Tassel Colors,"",true
 100739,Union Label Imprint Style,"",true
-100746,1- Color Screen Printing,"",true
-100746,1- Digital 4-Color Printing Digital Printing,"",true
-100746,1st color-Pad Printing Color,"",true
 100746,Add-Pad Printing Charges,"",true
 100746,Digital 4- Color Process Charge,"",true
 100746,Product Colors,"",true
@@ -4204,6 +4160,7 @@ dc_acct_num,dc_name,px_name,do_not_save
 100773,Product Color-BC-6262,"",true
 100773,Product Color-BC-6264,"",true
 100773,Product Color-BC-6289,"",true
+100746,1st color-Pad Printing Color,Pad Print,false
 100773,Product Color-BC-6801,"",true
 100773,Product Color-BC-6823,"",true
 100773,Product Color-BP-6203,"",true
@@ -5334,14 +5291,12 @@ dc_acct_num,dc_name,px_name,do_not_save
 100994,W982 Sizes,"",true
 100994,WL982 Sizes,"",true
 100994,Youth Sizes XS-XL,"",true
-100996,Ad Imprint Color,"",true
 100996,Additional Imprint Color,"",true
 100996,Card Stock,"",true
 100996,Change of Copy,"",true
 100996,Custom Sentiment,"",true
 100996,Envelope,"",true
 100996,Halftone Imprint,"",true
-100996,Imprint Color,"",true
 100996,Imprinted Cards,"",true
 100996,Imprinted Envelopes,"",true
 100996,Less Than Minimum for orders between 100-149,"",true
@@ -5349,7 +5304,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 100996,Less Than Minimum for orders between 50-99,"",true
 100996,Other Packaging Options,"",true
 100996,Phantom Overprint,"",true
-100996,Phanton Imprint,"",true
 100996,Photo Imprint,"",true
 100996,Proofs,"",true
 100996,Second Imprint Color,"",true
@@ -5386,6 +5340,8 @@ dc_acct_num,dc_name,px_name,do_not_save
 101002,Preproduction Product Proof,"",true
 101002,Second Side Imprint for Carpenter Pencils,"",true
 101002,Second Side Laser Imprint,"",true
+100996,Phanton Imprint,Phanton ,false
+100996,Ad Imprint Color,Imprint Color,false
 101002,Sharpening (Pencils),"",true
 101002,Silk Screen Imprint,"",true
 101002,Third Party Charge,"",true
@@ -7687,56 +7643,51 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,12BISTRO - Multi Color Imprint Run Charge,"",true
 101684,12GRPNGO - Per Color Run Charge,"",true
 101684,12ORBTMB - Color Surge Run Charge,"",true
-101684,12ORBTMB - Color Surge,"",true
 101684,12ORBTMB - Per Color Run Charge,"",true
 101684,12PKBG - Color Surge Run Charge,"",true
 101684,12PKCAMO - Color Surge Run Charge,"",true
 101684,14ECONMG - Per Color Run Charge,"",true
 101684,15ORBTMG - Color Surge Run Charge,"",true
-101684,15ORBTMG - Color Surge,"",true
 101684,15ORBTMG - Per Color Run Charge,"",true
 101684,16CORMUG - Per Color Run Charge,"",true
 101684,16CORTMB - Multi Color Imprint Run Charge,"",true
 101684,16FREDOM - Color Surge Run Charge,"",true
-101684,16FREDOM - Color Surge,"",true
 101684,16FREDOM - Multi Color Run Charge  Per Color,"",true
 101684,16FREFAC - Color Surge Run Charge,"",true
-101684,16FREFAC - Color Surge,"",true
 101684,16FREFAC - Per Color Run Charge,"",true
 101684,16FREONE - Color Surge Run Charge,"",true
-101684,16FREONE - Color Surge,"",true
 101684,16FREONE - Per Color Run Charge,"",true
 101684,16GRPNGO - Multi Color Run Charge  Per Color,"",true
 101684,16GRPSS - Per Color Run Charge,"",true
 101684,16JAMOCA - Per Color Run Charge,"",true
 101684,16JYMUG - Per Color Run Charge,"",true
 101684,16ORBTMB - Color Surge Run Charge,"",true
-101684,16ORBTMB - Color Surge,"",true
 101684,16ORBTMB - Per Color Run Charge,"",true
 101684,16SATMUG - Per Color Run Charge,"",true
 101684,17OUTBK - Optional Carabiner Charge,"",true
 101684,18FLPFRE - Color Surge Run Charge,"",true
-101684,18FLPFRE - Color Surge,"",true
 101684,18FLPFRE - Per Color Run Charge,"",true
 101684,20DWREV - Per Color Run Charge,"",true
-101684,20FRSTBB - Color Surge,"",true
 101684,20STD2GO - Color Surge Run Charge,"",true
-101684,20STD2GO - Color Surge,"",true
 101684,22FREDOM - Color Surge Run Charge,"",true
-101684,22FREDOM - Color Surge,"",true
 101684,22FREDOM - Multi Color Run Charge  Per Color,"",true
 101684,22GRPNGO - Per Color Run Charge,"",true
 101684,24AERIAL - Per Color Run Charge,"",true
 101684,24ORBTMB - Color Surge Run Charge,"",true
-101684,24ORBTMB - Color Surge,"",true
 101684,24ORBTMB - Per Color Run Charge,"",true
 101684,24REVNEO - Per Color Run Charge,"",true
 101684,24REVOTL - Per Color Run Charge,"",true
 101684,27FLPFRE - Color Surge Run Charge,"",true
-101684,27FLPFRE - Color Surge,"",true
+101684,15ORBTMG - Color Surge,Color Surge,false
+101684,16FREDOM - Color Surge,Color Surge,false
+101684,16FREONE - Color Surge,Color Surge,false
+101684,16ORBTMB - Color Surge,Color Surge,false
+101684,18FLPFRE - Color Surge,Color Surge,false
+101684,20FRSTBB - Color Surge,Color Surge,false
+101684,20STD2GO - Color Surge,Color Surge,false
+101684,24ORBTMB - Color Surge,Color Surge,false
 101684,27FLPFRE - Per Color Run Charge,"",true
 101684,28BLEBTL - Color Surge Run Charge,"",true
-101684,28BLEBTL - Color Surge,"",true
 101684,28TALNCL - Per Color Run Charge,"",true
 101684,30POLYCL - Multi Color Imprint Run Charge,"",true
 101684,6IN1 - Color Surge Run Charge,"",true
@@ -7744,7 +7695,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,6PKCLBCL - Color Surge Run Charge,"",true
 101684,6PKWAVE - Color Surge Run Charge,"",true
 101684,ACTSPBTL - Color Surge Run Charge,"",true
-101684,ACTSPBTL - Color Surge,"",true
 101684,ADVENBPK - Color Surge Run Charge,"",true
 101684,AEROBKSK - Color Surge Run Charge,"",true
 101684,ALCHCMBO - Pen Imprint Run Charge,"",true
@@ -7768,9 +7718,7 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,BIGLNGR - Assembly Charge,"",true
 101684,BIGLNGR - Color Surge Run Charge,"",true
 101684,BIKEBTLC - Color Surge Run Charge,"",true
-101684,BIKEBTLC - Color Surge,"",true
 101684,BIOCUP - Color Surge Run Charge,"",true
-101684,BIOCUP - Color Surge,"",true
 101684,BREAKER - 2nd Location Imprint Run Charge,"",true
 101684,BREAKER - Color Surge Run Charge,"",true
 101684,BRZYLNGR - Assembly Charge,"",true
@@ -7795,7 +7743,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,CHRODLUX - Color Surge Run Charge,"",true
 101684,CHROM6PK - Color Surge Run Charge,"",true
 101684,CITYLNH - Color Surge Run Charge,"",true
-101684,CLENFTBT - Color Surge,"",true
 101684,CLIPRND - Color Surge Run Charge,"",true
 101684,CLPCPHAN - Multi Color Label Imprint Run Charge,"",true
 101684,CLRBLKBK - Color Surge Run Charge,"",true
@@ -7814,7 +7761,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,CRSCALEX - Debossing Set-Up/Change of Copy,"",true
 101684,CRSCALJR - Debossing Set-Up/Change of Copy,"",true
 101684,CYCLONE - Assembly Charge,"",true
-101684,Cell-a-Lounge Colors,"",true
 101684,DBLSQBPK - Color Surge Run Charge,"",true
 101684,DBLSTBPK - Color Surge Run Charge,"",true
 101684,DBLTKDS - Color Surge Run Charge,"",true
@@ -7834,8 +7780,13 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,ELLSWORT - Debossing Set-Up/Change of Copy,"",true
 101684,ENDUTRIT - 2nd Location & Multi Color Imprint Charge,"",true
 101684,ENDUTRIT - Color Surge Run Charge,"",true
-101684,ENDUTRIT - Color Surge,"",true
 101684,ESQPEN - Laser Engraving Set-Up/Change of Copy,"",true
+101684,28BLEBTL - Color Surge,Color Surge,false
+101684,ACTSPBTL - Color Surge,Color Surge,false
+101684,BIKEBTLC - Color Surge,Color Surge,false
+101684,CLENFTBT - Color Surge,Color Surge,false
+101684,ENDUTRIT - Color Surge,Color Surge,false
+101684,Cell-a-Lounge Colors,Cell a Lounge,false
 101684,EVERYTOT - Color Surge 4 Color Process Run Charge,"",true
 101684,EVERYTOT - Color Surge PMS Color Match Per Color,"",true
 101684,EYESGTST - Color Surge Run Charge,"",true
@@ -7863,7 +7814,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,HLTHHND - Color Surge Run Charge,"",true
 101684,HYDRAPK - Color Surge Run Charge,"",true
 101684,IGGINFSR - Color Surge Run Charge,"",true
-101684,IGGINFSR - Color Surge,"",true
 101684,INFUSER - Per Color Run Charge,"",true
 101684,INSHPTOT - Color Surge Run Charge,"",true
 101684,IRWINEXE - Debossing Set-Up/Change of Copy,"",true
@@ -7878,7 +7828,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,LGTNLOOK - Color Surge Run Charge,"",true
 101684,LUGSPTOR - Color Surge Run Charge,"",true
 101684,Laser Engraving Reorder Charge,"",true
-101684,Laser Engraving,"",true
 101684,MAGNAJMB - Color Surge Run Charge,"",true
 101684,MANSALON - Color Surge Run Charge,"",true
 101684,MASTRTL - Laser Engraving Set-Up/Change of Copy,"",true
@@ -7903,10 +7852,8 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,NVLATBJR - Debossing Set-Up/Change of Copy,"",true
 101684,NYLFLYER - Assembly Charge,"",true
 101684,OASISBTL - Color Surge Run Charge,"",true
-101684,OASISBTL - Color Surge,"",true
 101684,ONGOCARY - Color Surge Run Charge,"",true
 101684,ORBINF - Color Surge Run Charge,"",true
-101684,ORBINF - Color Surge,"",true
 101684,OVLTROPN - Color Surge Run Charge,"",true
 101684,OVLTROPT - Color Surge Run Charge,"",true
 101684,OXFRDJOT - Pen Imprint Run Charge,"",true
@@ -7923,7 +7870,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,PNKYHY - 2nd Location Imprint Run Charge,"",true
 101684,POWBANK - Color Surge Run Charge,"",true
 101684,PRISTMB - Color Surge Run Charge,"",true
-101684,PRISTMB - Color Surge,"",true
 101684,Per Color Run Charge,"",true
 101684,Product Color,"",true
 101684,Product Colors,"",true
@@ -7939,6 +7885,9 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,RIVALBKS - 2nd Location Imprint Run Charge,"",true
 101684,RIVALBKS - Color Surge Run Charge,"",true
 101684,RIVET - 2nd Location Imprint Run Charge,"",true
+101684,OASISBTL - Color Surge,Color Surge,false
+101684,ORBINF - Color Surge,Color Surge,false
+101684,PRISTMB - Color Surge,Color Surge,false
 101684,RIVET - Color Surge Run Charge,"",true
 101684,RIVIBAG - Color Surge Run Charge,"",true
 101684,RTBADG - Color Surge Run Charge,"",true
@@ -7951,7 +7900,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,SAXONPN - Laser Engraving Set-Up/Change of Copy,"",true
 101684,SFTYSTRB - 2nd Location Imprint Run Charge,"",true
 101684,SHAKITUP - Color Surge Run Charge,"",true
-101684,SHAKITUP - Color Surge,"",true
 101684,SHOEKT - 2nd Location Imprint Run Charge,"",true
 101684,SHOWTOTE - Color Surge Run Charge,"",true
 101684,SILBRACD - 2nd Location Imprint Run Charge,"",true
@@ -7963,26 +7911,21 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,SILVCMBO - Pen Imprint Run Charge,"",true
 101684,SILVCMBO - Pen Imprint Set-Up Charge,"",true
 101684,SIPNSTYL - Sleeve Imprint Run Charge,"",true
-101684,SLENDSIP - Color Surge,"",true
 101684,SLIDACLP - Color Surge Run Charge,"",true
 101684,SLIDMAG - Color Surge Run Charge,"",true
 101684,SLKMPNCL - Laser Engraving Set-Up/Change of Copy,"",true
 101684,SLKPEN - Laser Engraving Set-Up/Change of Copy,"",true
 101684,SODATRIT - Color Surge Run Charge,"",true
-101684,SODATRIT - Color Surge,"",true
 101684,SODATRIT - Per Color Run Charge,"",true
 101684,SPECTRA - 2nd Location Imprint Run Charge,"",true
 101684,SPINPWBK - 2nd Location Imprint Run Charge,"",true
 101684,SPRACLMC - Color Surge Run Charge,"",true
 101684,SPRINBTL - Color Surge Run Charge,"",true
-101684,SPRINBTL - Color Surge,"",true
 101684,STADBLKT - Color Surge Run Charge,"",true
 101684,STAR - 2nd Location Imprint Run Charge,"",true
 101684,STDCUP20 - Color Surge Run Charge,"",true
-101684,STDCUP20 - Color Surge,"",true
 101684,STELNBK - 2nd Location Imprint Run Charge,"",true
 101684,STREABTL - Color Surge Run Charge,"",true
-101684,STREABTL - Color Surge,"",true
 101684,STRSBL - 2nd Location Imprint Run Charge,"",true
 101684,SUMMCMBO - Optional Pen Imprint Run Charge Per Piece,"",true
 101684,SUMMCMBO - Optional Pen Imprint Set-Up/Change of Copy,"",true
@@ -8002,10 +7945,8 @@ dc_acct_num,dc_name,px_name,do_not_save
 101684,TOGOTMB - Per Color Run Charge,"",true
 101684,TOOLARND - Color Surge Run Charge,"",true
 101684,TPTPTMB - Color Surge Run Charge,"",true
-101684,TPTPTMB - Color Surge,"",true
 101684,TREKRTUM - Per Color Run Charge,"",true
 101684,TRENTUM - Per Color Run Charge,"",true
-101684,TROBTMB - Color Surge,"",true
 101684,TROBTMB - Per Color Run Charge,"",true
 101684,TRSTAMBG - Color Surge Run Charge,"",true
 101684,TRSTRBG - Color Surge Run Charge,"",true
@@ -8043,6 +7984,12 @@ dc_acct_num,dc_name,px_name,do_not_save
 101697,HOLES,"",true
 101697,Holes,"",true
 101697,Imprint color Banner signs,"",true
+101684,STDCUP20 - Color Surge,Color Surge,false
+101684,SODATRIT - Color Surge,Color Surge,false
+101684,SPRINBTL - Color Surge,Color Surge,false
+101684,TPTPTMB - Color Surge,Color Surge,false
+101684,TROBTMB - Color Surge,Color Surge,false
+101684,SHAKITUP - Color Surge,Color Surge,false
 101697,Imprint color Imprint Color,"",true
 101697,Imprint color cs-cc Extra color cs,"",true
 101697,Imprint color,"",true
@@ -8136,30 +8083,26 @@ dc_acct_num,dc_name,px_name,do_not_save
 101760,Proof Options,"",true
 101760,Recycled Paper Option,"",true
 101760,Standard Paper Colors,"",true
-101768,Barrel Imprint Color(s),"",true
-101768,Barrel Imprint Color,"",true
-101768,Brand Gear Imprint Color(s),"",true
-101768,Clip Imprint Color,"",true
-101768,Imprint Color (40.00v),"",true
-101768,Imprint Color (55.00v),"",true
-101768,Imprint Color (62.50v),"",true
-101768,Imprint Color(s) (35.00./40.00/0.20),"",true
-101768,Imprint Color(s) (40.00/32.00/0.15),"",true
-101768,Imprint Color(s) (40.00/35.00/0.25),"",true
-101768,Imprint Color(s) (40.00/40.00/0.15),"",true
-101768,Imprint Color(s) (40.00/40.00/0.25),"",true
-101768,Imprint Color(s) (40.00/40.00/0.45),"",true
-101768,Imprint Color(s) (50.00/50.00/0.55),"",true
-101768,Imprint Color(s) (55.00./40.00/0.50),"",true
-101768,Imprint Color(s) (55.00/40.00/0.25),"",true
-101768,Imprint Color(s) (62.50/50.00/0.45),"",true
-101768,Imprinting / Laser Engraving $55.00(v),"",true
-101768,Imprinting: VibraColor label: $55.00 (v) setup.,"",true
-101768,Oxidation 0.30(v) / piece,"",true
 101768,Product Color(s) - AIO-7DAYV,"",true
 101768,Product Color(s) - AIO-ECOSV,"",true
 101768,Product Color(s) - AIO-HCR,"",true
 101768,Product Color(s) - AIO-ISURF,"",true
+101768,Barrel Imprint Color,Screen Print,false
+101768,Clip Imprint Color,Screen Print,false
+101768,Imprint Color (40.00v),Screen Print,false
+101768,Imprint Color (55.00v),Screen Print,false
+101768,Imprint Color (62.50v),Screen Print,false
+101768,Oxidation 0.30(v) / piece,Oxidation,false
+101768,Imprint Color(s) (40.00/35.00/0.25),Screen Print,false
+101768,Imprint Color(s) (40.00/40.00/0.15),Screen Print,false
+101768,Imprint Color(s) (40.00/40.00/0.25),Screen Print,false
+101768,Imprint Color(s) (40.00/40.00/0.45),Screen Print,false
+101768,Imprint Color(s) (50.00/50.00/0.55),Screen Print,false
+101768,Imprint Color(s) (55.00./40.00/0.50),Screen Print,false
+101768,Imprint Color(s) (55.00/40.00/0.25),Screen Print,false
+101768,Imprinting / Laser Engraving $55.00(v),Laser Engraving,false
+101768,Imprinting: VibraColor label: $55.00 (v) setup.,Vibracolor,false
+101768,Imprint Color(s) (35.00./40.00/0.20),Screen Print,false
 101768,Product Color(s) - AIO-LIPBA,"",true
 101768,Product Color(s) - AIO-MAGBV,"",true
 101768,Product Color(s) - AIO-MAGLV,"",true
@@ -8322,13 +8265,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 101768,Product Color(s) - Pocket Safety Cutters,"",true
 101768,Product Color(s) - Screwdrivers,"",true
 101768,Product Color(s) - Stick It Thermo,"",true
-101768,VIBRACOLOR DOME (55.00v),"",true
-101768,VIBRACOLOR DOME (62.50v),"",true
-101768,VibraColor Dome + Barrel Imprint,"",true
-101768,VibraColor Dome(s): 55.00/55.00/0.45,"",true
-101768,VibraColor Epoxy Dome ($55.00v+ $0.65v),"",true
-101768,VibraColor: $40.00 (v) setup.,"",true
-101768,VibraColor: $55.00 (v) setup.,"",true
 101768,Virtual Proof,"",true
 101820,Deboss Logo,"",true
 101820,Family Photo Closures,"",true
@@ -8379,6 +8315,9 @@ dc_acct_num,dc_name,px_name,do_not_save
 101828,Emery Added Color,"",true
 101828,Emery Additional Location Run Charge,"",true
 101828,Emery Full Color Run Charge,"",true
+101768,VIBRACOLOR DOME (55.00v),Vibracolor,false
+101768,VIBRACOLOR DOME (62.50v),Vibracolor,false
+101768,VibraColor: $55.00 (v) setup.,Vibracolor,false
 101828,Extra Caring Case for Art,"",true
 101828,Extra Large Imprint 33wx22h or 60wx13.5h,"",true
 101828,Extra set of art panels,"",true
@@ -9384,23 +9323,15 @@ dc_acct_num,dc_name,px_name,do_not_save
 111663,Standard Imprint Colors,"",true
 111751,Embroidery,"",true
 111751,Product Color,"",true
-112242,1 color,"",true
-112242,1st Screen Print Color,"",true
 112242,2nd Location Screen Print,"",true
-112242,4 Color Process,"",true
 112242,4-Color Insert,"",true
 112242,Additional Screen Print Color(s),"",true
 112242,Color Expressions,"",true
 112242,Deboss Setup,"",true
-112242,Deboss,"",true
 112242,Drop Shipping,"",true
 112242,Embroidery,"",true
 112242,Exports,"",true
-112242,Foil,"",true
-112242,Full Color Print,"",true
-112242,Laser Engraving,"",true
 112242,Laser Setup Charge,"",true
-112242,Laser engraving,"",true
 112242,Oxidation,"",true
 112242,Pad Printing Setup Charge,"",true
 112242,Pad Printing,"",true
@@ -9409,7 +9340,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 112242,Setup $125 (g),"",true
 112242,Setup Charge,"",true
 112242,Setup,"",true
-112242,Unimprinted Items,"",true
 112922,"Pro 1 Select Setup Charge - Items 11"" x 42"" or smaller","",true
 112922,"Pro 1 Select Setup Charge - Items 24"" x 42"" or larger","",true
 112922,"Setup Charge - Items 11"" x 42"" or smaller","",true
@@ -9470,6 +9400,12 @@ dc_acct_num,dc_name,px_name,do_not_save
 114993,Wooden Pallet,"",true
 115113,3D Bookmark/Rulers,"",true
 115113,65 lb. Felt Weave,"",true
+112242,4 Color Process,Four Color Process,false
+112242,Deboss,Deboss,false
+112242,Foil,Foil Stamping,false
+112242,Full Color Print,Full Color,false
+112242,Laser engraving,Laser Engraving,false
+112242,Unimprinted Items,Blank,false
 115113,80 lb. ClassicLinen,"",true
 115113,Additional imprint positions,"",true
 115113,Animated Flip Image,"",true
@@ -9482,8 +9418,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 115113,Decoration,"",true
 115113,Door Hanger Styles,"",true
 115113,Flip Image Magnet Frames,"",true
-115113,Foil Colors,"",true
-115113,Foil Stamp,"",true
 115113,Full Color Coverage,"",true
 115113,Full-Color Calendar Options,"",true
 115113,Greeting Cards,"",true
@@ -9501,7 +9435,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 115113,Product Color,"",true
 115113,Product Colors,"",true
 115113,Set up charges,"",true
-115113,Standard Ink Color Combos,"",true
 115113,Stock Animated Flip Image BookMark/Rulers,"",true
 115113,Stock Backgrounds - Digital Cases,"",true
 115113,Stock Backgrounds - Lenticular Cases & Skins,"",true
@@ -9597,6 +9530,7 @@ dc_acct_num,dc_name,px_name,do_not_save
 117874,BTL2463 Lid Colors,"",true
 117874,Challenger Colors,"",true
 117874,Colors,"",true
+115113,Foil Stamp,Foil Stamping,false
 117874,FREE Rush Service,"",true
 117874,Flyer Neon Colors,"",true
 117874,Imprint Color Changes,"",true
@@ -9608,8 +9542,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 117874,Stadium Cup Neon Colors,"",true
 117874,Translucent Lid Colors,"",true
 118217,"Deboss or Hotstamp, included.","",true
-118217,1 Color Pad Print,"",true
-118217,1 Color Screen,"",true
 118217,2 Piece Gift Box,"",true
 118217,2” x 2” Square Decal Applied To Deboss,"",true
 118217,2” x 2” Square Decal No Deboss,"",true
@@ -9623,11 +9555,9 @@ dc_acct_num,dc_name,px_name,do_not_save
 118217,Back Bay Pen with Stylus,"",true
 118217,Broadway Pen,"",true
 118217,Change of Copy,"",true
-118217,Color Impressions - 1 Color,"",true
 118217,Color Impressions - 2 Color,"",true
 118217,Color Impressions - 3 Color,"",true
 118217,Deboss (included),"",true
-118217,Deboss,"",true
 118217,G1057 Material,"",true
 118217,G3002 Material,"",true
 118217,G3008 Materials,"",true
@@ -9649,7 +9579,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 118217,Pen,"",true
 118217,Proofs,"",true
 118217,Rush Pen,"",true
-118217,Screen Printing,"",true
 118217,Set-up Charge,"",true
 118217,Sports Products,"",true
 118217,Stamp Deboss,"",true
@@ -9728,6 +9657,9 @@ dc_acct_num,dc_name,px_name,do_not_save
 119052,Slant Top Photo Logo Placement,"",true
 119052,Slant Top Photo Logo Types,"",true
 119052,Standard Imprint Colors,"",true
+118217,1 Color Screen,Screen Print,false
+118217,Deboss,Deboss,false
+118217,Screen Printing,Screen Print,false
 119052,Stock Gift Card Imprint,"",true
 119052,Stock Messages,"",true
 119052,Stock Panel Options,"",true
@@ -9796,7 +9728,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 119859,Zipper,"",true
 120402,3rd party shipping,"",true
 120402,4 Color Process - Add'l Location,"",true
-120402,4 Color Process,"",true
 120402,AP100 - Product Color,"",true
 120402,AP103 - Product Color,"",true
 120402,AP105 - Product Color,"",true
@@ -10146,7 +10077,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 120402,PT101 - Product Colors,"",true
 120402,PT102 - Product Colors,"",true
 120402,PT103 - Product Colors,"",true
-120402,Pad Print - Imprint Colors,"",true
 120402,Pad Print - Locations,"",true
 120402,Paper ProofCharges,"",true
 120402,Product Colors,"",true
@@ -10184,9 +10114,7 @@ dc_acct_num,dc_name,px_name,do_not_save
 120402,SG160 - Product Color,"",true
 120402,ST100 - Product Color,"",true
 120402,Screen Print - (Bags) Locations,"",true
-120402,Screen Print - Apparel - Imprint Colors,"",true
 120402,Screen Print - Apparel - Locations,"",true
-120402,Screen Print - Imprint Colors,"",true
 120402,Screen Print - Locations,"",true
 120402,T500 - Product Colors Colors,"",true
 120402,T501 - Product Color,"",true
@@ -10206,6 +10134,7 @@ dc_acct_num,dc_name,px_name,do_not_save
 120402,TY401 - Product Color,"",true
 120402,TY405 Color Option,"",true
 120402,TY605 - Product Color,"",true
+120402,Screen Print - Imprint Colors,Screen Print,false
 120402,TY620 - Product Color,"",true
 120402,VP100 - Product Color,"",true
 120402,WM105 - Product Color,"",true
@@ -10598,7 +10527,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 132819,"Packaging - Exec: EMI, Tinned & Drop Ad","",true
 132819,"Pocket, Desk Pkg","",true
 132819,"Pocket, Desk Pkg/chip/poly","",true
-132819,1-Screen Print Front,"",true
 132819,1.35 - FC britePix,"",true
 132819,20495 Product Color,"",true
 132819,30602 Product Color,"",true
@@ -10628,42 +10556,24 @@ dc_acct_num,dc_name,px_name,do_not_save
 132819,Custom Extra Sheets,"",true
 132819,Custom Inside Backmount,"",true
 132819,Custom Outside Backmount,"",true
-132819,Deboss Imprint,"",true
-132819,Deboss,"",true
-132819,Digital 4-Color Process,"",true
-132819,Digital full color Imprint - Epoxy,"",true
-132819,Digital full color Imprint,"",true
 132819,Embroidery,"",true
 132819,Envs/Poly,"",true
 132819,Envs/Tubes/Wrap/Poly/Chip,"",true
 132819,Exec Pkg,"",true
 132819,Extra Sheet,"",true
 132819,Flat Mailers,"",true
-132819,Flexograph,"",true
 132819,Foil Change,"",true
-132819,Foil Stamping,"",true
 132819,GVC Appt Packaging,"",true
-132819,Heat Transfer Color,"",true
-132819,Heat Transfer,"",true
-132819,Heat transfer - multicolor imprint,"",true
-132819,Imprint Color Other than Black color imprint,"",true
-132819,Imprint Color,"",true
 132819,Imprint EnvSU/Running,"",true
-132819,Imprint Option,"",true
 132819,Imprint color washup,"",true
 132819,Inserts,"",true
 132819,Insights Backmount Selection,"",true
-132819,Laser Engraved,"",true
-132819,Laser Engraving,"",true
-132819,Laser Etch (Personalization Fee),"",true
 132819,Memo Pkg,"",true
 132819,Offset,"",true
 132819,PMS Color Match,"",true
 132819,Packaging Options,"",true
 132819,Packaging-Env only,"",true
 132819,Packaging-Env/Gift only,"",true
-132819,Pad Print Color,"",true
-132819,Pad Print,"",true
 132819,Pen Mount,"",true
 132819,Personalization - 1 line,"",true
 132819,Personalization - 2 lines,"",true
@@ -10675,10 +10585,6 @@ dc_acct_num,dc_name,px_name,do_not_save
 132819,Product Color,"",true
 132819,Product Colors,"",true
 132819,Product colors,"",true
-132819,Screen Print / Pad Print Color,"",true
-132819,Screen Print Color,"",true
-132819,Screen Print Colors - Writing Instruments,"",true
-132819,Screenprint,"",true
 132819,Stick Up Pkg,"",true
 132819,Stick Up Shapes,"",true
 132819,Stick Up Vinyl Colors,"",true
@@ -10691,18 +10597,33 @@ dc_acct_num,dc_name,px_name,do_not_save
 132819,TR-Z fold Pkg,"",true
 132819,Thread Color,"",true
 132819,Triumph Extra Sheets,"",true
-132819,britePix,"",true
-132819,britePix-1 clr only,"",true
 132819,individual polybagging,"",true
 132819,lanyard Clasps,"",true
 132819,tee kit colors,"",true
+132819,Deboss,Deboss,false
+132819,Deboss Imprint,Deboss,false
+132819,Digital full color Imprint - Epoxy,Four Color Process,false
+132819,Foil Stamping,Foil Stamping,false
+132819,Flexograph,Flexograph,false
+132819,Heat Transfer Color,Heat Transfer,false
+132819,Heat Transfer,Heat Transfer,false
+132819,Heat transfer - multicolor imprint,Heat Transfer,false
+132819,Imprint Color,Screen Print,false
+132819,Imprint Option,Screen Print,false
+132819,britePix,britePix,false
+132819,Laser Engraving,Laser Engraving,false
+132819,Laser Etch (Personalization Fee),Laser Engraving,false
+132819,Pad Print,Pad Print,false
+132819,Pad Print Color,Pad Print,false
+132819,Screen Print Color,Screen Print,false
+132819,Screen Print Colors - Writing Instruments,Screen Print,false
+132819,Screenprint,Screen Print,false
+132819,Laser Engraved,Laser Engraving,false
 133324,08043I,"",true
 133324,08123IC,"",true
 133324,10714 JSPHD,"",true
 133324,2nd Location,"",true
 133324,31503,"",true
-133324,4 color process,"",true
-133324,4-Color Process Imprint,"",true
 133324,Additional Color,"",true
 133324,Additional Deboss Location,"",true
 133324,Additional Imprint Color,"",true
@@ -10710,16 +10631,12 @@ dc_acct_num,dc_name,px_name,do_not_save
 133324,Additional color,"",true
 133324,Ball Color,"",true
 133324,Gel Drop Color/Scent,"",true
-133324,Imprint Color,"",true
 133324,Ink Color Change,"",true
 133324,Memory Foam Color,"",true
 133324,Oversize Imprint,"",true
 133324,Oversized Imprint Running Charge,"",true
 133324,Oversized Screen Print Setup,"",true
-133324,Pad Color,"",true
 133324,Product Color,"",true
-133324,Screen Print/4CP,"",true
-133324,Skinware Color,"",true
 133438,"11"" Beach Ball Colors","",true
 133438,"Setup Charge for SS,HS,DP","",true
 133438,$ 15 (v) / imprint,"",true
@@ -10823,6 +10740,10 @@ dc_acct_num,dc_name,px_name,do_not_save
 133438,Car Wash Kit Bucket Colors,"",true
 133438,Carabiner Colors,"",true
 133438,Crest Lid Colors,"",true
+133324,4-Color Process Imprint,Four Color Process,false
+133324,Pad Color,Pad Print,false
+133324,Skinware Color,Skinware,false
+133324,Screen Print/4CP,Screen Print,false
 133438,Cup Colors,"",true
 133438,Cup Lid,"",true
 133438,Cylinder Lid Colors Lux,"",true
@@ -13277,3 +13198,83 @@ dc_acct_num,dc_name,px_name,do_not_save
 698266,MSB010,"",true
 698266,MSP002,"",true
 698266,MSP054,"",true
+100306,4-Color Process,4-Color Process,false
+100306,Full Color,Full Color,false
+100306,One Color Imprint,Screen Print,false
+100306,Multi-Color Imprint: Polypro/Non-Woven,Screen Print,false
+100383,4-Color Process Printing,Four Color Process,false
+100383,ColorPrint-One Color Only,Screen Print,false
+100166,Color Fill First Color,Color Fill,false
+100166,Imprint Color(s) - Side 1,Screen Print,false
+132819,1-Screen Print Front,Screen Print,false
+132819,Digital 4-Color Process,Four Color Process,false
+100007,Click to Choose Imprint Color(s) for envelope,Screen Print,false
+132819,Digital full color Imprint,Direct Digital Print,false
+132819,Imprint Color Other than Black color imprint,Screen Print,false
+132819,Screen Print / Pad Print Color,Screen Print,false
+132819,britePix-1 clr only,britePix,false
+101768,Barrel Imprint Color(s),Screen Print,false
+101768,Brand Gear Imprint Color(s),Screen Print,false
+101768,Imprint Color(s) (40.00/32.00/0.15),Screen Print,false
+101768,Imprint Color(s) (62.50/50.00/0.45),Screen Print,false
+101768,VibraColor Dome + Barrel Imprint,VibraColor (Dome + Barrel),false
+101768,VibraColor Dome(s): 55.00/55.00/0.45,Vibracolor,false
+101768,VibraColor Epoxy Dome ($55.00v+ $0.65v),Vibracolor,false
+101768,VibraColor: $40.00 (v) setup.,Vibracolor,false
+100104,Flexograph,Flexograph,false
+100463,FLEXOGRAPHY INK PLATE,Flexograph,false
+132819,Imprint Color Other than Black,,
+100156,Engraved,Engraved,false
+100156,First Imprint Color,Screen Print,false
+100652,Decoration Information,Screen Print,false
+100054,AB2 Cover Ink Color,Screen Print,false
+100054,BJ1G-PS Pen Imprint Color,Screen Print,false
+100054,BJ1E-PS Pen Imprint Color,Screen Print,false
+100054,BJ1S-PS Pen Imprint Color,Screen Print,false
+100054,BJ2G-PS Pen Imprint Color,Screen Print,false
+100054,CP3 Cover Colors,Screen Print,false
+100054,Cover Imprint- Standard Foil Colors Cover Imprint- Standard Foil Colors,Foil Stamping,false
+100054,DDP1B Ink Color,Screen Print,false
+100054,DDP2C Ink Color,Screen Print,false
+100054,DDP4B Ink Color,Screen Print,false
+100054,DJ1-PS Pen Imprint Color,Screen Print,false
+100054,DJ1R4-PS Pen Imprint Color,Screen Print,false
+100054,DJ2G-PS Pen Imprint Color,Screen Print,false
+100054,Deluxe and Flex Jrnl Foil Colors,Foil Stamping,false
+100054,IDJ-PS Pen Imprint Color,Screen Print,false
+100054,IMJ-PS Pen Imprint Color,Screen Print,false
+100089,4 color process,Four Color Process,false
+100089,Pad Print,Pad Print,false
+101684,12ORBTMB - Color Surge,Color Surge,false
+101684,16FREFAC - Color Surge,Color Surge,false
+101684,27FLPFRE - Color Surge,Color Surge,false
+101684,BIOCUP - Color Surge,Color Surge,false
+101684,IGGINFSR - Color Surge,Color Surge,false
+101684,SLENDSIP - Color Surge,Color Surge,false
+101684,STREABTL - Color Surge,Color Surge,false
+101684,22FREDOM - Color Surge,Color Surge,false
+100746,1- Color Screen Printing,Screen Print,false
+100746,1- Digital 4-Color Printing Digital Printing,Four Color Process,false
+100068,Box Color,Box Color,true
+118217,1 Color Pad Print,Pad Print,false
+118217,Color Impressions - 1 Color,Color Impressions,false
+115113,Foil Colors,Foil Stamping,false
+115113,Standard Ink Color Combos,Screen Print,false
+133324,4 color process,Four Color Process,false
+133324,Imprint Color,Screen Print,false
+100746,1- Digital 4-Color Printing,Four Color Process,false
+101684,Laser Engraving,Laser Engraving,false
+112242,1 color,Screen Print,false
+112242,1st Screen Print Color,Screen Print,false
+112242,Laser Engraving,Laser Engraving,false
+100996,Imprint Color,Screen Print,false
+100101,Awareness Ribbon Stress Reliever Imprint Colors,Imprint Color,false
+100101,Heart Shaped Stress Reliever Imprint Colors,Imprint Color,false
+100101,Imprint Colors - 2 Maximum - Banks,Imprint Color,false
+100101,Star Stress Reliever Imprint Colors,Imprint Color,false
+100101,Rubber Duckie Imprint Colors,Imprint Color,false
+100108,Imprint Colors,Imprint Color,false
+100108,Standard Imprint Colors,Imprint Color,false
+120402,4 Color Process,Four Color Process,false
+120402,Pad Print - Imprint Colors,Pad Print,false
+120402,Screen Print - Apparel - Imprint Colors,Screen Print,false

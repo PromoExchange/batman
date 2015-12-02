@@ -32,15 +32,6 @@ class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
 
   private
 
-  def pms_color_params
-    params.require(:pms_color).permit(
-      :name,
-      :display_name,
-      :pantone,
-      :hex
-    )
-  end
-
   def collection
     return @collection if @collection.present?
     params[:q] = {} if params[:q].blank?
@@ -52,5 +43,14 @@ class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
       .per(Spree::Config[:properties_per_page])
 
     @collection
+  end
+
+  def pms_color_params
+    params.require(:pms_color).permit(
+      :name,
+      :display_name,
+      :pantone,
+      :hex
+    )
   end
 end

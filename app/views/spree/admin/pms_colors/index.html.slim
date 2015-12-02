@@ -9,19 +9,24 @@
     = search_form_for [:admin, @search] do |f|
       - locals = {:f => f}
       .row
-        .col.col-md-3
+        .col.col-md-6
+          .form-group
+            = f.label :id_eq, "ID"
+            = f.text_field :id_eq, :class => "form-control js-quick-search-target"
+        .col.col-md-6
           .form-group
             = f.label :name_cont, "Name"
             = f.text_field :name_cont, :class => "form-control js-quick-search-target"
-        .col-md-3
+      .row
+        .col-md-4
           .form-group
             = f.label :display_name_cont, "Display Name"
             = f.text_field :display_name_cont, :class => "form-control"
-        .col-md-3
+        .col-md-4
           .form-group
             = f.label :pantone_cont, "Pantone"
             = f.text_field :pantone_cont, :class => "form-control"
-        .col-md-3
+        .col-md-4
           .form-group
             = f.label :hex_cont, "HEX"
             = f.text_field :hex_cont, :class => "form-control"
@@ -33,6 +38,7 @@
     table.table
       thead
         tr
+          th ID
           th Name
           th Display Name
           th Pantone
@@ -41,6 +47,7 @@
       tbody
         - @pms_colors.each do |pms_color|
           tr
+            td = pms_color.id
             td = pms_color.name
             td = pms_color.display_name
             td = pms_color.pantone

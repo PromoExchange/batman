@@ -71,13 +71,6 @@ class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
 
   private
 
-  def supplier_params
-    params.require(:supplier).permit([:name, :dc_acct_num] | [
-      ship_address_attributes: permitted_address_attributes,
-      bill_address_attributes: permitted_address_attributes
-    ])
-  end
-
   def collection
     return @collection if @collection.present?
     params[:q] = {} if params[:q].blank?
@@ -89,5 +82,12 @@ class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
       .per(Spree::Config[:properties_per_page])
 
     @collection
+  end
+
+  def supplier_params
+    params.require(:supplier).permit([:name, :dc_acct_num] | [
+      ship_address_attributes: permitted_address_attributes,
+      bill_address_attributes: permitted_address_attributes
+    ])
   end
 end

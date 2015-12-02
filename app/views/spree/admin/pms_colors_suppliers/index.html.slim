@@ -1,0 +1,57 @@
+- content_for :page_title do
+ = plural_resource_name(Spree::PmsColorsSupplier)
+
+ - content_for :page_actions do
+  = button_link_to Spree.t(:new_pms_colors_supplier), new_admin_pms_colors_supplier_path, { :class => "btn-success", :icon => 'add', 'data-update' => 'new_pms_supplier_color', :id => 'new_pms_color_supplier_link' }
+
+- content_for :table_filter do
+  div
+    = search_form_for [:admin, @search] do |f|
+      - locals = {:f => f}
+      .row
+        .col-md-3
+          .form-group
+            = f.label :supplier_id_eq, "Supplier ID"
+            = f.text_field :supplier_id_eq, :class => "form-control"
+        .col-md-3
+          .form-group
+            = f.label :pms_color_id_eq, "PMS Color ID"
+            = f.text_field :pms_color_id_eq, :class => "form-control"
+        .col-md-3
+          .form-group
+            = f.label :imprint_method_id_eq, "Imprint ID"
+            = f.text_field :imprint_method_id_eq, :class => "form-control"
+        .col.col-md-3
+          .form-group
+            = f.label :display_name_cont, "Display Name"
+            = f.text_field :display_name_cont, :class => "form-control js-quick-search-target"
+      .form-actions
+        = button Spree.t(:search), 'search'
+
+.well
+  - if @pms_colors_suppliers.any?
+    table.table
+      thead
+        tr
+          th Supplier ID
+          th Imprint method ID
+          th PMS Color ID
+          th Display Name
+          th Action
+      tbody
+        - @pms_colors_suppliers.each do |pms_color_supplier|
+          tr
+            td = pms_color_supplier.supplier_id
+            td = pms_color_supplier.imprint_method_id
+            td = pms_color_supplier.pms_color_id
+            td = pms_color_supplier.display_name
+            td.actions.actions-2.text-right
+              = link_to_edit(pms_color_supplier, :no_text => true)
+              = link_to_delete(pms_color_supplier, :no_text => true)
+  - else
+    .alert.alert-info.no-objects-found
+    = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::PmsColorsSupplier))
+    = ","
+    = link_to Spree.t(:add_one), new_object_url
+    = "!"
+= paginate @collection

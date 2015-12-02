@@ -1,0 +1,29 @@
+- content_for :page_title do
+ = plural_resource_name(Spree::Product)
+
+.well
+  h4 Stats
+  table.table
+    thead
+      tr
+        th Stat
+        th Value
+    tbody
+      tr
+        td Number of products
+        td = @products.count
+.well
+  h4 Reports
+  table.table
+    thead
+      tr
+        th Report
+        th Action
+    tbody
+      tr
+        td Data Gap report
+        td = button_to 'Download',
+          spree.admin_product_reports_path,
+          params: {format: 'csv'},
+          method: :get,
+          class: "btn btn-success btn-xs"

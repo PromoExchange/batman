@@ -119,6 +119,7 @@ Rails.application.routes.draw do
       resources :pms_colors
       resources :imprint_methods
       resources :option_mappings
+      resources :product_reports
       resources :pms_colors_suppliers
       resources :suppliers do
         get :addresses

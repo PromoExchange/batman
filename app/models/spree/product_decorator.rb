@@ -103,10 +103,10 @@ Spree::Product.class_eval do
     self.shipping_quantity ||= get_property_value('shipping_quantity')
     save!
 
-    got_shipping_weight = self.shipping_weight.present?
-    got_shipping_dimensions = self.shipping_dimensions.present?
-    got_shipping_quantity = self.shipping_quantity.present?
-    got_originating_zip = self.originating_zip.present?
+    got_shipping_weight = shipping_weight.present?
+    got_shipping_dimensions = shipping_dimensions.present?
+    got_shipping_quantity = shipping_quantity.present?
+    got_originating_zip = originating_zip.present?
 
     got_shipping_weight &&
       got_shipping_dimensions &&
@@ -147,7 +147,7 @@ Spree::Product.class_eval do
   end
 
   def add_category(category_guid)
-    taxon = Spree::Taxon.where(dc_category_guid: category_guid).first
+    taxon = Spree::Taxon.find_by(dc_category_guid: category_guid)
 
     return if taxon.nil?
 
@@ -155,5 +155,28 @@ Spree::Product.class_eval do
       taxon_id: taxon.id,
       product_id: id
     ).first_or_create
+  end
+
+  def self.to_csv
+    attributes = %w(sku name factory num_product_colors num_imprints num_prices)
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.find_each do |product|
+        num_product_colors = Spree::ColorProduct.where(product: product).count
+        num_imprint = Spree::ImprintMethodsProduct.where(product: product).count
+        num_prices = Spree::VolumePrice.where(variant: product.master).count
+
+        row = []
+        row << product.sku
+        row << product.name
+        row << product.supplier.name
+        row << num_product_colors
+        row << num_imprint
+        row << num_prices
+        csv << row
+      end
+    end
   end
 end

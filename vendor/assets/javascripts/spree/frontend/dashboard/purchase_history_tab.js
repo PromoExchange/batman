@@ -297,6 +297,8 @@ $(function() {
 
   $('#rating-submit').on('click', 'button', function(){
     var status = $(this).data(status);
+    var rating = $('.rating').val();
+    $('#select-rating').val(rating);
     var auction_id = $('#rating-auction-id').val();
     var key = $('#rating-seller').attr('data-key');
     var url = '/api/auctions/' + auction_id + '/confirmed_delivery';

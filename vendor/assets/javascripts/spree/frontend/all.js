@@ -17,6 +17,7 @@
 //= require jquery-color/jquery.color.js
 //= require accounting/accounting.min
 //= require jquery.remotipart
+//= require bootstrap-rating/bootstrap-rating.min
 
 $(function() {
   $('.title').on('keyup change', function(e) {

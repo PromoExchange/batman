@@ -139,13 +139,7 @@ $(function() {
               var rating_status = '';
             
               if(item.review) {
-                for (var i = 1; i < 6; i++) {
-                  if(i <= item.review.rating) {
-                    rating_status += '<span class="star-custom active-star"></span>';
-                  } else {
-                    rating_status += '<span class="star-custom inactive-star"></span>';
-                  }
-                }
+                rating_status = '<input type="hidden" class="rating rating-value" disabled="disabled" value='+ item.review.rating +'/>';
               }
 
               status_text = 'Completed <br>' + rating_status;
@@ -174,9 +168,11 @@ $(function() {
           trHTML += "<tr><td class='text-center' colspan='7'>No auctions found!</td></tr>";
         }
         $("#seller-won-auction-table > tbody").html(trHTML);
+        $('.rating').rating();
       }
     });
     window.history.pushState({}, null, '/dashboards?tab=won_auction');
+    
   });
 
   if ($($('#seller-won-auction-tab').parent()[0]).hasClass('active')) {

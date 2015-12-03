@@ -13,7 +13,7 @@ class Spree::Admin::ProductReportsController < Spree::Admin::BaseController
 
     headers['Content-Type'] = 'text/csv'
     headers['Content-disposition'] = "attachment; filename=\"#{filename}\""
-    headers['X-Accel-Buffering'] = 'no'
+    headers['Content-Transfer-Encoding'] = 'binary'
     headers['Cache-Control'] ||= 'no-cache'
     headers.delete('Content-Length')
 

@@ -158,23 +158,18 @@ Spree::Product.class_eval do
   end
 
   def self.to_csv
-    attributes = %w(sku name factory num_product_colors num_imprints num_prices)
+    attributes = %w(sku name factory num_product_colors num_imprints)
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
-      all.find_each do |product|
-        num_product_colors = Spree::ColorProduct.where(product: product).count
-        num_imprint = Spree::ImprintMethodsProduct.where(product: product).count
-        num_prices = Spree::VolumePrice.where(variant: product.master).count
-
+      where(state: 'invalid').find_each(batch_size: 10000) do |product|
         row = []
         row << product.sku
         row << product.name
         row << product.supplier.name
-        row << num_product_colors
-        row << num_imprint
-        row << num_prices
+        row << Spree::ColorProduct.where(product: product).count
+        row << Spree::ImprintMethodsProduct.where(product: product).count
         csv << row
       end
     end

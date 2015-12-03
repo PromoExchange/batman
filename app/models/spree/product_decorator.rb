@@ -3,6 +3,7 @@ Spree::Product.class_eval do
   has_and_belongs_to_many :imprint_methods
   has_and_belongs_to_many :option_values
   has_many :upcharges, as: :related
+  has_many :color_product
 
   delegate :upcharges, to: :option_values
 
@@ -157,26 +158,27 @@ Spree::Product.class_eval do
     ).first_or_create
   end
 
-  def self.to_csv
-    attributes = %w(sku name factory num_product_colors num_imprints num_prices)
+  def self.csv_header
+    CSV::Row.new([:sku, :name, :factory, :num_product_colors, :num_imprints],
+      %w(sku name factory num_product_colors num_imprints), true)
+  end
 
-    CSV.generate(headers: true) do |csv|
-      csv << attributes
+  def to_csv_row
+    CSV::Row.new([:sku, :name, :factory, :num_product_colors, :num_imprints],
+      [sku, name, supplier.name, color_product.count, imprint_methods.count]
+    )
+    # CSV::Row.new(
+    #   sku: sku,
+    #   name: name,
+    #   factory: supplier.name,
+    #   num_product_colors: color_product.count,
+    #   num_imprints: imprint_methods.count
+    # )
+  end
 
-      all.each do |product|
-        num_product_colors = Spree::ColorProduct.where(product: product).count
-        num_imprint = Spree::ImprintMethodsProduct.where(product: product).count
-        num_prices = Spree::VolumePrice.where(variant: product.master).count
-
-        row = []
-        row << product.sku
-        row << product.name
-        row << product.supplier.name
-        row << num_product_colors
-        row << num_imprint
-        row << num_prices
-        csv << row
-      end
+  def self.find_in_batches
+    all.find_each do |product|
+      yield product
     end
   end
 end

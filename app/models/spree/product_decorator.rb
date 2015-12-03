@@ -163,7 +163,7 @@ Spree::Product.class_eval do
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
-      all.find_each do |product|
+      all.each do |product|
         num_product_colors = Spree::ColorProduct.where(product: product).count
         num_imprint = Spree::ImprintMethodsProduct.where(product: product).count
         num_prices = Spree::VolumePrice.where(variant: product.master).count

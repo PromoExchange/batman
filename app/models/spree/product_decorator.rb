@@ -167,17 +167,10 @@ Spree::Product.class_eval do
     CSV::Row.new([:sku, :name, :factory, :num_product_colors, :num_imprints],
       [sku, name, supplier.name, color_product.count, imprint_methods.count]
     )
-    # CSV::Row.new(
-    #   sku: sku,
-    #   name: name,
-    #   factory: supplier.name,
-    #   num_product_colors: color_product.count,
-    #   num_imprints: imprint_methods.count
-    # )
   end
 
   def self.find_in_batches
-    all.find_each do |product|
+    all.find_each(batch_size: 5000) do |product|
       yield product
     end
   end

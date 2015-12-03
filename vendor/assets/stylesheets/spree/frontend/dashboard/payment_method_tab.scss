@@ -4,7 +4,8 @@
   }
 
   #add-account-field, #add-card-field, 
-  #confirm-account-field, #confirm_deposit {
+  #confirm-account-field, #confirm_deposit, 
+  #ach-cc-field {
     display: none;
   }
   .confirm_tr td, .remove-border td {
@@ -51,7 +52,7 @@
 
   input {
     text-align: center;
-    height:34px;
+    height: 34px;
   }
 
   .submit-btn {
@@ -63,18 +64,24 @@
     margin:0px 64px 0px 46px;
   }
 
-  #add-card-field .row {
+  #add-card-field .row, #ach-cc-field .row {
     display:inline-block;
     width:100%;
     text-align:center;
   }
 
-  #add-card-field .row .input-group {
+  #add-card-field .row .input-group, #ach-cc-field .row .input-group{
     display:inline-block;
   }
 
   .panel-body .panel-default {
     border-color:#000;
+  }
+
+  #cc_checked {
+    height: auto;
+    margin-right: 6px;
+    margin-top: 10px;
   }
       
 }

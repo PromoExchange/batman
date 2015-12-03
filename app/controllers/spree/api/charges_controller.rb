@@ -55,7 +55,8 @@ class Spree::Api::ChargesController < Spree::Api::BaseController
       brand: brand,
       last_4_digits: stripe_customer.sources.data.first.last4,
       payment_type: params[:payment_type],
-      status: status
+      status: status,
+      active_cc: params[:active_cc] ||= false
     )
 
     if params[:payment_type] == 'wc'

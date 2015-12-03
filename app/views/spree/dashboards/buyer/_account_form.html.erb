@@ -1,3 +1,50 @@
+<div id="ach-cc-field">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Add Card's Detail</h4>
+    </div>
+    <form action="/customer" method="POST" id="ach-cc-form" class="form">
+      <div class="panel-body">
+        <p>
+          In order to pay using ACH we require a CC to be on file. This card will not be charged unless there are issues with your ACH account. After entering your credit card information we will request your ACH account information.
+        </p>
+        <span class="payment-errors"></span>
+        <div class="row">
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="input-group">
+              <input type="text" size="20" placeholder="Card Number" data-stripe="number"/>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="input-group">
+              <input type="text" size="4" placeholder="CVC" data-stripe="cvc"/>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="input-group">
+              <input type="text" size="2" placeholder="MM" data-stripe="exp-month"/>
+              <span> / </span>
+              <input type="text" size="4" placeholder="YY" data-stripe="exp-year"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="input-group">
+            <input type="checkbox" name="active_cc" id="cc_checked" checked/> 
+            <lable>I confirm PromoExchange can charge this credit card if there are ever any issues with our ACH account.</lable>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="submit-btn">
+          <button class=' btn btn-success' id='ach-cc-submit' type="submit">Submit</button>
+          <span class=' btn btn-danger cancel-account'>Cancel</span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div id="add-account-field">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -28,7 +75,6 @@
       <div class="panel-footer">
         <div class="submit-btn">
           <button class=' btn btn-success' id='account-submit' type="submit">Submit</button>
-          <span class=' btn btn-danger cancel-account'>Cancel</span>
         </div>
       </div>
     </form>

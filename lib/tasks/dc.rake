@@ -25,21 +25,71 @@ namespace :dc do
       Spree::Prebid.destroy_all
     end
 
-    desc 'Get invalid CSV'
-    task invalid_report: :environment do
-      puts 'factory,name,sku,num_imprints,num_prices,num_colors'
-      Spree::Product.where(state: 'invalid').each do |product|
-        line = ''
-        line << wrap_string(product.supplier.name) << ','
-        line << wrap_string(product.name) << ','
-        line << wrap_string(product.sku) << ','
+    desc 'Fix SanMar Apparel'
+    task sanmar: :environment do
+      supplier = Spree::Supplier.where(name: 'SanMar').first_or_create
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      embroidery = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
 
-        line << Spree::ImprintMethodsProduct.where(product: product).count.to_s << ','
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          embroidery,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
 
-        line << Spree::VolumePrice.where(variant: product.master).count.to_s << ','
+      products = Spree::Product.where(supplier: supplier)
 
-        line << Spree::ColorProduct.where(product: product).count.to_s << ','
-        puts line
+      products.each do |product|
+        product.loading
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: screen_print,
+          product: product
+        ).first_or_create
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: embroidery,
+          product: product
+        ).first_or_create
+
+        product.check_validity!
+        product.loaded if product.state == 'loading'
       end
     end
 

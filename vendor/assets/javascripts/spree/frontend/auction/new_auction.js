@@ -139,4 +139,12 @@ $(function() {
   });
 
   $('.custom-swatch-clickable').tooltip();
+
+  $('#auction-size .product-size').change(function() {
+    var sum = 0;
+    $('#auction-size .product-size').each(function(){     
+     sum+= parseInt('0'+ $(this).val());
+    })
+    $('.total-qty span:last').text(sum);
+  });
 });

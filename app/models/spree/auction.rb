@@ -24,6 +24,8 @@ class Spree::Auction < Spree::Base
 
   belongs_to :customer
 
+  has_one :auction_size
+
   accepts_nested_attributes_for :auctions_pms_colors
 
   has_attached_file :proof_file,
@@ -218,6 +220,14 @@ class Spree::Auction < Spree::Base
       key: ENV['UPS_API_KEY']
     )
     ups.find_tracking_info(tracking_number, test: true)
+  end
+
+  def is_wearable?
+    true #product.wearable
+  end
+
+  def auction_sizes
+    ["small", "mediam", "large", "xl", "2xl", "3xl", "4xl", "5xl"]
   end
 
   private

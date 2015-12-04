@@ -16,7 +16,7 @@
         <tr><td>SKU:</td><td><%= @bid.auction.product.sku %></td></tr>
         <tr><td>Buyer:</td><td><%= @bid.auction.buyer.billing_address.full_name %></td></tr>
         <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @bid.auction.started %>'><%= @bid.auction.started %></time></td></tr>
-        <tr><td>Quantity:</td><td><%= @bid.auction.quantity %></td></tr>
+        <tr><td>Quantity:</td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @bid.auction} %></td></tr>
         <tr><td>Imprint Method:</td><td><%= @bid.auction.imprint_method.name %></td></tr>
         <tr><td>Main Color:</td><td><%= @bid.auction.main_color.color %></td></tr>
         <tr><td>Total Payment amount:</td><td>$<%= @bid.bid %></td></tr>

@@ -74,11 +74,14 @@
         <%= f.label(:custom_pms_colors, Spree.t(:custom_pms_colors)) %>
         <%= f.text_field(:custom_pms_colors, class: 'form-control')%>
       </div>
-
-      <div class="form-group">
-        <%= f.label(:quantity, Spree.t(:quantity)) %>
-        <%= f.number_field(:quantity, class: 'form-control', placeholder: "Minimum Quantity: #{@auction.product.minimum_quantity}")%>
-      </div>
+      <% if @auction.is_wearable? %>
+        <%= render partial: 'spree/auctions/auction_size', locals: {f: f} %>
+      <% else %>
+        <div class="form-group">
+          <%= f.label(:quantity, Spree.t(:quantity)) %>
+          <%= f.number_field(:quantity, class: 'form-control', placeholder: "Minimum Quantity: #{@auction.product.minimum_quantity}")%>
+        </div>
+      <% end %>
 
       <div class="form-group">
         <%= f.label(:shipping_address_id, 'Shipping Address') %>

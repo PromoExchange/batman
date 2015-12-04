@@ -1,7 +1,10 @@
 class Spree::Admin::ProductReportsController < Spree::Admin::BaseController
   def index
     respond_to do |format|
-      format.html { @products = Spree::Product.all }
+      format.html do
+        @products = Spree::Product.all
+        @factories = Spree::Supplier.all
+      end
       format.csv do
         render_csv
       end
@@ -25,7 +28,7 @@ class Spree::Admin::ProductReportsController < Spree::Admin::BaseController
   def csv_lines
     Enumerator.new do |y|
       y << Spree::Product.csv_header.to_s
-      Spree::Product.find_in_batches { |product| y << product.to_csv_row.to_s }
+      Spree::Product.find_in_batches(params[:dc_acct_num]) { |product| y << product.to_csv_row.to_s }
     end
   end
 end

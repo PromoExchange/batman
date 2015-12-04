@@ -168,8 +168,9 @@ Spree::Product.class_eval do
       [sku, name, supplier.name, color_product.count, imprint_methods.count])
   end
 
-  def self.find_in_batches
-    all.find_each do |product|
+  def self.find_in_batches(dc_acct_num)
+    supplier = Spree::Supplier.find_by(dc_acct_num: dc_acct_num)
+    where(supplier: supplier).find_each do |product|
       yield product
     end
   end

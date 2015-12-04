@@ -12,18 +12,31 @@
       tr
         td Number of products
         td = @products.count
+      tr
+        td Number of Factories
+        td = @factories.count
 .well
-  h4 Reports
-  table.table
-    thead
-      tr
-        th Report
-        th Action
-    tbody
-      tr
-        td Data Gap report
-        td = button_to 'Download',
-          spree.admin_product_reports_path,
-          params: {format: 'csv'},
-          method: :get,
-          class: "btn btn-success btn-xs"
+  - if @factories.any?
+    table.table
+      thead
+        tr
+          th Factory
+          th Invalid
+          th Active
+          th Loading
+          th Action
+      tbody
+        - @factories.each do |factory|
+          tr
+            td = factory.name
+            td = Spree::Product.where(supplier: factory, state: 'invalid').count
+            td = Spree::Product.where(supplier: factory, state: 'active').count
+            td = Spree::Product.where(supplier: factory, state: 'loading').count
+            td = button_to 'Download',
+              spree.admin_product_reports_path,
+              params: {format: 'csv', dc_acct_num: factory.dc_acct_num},
+              method: :get,
+              class: "btn btn-success btn-xs"
+  - else
+    .alert.alert-info.no-objects-found
+    = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Supplier))

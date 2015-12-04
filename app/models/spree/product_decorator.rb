@@ -28,10 +28,20 @@ Spree::Product.class_eval do
     end
   end
 
+  def wearable?
+    # Assume wearable as having Apparal as parent
+    apparel_taxon = Spree::Taxon.where(dc_category_guid: '7F4C59A7-6226-11D4-8976-00105A7027AA')
+    children = Spree::Taxon.where(parent: apparel_taxon).pluck(:id)
+    Spree::Classification.where(product: self).find_each do |classification|
+      return true if children.include?(classification.taxon_id)
+    end
+    false
+  end
+
   def minimum_quantity
-    # hack for SanMar
-    sanmar = Spree::Supplier.where(dc_acct_num: 100160)
-    return 12 if supplier = sanmar
+    # HACK: for SanMar
+    sanmar = Spree::Supplier.where(dc_acct_num: '100160').first
+    return 12 if supplier == sanmar
     lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).first
     return 50 if lowest_price_range.nil?
     lower_value = lowest_price_range.split('..')[0]

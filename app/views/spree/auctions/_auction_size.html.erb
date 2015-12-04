@@ -9,7 +9,7 @@
           <% size_value = @size_quantity.present? ? @size_quantity[key] : 0 %>
           <li class="col-md-2">
             <%= text_field_tag key, size_value, name:"size[#{key}]", class: 'product-size form-control' %>
-            <span><%= key.capitalize %></span>
+            <span><%= key %></span>
           </li>
         <% end %>
       </ul>

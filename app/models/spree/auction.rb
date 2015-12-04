@@ -223,11 +223,11 @@ class Spree::Auction < Spree::Base
   end
 
   def is_wearable?
-    true #product.wearable
+    product.wearable?
   end
 
   def auction_sizes
-    ["small", "mediam", "large", "xl", "2xl", "3xl", "4xl", "5xl"]
+    %w(S M L XL 2XL)
   end
 
   private

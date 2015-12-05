@@ -46,6 +46,7 @@
     <%= form.fields_for :blog_entry_image do |blog_entry_image_field| %>
       <%= form.field_container :blog_entry_image_attachment do %>
         <div class="row upload-img">
+
           <% unless @blog_entry.blog_entry_image.new_record? %>
             <div class="alpha ten columns col-md-4 col-sm-4 col-xs-12 pull-left">
               <div class="blog_entry_image_thumbnail">

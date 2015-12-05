@@ -173,6 +173,20 @@ ActiveRecord::Schema.define(version: 20151204084057) do
     t.boolean  "manage_workflow",               default: false
   end
 
+  create_table "spree_blog_entries", force: :cascade do |t|
+    t.string   "title"
+    t.text     "body"
+    t.string   "permalink"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "visible",      default: false
+    t.datetime "published_at"
+    t.text     "summary"
+    t.integer  "author_id"
+  end
+
+  add_index "spree_blog_entries", ["author_id"], name: "index_spree_blog_entries_on_author_id", using: :btree
+
   create_table "spree_calculators", force: :cascade do |t|
     t.string   "type"
     t.integer  "calculable_id"
@@ -1361,6 +1375,10 @@ ActiveRecord::Schema.define(version: 20151204084057) do
     t.boolean  "banned",                                                     default: false
     t.decimal  "avg_rating",                         precision: 7, scale: 5, default: 0.0,   null: false
     t.integer  "reviews_count",                                              default: 0,     null: false
+    t.string   "nickname"
+    t.string   "website_url"
+    t.string   "google_plus_url"
+    t.text     "bio_info"
   end
 
   add_index "spree_users", ["deleted_at"], name: "index_spree_users_on_deleted_at", using: :btree
@@ -1427,5 +1445,23 @@ ActiveRecord::Schema.define(version: 20151204084057) do
 
   add_index "spree_zones", ["default_tax"], name: "index_spree_zones_on_default_tax", using: :btree
   add_index "spree_zones", ["kind"], name: "index_spree_zones_on_kind", using: :btree
+
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.integer  "tagger_id"
+    t.string   "tagger_type"
+    t.string   "context",       limit: 128
+    t.datetime "created_at"
+  end
+
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
 end

@@ -96,6 +96,7 @@ en:
     login_register: 'Login / Register'
     px_fee: 'PX Fee'
     view_in_store: View in store
+    view_all_update: View All Updates
   devise:
     user_confirmations:
       spree_user:

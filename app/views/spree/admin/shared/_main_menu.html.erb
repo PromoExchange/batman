@@ -57,3 +57,9 @@
     <%= main_menu_tree Spree.t(:configurations), icon: "wrench", sub_menu: "configuration", url: "#sidebar-configuration" %>
   </ul>
 <% end %>
+
+<% if can? :admin, current_store %>
+  <ul class="nav nav-sidebar">
+    <%= tab :blog, url: spree.admin_blog_entries_path, icon: 'file' %>
+  </ul>
+<% end %>

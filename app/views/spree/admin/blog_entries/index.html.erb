@@ -30,7 +30,7 @@
           </td>
           <td class="actions">
             <% url = blog_entry_permalink(blog_entry) %>
-            <%= link_to "Show", url, :no_text => true, target: '_blank' %>
+            <%= link_to_with_icon 'show','', url, :no_text => true, target: '_blank',  class: "btn btn-success btn-sm", data:{original_title: Spree.t(:view_in_store)}%>
             <%= link_to_edit blog_entry, :no_text => true %>
             <%= link_to_delete blog_entry, :no_text => true %>
           </td>
@@ -38,7 +38,6 @@
       <% end %>
     </tbody>
   </table>
-
   <%= paginate @blog_entries %>
 <% else %>
   <div class="alpha twelve columns no-objects-found">

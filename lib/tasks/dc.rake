@@ -317,8 +317,99 @@ namespace :dc do
         end
       end
 
+      desc 'Import PMS Colors'
+      task import: :environment do
+        begin
+          import_file = File.join(Rails.root, 'db/maps/pmscolor_import.csv')
+          fail "PMS Color import file is missing: #{import_file}" unless File.exist?(import_file)
+          Spree::PmsColor.destroy_all
+          CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
+            hashed = row.to_hash
+            Spree::PmsColor.create(hashed)
+          end
+        rescue => e
+          puts "ERROR: #{e}"
+        end
+      end
+
       desc 'Export PMS by Factory/Imprint colors'
       task export_factory: :environment do
+        CSV.open(File.join(Rails.root, "db/maps/pmscolor_by_factory_export-#{Time.zone.today}.csv"), 'wb') do |csv|
+          csv << %w(factory imprint_method name display_name pantone hex)
+          data = ''
+          Spree::Supplier.all.each do |factory|
+            Spree::PmsColorsSupplier.where(supplier: factory).each do |pms_color_supplier|
+              imprint_method = Spree::ImprintMethod.find(pms_color_supplier.imprint_method_id)
+              pms_color = Spree::PmsColor.find(pms_color_supplier.pms_color_id)
+              row = []
+              row << factory.name
+              row << imprint_method.name
+              row << pms_color.name
+              row << pms_color.display_name
+              row << pms_color.pantone
+              row << pms_color.hex
+              csv << row
+            end
+          end
+        end
+      end
+
+      desc 'Import PMS by Factory/Imprint colors'
+      task import_factory: :environment do
+        begin
+          import_file = File.join(Rails.root, 'db/maps/pmscolor_by_factory_import.csv')
+          fail "PMS Color by factory import file is missing: #{import_file}" unless File.exist?(import_file)
+          CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
+            hashed = row.to_hash
+            supplier = Spree::Supplier.where(name: hashed[:factory]).first_or_create
+
+            next if hashed[:display_name].blank?
+
+            if supplier.nil?
+              puts "Failed to local supplier #{hashed[:factory]}"
+              next
+            end
+
+            imprint = Spree::ImprintMethod.where(name: hashed[:imprint_method].strip).first_or_create
+
+            if imprint.nil?
+              puts "Failed to find imprint #{hashed[:imprint_method]}"
+              next
+            end
+
+            pms_color = Spree::PmsColor.where(name: hashed[:name]).first_or_create
+            if pms_color.nil?
+              puts "Failed to find pms color #{hashed[:name]}"
+              next
+            end
+
+            pms_colors_supplier = Spree::PmsColorsSupplier.where(
+              pms_color: pms_color,
+              supplier: supplier,
+              imprint_method: imprint
+            ).first
+
+            if pms_colors_supplier.nil?
+              pms_colors_supplier = Spree::PmsColorsSupplier.where(
+                pms_color: pms_color,
+                supplier: supplier,
+                imprint_method: imprint,
+                display_name: hashed[:display_name]
+              ).first_or_create
+            end
+
+            pms_colors_supplier.update_attributes!(display_name: hashed[:display_name])
+
+            pms_color.update_attributes!(
+              pantone: hashed[:pantone],
+              hex: hashed[:hex],
+              display_name: hashed[:display_name]
+            )
+          end
+        rescue => e
+          puts "ERROR: #{e}"
+        end
+
         CSV.open(File.join(Rails.root, "db/maps/pmscolor_by_factory_export-#{Time.zone.today}.csv"), 'wb') do |csv|
           csv << %w(supplier_name imprint_method name display_name pantone hex)
           data = ''
@@ -338,22 +429,8 @@ namespace :dc do
           end
         end
       end
-
-      desc 'Import PMS Colors'
-      task import: :environment do
-        begin
-          import_file = File.join(Rails.root, 'db/maps/pmscolor_import.csv')
-          fail "PMS Color import file is missing: #{import_file}" unless File.exist?(import_file)
-          Spree::PmsColor.destroy_all
-          CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
-            hashed = row.to_hash
-            Spree::PmsColor.create(hashed)
-          end
-        rescue => e
-          puts "ERROR: #{e}"
-        end
-      end
     end
+
     namespace :option do
       desc 'Export option mappings'
       task export: :environment do

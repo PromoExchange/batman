@@ -108,8 +108,8 @@ ActiveRecord::Schema.define(version: 20151204084057) do
   create_table "spree_auction_sizes", force: :cascade do |t|
     t.integer  "auction_id"
     t.string   "product_size"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",   precision: 6, null: false
+    t.datetime "updated_at",   precision: 6, null: false
   end
 
   create_table "spree_auctions", force: :cascade do |t|
@@ -177,10 +177,10 @@ ActiveRecord::Schema.define(version: 20151204084057) do
     t.string   "title"
     t.text     "body"
     t.string   "permalink"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "visible",      default: false
-    t.datetime "published_at"
+    t.datetime "created_at",   precision: 6
+    t.datetime "updated_at",   precision: 6
+    t.boolean  "visible",                    default: false
+    t.datetime "published_at", precision: 6
     t.text     "summary"
     t.integer  "author_id"
   end
@@ -248,10 +248,11 @@ ActiveRecord::Schema.define(version: 20151204084057) do
     t.string   "token"
     t.string   "brand"
     t.string   "last_4_digits"
-    t.datetime "created_at",    precision: 6, null: false
-    t.datetime "updated_at",    precision: 6, null: false
+    t.datetime "created_at",    precision: 6,                 null: false
+    t.datetime "updated_at",    precision: 6,                 null: false
     t.string   "payment_type"
     t.string   "status"
+    t.boolean  "active_cc",                   default: false
   end
 
   create_table "spree_favorites", force: :cascade do |t|
@@ -1453,7 +1454,7 @@ ActiveRecord::Schema.define(version: 20151204084057) do
     t.integer  "tagger_id"
     t.string   "tagger_type"
     t.string   "context",       limit: 128
-    t.datetime "created_at"
+    t.datetime "created_at",                precision: 6
   end
 
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree

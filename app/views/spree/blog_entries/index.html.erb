@@ -14,12 +14,11 @@
             </div>
           </div>
         </div>
-      <% end %>  
+      <% end %>
     <% else %>
       <p id="no_entries"><%= Spree.t(:no_blog_entries) %></p>
-    <% end %> 
+    <% end %>
   </div>
-  
+
   <!-- end of blog section -->
 <%= paginate @blog_entries %>
-

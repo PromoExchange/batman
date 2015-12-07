@@ -25,13 +25,8 @@
         <%= form.text_field :published_at, :value => published_at, :class => 'datepicker form-control' %>
       <% end %>
     </div>
-
-    
-
   </div>
-
   <div class="omega six columns col-md-6 col-sm-6 col-xs-12">
-    
     <div class="columns five omega">
       <%= form.field_container :visible do %>
         <%= form.label :visible, Spree.t(:visible) %><br />
@@ -39,9 +34,9 @@
         <%= form.error_message_on :visible %>
       <% end %>
     </div>
-    
+
     <%= form.label Spree.t(:blog_entry_featured_image) %>
-   
+
     <% @blog_entry.build_blog_entry_image unless @blog_entry.blog_entry_image %>
     <%= form.fields_for :blog_entry_image do |blog_entry_image_field| %>
       <%= form.field_container :blog_entry_image_attachment do %>
@@ -53,11 +48,11 @@
                 <%= @blog_entry.blog_entry_image.attachment_file_name %><br/>
               </div>
             </div>
-          <% end %>  
+          <% end %>
           <div class="alpha ten columns col-md-8 col-sm-8 col-xs-12 pull-left" >
             <%= blog_entry_image_field.file_field :attachment %>
-          </div>  
-        </div>  
+          </div>
+        </div>
       <% end %>
 
       <%= form.field_container :blog_entry_image_alt do %>
@@ -65,7 +60,7 @@
         <%= blog_entry_image_field.text_field :alt, :class => 'form-control' %>
       <% end %>
     <% end %>
- 
+
   </div>
 </div>
 <div class="row">
@@ -75,7 +70,7 @@
       <%= form.text_area :body, {:cols => 60, :rows => 4, :class => 'fullwidth form-control', :id => 'blog_entry_body'} %>
       <%= form.error_message_on :body %>
     <% end %>
-  </div>  
+  </div>
   <div class="alpha ten columns col-md-6 col-sm-6 col-xs-12">
     <%= form.field_container :summary do %>
       <%= form.label :summary %><br />
@@ -83,4 +78,4 @@
       <%= form.error_message_on :summary %>
     <% end %>
   </div>
-</div>    
+</div>

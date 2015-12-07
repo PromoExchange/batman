@@ -26,6 +26,8 @@
               <td>
                 <% unless b.rejected? %>
                   <%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
+                <% else %>
+                 Failed to Accept Prior Selection
                 <% end %>
               </td>
             <% end %>

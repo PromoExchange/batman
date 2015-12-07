@@ -146,7 +146,7 @@ $(function() {
               action = simple_template({
                 value: ''
               });
-              if(item.payment_claimed === false) {
+              if(item.payment_claimed === false && item.winning_bid.manage_workflow === false) {
                 status_text = 'Payment ready <br>' + rating_status;
                 action = simple_template({
                   value: action_template({

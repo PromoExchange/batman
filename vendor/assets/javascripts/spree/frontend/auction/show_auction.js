@@ -58,7 +58,7 @@ $(function() {
       },
       success: function(data) {
         if((data.message == 'succeeded') || (data.message == 'pending')) {
-          alert('Bid accepted successfully');
+          alert('Thank you for using the PromoExchange');
           window.location.reload();
         } else {
           $("body").css("cursor", "default");

@@ -134,7 +134,7 @@ $(function() {
     e.preventDefault();
     var auction_id = $('#auction-id').val();
     var seller_id = $('#seller-id').val();
-    var bid = $('#per-unit-price-shown').val();
+    var bid = $('#total-price-shown').val();
 
     var bid_message = {
       seller_id: parseInt(seller_id, 10),

@@ -75,8 +75,8 @@ class Spree::Api::BidsController < Spree::Api::BaseController
     json = JSON.parse(request.body.read)
     @auction = Spree::Auction.find(json['auction_id'])
     quantity = @auction.quantity
-    price = json['per_unit_bid'].to_s
-    total = quantity * price.to_f
+    price = json['per_unit_bid']
+    total = price
 
     # TODO: Not sure about this, this is a float to float comparison
     if @auction.bids.where(seller_id: json['seller_id']).map(&:order).map(&:total).map(&:to_f).include?(total)
@@ -92,7 +92,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
         li = Spree::LineItem.create(
           currency: 'USD',
           order_id: @bid.order.id,
-          quantity: quantity,
+          quantity: 1,
           variant: @bid.auction.product.master
         )
 

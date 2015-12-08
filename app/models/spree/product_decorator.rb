@@ -129,7 +129,9 @@ Spree::Product.class_eval do
   end
 
   def check_validity!
-    invalid if Spree::ImprintMethodsProduct.where(product: self).empty?
+    no_imprint_methods = Spree::ImprintMethodsProduct.where(product: self).empty?
+    no_main_color = Spree::ColorProduct.where(product: self).empty?
+    invalid if no_imprint_methods || no_main_color
   rescue
     Rails.logger.warn('Failed to test for validity, assume invalid')
     invalid

@@ -41,9 +41,7 @@ class Spree::Auction < Spree::Base
     imprint_method_id == blank_imprint.id
   end
   validate :pms_colors_presence, unless: -> do
-    blank_imprint = Spree::ImprintMethod.find_by(name: 'Blank')
-    return true if blank_imprint.nil?
-    imprint_method_id == blank_imprint.id
+    Spree::PmsColorsSupplier.find_by(imprint_method_id: imprint_method_id).nil?
   end
   validates :main_color_id, presence: true
   validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']

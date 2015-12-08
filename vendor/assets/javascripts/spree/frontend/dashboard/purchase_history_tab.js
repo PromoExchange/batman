@@ -339,7 +339,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        $('#purchase-history-tab').click();
+        window.location = "/dashboards?tab=purchase_history";
       },
       error: function(data) {
         alert('Failed to Confirmed Receipt, please contact support');

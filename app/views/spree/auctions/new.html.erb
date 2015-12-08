@@ -34,7 +34,7 @@
     <fieldset>
       <div class="form-group" id="imprint-methods">
         <%= f.label(:imprint_method_id, Spree.t(:imprint_method)) %>
-        <%= f.select :imprint_method_id, options_for_select(@imprint_methods),
+        <%= f.select :imprint_method_id, options_for_select(@imprint_methods, @auction.imprint_method_id),
           { prompt: 'Please Select' }, { class: 'form-control' } %>
       </div>
 

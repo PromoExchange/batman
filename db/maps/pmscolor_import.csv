@@ -1,40 +1,35 @@
 name,pantone,hex,display_name
-blue301,301,#004b87,"Fred"
-blue294,294,#002f6c,
-blue2695,2695,#2e1a47,
-green7480,7480,#00bf6f,
-green3295,3295,#007864,
-green3425,3425,#006341,
-teal321,321,#008c95,
-red187,187,#a6192e,
-red216,216,#7d2248,
-purple259,259,#9b26b6,
-purple2415,2415,#9e007e,
-brown469,469,#693f23,
-orange166,166,#e35205,
-yellow380,380,#dbe442,
-yellow110,110,#daaa00,
-green349,349,#477258,
-yellow102,102,#ffec2d,
-brown471,471,#be7b54,
-blue300,300,#006eb6,
-red222,222,#82566b,
-gold874,874,#ae8f6f,
-green354,354,#00a95c,
-pink210,210,#ffa2cb,
-violet,Violet,#7758b3,
-rhodamine,Rhodamine,#e44c9a,
-rubine,Rubine,#db487e,
-warmred,Warm Red,#ff665e,
-test101,222,#123123,
-test101,222,#123123,
-test202,444,3q234234,
+Turquoise,PMS 320,#009999,
+Rhodamine Red,PMS 225,#FF3399,
+Lime,PMS 375,#99FF66,
+Kelly Green,PMS 354,#00CC00,
+Forest Green,PMS 349,#006633,
+Charcoal,PMS 432,#666666,
+Carolina Blue,PMS 284,#66CCFF,
+Beige,PMS 467,#FFCC99,
+Basketball Orange,PMS 158,#FF9900,
+Athletic Gold,PMS 123,#FFCC33,
+Yellow,123 C,#ffc72c,
+Orange,166 C,#e35205,
+Burgundy,202 C,#862633,
+Royal Blue,286 C,#0033a0,
+Yellow,Yellow C,#fedd00,
+Gold,123 C,#ffc72c,
+Orange,1495 C,#ff8f1c,
+Maroon,202 C,#862633,
+Pink,Rhodamine,#e10098,
+Royal Blue,Reflex Blue C,#001489,
+Navy Blue,281 C,#00205b,
+Process Blue,Process Blue,#0085ca,
+Teal,321 C,#008c95,
+Green,348 C,#00843d,
+Dark Green,336 C,#00664f,
+Brown,498 C,#00664f,
+Orange,21 C,#fe5000,
 black,black,#000000,
 Black,black,#000000,
-Blue,Blue,#0000ff,
 Brown,Brown,#a52a2a,
 Burgundy,Burgundy,#8C001A,
-Copper,Copper,#8b634b,
 Dark Blue,Dark Blue,#00239c,
 Dark Gray,Dark Gray,#a9a9a9,
 Gold,Gold,#ffc72c,
@@ -47,47 +42,295 @@ Pink,Pink,#d62598,
 Process Blue,Process Blue,#0085ca,
 Purple,Purple,#bb29bb,
 Red,Red,#ef3340,
-Reflex Blue,Reflex Blue,#001489,
 Silver,Silver,#8a8d8f,
 Teal,Teal,#006060,
 white,white,#FFFFFF,
 White,White,#FFFFFF,
 Yellow,Yellow,#fedd00,
-Yellow,Pantone Yellow,#FFFF33,
-Turquoise,PMS 320,#009999,
-Royal Blue,PMS 293,#0033FF,
-Rhodamine Red,PMS 225,#FF3399,
-Orange,PMS 021,#FF9933,
-Navy Blue,PMS 289,#000066,
-Metallic Silver,PMS 877,#999999,
-Metallic Gold,PMS 871,#996633,
-Maroon,PMS 202,#990033,
-Lime,PMS 375,#99FF66,
-Kelly Green,PMS 354,#00CC00,
-Forest Green,PMS 349,#006633,
-Charcoal,PMS 432,#666666,
-Carolina Blue,PMS 284,#66CCFF,
-Burgundy,PMS 208,#990006,
-Beige,PMS 467,#FFCC99,
-Basketball Orange,PMS 158,#FF9900,
-Athletic Gold,PMS 123,#FFCC33,
-Yellow (Pantone Yellow),,,
-Turquoise (PMS 320),,,
-Royal Blue (PMS 293),,,
-Rhodamine Red (PMS 225),,,
-Orange (PMS 021),,,
-Navy Blue (PMS 289),,,
-Metallic Silver (PMS 877),,,
-Metallic Gold (PMS 871),,,
-Maroon (PMS 202),,,
-Lime (PMS 375),,,
-Kelly Green (PMS 354),,,
-Gray,,,
-Forest Green (PMS 349),,,
-Charcoal (PMS 432),,,
-Carolina Blue (PMS 284),,,
-Burgundy (PMS 208),,,
-Beige (PMS 467),,,
-Basketball Orange (PMS 158),,,
-Athletic Gold (PMS 123),,,
 Red-Scarlet,,,
+Ivory,7527,#d6d2c4,Ivory 
+PMS 877 Silver,,,
+PMS 876 Copper,,,
+PMS 872 Gold,,,
+PMS 478 Brown,,,
+PMS 431 Dark Gray,,,
+PMS 429 Light Gray,,,
+PMS 348 Green,,,
+PMS 322 Light Teal,,,
+PMS 316 Teal,,,
+PMS 293 Blue,,,
+PMS 282 Dark Blue,,,
+PMS 266 Purple,,,
+PMS 231 Pink,,,
+PMS 222 Burgundy,,,
+PMS 186 Red,,,
+PMS 155 Ivory,,,
+PMS 021 Orange,,,
+PMS 012 Yellow,,,
+Laser Silver,,,
+PMS Match,,,
+Magenta,,,
+Cream,,,
+Burnt Orange,,,
+Lemon,,,
+1 TO 6 Lines,,,
+Yellow PMS 012,,,
+Teal PMS 320,,,
+Royal Blue PMS 293,,,
+Purple PMS 266,,,
+Orange PMS 021,,,
+Turquoise (PMS 320),PMS 320,#009ca6,Turquoise
+Royal Blue (PMS 293),293 C,#003da5,Royal Blue
+Yellow (Pantone Yellow),Yellow,#fedd00,Yellow
+Rhodamine Red (PMS 225),225 C ,#df1995,Rhodamine Red
+Red,186 C,#c8102e,Red
+Orange (PMS 021),021 C,#fe5000,Orange
+Navy Blue (PMS 289),289 C,#0c2340,Navy Blue
+Metallic Silver (PMS 877),877 C,#8a8d8f,Metallic Silver
+Metallic Gold (PMS 871),871 C,#84754e,Metallic Gold
+Maroon (PMS 202),202 C,#862633,Maroon
+Lime (PMS 375),375 C,#97d700,Lime
+Kelly Green (PMS 354),354 C,#00b140,Kelly Green 
+Violet,Violet C,#440099,Violet
+Forest Green (PMS 349),349 C,#046a38,Forest Green
+Charcoal (PMS 432),432 C,#333f48,Charcoal
+Carolina Blue (PMS 284),284 C,#6cace4,Carolina Blue
+Black,426,#25282B,Black
+Metallic Silver,PMS 877,#999999,Metallic Silver
+Grey,Cool Gray 10,#63666a,Grey 
+Lime Green,375 C,#97d700,Lime Green
+Warm Red,485 C,#da291c,Warm Red
+Burgundy,202 C,#862633,Burgundy
+Purple,259 C,#6d2077,Purple
+Navy Blue,281 C,#00205b,Navy Blue
+Teal,321 C,#008c95,Teal
+Matte Silver,877 C,#8a8d8f,Matte Silver
+Dark Green,336 C,#00664f,Dark Green
+Blue,Blue,#0000ff,Blue
+Maroon,202 C,#862633,Maroon
+Silver,877 C,#8a8d8f,Silver
+Gray,Cool Gray 9,#75787b,Gray
+Neon Pink,806 C,#ff3eb5,Neon Pink
+White,0,#FFFFFF,White
+Orange,PMS 021,#FF9933,Orange
+Royal Blue,Reflex Blue C,#001489,Royal Blue
+Cyan,299 C,#00a3e0,Cyan
+Matte Gold,873 C,#866d4b,Matte Gold
+Pink,189 C,#f8a3bc,Pink
+Beige (PMS 467),467 C,#d3bc8d,Beige
+Athletic Gold (PMS 123),123 C,#ffc72c,Athletic Gold
+Light Blue,Light Blue,#add8e6,Light Blue
+Green,343 C,#00843d,Green
+Copper,Copper,#8b634b,Copper
+Gold,872 C,#85714d,Gold
+Metallic Red,,,Metallic Red
+Metallic Green,,,Metallic Green
+Metallic Blue,,,Metallic Blue
+Navy Blue PMS 282,,,
+Light Green PMS 347,,,
+Light Gray PMS 429,,,
+Fire Red PMS 485,,,
+Dark Green PMS 342,,,
+Brown PMS 478,,,
+Dark Blue PMS 282,,,
+Burgundy PMS 202,,,
+Full Color,,,
+Color Match,,,
+N/C 1 Color,,,
+Scarlet,,,
+Rust,,,
+Gold 2,,,
+Gold 1,,,
+Columbia Blue,,,
+imprint color-red,,,
+imprint color-maroon,,,
+imprint color-lt red,,,
+imprint color-lt green,,,
+imprint color-lt brown,,,
+imprint color-dk green,,,
+imprint color-brown,,,
+imprint color-orange,,,
+imprint color-lt yellow,,,
+imprint color-gray,,,
+imprint color-flag red,,,
+imprint color-flag blue,,,
+Pad Print Color,,,
+Heat Transfer,,,
+Spectracolor II,,,
+VibraColor Dome,,,
+VibraColor,,,
+VibraColor Label,,,
+Laser Engraving $55.00(v),,,
+Oxidation 0.30(v) / piece,,,
+7530 Bronze,,,
+723 Amber Yellow (Gold),,,
+654 Navy Blue,,,
+639 Light Blue,,,
+5487 Green-Gray,,,
+471 Dk. Gray,,,
+423 Gray,,,
+3485 Forest Green,,,
+341 Kelly Green,,,
+3285 Light Green,,,
+327 Teal,,,
+2756 Ultramarine Blue,,,
+2635 Light Purple,,,
+1935 Dark Red,,,
+188 Deep Dark Red,,,
+184U Pink,,,
+1817 Deep Dark Red,,,
+179 Red,,,
+172 Orange,,,
+1545 Dk. Brown,,,
+153 Nu Rust,,,
+116 Yellow,,,
+032 Vermilion Red,,,
+Standard Imprint Color,,,
+Direct Imprint,,,
+Laser Engraving,,,
+Blue-Black,,,
+Printed,,,
+Digital Printing,,,
+4-color,,,
+PMS Color Matching,,,
+Color,,,
+Laser Engrave,,,
+Deboss,,,
+Deboss Option,,,
+Additional Imprint Color,,,
+1 Color,,,
+Laser Engraving - N/C,,,
+Laser Engraved,,,
+PMS Color Choice,,,
+Metallic Silver 877,,,
+Metallic Gold 874,,,
+Cool Gray 8,,,
+Dark Green 349,,,
+Light Green 375,,,
+Teal 321,,,
+Process Blue C,,,
+Blue 286,,,
+Royal 2748,,,
+Navy 648,,,
+Burgundy 202,,,
+Red 485,,,
+Orange 021,,,
+Yellow Gold,,,
+Yellow C,,,
+PMS,,,
+Medium Yellow,,,
+Orange ,,,
+Lemon Yellow,,,
+Cool Grey,,,
+Medium Blue,,,
+Rubine Red,,,
+Color Impressions Screen Charge,,,
+COPPER,,,
+BLACK,,,
+BLUE,,,
+LIME,,,
+LT BLUE,,,
+RED,,,
+SILVER,,,
+TEAL,,,
+WHITE,,,
+Dark Blue & Red,,,
+Dark Blue & Light Blue,,,
+Black & Red,,,
+4 Color Process,,,
+Dark Red,,,
+Standard Imprint Colors,,,
+Yellow Gold 123,,,
+Teal 320,,,
+Royal Blue 286,,,
+Red 186,,,
+Purple 268,,,
+Process,,,
+Orange 165,,,
+Navy 289,,,
+Metallic Gold 871,,,
+Maroon 202,,,
+Green 348,,,
+Gray 431,,,
+Emerald Green 354,,,
+Dark Green 343,,,
+Custom,,,
+Color to match,,,
+Burgundy 208,,,
+Brown 469,,,
+ColorFINITYHD,,,
+ColorFINITY,,,
+Silver Metallic 877,,,
+Laser-White Silver,,,
+Laser-Oxidized,,,
+Laser,,,
+4 color process,,,
+Frosted,,,
+Metallic Inks,,,
+White Imprint,,,White
+Teal Imprint,321 C,#008c95,Teal
+Royal Blue Imprint,293 C,#003da5,Royal Blue
+Purple Imprint,266 C,#753bbd,Purple
+Pink Imprint,189 C,#f8a3bc,Pink
+Navy Blue Imprint,280 C,#012169,Navy Blue
+Metallic Silver Imprint,,,Metallic Silver
+Maroon Imprint,209 C,#6f263d,Maroon
+Light Blue Imprint,307 C,#006ba6,Light Blue
+Dark Green Imprint,342 C,#006747,Dark Green
+Brown Imprint,476 C,#4e3629,Brown
+Black Imprint,,,Black
+Chrome-Brown,,,Brown
+Chrome-Black,,,Black
+Solid Silver,,,Silver
+Brown 168,,,
+Process Yellow,,,
+Green 357,,,
+Warm Red ,,,
+Burgandy 202,,,
+Green 355,,,
+Red 185,,,
+Blue 300,,,
+PMS 4625,,,
+PMS Violet C,,,
+PMS 208,,,
+PMS 185,,,
+PMS 347,,,
+PMS 3435,,,
+PMS 327,,,
+PMS 280,,,
+PMS 165,,,
+PMS 108,,,
+PMS 430,,,
+PMS 485,,,
+PMS 376,,,
+PMS 361,,,
+PMS 341,,,
+PMS 320,,,
+PMS 300,,,
+PMS 293,,,
+PMS 285,,,
+PMS 284,,,
+PMS 2738,,,
+PMS 2577,,,
+PMS 225,,,
+PMS 215,,,
+PMS 205,,,
+PMS 202,,,
+PMS 1795,,,
+PMS 123,,,
+PMS 072,,,
+Burgundy (PMS 208),208 C,#861f41,Burgundy
+Dark Blue,289 C,#0c2340,Dark Blue
+Yellow,Yellow C,#fedd00,Yellow
+Process Blue,Process Blue,#0085ca,Process Blue
+Basketball Orange (PMS 158),158 C,#e87722,Orange
+Reflex Blue,Reflex Blue,#001489,Reflex Blue
+Yellow Imprint,123 C,#ffc72c,Yellow
+Violet Imprint,Violet C,#440099,Violet
+Red Imprint,186 C,#c8102e,Red
+Orange Imprint,172 C,#fa4616,Orange
+Metallic Gold Imprint,,,Metallic Gold
+Green Imprint,347 C,#009a44,Green
+Brown,476 C,#4e3629,Brown
+Solid White,,,White
+Metallic Gold,PMS 871,#996633,Metallic Gold

@@ -42,9 +42,8 @@
       <div class="form-group">
         <%= f.label :logo_id, Spree.t(:logo) %>
         <%= f.select :logo_id,
-          @user.logos.map { |l| [ l.logo_file_file_name, l.id,
-            { 'data-img-src' => l.artwork }] },
-            { prompt: 'Please Select' } , { class: 'image-picker form-control' } %>
+          @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
+          { prompt: 'Please Select' } , { class: 'form-control' } %>
       </div>
 
       <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>

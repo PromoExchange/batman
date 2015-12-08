@@ -1,0 +1,28 @@
+- content_for :page_title do
+  = plural_resource_name(Spree::ColorProduct)
+
+- content_for :page_actions do
+  = button_link_to "Product Color", new_admin_product_color_product_path, { :class => "btn-success", :icon => 'add' }
+
+.well
+  - if @color_products.any?
+    table.table
+      thead
+        tr
+          th ID
+          th Color
+          th Action
+      tbody
+        - @color_products.each do |color_product|
+          tr
+            td = color_product.id
+            td = color_product.color
+            td.actions.actions-2.text-right
+              = link_to_edit(color_product, {no_text: true, url: edit_admin_product_color_product_path(color_product.product,color_product) })
+              = link_to_delete(color_product, {no_text: true, url: admin_product_color_product_path(color_product.product,color_product) })
+  - else
+    .alert.alert-info.no-objects-found
+    = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::ColorProduct))
+    = ","
+    = link_to Spree.t(:add_one), new_admin_product_color_product_path
+    = "!"

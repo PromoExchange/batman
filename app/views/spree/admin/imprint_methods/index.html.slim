@@ -9,7 +9,11 @@
     = search_form_for [:admin, @search] do |f|
       - locals = {:f => f}
       .row
-        .col.col-md-12
+        .col.col-md-6
+          .form-group
+            = f.label :id_eq, Spree.t(:ID)
+            = f.text_field :id_eq, :class => "form-control js-quick-search-target"
+        .col.col-md-6
           .form-group
             = f.label :name_cont, Spree.t(:name)
             = f.text_field :name_cont, :class => "form-control js-quick-search-target"
@@ -21,11 +25,13 @@
     table.table
       thead
         tr
+          th ID
           th Name
           th Action
       tbody
         - @imprint_methods.each do |imprint_method|
           tr
+            td = imprint_method.id
             td = imprint_method.name
             td.actions.actions-2.text-right
               = link_to_edit(imprint_method, :no_text => true)

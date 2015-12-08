@@ -1,0 +1,31 @@
+- content_for :page_title do
+  = link_to "#{@supplier.name}", edit_admin_supplier_url(@supplier)
+  = "/"
+  = Spree.t(:editing_resource, resource: plural_resource_name(Spree::ImprintMethod))
+
+= render partial: 'spree/admin/suppliers/sidebar', locals: { current: :imprint_method }
+= render partial: 'spree/admin/suppliers/supplier_page_actions'
+
+#admin_supplier_edit_imprint_methods
+  div
+    = render partial: 'spree/admin/shared/error_messages', locals: { target: @supplier }
+  .well
+    - if @imprint_methods.any?
+      table.table
+        thead
+          tr
+            th Name
+            th Actions
+        tbody
+          - @imprint_methods.each do |imprint_method|
+            tr
+              td = imprint_method.name
+              td.actions.actions-2.text-right
+                = link_to_edit(imprint_method, :no_text => true)
+                = link_to_delete(imprint_method, :no_text => true)
+    - else
+      .alert.alert-info.no-objects-found
+      = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Supplier))
+      = ","
+      = link_to Spree.t(:add_one), new_object_url
+      = "!"

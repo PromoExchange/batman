@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       end
       member do
         get 'download_proof'
+        get 'download_logo'
       end
     end
 
@@ -114,10 +115,18 @@ Rails.application.routes.draw do
           post 'generate_notification'
         end
       end
-      # match '/product_loads/destroy_factory' => 'product_loads#destroy_factory', via: :delete
       resources :product_loads
       resources :pms_colors
       resources :imprint_methods
+      resources :option_mappings
+      resources :product_reports
+      resources :pms_colors_suppliers
+      resources :suppliers do
+        get :addresses
+        put :addresses
+        get :imprint_methods
+        put :imprint_methods
+      end
     end
   end
 end

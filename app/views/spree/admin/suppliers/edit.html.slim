@@ -1,0 +1,11 @@
+- content_for :page_title do
+  = Spree.t(:editing_resource, resource: Spree::Supplier.model_name.human)
+
+= render partial: 'spree/admin/suppliers/sidebar', locals: { current: :account }
+
+= render partial: 'spree/admin/shared/error_messages', locals: { target: @supplier }
+
+= form_for [:admin, @supplier] do |f|
+  fieldset
+    = render :partial => 'form', locals: { f: f }
+    = render :partial => 'spree/admin/shared/edit_resource_links'

@@ -14,7 +14,7 @@
       <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
       <tr><td>Buyer:</td><td><%= @auction.buyer.billing_address.full_name %></td></tr>
       <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></td></tr>
-      <tr><td>Quantity:</td><td><%= @auction.quantity %></td></tr>
+      <tr><td>Quantity:</td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
       <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>
       <tr><td>Main Color:</td><td><%= @auction.main_color.color %></td></tr>
       <tr><td>Payment Method:</td><td><%= @auction.payment_method %></td></tr>
@@ -29,7 +29,13 @@
       </tr>
       <tr><td>Expected Delivery Date:</td><td><%= 15.days.from_now.strftime('%B %e, %Y') %></td></tr>
       <% unless @auction.logo.nil? %>
-        <tr><td>Logo:</td><td><%= image_tag(@auction.logo.logo_file.url(:thumb), { itemprop: "image", alt: @auction.logo.logo_file_file_name }) %></td></tr>
+        <tr>
+          <td>Logo:</td>
+          <td>
+            <%= image_tag(Spree::Logo::LOGO_FILE_NAME[@auction.logo.logo_file_file_name.split(".")[1].to_sym], { itemprop: "image", alt: @auction.logo.logo_file_file_name, size: "100x100" }) %>
+            <%= link_to "Download", "/auctions/#{@auction.id}/download_logo", class: "btn btn-success"%>
+          </td>
+        </tr>
       <% end %>
       <tr>
         <td>Shipping Address:</td>

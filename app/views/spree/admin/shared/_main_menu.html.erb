@@ -34,14 +34,32 @@
   </ul>
 <% end %>
 
+<% if can? :admin, Spree::Supplier %>
+  <ul class="nav nav-sidebar">
+    <%= tab :suppliers, url: spree.admin_suppliers_path, icon: 'edit' %>
+  </ul>
+<% end %>
+
 <% if can? :admin, Spree::ProductLoad %>
   <ul class="nav nav-sidebar">
     <%= tab :product_load, url: spree.admin_product_loads_path, icon: 'file' %>
   </ul>
 <% end %>
 
+<% if can? :admin, Spree::PmsColorsSupplier %>
+  <ul class="nav nav-sidebar">
+    <%= tab :pms_colors_supplier, url: spree.admin_pms_colors_suppliers_path, icon: 'file' %>
+  </ul>
+<% end %>
+
 <% if can? :admin, current_store %>
   <ul class="nav nav-sidebar">
     <%= main_menu_tree Spree.t(:configurations), icon: "wrench", sub_menu: "configuration", url: "#sidebar-configuration" %>
+  </ul>
+<% end %>
+
+<% if can? :admin, current_store %>
+  <ul class="nav nav-sidebar">
+    <%= tab :blog, url: spree.admin_blog_entries_path, icon: 'file' %>
   </ul>
 <% end %>

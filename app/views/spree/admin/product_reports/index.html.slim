@@ -1,0 +1,42 @@
+- content_for :page_title do
+ = plural_resource_name(Spree::Product)
+
+.well
+  h4 Stats
+  table.table
+    thead
+      tr
+        th Stat
+        th Value
+    tbody
+      tr
+        td Number of products
+        td = @products.count
+      tr
+        td Number of Factories
+        td = @factories.count
+.well
+  - if @factories.any?
+    table.table
+      thead
+        tr
+          th Factory
+          th Invalid
+          th Active
+          th Loading
+          th Action
+      tbody
+        - @factories.each do |factory|
+          tr
+            td = factory.name
+            td = Spree::Product.where(supplier: factory, state: 'invalid').count
+            td = Spree::Product.where(supplier: factory, state: 'active').count
+            td = Spree::Product.where(supplier: factory, state: 'loading').count
+            td = button_to 'Download',
+              spree.admin_product_reports_path,
+              params: {format: 'csv', dc_acct_num: factory.dc_acct_num},
+              method: :get,
+              class: "btn btn-success btn-xs"
+  - else
+    .alert.alert-info.no-objects-found
+    = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Supplier))

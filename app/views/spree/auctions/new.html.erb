@@ -34,18 +34,16 @@
     <fieldset>
       <div class="form-group" id="imprint-methods">
         <%= f.label(:imprint_method_id, Spree.t(:imprint_method)) %>
-        <%= f.select :imprint_method_id, options_for_select(@imprint_methods),
+        <%= f.select :imprint_method_id, options_for_select(@imprint_methods, @auction.imprint_method_id),
           { prompt: 'Please Select' }, { class: 'form-control' } %>
       </div>
 
       <p><a href="#" data-toggle="modal" data-target="#imprint-definitions-modal">Imprint Method Definitions</a></p>
-
       <div class="form-group">
         <%= f.label :logo_id, Spree.t(:logo) %>
         <%= f.select :logo_id,
-          @user.logos.map { |l| [ l.logo_file_file_name, l.id,
-            { 'data-img-src' => l.logo_file.url(:thumb) }] },
-            { prompt: 'Please Select' } , { class: 'image-picker form-control' } %>
+          @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
+          { prompt: 'Please Select' } , { class: 'form-control' } %>
       </div>
 
       <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
@@ -75,11 +73,14 @@
         <%= f.label(:custom_pms_colors, Spree.t(:custom_pms_colors)) %>
         <%= f.text_field(:custom_pms_colors, class: 'form-control')%>
       </div>
-
-      <div class="form-group">
-        <%= f.label(:quantity, Spree.t(:quantity)) %>
-        <%= f.number_field(:quantity, class: 'form-control', placeholder: "Minimum Quantity: #{@auction.product.minimum_quantity}")%>
-      </div>
+      <% if @auction.is_wearable? %>
+        <%= render partial: 'spree/auctions/auction_size', locals: {f: f} %>
+      <% else %>
+        <div class="form-group">
+          <%= f.label(:quantity, Spree.t(:quantity)) %>
+          <%= f.number_field(:quantity, class: 'form-control', placeholder: "Minimum Quantity: #{@auction.product.minimum_quantity}")%>
+        </div>
+      <% end %>
 
       <div class="form-group">
         <%= f.label(:shipping_address_id, 'Shipping Address') %>

@@ -24,6 +24,8 @@ class Spree::Auction < Spree::Base
 
   belongs_to :customer
 
+  has_one :auction_size
+
   accepts_nested_attributes_for :auctions_pms_colors
 
   has_attached_file :proof_file,
@@ -38,17 +40,14 @@ class Spree::Auction < Spree::Base
     return true if blank_imprint.nil?
     imprint_method_id == blank_imprint.id
   end
-  validates :pms_colors, length: { minimum: 1 , message: 'Must select at least 1 PMS color'}, unless: -> do
-    blank_imprint = Spree::ImprintMethod.find_by(name: 'Blank')
-    return true if blank_imprint.nil?
-    imprint_method_id == blank_imprint.id
+  validate :pms_colors_presence, unless: -> do
+    Spree::PmsColorsSupplier.find_by(imprint_method_id: imprint_method_id).nil?
   end
   validates :main_color_id, presence: true
   validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
   validates :imprint_method_id, presence: true
   validates :quantity, presence: true
-  validates :shipping_address_id, presence: true
   validates_numericality_of :quantity, only_integer: true
   validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) do
     50 if auction.product.nil?
@@ -57,7 +56,7 @@ class Spree::Auction < Spree::Base
   validates_inclusion_of :shipping_agent, in: %w(ups fedex)
   validates :customer_id, presence: { message: "Payment Option can't be blank" }, if: -> { payment_method.present? }
   validate :credit_card_presense, if: -> { customer_id.present? }, on: :create
-
+  validate :shipping_address_presence
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true
 
@@ -221,6 +220,14 @@ class Spree::Auction < Spree::Base
     ups.find_tracking_info(tracking_number, test: true)
   end
 
+  def is_wearable?
+    product.wearable?
+  end
+
+  def auction_sizes
+    %w(S M L XL 2XL)
+  end
+
   private
 
   def notification_for_in_production
@@ -228,18 +235,17 @@ class Spree::Auction < Spree::Base
       InProduction,
       auction_id: id
     )
-    unless winning_bid.manage_workflow
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 48.hours),
-        SellerFailedUploadProof,
-        auction_id: id
-      )
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 48.hours),
-        ProofNeededImmediately,
-        auction_id: id
-      )
-    end
+    return if winning_bid.manage_workflow
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      SellerFailedUploadProof,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      ProofNeededImmediately,
+      auction_id: id
+    )
   end
 
   def notification_for_product_delivered
@@ -247,13 +253,12 @@ class Spree::Auction < Spree::Base
       ProductDelivered,
       auction_id: id
     )
-    unless winning_bid.manage_workflow
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 3.days),
-        ConfirmReceiptReminder,
-        auction_id: id
-      )
-    end
+    return if winning_bid.manage_workflow
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 3.days),
+      ConfirmReceiptReminder,
+      auction_id: id
+    )
   end
 
   def notification_for_confirm_received
@@ -268,18 +273,17 @@ class Spree::Auction < Spree::Base
       RejectProof,
       auction_id: id
     )
-    unless winning_bid.manage_workflow
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 48.hours),
-        SellerFailedUploadProof,
-        auction_id: id
-      )
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 48.hours),
-        ProofNeededImmediately,
-        auction_id: id
-      )
-    end
+    return if winning_bid.manage_workflow
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      SellerFailedUploadProof,
+      auction_id: id
+    )
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      ProofNeededImmediately,
+      auction_id: id
+    )
   end
 
   def notification_for_approve_proof
@@ -287,13 +291,12 @@ class Spree::Auction < Spree::Base
       ApproveProof,
       auction_id: id
     )
-    unless winning_bid.manage_workflow
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 15.days),
-        TrackingReminder,
-        auction_id: id
-      )
-    end
+    return if winning_bid.manage_workflow
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 15.days),
+      TrackingReminder,
+      auction_id: id
+    )
   end
 
   def notification_for_upload_proof
@@ -301,23 +304,21 @@ class Spree::Auction < Spree::Base
       UploadProof,
       auction_id: id
     )
-    unless winning_bid.manage_workflow
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 24.hours),
-        ProofAvailable,
-        auction_id: id
-      )
-    end
+    return if winning_bid.manage_workflow
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 24.hours),
+      ProofAvailable,
+      auction_id: id
+    )
   end
 
   def rating_reminder
-    unless winning_bid.manage_workflow
-      Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 3.days),
-        RatingReminder,
-        auction_id: id
-      )
-    end
+    return if winning_bid.manage_workflow
+    Resque.enqueue_at(
+      EmailHelpers.email_delay(Time.zone.now + 3.days),
+      RatingReminder,
+      auction_id: id
+    )
   end
 
   def generate_reference
@@ -338,10 +339,18 @@ class Spree::Auction < Spree::Base
     errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
   end
 
+  def shipping_address_presence
+    errors.add(:base, 'A shipping address is required') if shipping_address_id.blank?
+  end
+
+  def pms_colors_presence
+    errors.add(:base, 'Must select at least one imprint color (standard or custom PMS color)') if pms_colors.length < 1
+  end
+
   def refund_payment
-    charge_id = winning_bid.auction_payments.where.not(status: "failed").take.charge_id
+    charge_id = winning_bid.auction_payments.where.not(status: 'failed').take.charge_id
     charge = Stripe::Charge.retrieve(charge_id)
-    charge.refund unless charge.status == "failed"
+    charge.refund unless charge.status == 'failed'
   rescue
     return false
   end

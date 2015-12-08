@@ -9,7 +9,9 @@
   <% active_me = 'active' if ['purchase_history'].include? @tab %>
   <li class="<%= active_me %>"><a href="#purchase-history" id="purchase-history-tab" role="tab" data-toggle="tab"><%=Spree.t(:purchase_history)%></a></li>
   <% active_me = nil %>
-  <li><a href="#awaiting-selection" role="tab" id="waiting-auction-tab" data-toggle="tab"><%=Spree.t(:awaiting_selection)%></a></li>
+  <% active_me = 'active' if ['awaiting_selection'].include? @tab %>
+  <li class="<%= active_me %>"><a href="#awaiting-selection" role="tab" id="waiting-auction-tab" data-toggle="tab"><%=Spree.t(:awaiting_selection)%></a></li>
+  <% active_me = nil %>
 </ul>
 
 <% active_me = 'active' if @tab.nil? %>
@@ -56,7 +58,8 @@
     </table>
   </div>
   <% active_me = nil %>
-  <div class="tab-pane scrolling" id="awaiting-selection">
+  <% active_me = 'active' if ['awaiting_selection'].include? @tab %>
+  <div class="tab-pane  <%= active_me %>  scrolling" id="awaiting-selection">
     <table class="table table-striped" id="waiting-auction-table">
       <thead>
         <tr>

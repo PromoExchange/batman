@@ -9,7 +9,7 @@
   <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
   <tr><td>Buyer:</td><td><%= @auction.buyer.billing_address.full_name %></td></tr>
   <tr><td>Auction Started:</td><td><%= @auction.started.strftime('%B %e, %Y') %></td></tr>
-  <tr><td>Quantity:</td><td><%= @auction.quantity %></td></tr>
+  <tr><td>Quantity:</td><td><%= render partial: '/spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
   <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>
   <tr><td>Main Color:</td><td><%= @auction.main_color.color %></td></tr>
   <tr><td>Total Payment amount:</td><td><%= @auction.winning_bid.bid %></td></tr>
@@ -50,19 +50,4 @@
 <p>Please contact the Buyer (<%= @auction.buyer.bill_address.phone %>/<%= @auction.buyer.email %>) by the end of the next business day to begin making delivery and payment arrangements.</p>
 <p>Failure to do so can cause this order to be awarded to another Seller and can jeopardize your membership in the PromoExchange community.</p>
 
-<div class="email-signature">
-  <div class="email-signature-icons">
-    <style>
-      div.email-signature-icons {padding-left:8px!important}
-
-    </style>
-    <a href="https://www.facebook.com/promobidz"><img class="Facebook-img" src="/Users/knobbie24/batman/app/assets/images/logo/facebook-3-24.png" alt="Facebook Icon"></a>
-    <a href ="https://twitter.com/ThePromoX"><img class="Twitter-img" src="/Users/knobbie24/batman/app/assets/images/logo/twitter-3-24.png" alt="Twitter Logo"></a>
-    <a href ="https://www.linkedin.com/company/promoexchange"><img class="LinkedIn-img" src="/Users/knobbie24/batman/app/assets/images/logo/linkedin-3-24.png" alt="LinkedIn Icon">
-    </a>
-  </div>
-<br>
-<a href ="http://thepromoexchange.com">
-  <img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo" style=height="96px" width="96px">
-</a>
-</div>
+<%= render partial: 'email_signature' %>

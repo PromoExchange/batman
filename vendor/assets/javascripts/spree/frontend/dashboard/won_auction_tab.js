@@ -137,21 +137,16 @@ $(function() {
 
             if(item.state === 'complete') {
               var rating_status = '';
+            
               if(item.review) {
-                for (var i = 1; i < 6; i++) {
-                  if(i <= item.review.rating) {
-                    rating_status += '<span class="star won-star">☆</span>';
-                  } else {
-                    rating_status += '<span class="star">☆</span>';
-                  }
-                }
+                rating_status = '<input type="hidden" class="rating rating-value" disabled="disabled" value='+ item.review.rating +'/>';
               }
 
               status_text = 'Completed <br>' + rating_status;
               action = simple_template({
                 value: ''
               });
-              if(item.payment_claimed === false) {
+              if(item.payment_claimed === false && item.winning_bid.manage_workflow === false) {
                 status_text = 'Payment ready <br>' + rating_status;
                 action = simple_template({
                   value: action_template({
@@ -173,9 +168,11 @@ $(function() {
           trHTML += "<tr><td class='text-center' colspan='7'>No auctions found!</td></tr>";
         }
         $("#seller-won-auction-table > tbody").html(trHTML);
+        $('.rating').rating();
       }
     });
     window.history.pushState({}, null, '/dashboards?tab=won_auction');
+    
   });
 
   if ($($('#seller-won-auction-tab').parent()[0]).hasClass('active')) {

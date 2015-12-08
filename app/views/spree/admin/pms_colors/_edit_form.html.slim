@@ -1,0 +1,17 @@
+= "Editing #{@pms_color.name}"
+.row
+  .col-md-4
+    = f.field_container :display_name, class: ['form-group'] do
+      = f.label :display_name, "Display Name"
+      = f.text_field :display_name, :class => 'form-control'
+      = f.error_message_on :display_name
+  .col-md-4
+    = f.field_container :pantone, class: ['form-group'] do
+      = f.label :pantone, "Pantone"
+      = f.text_field :pantone, :class => 'form-control'
+      = f.error_message_on :pantone
+  .col-md-4
+    = f.field_container :hex, class: ['form-group'] do
+      = f.label :hex, "HEX"
+      = f.text_field :hex, :class => 'form-control'
+      = f.error_message_on :hex

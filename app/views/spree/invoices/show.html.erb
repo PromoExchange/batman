@@ -21,7 +21,7 @@
         <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
         <tr><td>Buyer:</td><td><%= @auction.buyer.billing_address.full_name %></td></tr>
         <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></td></tr>
-        <tr><td>Quantity:</td><td><%= @auction.quantity %></td></tr>
+        <tr><td>Quantity:</td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
         <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>
         <tr><td>Main Color:</td><td><%= @auction.main_color.color %></td></tr>
         <tr><td>Payment Method:</td><td><%= @auction.payment_method %></td></tr>
@@ -67,7 +67,7 @@
     <div class="col-sm-6">
       <h4> Rating </h4>
       <div class="form-group">
-        <%= render 'spree/dashboards/shared/stars', stars: @auction.review.rating %>
+        <%= render 'spree/dashboards/shared/stars', stars: @auction.review.rating, edit_enabled: false %>
       </div>
       <div class="form-group">
         <%= @auction.review.review %>

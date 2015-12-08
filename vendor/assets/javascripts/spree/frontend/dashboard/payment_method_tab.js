@@ -1,7 +1,7 @@
 $(function() {
 
   $('#add-account').on('click', '.add-account', function() {
-    $('#add-account-field').show();
+    $('#ach-cc-field').show();
   });
 
   $('#add-card').click(function() {
@@ -9,7 +9,7 @@ $(function() {
   });
 
   $('.cancel-account').click(function() {
-    $('#add-account-field').hide();
+    $('#ach-cc-field').hide();
     $("#add-account button").prop('disabled', false).addClass('add-account');
   });
 
@@ -87,6 +87,61 @@ $(function() {
     $("body").css("cursor", "progress");
     $("#payment-submit").prop('disabled', true);
     Stripe.card.createToken($form, stripeResponseHandlerCustomer);
+    return false;
+  });
+
+  function stripeResponseHandlerAchCC(status, response) {
+    var $form = $('#ach-cc-form');
+    var key = $('#customer-method').attr('data-key');
+    var cc_chek = document.getElementById("cc_checked").checked;
+    if (response.error) {
+      $form.find('.payment-errors').text(response.error.message);
+      $("body").css("cursor", "default");
+      $("#ach-cc-submit").prop('disabled', false);
+    } else {
+      if (cc_chek) { 
+        var token = response.id;
+        var message = {
+          token: token,
+          payment_type: 'cc',
+          active_cc: cc_chek
+        };
+
+        $.ajax({
+          type: 'POST',
+          contentType: "application/json",
+          data: JSON.stringify(message),
+          url: '/customer',
+          headers: {
+            'X-Spree-Token': key
+          },
+          success: function(data) {
+            $('#customer-form')[0].reset();
+            alert('Save Credit/Debit card detail');
+            $('#add-account-field').show();
+            $('#ach-cc-field').hide();
+            $("body").css("cursor", "default");
+          },
+          error: function(data) {
+            $form.find('.payment-errors').text("Unsuccessful create");
+            $("body").css("cursor", "default");
+            $("#ach-cc-submit").prop('disabled', false);
+          }
+        });
+      } else {
+        $form.find('.payment-errors').text("Check box must be marked");
+        $("body").css("cursor", "default");
+        $("#ach-cc-submit").prop('disabled', false); 
+      }
+    }
+  }
+
+  $('#ach-cc-form').submit(function(event) {
+    var $form = $(this);
+    $("body").css("cursor", "progress");
+    $("#ach-cc-submit").prop('disabled', true);
+    $("#add-account button").prop('disabled', true).removeClass('add-account');
+    Stripe.card.createToken($form, stripeResponseHandlerAchCC);
     return false;
   });
 

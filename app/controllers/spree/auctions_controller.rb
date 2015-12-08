@@ -32,6 +32,13 @@ class Spree::AuctionsController < Spree::StoreController
   def create
     auction_data = params[:auction]
 
+    if params[:size].present?
+      params[:size] = params[:size].merge(params[:size]) {|k, val| (val.to_i < 0)? 0 : val.to_i}
+      @size_quantity = params[:size]
+      auction_data[:quantity] = params[:size].values.map(&:to_i).reduce(:+)
+      @total_size = auction_data[:quantity]
+    end
+
     @auction = Spree::Auction.new(
       product_id: auction_data[:product_id],
       buyer_id: auction_data[:buyer_id],
@@ -53,6 +60,13 @@ class Spree::AuctionsController < Spree::StoreController
       end
     end
     @auction.save!
+
+    if @auction.is_wearable?
+      Spree::AuctionSize.create(
+        auction_id: @auction.id,
+        product_size: params[:size]
+      )
+    end
 
     @request_idea_id = auction_data[:request_idea] if auction_data[:request_idea].present?
     idea = Spree::RequestIdea.where(id: @request_idea_id).take
@@ -123,6 +137,12 @@ class Spree::AuctionsController < Spree::StoreController
   def download_proof
     send_data open(@auction.proof_file.url).read,
       filename: @auction.proof_file_file_name,
+      disposition: 'attachment'
+  end
+  
+  def download_logo
+    send_data open(@auction.logo.logo_file.url).read,
+      filename: @auction.logo.logo_file_file_name,
       disposition: 'attachment'
   end
 

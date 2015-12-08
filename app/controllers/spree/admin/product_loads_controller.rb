@@ -6,7 +6,7 @@ class Spree::Admin::ProductLoadsController < Spree::Admin::BaseController
     @num_factory_queue = Resque.size(:product_load_factory)
     @num_factories = Spree::Supplier.count
     @loaded_factories = Spree::Product.joins(:supplier)
-      .group('spree_suppliers.name', :state)
+      .group('spree_suppliers.name', 'spree_suppliers.dc_acct_num', :state)
       .order('spree_suppliers.name')
       .count
     @dc_suppliers = Spree::DcSupplier.supplier_list

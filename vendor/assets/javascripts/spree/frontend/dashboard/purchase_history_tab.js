@@ -109,6 +109,8 @@ $(function() {
                     url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
                   }) + action_template({
                     url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
+                  }) + action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Reject Order', auction_class: 'btn-danger reject_order'
                   })
                 });
               } else {
@@ -118,6 +120,8 @@ $(function() {
                     url: '#', auction_id: item.id, auction_value: 'Confirm Receipt', auction_class: 'confirm_receipt'
                   }) + new_window_action_template({
                     url: url, auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment_fedex'
+                  }) + action_template({
+                    url: '#', auction_id: item.id, auction_value: 'Reject Order', auction_class: 'btn-danger reject_order'
                   })
                 });
               }
@@ -132,7 +136,7 @@ $(function() {
                   }) + action_template({
                     url: '#', auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment'
                   }) + action_template({
-                    url: '#', auction_id: item.id, auction_value: 'Reject Order', auction_class: 'reject_order'
+                    url: '#', auction_id: item.id, auction_value: 'Reject Order', auction_class: 'btn-danger reject_order'
                   })
                 });
               } else {
@@ -143,7 +147,7 @@ $(function() {
                   }) + action_template({
                     url: url, auction_id: item.id, auction_value: 'Track Shipment', auction_class: 'track_shipment_fedex'
                   }) + action_template({
-                    url: url, auction_id: item.id, auction_value: 'Reject Order', auction_class: 'reject_order'
+                    url: url, auction_id: item.id, auction_value: 'Reject Order', auction_class: 'btn-danger reject_order'
                   })
                 });
               }
@@ -293,6 +297,8 @@ $(function() {
 
   $('#rating-submit').on('click', 'button', function(){
     var status = $(this).data(status);
+    var rating = $('.rating').val();
+    $('#select-rating').val(rating);
     var auction_id = $('#rating-auction-id').val();
     var key = $('#rating-seller').attr('data-key');
     var url = '/api/auctions/' + auction_id + '/confirmed_delivery';
@@ -333,7 +339,7 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        $('#purchase-history-tab').click();
+        window.location = "/dashboards?tab=purchase_history";
       },
       error: function(data) {
         alert('Failed to Confirmed Receipt, please contact support');
@@ -343,7 +349,7 @@ $(function() {
 
   $('tbody').on('click', '.reject_proof', function(){
     var auction_id = $(this).data('id');
-    var accept = confirm("Are you sure, you want to reject the proof?");
+    var accept = confirm("Are you sure you want to reject the proof?");
     if (!accept){ return false; }
     $('#feedback-auction-id').val(auction_id);
     $('#reject-proof').modal('show');

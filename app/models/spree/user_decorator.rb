@@ -20,7 +20,7 @@ Spree::User.class_eval do
   end
 
   def stars
-    avg_rating.try(:round) || 0
+    avg_rating.to_f || 0
   end
 
   def recalculate_rating

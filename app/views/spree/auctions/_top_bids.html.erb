@@ -18,7 +18,7 @@
           <% seen.push(b.seller) %>
           <tr class="<%= row_class %>">
             <td><%= b.email %></td>
-            <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars %></td>
+            <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars, edit_enabled: false %></td>
             <td><%= '$%.2f' % b.bid %></td>
             <% unless (@auction.open? or @auction.waiting?) %>
               <td>Completed</td>
@@ -26,6 +26,8 @@
               <td>
                 <% unless b.rejected? %>
                   <%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
+                <% else %>
+                 Failed to Accept Prior Selection
                 <% end %>
               </td>
             <% end %>

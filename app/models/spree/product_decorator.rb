@@ -3,6 +3,7 @@ Spree::Product.class_eval do
   has_and_belongs_to_many :imprint_methods
   has_and_belongs_to_many :option_values
   has_many :upcharges, as: :related
+  has_many :color_product
 
   delegate :upcharges, to: :option_values
 
@@ -27,7 +28,20 @@ Spree::Product.class_eval do
     end
   end
 
+  def wearable?
+    # Assume wearable as having Apparal as parent
+    apparel_taxon = Spree::Taxon.where(dc_category_guid: '7F4C59A7-6226-11D4-8976-00105A7027AA')
+    children = Spree::Taxon.where(parent: apparel_taxon).pluck(:id)
+    Spree::Classification.where(product: self).find_each do |classification|
+      return true if children.include?(classification.taxon_id)
+    end
+    false
+  end
+
   def minimum_quantity
+    # HACK: for SanMar
+    sanmar = Spree::Supplier.where(dc_acct_num: '100160').first
+    return 12 if supplier == sanmar
     lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).first
     return 50 if lowest_price_range.nil?
     lower_value = lowest_price_range.split('..')[0]
@@ -103,10 +117,10 @@ Spree::Product.class_eval do
     self.shipping_quantity ||= get_property_value('shipping_quantity')
     save!
 
-    got_shipping_weight = self.shipping_weight.present?
-    got_shipping_dimensions = self.shipping_dimensions.present?
-    got_shipping_quantity = self.shipping_quantity.present?
-    got_originating_zip = self.originating_zip.present?
+    got_shipping_weight = shipping_weight.present?
+    got_shipping_dimensions = shipping_dimensions.present?
+    got_shipping_quantity = shipping_quantity.present?
+    got_originating_zip = originating_zip.present?
 
     got_shipping_weight &&
       got_shipping_dimensions &&
@@ -115,7 +129,9 @@ Spree::Product.class_eval do
   end
 
   def check_validity!
-    invalid if Spree::ImprintMethodsProduct.where(product: self).empty?
+    no_imprint_methods = Spree::ImprintMethodsProduct.where(product: self).empty?
+    no_main_color = Spree::ColorProduct.where(product: self).empty?
+    invalid if no_imprint_methods || no_main_color
   rescue
     Rails.logger.warn('Failed to test for validity, assume invalid')
     invalid
@@ -147,7 +163,7 @@ Spree::Product.class_eval do
   end
 
   def add_category(category_guid)
-    taxon = Spree::Taxon.where(dc_category_guid: category_guid).first
+    taxon = Spree::Taxon.find_by(dc_category_guid: category_guid)
 
     return if taxon.nil?
 
@@ -155,5 +171,22 @@ Spree::Product.class_eval do
       taxon_id: taxon.id,
       product_id: id
     ).first_or_create
+  end
+
+  def self.csv_header
+    CSV::Row.new([:sku, :name, :factory, :num_product_colors, :num_imprints],
+      %w(sku name factory num_product_colors num_imprints), true)
+  end
+
+  def to_csv_row
+    CSV::Row.new([:sku, :name, :factory, :num_product_colors, :num_imprints],
+      [sku, name, supplier.name, color_product.count, imprint_methods.count])
+  end
+
+  def self.find_in_batches(dc_acct_num)
+    supplier = Spree::Supplier.find_by(dc_acct_num: dc_acct_num)
+    where(supplier: supplier).find_each do |product|
+      yield product
+    end
   end
 end

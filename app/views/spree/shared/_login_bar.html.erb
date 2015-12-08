@@ -1,4 +1,7 @@
 <% if spree_current_user %>
+  <% if spree_current_user.has_spree_role?(:admin) %>
+    <li><%= link_to 'Admin', spree.admin_path %></li>
+  <% end %>
   <li><%= link_to Spree.t(:my_account), main_app.dashboards_path %></li>
   <li><%= link_to Spree.t(:logout), spree.logout_path %></li>
 <% else %>

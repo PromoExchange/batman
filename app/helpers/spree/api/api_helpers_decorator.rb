@@ -66,7 +66,8 @@ Spree::Api::ApiHelpers.module_eval do
       :bid,
       :seller_fee,
       :prebid_id,
-      :state
+      :state,
+      :manage_workflow
     ])
   mattr_reader :bid_attributes
 

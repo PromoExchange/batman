@@ -1,0 +1,10 @@
+.row
+  .col-md-4
+    h4 = f.object.name
+    p Cannot be edited, it is the key into DC data
+  .col-md-8
+    = f.field_container :dc_acct_num, class: ['form-group'] do
+      = f.label :dc_acct_num, "DC Account Number"
+      span.required *
+      = f.text_field :dc_acct_num, :class => 'form-control'
+      = f.error_message_on :dc_acct_num

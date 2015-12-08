@@ -1,0 +1,16 @@
+<% if auction.is_wearable? %>
+  <ul class="display-address-ul">
+    <% auction.auction_sizes.each do |key| %>
+      <% unless auction.auction_size.product_size[key] == 0 %>
+        <li>
+          <%= "#{key.capitalize}: #{auction.auction_size.product_size[key]}" %>
+        </li>
+      <% end %>
+    <% end %>
+    <li>
+      Total Qty: <%= auction.quantity %>
+    </li>
+  </ul>
+<% else %>
+  <%= auction.quantity %>
+<% end %>

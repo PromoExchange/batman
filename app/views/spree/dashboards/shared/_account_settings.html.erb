@@ -4,30 +4,34 @@
 
 <ul class="nav nav-tabs" role="tablist">
   <% active_me = nil %>
-  <% active_me = 'active' unless ['address', 'logo', 'payment_method'].include? @tab %>
+  <% active_me = 'active' unless ['address', 'logo', 'payment_method','prebids', 'taxrates'].include? @tab %>
   <li class="<%= active_me %>"><a href="#contact-tab" role="tab" data-toggle="tab"><%=Spree.t(:contact_information)%></a></li>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
     <% active_me = nil %>
     <% active_me = 'active' if @tab == 'payment_method' %>
-    <li class="<%= active_me %>"><a href="#payment-method-tab" role="tab" data-toggle="tab"><%=Spree.t(:payment_methods)%></a></li>
+    <li class="<%= active_me %>"><a href="#payment-method-tab" role="tab" id="payment-method" data-toggle="tab"><%=Spree.t(:payment_methods)%></a></li>
   <% end %>
   <% active_me = nil %>
   <% active_me = 'active' if @tab == 'address' %>
-  <li class="<%= active_me %>"><a href="#address-tab" role="tab" data-toggle="tab"><%=Spree.t(:Addresses)%></a></li>
+  <li class="<%= active_me %>"><a href="#address-tab" role="tab" id="address" data-toggle="tab"><%=Spree.t(:Addresses)%></a></li>
+  <% active_me = nil %>
   <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-    <li><a href="#taxrates-tab" role="tab" data-toggle="tab"><%=Spree.t(:tax_rates)%></a></li>
-    <li><a href="#prebids-tab" role="tab" data-toggle="tab"><%=Spree.t(:prebids)%></a></li>
+    <% active_me = 'active' if @tab == 'taxrates' %>
+    <li class="<%= active_me %>"><a href="#taxrates-tab" role="tab" id="taxrates" data-toggle="tab"><%=Spree.t(:tax_rates)%></a></li>
+    <% active_me = nil %>
+    <% active_me = 'active' if @tab == 'prebids' %>
+    <li class="<%= active_me %>"><a href="#prebids-tab" role="tab" id="prebids" data-toggle="tab"><%=Spree.t(:prebids)%></a></li>
   <% end %>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
     <% active_me = nil %>
     <% active_me = 'active' if @tab == 'logo' %>
-    <li class="<%= active_me %>"><a data-toggle="tab" href="#logo-tab" role="tab"><%= Spree.t(:logos) %></a></li>
+    <li class="<%= active_me %>"><a data-toggle="tab" href="#logo-tab" id="logo-click" role="tab"><%= Spree.t(:logos) %></a></li>
   <% end %>
 </ul>
 
 <div class="tab-content">
   <% active_me = nil %>
-  <% active_me = 'active' unless ['address', 'logo', 'payment_method'].include? @tab %>
+  <% active_me = 'active' unless ['address', 'logo', 'payment_method','prebids', 'taxrates'].include? @tab %>
   <div class="tab-pane <%= active_me %>" id="contact-tab">
     <%= render partial: 'spree/dashboards/shared/contact_tab' %>
   </div>
@@ -43,11 +47,14 @@
   <div class="tab-pane <%= active_me %>" id="address-tab">
     <%= render partial: 'spree/dashboards/shared/address_tab' %>
   </div>
+  <% active_me = nil %>
   <% if spree_current_user.has_spree_role?(:seller) || spree_current_user.has_spree_role?(:admin) %>
-    <div class="tab-pane" id="taxrates-tab">
+    <% active_me = 'active' if @tab == 'taxrates' %>
+    <div class="tab-pane <%= active_me %>" id="taxrates-tab">
       <%= render partial: 'spree/dashboards/seller/taxrates_tab' %>
     </div>
-    <div class="tab-pane" id="prebids-tab">
+    <% active_me = 'active' if @tab == 'prebids' %>
+    <div class="tab-pane <%= active_me %>" id="prebids-tab">
       <%= render partial: 'spree/dashboards/seller/prebids_tab' %>
     </div>
   <% end %>

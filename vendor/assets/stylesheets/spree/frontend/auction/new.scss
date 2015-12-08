@@ -48,3 +48,75 @@
     cursor: pointer;
   }
 }
+
+.auction-size{
+  display:inline-block;
+  width:100%;
+  margin-bottom:15px;
+}
+
+.auction-size .auction-list ul{
+  padding:0px;
+  display:inline-block;
+  margin:0px;
+}
+
+.auction-size .auction-list ul li{
+  list-style-type: none;
+  padding:0px;
+  margin-right:10px;
+  margin-bottom:10px;
+
+}
+
+.auction-size .auction-list ul li input, 
+.auction-size .auction-list ul li span.dispaly-size{
+  border-color:#ccc;
+  color:purple;
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  border-radius:0px;
+  height: 44px;
+}
+
+.auction-size .auction-list ul li span{
+  font-size:15px;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
+
+.auction-size h3{
+  font-size:17px;
+  color:purple;
+  font-weight:700;
+  margin-top:0px;
+  margin-bottom:0px;
+}
+
+.auction-size .col-md-3{
+  padding-right:0px;
+
+}
+
+.auction-size .col-md-3 span{
+  color:grey;
+  font-weight:700;
+  font-size:15px;
+}
+
+.total-qty span{
+  font-weight:700;
+  font-size:19px;
+  padding-left:10px;
+}
+
+.total-qty span:last-child{
+   font-size:18px;
+  font-weight:700;
+  color:purple;
+  padding-right:10px;
+  line-height:31px;
+  text-align:center;
+}

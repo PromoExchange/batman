@@ -18,10 +18,6 @@ class Spree::Admin::ImprintMethodsController < Spree::Admin::ResourceController
 
   private
 
-  def imprint_method_params
-    params.require(:imprint_method).permit(:name)
-  end
-
   def collection
     return @collection if @collection.present?
     params[:q] = {} if params[:q].blank?
@@ -33,5 +29,9 @@ class Spree::Admin::ImprintMethodsController < Spree::Admin::ResourceController
       .per(Spree::Config[:properties_per_page])
 
     @collection
+  end
+  
+  def imprint_method_params
+    params.require(:imprint_method).permit(:name)
   end
 end

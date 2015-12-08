@@ -1,4 +1,4 @@
-def add_pms_color(supplier, imprint_method, name , pantone, hex)
+def add_pms_color(supplier, imprint_method, name, pantone, hex)
   pms_color = Spree::PmsColor.where(
     name: name,
     pantone: pantone,
@@ -18,27 +18,135 @@ def wrap_string(string)
 end
 
 namespace :dc do
+  # Fixes
   namespace :fix do
     desc 'Delete all existing prebids'
     task delete_prebids: :environment do
       Spree::Prebid.destroy_all
     end
 
-    desc 'Get invalid CSV'
-    task invalid_report: :environment do
-      puts 'factory,name,sku,num_imprints,num_prices,num_colors'
-      Spree::Product.where(state: 'invalid').each do |product|
-        line = ''
-        line << wrap_string(product.supplier.name) << ','
-        line << wrap_string(product.name) << ','
-        line << wrap_string(product.sku) << ','
+    desc 'Fix SanMar Apparel'
+    task sanmar: :environment do
+      supplier = Spree::Supplier.where(name: 'SanMar').first_or_create
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      embroidery = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
 
-        line << Spree::ImprintMethodsProduct.where(product: product).count.to_s << ','
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          embroidery,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
 
-        line << Spree::VolumePrice.where(variant: product.master).count.to_s << ','
+      products = Spree::Product.where(supplier: supplier)
 
-        line << Spree::ColorProduct.where(product: product).count.to_s << ','
-        puts line
+      products.each do |product|
+        product.loading
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: screen_print,
+          product: product
+        ).first_or_create
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: embroidery,
+          product: product
+        ).first_or_create
+
+        product.check_validity!
+        product.loaded if product.state == 'loading'
+      end
+    end
+
+    desc 'Fix AIO Drives'
+    task aio: :environment do
+      supplier = Spree::Supplier.where(name: 'All in One').first_or_create
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Brown', '498 C', '#00664f'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Green', '348 C', '#00843d'],
+        ['Light Blue', 'Light Blue', '#add8e6'],
+        ['Maroon', '202 C', '#862633'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Silver', '877 C', '#8a8d8f'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Purple', '259 C', '#6d2077'],
+        ['Red', '186 C', '#c8102e'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Teal', '321 C', '#008c95'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Yellow', 'Yellow C', '#fedd00']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          imprint_method,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      product_guids = [
+        'E41E27A5-DCE5-4648-9042-6527DBD4A56F',
+        '50C83239-E2AA-4297-B445-884392332F0D'
+      ]
+
+      product_guids.each do |product_guid|
+        product = Spree::Product.where(supplier_item_guid: product_guid).first
+
+        next unless product
+
+        product.loading
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: imprint_method,
+          product: product
+        ).first_or_create
+
+        product.check_validity!
+        product.loaded if product.state == 'loading'
       end
     end
 
@@ -248,6 +356,174 @@ namespace :dc do
     end
   end
 
+  # Maps
+  namespace :maps do
+    namespace :pms do
+      desc 'Export PMS colors'
+      task export: :environment do
+        CSV.open(File.join(Rails.root, 'db/maps/pmscolor_export.csv'), 'wb') do |csv|
+          csv << %w(name display_name pantone hex)
+          Spree::PmsColor.all.each do |pms_color|
+            row = []
+            row << pms_color.name
+            row << pms_color.display_name
+            row << pms_color.pantone
+            row << pms_color.hex
+            csv << row
+          end
+        end
+      end
+
+      desc 'Import PMS Colors'
+      task import: :environment do
+        begin
+          import_file = File.join(Rails.root, 'db/maps/pmscolor_import.csv')
+          fail "PMS Color import file is missing: #{import_file}" unless File.exist?(import_file)
+          Spree::PmsColor.destroy_all
+          CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
+            hashed = row.to_hash
+            Spree::PmsColor.create(hashed)
+          end
+        rescue => e
+          puts "ERROR: #{e}"
+        end
+      end
+
+      desc 'Export PMS by Factory/Imprint colors'
+      task export_factory: :environment do
+        CSV.open(File.join(Rails.root, "db/maps/pmscolor_by_factory_export-#{Time.zone.today}.csv"), 'wb') do |csv|
+          csv << %w(factory imprint_method name display_name pantone hex)
+          data = ''
+          Spree::Supplier.all.each do |factory|
+            Spree::PmsColorsSupplier.where(supplier: factory).each do |pms_color_supplier|
+              imprint_method = Spree::ImprintMethod.find(pms_color_supplier.imprint_method_id)
+              pms_color = Spree::PmsColor.find(pms_color_supplier.pms_color_id)
+              row = []
+              row << factory.name
+              row << imprint_method.name
+              row << pms_color.name
+              row << pms_color.display_name
+              row << pms_color.pantone
+              row << pms_color.hex
+              csv << row
+            end
+          end
+        end
+      end
+
+      desc 'Import PMS by Factory/Imprint colors'
+      task import_factory: :environment do
+        begin
+          import_file = File.join(Rails.root, 'db/maps/pmscolor_by_factory_import.csv')
+          fail "PMS Color by factory import file is missing: #{import_file}" unless File.exist?(import_file)
+          CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
+            hashed = row.to_hash
+            supplier = Spree::Supplier.where(name: hashed[:factory]).first_or_create
+
+            next if hashed[:display_name].blank?
+
+            if supplier.nil?
+              puts "Failed to local supplier #{hashed[:factory]}"
+              next
+            end
+
+            imprint = Spree::ImprintMethod.where(name: hashed[:imprint_method].strip).first_or_create
+
+            if imprint.nil?
+              puts "Failed to find imprint #{hashed[:imprint_method]}"
+              next
+            end
+
+            pms_color = Spree::PmsColor.where(name: hashed[:name]).first_or_create
+            if pms_color.nil?
+              puts "Failed to find pms color #{hashed[:name]}"
+              next
+            end
+
+            pms_colors_supplier = Spree::PmsColorsSupplier.where(
+              pms_color: pms_color,
+              supplier: supplier,
+              imprint_method: imprint
+            ).first
+
+            if pms_colors_supplier.nil?
+              pms_colors_supplier = Spree::PmsColorsSupplier.where(
+                pms_color: pms_color,
+                supplier: supplier,
+                imprint_method: imprint,
+                display_name: hashed[:display_name]
+              ).first_or_create
+            end
+
+            pms_colors_supplier.update_attributes!(display_name: hashed[:display_name])
+
+            pms_color.update_attributes!(
+              pantone: hashed[:pantone],
+              hex: hashed[:hex],
+              display_name: hashed[:display_name]
+            )
+          end
+        rescue => e
+          puts "ERROR: #{e}"
+        end
+
+        CSV.open(File.join(Rails.root, "db/maps/pmscolor_by_factory_export-#{Time.zone.today}.csv"), 'wb') do |csv|
+          csv << %w(supplier_name imprint_method name display_name pantone hex)
+          data = ''
+          Spree::Supplier.all.each do |factory|
+            Spree::PmsColorsSupplier.where(supplier: factory).each do |pms_color_supplier|
+              imprint_method = Spree::ImprintMethod.find(pms_color_supplier.imprint_method_id)
+              pms_color = Spree::PmsColor.find(pms_color_supplier.pms_color_id)
+              row = []
+              row << factory.name
+              row << imprint_method.name
+              row << pms_color.name
+              row << pms_color.display_name
+              row << pms_color.pantone
+              row << pms_color.hex
+              csv << row
+            end
+          end
+        end
+      end
+    end
+
+    namespace :option do
+      desc 'Export option mappings'
+      task export: :environment do
+        CSV.open(File.join(Rails.root, 'db/maps/option_export.csv'), 'wb') do |csv|
+          csv << %w(dc_acct_num dc_name px_name do_not_save)
+          Spree::OptionMapping.all.each do |option_map|
+            row = []
+            row << option_map.dc_acct_num
+            row << option_map.dc_name.strip
+            row << option_map.px_name
+            row << option_map.do_not_save
+            csv << row
+          end
+        end
+      end
+
+      desc 'Import option mappings'
+      task import: :environment do
+        begin
+          import_file = File.join(Rails.root, 'db/maps/option_import.csv')
+          fail "Option Mapping import file is missing: #{import_file}" unless File.exist?(import_file)
+          Spree::OptionMapping.destroy_all
+          count = 1
+          CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
+            hashed = row.to_hash
+            Spree::OptionMapping.create(hashed)
+            count += 1
+          end
+        rescue => e
+          puts "ERROR: #{e}"
+        end
+      end
+    end
+  end
+
+  # Categories
   namespace :category do
     desc 'Reload DC Categories'
     task reload: :environment do
@@ -263,7 +539,6 @@ namespace :dc do
 
       tree = Spree::DcCategory.category_tree
       tree.each do |parent|
-        puts "#{parent.name}"
         parent_taxon = Spree::Taxon.create(
           name: parent.name,
           dc_category_guid: parent.guid,
@@ -271,7 +546,6 @@ namespace :dc do
           taxonomy_id: category_taxonomy.id
         )
         parent.children.each do |child|
-          puts "--->#{child.name}"
           Spree::Taxon.create(
             name: child.name,
             dc_category_guid: child.guid,

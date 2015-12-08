@@ -31,7 +31,7 @@ $(function() {
           $("body").css("cursor", "default");
           $("#payment-submit").prop('disabled', false);
           alert('Payment processed, thank you');
-          window.location.href = "/dashboards";
+          window.location.href = "/dashboards?tab=won_auction";
         },
         error: function(data) {
           console.log(data);

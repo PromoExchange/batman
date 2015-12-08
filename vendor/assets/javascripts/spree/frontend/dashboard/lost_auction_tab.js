@@ -64,5 +64,10 @@ $(function() {
         $("#seller-lost-auction-table > tbody").html(trHTML);
       }
     });
+    window.history.pushState({}, null, '/dashboards?tab=lost_auction');
   });
+  if ($($('#seller-lost-auction-tab').parent()[0]).hasClass('active')) {
+    $('#seller-lost-auction-tab').trigger('click');
+  }
+  
 });

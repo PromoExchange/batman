@@ -41,10 +41,15 @@ $(function() {
         $("#buyer-product-ideas-table > tbody").html(trHTML);
       }
     });
+
+    window.history.pushState({}, null, '/dashboards?tab=product_idea');
   });
 
-  $('tbody').on('click', '.product_request_title', function(){
+  if ($($('#product-ideas-tab').parent()[0]).hasClass('active')) {
+    $('#product-ideas-tab').trigger('click');
+  }
 
+  $('tbody').on('click', '.product_request_title', function(){
     if($(this).find('span').hasClass('glyphicon-chevron-down')) {
 
       $(this).find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
@@ -150,7 +155,6 @@ $(function() {
 
       });
     }
-
   });
 
   $('tbody').on('click', '.sample_cost', function(){

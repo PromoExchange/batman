@@ -25,6 +25,115 @@ namespace :dc do
       Spree::Prebid.destroy_all
     end
 
+    desc 'Fix American Accent Napkins'
+    task american_accents: :environment do
+      supplier = Spree::Supplier.where(name: 'American Accents').first_or_create
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      napkins = [
+        ['White', 'A04A0EF9-8CB3-4771-B6EC-40E0A7EFCC6C'],
+        ['White', 'AFC06A67-02E1-429E-B18D-AE5CD89BEFD8'],
+        ['White', 'D662D322-CFE8-4E03-9759-B6FD038818F5'],
+        ['Aqua', 'EB32B66A-D8FC-4750-90E3-6833A9AC2EC1'],
+        ['Black', 'DB14664C-4E32-481F-9C8F-FAC707105148'],
+        ['Blue', '145263F1-1223-46CE-A1DA-89A7559FBE83'],
+        ['Burgundy', '22B65D60-51EC-444F-B587-2380049B6C94'],
+        ['Green', 'C9524625-0EEA-4408-ACEB-67843F5178D8'],
+        ['Ivory', 'B608D6FE-A59E-4523-BF9F-C1636A853245'],
+        ['Light Blue', '1D2725A7-4D27-44B9-A4E8-C7F87160A32E'],
+        ['Red', '01E1E0E3-3C23-4B76-BA2B-BA9A3DB392DD'],
+        ['Light Green', '1389E233-CEAC-43B2-B494-82C71FA9CACD'],
+        ['Magenta', '58259221-0DF9-40E0-A74D-09584A958D65'],
+        ['Orange', '372E423D-F43C-489A-937E-BB480BD1CBBA'],
+        ['Pink', 'C04880F3-7C51-4C64-85AD-8EC609927B73'],
+        ['Silver', 'A56895E6-1040-4258-A9D4-56A2314E9E89'],
+        ['Teal', '2179CB1D-3974-4716-BE92-7CAD6E7E7D5A'],
+        ['Yellow', 'AA17430A-07AC-4425-9018-FB3D96D34AB0'],
+        ['Almost Linen', '493C329F-C886-4C4E-B99C-323F184B22C5'],
+        ['White', 'BE7F028C-1AAA-46E5-AB8A-5E1DAE49FD02'],
+        ['Black', '4B39FA22-3875-49B7-BB9A-E2D2DE12B5B7'],
+        ['Dark Blue', '5B631858-7DC2-4BCA-9D91-81797E1B3289'],
+        ['Green', '66A2C90F-239C-497C-876D-7AE0D9F65BB4'],
+        ['Purple', '36BA868D-DA23-4405-A850-853ECCCC6BC5'],
+        ['Red', '2F8B6DC1-300C-46E2-B519-5DF5AD3957E4'],
+        ['Silver', '32B622B8-702E-41F9-9670-638F5078F82C'],
+        ['Yellow', '462E6EB5-1DA7-492A-A9AB-4211E3ABF341'],
+        ['White', '3316212A-582B-40C6-B32A-72ABCB1171C2'],
+        ['Black', '08AB4314-51D0-4E24-BE48-02280640EC04'],
+        ['Dark Blue', 'CAE74FF0-8385-4E33-BA7A-5AFF490F3DD9'],
+        ['Ivory', 'F2650B0B-423C-422C-BFD5-8536E89827B7'],
+        ['Purple', 'FD4CA05B-BF04-4952-AA44-433B9C93A3C3'],
+        ['Red', 'DBA558ED-8639-43CE-A572-266499A41899'],
+        ['Silver', 'D2147037-4FF7-4434-92B7-194EA2E2C4A3'],
+        ['Yellow', '86879B90-66AC-4443-BF2B-B6B73884C963'],
+        ['Almost Linen', 'DB71EA4C-FAC1-4D04-ACFE-219E5FE5F23C'],
+        ['White', '54B32019-06D6-40AB-89D1-461F422BD9A2'],
+        ['White', '2DD13B5F-B380-492E-9CC2-16213BD37F15'],
+        ['Purple', '68ED7485-39C6-44D7-9833-B908450412BF'],
+        ['Ivory', '3BFBA591-56E1-4ABA-A1B2-092CAE179F91'],
+        ['Green', 'F5893E00-96E6-4CE1-806D-CD06163B0C85'],
+        ['Natural', 'A15276A3-CC19-42D1-8823-B4DC1D41B913'],
+        ['Chocolate', '41D407BB-E6F9-4C2E-B826-AFD8D1D3BC6D'],
+        ['Dark Blue', '53A020FC-2360-4235-BFB7-5D166A1BB24C'],
+        ['Dark Green', '93D34317-AA3D-47E7-A815-3DE4C3C953F4']
+      ]
+
+      napkins.each do |napkin|
+        product = Spree::Product.where(supplier_item_guid: napkin[1]).first
+        next if product.nil?
+
+        product.loading
+
+        Spree::ImprintMethodsProduct.where(
+          imprint_method: screen_print,
+          product: product
+        ).first_or_create
+
+        Spree::ColorProduct.where(
+          product: product,
+          color: napkin[0]
+        ).first_or_create
+
+        product.check_validity!
+        product.loaded if product.state == 'loading'
+      end
+    end
+
     desc 'Fix SanMar Apparel'
     task sanmar: :environment do
       supplier = Spree::Supplier.where(name: 'SanMar').first_or_create
@@ -85,63 +194,6 @@ namespace :dc do
 
         Spree::ImprintMethodsProduct.where(
           imprint_method: embroidery,
-          product: product
-        ).first_or_create
-
-        product.check_validity!
-        product.loaded if product.state == 'loading'
-      end
-    end
-
-    desc 'Fix AIO Drives'
-    task aio: :environment do
-      supplier = Spree::Supplier.where(name: 'All in One').first_or_create
-      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-
-      add_these_colors = [
-        ['Black', '426', '#25282B'],
-        ['White', '000', '#FFFFFF'],
-        ['Brown', '498 C', '#00664f'],
-        ['Dark Green', '336 C', '#00664f'],
-        ['Green', '348 C', '#00843d'],
-        ['Light Blue', 'Light Blue', '#add8e6'],
-        ['Maroon', '202 C', '#862633'],
-        ['Gold', '123 C', '#ffc72c'],
-        ['Silver', '877 C', '#8a8d8f'],
-        ['Navy Blue', '281 C', '#00205b'],
-        ['Orange', '21 C', '#fe5000'],
-        ['Pink', 'Rhodamine', '#e10098'],
-        ['Purple', '259 C', '#6d2077'],
-        ['Red', '186 C', '#c8102e'],
-        ['Royal Blue', 'Reflex Blue C', '#001489'],
-        ['Teal', '321 C', '#008c95'],
-        ['Violet', 'Violet C', '#440099'],
-        ['Yellow', 'Yellow C', '#fedd00']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          imprint_method,
-          color[0],
-          color[1],
-          color[2]
-        )
-      end
-
-      product_guids = [
-        'E41E27A5-DCE5-4648-9042-6527DBD4A56F',
-        '50C83239-E2AA-4297-B445-884392332F0D'
-      ]
-
-      product_guids.each do |product_guid|
-        product = Spree::Product.where(supplier_item_guid: product_guid).first
-
-        next unless product
-
-        product.loading
-
-        Spree::ImprintMethodsProduct.where(
-          imprint_method: imprint_method,
           product: product
         ).first_or_create
 

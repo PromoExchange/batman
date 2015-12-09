@@ -5,7 +5,7 @@
   <%= render partial: 'spree/shared/properties' %>
 </div>
 <div class="col-md-6 well">
-  <div class="auction-details">
+  <div class="auction-details" data-id="<%= @auction.id %>">
     <h4><%= Spree::t(:auction_details) %></h4>
     <table class="table">
       <tr><td>Auction #:</td><td><%= @auction.reference %></td></tr>

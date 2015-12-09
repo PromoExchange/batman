@@ -46,7 +46,13 @@ $(function() {
             var action = '';
 
             if(item.state === 'unpaid') {
-              status_text = 'Invoice Payment Required';
+              var rating_status = '';
+            
+              if(item.review) {
+                rating_status = '<input type="hidden" class="rating rating-value" disabled="disabled" value='+ item.review.rating +'/>';
+              }
+
+              status_text = 'Invoice Payment Required<br>' + rating_status;
               action = simple_template({
                 value: action_template({
                   feedback: '', url: '/invoices/'+item.id, auction_id: item.id, auction_value: 'Pay', auction_class: 'pay'

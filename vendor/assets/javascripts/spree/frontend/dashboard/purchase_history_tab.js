@@ -62,6 +62,16 @@ $(function() {
               action = simple_template({
                 value: ''
               });
+              if(item.state === 'unpaid' && !item.winning_bid.manage_workflow) {
+                status_text = 'Completed';
+                if(!item.review){
+                  action = simple_template({
+                    value: action_template({
+                      url: '#', auction_id: item.id, auction_value: 'Rate Seller', auction_class: 'review_rating'
+                    })
+                  });
+                }
+              }
             }
 
             if (item.state === 'create_proof') {
@@ -297,7 +307,7 @@ $(function() {
 
   $('#rating-submit').on('click', 'button', function(){
     var status = $(this).data(status);
-    var rating = $('.rating').val();
+    var rating = $('.rating-value').val();
     $('#select-rating').val(rating);
     var auction_id = $('#rating-auction-id').val();
     var key = $('#rating-seller').attr('data-key');
@@ -317,7 +327,8 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        $('#purchase-history-tab').click();
+        // $('#purchase-history-tab').click();
+        window.location = "/dashboards?tab=purchase_history";
       },
       error: function(data) {
         alert('Failed to Submit Rating, please contact support');

@@ -134,12 +134,22 @@ $(function() {
     e.preventDefault();
     var auction_id = $('#auction-id').val();
     var seller_id = $('#seller-id').val();
-    var bid = $('#total-price-shown').val();
+    var bid = $('#total-price-shown').val().replace(/[$ ,]/gi,'');
+
+    if (bid.split('.')[0].length > 8) {
+      alert('Total price shown value must be less than 9 digit i.e. 12345678.12');
+      return false
+    }
+
+    if (bid.split('.')[0] == 0) {
+      alert('Total price shown must be greater than $0.00');
+      return false
+    }
 
     var bid_message = {
       seller_id: parseInt(seller_id, 10),
       auction_id: parseInt(auction_id, 10),
-      per_unit_bid: parseFloat(bid.replace(/\$/gi,''))
+      per_unit_bid: parseFloat(bid)
     };
     $.ajax({
       type: 'POST',

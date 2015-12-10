@@ -31,8 +31,8 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
-  
-  
+
+
 
   <div role="tabpanel">
     <!-- Nav tabs -->
@@ -55,11 +55,10 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Query section -->
-  <hr>
-  <div>
-    <h1>Want to learn more?</h1>
+  <div id="home_query_section">
+    <h3>Want to learn more?</h3>
     <%= form_for :request,  url: '/send_request', method: :post, remote: true do |f| %>
       <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -69,11 +68,10 @@
           <%= f.submit "Submit", class: "btn btn-success", data: { disable_with: 'Processing...' }%>
         </div>
       </div>
-    <% end %>  
+    <% end %>
   </div>
-  <hr>
   <!-- End of query section -->
- 
+
   <!-- Blog section -->
   <div class="blog-wrapper">
     <div class="main-heading text-center">
@@ -93,14 +91,14 @@
             </div>
           </div>
         </div>
-      <% end %>  
-      <div class="text-center previous-blog"><a href="/blog" class="update-link"><%= Spree.t(:view_all_update)%></a></div> 
+      <% end %>
+      <div class="text-center previous-blog"><a href="/blog" class="update-link"><%= Spree.t(:view_all_update)%></a></div>
     <% else %>
       <p id="no_entries"><%= Spree.t(:no_blog_entries) %></p>
-    <% end %> 
+    <% end %>
   </div>
-  
+
   <!-- end of blog section -->
-  
-  
+
+
 </div>

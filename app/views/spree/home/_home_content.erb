@@ -1,3 +1,4 @@
+<div id="notification-msg"></div>
 <div id="batman-home-content">
   <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
@@ -55,6 +56,24 @@
     </div>
   </div>
   
+  <!-- Query section -->
+  <hr>
+  <div>
+    <h1>Want to learn more?</h1>
+    <%= form_for :request,  url: '/send_request', method: :post, remote: true do |f| %>
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <%= f.text_field :email, class: "form-control", placeholder:"Enter your email" %>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <%= f.submit "Submit", class: "btn btn-success", data: { disable_with: 'Processing...' }%>
+        </div>
+      </div>
+    <% end %>  
+  </div>
+  <hr>
+  <!-- End of query section -->
+ 
   <!-- Blog section -->
   <div class="blog-wrapper">
     <div class="main-heading text-center">

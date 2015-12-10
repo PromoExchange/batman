@@ -3,6 +3,6 @@ module ConfirmReceiptReminder
 
   def self.perform(params)
     @auction = Spree::Auction.find(params['auction_id'])
-    BuyerMailer.confirm_receipt_reminder(@auction).deliver
+    BuyerMailer.confirm_receipt_reminder(@auction).deliver if @auction.confirm_receipt?
   end
 end

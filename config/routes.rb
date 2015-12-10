@@ -44,7 +44,6 @@ Rails.application.routes.draw do
       end
       member do
         get 'download_proof'
-        get 'download_logo'
       end
     end
 
@@ -60,7 +59,11 @@ Rails.application.routes.draw do
 
   resources :logos,
     controller: 'spree/logos',
-    as: 'logos'
+    as: 'logos' do
+      member do
+        get 'download_logo'
+      end
+    end  
 
   resources :product_requests,
     controller: 'spree/product_requests',

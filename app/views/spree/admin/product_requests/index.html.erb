@@ -37,7 +37,7 @@
           <% else %>
             <li class="sample_cost col-md-2 request_sample"> <%= request_idea.cost %> </li>
           <% end %>
-          <li class="col-md-1"> </li>
+          <li class="col-md-1"> <%= request_idea.paid ? "Paid" : "Unpaid" %> </li>
           <li class="col-md-3">
             <% if request_idea.cancelled? %>
               "Deleted by buyer"

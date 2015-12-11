@@ -3,6 +3,8 @@ class Spree::RequestIdea < Spree::Base
   belongs_to :variant, foreign_key: :sku, primary_key: :sku
   belongs_to :auction
 
+  has_many :auction_payments
+
   validates :sku, presence: true
   validate :validate_product, if: -> { sku.present? }, on: :create
 

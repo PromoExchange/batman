@@ -30,6 +30,32 @@ class Spree::ProductRequest < Spree::Base
     )
   end
 
+  def sample_fee
+    request_ideas.each do |request_idea|
+      if request_idea.complete? && !request_idea.paid
+        description = "Request Idea ID: #{request_idea.id}"
+        customer_token = buyer.customers.where(payment_type: "cc").take.token
+        amount = request_idea.cost.round(2) * 100
+
+        stripe = Stripe::Charge.create(
+          amount: amount.to_i,
+          currency: 'usd',
+          customer: customer_token,
+          description: description
+        )
+        if %w(succeeded pending).include?(stripe.status)
+          request_idea.auction_payments.create(
+            status: stripe.status,
+            charge_id: stripe.id,
+            failure_code: stripe.failure_code,
+            failure_message: stripe.failure_message
+          )
+          request_idea.update_attributes(paid: true)
+        end
+      end
+    end
+  end
+
   private
 
   def set_request_type

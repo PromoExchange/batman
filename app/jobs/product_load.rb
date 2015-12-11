@@ -66,10 +66,12 @@ module ProductLoad
 
     # Sets a 'default' color,
     # If there is a PRODUCT COLORS option it will override this
-    Spree::ColorProduct.where(
-      product_id: px_product.id,
-      color: px_product.supplier_display_name
-    ).first_or_create
+    unless px_product.supplier_display_name.blank?
+      Spree::ColorProduct.where(
+        product_id: px_product.id,
+        color: px_product.supplier_display_name
+      ).first_or_create
+    end
 
     # Image
     px_product.load_image supplier_item_guid
@@ -185,11 +187,14 @@ module ProductLoad
           product_id: px_product.id
         ).first_or_create
       elsif option.type == 'Product Color Information'
-        Spree::ColorProduct.where(
-          product_id: px_product.id
-        ).destroy_all
-
         option_detail = Spree::DcOptionDetail.retrieve(option.guid)
+
+        if option_detail.option_choices.count > 0
+          Spree::ColorProduct.where(
+            product_id: px_product.id
+          ).destroy_all
+        end
+
         option_detail.option_choices.each do |option_choice|
           cleaned_color_name = clean_color_name(option_choice.name)
           Spree::ColorProduct.where(

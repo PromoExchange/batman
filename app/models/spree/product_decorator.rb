@@ -1,9 +1,11 @@
 Spree::Product.class_eval do
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
-  has_and_belongs_to_many :imprint_methods
   has_and_belongs_to_many :option_values
   has_many :upcharges, as: :related
   has_many :color_product
+
+  has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
+  has_many :imprint_methods, through: :imprint_methods_products
 
   delegate :upcharges, to: :option_values
 

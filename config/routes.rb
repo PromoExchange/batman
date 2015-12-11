@@ -63,7 +63,7 @@ Rails.application.routes.draw do
       member do
         get 'download_logo'
       end
-    end  
+    end
 
   resources :product_requests,
     controller: 'spree/product_requests',
@@ -138,6 +138,7 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :products do
         resources :color_products
+        resources :imprint_methods_products
       end
     end
   end

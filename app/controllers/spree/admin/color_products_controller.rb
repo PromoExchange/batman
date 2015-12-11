@@ -1,6 +1,7 @@
 class Spree::Admin::ColorProductsController < Spree::Admin::BaseController
   before_action :load_product
   before_action :load_color_product, only: [:edit, :update, :destroy]
+  after_action :set_validity, only: [:create, :update, :destroy]
 
   def index
     @color_products = Spree::ColorProduct.where(product: @product)
@@ -27,6 +28,12 @@ class Spree::Admin::ColorProductsController < Spree::Admin::BaseController
   end
 
   private
+
+  def set_validity
+    @product.loading!
+    @product.check_validity!
+    @product.loaded! if @product.state == 'loading'
+  end
 
   def load_product
     @product = Spree::Product.friendly.find(params[:product_id])

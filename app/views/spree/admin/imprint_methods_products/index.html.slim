@@ -18,7 +18,7 @@
             td.actions.actions-2.text-right
               = button_link_to "Delete", \
                 admin_product_imprint_methods_product_path(imprint_method.product,imprint_method), \
-                { :class => "btn-warning btn-sm", :icon => 'delete', :method => :delete}
+                { :class => "btn-success btn-xs", :icon => 'delete', :method => :delete}
   - else
     .alert.alert-info.no-objects-found
     = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::ImprintMethodsProduct))

@@ -16,8 +16,13 @@
           tr
             td = color_product.color
             td.actions.actions-2.text-right
-              = link_to_edit(color_product, {no_text: true, url: edit_admin_product_color_product_path(color_product.product,color_product) })
-              = link_to_delete(color_product, {no_text: true, url: admin_product_color_product_path(color_product.product,color_product) })
+              = button_link_to "Edit", \
+                edit_admin_product_color_product_path(color_product.product,color_product), \
+                { :class => "btn-success btn-xs", :icon => 'edit'}
+              = button_link_to "Delete", \
+                admin_product_color_product_path(color_product.product,color_product), \
+                { :class => "btn-danger btn-xs", :icon => 'delete', :method => :delete}
+
   - else
     .alert.alert-info.no-objects-found
     = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::ColorProduct))

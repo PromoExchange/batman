@@ -217,7 +217,7 @@ module ProductLoad
 
     px_product.save!
     px_product.check_validity!
-    px_product.loaded if px_product.state == 'loading'
+    px_product.loaded! if px_product.state == 'loading'
 
     elapsed = (Time.zone.now - beginning_time) * 1000
     Rails.logger.info("PLOAD: [#{supplier_item_guid}] Load took: #{elapsed.round(3)}ms")

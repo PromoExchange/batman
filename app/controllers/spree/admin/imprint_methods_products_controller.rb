@@ -2,6 +2,7 @@ class Spree::Admin::ImprintMethodsProductsController < Spree::Admin::BaseControl
   prepend_before_action :load_product
   before_action :load_imprint_methods, only: [:edit, :new]
   before_action :load_imprint_methods_product, only: [:edit, :update, :destroy]
+  after_action :set_validity, only: [:create, :update, :destroy]
 
   def index
     @imprint_methods_products = Spree::ImprintMethodsProduct.where(product: @product)
@@ -28,6 +29,12 @@ class Spree::Admin::ImprintMethodsProductsController < Spree::Admin::BaseControl
   end
 
   private
+
+  def set_validity
+    @product.loading!
+    @product.check_validity!
+    @product.loaded! if @product.state == 'loading'
+  end
 
   def load_product
     @product = Spree::Product.friendly.find(params[:product_id])

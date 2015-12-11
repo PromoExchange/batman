@@ -4,7 +4,5 @@
 
 <div class="row" id="show-auction" data-key="<%= spree_current_user.spree_api_key %>">
   <%= render partial: 'spree/shared/auction_details' %>
-  <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
-    <%= render partial: 'spree/auctions/top_bids' %>
-  <% end %>
+  <%= render partial: 'spree/shared/action_buttons' %>
 </div>

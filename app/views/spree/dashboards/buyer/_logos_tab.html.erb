@@ -5,24 +5,27 @@
         <%= f.hidden_field :user_id, value: spree_current_user.id %>
         <div class="form-group">
           <%= f.label :logo_file, Spree.t(:add_logo) %>
-          <%= f.file_field :logo_file, class: 'form-control' %>
+          <%= f.file_field :logo_file %>
           <p>Acceptable file formats: (.ai, .pdf, .eps, .psd)</p>
           <%= button 'Upload', 'ok', 'submit', {class: 'btn-success'} %>
         </div>
       <% end %>
-      <div>
+      <div class="row">
         <% unless @user.logos.any? %>
           <p>No logos found</p>
         <% else %>
           <% @user.logos.each do |image| %>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="panel panel-default">
               <div class="panel-body text-center">
-                <%= image_tag(image.logo_file.url(:thumb), { itemprop: "image", alt: image.logo_file_file_name }) %>
+                <p style="word-wrap: break-word;"><%= image.logo_file_file_name %></p>
               </div>
-              <div class="panel-footer">
-                <%= button_to "delete", "/logos/#{image.id}", :method => :delete %>
-              </div>
+              <center>
+                <div class="panel-footer">
+                  <%= link_to "Delete", "/logos/#{image.id}", method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure, you want to delete this file?"}%>
+                  <%= link_to "Download", "/logos/#{image.id}/download_logo", method: :get, class: "btn btn-primary" %>
+                </div>
+              </center>
             </div>
           </div>
           <% end %>

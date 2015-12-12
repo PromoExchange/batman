@@ -11,7 +11,7 @@
       .row
         .col-md-3
           .form-group
-            = f.label :supplier_id_eq, "Supplier ID"
+            = f.label :supplier_id_eq, "Supplier"
             = f.text_field :supplier_id_eq, :class => "form-control"
         .col-md-3
           .form-group
@@ -41,9 +41,9 @@
       tbody
         - @pms_colors_suppliers.each do |pms_color_supplier|
           tr
-            td = pms_color_supplier.supplier_id
-            td = pms_color_supplier.imprint_method_id
-            td = pms_color_supplier.pms_color_id
+            td = "#{pms_color_supplier.supplier.name}(#{pms_color_supplier.supplier_id})"
+            td = "#{pms_color_supplier.imprint_method.name}(#{pms_color_supplier.imprint_method_id})"
+            td = "#{pms_color_supplier.pms_color.name}(#{pms_color_supplier.pms_color_id})"
             td = pms_color_supplier.display_name
             td.actions.actions-2.text-right
               = link_to_edit(pms_color_supplier, :no_text => true)

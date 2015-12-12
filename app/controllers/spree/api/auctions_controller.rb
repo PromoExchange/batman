@@ -98,6 +98,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
           @auction.confirm_order!
         else
           @auction.invoice_paid!
+          @auction.update_attributes(payment_claimed: true)
         end
       else
         @auction.confirm_order!

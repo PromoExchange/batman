@@ -23,14 +23,14 @@ class Spree::Admin::ProductLoadsController < Spree::Admin::BaseController
     redirect_to spree.admin_product_loads_path, flash: { error: 'Failed to queue factory load' }
   end
 
-  def destroy_factory
-    supplier_id = Spree::Supplier.where(name: params[:factory_name]).first
-    Spree::Product.where(supplier_id: supplier_id).destroy_all
-    Spree::Supplier.where(name: params[:factory_name]).destroy_all
-    redirect_to spree.admin_product_loads_path
-  rescue
-    redirect_to spree.admin_product_loads_path
-  end
+  # def destroy_factory
+  #   supplier_id = Spree::Supplier.where(name: params[:factory_name]).first
+  #   Spree::Product.where(supplier_id: supplier_id).destroy_all
+  #   Spree::Supplier.where(name: params[:factory_name]).destroy_all
+  #   redirect_to spree.admin_product_loads_path
+  # rescue
+  #   redirect_to spree.admin_product_loads_path
+  # end
 
   private
 

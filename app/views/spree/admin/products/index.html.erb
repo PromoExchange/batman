@@ -33,7 +33,8 @@
         <div class="col-md-6">
           <div class="form-group">
             <%= f.label :state_eq, 'State' %>
-            <%= f.text_field :state_eq, :size => 10, class: "form-control" %>
+            <%= f.select :state_eq, options_for_select([['Active','active'],['Invalid','invalid']], class: 'form-control')%>
+            <!-- <%= f.text_field :state_eq, :size => 10, class: "form-control" %> -->
           </div>
         </div>
         <div class="col-md-12">

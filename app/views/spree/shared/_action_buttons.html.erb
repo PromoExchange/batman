@@ -1,0 +1,23 @@
+<% if spree_current_user.has_spree_role?(:seller) %>
+  <%= render partial: 'spree/invoices/seller_actions' %>
+<% end %>
+
+<% if spree_current_user.has_spree_role?(:buyer) %>
+  <%= render partial: 'spree/invoices/buyer_actions' %>
+<% end %>
+
+<% if @auction.complete? and @auction.review.present? %>
+  <div class="col-sm-6">
+    <h4> Rating </h4>
+    <div class="form-group">
+      <%= render 'spree/dashboards/shared/stars', stars: @auction.review.rating, edit_enabled: false %>
+    </div>
+    <div class="form-group">
+      <%= @auction.review.review %>
+    </div>
+  </div>
+<% end %>
+
+<% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
+  <%= render partial: 'spree/auctions/top_bids' %>
+<% end %>

@@ -139,12 +139,6 @@ class Spree::AuctionsController < Spree::StoreController
       filename: @auction.proof_file_file_name,
       disposition: 'attachment'
   end
-  
-  def download_logo
-    send_data open(@auction.logo.logo_file.url).read,
-      filename: @auction.logo.logo_file_file_name,
-      disposition: 'attachment'
-  end
 
   private
 

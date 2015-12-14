@@ -228,6 +228,21 @@ class Spree::Auction < Spree::Base
     %w(S M L XL 2XL)
   end
 
+  def bids_status
+    {
+      'waiting_confirmation': 'Awaiting Confirmation',
+      'unpaid': 'Awaiting Confirmation',
+      'create_proof': 'Awaiting Virtual Proof',
+      'waiting_proof_approval': 'View Proof', 
+      'in_production': 'In Production', 
+      'send_for_delivery': 'Track Shipment', 
+      'confirm_receipt': 'Awaiting receipt confirmation', 
+      'in_dispute': 'Order being disputed', 
+      'complete': 'Completed'
+    }
+
+  end
+
   private
 
   def notification_for_in_production

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   post '/customer', to: 'spree/api/charges#create_customer'
   post '/delete_customer/:customer_id', to: 'spree/api/charges#delete_customer'
   post '/confirm', to: 'spree/api/charges#confirm_deposit'
+  post '/send_request', to: 'spree/home#send_request'
 
   resources :pxtaxrates,
     controller: 'spree/pxtaxrates',
@@ -43,7 +44,6 @@ Rails.application.routes.draw do
       end
       member do
         get 'download_proof'
-        get 'download_logo'
       end
     end
 
@@ -59,7 +59,11 @@ Rails.application.routes.draw do
 
   resources :logos,
     controller: 'spree/logos',
-    as: 'logos'
+    as: 'logos' do
+      member do
+        get 'download_logo'
+      end
+    end
 
   resources :product_requests,
     controller: 'spree/product_requests',
@@ -87,12 +91,12 @@ Rails.application.routes.draw do
     resources :upcharges, controller: 'spree/api/upcharges', as: 'api_upcharges'
     resources :taxrates, controller: 'spree/api/taxrates', as: 'api_taxrates'
     resources :pxaddresses, controller: 'spree/api/pxaddresses', as: 'api_addresses'
-    match '/pxaddresses/:id/type' => 'spree/api/pxaddresses#type', via: :post
-    match '/auctions/:id/order_confirm' => 'spree/api/auctions#order_confirm', via: :post
-    match '/auctions/:id/in_production' => 'spree/api/auctions#in_production', via: :post
-    match '/auctions/:id/claim_payment' => 'spree/api/auctions#claim_payment', via: :post
-    match '/auctions/:id/reject_order' => 'spree/api/auctions#reject_order', via: :post
-    match '/auctions/:id/resolve_dispute' => 'spree/api/auctions#resolve_dispute', via: :post
+    post '/pxaddresses/:id/type' => 'spree/api/pxaddresses#type'
+    post '/auctions/:id/order_confirm' => 'spree/api/auctions#order_confirm'
+    post '/auctions/:id/in_production' => 'spree/api/auctions#in_production'
+    post '/auctions/:id/claim_payment' => 'spree/api/auctions#claim_payment'
+    post '/auctions/:id/reject_order' => 'spree/api/auctions#reject_order'
+    post '/auctions/:id/resolve_dispute' => 'spree/api/auctions#resolve_dispute'
 
     resources :request_ideas, controller: 'spree/api/request_ideas' do
       member do
@@ -105,8 +109,8 @@ Rails.application.routes.draw do
     resources :charges, controller: 'spree/api/charges', only: [:index]
   end
 
-  match 'product_requests/:request_idea_id/destroy' => 'spree/admin/product_requests#destroy_idea', via: :post
-  match 'product_requests/:request_idea_id/update' => 'spree/admin/product_requests#update_idea', via: :post
+  post 'product_requests/:request_idea_id/destroy' => 'spree/admin/product_requests#destroy_idea'
+  post 'product_requests/:request_idea_id/update' => 'spree/admin/product_requests#update_idea'
 
   Spree::Core::Engine.routes.draw do
     namespace :admin do
@@ -126,6 +130,15 @@ Rails.application.routes.draw do
         put :addresses
         get :imprint_methods
         put :imprint_methods
+      end
+    end
+  end
+
+  Spree::Core::Engine.add_routes do
+    namespace :admin do
+      resources :products do
+        resources :color_products
+        resources :imprint_methods_products
       end
     end
   end

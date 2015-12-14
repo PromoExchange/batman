@@ -34,8 +34,13 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        alert("You've selected a Seller and the use of our project management tool");
-        window.location = "/dashboards?tab=purchase_history";
+        if (data.manage_status) {
+          alert("You've selected a Seller and the use of our project management tool");
+          window.location = "/dashboards?tab=purchase_history";
+        } else {
+          $('#manage-workflow').hide('modal');
+          $('#manage-project-off-site').show('modal');
+        }
       },
       error: function(data) {
         alert('Failed to accept bid, please contact support');
@@ -72,5 +77,16 @@ $(function() {
         $('#bid-error').find('.payment-errors').text("Unsuccessful Accept");
       }
     });
+  });
+
+  $('#workflow-continue').click(function() {
+    window.location = "/dashboards?tab=purchase_history";
+  });
+
+  $('#workflow-rate-seller').click(function() {
+    var auction_id = $('.auction-details').data('id')
+    $('#rating-auction-id').val(auction_id);
+    $('#manage-project-off-site').hide('modal');
+    $('#rating-seller').show('modal');
   });
 });

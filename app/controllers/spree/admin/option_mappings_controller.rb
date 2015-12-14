@@ -16,11 +16,11 @@ class Spree::Admin::OptionMappingsController < Spree::Admin::ResourceController
     redirect_to admin_option_mappings_path
   end
 
+  private
+
   def load_option_mapping
     @imprint_method = Spree::OptionMapping.find(params[:id])
   end
-
-  private
 
   def collection
     return @collection if @collection.present?

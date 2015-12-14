@@ -26,11 +26,11 @@ class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
     redirect_to admin_pms_colors_path
   end
 
+  private
+  
   def load_pms_color
     @pms_color = Spree::PmsColor.find(params[:id])
   end
-
-  private
 
   def collection
     return @collection if @collection.present?

@@ -28,11 +28,9 @@ $(function() {
     var show_swatches = "div.imprint_swatch_";
     show_swatches += val;
     $(show_swatches).show();
-    $("div.imprint_swatch_custom").show();
 
-    var selected = $("#auction_imprint_method_id option:selected").text();
-    var found_index = $.inArray(selected, ['Blank','Deboss','Engrave']);
-    if( found_index === -1 ) {
+    if ($(show_swatches).length > 0) {
+      $("div.imprint_swatch_custom").show();
       $("div.color-hideable").show(750);
     } else {
       $("div.color-hideable").hide(750);

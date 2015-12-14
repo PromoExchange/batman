@@ -4,4 +4,6 @@ class Spree::ImprintMethodsProduct < Spree::Base
 
   validates :imprint_method_id, presence: true
   validates :product_id, presence: true
+
+  delegate :name, to: :imprint_method
 end

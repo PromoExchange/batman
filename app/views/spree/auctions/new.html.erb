@@ -45,6 +45,13 @@
           @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
           { prompt: 'Please Select' } , { class: 'form-control' } %>
       </div>
+      
+      <% if @user.logos.present? %>
+        <% @user.logos.each do |logo|%>
+          <p><%= logo.logo_file_file_name %> <a href='<%="/logos/#{logo.id}/download_logo"%>'><span title="Download file" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>  </a></p>
+        <% end %>
+      <% end %>
+      
 
       <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
 

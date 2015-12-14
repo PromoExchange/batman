@@ -15,6 +15,17 @@ class Spree::LogosController < Spree::StoreController
     Spree::Logo.destroy(params[:id])
     redirect_to main_app.dashboards_path(tab: 'logo'), flash: { notice: 'Logo deleted sucessfully.' }
   end
+  
+  def download_logo
+    logo = Spree::Logo.find_by(id: params[:id])
+    if logo.present?
+      send_data open(logo.logo_file.url).read,
+        filename: logo.logo_file_file_name,
+        disposition: 'attachment'
+    else
+      redirect_to :back, flash: { error: 'Something went wrong !' }
+    end 
+  end
 
   private
 

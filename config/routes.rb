@@ -70,6 +70,11 @@ Rails.application.routes.draw do
     as: 'product_requests',
     only: [:create]
 
+  resources :categories,
+    controller: 'spree/categories',
+    as: 'categories',
+    only: [:index]
+
   scope :api do
     resources :auctions, controller: 'spree/api/auctions' do
       member do

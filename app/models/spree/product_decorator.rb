@@ -41,14 +41,14 @@ Spree::Product.class_eval do
     # HACK: for SanMar
     sanmar = Spree::Supplier.where(dc_acct_num: '100160').first
     return 12 if supplier == sanmar
-    lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).first
+    lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).first
     return 50 if lowest_price_range.nil?
     lower_value = lowest_price_range.split('..')[0]
     lower_value.gsub(/\(/, '').to_i
   end
 
   def maximum_quantity
-    highest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).last
+    highest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).last
     return 2500 if highest_price_range.nil?
     return 2500 if highest_price_range.include? '+'
     highest_value = highest_price_range.split('..')[1]

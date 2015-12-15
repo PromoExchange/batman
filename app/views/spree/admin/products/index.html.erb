@@ -14,14 +14,14 @@
       <div data-hook="admin_products_index_search" class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <%= f.label :name_cont, Spree.t(:name) %>
-            <%= f.text_field :name_cont, :size => 15, class: "form-control js-quick-search-target" %>
+            <%= f.label :variants_including_master_sku_cont, Spree.t(:sku) %>
+            <%= f.text_field :variants_including_master_sku_cont, :size => 15, class: "form-control js-quick-search-target" %>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <%= f.label :variants_including_master_sku_cont, Spree.t(:sku) %>
-            <%= f.text_field :variants_including_master_sku_cont, :size => 15, class: "form-control" %>
+            <%= f.label :name_cont, Spree.t(:name) %>
+            <%= f.text_field :name_cont, :size => 15, class: "form-control" %>
           </div>
         </div>
         <div class="col-md-6">
@@ -33,7 +33,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <%= f.label :state_eq, 'State' %>
-            <%= f.select :state_eq, options_for_select([['Active','active'],['Invalid','invalid']], class: 'form-control')%>
+            <%= f.select :state_eq, options_for_select([['Invalid','invalid'],['Active','active']], class: 'form-control')%>
             <!-- <%= f.text_field :state_eq, :size => 10, class: "form-control" %> -->
           </div>
         </div>

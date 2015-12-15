@@ -1,3 +1,4 @@
 class Spree::UpchargeProduct < Spree::Upcharge
-  has_one :product, foreign_key: 'related_id'
+  belongs_to :product, foreign_key: 'related_id'
+  belongs_to :imprint_method
 end

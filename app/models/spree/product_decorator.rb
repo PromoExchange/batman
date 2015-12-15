@@ -1,13 +1,10 @@
 Spree::Product.class_eval do
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
-  has_and_belongs_to_many :option_values
-  has_many :upcharges, as: :related
+  has_many :upcharges, class_name: 'Spree::UpchargeProduct', foreign_key: 'related_id'
   has_many :color_product
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
   has_many :imprint_methods, through: :imprint_methods_products
-
-  delegate :upcharges, to: :option_values
 
   state_machine initial: :active do
     after_transition on: :invalid, do: :unavailable
@@ -44,14 +41,14 @@ Spree::Product.class_eval do
     # HACK: for SanMar
     sanmar = Spree::Supplier.where(dc_acct_num: '100160').first
     return 12 if supplier == sanmar
-    lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).first
+    lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).first
     return 50 if lowest_price_range.nil?
     lower_value = lowest_price_range.split('..')[0]
     lower_value.gsub(/\(/, '').to_i
   end
 
   def maximum_quantity
-    highest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0...-1].map(&:range).last
+    highest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).last
     return 2500 if highest_price_range.nil?
     return 2500 if highest_price_range.include? '+'
     highest_value = highest_price_range.split('..')[1]
@@ -176,13 +173,52 @@ Spree::Product.class_eval do
   end
 
   def self.csv_header
-    CSV::Row.new([:sku, :name, :factory, :num_product_colors, :num_imprints],
-      %w(sku name factory num_product_colors num_imprints), true)
+    CSV::Row.new(
+      [
+        :sku,
+        :name,
+        :factory,
+        :num_product_colors,
+        :num_imprints,
+        :num_upcharges,
+        :shipping_weight,
+        :shipping_dimensions,
+        :shipping_quantity,
+        :shipping_originating_zip
+      ],
+      %w(sku name factory num_product_colors num_imprints num_upcharges shipping_weight shipping_dimensions shipping_quantity shipping_originating_zip), true)
   end
 
   def to_csv_row
-    CSV::Row.new([:sku, :name, :factory, :num_product_colors, :num_imprints],
-      [sku, name, supplier.name, color_product.count, imprint_methods.count])
+    shipping_weight = get_property_value('shipping_weight')
+    shipping_dimensions = get_property_value('shipping_dimensions')
+    shipping_quantity = get_property_value('shipping_quantity')
+
+    CSV::Row.new(
+      [
+        :sku,
+        :name,
+        :factory,
+        :num_product_colors,
+        :num_imprints,
+        :num_upcharges,
+        :shipping_weight,
+        :shipping_dimensions,
+        :shipping_quantity,
+        :shipping_originating_zip
+      ],
+      [
+        sku,
+        name,
+        supplier.name,
+        color_product.count,
+        imprint_methods.count,
+        upcharges.count,
+        shipping_weight,
+        shipping_dimensions,
+        shipping_quantity,
+        originating_zip
+      ])
   end
 
   def self.find_in_batches(dc_acct_num)

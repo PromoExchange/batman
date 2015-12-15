@@ -45,15 +45,15 @@
           @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
           { prompt: 'Please Select' } , { class: 'form-control' } %>
       </div>
-      
+
       <% if @user.logos.present? %>
         <% @user.logos.each do |logo|%>
           <p><%= logo.logo_file_file_name %> <a href='<%="/logos/#{logo.id}/download_logo"%>'><span title="Download file" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>  </a></p>
         <% end %>
       <% end %>
-      
 
-      <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
+
+      <p><button href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal" class="btn btn-sm">Add Logo</button></p>
 
       <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
@@ -94,7 +94,7 @@
         <%= f.select(:shipping_address_id, options_for_select(@addresses),
           { prompt: 'Please Select' }, { class: 'form-control' }) %>
       </div>
-      <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
+      <p><button href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address" class="btn btn-sm">Add Address</button></p>
 
       <div class="form-group">
         <%= f.label(:main_color_id, 'Product Color') %>
@@ -110,7 +110,7 @@
           <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
       </div>
 
-      <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
+      <p><%= button link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' {id: 'Add_Payment_Method'class: 'btn btn-sm' }%></p>
 
       <div class="form-group customer-hideable" style="display: none;">
         <ul class="list-group customer-listing">
@@ -118,11 +118,11 @@
       </div>
 
       <% if @request_idea_id.blank? %>
-        <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>
+        <p><button href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-sm">Invite Sellers</button></p>
       <% end %>
       <p>Estimated delivery date: <%= 15.days.from_now.strftime('%B %e, %Y') %></p>
       <div class="form-actions" data-hook="buttons">
-        <%= button 'Start Auction', 'ok', 'submit', { class: 'btn-success' } %>
+        <%= button 'Start Auction', 'ok', 'submit', { id: 'Start_Auction'class: 'btn-success' } %>
         <span class="or"><%= Spree.t(:or) %></span>
         <%= button_link_to Spree.t('actions.cancel'), products_path, :icon => 'remove' %>
       </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216163908) do
+ActiveRecord::Schema.define(version: 20151216213346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -623,6 +623,7 @@ ActiveRecord::Schema.define(version: 20151216163908) do
     t.decimal "markup",       default: 0.0
     t.boolean "eqp",          default: false
     t.decimal "eqp_discount", default: 0.0
+    t.boolean "live",         default: false
   end
 
   create_table "spree_preferences", force: :cascade do |t|

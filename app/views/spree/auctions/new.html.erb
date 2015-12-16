@@ -51,8 +51,6 @@
           <p><%= logo.logo_file_file_name %> <a href='<%="/logos/#{logo.id}/download_logo"%>'><span title="Download file" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>  </a></p>
         <% end %>
       <% end %>
-
-
       <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
 
       <div class="form-group color-hideable" style="display: none;">
@@ -72,6 +70,11 @@
           </div>
         </div>
         <div class="clearfix"></div>
+        <% if @auction.pms_colors%>
+          <% @auction.pms_colors.each do |pms_color|%>
+             <div class="selected-pms" id="<%= pms_color.id %>" name="<%= pms_color.display_name %>"></div>
+          <% end %>
+        <% end %>
         <input class="form-control tagsinput" data-role="tagsinput" id="auction_pms_colors" name="auction[pms_colors]" type='text'></input>
         <p>Maxmimum Number of PMS Imprint Colors: 4</p>
       </div>

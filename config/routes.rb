@@ -141,6 +141,7 @@ Rails.application.routes.draw do
         resources :color_products
         resources :imprint_methods_products
         resources :upcharge_products
+        resources :carton_products
       end
     end
   end

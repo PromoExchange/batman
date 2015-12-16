@@ -23,5 +23,8 @@
     <%= content_tag :li, class: ('active' if current == :imprint_method) do %>
       <%= link_to_with_icon 'list-alt', 'Imprint Methods', admin_product_imprint_methods_products_url(@product) %>
     <% end if can?(:admin, Spree::ImprintMethodsProduct) %>
+    <%= content_tag :li, class: ('active' if current == :carton) do %>
+      <%= link_to_with_icon 'list-alt', 'Carton', edit_admin_product_carton_product_url(@product,@product.carton) %>
+    <% end if can?(:admin, Spree::ImprintMethodsProduct) %>
   </ul>
 <% end %>

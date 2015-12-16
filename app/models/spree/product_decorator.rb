@@ -1,7 +1,9 @@
 Spree::Product.class_eval do
+  before_create :build_default_carton
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_many :upcharges, class_name: 'Spree::UpchargeProduct', foreign_key: 'related_id'
   has_many :color_product
+  has_one :carton, dependent: :destroy
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
   has_many :imprint_methods, through: :imprint_methods_products
@@ -226,5 +228,11 @@ Spree::Product.class_eval do
     where(supplier: supplier).find_each do |product|
       yield product
     end
+  end
+
+  private
+
+  def build_default_carton
+    build_carton
   end
 end

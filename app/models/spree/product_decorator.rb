@@ -182,19 +182,19 @@ Spree::Product.class_eval do
         :factory,
         :num_product_colors,
         :num_imprints,
-        :num_upcharges,
+        :num_upcharges_setup,
+        :num_upcharges_run,
         :shipping_weight,
         :shipping_dimensions,
         :shipping_quantity,
         :shipping_originating_zip
       ],
-      %w(sku name factory num_product_colors num_imprints num_upcharges shipping_weight shipping_dimensions shipping_quantity shipping_originating_zip), true)
+      %w(sku name factory num_product_colors num_imprints num_upcharges_setup num_upcharges_run shipping_weight shipping_dimensions shipping_quantity shipping_originating_zip), true)
   end
 
   def to_csv_row
-    shipping_weight = get_property_value('shipping_weight')
-    shipping_dimensions = get_property_value('shipping_dimensions')
-    shipping_quantity = get_property_value('shipping_quantity')
+    setup_type = Spree::UpchargeType.where(name: 'setup').first_or_create
+    run_type = Spree::UpchargeType.where(name: 'run').first_or_create
 
     CSV::Row.new(
       [
@@ -203,7 +203,8 @@ Spree::Product.class_eval do
         :factory,
         :num_product_colors,
         :num_imprints,
-        :num_upcharges,
+        :num_upcharges_setup,
+        :num_upcharges_run,
         :shipping_weight,
         :shipping_dimensions,
         :shipping_quantity,
@@ -215,10 +216,11 @@ Spree::Product.class_eval do
         supplier.name,
         color_product.count,
         imprint_methods.count,
-        upcharges.count,
-        shipping_weight,
-        shipping_dimensions,
-        shipping_quantity,
+        upcharges.where(upcharge_type: setup_type).count,
+        upcharges.where(upcharge_type: run_type).count,
+        carton.weight,
+        carton.to_s,
+        carton.quantity,
         originating_zip
       ])
   end

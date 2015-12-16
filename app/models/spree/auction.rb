@@ -374,6 +374,6 @@ class Spree::Auction < Spree::Base
     if self.imprint_method_id.blank?
       return false
     end
-     self.product.supplier.pms_colors_supplier.map(&:imprint_method_id).exclude? self.imprint_method_id
+    Spree::PmsColorsSupplier.where(supplier_id: self.product.supplier_id).map(&:imprint_method_id).exclude? self.imprint_method_id
   end
 end

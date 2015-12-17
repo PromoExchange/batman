@@ -53,7 +53,11 @@
       <% end %>
 
 
+<<<<<<< HEAD
       <p><button href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal" class="btn btn-info btn-xs">Add Logo</button></p>
+=======
+      <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
+>>>>>>> origin/Connor-Dev
 
       <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
@@ -94,7 +98,11 @@
         <%= f.select(:shipping_address_id, options_for_select(@addresses),
           { prompt: 'Please Select' }, { class: 'form-control' }) %>
       </div>
+<<<<<<< HEAD
       <p><button href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address" class="btn btn-info btn-xs">Add Address</button></p>
+=======
+      <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
+>>>>>>> origin/Connor-Dev
 
       <div class="form-group">
         <%= f.label(:main_color_id, 'Product Color') %>
@@ -110,7 +118,11 @@
           <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
       </div>
 
+<<<<<<< HEAD
       <p><%= button_link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank', class: 'btn btn-info btn-xs' %></p>
+=======
+      <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
+>>>>>>> origin/Connor-Dev
 
       <div class="form-group customer-hideable" style="display: none;">
         <ul class="list-group customer-listing">
@@ -118,7 +130,11 @@
       </div>
 
       <% if @request_idea_id.blank? %>
+<<<<<<< HEAD
         <p><button href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</button></p>
+=======
+        <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>
+>>>>>>> origin/Connor-Dev
       <% end %>
       <p>Estimated delivery date: <%= 15.days.from_now.strftime('%B %e, %Y') %></p>
       <div class="form-actions" data-hook="buttons">

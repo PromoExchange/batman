@@ -1,0 +1,39 @@
+- content_for :page_title do
+ = plural_resource_name(Spree::UpchargeType)
+
+ - content_for :page_actions do
+  = button_link_to Spree.t(:new_upcharge_type), new_admin_upcharge_type_url, { :class => "btn-success", :icon => 'add', 'data-update' => 'new_upcharge_type', :id => 'new_admin_upcharge_type_link' }
+
+- content_for :table_filter do
+  div
+    = search_form_for [:admin, @search] do |f|
+      - locals = {:f => f}
+      .row
+        .col.col-md-12
+          .form-group
+            = f.label :name_cont, "Name"
+            = f.text_field :name_cont, :class => "form-control js-quick-search-target"
+      .form-actions
+        = button Spree.t(:search), 'search'
+
+.well
+  - if @upcharge_types.any?
+    table.table
+      thead
+        tr
+          th Name
+          th Action
+      tbody
+        - @upcharge_types.each do |upcharge_type|
+          tr
+            td = upcharge_type.name
+            td.actions.actions-2.text-right
+              = link_to_edit(upcharge_type, :no_text => true)
+              = link_to_delete(upcharge_type, :no_text => true)
+  - else
+    .alert.alert-info.no-objects-found
+    = Spree.t(:no_resource_found, resource: plural_resource_name(Spree::UpchargeType))
+    = ","
+    = link_to Spree.t(:add_one), new_object_url
+    = "!"
+= paginate @collection

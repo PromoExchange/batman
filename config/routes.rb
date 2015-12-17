@@ -124,6 +124,7 @@ Rails.application.routes.draw do
       resources :imprint_methods
       resources :option_mappings
       resources :product_reports
+      resources :upcharge_types
       resources :pms_colors_suppliers
       resources :suppliers do
         get :addresses
@@ -139,6 +140,7 @@ Rails.application.routes.draw do
       resources :products do
         resources :color_products
         resources :imprint_methods_products
+        resources :upcharge_products
       end
     end
   end

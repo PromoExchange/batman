@@ -1,0 +1,12 @@
+- content_for :page_title do
+  | Editing Product Upcharge
+
+= render :partial => 'spree/admin/shared/error_messages', :locals => { :target => @upcharge }
+
+= form_for [:admin, @upcharge], url: "/admin/products/#{@product.id}/upcharge_products/#{@upcharge.id}" do |f|
+  fieldset
+    = render :partial => 'form', :locals => { :f => f }
+    .form-actions
+      = button Spree.t('actions.update'), 'refresh', 'submit', {class: 'btn-success'}
+      | or
+      = button_link_to Spree.t('actions.cancel'), "/admin/products/#{@product.id}/upcharge_products"

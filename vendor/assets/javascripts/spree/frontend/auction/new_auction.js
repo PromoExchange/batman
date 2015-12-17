@@ -42,6 +42,7 @@ $(function() {
 
   function customerList(url) {
     var key = $("#new-auction").data("key");
+    var selected_id = $("#new-auction ul.customer-listing").data('id');
     var simple_template = _.template("<li class='list-group-item'>${value}</li>");
 
     $.ajax( {
@@ -56,18 +57,21 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<input type='radio' value='${customer_id}' name='auction[customer_id]' id='auction_customer_id_${customer_id}'/> <label for='auction_customer_id'>${name}</label>");
+          action_template = _.template("<input type='radio' value='${customer_id}' name='auction[customer_id]' id='auction_customer_id_${customer_id}' ${selected}/> <label for='auction_customer_id'>${name}</label>");
           $.each(data, function(i, item) {
             if (item.payment_type == 'cc') {
               var name = item.brand+' '+item.last_4_digits;
             } else {
               var name = item.brand+'#'+item.last_4_digits;
             }
+            var selected = ''
+            if (item.id == selected_id) {selected = 'checked'}
 
             trHTML += simple_template({
               value: action_template ({
                 customer_id: item.id,
-                name: name
+                name: name,
+                selected: selected
               })
             });
           })

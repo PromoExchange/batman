@@ -2,7 +2,7 @@
 <%= Spree.t(:auction) %>
 <% end %>
 
-<div class="row" id="new-auction" data-key="<%= spree_current_user.spree_api_key %>">
+<div class="row" id="new-auction" data-key="<%= spree_current_user.spree_api_key if spree_current_user %>">
   <div class="col-md-6">
     <% url = spree.product_url(@auction.product) %>
     <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url' %><br/>
@@ -15,7 +15,8 @@
   </div>
   <div class="col-md-6 well">
     <h2><%= @auction.product.name %></h2>
-    <%= form_for @auction, url: main_app.auctions_path, class: 'form' do |f| %>
+    <% url = @auction.id.present? ? main_app.auction_path(@auction) : main_app.auctions_path %>
+    <%= form_for @auction, url: url, class: 'form' do |f| %>
     <% if @auction.errors.any? %>
       <p class="alert alert-error">Errors</p>
       <ul>
@@ -28,7 +29,7 @@
     <% @request_idea_id ||= params[:request_idea_id] %>
 
     <%= f.hidden_field :product_id, value: @auction.product.id %>
-    <%= f.hidden_field :buyer_id, value: @auction.buyer_id %>
+    <%= f.hidden_field :buyer_id, value: spree_current_user.id if spree_current_user %>
     <%= f.hidden_field :invited_sellers, value: '' %>
     <%= f.hidden_field :request_idea, value: @request_idea_id %>
     <fieldset>
@@ -39,19 +40,23 @@
       </div>
 
       <p><a href="#" data-toggle="modal" data-target="#imprint-definitions-modal">Imprint Method Definitions</a></p>
-      <div class="form-group">
-        <%= f.label :logo_id, Spree.t(:logo) %>
-        <%= f.select :logo_id,
-          @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
-          { prompt: 'Please Select' } , { class: 'form-control' } %>
-      </div>
 
-      <% if @user.logos.present? %>
-        <% @user.logos.each do |logo|%>
-          <p><%= logo.logo_file_file_name %> <a href='<%="/logos/#{logo.id}/download_logo"%>'><span title="Download file" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>  </a></p>
+      <% if spree_current_user %>
+        <div class="form-group">
+          <%= f.label :logo_id, Spree.t(:logo) %>
+          <%= f.select :logo_id,
+            @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
+            { prompt: 'Please Select' } , { class: 'form-control' } %>
+        </div>
+
+        <% if @user.logos.present? %>
+          <% @user.logos.each do |logo|%>
+            <p><%= logo.logo_file_file_name %> <a href='<%="/logos/#{logo.id}/download_logo"%>'><span title="Download file" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>  </a></p>
+          <% end %>
         <% end %>
+
+        <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
       <% end %>
-      <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
 
       <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
@@ -92,35 +97,38 @@
         </div>
       <% end %>
 
-      <div class="form-group">
-        <%= f.label(:shipping_address_id, 'Shipping Address') %>
-        <%= f.select(:shipping_address_id, options_for_select(@addresses),
-          { prompt: 'Please Select' }, { class: 'form-control' }) %>
-      </div>
-      <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
+      <% if spree_current_user %>
+        <div class="form-group">
+          <%= f.label(:shipping_address_id, 'Shipping Address') %>
+          <%= f.select(:shipping_address_id, options_for_select(@addresses, @auction.shipping_address_id),
+            { prompt: 'Please Select' }, { class: 'form-control' }) %>
+        </div>
+        <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
+      <% end %>
 
       <div class="form-group">
         <%= f.label(:main_color_id, 'Product Color') %>
-        <%= f.select(:main_color_id, options_for_select(@main_colors),
+        <%= f.select(:main_color_id, options_for_select(@main_colors, @auction.main_color_id),
           { prompt: 'Please Select'}, { class: 'form-control' }) %>
       </div>
+      <% if spree_current_user %>
+        <div class="form-group">
+          <%= f.label(:payment_method, 'Payment Method') %>
+          <%= f.select(:payment_method, options_for_select(
+            [['Credit Card', 'Credit Card'],['Web Check', 'Check']], @auction.payment_method),
+            { prompt: 'Please Select' }, { class: 'form-control' }) %>
+            <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
+        </div>
 
-      <div class="form-group">
-        <%= f.label(:payment_method, 'Payment Method') %>
-        <%= f.select(:payment_method, options_for_select(
-          [['Credit Card', 'Credit Card'],['Web Check', 'Check']], @auction.payment_method),
-          { prompt: 'Please Select' }, { class: 'form-control' }) %>
-          <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
-      </div>
+        <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
 
-      <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
+        <div class="form-group customer-hideable" style="display: none;">
+          <ul class="list-group customer-listing" data-id="<%= @auction.customer_id %>">
+          </ul>
+        </div>
+      <% end %>
 
-      <div class="form-group customer-hideable" style="display: none;">
-        <ul class="list-group customer-listing">
-        </ul>
-      </div>
-
-      <% if @request_idea_id.blank? %>
+      <% if spree_current_user && @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>
       <% end %>
       <p>Estimated delivery date: <%= 15.days.from_now.strftime('%B %e, %Y') %></p>
@@ -133,7 +141,9 @@
     <% end %>
   </div>
 </div>
-<%= render partial: 'spree/auctions/invite_sellers_modal' %>
+<% if spree_current_user %>
+  <%= render partial: 'spree/auctions/invite_sellers_modal' %>
+  <%= render partial: 'spree/auctions/new_logo_modal' %>
+  <%= render partial: 'spree/auctions/address_modal' %>
+<% end %>
 <%= render partial: 'spree/auctions/imprint_definitions_modal' %>
-<%= render partial: 'spree/auctions/new_logo_modal' %>
-<%= render partial: 'spree/auctions/address_modal' %>

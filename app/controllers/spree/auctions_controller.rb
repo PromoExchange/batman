@@ -1,6 +1,6 @@
 class Spree::AuctionsController < Spree::StoreController
   before_action :store_location
-  before_action :require_login, only: [:new, :edit, :show, :auction_payment]
+  before_action :require_login, only: [:edit, :show, :auction_payment]
   before_action :fetch_auction, except: [:index, :create, :new, :auction_payment]
 
   def index
@@ -21,11 +21,15 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def new
-    @auction = Spree::Auction.new(
+    if session[:pending_auction_id].present?
+      require_buyer
+      @auction = Spree::Auction.find_by(id: session[:pending_auction_id])
+    else
+      @auction = Spree::Auction.new(
       product_id: params[:product_id],
-      buyer_id: current_spree_user.id,
       started: Time.zone.now)
-
+    end  
+    
     supporting_data
   end
 
@@ -59,45 +63,60 @@ class Spree::AuctionsController < Spree::StoreController
         @auction.pms_colors << Spree::PmsColor.find(pms_color)
       end
     end
+    
     @auction.save!
 
-    if @auction.is_wearable?
-      Spree::AuctionSize.create(
-        auction_id: @auction.id,
-        product_size: params[:size]
-      )
+    unless current_spree_user
+      @auction.pending 
+      session[:pending_auction_id] = @auction.id
+      redirect_to login_url and return
     end
 
-    @request_idea_id = auction_data[:request_idea] if auction_data[:request_idea].present?
-    idea = Spree::RequestIdea.where(id: @request_idea_id).take
-    idea.update_attributes(auction_id: @auction.id) if idea
+    create_related_data(auction_data)
 
-    send_prebid_request @auction.id
+    redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
+  rescue
+    supporting_data
+    render :new
+  end
 
-    unless auction_data[:invited_sellers].nil?
-      auction_data[:invited_sellers].split(';').each do |seller_email|
-        next if seller_email.blank?
+  def update
+    @auction = Spree::Auction.find(params[:id])
 
-        email_type = :is
-        invited_seller = Spree::User.where(email: seller_email).first
+    auction_data = params[:auction]
 
-        if invited_seller.nil?
-          email_type = :non
-        else
-          Spree::AuctionsUser.create(
-            auction_id: @auction.id,
-            user_id: invited_seller.id
-          )
-        end
+    if params[:size].present?
+      params[:size] = params[:size].merge(params[:size]) {|k, val| (val.to_i < 0)? 0 : val.to_i}
+      @size_quantity = params[:size]
+      auction_data[:quantity] = params[:size].values.map(&:to_i).reduce(:+)
+      @total_size = auction_data[:quantity]
+    end
 
-        Resque.enqueue(
-          SellerInvite,
-          auction_id: @auction.id,
-          type: email_type,
-          email_address: seller_email
-        )
+    @auction.update_attributes(
+      product_id: auction_data[:product_id],
+      buyer_id: auction_data[:buyer_id],
+      quantity: auction_data[:quantity],
+      imprint_method_id: auction_data[:imprint_method_id],
+      main_color_id: auction_data[:main_color_id],
+      shipping_address_id: auction_data[:shipping_address_id],
+      payment_method: auction_data[:payment_method],
+      logo_id: auction_data[:logo_id],
+      custom_pms_colors: auction_data[:custom_pms_colors],
+      started: Time.zone.now,
+      customer_id: auction_data[:customer_id],
+      state: 'open'
+    )
+    @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
+
+    unless params[:auction][:pms_colors].nil?
+      params[:auction][:pms_colors].split(',').each do |pms_color|
+        @auction.pms_colors << Spree::PmsColor.find(pms_color)
       end
     end
+
+    @auction.save!
+    session.delete(:pending_auction_id)
+    create_related_data(auction_data)
 
     redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
   rescue
@@ -150,18 +169,24 @@ class Spree::AuctionsController < Spree::StoreController
     redirect_to login_url unless current_spree_user
   end
 
+  def require_buyer
+    redirect_to root_path unless current_spree_user && current_spree_user.has_spree_role?(:buyer)
+  end
+
   def supporting_data
-    @addresses = []
-    @auction.buyer.addresses.active.each do |address|
-      add = true
-      add = false if address.bill?
-      add = true if address.ship?
+    if current_spree_user
+      @addresses = []
+      current_spree_user.addresses.active.each do |address|
+        add = true
+        add = false if address.bill?
+        add = true if address.ship?
 
-      next unless add
+        next unless add
 
-      @addresses << [
-        "#{address}",
-        address.id]
+        @addresses << [
+          "#{address}",
+          address.id]
+      end
     end
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
@@ -193,6 +218,46 @@ class Spree::AuctionsController < Spree::StoreController
     @logo = Spree::Logo.new
 
     @pxaddress = Spree::Pxaddress.new
+  end
+
+  def create_related_data(auction_data)
+    if @auction.is_wearable?
+      Spree::AuctionSize.create(
+        auction_id: @auction.id,
+        product_size: params[:size]
+      )
+    end
+    
+    @request_idea_id = auction_data[:request_idea] if auction_data[:request_idea].present?
+    idea = Spree::RequestIdea.where(id: @request_idea_id).take
+    idea.update_attributes(auction_id: @auction.id) if idea
+
+    send_prebid_request @auction.id
+
+    unless auction_data[:invited_sellers].nil?
+      auction_data[:invited_sellers].split(';').each do |seller_email|
+        next if seller_email.blank?
+
+        email_type = :is
+        invited_seller = Spree::User.where(email: seller_email).first
+
+        if invited_seller.nil?
+          email_type = :non
+        else
+          Spree::AuctionsUser.create(
+            auction_id: @auction.id,
+            user_id: invited_seller.id
+          )
+        end
+
+        Resque.enqueue(
+          SellerInvite,
+          auction_id: @auction.id,
+          type: email_type,
+          email_address: seller_email
+        )
+      end
+    end
   end
 
   def auction_params

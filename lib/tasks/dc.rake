@@ -25,6 +25,14 @@ namespace :dc do
       Spree::Prebid.destroy_all
     end
 
+    desc 'Create cartons for all products'
+    task create_cartons: :environment do
+      Spree::Product.all.each do |p|
+        p.build_carton
+        p.save!
+      end
+    end
+
     desc 'Fix American Accent Napkins'
     task american_accents: :environment do
       supplier = Spree::Supplier.where(name: 'American Accents').first_or_create

@@ -78,6 +78,13 @@ class Spree::Bid < Spree::Base
     return e
   end
 
+  def pay_sample_fee
+    @product_requests = auction.buyer.product_requests
+    @product_requests.each do |product_request|
+      product_request.sample_fee if product_request.request_ideas.present?
+    end
+  end
+
   private
 
   def notification_for_waiting_confirmation

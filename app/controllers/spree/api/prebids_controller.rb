@@ -58,6 +58,7 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
       :seller_id,
       :supplier_id,
       :eqp,
+      :live,
       :eqp_discount
     )
   end

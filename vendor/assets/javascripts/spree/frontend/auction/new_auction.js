@@ -23,6 +23,7 @@ $(function() {
   });
 
   $("#auction_imprint_method_id").change(function(e) {
+    $('#auction_pms_colors').val('');
     $("div.imprint_swatch").hide();
     var val = $("#auction_imprint_method_id option:selected").val();
     var show_swatches = "div.imprint_swatch_";
@@ -146,3 +147,29 @@ $(function() {
     $('.total-qty span:last').text(sum);
   });
 });
+
+$(document).ready(function(){
+  $("div.imprint_swatch").hide();
+  var val = $("#auction_imprint_method_id option:selected").val();
+  var show_swatches = "div.imprint_swatch_";
+  show_swatches += val;
+  $(show_swatches).show();
+
+  if ($(show_swatches).length > 0) {
+    $("div.imprint_swatch_custom").show();
+    $("div.color-hideable").show(750);
+  } else {
+    $("div.color-hideable").hide(750);
+  }
+
+  $("div.custom-color-hideable").hide(750);
+ 
+  $(".selected-pms").click(function() {
+    $('#auction_pms_colors').tagsinput('add', {
+      id: $(this).attr('id'),
+      text: $(this).attr('name')
+    });
+  });
+  
+  $(".selected-pms").click();
+})

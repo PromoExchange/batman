@@ -9,6 +9,7 @@
         <thead>
           <tr>
             <th>Factory</th>
+            <th>Live</th>
             <th>EQP</th>
             <th>Discount from EQP</th>
             <th>Markup</th>
@@ -19,6 +20,7 @@
           <% @prebids.each do |prebid| %>
             <tr data-id="<%= prebid.id %>" id="prebid-<%= prebid.id %>">
               <td class="factory" data-id><%= prebid.supplier.name %></td>
+              <td class="live-flag"><%= prebid.live.humanize %></td>
               <td class="eqp-flag"><%= prebid.eqp.humanize %></td>
               <td class="eqp-discount pct"><%= (prebid.eqp_discount.to_f * 100).round(2) %></td>
               <td class="markup pct"><%= (prebid.markup.to_f * 100).round(2) %></td>

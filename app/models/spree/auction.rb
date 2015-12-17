@@ -40,13 +40,13 @@ class Spree::Auction < Spree::Base
     return true if blank_imprint.nil?
     imprint_method_id == blank_imprint.id
   end
-  validate :pms_colors_presence, unless: -> do
-    Spree::PmsColorsSupplier.find_by(imprint_method_id: imprint_method_id).nil?
-  end
   validates :main_color_id, presence: true
   validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
   validates :imprint_method_id, presence: true
+  validate :pms_colors_presence, unless: -> do
+    is_imprint_pms_colors_present?
+  end
   validates :quantity, presence: true
   validates_numericality_of :quantity, only_integer: true
   validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) do
@@ -368,5 +368,12 @@ class Spree::Auction < Spree::Base
     charge.refund unless charge.status == 'failed'
   rescue
     return false
+  end
+  
+  def is_imprint_pms_colors_present?
+    if self.imprint_method_id.blank?
+      return false
+    end
+    Spree::PmsColorsSupplier.where(supplier_id: self.product.supplier_id).map(&:imprint_method_id).exclude? self.imprint_method_id
   end
 end

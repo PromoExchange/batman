@@ -20,17 +20,23 @@
             <td><%= b.email %></td>
             <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars, edit_enabled: false %></td>
             <td><%= '$%.2f' % b.bid %></td>
-            <% unless (@auction.open? or @auction.waiting?) %>
-              <td>Completed</td>
-            <% else %>
-              <td>
-                <% unless b.rejected? %>
-                  <%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
+            <td>
+              <% if b.accepted? %>
+                <% if @auction.unpaid? && !b.manage_workflow %>
+                  Completed
                 <% else %>
-                 Failed to Accept Prior Selection
+                  <%= @auction.bids_status[@auction.state.to_sym] %>
                 <% end %>
-              </td>
-            <% end %>
+              <% else %>
+                <% if (b.lost? && @auction.waiting?) or b.open? %>
+                  <%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
+                <% elsif b.rejected? %>
+                  Failed to Accept Prior Selection
+                <% else %>
+                  Lost
+                <% end %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       <% end %>

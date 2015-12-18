@@ -178,7 +178,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   product.carton.weight = hashed[:weight_per_carton_lbs]
   product.carton.quantity = hashed[:quantity_per_box]
-  # product.carton.originating_zip = '01843-1066'
+  product.carton.originating_zip = '01843-1066'
   dimensions = hashed[:carton_dimensions].gsub(/[A-Z]/, '').delete(' ').split('x')
   product.carton.length = dimensions[0]
   product.carton.width = dimensions[1]

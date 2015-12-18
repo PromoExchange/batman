@@ -48,11 +48,11 @@ def add_upcharges(product)
   add_charge(product, gemphoto_imprint, run_upcharge, '2.05', '1000+', 'V', 4)
 end
 
-puts 'Loading Gemline products'
+puts 'Loading Crown products'
 
-supplier = Spree::Supplier.where(dc_acct_num: '100257')
+supplier = Spree::Supplier.where(dc_acct_num: '101684')
 
-file_name = File.join(Rails.root, 'db/product_data/gemline.csv')
+file_name = File.join(Rails.root, 'db/product_data/crown.csv')
 db_load_fail = 0
 db_product_count = Spree::Product.where(supplier: supplier).count
 in_file_count = 0
@@ -60,28 +60,33 @@ found_ids = []
 invalid_carton_count = 0
 updated_carton_count = 0
 updated_upcharge_count = 0
+updated_main_color = 0
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
+  sku = hashed[:item_sku]
+
   in_file_count += 1
-  product = Spree::Product.joins(:master).where(supplier: supplier).where("spree_variants.sku='#{hashed[:item_]}'").first
+  product = Spree::Product.joins(:master).where(supplier: supplier).where("spree_variants.sku='#{sku}'").first
 
   if product.nil?
     db_load_fail += 1
-    puts "ERROR: Failed to find product [#{hashed[:item_]}]"
+    puts "ERROR: Failed to find product [#{sku}]"
     next
   end
 
   found_ids << product.id
 
-  product.carton.weight = hashed[:weight_per_carton_lbs]
-  product.carton.quantity = hashed[:quantity_per_box]
-  product.carton.originating_zip = '01843-1066'
-  dimensions = hashed[:carton_dimensions].gsub(/[A-Z]/, '').delete(' ').split('x')
-  product.carton.length = dimensions[0]
-  product.carton.width = dimensions[1]
-  product.carton.height = dimensions[2]
+  product.carton.weight = hashed[:shipping_weight_lbs]
+  product.carton.quantity = hashed[:shipping_quantity]
+  product.carton.originating_zip = '36606-2506'
+  unless hashed[:shipping_dimensions_inch].blank?
+    dimensions = hashed[:shipping_dimensions_inch].gsub(/[A-Z]/, '').delete(' ').split('x')
+    product.carton.length = dimensions[0]
+    product.carton.width = dimensions[1]
+    product.carton.height = dimensions[2]
+  end
 
   if product.carton.active?
     product.carton.save!
@@ -90,17 +95,30 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     invalid_carton_count += 1
   end
 
-  add_upcharges(product)
-  updated_upcharge_count += 1
+  # Product Colors
+  # available_colors
+  unless hashed[:available_colors].blank?
+    colors = hashed[:available_colors].split(',')
+    if colors.count > 0
+      Spree::ColorProduct.where(product: product).destroy_all
+      colors.each do |color|
+        Spree::ColorProduct.create( product: product , color: color)
+      end
+      updated_main_color += 1
+    end
+  end
+
+  # add_upcharges(product)
+  # updated_upcharge_count += 1
 end
 
-# Add upcharges to those remaining
 in_db_only = Spree::Product.where(supplier: supplier).where.not(id: found_ids).count
 
-Spree::Product.where(supplier: supplier).where.not(id: found_ids).each do |prod|
-  add_upcharges(prod)
-  updated_upcharge_count += 1
-end
+# Add upcharges to those remaining
+# Spree::Product.where(supplier: supplier).where.not(id: found_ids).each do |prod|
+#   add_upcharges(prod)
+#   updated_upcharge_count += 1
+# end
 
 puts "Products in XML: #{in_file_count}"
 puts "Products in DB: #{db_product_count}"
@@ -110,3 +128,4 @@ puts "Products in DB only: #{in_db_only}"
 puts "Products with invalid cartons: #{invalid_carton_count}"
 puts "Products updated with carton: #{updated_carton_count}"
 puts "Products updated with upcharges: #{updated_upcharge_count}"
+puts "Products updated with main product color: #{updated_main_color}"

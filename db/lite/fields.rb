@@ -18,9 +18,11 @@ end
 def add_upcharges(product)
   # upcharges
   setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
-  run_upcharge = Spree::UpchargeType.where(name: 'run').first
+  run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
 
   screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+  Spree::UpchargeProduct.where(product: product).destroy_all
 
   add_charge(product, screen_print_imprint, setup_upcharge, '50', '', 'G',0)
   add_charge(product, screen_print_imprint, run_upcharge, '0.4', '1+', 'G',0)

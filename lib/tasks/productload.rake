@@ -22,6 +22,11 @@ namespace :product do
       load_files('crown')
     end
 
+    desc 'Crown Lite Load'
+    task crown_lite: :environment do
+      ProductLoader.load('lite', 'crown')
+    end
+
     desc 'Fields Load'
     task fields: :environment do
       load_files('fields')

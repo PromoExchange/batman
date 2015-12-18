@@ -49,12 +49,10 @@ class Spree::AuctionsController < Spree::StoreController
       quantity: auction_data[:quantity],
       imprint_method_id: auction_data[:imprint_method_id],
       main_color_id: auction_data[:main_color_id],
-      shipping_address_id: auction_data[:shipping_address_id],
-      payment_method: auction_data[:payment_method],
+      ship_to_zip: auction_data[:ship_to_zip],
       logo_id: auction_data[:logo_id],
       custom_pms_colors: auction_data[:custom_pms_colors],
-      started: Time.zone.now,
-      customer_id: auction_data[:customer_id]
+      started: Time.zone.now
     )
     @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
 

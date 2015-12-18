@@ -99,9 +99,8 @@
 
       <% if spree_current_user %>
         <div class="form-group">
-          <%= f.label(:shipping_address_id, 'Shipping Address') %>
-          <%= f.select(:shipping_address_id, options_for_select(@addresses, @auction.shipping_address_id),
-            { prompt: 'Please Select' }, { class: 'form-control' }) %>
+          <%= f.label(:ship_to_zip, 'Shipping Zipcode') %>
+          <%= f.text_field(:ship_to_zip, class: 'form-control', placeholder: '10591') %>
         </div>
       <% end %>
 
@@ -112,22 +111,6 @@
         <%= f.select(:main_color_id, options_for_select(@main_colors, @auction.main_color_id),
           { prompt: 'Please Select'}, { class: 'form-control' }) %>
       </div>
-      <% if spree_current_user %>
-        <div class="form-group">
-          <%= f.label(:payment_method, 'Payment Method') %>
-          <%= f.select(:payment_method, options_for_select(
-            [['Credit Card', 'Credit Card'],['Web Check', 'Check']], @auction.payment_method),
-            { prompt: 'Please Select' }, { class: 'form-control' }) %>
-            <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
-        </div>
-
-        <p><%= button_link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank', class: 'btn btn-info btn-xs' %></p>
-
-        <div class="form-group customer-hideable" style="display: none;">
-          <ul class="list-group customer-listing" data-id="<%= @auction.customer_id %>">
-          </ul>
-        </div>
-      <% end %>
 
       <% if @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>
@@ -146,6 +129,5 @@
 <% if spree_current_user %>
   <%= render partial: 'spree/auctions/invite_sellers_modal' %>
   <%= render partial: 'spree/auctions/new_logo_modal' %>
-  <%= render partial: 'spree/auctions/address_modal' %>
 <% end %>
 <%= render partial: 'spree/auctions/imprint_definitions_modal' %>

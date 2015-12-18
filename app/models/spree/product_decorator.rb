@@ -105,10 +105,10 @@ Spree::Product.class_eval do
   end
 
   def get_property_value(key)
-    shipping_weight_id = Spree::Property.all.find_by_name(key).id
-    return if shipping_weight_id.nil?
-    prop = product_properties.find_by(property_id: shipping_weight_id)
-    return if prop.nil?
+    property_id = Spree::Property.all.find_by_name(key).id
+    return if property_id.nil?
+    property = product_properties.find_by(property_id: property_id)
+    return if property.nil?
     prop.value
   end
 
@@ -218,7 +218,7 @@ Spree::Product.class_eval do
         carton.weight,
         carton.to_s,
         carton.quantity,
-        originating_zip
+        carton.originating_zip
       ])
   end
 

@@ -39,7 +39,7 @@
           { prompt: 'Please Select' }, { class: 'form-control' } %>
       </div>
 
-<<<<<<< HEAD
+
       <p><button href="#" data-toggle="modal" data-target="#imprint-definitions-modal" class='btn btn-info btn-xs'>Imprint Method Definitions</button></p>
       <div class="form-group">
         <%= f.label :logo_id, Spree.t(:logo) %>
@@ -47,9 +47,7 @@
           @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
           { prompt: 'Please Select' } , { class: 'form-control' } %>
       </div>
-=======
-      <p><a href="#" data-toggle="modal" data-target="#imprint-definitions-modal">Imprint Method Definitions</a></p>
->>>>>>> development
+
 
       <% if spree_current_user %>
         <div class="form-group">
@@ -65,21 +63,9 @@
           <% end %>
         <% end %>
 
-        <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
+        <p><button href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal" class="btn btn-info btn-xs">Add Logo</button></p>
       <% end %>
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-
-<<<<<<< HEAD
-      <p><button href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal" class="btn btn-info btn-xs">Add Logo</button></p>
-=======
-=======
->>>>>>> development
-      <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal">Add Logo</a></p>
->>>>>>> origin/Connor-Dev
-=======
->>>>>>> development
 
       <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
@@ -120,27 +106,22 @@
         </div>
       <% end %>
 
-<<<<<<< HEAD
+
       <div class="form-group">
         <%= f.label(:shipping_address_id, 'Shipping Address') %>
         <%= f.select(:shipping_address_id, options_for_select(@addresses),
           { prompt: 'Please Select' }, { class: 'form-control' }) %>
       </div>
-<<<<<<< HEAD
-      <p><button href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address" class="btn btn-info btn-xs">Add Address</button></p>
-=======
-      <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
->>>>>>> origin/Connor-Dev
-=======
+
       <% if spree_current_user %>
         <div class="form-group">
           <%= f.label(:shipping_address_id, 'Shipping Address') %>
           <%= f.select(:shipping_address_id, options_for_select(@addresses, @auction.shipping_address_id),
             { prompt: 'Please Select' }, { class: 'form-control' }) %>
         </div>
-        <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
+        <p><button href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address" class="btn btn-info btn-xs">Add Address</button></p>
       <% end %>
->>>>>>> development
+
 
       <div class="form-group">
         <%= f.label(:main_color_id, 'Product Color') %>
@@ -156,7 +137,7 @@
             <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
         </div>
 
-<<<<<<< HEAD
+
       <div class="form-group">
         <%= f.label(:payment_method, 'Payment Method') %>
         <%= f.select(:payment_method, options_for_select(
@@ -165,14 +146,9 @@
           <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
       </div>
 
-<<<<<<< HEAD
+
       <p><%= button_link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank', class: 'btn btn-info btn-xs' %></p>
-=======
-      <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
->>>>>>> origin/Connor-Dev
-=======
-        <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
->>>>>>> development
+
 
         <div class="form-group customer-hideable" style="display: none;">
           <ul class="list-group customer-listing" data-id="<%= @auction.customer_id %>">
@@ -180,16 +156,10 @@
         </div>
       <% end %>
 
-<<<<<<< HEAD
-      <% if @request_idea_id.blank? %>
-<<<<<<< HEAD
-        <p><button href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</button></p>
-=======
-=======
+
       <% if spree_current_user && @request_idea_id.blank? %>
->>>>>>> development
-        <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal">Invite Sellers</a></p>
->>>>>>> origin/Connor-Dev
+        <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>
+
       <% end %>
       <p>Estimated delivery date: <%= 15.days.from_now.strftime('%B %e, %Y') %></p>
       <div class="form-actions" data-hook="buttons">

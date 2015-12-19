@@ -68,13 +68,6 @@
       <% end %>
 
 
-      <% if @user.logos.present? %>
-        <% @user.logos.each do |logo|%>
-          <p><%= logo.logo_file_file_name %> <a href='<%="/logos/#{logo.id}/download_logo"%>'><span title="Download file" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>  </a></p>
-        <% end %>
-      <% end %>
-
-
       <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
         <div>
@@ -167,7 +160,7 @@
           </ul>
         </div>
       <% end %>
-      
+
 
       <% if @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>

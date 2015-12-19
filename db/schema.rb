@@ -115,16 +115,16 @@ ActiveRecord::Schema.define(version: 20151216213346) do
 
   create_table "spree_auctions", force: :cascade do |t|
     t.integer  "product_id",                                            null: false
-    t.integer  "buyer_id",                                              null: false
+    t.integer  "buyer_id"
     t.integer  "quantity",                                              null: false
     t.datetime "started",                 precision: 6
     t.datetime "ended",                   precision: 6
     t.datetime "created_at",              precision: 6,                 null: false
     t.datetime "updated_at",              precision: 6,                 null: false
     t.integer  "imprint_method_id",                                     null: false
-    t.integer  "shipping_address_id",                                   null: false
+    t.integer  "shipping_address_id"
     t.integer  "main_color_id",                                         null: false
-    t.string   "payment_method",                                        null: false
+    t.string   "payment_method"
     t.string   "reference"
     t.datetime "cancelled_date",          precision: 6
     t.integer  "logo_id"

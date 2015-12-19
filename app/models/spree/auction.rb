@@ -34,14 +34,11 @@ class Spree::Auction < Spree::Base
   validates_attachment_content_type :proof_file,
     content_type: %w(image/jpeg image/jpg image/png image/gif application/pdf)
 
-  validates :buyer_id, presence: true
-  validates :logo_id, presence: true, unless: -> do
-    blank_imprint = Spree::ImprintMethod.find_by(name: 'Blank')
-    return true if blank_imprint.nil?
-    imprint_method_id == blank_imprint.id
+  validates :logo_id, presence: true, if: -> { buyer_id.present? }
+  validate :pms_colors_presence, unless: -> do
+    Spree::PmsColorsSupplier.find_by(imprint_method_id: imprint_method_id).nil?
   end
   validates :main_color_id, presence: true
-  validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
   validates :imprint_method_id, presence: true
   validate :pms_colors_presence, unless: -> do
@@ -53,10 +50,11 @@ class Spree::Auction < Spree::Base
     50 if auction.product.nil?
     auction.product.minimum_quantity
   end
-  validates_inclusion_of :shipping_agent, in: %w(ups fedex)
+  validates_inclusion_of :payment_method, in: ['Credit Card', 'Check'], if: -> { buyer_id.present? }
+  validates_inclusion_of :shipping_agent, in: %w(ups fedex), if: -> { buyer_id.present? }
   validates :customer_id, presence: { message: "Payment Option can't be blank" }, if: -> { payment_method.present? }
   validate :credit_card_presense, if: -> { customer_id.present? }, on: :create
-  validate :shipping_address_presence
+  validate :shipping_address_presence, if: -> { buyer_id.present? }
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true
 
@@ -94,6 +92,10 @@ class Spree::Auction < Spree::Base
 
     event :cancel do
       transition [:open, :waiting_confirmation, :in_dispute] => :cancelled
+    end
+
+    event :pending do
+      transition open: :pending
     end
 
     event :accept do

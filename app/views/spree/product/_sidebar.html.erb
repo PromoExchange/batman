@@ -13,7 +13,7 @@
       </div>
     <% end %>
   </div>
-  <% unless spree_current_user.has_spree_role?(:seller) %>
+  <% unless spree_current_user && spree_current_user.has_spree_role?(:seller) %>
     <div>
       <p>Can't find the product you are looking for? Let the PromoExchange swag pros provide you with some custom ideas.</p>
       <%= button_tag "Get Ideas", class: 'btn btn-success',id: "get-ideas", data: {toggle: "modal", target: "#product-ideation-request"} %>

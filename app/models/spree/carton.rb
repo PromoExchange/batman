@@ -3,7 +3,16 @@ class Spree::Carton < Spree::Base
   validates :product_id, presence: true
 
   def to_s
-    return "#{length}L X #{width}W X #{height}H" if length.present?
-    ""
+    return "#{length}L x #{width}W x #{height}H" if length.present?
+    ''
+  end
+
+  def active?
+    length.present? &&
+      width.present? &&
+      height.present? &&
+      quantity > 0 &&
+      weight.present? &&
+      originating_zip.present?
   end
 end

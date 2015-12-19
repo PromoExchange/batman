@@ -19,7 +19,7 @@ class Spree::Prebid < Spree::Base
     return if auction.quantity > (auction.product.maximum_quantity * 2)
 
     # Cannot prebid if no shipping/packaging data
-    return unless auction.product.prebid_ability!
+    return unless auction.product.prebid_ability?
 
     # (TEMP) Do not prebid if this seller is not preferred
     # return unless auction.preferred?(seller)
@@ -242,15 +242,19 @@ class Spree::Prebid < Spree::Base
       # [3] = :price_code,
       # [4] = :value
       # [5] = :range
-      log_debug(auction_data, "upcharge=#{product_upcharge[2]}")
+      log_debug(auction_data, "upcharge_actual=#{product_upcharge[2]}")
+      log_debug(auction_data, "upcharge_type=#{product_upcharge[1]}")
 
       upcharge_value = product_upcharge[4].to_f
       log_debug(auction_data, "upcharge_value=#{upcharge_value}")
 
+      log_debug(auction_data, "upcharge_price_code=#{product_upcharge[3]}")
       price_code = product_upcharge[3].gsub(/[1-9]/, '')
 
+      log_debug(auction_data, "range_code=#{product_upcharge[5]}")
+
       in_range = false
-      unless product_upcharge[5].nil?
+      unless product_upcharge[5].blank?
         bounds = []
         # Is it open ended
         if product_upcharge[5].include? '+'
@@ -323,21 +327,16 @@ class Spree::Prebid < Spree::Base
   end
 
   def calculate_shipping(auction)
-    shipping_weight_id = Spree::Property.where(name: 'shipping_weight').first.id
-    shipping_dimensions_id = Spree::Property.where(name: 'shipping_dimensions').first.id
-    shipping_quantity_id = Spree::Property.where(name: 'shipping_quantity').first.id
+    fail 'Shipping carton weight is nil' if auction.product.carton.weight.blank?
+    shipping_weight = auction.product.carton.weight
 
-    property = auction.product.product_properties.find_by(property_id: shipping_weight_id)
-    fail 'Shipping weight is nil' if property.nil?
-    shipping_weight = property.value
+    fail 'Shipping carton length is nil' if auction.product.carton.length.blank?
+    fail 'Shipping carton width is nil' if auction.product.carton.width.blank?
+    fail 'Shipping carton height is nil' if auction.product.carton.height.blank?
+    shipping_dimensions = auction.product.carton.to_s
 
-    property = auction.product.product_properties.find_by(property_id: shipping_dimensions_id)
-    fail 'Shipping dimensions is nil' if property.nil?
-    shipping_dimensions = property.value
-
-    property = auction.product.product_properties.find_by(property_id: shipping_quantity_id)
-    fail 'Shipping quantity is nil' if property.nil?
-    shipping_quantity = property.value
+    fail 'Shipping quantity is nil' if auction.product.carton.quantity <= 0
+    shipping_quantity = auction.product.carton.quantity
 
     Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_weight=#{shipping_weight}")
     Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_dimensions=#{shipping_dimensions}")
@@ -349,17 +348,23 @@ class Spree::Prebid < Spree::Base
 
     dimensions = shipping_dimensions.gsub(/[A-Z]/, '').delete(' ').split('x')
     package = ActiveShipping::Package.new(
-      shipping_weight.to_i * 16,
+      # shipping_weight.to_i * 16,
+      shipping_weight.to_i,
       dimensions.map(&:to_i),
       units: :imperial
     )
 
     Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_origin zipcode=#{seller.shipping_address.zipcode}")
 
+    # origin = ActiveShipping::Location.new(
+    #   country: seller.shipping_address.country.iso,
+    #   state: seller.shipping_address.state.abbr,
+    #   city: seller.shipping_address.city,
+    #   zip: seller.shipping_address.zipcode
+    # )
+
     origin = ActiveShipping::Location.new(
-      country: seller.shipping_address.country.iso,
-      state: seller.shipping_address.state.abbr,
-      city: seller.shipping_address.city,
+      country: 'USA',
       zip: seller.shipping_address.zipcode
     )
 

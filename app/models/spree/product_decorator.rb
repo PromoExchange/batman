@@ -105,28 +105,25 @@ Spree::Product.class_eval do
   end
 
   def get_property_value(key)
-    shipping_weight_id = Spree::Property.all.find_by_name(key).id
-    return if shipping_weight_id.nil?
-    prop = product_properties.find_by(property_id: shipping_weight_id)
-    return if prop.nil?
+    property_id = Spree::Property.all.find_by_name(key).id
+    return if property_id.nil?
+    property = product_properties.find_by(property_id: property_id)
+    return if property.nil?
     prop.value
   end
 
-  def prebid_ability!
-    self.shipping_weight ||= get_property_value('shipping_weight')
-    self.shipping_dimensions ||= get_property_value('shipping_dimensions')
-    self.shipping_quantity ||= get_property_value('shipping_quantity')
-    save!
+  def prebid_ability?
+    carton.active?
+  end
 
-    got_shipping_weight = shipping_weight.present?
-    got_shipping_dimensions = shipping_dimensions.present?
-    got_shipping_quantity = shipping_quantity.present?
-    got_originating_zip = originating_zip.present?
+  def setup_upcharges
+    setup_upcharge_type = Spree::UpchargeType.where(name: 'setup').first_or_create
+    upcharges.where(upcharge_type: setup_upcharge_type)
+  end
 
-    got_shipping_weight &&
-      got_shipping_dimensions &&
-      got_shipping_quantity &&
-      got_originating_zip
+  def run_upcharges
+    run_upcharge_type = Spree::UpchargeType.where(name: 'run').first_or_create
+    upcharges.where(upcharge_type: run_upcharge_type)
   end
 
   def check_validity!
@@ -221,7 +218,7 @@ Spree::Product.class_eval do
         carton.weight,
         carton.to_s,
         carton.quantity,
-        originating_zip
+        carton.originating_zip
       ])
   end
 

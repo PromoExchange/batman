@@ -1,6 +1,6 @@
 class Spree::Admin::CartonProductsController < Spree::Admin::BaseController
   before_action :load_product
-  before_action :load_carton, only: [:edit, :update, :destroy]
+  before_action :load_carton, only: [:edit, :update]
 
   def edit
     @carton = Spree::Carton.new if @carton.nil?
@@ -29,7 +29,8 @@ class Spree::Admin::CartonProductsController < Spree::Admin::BaseController
       :length,
       :height,
       :weight,
-      :quantity
+      :quantity,
+      :originating_zip
     )
   end
 end

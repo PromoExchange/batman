@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216213346) do
+ActiveRecord::Schema.define(version: 20151217155330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,11 +202,12 @@ ActiveRecord::Schema.define(version: 20151216213346) do
 
   create_table "spree_cartons", force: :cascade do |t|
     t.integer "product_id"
-    t.string  "width",      default: ""
-    t.string  "length",     default: ""
-    t.string  "height",     default: ""
-    t.string  "weight",     default: ""
-    t.integer "quantity",   default: 0
+    t.string  "width",           default: ""
+    t.string  "length",          default: ""
+    t.string  "height",          default: ""
+    t.string  "weight",          default: ""
+    t.integer "quantity",        default: 0
+    t.string  "originating_zip", default: ""
   end
 
   create_table "spree_color_products", force: :cascade do |t|
@@ -741,10 +742,6 @@ ActiveRecord::Schema.define(version: 20151216213346) do
     t.datetime "size",                  precision: 6
     t.datetime "weight",                precision: 6
     t.string   "state"
-    t.string   "shipping_quantity"
-    t.string   "shipping_weight"
-    t.string   "shipping_dimensions"
-    t.string   "originating_zip"
   end
 
   add_index "spree_products", ["available_on"], name: "index_spree_products_on_available_on", using: :btree

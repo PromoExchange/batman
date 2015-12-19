@@ -67,14 +67,6 @@
         <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal" class="btn btn-info btn-xs">Add Logo</a></p>
       <% end %>
 
-
-      <% if @user.logos.present? %>
-        <% @user.logos.each do |logo|%>
-          <p><%= logo.logo_file_file_name %> <a href='<%="/logos/#{logo.id}/download_logo"%>'><span title="Download file" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>  </a></p>
-        <% end %>
-      <% end %>
-
-
       <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
         <div>

@@ -128,11 +128,15 @@
           </ul>
         </div>
       <% end %>
+<<<<<<< HEAD
+=======
+
+>>>>>>> Removed 2nd Logo download link
 
       <% if @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>
       <% end %>
-      
+
       <p>Estimated delivery date: <%= 15.days.from_now.strftime('%B %e, %Y') %></p>
       <div class="form-actions" data-hook="buttons">
         <%= button 'Start Auction', 'ok', 'submit', { class: 'btn-success' } %>

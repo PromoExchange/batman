@@ -11,6 +11,7 @@ class Spree::Carton < Spree::Base
     length.present? &&
       width.present? &&
       height.present? &&
+      quantity.present? &&
       quantity > 0 &&
       weight.present? &&
       originating_zip.present?

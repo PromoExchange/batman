@@ -2,11 +2,20 @@ require 'csv'
 require 'open-uri'
 
 def add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-  upcharge = Spree::UpchargeProduct.where(
-    product: product,
-    imprint_method: imprint_method,
-    upcharge_type: upcharge_type
-  ).first_or_create
+  if range.blank?
+    upcharge = Spree::UpchargeProduct.where(
+      product: product,
+      imprint_method: imprint_method,
+      upcharge_type: upcharge_type
+    ).first_or_create
+  else
+    upcharge = Spree::UpchargeProduct.where(
+      product: product,
+      imprint_method: imprint_method,
+      upcharge_type: upcharge_type,
+      range: range
+    ).first_or_create
+  end
   upcharge.update_attributes(
     value: value,
     range: range,
@@ -16,11 +25,12 @@ def add_charge(product, imprint_method, upcharge_type, value, range, price_code,
 end
 
 def add_upcharges(product)
+
+  Spree::UpchargeProduct.where(product: product).destroy_all
+  
   # upcharges
   setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
   run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
-
-  Spree::UpchargeProduct.where(product: product).destroy_all
 
   screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
   deboss_imprint = Spree::ImprintMethod.where(name: 'Deboss').first_or_create

@@ -42,6 +42,11 @@ namespace :product do
       load_files('high_caliber')
     end
 
+    desc 'High Caliber lite Load'
+    task high_caliber_lite: :environment do
+      ProductLoader.load('lite', 'high_caliber')
+    end
+
     desc 'Leeds Load'
     task leeds: :environment do
       ProductLoader.load('products', 'leeds')

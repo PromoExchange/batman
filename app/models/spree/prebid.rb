@@ -21,9 +21,6 @@ class Spree::Prebid < Spree::Base
     # Cannot prebid if no shipping/packaging data
     return unless auction.product.prebid_ability?
 
-    # (TEMP) Do not prebid if this seller is not preferred
-    # return unless auction.preferred?(seller)
-
     # No prebids from banned users
     return if seller.banned?
 
@@ -43,6 +40,7 @@ class Spree::Prebid < Spree::Base
     log_debug(auction_data, "quantity=#{auction_data[:quantity]}")
 
     # Apply discount to base price
+    # TODO: Add base product discount price code to supplier (OR Product..research it)
     log_debug(auction_data, 'Vitronic hack, all prices have C discount code')
     apply_price_discount(auction_data, 'C')
 
@@ -81,11 +79,6 @@ class Spree::Prebid < Spree::Base
 
     log_debug(auction_data, "product_run_charge_count=#{auction_data[:product_upcharges].count}")
     apply_product_upcharges(auction_data)
-
-    # Decoration cost added to unit price
-    # PMS Color match added to unit price
-    # Setup cost added to unit price
-    # Additional costs added to unit price
 
     # Apply tax from raxrate table
     tax_rate = 0.0
@@ -273,14 +266,15 @@ class Spree::Prebid < Spree::Base
 
       case product_upcharge[1]
       when 'setup'
-        # No ranges
-        setup_charge = product_upcharge[4].to_f
-        log_debug(auction_data, "setup upcharge #{setup_charge}")
-        log_debug(auction_data, "setup upcharge discount #{price_code}")
-        auction_data[:running_unit_price] += (
-          (Spree::Price.discount_price(price_code, setup_charge) * auction_data[:num_colors]) / auction_data[:quantity]
-        )
-        log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+        (1..auction_data[:num_colors].to_i).each do
+          setup_charge = product_upcharge[4].to_f
+          log_debug(auction_data, "setup upcharge #{setup_charge}")
+          log_debug(auction_data, "setup upcharge discount #{price_code}")
+          auction_data[:running_unit_price] += (
+            (Spree::Price.discount_price(price_code, setup_charge) * auction_data[:num_colors]) / auction_data[:quantity]
+          )
+          log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+        end
       when 'run'
         next unless in_range
         run_charge = product_upcharge[4].to_f
@@ -305,13 +299,15 @@ class Spree::Prebid < Spree::Base
         next unless in_range
         log_debug(auction_data, "auction_data[:num_colors]=#{auction_data[:num_colors]}")
         if auction_data[:num_colors] > 1
-          multiple_colors_charge = product_upcharge[4].to_f
-          log_debug(auction_data, "multiple colors upcharge #{multiple_colors_charge}")
-          log_debug(auction_data, "multiple colors upcharge discount #{price_code}")
-          auction_data[:running_unit_price] += (
-            Spree::Price.discount_price(price_code, multiple_colors_charge)
-          )
-          log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+          (2..auction_data[:num_colors].to_i).each do
+            multiple_colors_charge = product_upcharge[4].to_f
+            log_debug(auction_data, "#{product_upcharge[1]} #{multiple_colors_charge}")
+            log_debug(auction_data, "#{product_upcharge[1]} upcharge discount #{price_code}")
+            auction_data[:running_unit_price] += (
+              Spree::Price.discount_price(price_code, multiple_colors_charge)
+            )
+            log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
+          end
         end
       when 'rush'
         # No ranges
@@ -348,8 +344,7 @@ class Spree::Prebid < Spree::Base
 
     dimensions = shipping_dimensions.gsub(/[A-Z]/, '').delete(' ').split('x')
     package = ActiveShipping::Package.new(
-      # shipping_weight.to_i * 16,
-      shipping_weight.to_i,
+      shipping_weight.to_i * 16,
       dimensions.map(&:to_i),
       units: :imperial
     )
@@ -363,6 +358,7 @@ class Spree::Prebid < Spree::Base
     #   zip: seller.shipping_address.zipcode
     # )
 
+    # TODO: Use product FOB from carton, once we get it populated
     origin = ActiveShipping::Location.new(
       country: 'USA',
       zip: seller.shipping_address.zipcode

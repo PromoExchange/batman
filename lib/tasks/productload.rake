@@ -12,14 +12,29 @@ namespace :product do
       load_files('gemline')
     end
 
+    desc 'Gemline lite load'
+    task gemline_lite: :environment do
+      ProductLoader.load('lite', 'gemline')
+    end
+
     desc 'Crown Load'
     task crown: :environment do
       load_files('crown')
     end
 
+    desc 'Crown Lite Load'
+    task crown_lite: :environment do
+      ProductLoader.load('lite', 'crown')
+    end
+
     desc 'Fields Load'
     task fields: :environment do
       load_files('fields')
+    end
+
+    desc 'Fields lite load'
+    task fields_lite: :environment do
+      ProductLoader.load('lite', 'fields')
     end
 
     desc 'High Caliber Load'

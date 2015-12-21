@@ -261,7 +261,7 @@ RSpec.describe Spree::Prebid, type: :model do
     ]
 
     prebid.send(:apply_product_upcharges, auction_data)
-    expect((102.1920 - auction_data[:running_unit_price]).abs).to be < 0.0001
+    expect((102.5893 - auction_data[:running_unit_price]).abs).to be < 0.0001
   end
 
   it 'should process open ended range' do
@@ -288,6 +288,6 @@ RSpec.describe Spree::Prebid, type: :model do
     ]
 
     prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.5960 - auction_data[:running_unit_price]).abs).to be < 0.0001
+    expect((100.9933 - auction_data[:running_unit_price]).abs).to be < 0.0001
   end
 end

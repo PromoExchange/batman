@@ -85,6 +85,10 @@ class Spree::Bid < Spree::Base
     end
   end
 
+  def payment_option
+    payment_type == 'check' ? 'ACH' : 'Credit Card'   
+  end
+
   private
 
   def notification_for_waiting_confirmation

@@ -96,12 +96,10 @@ class Spree::AuctionsController < Spree::StoreController
       quantity: auction_data[:quantity],
       imprint_method_id: auction_data[:imprint_method_id],
       main_color_id: auction_data[:main_color_id],
-      shipping_address_id: auction_data[:shipping_address_id],
-      payment_method: auction_data[:payment_method],
+      ship_to_zip: auction_data[:ship_to_zip],
       logo_id: auction_data[:logo_id],
       custom_pms_colors: auction_data[:custom_pms_colors],
       started: Time.zone.now,
-      customer_id: auction_data[:customer_id],
       state: 'open'
     )
     @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
@@ -135,6 +133,27 @@ class Spree::AuctionsController < Spree::StoreController
 
   def auction_payment
     @bid = Spree::Bid.find(params[:bid_id])
+    @auction = @bid.auction
+    customers = current_spree_user.customers 
+    if @bid.payment_type.include?('check')
+      @customers = customers.web_check.verified
+    else
+      @customers = customers.credit_card
+    end
+
+    @addresses = []
+    current_spree_user.addresses.active.each do |address|
+      add = true
+      add = false if address.bill?
+      add = true if address.ship?
+
+      next unless add
+
+      @addresses << [
+        "#{address}",
+        address.id]
+    end
+    @pxaddress = Spree::Pxaddress.new
   end
 
   def upload_proof

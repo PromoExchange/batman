@@ -43,24 +43,32 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   end
 
   def accept
-    @bid.transaction do
-      if @bid.auction.preferred?(@bid.seller)
-        @bid.update_attributes(manage_workflow: params[:manage_workflow])
-        @bid.preferred_accept
-        @bid.auction.unpaid
-        @status = 'succeeded'
-      else
-        @status = @bid.create_payment(nil)
-        if %w(succeeded pending).include?(@status)
-          @bid.non_preferred_accept
-          @bid.auction.accept
+    @auction = @bid.auction
+    @auction.payment_method = @bid.payment_type
+    @auction.customer_id = params[:customer_id]
+    @auction.shipping_address_id = params[:ship_id]
+    if @auction.save
+      @bid.transaction do
+        if @bid.auction.preferred?(@bid.seller)
+          @bid.update_attributes(manage_workflow: params[:manage_workflow])
+          @bid.preferred_accept
+          @bid.auction.unpaid
+          @status = 'succeeded'
+        else
+          @status = @bid.create_payment(nil)
+          if %w(succeeded pending).include?(@status)
+            @bid.non_preferred_accept
+            @bid.auction.accept
+          end
         end
+        @bid.order.update_attributes(payment_state: 'balance_due')
       end
-      @bid.order.update_attributes(payment_state: 'balance_due')
+      Spree::OrderUpdater.new(@bid.order).update
+      message = !%w(succeeded pending).include?(@status) ? @status.message : @status
+      @bid.pay_sample_fee
+    else
+      message = @auction.errors.full_messages
     end
-    Spree::OrderUpdater.new(@bid.order).update
-    message = !%w(succeeded pending).include?(@status) ? @status.message : @status
-    @bid.pay_sample_fee
     render nothing: true, status: :ok, json: { message: message, manage_status: @bid.manage_workflow }
   rescue
     render nothing: true, status: :internal_server_error

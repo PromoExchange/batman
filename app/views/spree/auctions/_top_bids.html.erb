@@ -10,35 +10,31 @@
       </tr>
     </thead>
     <tbody>
-      <% seen = [] %>
       <% @auction.bids.each do |b| %>
         <% row_class = '' %>
         <% row_class = 'preferred' if @auction.preferred?(b.seller) %>
-        <% unless seen.include? b.seller %>
-          <% seen.push(b.seller) %>
-          <tr class="<%= row_class %>">
-            <td><%= b.email %></td>
-            <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars, edit_enabled: false %></td>
-            <td><%= '$%.2f' % b.bid %></td>
-            <td>
-              <% if b.accepted? %>
-                <% if @auction.unpaid? && !b.manage_workflow %>
-                  Completed
-                <% else %>
-                  <%= @auction.bids_status[@auction.state.to_sym] %>
-                <% end %>
+        <tr class="<%= row_class %>">
+          <td><%= b.email %></td>
+          <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars, edit_enabled: false %></td>
+          <td><%= '$%.2f' % b.bid %> (<%= b.payment_type%>)</td>
+          <td>
+            <% if b.accepted? %>
+              <% if @auction.unpaid? && !b.manage_workflow %>
+                Completed
               <% else %>
-                <% if (b.lost? && @auction.waiting?) or b.open? %>
-                  <%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
-                <% elsif b.rejected? %>
-                  Failed to Accept Prior Selection
-                <% else %>
-                  Lost
-                <% end %>
+                <%= @auction.bids_status[@auction.state.to_sym] %>
               <% end %>
-            </td>
-          </tr>
-        <% end %>
+            <% else %>
+              <% if (b.lost? && @auction.waiting?) or b.open? %>
+                <%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
+              <% elsif b.rejected? %>
+                Failed to Accept Prior Selection
+              <% else %>
+                Lost
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
       <% end %>
     </tbody>
   </table>

@@ -52,6 +52,7 @@ class Spree::Auction < Spree::Base
   end
   validates_inclusion_of :shipping_agent, in: %w(ups fedex), if: -> { buyer_id.present? }
   validate :shipping_zipcode_presence, if: -> { buyer_id.present? }
+  validate :credit_card_presense, if: -> { customer_id.present? }, on: :update
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true
 
@@ -381,5 +382,9 @@ class Spree::Auction < Spree::Base
       return false
     end
     Spree::PmsColorsSupplier.where(supplier_id: self.product.supplier_id).map(&:imprint_method_id).exclude? self.imprint_method_id
+  end
+
+  def credit_card_presense
+    errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
   end
 end

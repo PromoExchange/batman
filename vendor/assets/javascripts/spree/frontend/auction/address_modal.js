@@ -29,8 +29,9 @@ $(function() {
       success: function(data) {
         alert('Address added successfully');
         $('#auction-add-address').modal('hide');
+        $('#edit-address-modal-form').trigger("reset");
         option_text = data.firstname + ' ' + data.lastname + ': ' + data.address1;
-        $('#auction_shipping_address_id')
+        $('#shipping_address_id')
           .append($("<option></option>")
           .attr('value',data.id)
           .text(option_text));

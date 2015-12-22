@@ -82,6 +82,11 @@ namespace :product do
       load_files('primeline')
     end
 
+    desc 'Primeline Load'
+    task primeline_lite: :environment do
+      ProductLoader.load('lite', 'primeline')
+    end
+
     desc 'Sweda Load'
     task sweda: :environment do
       ProductLoader.load('products', 'sweda')

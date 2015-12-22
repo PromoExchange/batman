@@ -122,8 +122,10 @@ Spree::Product.class_eval do
   end
 
   def run_upcharges
-    run_upcharge_type = Spree::UpchargeType.where(name: 'run').first_or_create
-    upcharges.where(upcharge_type: run_upcharge_type)
+    upcharges_types = []
+    upcharges_types << Spree::UpchargeType.where(name: 'run').first_or_create
+    upcharges_types << Spree::UpchargeType.where(name: 'additional_color_run').first_or_create
+    upcharges.where(upcharge_type: upcharges_types)
   end
 
   def check_validity!

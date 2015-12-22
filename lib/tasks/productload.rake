@@ -62,6 +62,11 @@ namespace :product do
       load_files('logomark')
     end
 
+    desc 'Logomark Lite Load'
+    task logomark_lite: :environment do
+      ProductLoader.load('lite', 'logomark')
+    end
+
     desc 'Norwood Load'
     task norwood: :environment do
       ProductLoader.load('products', 'norwood')

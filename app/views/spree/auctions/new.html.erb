@@ -39,16 +39,7 @@
           { prompt: 'Please Select' }, { class: 'form-control' } %>
       </div>
 
-
       <p><a href="#" data-toggle="modal" data-target="#imprint-definitions-modal" class='btn btn-info btn-xs'>Imprint Method Definitions</a></p>
-      <div class="form-group">
-        <%= f.label :logo_id, Spree.t(:logo) %>
-        <%= f.select :logo_id,
-          @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
-          { prompt: 'Please Select' } , { class: 'form-control' } %>
-      </div>
-
-
 
       <% if spree_current_user %>
         <div class="form-group">
@@ -67,7 +58,10 @@
         <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal" class="btn btn-info btn-xs">Add Logo</a></p>
       <% end %>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/Connor-Dev
       <div class="form-group color-hideable" style="display: none;">
         <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
         <div>
@@ -107,26 +101,15 @@
         </div>
       <% end %>
 
-
-      <div class="form-group">
-        <%= f.label(:shipping_address_id, 'Shipping Address') %>
-        <%= f.select(:shipping_address_id, options_for_select(@addresses),
-          { prompt: 'Please Select' }, { class: 'form-control' }) %>
-      </div>
-
-
       <% if spree_current_user %>
         <div class="form-group">
           <%= f.label(:shipping_address_id, 'Shipping Address') %>
           <%= f.select(:shipping_address_id, options_for_select(@addresses, @auction.shipping_address_id),
             { prompt: 'Please Select' }, { class: 'form-control' }) %>
         </div>
-
       <% end %>
 
-
       <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address" class="btn btn-info btn-xs">Add Address</a></p>
-
 
       <div class="form-group">
         <%= f.label(:main_color_id, 'Product Color') %>
@@ -142,30 +125,22 @@
             <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
         </div>
 
-
-      <div class="form-group">
-        <%= f.label(:payment_method, 'Payment Method') %>
-        <%= f.select(:payment_method, options_for_select(
-          [['Credit Card', 'Credit Card'],['Web Check', 'Check']], @auction.payment_method),
-          { prompt: 'Please Select' }, { class: 'form-control' }) %>
-          <span id="payment-question" class="glyphicon glyphicon-question-sign payment-question" data-toggle="tooltip" data-placement="top" title="You will not be charged until a bid is accepted and the auction is closed."></span>
-      </div>
-
-
-      <p><%= button_link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank', class: 'btn btn-info btn-xs' %></p>
-
+        <p><%= button_link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank', class: 'btn btn-info btn-xs' %></p>
 
         <div class="form-group customer-hideable" style="display: none;">
           <ul class="list-group customer-listing" data-id="<%= @auction.customer_id %>">
           </ul>
         </div>
       <% end %>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/Connor-Dev
 
       <% if @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>
-
       <% end %>
+      
       <p>Estimated delivery date: <%= 15.days.from_now.strftime('%B %e, %Y') %></p>
       <div class="form-actions" data-hook="buttons">
         <%= button 'Start Auction', 'ok', 'submit', { class: 'btn-success' } %>

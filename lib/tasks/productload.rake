@@ -72,6 +72,11 @@ namespace :product do
       ProductLoader.load('products', 'norwood')
     end
 
+    desc 'Norwood Load'
+    task norwood_lite: :environment do
+      ProductLoader.load('lite', 'norwood')
+    end
+
     desc 'Primeline Load'
     task primeline: :environment do
       load_files('primeline')

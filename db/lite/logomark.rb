@@ -32,7 +32,7 @@ def add_upcharges(product)
   setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
   run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
 
-  laser_engrave_imprint = Spree::ImprintMethod.where(name: 'Laser Engrave').first_or_create
+  laser_engrave_imprint = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
   value_mark_imprint = Spree::ImprintMethod.where(name: 'Valuemark').first_or_create
   logomark_imprint = Spree::ImprintMethod.where(name: 'Logomark').first_or_create
   vinyl_imprint = Spree::ImprintMethod.where(name: 'Vinyl').first_or_create

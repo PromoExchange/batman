@@ -58,12 +58,16 @@ updated_upcharge_count = 0
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
+  sku = hashed[:sku]
+  sku_parts = hashed[:sku].split('-')
+  sku = sku_parts[0] if sku_parts.count > 1
+
   in_file_count += 1
-  product = Spree::Product.joins(:master).where(supplier: supplier).where("spree_variants.sku='#{hashed[:sku]}'").first
+  product = Spree::Product.joins(:master).where(supplier: supplier).where("spree_variants.sku='#{sku}'").first
 
   if product.nil?
     db_load_fail += 1
-    puts "ERROR: Failed to find product [#{hashed[:sku]}]"
+    puts "ERROR: Failed to find product [#{sku}]"
     next
   end
 
@@ -85,7 +89,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     updated_carton_count += 1
   else
     invalid_carton_count += 1
-    byebug
   end
 
   add_upcharges(product)
@@ -98,9 +101,7 @@ in_db_only = Spree::Product.where(supplier: supplier).where.not(id: found_ids).c
 Spree::Product.where(supplier: supplier).where.not(id: found_ids).each do |prod|
   add_upcharges(prod)
   updated_upcharge_count += 1
-  if updated_upcharge_count % 10 == 0
-    putc '.'
-  end
+  putc '.' if updated_upcharge_count % 10 == 0
 end
 
 puts "Products in XML: #{in_file_count}"

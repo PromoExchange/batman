@@ -92,6 +92,11 @@ namespace :product do
       ProductLoader.load('products', 'sweda')
     end
 
+    desc 'Sweda Lite Load'
+    task sweda_lite: :environment do
+      ProductLoader.load('lite', 'sweda')
+    end
+
     desc 'Starline Load'
     task starline: :environment do
       load_files('starline')

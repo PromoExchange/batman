@@ -122,6 +122,11 @@ namespace :product do
       load_files('vitronic')
     end
 
+    desc 'Vitronic Lite Load'
+    task vitronic_lite: :environment do
+      ProductLoader.load('lite', 'vitronic')
+    end
+
     desc 'Gildan Load'
     task gildan: :environment do
       ProductLoader.load('products', 'gildan')

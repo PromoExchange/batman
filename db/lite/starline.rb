@@ -138,7 +138,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       updated_imprint_method += 1
     end
   end
-  screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
 end
 
 # Add upcharges to those remaining
@@ -148,6 +147,12 @@ Spree::Product.where(supplier: supplier).where.not(id: found_ids).each do |prod|
   add_upcharges(prod)
   updated_upcharge_count += 1
   putc '.' if updated_upcharge_count % 10 == 0
+end
+
+Spree::Product.where(supplier: supplier).each do |product|
+  product.loading!
+  product.check_validity!
+  product.loaded! if product.state == 'loading'
 end
 
 puts "Products in XML: #{in_file_count}"

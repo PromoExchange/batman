@@ -15,7 +15,7 @@
         .col.col-md-4
           .form-group
             = f.label :id_eq, Spree.t(:ID)
-            = f.text_field :id_eq, class: "form-control js-quick-search-target"
+            = f.text_field :id_eq, class: "form-control"
         .col.col-md-4
           .form-group
             = f.label :name_cont, Spree.t(:name)
@@ -23,7 +23,7 @@
         .col.col-md-4
           .form-group
             = f.label :dc_acct_num_cont, 'DC Acct Number'
-            = f.text_field :dc_acct_num_cont, class: "form-control js-quick-search-target"
+            = f.text_field :dc_acct_num_cont, class: "form-control"
       .form-actions
         = button Spree.t(:search), 'search'
 .well

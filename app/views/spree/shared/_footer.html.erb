@@ -23,8 +23,21 @@
         <li>More Information</li>
         <li><a href="/contact">Contact Us</a></li>
         <li><a href="/privacy">Privacy Policy</a></li>
-        <li><a href="#">User Agreement</a></li>
+        <li><a href="#user_agreement" data-toggle="modal" data-target="#user-agreement">User Agreement</a>
       </ul>
+    </div>
+    <div class="modal fade" id="user-agreement" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header"><h2><%= Spree.t(:user_agreement) %></h2></div>
+          <div class="modal-body scrolling" style="color:black">
+            <%= render partial: 'spree/pxusers/user_agreement' %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="col-lg-2">
       <ul>

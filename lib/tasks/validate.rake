@@ -40,4 +40,31 @@ namespace :product do
       puts("ERROR: #{e.message}")
     end
   end
+
+  task product_report: :environment do
+    num_total_products = Spree::Product.count
+
+    num_prebidable_active = 0
+    valid_products = Spree::Product.where(state: :active)
+    valid_products.each do |product|
+      num_prebidable_active += 1 if product.prebid_ability?
+    end
+    num_valid_products = valid_products.count
+
+    num_prebidable_invalid = 0
+    invalid_products = Spree::Product.where(state: :invalid)
+    invalid_products.each do |product|
+      num_prebidable_invalid += 1 if product.prebid_ability?
+    end
+    num_invalid_products = invalid_products.count
+
+    num_loading_products = Spree::Product.where(state: :loading).count
+
+    puts "Number of products: #{num_total_products}"
+    puts "Number of invalid products: #{num_invalid_products}"
+    puts "Number of active products: #{num_valid_products}"
+    puts "Number of loading products: #{num_loading_products}"
+    puts "Number of prebidable active products: #{num_prebidable_active}"
+    puts "Number of prebidable invalid products: #{num_prebidable_invalid}"
+  end
 end

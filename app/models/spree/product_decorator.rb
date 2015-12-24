@@ -64,14 +64,14 @@ Spree::Product.class_eval do
   end
 
   def lowest_discounted_volume_price
-    volume_prices = Spree::Variant.find_by(product_id: id).volume_prices
+    volume_prices = Spree::Variant.find_by(product: self).volume_prices
 
     return 0 unless volume_prices.present?
     volume_prices.last.amount.to_f
   end
 
   def highest_discounted_volume_price
-    volume_prices = Spree::Variant.find_by(product_id: id).volume_prices
+    volume_prices = Spree::Variant.find_by(product: self).volume_prices
 
     return 0 unless volume_prices.present?
     volume_prices.first.amount.to_f
@@ -117,15 +117,11 @@ Spree::Product.class_eval do
   end
 
   def setup_upcharges
-    setup_upcharge_type = Spree::UpchargeType.where(name: 'setup').first_or_create
-    upcharges.where(upcharge_type: setup_upcharge_type)
+    upcharges.where(upcharge_type: Spree::UpchargeType.where(name: 'setup'))
   end
 
   def run_upcharges
-    upcharges_types = []
-    upcharges_types << Spree::UpchargeType.where(name: 'run').first_or_create
-    upcharges_types << Spree::UpchargeType.where(name: 'additional_color_run').first_or_create
-    upcharges.where(upcharge_type: upcharges_types)
+    upcharges.where(upcharge_type: Spree::UpchargeType.where(name: %w(run additional_color_run)))
   end
 
   def check_validity!

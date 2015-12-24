@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151217155330) do
+ActiveRecord::Schema.define(version: 20151224154236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1349,6 +1349,10 @@ ActiveRecord::Schema.define(version: 20151217155330) do
     t.integer "imprint_method_id"
     t.string  "type"
   end
+
+  add_index "spree_upcharges", ["imprint_method_id"], name: "index_spree_upcharges_on_imprint_method_id", using: :btree
+  add_index "spree_upcharges", ["related_id"], name: "index_spree_upcharges_on_related_id", using: :btree
+  add_index "spree_upcharges", ["upcharge_type_id"], name: "index_spree_upcharges_on_upcharge_type_id", using: :btree
 
   create_table "spree_users", force: :cascade do |t|
     t.string   "encrypted_password",     limit: 128

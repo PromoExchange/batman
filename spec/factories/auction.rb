@@ -12,6 +12,7 @@ FactoryGirl.define do
     payment_method 'Credit Card'
     state 'open'
     shipping_agent 'ups'
+    ship_to_zip 30308
     reference SecureRandom.hex(3)
     proof_file { File.new(Rails.root.join('spec', 'fixtures', 'batman.jpeg')) }
     association :customer, factory: :customer

@@ -17,11 +17,6 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.save).to be_falsey
   end
 
-  it 'should not save with a nil shipping' do
-    a = FactoryGirl.build(:auction, shipping_address: nil)
-    expect(a.save).to be_falsey
-  end
-
   it 'should not save with a nil main color' do
     a = FactoryGirl.build(:auction, main_color: nil)
     expect(a.save).to be_falsey

@@ -28,8 +28,8 @@ class Spree::AuctionsController < Spree::StoreController
       @auction = Spree::Auction.new(
       product_id: params[:product_id],
       started: Time.zone.now)
-    end  
-    
+    end
+
     supporting_data
   end
 
@@ -61,11 +61,11 @@ class Spree::AuctionsController < Spree::StoreController
         @auction.pms_colors << Spree::PmsColor.find(pms_color)
       end
     end
-    
+
     @auction.save!
 
     unless current_spree_user
-      @auction.pending 
+      @auction.pending
       session[:pending_auction_id] = @auction.id
       redirect_to login_url and return
     end
@@ -134,25 +134,14 @@ class Spree::AuctionsController < Spree::StoreController
   def auction_payment
     @bid = Spree::Bid.find(params[:bid_id])
     @auction = @bid.auction
-    customers = current_spree_user.customers 
-    if @bid.payment_type.include?('check')
-      @customers = customers.web_check.verified
-    else
-      @customers = customers.credit_card
+    customers = current_spree_user.customers
+    @customers = @bid.payment_type.include?('check') ? customers.web_check.verified : customers.credit_card
+
+    @addresses = current_spree_user.addresses.active.map do |address|
+      next if address.bill?
+      ["#{address}", address.id]
     end
 
-    @addresses = []
-    current_spree_user.addresses.active.each do |address|
-      add = true
-      add = false if address.bill?
-      add = true if address.ship?
-
-      next unless add
-
-      @addresses << [
-        "#{address}",
-        address.id]
-    end
     @pxaddress = Spree::Pxaddress.new
   end
 
@@ -244,7 +233,7 @@ class Spree::AuctionsController < Spree::StoreController
         product_size: params[:size]
       )
     end
-    
+
     @request_idea_id = auction_data[:request_idea] if auction_data[:request_idea].present?
     idea = Spree::RequestIdea.where(id: @request_idea_id).take
     idea.update_attributes(auction_id: @auction.id) if idea

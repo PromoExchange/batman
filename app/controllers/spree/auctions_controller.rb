@@ -138,7 +138,7 @@ class Spree::AuctionsController < Spree::StoreController
     @customers = @bid.payment_type.include?('check') ? customers.web_check.verified : customers.credit_card
 
     @addresses = current_spree_user.addresses.active.map do |address|
-      next if address.bill?
+      next if address.bill? && !address.ship?
       ["#{address}", address.id]
     end
 

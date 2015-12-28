@@ -58,6 +58,9 @@ updated_carton_count = 0
 updated_upcharge_count = 0
 updated_main_color = 0
 
+num_invalid_before = Spree::Product.where(supplier: supplier, state: :invalid).count
+num_invalid_after = 0
+
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
@@ -92,20 +95,54 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   end
 
   # Product Colors
-  # available_colors
   unless hashed[:available_colors].blank?
     colors = hashed[:available_colors].split(',')
     if colors.count > 0
       Spree::ColorProduct.where(product: product).destroy_all
       colors.each do |color|
-        Spree::ColorProduct.create( product: product , color: color.strip)
+        Spree::ColorProduct.create( product: product , color: color.strip.titleize)
       end
       updated_main_color += 1
     end
   end
 
-  # add_upcharges(product)
-  # updated_upcharge_count += 1
+  imprints = []
+  imprints << hashed[:imprint_method_1]
+  imprints << hashed[:imprint_method_2]
+
+  was_updated = false
+
+  imprints.each do |imprint|
+    next if imprint.blank?
+    if imprint == 'Silkscreen'
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+    elsif imprint == 'Deboss'
+      imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+    elsif imprint == 'Emboss'
+      imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+    elsif imprint == 'Blank'
+      imprint_method = Spree::ImprintMethod.where(name: 'Blank').first_or_create
+    elsif imprint == 'Pad Print'
+      imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+    elsif imprint == 'Laser Engraved'
+      imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
+    elsif imprint == 'Four Color Process'
+      imprint_method = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
+    else
+      fail "*****Failed to see [#{imprint}]"
+    end
+    unless imprint_method.nil?
+      Spree::ImprintMethodsProduct.where(
+        imprint_method: imprint_method,
+        product: product
+      ).first_or_create
+      was_updated = true
+    end
+  end
+
+  product.loading
+  product.check_validity!
+  product.loaded! if product.state == 'loading'
 end
 
 in_db_only = Spree::Product.where(supplier: supplier).where.not(id: found_ids).count
@@ -120,7 +157,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   if upcharge_in_file_count % 10
-    puts "."
+    putc "."
   end
 
   sku = hashed[:item_sku]
@@ -317,13 +354,9 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   end
 end
 
+num_invalid_after = Spree::Product.where(supplier: supplier, state: :invalid).count
 
-# Add upcharges to those remaining
-# Spree::Product.where(supplier: supplier).where.not(id: found_ids).each do |prod|
-#   add_upcharges(prod)
-#   updated_upcharge_count += 1
-# end
-
+puts "Done"
 puts "Products in XML: #{in_file_count}"
 puts "Products in DB: #{db_product_count}"
 puts "Products in XML AND DB: #{found_ids.count}"
@@ -335,3 +368,5 @@ puts "Upcharge Products in DB: #{upcharge_found_ids.count}"
 puts "Upcharges found in file: #{upcharge_in_file_count}"
 puts "Upcharges added: #{updated_upcharge_count}"
 puts "Products updated with main product color: #{updated_main_color}"
+puts "Products invalid before: #{num_invalid_before}"
+puts "Products invalid after: #{num_invalid_after}"

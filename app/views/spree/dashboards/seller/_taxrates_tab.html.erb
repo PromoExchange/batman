@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @tax_rates.each do |t| %>
+          <% (@tax_rates || []).each do |t| %>
             <tr data-id="<%= t.id %>" id="taxrate-<%= t.id %>">
               <td class="rate-name"><%= t.zone.name %></td>
               <td class="rate-amount pct"><%= (t.amount * 100).round(2) %></td>

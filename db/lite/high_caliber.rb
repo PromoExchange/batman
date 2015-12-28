@@ -48,6 +48,9 @@ updated_carton_count = 0
 updated_upcharge_count = 0
 updated_main_color = 0
 
+num_invalid_before = Spree::Product.where(supplier: supplier, state: :invalid).count
+num_invalid_after = 0
+
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
@@ -80,10 +83,31 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   add_upcharges(product)
   updated_upcharge_count += 1
+
+  # Product color
+  unless hashed[:item_color].blank?
+    colors = hashed[:item_color].split(',')
+    colors.each do |color|
+      Spree::ColorProduct.where(product: product, color: color.strip ).first_or_create
+    end
+    updated_main_color += 1
+  end
+
+  # Give everyone screenprint
+  screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  Spree::ImprintMethodsProduct.where(
+    imprint_method: screen_print_imprint,
+    product: product
+  ).first_or_create
+
+  product.loading
+  product.check_validity!
+  product.loaded! if product.state == 'loading'
 end
 
 in_db_only = Spree::Product.where(supplier: supplier).where.not(id: found_ids).count
 
+num_invalid_after = Spree::Product.where(supplier: supplier, state: :invalid).count
 
 puts "Products in XML: #{in_file_count}"
 puts "Products in DB: #{db_product_count}"
@@ -94,3 +118,5 @@ puts "Products with invalid cartons: #{invalid_carton_count}"
 puts "Products updated with carton: #{updated_carton_count}"
 puts "Upcharges added: #{updated_upcharge_count}"
 puts "Products updated with main product color: #{updated_main_color}"
+puts "Products invalid before: #{num_invalid_before}"
+puts "Products invalid after: #{num_invalid_after}"

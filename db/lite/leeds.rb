@@ -167,6 +167,8 @@ Spree::Product.where(supplier: supplier).where.not(id: found_ids).each do |prod|
   updated_upcharge_count += 1
 end
 
+num_invalid_after = Spree::Product.where(supplier: supplier, state: :invalid).count
+
 puts "Products in XML: #{in_file_count}"
 puts "Products in DB: #{db_product_count}"
 puts "Products in XML AND DB: #{found_ids.count}"

@@ -12,7 +12,7 @@
       <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>
       <tr><td>Factory:</td><td><%= @auction.product.supplier.name %></td></tr>
       <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
-      <tr><td>Buyer:</td><td><%= @auction.buyer.billing_address.full_name %></td></tr>
+      <tr><td>Buyer Zip:</td><td><%= @auction.ship_to_zip %></td></tr>
       <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></td></tr>
       <tr><td>Quantity:</td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
       <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>

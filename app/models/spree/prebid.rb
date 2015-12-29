@@ -154,11 +154,10 @@ class Spree::Prebid < Spree::Base
       return
     end
 
-    if auction.payment_method == 'Check'
-      payment_processing_commission = 0.0
-    else
-      payment_processing_commission = 0.029
-    end
+    # NOTE: We are charging a flat fee equal to the payment processing fee of a credit card transaction.
+    # This is due to us not knowing the payment method at the beginning of an auction. We charge the greater
+    # value to compensate if the buyer selects CC. If they select Check, then we still charge the CC fee.
+    payment_processing_commission = 0.029
     payment_processing_flat_fee = 0.30
 
     log_debug(auction_data, "payment_processing_commission=#{payment_processing_commission}")
@@ -368,11 +367,10 @@ class Spree::Prebid < Spree::Base
       "PREBID DEBUG A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.shipping_address.zipcode}"
     )
 
+    # NOTE: We only have access to the zip code at auction creation time
     destination = ActiveShipping::Location.new(
-      country: auction.shipping_address.country.iso,
-      state: auction.shipping_address.state.abbr,
-      city: auction.shipping_address.city,
-      zip: auction.shipping_address.zipcode
+      country: 'USA',
+      zip: auction.ship_to_zip
     )
 
     ups = ActiveShipping::UPS.new(

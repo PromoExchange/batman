@@ -78,6 +78,9 @@ invalid_carton_count = 0
 updated_carton_count = 0
 updated_upcharge_count = 0
 updated_main_color = 0
+updated_imprint = 0
+num_invalid_before = Spree::Product.where(supplier: supplier, state: :invalid).count
+num_invalid_after = 0
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
@@ -108,7 +111,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   end
 
   # Product Colors
-  # available_colors
   unless hashed[:colors].blank?
     colors = hashed[:colors].split(',')
     if colors.count > 0
@@ -120,9 +122,54 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     end
   end
 
+  # Imprint Methods
+  unless hashed[:imprint_type].blank?
+    method_name = hashed[:imprint_type]
+    imprint_method = nil
+
+    if /^Custom/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Molded PVC').first_or_create
+    elsif /^Deboss/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+    elsif /^Embroidery/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+    elsif /^Four/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
+    elsif /^Full-Color/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+    elsif /^Image Bonding/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
+    elsif /^Laser Engraved/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
+    elsif /^Pad Print/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+    elsif /^Silk Screen/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+    elsif /^Transfer/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+    elsif /^VibraTec/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'VibraTec').first_or_create
+    elsif /^pad Print/.match(method_name)
+      imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+    else
+      next
+    end
+    Spree::ImprintMethodsProduct.where(
+      imprint_method: imprint_method,
+      product: product
+    ).first_or_create
+    updated_imprint += 1
+  end
+
   add_upcharges(product)
   updated_upcharge_count += 1
+
+  product.loading
+  product.check_validity!
+  product.loaded! if product.state == 'loading'
 end
+
+num_invalid_after = Spree::Product.where(supplier: supplier, state: :invalid).count
 
 # Add upcharges to those remaining
 in_db_only = Spree::Product.where(supplier: supplier).where.not(id: found_ids).count
@@ -141,3 +188,6 @@ puts "Products main colors updated: #{updated_main_color}"
 puts "Products with invalid cartons: #{invalid_carton_count}"
 puts "Products updated with carton: #{updated_carton_count}"
 puts "Products updated with upcharges: #{updated_upcharge_count}"
+puts "Products updated with imprint method: #{updated_imprint}"
+puts "Product invalid before: #{num_invalid_before}"
+puts "Product invalid after: #{num_invalid_after}"

@@ -221,7 +221,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     },
     'Screen Print Multiple Color Run Charge': {
       imprint_method: 'Screen Print',
-      upcharge_type: 'multiple_color_run'
+      upcharge_type: 'additional_color_run'
     },
     'Hot Stamp Setup Charge': {
       imprint_method: 'Hot Stamp',
@@ -229,7 +229,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     },
     'Hot Stamp Multiple Color Run Charge': {
       imprint_method: 'Hot Stamp',
-      upcharge_type: 'second_color_run'
+      upcharge_type: 'additional_color_run'
     },
     'Deboss Setup Charge': {
       imprint_method: 'Deboss',

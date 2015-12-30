@@ -201,7 +201,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     },
     'Vivid Expressions Additional Location Run Charge': {
       imprint_method: 'Vivid Expression',
-      upcharge_type: 'additional_location_run'
+      upcharge_type: 'additional_color_run'
     },
     'Image Lock Additional Color Run Charge': {
       imprint_method: 'Image Lock',

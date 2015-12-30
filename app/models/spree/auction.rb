@@ -169,6 +169,17 @@ class Spree::Auction < Spree::Base
     unit_price
   end
 
+  def product_price_code
+    price_code = nil
+    product.master.volume_prices.each do |v|
+      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
+        price_code = v.price_code
+        break
+      end
+    end
+    price_code || 'V'
+  end
+
   def num_locations
     1
   end
@@ -235,11 +246,11 @@ class Spree::Auction < Spree::Base
       'waiting_confirmation': 'Awaiting Confirmation',
       'unpaid': 'Awaiting Confirmation',
       'create_proof': 'Awaiting Virtual Proof',
-      'waiting_proof_approval': 'View Proof', 
-      'in_production': 'In Production', 
-      'send_for_delivery': 'Track Shipment', 
-      'confirm_receipt': 'Awaiting receipt confirmation', 
-      'in_dispute': 'Order being disputed', 
+      'waiting_proof_approval': 'View Proof',
+      'in_production': 'In Production',
+      'send_for_delivery': 'Track Shipment',
+      'confirm_receipt': 'Awaiting receipt confirmation',
+      'in_dispute': 'Order being disputed',
       'complete': 'Completed'
     }
 
@@ -371,7 +382,7 @@ class Spree::Auction < Spree::Base
   rescue
     return false
   end
-  
+
   def is_imprint_pms_colors_present?
     if self.imprint_method_id.blank?
       return false

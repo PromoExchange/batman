@@ -38,4 +38,11 @@ RSpec.describe Spree::Price, type: :model do
       discount += 0.05
     end
   end
+
+  it 'should discount price with range' do
+    discount = 0.50
+    value = 1200
+    t = Spree::Price.discount_price('5P', value)
+    expect(((value * discount) - t).abs).to be < 0.0001
+  end
 end

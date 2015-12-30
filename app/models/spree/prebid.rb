@@ -28,6 +28,7 @@ class Spree::Prebid < Spree::Base
       auction_id: auction_id,
       prebid_id: id,
       base_unit_price: auction.product_unit_price,
+      price_code: auction.product_price_code,
       running_unit_price: auction.product_unit_price,
       quantity: auction.quantity,
       num_locations: auction.num_locations,
@@ -40,9 +41,8 @@ class Spree::Prebid < Spree::Base
     log_debug(auction_data, "quantity=#{auction_data[:quantity]}")
 
     # Apply discount to base price
-    # TODO: Add base product discount price code to supplier (OR Product..research it)
-    log_debug(auction_data, 'Vitronic hack, all prices have C discount code')
-    apply_price_discount(auction_data, 'C')
+    log_debug(auction_data, "applying price discount code=#{auction_data[:price_code] || 'V'}")
+    apply_price_discount(auction_data, auction.product_price_code || 'V')
 
     # Supplier level
     auction_data[:supplier_upcharges] = Spree::UpchargeSupplier.where(related_id: 1)

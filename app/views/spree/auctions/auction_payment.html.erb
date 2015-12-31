@@ -14,10 +14,10 @@
           <ul></ul>
         </div>
         <div class="form-group">
-          <%= label_tag(:payment_method, "Payment Method (#{@bid.payment_option})") %>
+          <%= label_tag(:payment_method, "Payment Method") %>
           <ul class="list-group customer-listing">
             <% @customers.each do |customer| %>
-              <li class='list-group-item customer-listing'> 
+              <li class='list-group-item customer-listing'>
                 <%= radio_button_tag('auction[customer_id]', customer.id) %> <%= label_tag("#{customer.brand}##{customer.last_4_digits}")%>
               </li>
             <% end %>
@@ -56,7 +56,7 @@
       <tbody>
         <tr><td><strong>Color:</strong></td><td><%= @auction.main_color.color %></td></tr>
         <tr><td><strong>QTY:</strong></td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
-        <tr><td><strong>Payment Method:</strong></td><td><%= @bid.payment_option %></td></tr>
+        <tr><td><strong>Payment Method:</strong></td><td><%= @auction.payment_method %></td></tr>
         <tr><td><strong>Total Amount:</strong></td><td><%= @bid.bid %></td></tr>
       </tbody>
     </table>
@@ -64,4 +64,3 @@
 </div>
 
  <%= render partial: 'spree/auctions/address_modal' %>
-

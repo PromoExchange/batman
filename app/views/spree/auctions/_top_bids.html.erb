@@ -16,7 +16,7 @@
         <tr class="<%= row_class %>">
           <td><%= b.email %></td>
           <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars, edit_enabled: false %></td>
-          <td><%= '$%.2f' % b.bid %> (<%= b.payment_type%>)</td>
+          <td><%= '$%.2f' % b.bid %></td>
           <td>
             <% if b.accepted? %>
               <% if @auction.unpaid? && !b.manage_workflow %>

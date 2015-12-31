@@ -270,7 +270,9 @@ class Spree::Prebid < Spree::Base
           log_debug(auction_data, "setup upcharge #{setup_charge}")
           log_debug(auction_data, "setup upcharge discount #{price_code}")
           auction_data[:running_unit_price] += (
-            (Spree::Price.discount_price(price_code, setup_charge) * auction_data[:num_colors]) / auction_data[:quantity]
+            (Spree::Price.discount_price(price_code, setup_charge) *
+              auction_data[:num_colors]) /
+              auction_data[:quantity]
           )
           log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
         end
@@ -348,7 +350,7 @@ class Spree::Prebid < Spree::Base
       units: :imperial
     )
 
-    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_origin zipcode=#{seller.shipping_address.zipcode}")
+    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - origin zipcode=#{seller.shipping_address.zipcode}")
 
     # origin = ActiveShipping::Location.new(
     #   country: seller.shipping_address.country.iso,
@@ -357,10 +359,9 @@ class Spree::Prebid < Spree::Base
     #   zip: seller.shipping_address.zipcode
     # )
 
-    # TODO: Use product FOB from carton, once we get it populated
     origin = ActiveShipping::Location.new(
       country: 'USA',
-      zip: seller.shipping_address.zipcode
+      zip: auction.product.carton.originating_zip
     )
 
     Rails.logger.debug(

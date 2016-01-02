@@ -28,6 +28,7 @@ class Spree::Prebid < Spree::Base
       auction_id: auction_id,
       prebid_id: id,
       base_unit_price: auction.product_unit_price,
+      price_code: auction.product_price_code,
       running_unit_price: auction.product_unit_price,
       quantity: auction.quantity,
       num_locations: auction.num_locations,
@@ -40,9 +41,8 @@ class Spree::Prebid < Spree::Base
     log_debug(auction_data, "quantity=#{auction_data[:quantity]}")
 
     # Apply discount to base price
-    # TODO: Add base product discount price code to supplier (OR Product..research it)
-    log_debug(auction_data, 'Vitronic hack, all prices have C discount code')
-    apply_price_discount(auction_data, 'C')
+    log_debug(auction_data, "applying price discount code=#{auction_data[:price_code] || 'V'}")
+    apply_price_discount(auction_data, auction.product_price_code || 'V')
 
     # Supplier level
     auction_data[:supplier_upcharges] = Spree::UpchargeSupplier.where(related_id: 1)
@@ -154,11 +154,10 @@ class Spree::Prebid < Spree::Base
       return
     end
 
-    if auction.payment_method == 'Check'
-      payment_processing_commission = 0.0
-    else
-      payment_processing_commission = 0.029
-    end
+    # NOTE: We are charging a flat fee equal to the payment processing fee of a credit card transaction.
+    # This is due to us not knowing the payment method at the beginning of an auction. We charge the greater
+    # value to compensate if the buyer selects CC. If they select Check, then we still charge the CC fee.
+    payment_processing_commission = 0.029
     payment_processing_flat_fee = 0.30
 
     log_debug(auction_data, "payment_processing_commission=#{payment_processing_commission}")
@@ -271,7 +270,9 @@ class Spree::Prebid < Spree::Base
           log_debug(auction_data, "setup upcharge #{setup_charge}")
           log_debug(auction_data, "setup upcharge discount #{price_code}")
           auction_data[:running_unit_price] += (
-            (Spree::Price.discount_price(price_code, setup_charge) * auction_data[:num_colors]) / auction_data[:quantity]
+            (Spree::Price.discount_price(price_code, setup_charge) *
+              auction_data[:num_colors]) /
+              auction_data[:quantity]
           )
           log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
         end
@@ -349,7 +350,7 @@ class Spree::Prebid < Spree::Base
       units: :imperial
     )
 
-    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - shipping_origin zipcode=#{seller.shipping_address.zipcode}")
+    Rails.logger.debug("PREBID DEBUG A:#{auction.id} P:#{id} - origin zipcode=#{seller.shipping_address.zipcode}")
 
     # origin = ActiveShipping::Location.new(
     #   country: seller.shipping_address.country.iso,
@@ -358,21 +359,19 @@ class Spree::Prebid < Spree::Base
     #   zip: seller.shipping_address.zipcode
     # )
 
-    # TODO: Use product FOB from carton, once we get it populated
     origin = ActiveShipping::Location.new(
       country: 'USA',
-      zip: seller.shipping_address.zipcode
+      zip: auction.product.carton.originating_zip
     )
 
     Rails.logger.debug(
       "PREBID DEBUG A:#{auction.id} P:#{id} - shipping_destination zipcode=#{auction.shipping_address.zipcode}"
     )
 
+    # NOTE: We only have access to the zip code at auction creation time
     destination = ActiveShipping::Location.new(
-      country: auction.shipping_address.country.iso,
-      state: auction.shipping_address.state.abbr,
-      city: auction.shipping_address.city,
-      zip: auction.shipping_address.zipcode
+      country: 'USA',
+      zip: auction.ship_to_zip
     )
 
     ups = ActiveShipping::UPS.new(

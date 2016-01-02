@@ -103,19 +103,17 @@
 
       <% if spree_current_user %>
         <div class="form-group">
-          <%= f.label(:shipping_address_id, 'Shipping Address') %>
-          <%= f.select(:shipping_address_id, options_for_select(@addresses, @auction.shipping_address_id),
-            { prompt: 'Please Select' }, { class: 'form-control' }) %>
+          <%= f.label(:ship_to_zip, 'Shipping Zipcode') %>
+          <%= f.text_field(:ship_to_zip, class: 'form-control', placeholder: '10591') %>
         </div>
       <% end %>
-
-      <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address" class="btn btn-info btn-xs">Add Address</a></p>
 
       <div class="form-group">
         <%= f.label(:main_color_id, 'Product Color') %>
         <%= f.select(:main_color_id, options_for_select(@main_colors, @auction.main_color_id),
           { prompt: 'Please Select'}, { class: 'form-control' }) %>
       </div>
+<<<<<<< HEAD
       <% if spree_current_user %>
         <div class="form-group">
           <%= f.label(:payment_method, 'Payment Method') %>
@@ -136,6 +134,8 @@
 
 =======
 >>>>>>> origin/Connor-Dev -->
+=======
+>>>>>>> development
 
       <% if @request_idea_id.blank? %>
         <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>
@@ -154,6 +154,5 @@
 <% if spree_current_user %>
   <%= render partial: 'spree/auctions/invite_sellers_modal' %>
   <%= render partial: 'spree/auctions/new_logo_modal' %>
-  <%= render partial: 'spree/auctions/address_modal' %>
 <% end %>
 <%= render partial: 'spree/auctions/imprint_definitions_modal' %>

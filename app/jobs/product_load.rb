@@ -8,6 +8,9 @@ module ProductLoad
     bits[0].strip
   end
 
+  # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=8F68F6E0-1EB3-4D71-80EE-16B76E7FC03F
+  # Elleven Zippered Padfolio
+
   def self.perform(params)
     beginning_time = Time.zone.now
 
@@ -46,17 +49,24 @@ module ProductLoad
     # N.B. Needed for prebid (well..as soon as prebid uses attributes)
     if dc_product.packaging.weight
       properties << "shipping_weight: #{dc_product.packaging.weight}"
-      px_product.shipping_weight = dc_product.packaging.weight
+      px_product.carton.weight = dc_product.packaging.weight
     end
 
     if dc_product.packaging.dimensions
       properties << "shipping_dimensions: #{dc_product.packaging.dimensions}" if dc_product.packaging.dimensions
-      px_product.shipping_dimensions = dc_product.packaging.dimensions
+      dimensions = dc_product.packaging.dimensions.gsub(/[A-Z]/, '').delete(' ').split('x')
+      px_product.carton.length = dimensions[0]
+      px_product.carton.width = dimensions[1] if dimensions.count > 1
+      px_product.carton.height = dimensions[2] if dimensions.count > 2
     end
 
     if dc_product.packaging.quantity
       properties << "shipping_quantity: #{dc_product.packaging.quantity}" if dc_product.packaging.quantity
-      px_product.shipping_quantity = dc_product.packaging.quantity
+      px_product.carton.quantity = dc_product.packaging.quantity
+    end
+
+    if dc_product.packaging.orig_zip
+      px_product.carton.originating_zip = dc_product.packaging.orig_zip if dc_product.packaging.orig_zip
     end
 
     properties.each do |property|
@@ -116,7 +126,8 @@ module ProductLoad
             range: range,
             amount: last_price.retail,
             position: range_count,
-            discount_type: 'price'
+            discount_type: 'price',
+            price_code: price.code
           )
 
           range_count += 1
@@ -131,7 +142,8 @@ module ProductLoad
       range: range,
       amount: last_price.retail,
       position: range_count,
-      discount_type: 'price'
+      discount_type: 'price',
+      price_code: last_price.code
     )
 
     # Options
@@ -206,14 +218,6 @@ module ProductLoad
         Rails.logger.warn("PLOAD: *** Unseen option type [#{option.type}]")
       end
     end
-
-    # :imprint_areas,
-    # :packaging
-    Rails.logger.debug("PLOAD: Loading #{dc_product.options.count} packaging")
-    px_product.originating_zip = dc_product.packaging.orig_zip if dc_product.packaging.orig_zip
-    px_product.shipping_quantity = dc_product.packaging.quantity if dc_product.packaging.quantity
-    px_product.shipping_weight = dc_product.packaging.weight if dc_product.packaging.weight
-    px_product.shipping_dimensions = dc_product.packaging.dimensions if dc_product.packaging.dimensions
 
     px_product.save!
     px_product.check_validity!

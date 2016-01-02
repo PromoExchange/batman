@@ -15,3 +15,13 @@
     margin-left: -40px;
   }
 }
+
+#show-invoice {
+  .error ul {
+    color: red;
+    font-weight: bolder;
+  }
+  li {
+    list-style: none;
+  }
+}

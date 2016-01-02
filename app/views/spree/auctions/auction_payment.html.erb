@@ -5,87 +5,37 @@
 </script>
 <% end %>
 
+
 <div class="row" id="show-invoice" data-key="<%= spree_current_user.spree_api_key %>">
-  <div class="col-md-6">
-    <% url = spree.product_url(@bid.auction.product) %>
-    <%= link_to large_image(@bid.auction.product, itemprop: "image"), url, itemprop: 'url' %><br/>
-    <p><%= @bid.auction.product.description %></p>
-    <% unless @bid.auction.product.product_properties.empty? %>
-      <h3 class="product-section-title">Product Details</h3>
-      <table id="product-properties" class="table table-striped" data-hook>
-        <tbody>
-          <% @bid.auction.product.product_properties.each do |product_property| %>
-            <% unless product_property.property.do_not_display %>
-              <% css_class = cycle('even', 'odd', name: 'properties') %>
-              <tr class="<%= css_class %>">
-                <td><strong><%= product_property.property.presentation %></strong></td>
-                <td><%= product_property.value %></td>
-              </tr>
-            <% end %>
-          <% end %>
-          <% reset_cycle('properties') %>
-        </tbody>
-      </table>
-    <% end %>
-  </div>
-  <div class="col-md-6 well">
-    <div class="auction-details">
-      <h4><%= Spree::t(:auction_details) %></h4>
-      <table class="table">
-        <tr><td>Auction #:</td><td><%= @bid.auction.reference %></td></tr>
-        <tr><td>Product:</td><td><%= @bid.auction.product.name %></td></tr>
-        <tr><td>Factory:</td><td><%= @bid.auction.product.supplier.name %></td></tr>
-        <tr><td>SKU:</td><td><%= @bid.auction.product.sku %></td></tr>
-        <tr><td>Buyer:</td><td><%= @bid.auction.buyer.billing_address.full_name %></td></tr>
-        <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @bid.auction.started %>'><%= @bid.auction.started %></time></td></tr>
-        <tr><td>Quantity:</td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @bid.auction} %></td></tr>
-        <tr><td>Imprint Method:</td><td><%= @bid.auction.imprint_method.name %></td></tr>
-        <tr><td>Main Color:</td><td><%= @bid.auction.main_color.color %></td></tr>
-        <tr><td>Total Payment amount:</td><td>$<%= @bid.bid %></td></tr>
-        <tr><td>Payment Method:</td><td><%= @bid.auction.payment_method %></td></tr>
-        <tr><td>Custom PMS Colors:</td><td><%= @bid.auction.custom_pms_colors %></td></tr>
-        <tr>
-          <td>Imprint Colors:</td>
-          <td>
-            <% @bid.auction.pms_colors.each do |c| %>
-              <p><%= c.name %>/<%= c.pantone %></p>
-              <% end %>
-          </td>
-        </tr>
-        <tr><td>Expected Delivery Date:</td><td><%= (@bid.auction.created_at + 15.days).strftime('%B %e, %Y') %></td></tr>
-        <% unless @bid.auction.logo.nil? %>
-          <tr><td>Logo:</td><td><%= image_tag(@bid.auction.logo.logo_file.url(:thumb), { itemprop: "image", alt: @bid.auction.logo.logo_file_file_name }) %></td></tr>
-        <% end %>
-        <tr>
-          <td>Shipping Address:</td>
-          <td>
-            <ul class="display-address-ul">
-              <li><%= @bid.auction.shipping_address.firstname %>&nbsp;<%= @bid.auction.shipping_address.lastname %></li>
-              <li><%= @bid.auction.shipping_address.company %></li>
-              <li><%= @bid.auction.shipping_address.address1 %></li>
-              <li><%= @bid.auction.shipping_address.address2 %></li>
-              <li><%= @bid.auction.shipping_address.city %></li>
-              <li><%= @bid.auction.shipping_address.state_text %>&nbsp;<%= @bid.auction.shipping_address.zipcode %></li>
-            </ul>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-
   <% if spree_current_user.has_spree_role?(:buyer) %>
-    <div class="col-md-6">
-      <% if (@bid.auction.open? or @bid.auction.waiting?) and ( @bid.open? or @bid.lost?) %>
-        <div id="bid-error">
-          <span class="payment-errors"></span>
+    <div class="col-md-6 well">
+      <% if (@auction.open? or @auction.waiting?) and ( @bid.open? or @bid.lost?) %>
+        <div class="form-group error">
+          <ul></ul>
         </div>
         <div class="form-group">
-          <button class="btn btn-success" id="accept-bid" data-bid="<%= @bid.id %>">Accept Bid</button>
+          <%= label_tag(:payment_method, "Payment Method") %>
+          <ul class="list-group customer-listing">
+            <% @customers.each do |customer| %>
+              <li class='list-group-item customer-listing'>
+                <%= radio_button_tag('auction[customer_id]', customer.id) %> <%= label_tag("#{customer.brand}##{customer.last_4_digits}")%>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
+        <div class="form-group">
+          <%= label_tag(:shipping_address_id, 'Shipping Address') %>
+          <%= select_tag(:shipping_address_id, options_for_select(@addresses, @auction.shipping_address_id),
+             { prompt: 'Please Select' ,  class: 'form-control' }) %>
+        </div>
+        <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
+        <div class="form-group">
+          <%= button 'Submit', 'ok', 'submit', { class: 'btn-success', id: 'accept-bid', data: {bid: @bid.id} } %>
         </div>
       <% end %>
 
-      <% if @bid.accepted? and @bid.auction.waiting_confirmation? %>
+      <% if @bid.accepted? and @auction.waiting_confirmation? %>
         <div class="form-group">
           <p>Thanks for your order! We will be processing your payment and <%= @bid.seller.shipping_address.full_name %> will be confirming and processing your order shortly. </p>
         </div>
@@ -96,4 +46,20 @@
     </div>
   <% end %>
 
+  <div class="col-md-6">
+    <% url = spree.product_url(@auction.product) %>
+    <div>
+      <div class="col-md-3"><%= link_to small_image(@auction.product, itemprop: "image"), url, itemprop: 'url' %></div>
+      <div class="col-md-9"><br><%= @auction.product.description %></div>
+    </div>
+    <table id="auction-product-properties" class="table table-striped">
+      <tbody>
+        <tr><td><strong>Color:</strong></td><td><%= @auction.main_color.color %></td></tr>
+        <tr><td><strong>QTY:</strong></td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
+        <tr><td><strong>Payment Method:</strong></td><td><%= @auction.payment_method %></td></tr>
+        <tr><td><strong>Total Amount:</strong></td><td><%= @bid.bid %></td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+<%= render partial: 'spree/auctions/address_modal' %>

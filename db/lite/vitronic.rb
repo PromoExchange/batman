@@ -72,6 +72,9 @@ invalid_carton_count = 0
 updated_carton_count = 0
 updated_upcharge_count = 0
 updated_main_color = 0
+updated_imprint_method = 0
+num_invalid_before = Spree::Product.where(supplier: supplier, state: :invalid).count
+num_invalid_after = 0
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
@@ -116,6 +119,57 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       updated_main_color += 1
     end
   end
+
+  # Imprint Methods
+  unless hashed[:imprint_area].blank?
+    downcased_imprint = hashed[:imprint_area].downcase
+
+    imprints = []
+
+    if /image lock/.match(downcased_imprint)
+      imprints << Spree::ImprintMethod.where(name: 'Image Lock').first_or_create
+    end
+
+    if /embroidery/.match(downcased_imprint)
+      imprints << Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+    end
+
+    if /vivid expressions/.match(downcased_imprint)
+      imprints << Spree::ImprintMethod.where(name: 'Vivid Expressions').first_or_create
+    end
+
+    if /screen print/.match(downcased_imprint)
+      imprints << Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+    end
+
+    if /deboss/.match(downcased_imprint)
+      imprints << Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+    end
+
+    if /hot stamp/.match(downcased_imprint)
+      imprints << Spree::ImprintMethod.where(name: 'Hot Stamp').first_or_create
+    end
+
+    if /full color/.match(downcased_imprint)
+      imprints << Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
+    end
+
+    if imprints.count == 0
+      imprints << Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+    end
+
+    imprints.each do |imprint|
+      Spree::ImprintMethodsProduct.where(
+        imprint_method: imprint,
+        product: product
+      ).first_or_create
+    end
+    updated_imprint_method += 1
+  end
+
+  product.loading!
+  product.check_validity!
+  product.loaded! if product.state == 'loading'
 end
 
 in_db_only = Spree::Product.where(supplier: supplier).where.not(id: found_ids).count
@@ -147,7 +201,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     },
     'Vivid Expressions Additional Location Run Charge': {
       imprint_method: 'Vivid Expression',
-      upcharge_type: 'additional_location_run'
+      upcharge_type: 'additional_color_run'
     },
     'Image Lock Additional Color Run Charge': {
       imprint_method: 'Image Lock',
@@ -167,7 +221,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     },
     'Screen Print Multiple Color Run Charge': {
       imprint_method: 'Screen Print',
-      upcharge_type: 'multiple_color_run'
+      upcharge_type: 'additional_color_run'
     },
     'Hot Stamp Setup Charge': {
       imprint_method: 'Hot Stamp',
@@ -175,7 +229,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     },
     'Hot Stamp Multiple Color Run Charge': {
       imprint_method: 'Hot Stamp',
-      upcharge_type: 'second_color_run'
+      upcharge_type: 'additional_color_run'
     },
     'Deboss Setup Charge': {
       imprint_method: 'Deboss',
@@ -246,6 +300,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   end
 end
 
+num_invalid_after = Spree::Product.where(supplier: supplier, state: :invalid).count
+
 puts "Products in XML: #{in_file_count}"
 puts "Products in DB: #{db_product_count}"
 puts "Products in XML AND DB: #{found_ids.count}"
@@ -255,3 +311,6 @@ puts "Products with invalid cartons: #{invalid_carton_count}"
 puts "Products updated with carton: #{updated_carton_count}"
 puts "Products updated with upcharges: #{upcharge_product_count}"
 puts "Products updated with main product color: #{updated_main_color}"
+puts "Products updated with imprint method: #{updated_imprint_method}"
+puts "Product invalid before: #{num_invalid_before}"
+puts "Product invalid after: #{num_invalid_after}"

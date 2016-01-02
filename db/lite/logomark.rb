@@ -74,6 +74,10 @@ found_ids = []
 invalid_carton_count = 0
 updated_carton_count = 0
 updated_upcharge_count = 0
+updated_main_color = 0
+updated_imprint = 0
+num_invalid_before = Spree::Product.where(supplier: supplier, state: :invalid).count
+num_invalid_after = 0
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
@@ -105,7 +109,60 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   add_upcharges(product)
   updated_upcharge_count += 1
+
+  # Product colors
+  unless hashed[:item_color].blank?
+    Spree::ColorProduct.where(product: product, color: hashed[:item_color] ).first_or_create
+    updated_main_color += 1
+  end
+
+  # Imprints
+  unless hashed[:decoration_methods].blank?
+    imprints = hashed[:decoration_methods].split(',')
+
+    imprints.each do |imprint|
+      next if imprint.nil?
+      if imprint.strip == 'Laser'
+        imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
+      elsif imprint.strip == 'Laser & Oxidation'
+        imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
+      elsif imprint.strip == 'Print'
+        imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      elsif imprint.strip == 'Full Color Dome'
+        imprint_method = Spree::ImprintMethod.where(name: 'Full Color Dome').first_or_create
+      elsif imprint.strip == 'Color Splash'
+        imprint_method = Spree::ImprintMethod.where(name: 'Color Splash').first_or_create
+      elsif imprint.strip == 'Etched'
+        imprint_method = Spree::ImprintMethod.where(name: 'Etched').first_or_create
+      elsif imprint.strip == 'Etched and Color Filled'
+        imprint_method = Spree::ImprintMethod.where(name: 'Etched').first_or_create
+      elsif imprint.strip == 'Deboss'
+        imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+      elsif imprint.strip == 'Embroidery'
+        imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+      elsif imprint.strip == 'Full Color Transfer'
+        imprint_method = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+      elsif imprint.strip == 'Custom Mold'
+        imprint_method = Spree::ImprintMethod.where(name: 'Custom Mold').first_or_create
+      elsif imprint.strip == 'Vinyl'
+        imprint_method = Spree::ImprintMethod.where(name: 'Vinyl').first_or_create
+      else
+        fail "Failed to find [#{imprint.strip}]"
+      end
+      Spree::ImprintMethodsProduct.where(
+        imprint_method: imprint_method,
+        product: product
+      ).first_or_create
+    end
+    updated_imprint += 1
+  end
+
+  product.loading
+  product.check_validity!
+  product.loaded! if product.state == 'loading'
 end
+
+num_invalid_after = Spree::Product.where(supplier: supplier, state: :invalid).count
 
 # Add upcharges to those remaining
 in_db_only = Spree::Product.where(supplier: supplier).where.not(id: found_ids).count
@@ -123,3 +180,7 @@ puts "Products in DB only: #{in_db_only}"
 puts "Products with invalid cartons: #{invalid_carton_count}"
 puts "Products updated with carton: #{updated_carton_count}"
 puts "Products updated with upcharges: #{updated_upcharge_count}"
+puts "Products updated with main color: #{updated_main_color}"
+puts "Products updated with imprint method: #{updated_imprint}"
+puts "Product invalid before: #{num_invalid_before}"
+puts "Product invalid after: #{num_invalid_after}"

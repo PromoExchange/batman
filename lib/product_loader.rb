@@ -52,4 +52,27 @@ module ProductLoader
     end
     main_color_map
   end
+
+  def self.add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
+    if range.blank?
+      upcharge = Spree::UpchargeProduct.where(
+        product: product,
+        imprint_method: imprint_method,
+        upcharge_type: upcharge_type
+      ).first_or_create
+    else
+      upcharge = Spree::UpchargeProduct.where(
+        product: product,
+        imprint_method: imprint_method,
+        upcharge_type: upcharge_type,
+        range: range
+      ).first_or_create
+    end
+    upcharge.update_attributes(
+      value: value,
+      range: range,
+      price_code: price_code,
+      position: position
+    )
+  end
 end

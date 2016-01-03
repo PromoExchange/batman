@@ -117,6 +117,11 @@ namespace :product do
       load_files('bullet')
     end
 
+    desc 'Bullet Lite Load'
+    task bullet_lite: :environment do
+      ProductLoader.load('lite', 'bullet')
+    end
+
     desc 'Vitronic Load'
     task vitronic: :environment do
       load_files('vitronic')

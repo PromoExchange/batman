@@ -167,7 +167,11 @@ $(document).ready(function(){
     $("div.color-hideable").hide(750);
   }
 
-  $("div.custom-color-hideable").hide(750);
+  if( $("#auction_custom_pms_colors").val() ) {
+    $("div.custom-color-hideable").show(750);
+  } else {
+    $("div.custom-color-hideable").hide(750);
+  }
 
   $(".selected-pms").click(function() {
     $('#auction_pms_colors').tagsinput('add', {

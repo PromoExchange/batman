@@ -9,7 +9,8 @@ RSpec.describe Spree::Prebid, type: :model do
       prebid_id: prebid.id,
       base_unit_price: 100,
       running_unit_price: 100,
-      quantity: 100
+      quantity: 100,
+      messages: []
     }
   end
 

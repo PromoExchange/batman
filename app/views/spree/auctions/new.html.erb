@@ -77,7 +77,7 @@
         <div class="clearfix"></div>
         <% if @auction.pms_colors%>
           <% @auction.pms_colors.each do |pms_color|%>
-             <div class="selected-pms" id="<%= pms_color.id %>" name="<%= pms_color.display_name %>"></div>
+             <div class="selected-pms" id="<%= pms_color.id %>" name="<%= pms_color.pantone %>"></div>
           <% end %>
         <% end %>
         <input class="form-control tagsinput" data-role="tagsinput" id="auction_pms_colors" name="auction[pms_colors]" type='text'></input>

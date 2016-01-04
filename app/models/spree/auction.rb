@@ -42,7 +42,7 @@ class Spree::Auction < Spree::Base
   validates :product_id, presence: true
   validates :imprint_method_id, presence: true
   validate :pms_colors_presence, unless: -> do
-    is_imprint_pms_colors_present?
+    is_imprint_pms_colors_present? || custom_pms_colors.present?
   end
   validates :quantity, presence: true
   validates_numericality_of :quantity, only_integer: true

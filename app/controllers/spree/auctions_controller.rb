@@ -37,7 +37,7 @@ class Spree::AuctionsController < Spree::StoreController
     auction_data = params[:auction]
 
     if params[:size].present?
-      params[:size] = params[:size].merge(params[:size]) {|k, val| (val.to_i < 0)? 0 : val.to_i}
+      params[:size] = params[:size].merge(params[:size]) { |k, val| (val.to_i < 0)? 0 : val.to_i }
       @size_quantity = params[:size]
       auction_data[:quantity] = params[:size].values.map(&:to_i).reduce(:+)
       @total_size = auction_data[:quantity]

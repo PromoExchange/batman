@@ -197,7 +197,6 @@ class Spree::AuctionsController < Spree::StoreController
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
 
-    # TODO: Only send colors that this product can use
     @pms_colors = Spree::PmsColorsSupplier
       .where(supplier_id: @auction.product.supplier)
       .joins(:pms_color)

@@ -87,6 +87,7 @@
       <div class="form-group custom-color-hideable" style="display: none;">
         <%= f.label(:custom_pms_colors, Spree.t(:custom_pms_colors)) %>
         <%= f.text_field(:custom_pms_colors, class: 'form-control')%>
+        <p>Enter list of custom PMS colors seperated with a comma (,)</p>
       </div>
       <% if @auction.is_wearable? %>
         <%= render partial: 'spree/auctions/auction_size', locals: {f: f} %>

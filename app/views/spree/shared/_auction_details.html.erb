@@ -12,12 +12,11 @@
       <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>
       <tr><td>Factory:</td><td><%= @auction.product.supplier.name %></td></tr>
       <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
-      <tr><td>Buyer:</td><td><%= @auction.buyer.billing_address.full_name %></td></tr>
+      <tr><td>Buyer Zip:</td><td><%= @auction.ship_to_zip %></td></tr>
       <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></td></tr>
       <tr><td>Quantity:</td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
       <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>
       <tr><td>Main Color:</td><td><%= @auction.main_color.color %></td></tr>
-      <tr><td>Payment Method:</td><td><%= @auction.payment_method %></td></tr>
       <tr><td>Custom PMS Colors:</td><td><%= @auction.custom_pms_colors %></td></tr>
       <tr>
         <td>Imprint Colors:</td>
@@ -37,19 +36,21 @@
           </td>
         </tr>
       <% end %>
-      <tr>
-        <td>Shipping Address:</td>
-        <td>
-          <ul class="display-address-ul">
-            <li><%= @auction.shipping_address.firstname %>&nbsp;<%= @auction.shipping_address.lastname %></li>
-            <li><%= @auction.shipping_address.company %></li>
-            <li><%= @auction.shipping_address.address1 %></li>
-            <li><%= @auction.shipping_address.address2 %></li>
-            <li><%= @auction.shipping_address.city %></li>
-            <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
-          </ul>
-        </td>
-      </tr>
+      <% if @auction.shipping_address.present? %>
+        <tr>
+          <td>Shipping Address:</td>
+          <td>
+            <ul class="display-address-ul">
+              <li><%= @auction.shipping_address.firstname %>&nbsp;<%= @auction.shipping_address.lastname %></li>
+              <li><%= @auction.shipping_address.company %></li>
+              <li><%= @auction.shipping_address.address1 %></li>
+              <li><%= @auction.shipping_address.address2 %></li>
+              <li><%= @auction.shipping_address.city %></li>
+              <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
+            </ul>
+          </td>
+        </tr>
+      <% end %>
     </table>
   </div>
 </div>

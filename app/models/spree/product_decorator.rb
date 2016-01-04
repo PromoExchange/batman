@@ -1,7 +1,9 @@
 Spree::Product.class_eval do
+  before_create :build_default_carton
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_many :upcharges, class_name: 'Spree::UpchargeProduct', foreign_key: 'related_id'
   has_many :color_product
+  has_one :carton, dependent: :destroy
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
   has_many :imprint_methods, through: :imprint_methods_products
@@ -62,14 +64,14 @@ Spree::Product.class_eval do
   end
 
   def lowest_discounted_volume_price
-    volume_prices = Spree::Variant.find_by(product_id: id).volume_prices
+    volume_prices = Spree::Variant.find_by(product: self).volume_prices
 
     return 0 unless volume_prices.present?
     volume_prices.last.amount.to_f
   end
 
   def highest_discounted_volume_price
-    volume_prices = Spree::Variant.find_by(product_id: id).volume_prices
+    volume_prices = Spree::Variant.find_by(product: self).volume_prices
 
     return 0 unless volume_prices.present?
     volume_prices.first.amount.to_f
@@ -103,28 +105,23 @@ Spree::Product.class_eval do
   end
 
   def get_property_value(key)
-    shipping_weight_id = Spree::Property.all.find_by_name(key).id
-    return if shipping_weight_id.nil?
-    prop = product_properties.find_by(property_id: shipping_weight_id)
-    return if prop.nil?
+    property_id = Spree::Property.all.find_by_name(key).id
+    return if property_id.nil?
+    property = product_properties.find_by(property_id: property_id)
+    return if property.nil?
     prop.value
   end
 
-  def prebid_ability!
-    self.shipping_weight ||= get_property_value('shipping_weight')
-    self.shipping_dimensions ||= get_property_value('shipping_dimensions')
-    self.shipping_quantity ||= get_property_value('shipping_quantity')
-    save!
+  def prebid_ability?
+    carton.active? && upcharges.count > 0
+  end
 
-    got_shipping_weight = shipping_weight.present?
-    got_shipping_dimensions = shipping_dimensions.present?
-    got_shipping_quantity = shipping_quantity.present?
-    got_originating_zip = originating_zip.present?
+  def setup_upcharges
+    upcharges.where(upcharge_type: Spree::UpchargeType.where(name: 'setup'))
+  end
 
-    got_shipping_weight &&
-      got_shipping_dimensions &&
-      got_shipping_quantity &&
-      got_originating_zip
+  def run_upcharges
+    upcharges.where(upcharge_type: Spree::UpchargeType.where(name: %w(run additional_color_run)))
   end
 
   def check_validity!
@@ -180,19 +177,19 @@ Spree::Product.class_eval do
         :factory,
         :num_product_colors,
         :num_imprints,
-        :num_upcharges,
+        :num_upcharges_setup,
+        :num_upcharges_run,
         :shipping_weight,
         :shipping_dimensions,
         :shipping_quantity,
         :shipping_originating_zip
       ],
-      %w(sku name factory num_product_colors num_imprints num_upcharges shipping_weight shipping_dimensions shipping_quantity shipping_originating_zip), true)
+      %w(sku name factory num_product_colors num_imprints num_upcharges_setup num_upcharges_run shipping_weight shipping_dimensions shipping_quantity shipping_originating_zip), true)
   end
 
   def to_csv_row
-    shipping_weight = get_property_value('shipping_weight')
-    shipping_dimensions = get_property_value('shipping_dimensions')
-    shipping_quantity = get_property_value('shipping_quantity')
+    setup_type = Spree::UpchargeType.where(name: 'setup').first_or_create
+    run_type = Spree::UpchargeType.where(name: 'run').first_or_create
 
     CSV::Row.new(
       [
@@ -201,7 +198,8 @@ Spree::Product.class_eval do
         :factory,
         :num_product_colors,
         :num_imprints,
-        :num_upcharges,
+        :num_upcharges_setup,
+        :num_upcharges_run,
         :shipping_weight,
         :shipping_dimensions,
         :shipping_quantity,
@@ -213,11 +211,12 @@ Spree::Product.class_eval do
         supplier.name,
         color_product.count,
         imprint_methods.count,
-        upcharges.count,
-        shipping_weight,
-        shipping_dimensions,
-        shipping_quantity,
-        originating_zip
+        upcharges.where(upcharge_type: setup_type).count,
+        upcharges.where(upcharge_type: run_type).count,
+        carton.weight,
+        carton.to_s,
+        carton.quantity,
+        carton.originating_zip
       ])
   end
 
@@ -226,5 +225,11 @@ Spree::Product.class_eval do
     where(supplier: supplier).find_each do |product|
       yield product
     end
+  end
+
+  private
+
+  def build_default_carton
+    build_carton
   end
 end

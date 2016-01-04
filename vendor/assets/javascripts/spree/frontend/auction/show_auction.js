@@ -49,34 +49,54 @@ $(function() {
   });
 
   $('#accept-bid').click(function() {
+    $('.error ul').html('');
     var key = $('#show-invoice').attr('data-key');
     var bid_id = $(this).data('bid');
+    var e = document.getElementById('shipping_address_id');
+    var ship_id = e.options[e.selectedIndex].value;
+    var customer_id = '';
+    if($("input[type='radio'][name='auction[customer_id]']:checked")) {
+      customer_id = $("input[type='radio'][name='auction[customer_id]']:checked").val();
+    }
     $("body").css("cursor", "progress");
     $("#accept-bid").prop('disabled', true);
+    var message = {
+      ship_id: ship_id,
+      customer_id: customer_id
+    };
 
-    $.ajax({
-      type: 'POST',
-      contentType: "application/json",
-      url: '/api/bids/' + bid_id + '/accept',
-      headers: {
-        'X-Spree-Token': key
-      },
-      success: function(data) {
-        if((data.message == 'succeeded') || (data.message == 'pending')) {
-          alert('Thank you for using the PromoExchange');
-          window.location.reload();
-        } else {
+    if (!customer_id) {$(".error ul").append("<li>Payment Option can't be blank</li>");}
+    if (!ship_id) {$(".error ul").append("<li>A shipping address is required</li>");}
+
+    if (customer_id && ship_id) {
+      $.ajax({
+        type: 'POST',
+        contentType: "application/json",
+        data: JSON.stringify(message),
+        url: '/api/bids/' + bid_id + '/accept',
+        headers: {
+          'X-Spree-Token': key
+        },
+        success: function(data) {
+          if((data.message == 'succeeded') || (data.message == 'pending')) {
+            alert('Thank you for using the PromoExchange');
+            window.location.reload();
+          } else {
+            $("body").css("cursor", "default");
+            $("#accept-bid").prop('disabled', false);
+            $(".error ul").append("<li>" + data.message + "</li>");
+          }
+        },
+        error: function(data) {
           $("body").css("cursor", "default");
           $("#accept-bid").prop('disabled', false);
-          $('#bid-error').find('.payment-errors').text(data.message);
+          $(".error ul").append("<li>Unsuccessful Accept<li>");
         }
-      },
-      error: function(data) {
-        $("body").css("cursor", "default");
-        $("#accept-bid").prop('disabled', false);
-        $('#bid-error').find('.payment-errors').text("Unsuccessful Accept");
-      }
-    });
+      });
+    } else {
+      $("body").css("cursor", "default");
+      $("#accept-bid").prop('disabled', false);
+    }
   });
 
   $('#workflow-continue').click(function() {
@@ -84,7 +104,7 @@ $(function() {
   });
 
   $('#workflow-rate-seller').click(function() {
-    var auction_id = $('.auction-details').data('id')
+    var auction_id = $('.auction-details').data('id');
     $('#rating-auction-id').val(auction_id);
     $('#manage-project-off-site').hide('modal');
     $('#rating-seller').show('modal');

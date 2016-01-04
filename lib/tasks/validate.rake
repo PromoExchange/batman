@@ -3,7 +3,7 @@ def prod_desc(p)
 end
 
 namespace :product do
-  task report: :environment do
+  task auction_report: :environment do
     puts "Users: #{Spree::User.count}"
     puts "Products: #{Spree::Product.count}"
     puts 'Auctions:'
@@ -21,30 +21,50 @@ namespace :product do
     puts "Bid Total: #{Spree::Order.sum(:total).to_f}"
   end
 
-  task validate: :environment do
+  task revalidate: :environment do
     begin
-      # Required properties
-      shipping_weight_id = Spree::Property.where(name: 'shipping_weight').first.id
-      shipping_dimensions_id = Spree::Property.where(name: 'shipping_dimensions').first.id
-      shipping_quantity_id = Spree::Property.where(name: 'shipping_quantity').first.id
-
-      fail 'ERROR: shipping_weight_id is nil' if shipping_weight_id.nil?
-      fail 'ERROR: shipping_dimensions_id is nil' if shipping_weight_id.nil?
-      fail 'ERROR: shipping_quantity_id is nil' if shipping_weight_id.nil?
-
-      products = Spree::Product.all
-      products.each do |p|
-        property = p.product_properties.where(property_id: shipping_weight_id).first
-        puts "#{prod_desc(p)} - Shipping Weight is nil" if property.nil?
-
-        property = p.product_properties.where(property_id: shipping_dimensions_id).first
-        puts "#{prod_desc(p)} - Shipping Dimensions is nil" if property.nil?
-
-        property = p.product_properties.where(property_id: shipping_quantity_id).first
-        puts "#{prod_desc(p)} - Shipping Quantity is nil" if property.nil?
+      product_count = Spree::Product.count
+      before_count = Spree::Product.where(state: 'invalid').count
+      product_processed = 0
+      Spree::Product.all.each do |product|
+        product.loading!
+        product.check_validity!
+        product.loaded! if product.state == 'loading'
+        product_processed += 1
+        puts "Processed:#{product_processed} of #{product_count}, (%#{(100 * (product_processed.to_f / product_count.to_f)).round(4)})" if (product_processed % 10 ) == 0
       end
+      after_count = Spree::Product.where(state: 'invalid').count
+      puts "Product invalid before: #{before_count}"
+      puts "Product invalid after: #{after_count}"
     rescue => e
       puts("ERROR: #{e.message}")
     end
+  end
+
+  task product_report: :environment do
+    num_total_products = Spree::Product.count
+
+    num_prebidable_active = 0
+    valid_products = Spree::Product.where(state: :active)
+    valid_products.each do |product|
+      num_prebidable_active += 1 if product.prebid_ability?
+    end
+    num_valid_products = valid_products.count
+
+    num_prebidable_invalid = 0
+    invalid_products = Spree::Product.where(state: :invalid)
+    invalid_products.each do |product|
+      num_prebidable_invalid += 1 if product.prebid_ability?
+    end
+    num_invalid_products = invalid_products.count
+
+    num_loading_products = Spree::Product.where(state: :loading).count
+
+    puts "Number of products: #{num_total_products}"
+    puts "Number of invalid products: #{num_invalid_products}"
+    puts "Number of active products: #{num_valid_products}"
+    puts "Number of loading products: #{num_loading_products}"
+    puts "Number of prebidable active products: #{num_prebidable_active}"
+    puts "Number of prebidable invalid products: #{num_prebidable_invalid}"
   end
 end

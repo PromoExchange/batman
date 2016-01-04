@@ -34,29 +34,25 @@ class Spree::Auction < Spree::Base
   validates_attachment_content_type :proof_file,
     content_type: %w(image/jpeg image/jpg image/png image/gif application/pdf)
 
-  validates :buyer_id, presence: true
-  validates :logo_id, presence: true, unless: -> do
-    blank_imprint = Spree::ImprintMethod.find_by(name: 'Blank')
-    return true if blank_imprint.nil?
-    imprint_method_id == blank_imprint.id
-  end
+  validates :logo_id, presence: true, if: -> { buyer_id.present? }
   validate :pms_colors_presence, unless: -> do
     Spree::PmsColorsSupplier.find_by(imprint_method_id: imprint_method_id).nil?
   end
   validates :main_color_id, presence: true
-  validates_inclusion_of :payment_method, in: ['Credit Card', 'Check']
   validates :product_id, presence: true
   validates :imprint_method_id, presence: true
+  validate :pms_colors_presence, unless: -> do
+    is_imprint_pms_colors_present? || custom_pms_colors.present?
+  end
   validates :quantity, presence: true
   validates_numericality_of :quantity, only_integer: true
   validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) do
     50 if auction.product.nil?
     auction.product.minimum_quantity
   end
-  validates_inclusion_of :shipping_agent, in: %w(ups fedex)
-  validates :customer_id, presence: { message: "Payment Option can't be blank" }, if: -> { payment_method.present? }
-  validate :credit_card_presense, if: -> { customer_id.present? }, on: :create
-  validate :shipping_address_presence
+  validates_inclusion_of :shipping_agent, in: %w(ups fedex), if: -> { buyer_id.present? }
+  validate :shipping_zipcode_presence, if: -> { buyer_id.present? }
+  validate :credit_card_presense, if: -> { customer_id.present? }, on: :update
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true
 
@@ -94,6 +90,10 @@ class Spree::Auction < Spree::Base
 
     event :cancel do
       transition [:open, :waiting_confirmation, :in_dispute] => :cancelled
+    end
+
+    event :pending do
+      transition open: :pending
     end
 
     event :accept do
@@ -167,6 +167,17 @@ class Spree::Auction < Spree::Base
     unit_price
   end
 
+  def product_price_code
+    price_code = nil
+    product.master.volume_prices.each do |v|
+      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
+        price_code = v.price_code
+        break
+      end
+    end
+    price_code || 'V'
+  end
+
   def num_locations
     1
   end
@@ -233,11 +244,11 @@ class Spree::Auction < Spree::Base
       'waiting_confirmation': 'Awaiting Confirmation',
       'unpaid': 'Awaiting Confirmation',
       'create_proof': 'Awaiting Virtual Proof',
-      'waiting_proof_approval': 'View Proof', 
-      'in_production': 'In Production', 
-      'send_for_delivery': 'Track Shipment', 
-      'confirm_receipt': 'Awaiting receipt confirmation', 
-      'in_dispute': 'Order being disputed', 
+      'waiting_proof_approval': 'View Proof',
+      'in_production': 'In Production',
+      'send_for_delivery': 'Track Shipment',
+      'confirm_receipt': 'Awaiting receipt confirmation',
+      'in_dispute': 'Order being disputed',
       'complete': 'Completed'
     }
 
@@ -350,12 +361,8 @@ class Spree::Auction < Spree::Base
     self.ended = started + 21.days
   end
 
-  def credit_card_presense
-    errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
-  end
-
-  def shipping_address_presence
-    errors.add(:base, 'A shipping address is required') if shipping_address_id.blank?
+  def shipping_zipcode_presence
+    errors.add(:base, 'A shipping zipcode is required') if ship_to_zip.blank?
   end
 
   def pms_colors_presence
@@ -368,5 +375,16 @@ class Spree::Auction < Spree::Base
     charge.refund unless charge.status == 'failed'
   rescue
     return false
+  end
+
+  def is_imprint_pms_colors_present?
+    if self.imprint_method_id.blank?
+      return false
+    end
+    Spree::PmsColorsSupplier.where(supplier_id: self.product.supplier_id).map(&:imprint_method_id).exclude? self.imprint_method_id
+  end
+
+  def credit_card_presense
+    errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
   end
 end

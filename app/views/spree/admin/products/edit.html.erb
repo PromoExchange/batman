@@ -10,6 +10,10 @@
 
 <div class="well">
   <p>State: <%= @product.state %> </p>
+  <p>Prebidable: <%= @product.prebid_ability?.humanize %></p>
+  <p>Carton Active: <%= @product.carton.active?.humanize %></p>
+  <p>Number of Setup upcharges: <%= @product.setup_upcharges.count %> </p>
+  <p>Number of Run Upcharges: <%= @product.run_upcharges.count %> </p>
   <p>Number of Imprints: <%= @product.imprint_methods.count %> </p>
   <p>Number of Product colors: <%= @product.color_product.count %> </p>
 </div>

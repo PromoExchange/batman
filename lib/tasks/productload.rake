@@ -12,9 +12,19 @@ namespace :product do
       load_files('gemline')
     end
 
+    desc 'Gemline lite load'
+    task gemline_lite: :environment do
+      ProductLoader.load('lite', 'gemline')
+    end
+
     desc 'Crown Load'
     task crown: :environment do
       load_files('crown')
+    end
+
+    desc 'Crown Lite Load'
+    task crown_lite: :environment do
+      ProductLoader.load('lite', 'crown')
     end
 
     desc 'Fields Load'
@@ -22,9 +32,19 @@ namespace :product do
       load_files('fields')
     end
 
+    desc 'Fields lite load'
+    task fields_lite: :environment do
+      ProductLoader.load('lite', 'fields')
+    end
+
     desc 'High Caliber Load'
     task high_caliber: :environment do
       load_files('high_caliber')
+    end
+
+    desc 'High Caliber lite Load'
+    task high_caliber_lite: :environment do
+      ProductLoader.load('lite', 'high_caliber')
     end
 
     desc 'Leeds Load'
@@ -32,9 +52,19 @@ namespace :product do
       ProductLoader.load('products', 'leeds')
     end
 
+    desc 'Leeds Lite Load'
+    task leeds_lite: :environment do
+      ProductLoader.load('lite', 'leeds')
+    end
+
     desc 'Logomark Load'
     task logomark: :environment do
       load_files('logomark')
+    end
+
+    desc 'Logomark Lite Load'
+    task logomark_lite: :environment do
+      ProductLoader.load('lite', 'logomark')
     end
 
     desc 'Norwood Load'
@@ -42,9 +72,19 @@ namespace :product do
       ProductLoader.load('products', 'norwood')
     end
 
+    desc 'Norwood Load'
+    task norwood_lite: :environment do
+      ProductLoader.load('lite', 'norwood')
+    end
+
     desc 'Primeline Load'
     task primeline: :environment do
       load_files('primeline')
+    end
+
+    desc 'Primeline Load'
+    task primeline_lite: :environment do
+      ProductLoader.load('lite', 'primeline')
     end
 
     desc 'Sweda Load'
@@ -52,9 +92,19 @@ namespace :product do
       ProductLoader.load('products', 'sweda')
     end
 
+    desc 'Sweda Lite Load'
+    task sweda_lite: :environment do
+      ProductLoader.load('lite', 'sweda')
+    end
+
     desc 'Starline Load'
     task starline: :environment do
       load_files('starline')
+    end
+
+    desc 'Starline Lite Load'
+    task starline_lite: :environment do
+      ProductLoader.load('lite', 'starline')
     end
 
     desc 'Jornik Load'
@@ -67,9 +117,19 @@ namespace :product do
       load_files('bullet')
     end
 
+    desc 'Bullet Lite Load'
+    task bullet_lite: :environment do
+      ProductLoader.load('lite', 'bullet')
+    end
+
     desc 'Vitronic Load'
     task vitronic: :environment do
       load_files('vitronic')
+    end
+
+    desc 'Vitronic Lite Load'
+    task vitronic_lite: :environment do
+      ProductLoader.load('lite', 'vitronic')
     end
 
     desc 'Gildan Load'

@@ -44,13 +44,17 @@ class Spree::Api::BidsController < Spree::Api::BaseController
 
   def accept
     @bid.transaction do
+      @bid.auction.update_attributes(
+        shipping_address_id: params[:ship_id],
+        customer_id: params[:customer_id]
+      )
       if @bid.auction.preferred?(@bid.seller)
         @bid.update_attributes(manage_workflow: params[:manage_workflow])
         @bid.preferred_accept
         @bid.auction.unpaid
         @status = 'succeeded'
       else
-        @status = @bid.create_payment(nil)
+        @status = @bid.create_payment(@bid.auction.customer.token)
         if %w(succeeded pending).include?(@status)
           @bid.non_preferred_accept
           @bid.auction.accept
@@ -60,6 +64,7 @@ class Spree::Api::BidsController < Spree::Api::BaseController
     end
     Spree::OrderUpdater.new(@bid.order).update
     message = !%w(succeeded pending).include?(@status) ? @status.message : @status
+    @bid.pay_sample_fee
     render nothing: true, status: :ok, json: { message: message, manage_status: @bid.manage_workflow }
   rescue
     render nothing: true, status: :internal_server_error

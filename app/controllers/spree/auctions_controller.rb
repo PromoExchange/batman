@@ -67,7 +67,7 @@ class Spree::AuctionsController < Spree::StoreController
     unless current_spree_user
       @auction.pending
       session[:pending_auction_id] = @auction.id
-      redirect_to login_url and return
+      redirect_to login_url && return
     end
 
     create_related_data(auction_data)
@@ -84,7 +84,7 @@ class Spree::AuctionsController < Spree::StoreController
     auction_data = params[:auction]
 
     if params[:size].present?
-      params[:size] = params[:size].merge(params[:size]) {|k, val| (val.to_i < 0)? 0 : val.to_i}
+      params[:size] = params[:size].merge(params[:size]) { |_k, val| (val.to_i < 0) ? 0 : val.to_i }
       @size_quantity = params[:size]
       auction_data[:quantity] = params[:size].values.map(&:to_i).reduce(:+)
       @total_size = auction_data[:quantity]
@@ -150,7 +150,7 @@ class Spree::AuctionsController < Spree::StoreController
       render nothing: true, status: :unprocessable_entity, json: 'This is not a supported file format'
     elsif @auction.update_attributes(proof_file: params[:proof_file], proof_feedback: '')
       @auction.upload_proof!
-      flash[:notice] = "Your document uploaded successfully."
+      flash[:notice] = 'Your document uploaded successfully.'
       render :js => "window.location = '/invoices/#{@auction.id}'"
     else
       render nothing: true, status: :unprocessable_entity, json: 'This is not a supported file format'

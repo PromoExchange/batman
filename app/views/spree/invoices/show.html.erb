@@ -16,13 +16,13 @@
     <p><%= @auction.product.description %></p>
     <%= render partial: 'spree/shared/properties' %>
   </div>
-  
+
   <div class="col-md-6 well">
     <div class="auction-details">
       <h4><%= Spree::t(:auction_details) %></h4>
       <table class="table">
         <tr><td>Auction #:</td><td><%= @auction.reference %></td></tr>
-        <tr><td>Winning Bid:</td><td>$<%= @auction.winning_bid.bid %></td></tr>
+        <tr><td>Winning Bid:</td><td><%= number_to_currency(@auction.winning_bid.bid) %></td></tr>
         <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>
         <tr><td>Factory:</td><td><%= @auction.product.supplier.name %></td></tr>
         <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
@@ -49,7 +49,7 @@
               <%= image_tag(Spree::Logo::LOGO_FILE_NAME[@auction.logo.logo_file_file_name.split(".").last.to_sym], { title: @auction.logo.logo_file_file_name, itemprop: "image", alt: @auction.logo.logo_file_file_name, size: "100x100" }) %>
             </td>
           </tr>
-            
+
         <% end %>
         <tr>
           <td>Shipping Address:</td>

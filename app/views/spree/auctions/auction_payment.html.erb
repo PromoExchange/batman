@@ -57,7 +57,7 @@
         <tr><td><strong>Color:</strong></td><td><%= @auction.main_color.color %></td></tr>
         <tr><td><strong>QTY:</strong></td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
         <tr><td><strong>Payment Method:</strong></td><td><%= @auction.payment_method %></td></tr>
-        <tr><td><strong>Total Amount:</strong></td><td><%= @bid.bid %></td></tr>
+        <tr><td><strong>Total Amount:</strong></td><td><%= number_to_currency(@bid.bid) %></td></tr>
       </tbody>
     </table>
   </div>

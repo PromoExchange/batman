@@ -179,16 +179,16 @@ class Spree::Prebid < Spree::Base
     auction_data[:running_unit_price] += (payment_processing_flat_fee / auction.quantity)
   end
 
-  def log_format(auction_data, level, message)
-    "PREBID #{level} A:#{auction_data[:auction_id]} P:#{auction_data[:prebid_id]} - #{message}"
+  def log_format(auction_data, message)
+    "PREBID A:#{auction_data[:auction_id]} P:#{auction_data[:prebid_id]} - #{message}"
   end
 
   def log_error(auction_data, message)
-    Rails.logger.error(log_format(auction_data, 'ERROR', message))
+    Rails.logger.error(log_format(auction_data, message))
   end
 
   def log_debug(auction_data, message)
-    Rails.logger.debug(log_format(auction_data, 'DEBUG', message))
+    Rails.logger.debug(log_format(auction_data, message))
   end
 
   def apply_price_discount(auction_data, discount_code)

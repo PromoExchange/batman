@@ -39,9 +39,9 @@ $(function() {
 
         var include_cell_id = "#taxrate-" + taxrate_id + " > td.rate-includesandh";
         if(taxrate_include === true) {
-          $(include_cell_id).html('true');
+          $(include_cell_id).html('Yes');
         } else {
-          $(include_cell_id).html('false');
+          $(include_cell_id).html('No');
         }
         alert('Tax rate updated');
       },

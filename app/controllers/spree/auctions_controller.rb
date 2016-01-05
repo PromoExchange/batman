@@ -121,8 +121,7 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def send_prebid_request(auction_id)
-    # embroidery_imprint_method_id = Spree::ImprintMethod.where(name: 'Embroidery').first.id
-    # return if embroidery_imprint_method_id == params[:auction][:imprint_method_id].to_i
+    return if ENV['DISABLE_PREBIDS'] == 'true'
     Resque.enqueue(CreatePrebids, auction_id: auction_id)
   end
 

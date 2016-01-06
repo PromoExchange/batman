@@ -33,6 +33,59 @@ namespace :dc do
       end
     end
 
+    desc 'Fix Fields PMS Colors'
+    task fields: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100156').first
+      return if supplier.nil?
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      four_color_process_imprint = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Cool Gray', 'Gray 9', '#75787b'],
+        ['Gray', '425 C', '#54585a'],
+        ['Purple', '273 C', '#24135f'],
+        ['Light Purple', '527 C', '#8031a7'],
+        ['Navy', '282 C', '#041e42'],
+        ['Reflex Blue', 'Reflex Blue C', '#001489'],
+        ['Dark Blue', '294 C', '#002f6c'],
+        ['Blue', '286 C', '#0033a0'],
+        ['Royal Blue', '300 C', '#005eb8'],
+        ['Teal', '300 C', '#008675'],
+        ['Dark Green', '357 C', '#215732'],
+        ['Forest Green', '349 C', '#046a38'],
+        ['Green', '354 C', '#00b140'],
+        ['Yellow', '109 C', '#ffd100'],
+        ['Athletic Gold', '123 C', '#ffc72c'],
+        ['Orange', '172 C', '#fa4616'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Pink', '211 C', '#f57eb6'],
+        ['Bright Red', '185 C', '#e4002b'],
+        ['Red', '485 C', '#da291c'],
+        ['Burgundy', '209 C', '#6f263d'],
+        ['Brown', '469 C', '#693f23'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Metallic Silver', '877 C', '#8d9092']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          four_color_process_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
     desc 'Fix American Accent Napkins'
     task american_accents: :environment do
       supplier = Spree::Supplier.where(name: 'American Accents').first_or_create
@@ -60,7 +113,7 @@ namespace :dc do
         ['Brown', '498 C', '#00664f'],
         ['Matte Silver', '877 C', '#8a8d8f'],
         ['Matte Gold', '873 C', '#866d4b'],
-        ['Orange', '21 C', '#fe5000'],
+        ['Orange', '021 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
       ]
       add_these_colors.each do |color|
@@ -264,6 +317,72 @@ namespace :dc do
 
         product.check_validity!
         product.loaded if product.state == 'loading'
+      end
+    end
+
+    desc 'Fix Gemline'
+    task gemline: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100257').first_or_create
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      logomatic_imprint = Spree::ImprintMethod.where(name: 'Logomatic').first_or_create
+      embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+      gemphoto_imprint = Spree::ImprintMethod.where(name: 'Gemphoto').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          logomatic_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          embroidery_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          gemphoto_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
       end
     end
 

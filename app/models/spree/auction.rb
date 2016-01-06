@@ -183,7 +183,10 @@ class Spree::Auction < Spree::Base
   end
 
   def num_colors
-    pms_colors.count
+    pms_count = pms_colors.count
+    custom_count = 0
+    custom_count = custom_pms_colors.split(',').count unless custom_pms_colors.nil?
+    pms_count + custom_count
   end
 
   def rush?

@@ -1,0 +1,152 @@
+Item name: Chevy Van
+SKU: 907
+Seller: Non-preferred
+Item Count: 100
+MSRP: 7.47
+MSRP Price Code: C
+Discount percentage: 0.6
+Initial unit cost: 7.47
+Discount unit cost: 4.482
+After supplier level: 4.482
+Applying 2 setups
+Charge: 50.0
+Price code: G
+Discounted Charge: 40.0
+After applying charge unit cost: 5.282
+After product level upcharges: 5.282
+Applying tax rate 0.0
+After applying tax rate: 5.282
+Applying shipping
+Carton quantity: 100
+Number of packages: 1
+Originating zip: 56301
+Destination zip: 19020
+Shipping cost 17.92
+After applying shipping cost: 5.4612
+Applying markup: 0.1
+After applying markup: 6.00732
+Applying PX commission: 0.0899
+After applying commision: 6.600725195033512801
+Applying processing cost:
+Payment processing commission: 0.029
+Payment processing flat fee: 0.3
+After applying processing cost: 6.80086322866479176210092688
+Total prebid bid: 680.086322866479176210092688
+
+Item name: Digital Pedometer With Twin Lcd Readout
+SKU: 216
+Seller: Non-preferred
+Item Count: 100
+MSRP: 9.37
+MSRP Price Code: C
+Discount percentage: 0.6
+Initial unit cost: 9.37
+Discount unit cost: 5.622
+After supplier level: 5.622
+Applying 1 setups
+Charge: 50.0
+Price code: G
+Discounted Charge: 40.0
+After applying charge unit cost: 6.022
+After product level upcharges: 6.022
+Applying tax rate 0.0
+After applying tax rate: 6.022
+Applying shipping
+Carton quantity: 1000
+Number of packages: 1
+Originating zip: 56301
+Destination zip: 19020
+Shipping cost 17.0
+After applying shipping cost: 6.192
+Applying markup: 0.1
+After applying markup: 6.8112
+Applying PX commission: 0.0899
+After applying commision: 7.484012745852104164
+Applying processing cost:
+Payment processing commission: 0.029
+Payment processing flat fee: 0.3
+After applying processing cost: 7.710531149178274113285272915
+Total prebid bid: 771.0531149178274113285272915
+
+Item name: Champion Sport Bag
+Factory: Gemline
+SKU: 7059
+Seller: Non-preferred
+Item Count: 50
+MSRP: 9.75
+MSRP Price Code: Q
+Discount percentage: 0.55
+Initial unit cost: 9.75
+Discount unit cost: 5.3625
+After supplier level: 5.3625
+Applying 2 setups
+Charge: 55.0
+Price code: V
+Discounted Charge: 44.0
+After applying charge unit cost: 7.1225
+Applying 1 additional color charges
+Charge: 0.99
+Price code: V
+Discounted Charge: 0.792
+After Run applied unit cost: 7.9145
+After product level upcharges: 7.9145
+Applying tax rate 0.0
+After applying tax rate: 7.9145
+Applying shipping
+Carton quantity: 40
+Number of packages: 2
+Originating zip: 01843-1066
+Destination zip: 19020
+Shipping cost 40.9
+After applying shipping cost: 8.7324999999999999
+Applying markup: 0.1
+After applying markup: 9.60574999999999989
+Applying PX commission: 0.0899
+After applying commision: 10.554609383584221393253488628
+Applying processing cost:
+Payment processing commission: 0.029
+Payment processing flat fee: 0.3
+After applying processing cost: 10.875834586595490621270328144181256437
+Total prebid bid: 543.79172932977453106351640720906282185
+
+Item name: Collapsible Party Cooler
+Factory: Gemline
+SKU: 9276
+Seller: Non-preferred
+Item Count: 25
+MSRP: 26.25
+MSRP Price Code: Q
+Discount percentage: 0.55
+Initial unit cost: 26.25
+Discount unit cost: 14.4375
+After supplier level: 14.4375
+Number of imprint colors: 2
+Applying 2 setups
+Charge: 55.0
+Price code: V
+Discounted Charge: 44.0
+After applying charge unit cost: 17.9575
+Applying 1 additional color charges
+Charge: 0.99
+Price code: V
+Discounted Charge: 0.792
+After Run applied unit cost: 18.7495
+After product level upcharges: 18.7495
+Applying tax rate 0.0
+After applying tax rate: 18.7495
+Applying shipping
+Carton quantity: 12
+Number of packages: 3
+Originating zip: 01843-1066
+Destination zip: 19020
+Shipping cost 61.35
+After applying shipping cost: 21.2035
+Applying markup: 0.1
+After applying markup: 23.32385
+Applying PX commission: 0.0899
+After applying commision: 25.627788155147785958
+Applying processing cost:
+Payment processing commission: 0.029
+Payment processing flat fee: 0.3
+After applying processing cost: 26.405190685013167824922760041
+Total prebid bid: 660.129767125329195623069001025

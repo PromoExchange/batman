@@ -127,7 +127,7 @@ module ProductLoad
             amount: last_price.retail,
             position: range_count,
             discount_type: 'price',
-            price_code: price.code
+            price_code: last_price.code
           )
 
           range_count += 1

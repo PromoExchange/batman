@@ -40,6 +40,8 @@ class Spree::Prebid < Spree::Base
     auction_data[:price_code] ||= 'V'
 
     auction_data[:messages] << "Item name: #{auction.product.name}"
+    auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
+    auction_data[:messages] << "SKU: #{auction.product.master.sku}"
     if auction.preferred?(seller)
       auction_data[:messages] << 'Seller: Preferred'
     else
@@ -51,9 +53,9 @@ class Spree::Prebid < Spree::Base
     # Apply discount to base price
     auction_data[:messages] << "MSRP Price Code: #{auction.product_price_code || 'V'}"
     auction_data[:messages] << "Discount percentage: #{Spree::Price.discount_codes[auction_data[:price_code].to_sym]}"
-    auction_data[:messages] << "Initial unit cost: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "Initial unit cost: #{auction_data[:running_unit_price]}"
     apply_price_discount(auction_data, auction.product_price_code)
-    auction_data[:messages] << "Discount unit cost: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "Discount unit cost: #{auction_data[:running_unit_price]}"
 
     # Supplier level
     auction_data[:supplier_upcharges] = Spree::UpchargeSupplier.where(related_id: 1)
@@ -71,7 +73,8 @@ class Spree::Prebid < Spree::Base
       no_under_over: auction.no_under_over
     }
     apply_supplier_upcharges(auction_data)
-    auction_data[:messages] << "After supplier level: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "After supplier level: #{auction_data[:running_unit_price]}"
+    auction_data[:messages] << "Number of imprint colors: #{auction_data[:num_colors]}"
 
     # Product level
     auction_data[:product_upcharges] = Spree::UpchargeProduct.where(
@@ -89,7 +92,7 @@ class Spree::Prebid < Spree::Base
       )
 
     apply_product_upcharges(auction_data)
-    auction_data[:messages] << "After product level upcharges: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "After product level upcharges: #{auction_data[:running_unit_price]}"
 
     # Apply tax from raxrate table
     tax_rate = 0.0
@@ -106,31 +109,31 @@ class Spree::Prebid < Spree::Base
     end
     auction_data[:messages] << "Applying tax rate #{tax_rate}"
     auction_data[:running_unit_price] /= (1 - tax_rate)
-    auction_data[:messages] << "After applying tax rate: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "After applying tax rate: #{auction_data[:running_unit_price]}"
 
     # Shipping based on buyers zip
     # Package needs weight, height, width and depth
-    shipping_cost = calculate_shipping(auction)
+    shipping_cost = calculate_shipping(auction, auction_data)
     auction_data[:messages] << "Shipping cost #{shipping_cost}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
-    auction_data[:messages] << "After applying shipping cost: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "After applying shipping cost: #{auction_data[:running_unit_price]}"
 
     # Seller markup
     auction_data[:messages] << "Applying markup: #{markup.to_f}"
     auction_data[:running_unit_price] *= (1 + markup.to_f)
-    auction_data[:messages] << "After applying markup: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "After applying markup: #{auction_data[:running_unit_price]}"
 
     # Promo exchange commission
     px_commission = 0.0899
     px_commission = 0.0399 if auction.preferred?(seller)
     auction_data[:messages] << "Applying PX commission: #{px_commission}"
     auction_data[:running_unit_price] /= (1 - px_commission)
-    auction_data[:messages] << "After applying commision: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "After applying commision: #{auction_data[:running_unit_price]}"
 
     # Payment processing cost
     auction_data[:messages] << 'Applying processing cost:'
     apply_processing_fee(auction, auction_data)
-    auction_data[:messages] << "After applying processing cost: #{auction_data[:base_unit_price]}"
+    auction_data[:messages] << "After applying processing cost: #{auction_data[:running_unit_price]}"
 
     Spree::Bid.transaction do
       bid = Spree::Bid.create(
@@ -262,14 +265,14 @@ class Spree::Prebid < Spree::Base
       case product_upcharge[1]
       when 'setup'
         setup_charge = product_upcharge[4].to_f
-        (1..auction_data[:num_colors].to_i).each do
+        num_setups = [auction_data[:num_colors].to_i, 1].max
+        (1..num_setups).each do
           auction_data[:running_unit_price] += (
-            (Spree::Price.discount_price(price_code, setup_charge) *
-              auction_data[:num_colors]) /
+            Spree::Price.discount_price(price_code, setup_charge) /
               auction_data[:quantity]
           )
         end
-        auction_data[:messages] << "Applying #{auction_data[:num_colors]} setups"
+        auction_data[:messages] << "Applying #{num_setups} setups"
         auction_data[:messages] << "Charge: #{setup_charge}"
         auction_data[:messages] << "Price code: #{price_code}"
         auction_data[:messages] << "Discounted Charge: #{Spree::Price.discount_price(price_code, setup_charge)}"
@@ -328,7 +331,7 @@ class Spree::Prebid < Spree::Base
     end
   end
 
-  def calculate_shipping(auction)
+  def calculate_shipping(auction, auction_data)
     fail 'Shipping carton weight is nil' if auction.product.carton.weight.blank?
     shipping_weight = auction.product.carton.weight
 

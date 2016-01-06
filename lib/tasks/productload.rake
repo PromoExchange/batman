@@ -174,5 +174,22 @@ namespace :product do
       'product:load:bullet',
       'product:load:alternative_apparel'
     ]
+
+    desc 'Product Lite Load'
+    task lite: [
+      'environment',
+      'product:load:gemline_lite',
+      'product:load:crown_lite',
+      'product:load:fields_lite',
+      'product:load:high_caliber_lite',
+      'product:load:leeds_lite',
+      'product:load:logomark_lite',
+      'product:load:norwood_lite',
+      'product:load:primeline_lite',
+      'product:load:sweda_lite',
+      'product:load:starline_lite',
+      'product:load:bullet_lite',
+      'product:load:vitronic_lite'
+    ]
   end
 end

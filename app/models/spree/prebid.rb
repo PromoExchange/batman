@@ -128,7 +128,7 @@ class Spree::Prebid < Spree::Base
     px_commission = 0.0399 if auction.preferred?(seller)
     auction_data[:messages] << "Applying PX commission: #{px_commission}"
     auction_data[:running_unit_price] /= (1 - px_commission)
-    auction_data[:messages] << "After applying commision: #{auction_data[:running_unit_price]}"
+    auction_data[:messages] << "After applying commission: #{auction_data[:running_unit_price]}"
 
     # Payment processing cost
     auction_data[:messages] << 'Applying processing cost:'

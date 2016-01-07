@@ -113,7 +113,7 @@ Spree::Product.class_eval do
   end
 
   def prebid_ability?
-    carton.active? && upcharges.count > 0
+    carton.active? && upcharges.count > 0 && Spree::Variant.find_by(product_id: id).volume_prices.count > 0
   end
 
   def setup_upcharges

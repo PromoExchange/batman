@@ -8,7 +8,7 @@ module ProductLoad
     bits[0].strip
   end
 
-  # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=8F68F6E0-1EB3-4D71-80EE-16B76E7FC03F
+  # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=6815169A-1A38-46C5-898B-B637AA7E9081
   # Elleven Zippered Padfolio
 
   def self.perform(params)

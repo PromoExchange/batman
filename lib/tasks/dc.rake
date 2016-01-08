@@ -478,6 +478,47 @@ namespace :dc do
       end
     end
 
+    desc 'Fix High Caliber PMS Colors'
+    task high_caliber: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100334').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      standard_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Red', '186 C', '#c8102e'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Process Yellow', 'Process Yellow', '#fedd00'],
+        ['Athletic Gold', '123 C', '#ffc72c'],
+        ['Brown', '161 C', '#603d20'],
+        ['Teal', '320 C', '#009ca6'],
+        ['Purple', '266 C', '#753bbd'],
+        ['Pink', '225 C', '#df1995'],
+        ['Burgundy', '195 C', '#782f40'],
+        ['Gray', '428 C', '#c1c6c8'],
+        ['Green', '347 C', '#009a44'],
+        ['Forest Green', '342 C', '#006747'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Charcoal', '430 C', '#7c878e'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Charcoal Grey', '424 C', '#707372'],
+        ['Met. Gold', '872 C', '#85714d'],
+        ['Met. Silver', '877 C', '#8a8d8f']
+      ]
+      standard_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
     desc 'Fix Bullet PMS Colors'
     task bullet: :environment do
       supplier = Spree::Supplier.where(dc_acct_num: '100383').first

@@ -392,6 +392,92 @@ namespace :dc do
       end
     end
 
+    desc 'Fix Norwood PMS Colors'
+    task norwood: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100334').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+
+      standard_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Burgundy', '208 C', '#861f41'],
+        ['Magenta', '205 C', '#e0457b'],
+        ['Pink', '211 C', '#f57eb6'],
+        ['Cream', '1345 C', '#fdd086'],
+        ['Orange', '172 C', '#fa4616'],
+        ['Lemon', '114 C', '#fbdd40'],
+        ['Athletic Gold', '116 C', '#ffcd00'],
+        ['Teal', '327 U', '#008675'],
+        ['Dark Teal', '316 C', '#004851'],
+        ['Green', '355 C', '#009639'],
+        ['Forest Green', '341 C', '#007a53'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Forest Green', '341 C', '#007a53'],
+        ['Royal Blue', '293 C', '#003da5'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Purple', '2587 C', '#8246af'],
+        ['Brown', '1545 C', '#653819'],
+        ['Charcoal Grey', '424 C', '#707372'],
+        ['Met. Gold', '872 C', '#85714d'],
+        ['Met. Silver', '877 C', '#8a8d8f'],
+        ['Met. Copper', '876 C', '#8b634b'],
+        ['Met. Green', '8283 C', '#499c93'],
+        ['Met. Blue', '8203 C', '#3177a3'],
+        ['Met. Magenta', '8085 C', '#a13769']
+      ]
+      standard_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      embroidery_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Light Gray', 'W Gray 3', '#bfb8af'],
+        ['Gray', 'C Gray 7', '#97999b'],
+        ['Dark Gray', '425', '#54585a'],
+        ['Medium Brown', '476', '#4e3629'],
+        ['Process Yellow', 'Process Yellow', '#fedd00'],
+        ['Sunflow Yellow', '108', '#fedb00'],
+        ['Yellow', '115', '#fdda24'],
+        ['Light Gold', '1235', '#ffb81c'],
+        ['Gold', '123', '#ffc72c'],
+        ['Pumpkin Orange', '151', '#ff8200'],
+        ['Orange', '165', '#ff671f'],
+        ['Warm Red', 'Warm Red', '#f9423a'],
+        ['Red', '186', '#c8102e'],
+        ['Very Red', '200', '#ba0c2f'],
+        ['Maroon', '201', '#9d2235'],
+        ['Light Green', '802', '#44d62c'],
+        ['Bright Green', '361', '#43b02a'],
+        ['Royal Blue', '293', '#003da5'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Medium Blue', '285', '#0072ce'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Metallic Silver', '877 C', '#8d9092']
+      ]
+      embroidery_colors.each do |color|
+        add_pms_color(
+          supplier,
+          embroidery_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
     desc 'Fix Bullet PMS Colors'
     task bullet: :environment do
       supplier = Spree::Supplier.where(dc_acct_num: '100383').first

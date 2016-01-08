@@ -86,6 +86,126 @@ namespace :dc do
       end
     end
 
+    desc 'Fix Vitronic PMS Colors'
+    task vitronic: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '101715').first
+      return if supplier.nil?
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      screen_print_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Royal Blue', '286 C', '#0033a0'],
+        ['Royal Blue', '286 C', '#0033a0'],
+        ['Brown', '476 C', '#4e3629'],
+        ['Burgundy', '202 C', '#862633'],
+        ['Copper', '876 C', '#8b634b'],
+        ['Athletic Gold', '123 C', '#ffc72c'],
+        ['Metallic Gold', '873 C', '#866d4b'],
+        ['Gray', '429 C', '#a2aaad'],
+        ['Forest Green', '3435 C', '#154734'],
+        ['Kelly Green', '356 C', '#007a33'],
+        ['Teal', '320 C', '#009ca6'],
+        ['Orange', '151 C', '#ff8200'],
+        ['Pink', '211 C', '#f57eb6'],
+        ['Purple', '268 C', '#582c83'],
+        ['Red', '186 C', '#c8102e'],
+        ['Warm Red', '032 C', '#ef3340'],
+        ['Metallic Silver', '877 C', '#8d9092'],
+        ['Yellow', '115 C', '#fdda24']
+      ]
+      screen_print_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      image_lock_imprint = Spree::ImprintMethod.where(name: 'Image Lock').first_or_create
+      image_lock_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Light Blue', '2995 U', '#0d9ddb'],
+        ['Navy Blue', '295 U', '#375172'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Royal Blue',  '293 U', '#235ba8'],
+        ['Brown',  '477 U', '#7d6556'],
+        ['Beige',  '155 U', '#f7c995'],
+        ['Tan', '155 U', '#c1a67f'],
+        ['Charcoal', '424 U', '#88898a'],
+        ['Athletic Gold',  '109 U', '#ffc700'],
+        ['Metallic Gold', '873 U', '#ae906f'],
+        ['Gray', '422 U', '#9ea1a2'],
+        ['Forest Green', '343 U', '#48655b'],
+        ['Olive', '582 U', '#919145'],
+        ['Teal', '327 U', '#008f85'],
+        ['Maroon', '209 U', '#825864'],
+        ['Orange', '021 U', '#ff6c2f'],
+        ['Purple', '273 U', '#645d9b'],
+        ['Red', '186 U', '#d2515e'],
+        ['Cardinal Red', '200 U', '#bd4f5c'],
+        ['Chili Red', '202 U', '#90585e'],
+        ['Rubine', 'Rubine', '#db487e'],
+        ['Metallic Silver', '877 U', '#b4b7b9'],
+        ['Yellow', '107', '#8d9092']
+      ]
+      image_lock_colors.each do |color|
+        add_pms_color(
+          supplier,
+          image_lock_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      hot_stamp_imprint = Spree::ImprintMethod.where(name: 'Hot Stamp').first_or_create
+      hot_stamp_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Blue', '2728 C', '#0047bb'],
+        ['Dark Blue', '2728 C', '#1b365d'],
+        ['Navy Blue', '289 C', '#0c2340'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Brown', '476 C', '#4e3629'],
+        ['Bison', '439 C', '#453536'],
+        ['Dark Brown', '4625 C', '#4f2c1d'],
+        ['Light Brown', '4635 C', '#946037'],
+        ['Burgundy', '4635 C', '#782f40'],
+        ['Dark Burgundy', '504 C', '#572932'],
+        ['Grey', '431 C', '#5b6770'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Dark Green', '357 C', '#215732'],
+        ['Light Green', '356 C', '#007a33'],
+        ['Ivory', '1205 C', '#f8e08e'],
+        ['Orange', '179 C', '#e03c31'],
+        ['Pink', '673 C', '#d986ba'],
+        ['Purple', '2587 C', '#8246af'],
+        ['Dark Red', '188 C', '#76232f'],
+        ['Light Red', '1805 C', '#af272f'],
+        ['Metallic Silver', '877 C', '#8d9092'],
+        ['Yellow', '124 C', '#eaaa00'],
+        ['Light Yellow', '115 C', '#fdda24']
+      ]
+      hot_stamp_colors.each do |color|
+        add_pms_color(
+          supplier,
+          hot_stamp_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
     desc 'Fix Logomark PMS Colors'
     task logomark: :environment do
       supplier = Spree::Supplier.where(dc_acct_num: '101044').first

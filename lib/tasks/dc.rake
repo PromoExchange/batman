@@ -363,7 +363,7 @@ namespace :dc do
         ['Medium Green', '347 C', '#009a44'],
         ['Dark Green', '343 C', '#115740'],
         ['Brown', '4635 C', '#946037'],
-        ['Grey', '423 C', '#898d8d']
+        ['Grey', '423 C', '#898d8d'],
         ['Metallic Gold', '871 C', '#84754e'],
         ['Silver', '877 C', '#8d9092']
       ]

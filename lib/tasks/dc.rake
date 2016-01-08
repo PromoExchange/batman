@@ -48,7 +48,7 @@ namespace :dc do
         ['Purple', '273 C', '#24135f'],
         ['Light Purple', '527 C', '#8031a7'],
         ['Navy', '282 C', '#041e42'],
-        ['Reflex Blue', 'Reflex Blue C', '#001489'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
         ['Dark Blue', '294 C', '#002f6c'],
         ['Blue', '286 C', '#0033a0'],
         ['Royal Blue', '300 C', '#005eb8'],
@@ -272,6 +272,119 @@ namespace :dc do
         add_pms_color(
           supplier,
           colorsplash_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Starline PMS Colors'
+    task starline: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100512').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+      true_color_direct_imprint = Spree::ImprintMethod.where(name: 'True Color Direct Digital').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Gold', '871 C', '#84754e'],
+        ['Silver', '877 C', '#8d9092'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '194 C', '#9b2743'],
+        ['Violet', '2685 C', '#330072'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Navy Blue', '282 C', '#041e42'],
+        ['Teal', '322 C', '#007377'],
+        ['Light Green', '348 C', '#00843d'],
+        ['Dark Green', '350 C', '#2c5234'],
+        ['Yellow', '116 C', '#ffcd00'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Grey', '423 C', '#898d8d']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          pad_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          true_color_direct_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Primeline PMS Colors'
+    task primeline: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100334').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+      embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Medium Yellow', '116 C', '#ffcd00'],
+        ['Dark Yellow', '1235 C', '#ffb81c'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Light Red', '1787 C', '#f4364c'],
+        ['Fire Red', '199 C', '#d50032'],
+        ['Burgundy', '202 C', '#862633'],
+        ['Maroon', '208 C', '#861f41'],
+        ['Pink', '225 C', '#df1995'],
+        ['Purple', '267 C', '#5f259f'],
+        ['Light Blue', '2925 C', '#009cde'],
+        ['Medium Blue', '287 C', '#003087'],
+        ['Dark Blue', '281 C', '#00205b'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Teal', '327 C', '#008675'],
+        ['Green', 'Green', '#00ab84'],
+        ['Medium Green', '347 C', '#009a44'],
+        ['Dark Green', '343 C', '#115740'],
+        ['Brown', '4635 C', '#946037'],
+        ['Grey', '423 C', '#898d8d']
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Silver', '877 C', '#8d9092']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          pad_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          embroidery_imprint,
           color[0],
           color[1],
           color[2]

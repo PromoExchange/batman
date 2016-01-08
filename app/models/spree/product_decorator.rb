@@ -179,12 +179,13 @@ Spree::Product.class_eval do
         :num_imprints,
         :num_upcharges_setup,
         :num_upcharges_run,
+        :num_prices,
         :shipping_weight,
         :shipping_dimensions,
         :shipping_quantity,
         :shipping_originating_zip
       ],
-      %w(sku name factory num_product_colors num_imprints num_upcharges_setup num_upcharges_run shipping_weight shipping_dimensions shipping_quantity shipping_originating_zip), true)
+      %w(sku name factory num_product_colors num_imprints num_upcharges_setup num_upcharges_run num_prices shipping_weight shipping_dimensions shipping_quantity shipping_originating_zip), true)
   end
 
   def to_csv_row
@@ -200,6 +201,7 @@ Spree::Product.class_eval do
         :num_imprints,
         :num_upcharges_setup,
         :num_upcharges_run,
+        :num_prices,
         :shipping_weight,
         :shipping_dimensions,
         :shipping_quantity,
@@ -213,6 +215,7 @@ Spree::Product.class_eval do
         imprint_methods.count,
         upcharges.where(upcharge_type: setup_type).count,
         upcharges.where(upcharge_type: run_type).count,
+        Spree::Variant.find_by(product: self).volume_prices.count,
         carton.weight,
         carton.to_s,
         carton.quantity,

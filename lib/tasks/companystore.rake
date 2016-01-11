@@ -1,0 +1,78 @@
+
+namespace :companystore do
+  desc 'Create anchor free company store'
+  task anchorfree: :environment do
+    user = Spree::User.where(email: 'dwittig@anchorfree.com').first
+
+    # User
+    if user.nil?
+      role = Spree::Role.where(name: 'buyer').first_or_create
+
+      user = Spree::User.create(email: 'dwittig@anchorfree.com',
+                                login: 'dwittig@anchorfree.com',
+                                password: 'spree123',
+                                password_confirmation: 'spree123')
+
+      user.spree_roles << role
+      user.generate_spree_api_key!
+
+      country = Spree::Country.where(iso3: 'USA').first
+      state = Spree::State.where(name: 'California').first
+
+      user.ship_address = Spree::Address.create(
+        company: 'Anchor Free',
+        firstname: 'Drew',
+        lastname: 'Wittig',
+        address1: '155 Constitution Drive',
+        city: 'Menlo Park',
+        zipcode: '94025',
+        state_id: state.id,
+        country_id: country.id,
+        phone: '4087441002'
+      )
+
+      user.bill_address = Spree::Address.create(
+        company: 'Anchor Free',
+        firstname: 'Drew',
+        lastname: 'Wittig',
+        address1: '155 Constitution Drive',
+        city: 'Menlo Park',
+        zipcode: '94025',
+        state_id: state.id,
+        country_id: country.id,
+        phone: '4087441002'
+      )
+      user.save!
+      user.confirm!
+    end
+
+    store_name = 'AnchorFree Company Store'
+
+    # Supplier
+    supplier = Spree::Supplier.where(name: store_name).first
+    if supplier.nil?
+      supplier = Spree::Supplier.create(
+        name: 'AnchorFree Company Store',
+        billing_address: user.bill_address,
+        shipping_address: user.ship_address,
+        company_store: true
+      )
+      supplier.save!
+    end
+
+    # Company Store
+    company_store = Spree::CompanyStore.where(name: store_name).first
+    if company_store.nil?
+      company_store = Spree::CompanyStore.create(
+        name: store_name,
+        slug: 'anchorfree',
+        supplier: supplier,
+        buyer: user
+      )
+      company_store.save!
+    end
+
+    # Products
+    ProductLoader.load('company_store', 'anchorfree')
+  end
+end

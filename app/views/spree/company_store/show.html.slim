@@ -1,0 +1,8 @@
+= image_tag("logo/anchorfree-logo.png", :alt => "AnchorFree")
+h4 AnchorFree
+.well
+  table.table
+    tbody
+      - @products.each do |product|
+        tr
+          td = product.name

@@ -11,8 +11,8 @@ RSpec.describe Spree::CompanyStore, type: :model do
     expect(m.save).to be_falsey
   end
 
-  it 'should not save with a nil url' do
-    m = FactoryGirl.build(:company_store, url: nil)
+  it 'should not save with a nil slug' do
+    m = FactoryGirl.build(:company_store, slug: nil)
     expect(m.save).to be_falsey
   end
 

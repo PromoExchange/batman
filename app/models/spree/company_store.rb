@@ -4,6 +4,6 @@ class Spree::CompanyStore < Spree::Base
 
   validates :buyer_id, presence: true
   validates :supplier_id, presence: true
-  validates :url, presence: true
+  validates :slug, presence: true
   validates :name, presence: true
 end

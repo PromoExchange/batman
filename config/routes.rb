@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   post '/confirm', to: 'spree/api/charges#confirm_deposit'
   post '/send_request', to: 'spree/home#send_request'
 
+  get '/company_store/:id', to: 'spree/company_store#show'
+
   resources :pxtaxrates,
     controller: 'spree/pxtaxrates',
     as: 'pxtaxrates'

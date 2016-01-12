@@ -3,5 +3,4 @@
 - @products.each do |product|
   .col-md-4.cs-product
     = link_to large_image(product, {itemprop: 'image', class: 'cs-image'}), main_app.new_auction_path(product_id: product.id), itemprop: 'url'
-    br
     .cs-product-text.text-center = product.name

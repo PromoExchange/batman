@@ -1,0 +1,25 @@
+#cs-container{
+  width: 800px;
+  margin: 0 auto;
+  // background-color: blue;
+}
+
+.cs-title{
+  font-size: 2em;
+  color: #636868;
+  text-transform: uppercase;
+}
+
+.cs-product{
+  min-height: 200px !important;
+}
+
+.cs-product-text{
+  color: #636868;
+  font-size: 1.1em;
+  margin-top: 5px;
+}
+
+.cs-image{
+  margin: auto;
+}

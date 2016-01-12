@@ -61,16 +61,19 @@ namespace :companystore do
     end
 
     # Company Store
+    company_store_attr = {
+      name: store_name,
+      display_name: 'AnchorFree',
+      slug: 'anchorfree',
+      supplier: supplier,
+      buyer: user
+    }
     company_store = Spree::CompanyStore.where(name: store_name).first
     if company_store.nil?
-      company_store = Spree::CompanyStore.create(
-        name: store_name,
-        slug: 'anchorfree',
-        supplier: supplier,
-        buyer: user
-      )
-      company_store.save!
+      company_store = Spree::CompanyStore.create(company_store_attr)
     end
+    company_store.update_attributes(company_store_attr)
+    company_store.save!
 
     # Products
     ProductLoader.load('company_store', 'anchorfree')

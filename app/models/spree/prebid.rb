@@ -336,7 +336,7 @@ class Spree::Prebid < Spree::Base
 
   def calculate_shipping(auction_data)
     carton = auction_data[:carton]
-    if carton.fixed_price.present?
+    unless carton.fixed_price.nil?
       auction_data[:shipping_cost] = carton.fixed_price
       return auction_data[:shipping_cost]
     end
@@ -346,7 +346,7 @@ class Spree::Prebid < Spree::Base
 
     fail 'Shipping carton length is nil' if carton.length.blank?
     fail 'Shipping carton width is nil' if carton.width.blank?
-    fail 'Shipping carton height is nil' if acarton.height.blank?
+    fail 'Shipping carton height is nil' if carton.height.blank?
     shipping_dimensions = carton.to_s
 
     fail 'Shipping quantity is nil' if carton.quantity <= 0
@@ -356,7 +356,7 @@ class Spree::Prebid < Spree::Base
     shipping_quantity = carton.quantity
     auction_data[:messages] << "Carton quantity: #{shipping_quantity}"
 
-    number_of_packages = (auction_data.quantity / shipping_quantity.to_f).ceil
+    number_of_packages = (auction_data[:quantity] / shipping_quantity.to_f).ceil
     auction_data[:messages] << "Number of packages: #{number_of_packages}"
 
     dimensions = shipping_dimensions.gsub(/[A-Z]/, '').delete(' ').split('x')

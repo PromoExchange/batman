@@ -2,6 +2,10 @@ RE: Auction <%= @auction.reference %>
 
 Congratulations! You are the winning bidder on the auction for <%= @auction.product.name %> posted by <%= @auction.shipping_address.company %>. Click on the link below to confirm your acceptance.  You have until 12 AM of the next business day to do so. If you do not confirm the order within that time you will be at risk of losing the project.
 
+<p><a href="http://<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>">
+  <button class="btn btn-success">Confirm</button>
+</a></p>
+
 Auction #:<%= @auction.reference %>
 Product:<%= @auction.product.name %>
 Factory:<%= @auction.product.supplier.name %>
@@ -42,21 +46,5 @@ Payment is due by <%= (Date.today + 10.days).strftime("%D") %>
 Please contact the Buyer (<%= @auction.buyer.bill_address.phone %>/<%= @auction.buyer.email %>) by the end of the next business day to begin making delivery and payment arrangements.
 Failure to do so can cause this order to be awarded to another Seller and can jeopardize your membership in the PromoExchange community.
 
-<a href="<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>"><button>Confirm</button></a>
 
-<div class="email-signature">
-  <div class="email-signature-icons">
-    <style>
-      div.email-signature-icons {padding-left:8px!important}
-
-    </style>
-    <a href="https://www.facebook.com/promobidz"><img class="Facebook-img" src="/Users/knobbie24/batman/app/assets/images/logo/facebook-3-24.png" alt="Facebook Icon"></a>
-    <a href ="https://twitter.com/ThePromoX"><img class="Twitter-img" src="/Users/knobbie24/batman/app/assets/images/logo/twitter-3-24.png" alt="Twitter Logo"></a>
-    <a href ="https://www.linkedin.com/company/promoexchange"><img class="LinkedIn-img" src="/Users/knobbie24/batman/app/assets/images/logo/linkedin-3-24.png" alt="LinkedIn Icon">
-    </a>
-  </div>
-<br>
-<a href ="http://thepromoexchange.com">
-  <img src="http://thepromoexchange.com/images/px_logo.png" alt="PX Logo" style=height="96px" width="96px">
-</a>
-</div>
+<%= render partial: 'shared/email_signature' %>

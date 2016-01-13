@@ -33,6 +33,571 @@ namespace :dc do
       end
     end
 
+    desc 'Fix PMS Colors'
+    task pms_imprints: [
+      'environment',
+      'dc:fix:fields',
+      'dc:fix:vitronic',
+      'dc:fix:logomark',
+      'dc:fix:starline',
+      'dc:fix:primeline',
+      'dc:fix:norwood',
+      'dc:fix:high_caliber',
+      'dc:fix:bullet',
+      'dc:fix:leeds',
+      'dc:fix:crown',
+      'dc:fix:gemline',
+      'dc:fix:sweda'
+    ]
+
+    desc 'Fix Fields PMS Colors'
+    task fields: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100156').first
+      return if supplier.nil?
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      four_color_process_imprint = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Cool Gray', 'Gray 9', '#75787b'],
+        ['Gray', '425 C', '#54585a'],
+        ['Purple', '273 C', '#24135f'],
+        ['Light Purple', '527 C', '#8031a7'],
+        ['Navy', '282 C', '#041e42'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Dark Blue', '294 C', '#002f6c'],
+        ['Blue', '286 C', '#0033a0'],
+        ['Royal Blue', '300 C', '#005eb8'],
+        ['Teal', '300 C', '#008675'],
+        ['Dark Green', '357 C', '#215732'],
+        ['Forest Green', '349 C', '#046a38'],
+        ['Green', '354 C', '#00b140'],
+        ['Yellow', '109 C', '#ffd100'],
+        ['Athletic Gold', '123 C', '#ffc72c'],
+        ['Orange', '172 C', '#fa4616'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Pink', '211 C', '#f57eb6'],
+        ['Bright Red', '185 C', '#e4002b'],
+        ['Red', '485 C', '#da291c'],
+        ['Burgundy', '209 C', '#6f263d'],
+        ['Brown', '469 C', '#693f23'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Metallic Silver', '877 C', '#8d9092']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          four_color_process_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Vitronic PMS Colors'
+    task vitronic: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '101715').first
+      return if supplier.nil?
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      screen_print_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Royal Blue', '286 C', '#0033a0'],
+        ['Royal Blue', '286 C', '#0033a0'],
+        ['Brown', '476 C', '#4e3629'],
+        ['Burgundy', '202 C', '#862633'],
+        ['Copper', '876 C', '#8b634b'],
+        ['Athletic Gold', '123 C', '#ffc72c'],
+        ['Metallic Gold', '873 C', '#866d4b'],
+        ['Gray', '429 C', '#a2aaad'],
+        ['Forest Green', '3435 C', '#154734'],
+        ['Kelly Green', '356 C', '#007a33'],
+        ['Teal', '320 C', '#009ca6'],
+        ['Orange', '151 C', '#ff8200'],
+        ['Pink', '211 C', '#f57eb6'],
+        ['Purple', '268 C', '#582c83'],
+        ['Red', '186 C', '#c8102e'],
+        ['Warm Red', '032 C', '#ef3340'],
+        ['Metallic Silver', '877 C', '#8d9092'],
+        ['Yellow', '115 C', '#fdda24']
+      ]
+      screen_print_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      image_lock_imprint = Spree::ImprintMethod.where(name: 'Image Lock').first_or_create
+      image_lock_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Light Blue', '2995 U', '#0d9ddb'],
+        ['Navy Blue', '295 U', '#375172'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Royal Blue',  '293 U', '#235ba8'],
+        ['Brown',  '477 U', '#7d6556'],
+        ['Beige',  '155 U', '#f7c995'],
+        ['Tan', '155 U', '#c1a67f'],
+        ['Charcoal', '424 U', '#88898a'],
+        ['Athletic Gold',  '109 U', '#ffc700'],
+        ['Metallic Gold', '873 U', '#ae906f'],
+        ['Gray', '422 U', '#9ea1a2'],
+        ['Forest Green', '343 U', '#48655b'],
+        ['Olive', '582 U', '#919145'],
+        ['Teal', '327 U', '#008f85'],
+        ['Maroon', '209 U', '#825864'],
+        ['Orange', '021 U', '#ff6c2f'],
+        ['Purple', '273 U', '#645d9b'],
+        ['Red', '186 U', '#d2515e'],
+        ['Cardinal Red', '200 U', '#bd4f5c'],
+        ['Chili Red', '202 U', '#90585e'],
+        ['Rubine', 'Rubine', '#db487e'],
+        ['Metallic Silver', '877 U', '#b4b7b9'],
+        ['Yellow', '107', '#8d9092']
+      ]
+      image_lock_colors.each do |color|
+        add_pms_color(
+          supplier,
+          image_lock_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      hot_stamp_imprint = Spree::ImprintMethod.where(name: 'Hot Stamp').first_or_create
+      hot_stamp_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Blue', '2728 C', '#0047bb'],
+        ['Dark Blue', '2728 C', '#1b365d'],
+        ['Navy Blue', '289 C', '#0c2340'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Brown', '476 C', '#4e3629'],
+        ['Bison', '439 C', '#453536'],
+        ['Dark Brown', '4625 C', '#4f2c1d'],
+        ['Light Brown', '4635 C', '#946037'],
+        ['Burgundy', '4635 C', '#782f40'],
+        ['Dark Burgundy', '504 C', '#572932'],
+        ['Grey', '431 C', '#5b6770'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Dark Green', '357 C', '#215732'],
+        ['Light Green', '356 C', '#007a33'],
+        ['Ivory', '1205 C', '#f8e08e'],
+        ['Orange', '179 C', '#e03c31'],
+        ['Pink', '673 C', '#d986ba'],
+        ['Purple', '2587 C', '#8246af'],
+        ['Dark Red', '188 C', '#76232f'],
+        ['Light Red', '1805 C', '#af272f'],
+        ['Metallic Silver', '877 C', '#8d9092'],
+        ['Yellow', '124 C', '#eaaa00'],
+        ['Light Yellow', '115 C', '#fdda24']
+      ]
+      hot_stamp_colors.each do |color|
+        add_pms_color(
+          supplier,
+          hot_stamp_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Logomark PMS Colors'
+    task logomark: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '101044').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      value_mark_imprint = Spree::ImprintMethod.where(name: 'Valuemark').first_or_create
+      logomark_imprint = Spree::ImprintMethod.where(name: 'Logomark').first_or_create
+      vinyl_imprint = Spree::ImprintMethod.where(name: 'Vinyl').first_or_create
+      transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+      colorsplash_imprint = Spree::ImprintMethod.where(name: 'Colorsplash').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', '012 C', '#ffd700'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Red', '485 C', '#da291c'],
+        ['Purple', '266 C', '#753bbd'],
+        ['Burgundy', '202 C', '#862633'],
+        ['Green', '347 C', '#009a44'],
+        ['Royal Blue', '293 C', '#003da5'],
+        ['Brown', '478 C', '#703f2a'],
+        ['Light Gray', '428 C', '#703f2a'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Metallic Silver', '877 C', '#8d9092']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          value_mark_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          logomark_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          vinyl_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          transfer_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          colorsplash_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Starline PMS Colors'
+    task starline: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100512').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+      true_color_direct_imprint = Spree::ImprintMethod.where(name: 'True Color Direct Digital').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Gold', '871 C', '#84754e'],
+        ['Silver', '877 C', '#8d9092'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '194 C', '#9b2743'],
+        ['Violet', '2685 C', '#330072'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Navy Blue', '282 C', '#041e42'],
+        ['Teal', '322 C', '#007377'],
+        ['Light Green', '348 C', '#00843d'],
+        ['Dark Green', '350 C', '#2c5234'],
+        ['Yellow', '116 C', '#ffcd00'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Grey', '423 C', '#898d8d']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          pad_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          true_color_direct_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Primeline PMS Colors'
+    task primeline: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100334').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+      embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Medium Yellow', '116 C', '#ffcd00'],
+        ['Dark Yellow', '1235 C', '#ffb81c'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Light Red', '1787 C', '#f4364c'],
+        ['Fire Red', '199 C', '#d50032'],
+        ['Burgundy', '202 C', '#862633'],
+        ['Maroon', '208 C', '#861f41'],
+        ['Pink', '225 C', '#df1995'],
+        ['Purple', '267 C', '#5f259f'],
+        ['Light Blue', '2925 C', '#009cde'],
+        ['Medium Blue', '287 C', '#003087'],
+        ['Dark Blue', '281 C', '#00205b'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Teal', '327 C', '#008675'],
+        ['Green', 'Green', '#00ab84'],
+        ['Medium Green', '347 C', '#009a44'],
+        ['Dark Green', '343 C', '#115740'],
+        ['Brown', '4635 C', '#946037'],
+        ['Grey', '423 C', '#898d8d'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Silver', '877 C', '#8d9092']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          pad_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          embroidery_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Norwood PMS Colors'
+    task norwood: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100334').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+
+      standard_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Burgundy', '208 C', '#861f41'],
+        ['Magenta', '205 C', '#e0457b'],
+        ['Pink', '211 C', '#f57eb6'],
+        ['Cream', '1345 C', '#fdd086'],
+        ['Orange', '172 C', '#fa4616'],
+        ['Lemon', '114 C', '#fbdd40'],
+        ['Athletic Gold', '116 C', '#ffcd00'],
+        ['Teal', '327 U', '#008675'],
+        ['Dark Teal', '316 C', '#004851'],
+        ['Green', '355 C', '#009639'],
+        ['Forest Green', '341 C', '#007a53'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Forest Green', '341 C', '#007a53'],
+        ['Royal Blue', '293 C', '#003da5'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Purple', '2587 C', '#8246af'],
+        ['Brown', '1545 C', '#653819'],
+        ['Charcoal Grey', '424 C', '#707372'],
+        ['Met. Gold', '872 C', '#85714d'],
+        ['Met. Silver', '877 C', '#8a8d8f'],
+        ['Met. Copper', '876 C', '#8b634b'],
+        ['Met. Green', '8283 C', '#499c93'],
+        ['Met. Blue', '8203 C', '#3177a3'],
+        ['Met. Magenta', '8085 C', '#a13769']
+      ]
+      standard_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+
+      embroidery_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Light Gray', 'W Gray 3', '#bfb8af'],
+        ['Gray', 'C Gray 7', '#97999b'],
+        ['Dark Gray', '425', '#54585a'],
+        ['Medium Brown', '476', '#4e3629'],
+        ['Process Yellow', 'Process Yellow', '#fedd00'],
+        ['Sunflow Yellow', '108', '#fedb00'],
+        ['Yellow', '115', '#fdda24'],
+        ['Light Gold', '1235', '#ffb81c'],
+        ['Gold', '123', '#ffc72c'],
+        ['Pumpkin Orange', '151', '#ff8200'],
+        ['Orange', '165', '#ff671f'],
+        ['Warm Red', 'Warm Red', '#f9423a'],
+        ['Red', '186', '#c8102e'],
+        ['Very Red', '200', '#ba0c2f'],
+        ['Maroon', '201', '#9d2235'],
+        ['Light Green', '802', '#44d62c'],
+        ['Bright Green', '361', '#43b02a'],
+        ['Royal Blue', '293', '#003da5'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Medium Blue', '285', '#0072ce'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Metallic Silver', '877 C', '#8d9092']
+      ]
+      embroidery_colors.each do |color|
+        add_pms_color(
+          supplier,
+          embroidery_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix High Caliber PMS Colors'
+    task high_caliber: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100334').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      standard_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Red', '186 C', '#c8102e'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Process Yellow', 'Process Yellow', '#fedd00'],
+        ['Athletic Gold', '123 C', '#ffc72c'],
+        ['Brown', '161 C', '#603d20'],
+        ['Teal', '320 C', '#009ca6'],
+        ['Purple', '266 C', '#753bbd'],
+        ['Pink', '225 C', '#df1995'],
+        ['Burgundy', '195 C', '#782f40'],
+        ['Gray', '428 C', '#c1c6c8'],
+        ['Green', '347 C', '#009a44'],
+        ['Forest Green', '342 C', '#006747'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Charcoal', '430 C', '#7c878e'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Reflex Blue', 'Reflex Blue', '#001489'],
+        ['Charcoal Grey', '424 C', '#707372'],
+        ['Met. Gold', '872 C', '#85714d'],
+        ['Met. Silver', '877 C', '#8a8d8f']
+      ]
+      standard_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Bullet PMS Colors'
+    task bullet: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100383').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      color_blast_imprint = Spree::ImprintMethod.where(name: 'Color Blast').first_or_create
+      label_imprint = Spree::ImprintMethod.where(name: 'Label').first_or_create
+      transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', '012 C', '#ffd700'],
+        ['Orange', '021 C', '#fe5000'],
+        ['Red', '485 C', '#da291c'],
+        ['Purple', '266 C', '#753bbd'],
+        ['Burgundy', '202 C', '#862633'],
+        ['Green', '347 C', '#009a44'],
+        ['Royal Blue', '293 C', '#003da5'],
+        ['Brown', '478 C', '#703f2a'],
+        ['Light Gray', '428 C', '#703f2a'],
+        ['Metallic Gold', '871 C', '#84754e'],
+        ['Metallic Silver', '877 C', '#8d9092']
+      ]
+      add_these_colors.each do |color|
+        screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+        color_blast_imprint = Spree::ImprintMethod.where(name: 'Color Blast').first_or_create
+        label_imprint = Spree::ImprintMethod.where(name: 'Label').first_or_create
+        transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          color_blast_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          label_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          transfer_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
     desc 'Fix American Accent Napkins'
     task american_accents: :environment do
       supplier = Spree::Supplier.where(name: 'American Accents').first_or_create
@@ -60,7 +625,7 @@ namespace :dc do
         ['Brown', '498 C', '#00664f'],
         ['Matte Silver', '877 C', '#8a8d8f'],
         ['Matte Gold', '873 C', '#866d4b'],
-        ['Orange', '21 C', '#fe5000'],
+        ['Orange', '021 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
       ]
       add_these_colors.each do |color|
@@ -210,6 +775,116 @@ namespace :dc do
       end
     end
 
+    desc 'Fix Leeds'
+    task leeds: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100306').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+      pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          transfer_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          pad_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Crown'
+    task crown: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '101684').first
+      return if supplier.nil?
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      color_label_imprint = Spree::ImprintMethod.where(name: 'Color Label').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          color_label_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
     desc 'Fix AIO Drives'
     task aio: :environment do
       supplier = Spree::Supplier.where(name: 'All in One').first_or_create
@@ -264,6 +939,113 @@ namespace :dc do
 
         product.check_validity!
         product.loaded if product.state == 'loading'
+      end
+    end
+
+    desc 'Fix Gemline'
+    task gemline: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '100257').first_or_create
+
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      logomatic_imprint = Spree::ImprintMethod.where(name: 'Logomatic').first_or_create
+      embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+      gemphoto_imprint = Spree::ImprintMethod.where(name: 'Gemphoto').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          logomatic_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          embroidery_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+        add_pms_color(
+          supplier,
+          gemphoto_imprint,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
+    desc 'Fix Sweda'
+    task sweda: :environment do
+      supplier = Spree::Supplier.where(dc_acct_num: '119303').first
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF'],
+        ['Yellow', 'Yellow C', '#fedd00'],
+        ['Gold', '123 C', '#ffc72c'],
+        ['Orange', '1495 C', '#ff8f1c'],
+        ['Warm Red', '485 C', '#da291c'],
+        ['Red', '186 C', '#c8102e'],
+        ['Maroon', '202 C', '#862633'],
+        ['Pink', 'Rhodamine', '#e10098'],
+        ['Gray', 'Gray 9', '#75787b'],
+        ['Violet', 'Violet C', '#440099'],
+        ['Royal Blue', 'Reflex Blue C', '#001489'],
+        ['Navy Blue', '281 C', '#00205b'],
+        ['Cyan', '299 C', '#00a3e0'],
+        ['Process Blue', 'Process Blue', '#0085ca'],
+        ['Teal', '321 C', '#008c95'],
+        ['Green', '348 C', '#00843d'],
+        ['Dark Green', '336 C', '#00664f'],
+        ['Brown', '498 C', '#00664f'],
+        ['Matte Silver', '877 C', '#8a8d8f'],
+        ['Matte Gold', '873 C', '#866d4b'],
+        ['Orange', '21 C', '#fe5000'],
+        ['Lime Green', '375 C', '#97d700']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          imprint_method,
+          color[0],
+          color[1],
+          color[2]
+        )
       end
     end
 

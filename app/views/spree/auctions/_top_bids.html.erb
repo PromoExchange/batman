@@ -14,7 +14,7 @@
         <% row_class = '' %>
         <% row_class = 'preferred' if @auction.preferred?(b.seller) %>
         <tr class="<%= row_class %>">
-          <td><%= b.email %></td>
+          <td><%= b.seller.shipping_address.company_name %> -  <%=b.seller.shipping_address.first_name %>  <%= b.seller.shipping_address.last_name %> </td> 
           <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars, edit_enabled: false %></td>
           <td><%= '$%.2f' % b.bid %></td>
           <td>

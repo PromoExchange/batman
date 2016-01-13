@@ -9,12 +9,9 @@ RSpec.describe Spree::Prebid, type: :model do
       prebid_id: prebid.id,
       base_unit_price: 100,
       running_unit_price: 100,
-      quantity: 100
+      quantity: 100,
+      messages: []
     }
-  end
-
-  xit 'should call the prebid algorithm' do
-    prebid.create_prebid(auction.id)
   end
 
   it 'should apply payment processing fee for non preferred supplier' do
@@ -261,7 +258,7 @@ RSpec.describe Spree::Prebid, type: :model do
     ]
 
     prebid.send(:apply_product_upcharges, auction_data)
-    expect((102.5893 - auction_data[:running_unit_price]).abs).to be < 0.0001
+    expect((102.1920 - auction_data[:running_unit_price]).abs).to be < 0.0001
   end
 
   it 'should process open ended range' do
@@ -288,6 +285,12 @@ RSpec.describe Spree::Prebid, type: :model do
     ]
 
     prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.9933 - auction_data[:running_unit_price]).abs).to be < 0.0001
+    expect((100.5960 - auction_data[:running_unit_price]).abs).to be < 0.0001
+  end
+
+  it 'should provide fixed shipping' do
+    auction_data[:carton] = FactoryGirl.build(:carton, originating_zip: '', fixed_price: 1.0)
+    prebid.send(:calculate_shipping, auction_data)
+    expect(1.0 - auction_data[:shipping_cost]).to be < 0.0001
   end
 end

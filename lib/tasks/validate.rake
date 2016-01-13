@@ -43,11 +43,14 @@ namespace :product do
 
   task product_report: :environment do
     num_total_products = Spree::Product.count
+    num_valid_products_with_prices = 0
+    num_invalid_products_with_prices = 0
 
     num_prebidable_active = 0
     valid_products = Spree::Product.where(state: :active)
     valid_products.each do |product|
       num_prebidable_active += 1 if product.prebid_ability?
+      num_valid_products_with_prices += 1 if Spree::Variant.find_by(product: product).volume_prices.count > 0
     end
     num_valid_products = valid_products.count
 
@@ -55,6 +58,7 @@ namespace :product do
     invalid_products = Spree::Product.where(state: :invalid)
     invalid_products.each do |product|
       num_prebidable_invalid += 1 if product.prebid_ability?
+      num_invalid_products_with_prices += 1 if Spree::Variant.find_by(product: product).volume_prices.count > 0
     end
     num_invalid_products = invalid_products.count
 
@@ -63,6 +67,9 @@ namespace :product do
     puts "Number of products: #{num_total_products}"
     puts "Number of invalid products: #{num_invalid_products}"
     puts "Number of active products: #{num_valid_products}"
+    puts "Number of loading products: #{num_loading_products}"
+    puts "Number of active products with prices: #{num_valid_products_with_prices}"
+    puts "Number of invalid products with prices: #{num_invalid_products_with_prices}"
     puts "Number of loading products: #{num_loading_products}"
     puts "Number of prebidable active products: #{num_prebidable_active}"
     puts "Number of prebidable invalid products: #{num_prebidable_invalid}"

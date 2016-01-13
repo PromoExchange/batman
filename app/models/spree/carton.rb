@@ -8,6 +8,7 @@ class Spree::Carton < Spree::Base
   end
 
   def active?
+    return true if fixed_price.present?
     length.present? &&
       width.present? &&
       height.present? &&

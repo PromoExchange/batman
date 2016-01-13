@@ -33,6 +33,23 @@ namespace :dc do
       end
     end
 
+    desc 'Fix PMS Colors'
+    task pms_imprints: [
+      'environment',
+      'dc:fix:fields',
+      'dc:fix:vitronic',
+      'dc:fix:logomark',
+      'dc:fix:starline',
+      'dc:fix:primeline',
+      'dc:fix:norwood',
+      'dc:fix:high_caliber',
+      'dc:fix:bullet',
+      'dc:fix:leeds',
+      'dc:fix:crown',
+      'dc:fix:gemline',
+      'dc:fix:sweda'
+    ]
+
     desc 'Fix Fields PMS Colors'
     task fields: :environment do
       supplier = Spree::Supplier.where(dc_acct_num: '100156').first

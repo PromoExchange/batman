@@ -5,7 +5,7 @@ FactoryGirl.define do
     length '11'
     height '12'
     weight '13'
-    originating_zip '11111'
+    originating_zip '19020'
     quantity 150
     fixed_price nil
   end

@@ -45,4 +45,9 @@ RSpec.describe Spree::Carton, type: :model do
     c = FactoryGirl.build(:carton, originating_zip: '')
     expect(c.active?).to be_falsey
   end
+
+  it 'should be active with just a fixed_price' do
+    c = FactoryGirl.build(:carton, originating_zip: '', fixed_price: 1.0)
+    expect(c.active?).to be_truthy
+  end
 end

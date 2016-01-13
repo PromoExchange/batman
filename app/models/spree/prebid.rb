@@ -34,7 +34,10 @@ class Spree::Prebid < Spree::Base
       num_locations: auction.num_locations,
       num_colors: auction.num_colors,
       rush: auction.rush?,
-      messages: []
+      messages: [],
+      carton: auction.product.carton,
+      shipping_cost: 0.0,
+      ship_to_zip: auction.ship_to_zip
     }
 
     auction_data[:price_code] ||= 'V'
@@ -113,7 +116,7 @@ class Spree::Prebid < Spree::Base
 
     # Shipping based on buyers zip
     # Package needs weight, height, width and depth
-    shipping_cost = calculate_shipping(auction, auction_data)
+    shipping_cost = calculate_shipping(auction_data)
     auction_data[:messages] << "Shipping cost #{shipping_cost}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
     auction_data[:messages] << "After applying shipping cost: #{auction_data[:running_unit_price]}"
@@ -331,23 +334,29 @@ class Spree::Prebid < Spree::Base
     end
   end
 
-  def calculate_shipping(auction, auction_data)
-    fail 'Shipping carton weight is nil' if auction.product.carton.weight.blank?
-    shipping_weight = auction.product.carton.weight
+  def calculate_shipping(auction_data)
+    carton = auction_data[:carton]
+    unless carton.fixed_price.nil?
+      auction_data[:shipping_cost] = carton.fixed_price
+      return auction_data[:shipping_cost]
+    end
 
-    fail 'Shipping carton length is nil' if auction.product.carton.length.blank?
-    fail 'Shipping carton width is nil' if auction.product.carton.width.blank?
-    fail 'Shipping carton height is nil' if auction.product.carton.height.blank?
-    shipping_dimensions = auction.product.carton.to_s
+    fail 'Shipping carton weight is nil' if carton.weight.blank?
+    shipping_weight = carton.weight
 
-    fail 'Shipping quantity is nil' if auction.product.carton.quantity <= 0
+    fail 'Shipping carton length is nil' if carton.length.blank?
+    fail 'Shipping carton width is nil' if carton.width.blank?
+    fail 'Shipping carton height is nil' if carton.height.blank?
+    shipping_dimensions = carton.to_s
+
+    fail 'Shipping quantity is nil' if carton.quantity <= 0
 
     auction_data[:messages] << 'Applying shipping'
 
-    shipping_quantity = auction.product.carton.quantity
+    shipping_quantity = carton.quantity
     auction_data[:messages] << "Carton quantity: #{shipping_quantity}"
 
-    number_of_packages = (auction.quantity / shipping_quantity.to_f).ceil
+    number_of_packages = (auction_data[:quantity] / shipping_quantity.to_f).ceil
     auction_data[:messages] << "Number of packages: #{number_of_packages}"
 
     dimensions = shipping_dimensions.gsub(/[A-Z]/, '').delete(' ').split('x')
@@ -357,17 +366,17 @@ class Spree::Prebid < Spree::Base
       units: :imperial
     )
 
-    auction_data[:messages] << "Originating zip: #{auction.product.carton.originating_zip}"
+    auction_data[:messages] << "Originating zip: #{carton.originating_zip}"
     origin = ActiveShipping::Location.new(
       country: 'USA',
-      zip: auction.product.carton.originating_zip
+      zip: carton.originating_zip
     )
 
-    auction_data[:messages] << "Destination zip: #{auction.ship_to_zip}"
+    auction_data[:messages] << "Destination zip: #{auction_data[:ship_to_zip]}"
 
     destination = ActiveShipping::Location.new(
       country: 'USA',
-      zip: auction.ship_to_zip
+      zip: auction_data[:ship_to_zip]
     )
 
     ups = ActiveShipping::UPS.new(
@@ -378,11 +387,11 @@ class Spree::Prebid < Spree::Base
     response = ups.find_rates(origin, destination, package)
 
     ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price] }
-
-    (ups_rates[0][1] * number_of_packages.to_f) / 100
+    auction_data[:shipping_cost] = (ups_rates[0][1] * number_of_packages.to_f) / 100
+    auction_data[:shipping_cost]
   rescue => e
-    Rails.logger.error("PREBID ERROR A:#{auction.id} P:#{id} - Failed to calculate shipping")
-    Rails.logger.error("PREBID ERROR A:#{auction.id} P:#{id} - #{e.message}")
+    Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - Failed to calculate shipping")
+    Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - #{e.message}")
     0.0
   end
 end

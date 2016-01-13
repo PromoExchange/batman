@@ -4,6 +4,13 @@ require 'work_queue'
 
 puts 'Loading Anchor Free custom'
 
+price_codes = price_code_to_array('5C')
+byebug
+price_codes = price_code_to_array('PPQ')
+byebug
+price_codes = price_code_to_array('2C3A')
+byebug
+
 store_name = 'AnchorFree Company Store'
 
 supplier = Spree::Supplier.where(name: store_name).first
@@ -51,7 +58,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         image_path = File.join(Rails.root, "db/product_images/anchorfree/#{product_attrs[:sku]}.jpg")
         product.images << Spree::Image.create!(
           attachment: open(image_path),
-          viewable: product)
+          viewable: product
+        )
       rescue => e
         ap "Warning: Unable to load product image [#{product_attrs[:sku]}], #{e}"
         image_fail += 1
@@ -60,6 +68,12 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
     # Main Product Color
     Spree::ColorProduct.where(product: product, color: hashed[:color]).first_or_create
+
+    # Prices
+    price_code = hashed[:price_code]
+    unless price_code.nil?
+      price_code_array = price_code_to_array(price_code)
+    end
 
   rescue => e
     load_fail += 1

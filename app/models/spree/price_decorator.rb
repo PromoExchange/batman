@@ -32,4 +32,17 @@ Spree::Price.class_eval do
     discount = Spree::Price.discount_codes[code.upcase.delete('^A-Z')[0].to_sym]
     discount.nil? ? price : (price * discount)
   end
+
+  def self.price_code_to_array(price_code)
+    price_code_array = []
+    repeat_count = 1
+    price_code.split('').each do |code|
+      if /[1-9]/.match(code)
+        repeat_count = code.to_i
+      else
+        repeat_count.times { |_i| price_code_array << code }
+      end
+    end
+    price_code_array
+  end
 end

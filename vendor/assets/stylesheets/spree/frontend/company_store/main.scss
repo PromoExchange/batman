@@ -1,5 +1,5 @@
 #cs-container{
-  width: 800px;
+  width: 1000px;
   margin: 0 auto;
   // background-color: blue;
 }
@@ -12,15 +12,16 @@
 }
 
 .cs-product{
-  min-height: 200px !important;
+  min-height: 250px !important;
 }
 
 .cs-product-text{
   color: #636868;
   margin-top: 5px;
+  font-size: 1.2em;
 }
 
 .cs-image{
   width: 150px;
-  margin-left: 50px;
+  margin-left: 66px;
 }

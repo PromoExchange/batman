@@ -50,6 +50,26 @@ namespace :dc do
       'dc:fix:sweda'
     ]
 
+    desc 'Fix Cabelas PMS Colors'
+    task cabelas: :environment do
+      supplier = Spree::Supplier.where(name: 'Cabelas').first
+      return if supplier.nil?
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      add_these_colors = [
+        ['Black', '426', '#25282B'],
+        ['White', '000', '#FFFFFF']
+      ]
+      add_these_colors.each do |color|
+        add_pms_color(
+          supplier,
+          screen_print,
+          color[0],
+          color[1],
+          color[2]
+        )
+      end
+    end
+
     desc 'Fix Fields PMS Colors'
     task fields: :environment do
       supplier = Spree::Supplier.where(dc_acct_num: '100156').first

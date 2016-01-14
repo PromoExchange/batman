@@ -68,6 +68,13 @@ namespace :dc do
           color[2]
         )
       end
+
+      upcharge_type_id = Spree::UpchargeType.find_by_name('pms_color_match').id
+      Spree::UpchargeSupplier.where(
+        upcharge_type_id: upcharge_type_id,
+        related_id: supplier.id,
+        value: 25
+      ).first_or_create
     end
 
     desc 'Fix Fields PMS Colors'

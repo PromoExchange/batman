@@ -61,7 +61,7 @@ class Spree::Prebid < Spree::Base
     auction_data[:messages] << "Discount unit cost: #{auction_data[:running_unit_price]}"
 
     # Supplier level
-    auction_data[:supplier_upcharges] = Spree::UpchargeSupplier.where(related_id: 1)
+    auction_data[:supplier_upcharges] = Spree::UpchargeSupplier.where(related_id: supplier_id)
       .includes(:upcharge_type)
       .pluck(
         'spree_upcharge_types.id',

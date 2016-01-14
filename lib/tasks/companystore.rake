@@ -77,5 +77,6 @@ namespace :companystore do
 
     # Products
     ProductLoader.load('company_store', 'anchorfree')
+    ProductLoader.load('company_store', 'anchorfree_upcharges')
   end
 end

@@ -82,7 +82,7 @@ RSpec.describe Spree::Price, type: :model do
     expect(%w(B B B C C) & price_code_array).to be_truthy
   end
 
-  it 'should split price code array' do
+  it 'should split price code array lower' do
     price_code_array = Spree::Price.price_code_to_array('3b2c')
     expect(price_code_array.size).to be == 5
     expect(%w(b b b c c) & price_code_array).to be_truthy

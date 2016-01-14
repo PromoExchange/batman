@@ -67,13 +67,13 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     unless price_code.nil?
       price_code_array = Spree::Price.price_code_to_array(price_code)
       num_prices = price_code_array.size
+      puts "Num prices: #{num_prices}"
       num_prices.times do |i|
         quantity_code = "qty" + (i+1).to_s
         price_code = "price" + (i+1).to_s
         quantity = hashed[quantity_code.to_sym]
         price = hashed[price_code.to_sym]
-        byebug
-        puts "Qty[#{quantity}]/Price[#{price}]"
+        puts "#{i})Qty[#{quantity}]/Price[#{price}]"
       end
     end
 

@@ -41,6 +41,7 @@ Spree::Price.class_eval do
         repeat_count = code.to_i
       else
         repeat_count.times { |_i| price_code_array << code }
+        repeat_count = 1
       end
     end
     price_code_array

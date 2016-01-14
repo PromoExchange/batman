@@ -5,4 +5,5 @@ less_than_minimum
 setup
 run
 additional_location_run
+additional_color_run
 rush

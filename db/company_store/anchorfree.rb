@@ -151,6 +151,21 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       ).first_or_create
     end
 
+    # Carton
+    product.carton.weight = hashed[:shipping_weight]
+    product.carton.quantity = hashed[:shipping_quantity]
+    product.carton.originating_zip = hashed[:fob]
+    if hashed[:shipping_dimensions].present?
+      dimensions = hashed[:shipping_dimensions].gsub(/[A-Z]/, '').delete(' ').split('x')
+      product.carton.length = dimensions[0]
+      product.carton.width = dimensions[1]
+      product.carton.height = dimensions[2]
+      puts( "#{product.carton.to_s}")
+      puts( "#{product.carton.quantity}/#{product.carton.originating_zip}")
+      product.carton.save!
+    end
+    fail "Invalid carton #{hashed[:sku]}" unless product.carton.active?
+
     product.check_validity!
     product.loaded! if product.state == 'loading'
   rescue => e

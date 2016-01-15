@@ -17,7 +17,7 @@
           <div class="tab-pane <%= active_me %>" id="buyer">
             <h4><%= Spree.t(:buyer_registration) %></h4>
             <%= form_for @pxuser, url: '/pxusers', method: :post, class: 'form' do |f| %>
-              <%= render 'spree/shared/error_messages', :object => @pxuser %>
+              <%= render 'spree/shared/user_error_messages', :object => @pxuser %>
               <%= render partial: 'spree/pxusers/address_form', locals: { f: f, :type => 'buyer' } %>
             <% end %>
           </div>
@@ -26,7 +26,7 @@
           <div class="tab-pane <%= active_me %>" id="seller">
             <h4><%= Spree.t(:seller_registration) %></h4>
             <%= form_for @pxuser, url: '/pxusers', method: :post, class: 'form' do |f| %>
-              <%= render 'spree/shared/error_messages', :object => @pxuser %>
+              <%= render 'spree/shared/user_error_messages', :object => @pxuser %>
               <%= render partial: 'spree/pxusers/address_form', locals: { f: f, :type => 'seller' } %>
             <% end %>
           </div>

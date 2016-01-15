@@ -26,11 +26,13 @@ class Spree::AuctionsController < Spree::StoreController
       @auction = Spree::Auction.find_by(id: session[:pending_auction_id])
     else
       @auction = Spree::Auction.new(
-      product_id: params[:product_id],
-      started: Time.zone.now)
+        product_id: params[:product_id],
+        started: Time.zone.now
+      )
     end
 
     supporting_data
+    estimated_ship
   end
 
   def create
@@ -75,6 +77,7 @@ class Spree::AuctionsController < Spree::StoreController
     redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
   rescue
     supporting_data
+    estimated_ship
     render :new
   end
 
@@ -117,6 +120,7 @@ class Spree::AuctionsController < Spree::StoreController
     redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
   rescue
     supporting_data
+    estimated_ship
     render :new
   end
 
@@ -142,6 +146,7 @@ class Spree::AuctionsController < Spree::StoreController
     end
 
     @pxaddress = Spree::Pxaddress.new
+    estimated_ship
   end
 
   def upload_proof
@@ -168,6 +173,7 @@ class Spree::AuctionsController < Spree::StoreController
 
   def fetch_auction
     @auction = Spree::Auction.find(params[:id])
+    estimated_ship
   end
 
   def require_login
@@ -176,6 +182,15 @@ class Spree::AuctionsController < Spree::StoreController
 
   def require_buyer
     redirect_to root_path unless current_spree_user && current_spree_user.has_spree_role?(:buyer)
+  end
+
+  def estimated_ship
+    @estimated_ship_date = 21.days.from_now
+    unless @auction.nil?
+      if @auction.product.master.sku == 'Yeti-20'
+        @estimated_ship_date = 7.weeks.from_now
+      end
+    end
   end
 
   def supporting_data
@@ -191,10 +206,6 @@ class Spree::AuctionsController < Spree::StoreController
         @addresses << [
           "#{address}",
           address.id]
-      end
-      @estimated_ship_date = 21.days.from_now
-      if @auction.product.master.sku == 'Yeti-20'
-        @estimated_ship_date = 7.weeks.from_now
       end
     end
 

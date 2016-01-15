@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160113185916) do
+ActiveRecord::Schema.define(version: 20160115183134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -218,6 +218,14 @@ ActiveRecord::Schema.define(version: 20160113185916) do
   end
 
   add_index "spree_color_products", ["product_id"], name: "index_spree_color_products_on_product_id", using: :btree
+
+  create_table "spree_company_stores", force: :cascade do |t|
+    t.string  "name"
+    t.string  "slug"
+    t.integer "supplier_id"
+    t.integer "buyer_id"
+    t.string  "display_name"
+  end
 
   create_table "spree_countries", force: :cascade do |t|
     t.string   "iso_name"
@@ -744,6 +752,7 @@ ActiveRecord::Schema.define(version: 20160113185916) do
     t.datetime "size",                  precision: 6
     t.datetime "weight",                precision: 6
     t.string   "state"
+    t.boolean  "custom_product"
   end
 
   add_index "spree_products", ["available_on"], name: "index_spree_products_on_available_on", using: :btree
@@ -1210,9 +1219,10 @@ ActiveRecord::Schema.define(version: 20160113185916) do
 
   create_table "spree_suppliers", force: :cascade do |t|
     t.integer "billing_address_id"
-    t.string  "name",                null: false
+    t.string  "name",                                null: false
     t.string  "dc_acct_num"
     t.integer "shipping_address_id"
+    t.boolean "company_store",       default: false
   end
 
   create_table "spree_tax_categories", force: :cascade do |t|

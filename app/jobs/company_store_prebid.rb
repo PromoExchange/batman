@@ -7,7 +7,7 @@ module CompanyStorePrebid
 
     products = Spree::Product.where(supplier: company_store.supplier)
     products.each do |product|
-      product.pre_configure
+      product.preconfigure
     end
   end
 end

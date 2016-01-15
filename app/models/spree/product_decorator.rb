@@ -1,4 +1,6 @@
 Spree::Product.class_eval do
+  include Preconfigure
+  
   before_create :build_default_carton
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_many :upcharges, class_name: 'Spree::UpchargeProduct', foreign_key: 'related_id'

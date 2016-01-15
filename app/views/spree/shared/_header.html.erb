@@ -5,11 +5,9 @@
         <figure id="logo" class="col-md-1">
           <a href="/"><%= image_tag("logo/px_logo.png") %></a>
         </figure>
-        <div class="col-md-9">
+        <div class="col-md-11">
           <%= render :partial => 'spree/shared/nav_bar' %>
           <%= render :partial => 'spree/shared/main_nav_bar' if store_menu? %>
-        </div>
-        <div class="col-md-2">
           <% if spree_current_user %>
             <p class = "header-sign-in" > Hello, <%= spree_current_user.bill_address.first_name %> </p>
           <% end %>

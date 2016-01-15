@@ -7,6 +7,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
   product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
 
+  product.loading!
+
   fail "Failed to find product #{hashed[:sku]}" if product.nil?
 
   upcharge_type = Spree::UpchargeType.where(name: hashed[:type]).first
@@ -38,4 +40,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   upcharge_attrs[:range] = hashed[:range]
 
   Spree::UpchargeProduct.where(upcharge_attrs).first_or_create
+
+  product.check_validity!
+  product.loaded! if product.state == 'loading'
 end

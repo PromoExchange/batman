@@ -40,7 +40,7 @@ class Spree::Prebid < Spree::Base
       ship_to_zip: auction.ship_to_zip
     }
 
-    auction_data[:price_code] ||= 'V'
+    auction_data[:price_code] ||= 'K'
 
     auction_data[:messages] << "Item name: #{auction.product.name}"
     auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
@@ -54,7 +54,7 @@ class Spree::Prebid < Spree::Base
     auction_data[:messages] << "MSRP: #{auction_data[:base_unit_price]}"
 
     # Apply discount to base price
-    auction_data[:messages] << "MSRP Price Code: #{auction.product_price_code || 'V'}"
+    auction_data[:messages] << "MSRP Price Code: #{auction.product_price_code || 'K'}"
     auction_data[:messages] << "Discount percentage: #{Spree::Price.discount_codes[auction_data[:price_code].to_sym]}"
     auction_data[:messages] << "Initial unit cost: #{auction_data[:running_unit_price]}"
     apply_price_discount(auction_data, auction.product_price_code)

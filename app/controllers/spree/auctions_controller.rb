@@ -192,6 +192,10 @@ class Spree::AuctionsController < Spree::StoreController
           "#{address}",
           address.id]
       end
+      @estimated_ship_date = 21.days.from_now
+      if @auction.product.master.sku == 'Yeti-20'
+        @estimated_ship_date = 7.weeks.from_now
+      end
     end
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)

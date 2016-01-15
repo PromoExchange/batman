@@ -160,8 +160,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       product.carton.length = dimensions[0]
       product.carton.width = dimensions[1]
       product.carton.height = dimensions[2]
-      puts( "#{product.carton.to_s}")
-      puts( "#{product.carton.quantity}/#{product.carton.originating_zip}")
       product.carton.save!
     end
     fail "Invalid carton #{hashed[:sku]}" unless product.carton.active?

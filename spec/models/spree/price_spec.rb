@@ -58,6 +58,13 @@ RSpec.describe Spree::Price, type: :model do
     t = Spree::Price.discount_price(nil, value)
     expect(((value) - t).abs).to be < 0.0001
 
+  it 'should discount a zero price' do
+    discount = 1.00
+    value = 0
+    t = Spree::Price.discount_price('K', value)
+    expect(((value * discount) - t).abs).to be < 0.0001
+  end
+
   it 'should split price code array' do
     price_code_array = Spree::Price.price_code_to_array('5C')
     expect(price_code_array.size).to be == 5

@@ -6,6 +6,7 @@ file_name = File.join(Rails.root, 'db/company_store_data/anchorfree_upcharges.cs
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
   product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
+
   fail "Failed to find product #{hashed[:sku]}" if product.nil?
 
   upcharge_type = Spree::UpchargeType.where(name: hashed[:type]).first
@@ -33,15 +34,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     imprint_method_id: imprint_method.id
   }
 
-  case hashed[:type]
-  when 'setup'
-    attrs[:value] = hashed[:setup]
+  upcharge_attrs[:value] = hashed[:value]
+  upcharge_attrs[:range] = hashed[:range]
 
-    FFFFFF
-    attrs[:range] = nil
-  when 'run'
-  when 'additional_color_run'
-  end
-
-
+  Spree::UpchargeProduct.where(upcharge_attrs).first_or_create
 end

@@ -78,5 +78,10 @@ namespace :companystore do
     # Products
     ProductLoader.load('company_store', 'anchorfree')
     ProductLoader.load('company_store', 'anchorfree_upcharges')
+
+    Resque.enqueue(
+      CompanyStorePrebid,
+      name: store_name
+    )
   end
 end

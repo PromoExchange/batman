@@ -11,9 +11,8 @@
         </div>
         <div class="col-md-2">
           <% if spree_current_user %>
-          <p class = "header-sign-in" > Hello, <%= spree_current_user.bill_address.first_name %> </p>
+            <p class = "header-sign-in" > Hello, <%= spree_current_user.bill_address.first_name %> </p>
           <% end %>
-          <% else %>
         </div>
       </div>
     </div>

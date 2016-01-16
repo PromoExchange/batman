@@ -1,9 +1,10 @@
 #batman-home-content {
   font-family: 'Open Sans', sans-serif;
-  
+
   .nav-tabs > li, .nav-pills > li {
     float: none;
     display: inline-block;
+    padding-top:50px;
   }
 
   .nav-tabs, .nav-pills {
@@ -14,4 +15,20 @@
   p {
     font-size: 1.5em;
   }
+}
+
+.carousel-inner {
+  position: relative;
+}
+
+#home_query_section {
+  position:absolute;
+  margin-top: 330px;
+  width: 100%;
+  padding-bottom: 40px;
+  padding-left: 325px;
+  margin-bottom: 10px;
+  background-color: #69cddd;
+  color:white;
+
 }

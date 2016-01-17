@@ -3,7 +3,7 @@ RE: Auction <%= @auction.reference %>
 Congratulations! You are the winning bidder on the auction for <%= @auction.product.name %> posted by <%= @auction.shipping_address.company %>. Click on the link below to confirm your acceptance.  You have until 12 AM of the next business day to do so. If you do not confirm the order within that time you will be at risk of losing the project.
 
 <p><a href="http://<%= Spree::Store.current.url %>/invoices/<%= @auction.id %>">
-  <button class="btn btn-success">Confirm</button>
+  <button class="btn btn-success" style = "color: white; background-color: #5cb85c; border-color: #4cae4c;">Confirm</button>
 </a></p>
 
 Auction #:<%= @auction.reference %>

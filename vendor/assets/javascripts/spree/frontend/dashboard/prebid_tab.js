@@ -2,6 +2,7 @@ $(function() {
 
   $('tbody').on('click', 'button.open-prebid', function(e) {
     var row = $(this).closest('tr');
+    var live_flag = row.find('td.live-flag').html();
     var eqp_flag = row.find('td.eqp-flag').html();
     var eqp_discount = row.find('td.eqp-discount').html();
     var markup = row.find('td.markup').html();
@@ -46,8 +47,8 @@ $(function() {
         var eqp_discount_cell_id = "#prebid-" + prebid_id + " > td.eqp-discount";
         var markup_cell_id = "#prebid-" + prebid_id + " > td.markup";
 
-        $(markup_cell_id).html((markup * 100).toFixed(2));
-        $(eqp_discount_cell_id).html((eqp_discount * 100).toFixed(2));
+        $(markup_cell_id).html((markup * 100).toFixed(3));
+        $(eqp_discount_cell_id).html((eqp_discount * 100).toFixed(3));
         if(eqp_flag === true) {
           $(eqp_flag_cell_id).html('Yes');
         } else {

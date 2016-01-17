@@ -22,8 +22,8 @@
               <td class="factory" data-id><%= prebid.supplier.name %></td>
               <td class="live-flag"><%= prebid.live.humanize %></td>
               <td class="eqp-flag"><%= prebid.eqp.humanize %></td>
-              <td class="eqp-discount pct"><%= (prebid.eqp_discount.to_f * 100).round(2) %></td>
-              <td class="markup pct"><%= (prebid.markup.to_f * 100).round(2) %></td>
+              <td class="eqp-discount pct"><%= (prebid.eqp_discount.to_f * 100).round(3) %></td>
+              <td class="markup pct"><%= (prebid.markup.to_f * 100).round(3) %></td>
               <td><button type="button" class="btn btn-success open-prebid" data-toggle="modal" data-target="#prebid-edit-modal">Edit</button></td>
             </tr>
           <% end %>

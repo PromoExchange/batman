@@ -46,6 +46,10 @@ namespace :companystore do
       user.confirm!
     end
 
+    # Add Logo
+    logo_file_name = File.join(Rails.root, 'db/company_store_data/anchorfree-logo.pdf')
+    user.logos << Spree::Logo.create!(user: user, logo_file: open(logo_file_name))
+
     store_name = 'AnchorFree Company Store'
 
     # Supplier
@@ -76,12 +80,13 @@ namespace :companystore do
     company_store.save!
 
     # Products
-    ProductLoader.load('company_store', 'anchorfree')
-    ProductLoader.load('company_store', 'anchorfree_upcharges')
+    # ProductLoader.load('company_store', 'anchorfree')
+    # ProductLoader.load('company_store', 'anchorfree_upcharges')
+    # ProductLoader.load('company_store', 'anchorfree_preconfigure')
 
-    Resque.enqueue(
-      CompanyStorePrebid,
-      name: store_name
-    )
+    # Resque.enqueue(
+    #   CompanyStorePrebid,
+    #   name: store_name
+    # )
   end
 end

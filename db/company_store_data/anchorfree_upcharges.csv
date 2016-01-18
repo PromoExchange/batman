@@ -1,6 +1,6 @@
 SKU,type,range,value,code,imprint_method
-AF-632418,setup,,100,A,embroidery
-AF-632418,run,1+,2.50,K,embroidery
+AF-632418,setup,,50,A,embroidery
+AF-632418,run,1+,3.75,K,embroidery
 AF-5170,setup,,50,K,embroidery
 AF-5170,run,1+,2.50,K,embroidery
 AF-7003-40,setup,,55.0,G,screen_print
@@ -37,7 +37,7 @@ AF-SM-2381,additional_color_run,(10001..20000),0.35,G,colorprint
 AF-SM-2381,additional_color_run,(20001..50000),0.30,G,colorprint
 AF-SM-2381,additional_color_run,50001+,0.25,G,colorprint
 AF-5117,setup,,50,G,screen_print
-AF-71600,setup,,100,A,embroidery
-AF-71600,run,1+,2.50,K,embroidery
+AF-71600,setup,,50,A,embroidery
+AF-71600,run,1+,3.75,K,embroidery
 AF-SG120,setup,,55,G,screen_print
 AF-SG120,run,1+,0.55,G,screen_print

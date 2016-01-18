@@ -1,6 +1,5 @@
 require 'csv'
 require 'open-uri'
-require 'work_queue'
 
 puts 'Loading Anchor Free custom'
 

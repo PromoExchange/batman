@@ -47,8 +47,10 @@ namespace :companystore do
     end
 
     # Add Logo
-    logo_file_name = File.join(Rails.root, 'db/company_store_data/anchorfree-logo.pdf')
-    user.logos << Spree::Logo.create!(user: user, logo_file: open(logo_file_name))
+    if user.logos.where(custom: true).count == 0
+      logo_file_name = File.join(Rails.root, 'db/company_store_data/anchorfree-logo.pdf')
+      user.logos << Spree::Logo.create!(user: user, logo_file: open(logo_file_name), custom: true)
+    end
 
     store_name = 'AnchorFree Company Store'
 

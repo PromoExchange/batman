@@ -36,13 +36,16 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   main_color = Spree::ColorProduct.where( product:product, color: hashed[:color]).first_or_create
 
+  logo = buyer.logos.where(custom: true).first
+
   attrs = {
     product: product,
-    buyer: buyer.
+    buyer: buyer,
     imprint_method: imprint_method,
     main_color: main_color,
-    FFFF
-    t.integer "logo_id",           null: false
+    logo: logo,
     custom_pms_colors: '321'
   }
+
+  Spree::Preconfigure.where(attrs).first_or_create
 end

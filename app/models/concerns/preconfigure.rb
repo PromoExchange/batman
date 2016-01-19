@@ -1,22 +1,38 @@
 module Preconfigure
   extend ActiveSupport::Concern
 
-  def preconfigure
-    logger.warn "CSTORE: Preconfigure called for #{master.sku}"
-    # Is there an auction for this product
-    custom_auction = Spree::Auction.where(custom: true, product: self).first
-    # if custom_auction.nil?
-    #   @auction = Spree::Auction.new(
-    #     product: self,
-    #     buyer_id: auction_data[:buyer_id],
-    #     quantity: minimum_quantity,
-    #     imprint_method_id: auction_data[:imprint_method_id],
-    #     main_color_id: auction_data[:main_color_id],
-    #     ship_to_zip: auction_data[:ship_to_zip],
-    #     logo_id: auction_data[:logo_id],
-    #     custom_pms_colors: auction_data[:custom_pms_colors],
-    #     started: Time.zone.now
-    #   )
-    # end
+  def preconfigure_auction(company_store)
+    Rails.logger.debug "CSTORE: Preconfigure called for [#{master.sku}]"
+
+    custom_auction = Spree::Auction.find_by(product: self)
+
+    if custom_auction.present?
+      Rails.logger.debug "CSTORE: Custom auction already present [#{master.sku}]"
+      return
+    end
+
+    Rails.logger.debug "CSTORE: Creating custom auction for #{master.sku}"
+
+    preconfigure_data = Spree::Preconfigure.find_by(product: self)
+    auction = Spree::Auction.new(
+      product_id: id,
+      buyer: company_store.buyer,
+      quantity: minimum_quantity,
+      imprint_method: preconfigure_data.imprint_method,
+      main_color: preconfigure_data.main_color,
+      ship_to_zip: supplier.shipping_address.zipcode,
+      custom_pms_colors: preconfigure_data.custom_pms_colors,
+      logo: preconfigure_data.logo,
+      started: Time.zone.now
+    )
+    # TODO: This is for AnchorFree, preconfigure PMS Colors
+    auction.pms_colors << Spree::PmsColor.where(
+      name: 'Orange',
+      pantone: 'Orange',
+      hex: '#fe5000'
+    ).first_or_create
+    auction.save!
+  rescue => e
+    Rails.logger.error "CSTORE: Failed to preconfigure product [#{master.sku}] - #{e.message}"
   end
 end

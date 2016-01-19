@@ -55,6 +55,7 @@ class Spree::Auction < Spree::Base
   validate :credit_card_presense, if: -> { customer_id.present? }, on: :update
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true
+  delegate :custom_product, to: :product
 
   # preferred
   #   open

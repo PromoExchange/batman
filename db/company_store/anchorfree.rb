@@ -71,7 +71,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       name: hashed[:item_name],
       description: hashed[:product_description],
       price: 1.0,
-      supplier_id: supplier.id
+      supplier_id: supplier.id,
+      custom_product: true
     }
 
     product = Spree::Product.create!(default_attrs.merge(product_attrs))

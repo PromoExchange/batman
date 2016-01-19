@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160118162903) do
+ActiveRecord::Schema.define(version: 20160119162905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,7 +143,6 @@ ActiveRecord::Schema.define(version: 20160118162903) do
     t.string   "shipping_agent",                        default: "ups"
     t.integer  "customer_id"
     t.string   "ship_to_zip"
-    t.boolean  "custom"
   end
 
   add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree

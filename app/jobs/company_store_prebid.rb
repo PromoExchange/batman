@@ -6,8 +6,10 @@ module CompanyStorePrebid
     fail "Unable to find company store #{params['name']}" if company_store.nil?
 
     products = Spree::Product.where(supplier: company_store.supplier)
+    Rails.logger.info "CSTORE: Preconfiguring products [#{products.count}]"
     products.each do |product|
-      product.preconfigure
+      Rails.logger.info "CSTORE: Preconfiguring product [#{product.master.sku}]"
+      product.preconfigure_auction(company_store)
     end
   end
 end

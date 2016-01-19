@@ -82,13 +82,13 @@ namespace :companystore do
     company_store.save!
 
     # Products
-    # ProductLoader.load('company_store', 'anchorfree')
-    # ProductLoader.load('company_store', 'anchorfree_upcharges')
+    ProductLoader.load('company_store', 'anchorfree')
+    ProductLoader.load('company_store', 'anchorfree_upcharges')
     ProductLoader.load('company_store', 'anchorfree_preconfigure')
 
-    # Resque.enqueue(
-    #   CompanyStorePrebid,
-    #   name: store_name
-    # )
+    Resque.enqueue(
+      CompanyStorePrebid,
+      name: store_name
+    )
   end
 end

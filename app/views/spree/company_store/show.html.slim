@@ -1,6 +1,7 @@
 .cs-title.text-center = @company_store.display_name
 .row
-- @products.each do |product|
+- @auctions.each do |auction|
   .col-md-4.cs-product
-    = link_to large_image(product, {itemprop: 'image', class: 'cs-image'}), main_app.new_auction_path(product_id: product.id), itemprop: 'url'
-    .cs-product-text.text-center = product.name
+    = link_to large_image(auction.product, {itemprop: 'image', class: 'cs-image'}), main_app.new_auction_path(product_id: auction.product.id), itemprop: 'url'
+    .cs-product-text.text-center = auction.name
+    .cs-product-text.text-center = number_to_currency(auction.bids.first.total.to_f)

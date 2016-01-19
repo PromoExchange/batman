@@ -4,7 +4,7 @@ module Preconfigure
   def preconfigure_auction(company_store)
     Rails.logger.debug "CSTORE: Preconfigure called for [#{master.sku}]"
 
-    custom_auction = Spree::Auction.find_by(product: self)
+    custom_auction = Spree::Auction.find_by(product: self, state: :custom_auction)
 
     if custom_auction.present?
       Rails.logger.debug "CSTORE: Custom auction already present [#{master.sku}]"
@@ -32,6 +32,7 @@ module Preconfigure
       hex: '#fe5000'
     ).first_or_create
     auction.save!
+    auction.custom_auction
   rescue => e
     Rails.logger.error "CSTORE: Failed to preconfigure product [#{master.sku}] - #{e.message}"
   end

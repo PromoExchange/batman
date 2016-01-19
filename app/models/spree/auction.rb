@@ -73,6 +73,10 @@ class Spree::Auction < Spree::Base
   #   cancel, only valid before accept
   #   end, At the end of the auctions time
 
+  # custom_auction
+  #   open
+  #   custom_auction
+
   state_machine initial: :open do
     after_transition on: :confirm_order, do: :notification_for_in_production
     after_transition on: :delivered, do: :notification_for_product_delivered
@@ -87,6 +91,10 @@ class Spree::Auction < Spree::Base
     # TODO: When auction created, schedule job to end it
     event :end do
       transition open: :ended
+    end
+
+    event :custom_auction do
+      transition open: :custom_auction
     end
 
     event :cancel do

@@ -40,6 +40,15 @@ imprints.each do |imprint|
   ).first_or_create
 end
 
+# Clean up
+Spree::Product.where(supplier: supplier).each do |product|
+  auctions = Spree::Auction.where(state: :custom_auction, product: product).each do |auction|
+    Spree::Bid.where(auction: auction).destroy_all
+    auction.destroy
+  end
+  product.destroy
+end
+
 # Products
 Spree::Product.where(supplier: supplier).destroy_all
 

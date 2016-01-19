@@ -11,7 +11,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   fail "Failed to find product #{hashed[:sku]}" if product.nil?
 
-  upcharge_type = Spree::UpchargeType.where(name: hashed[:type]).first
+  upcharge_type = Spree::UpchargeType.where(name: hashed[:type]).first_or_create
 
   case hashed[:imprint_method]
   when 'embroidery'

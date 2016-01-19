@@ -8,10 +8,12 @@ namespace :companystore do
     if user.nil?
       role = Spree::Role.where(name: 'buyer').first_or_create
 
-      user = Spree::User.create(email: 'dwittig@anchorfree.com',
-                                login: 'dwittig@anchorfree.com',
-                                password: 'spree123',
-                                password_confirmation: 'spree123')
+      user = Spree::User.create(
+        email: 'dwittig@anchorfree.com',
+        login: 'dwittig@anchorfree.com',
+        password: 'spree123',
+        password_confirmation: 'spree123'
+      )
 
       user.spree_roles << role
       user.generate_spree_api_key!

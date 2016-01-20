@@ -282,6 +282,7 @@ class Spree::AuctionsController < Spree::StoreController
   def auction_params
     params.require(:auction).permit(
       :auction_id,
+      :clone_auction_id,
       :product_id,
       :buyer_id,
       :logo_id,

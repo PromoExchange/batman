@@ -12,6 +12,7 @@ class Spree::Auction < Spree::Base
   belongs_to :logo
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
   has_one :order
+  belongs_to :clone, class_name: 'Spree::Auction'
 
   has_many :auctions_pms_colors, class_name: 'Spree::AuctionPmsColor'
   has_many :pms_colors, through: :auctions_pms_colors

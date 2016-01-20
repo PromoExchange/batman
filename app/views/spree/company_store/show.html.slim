@@ -2,6 +2,6 @@
 .row
 - @auctions.each do |auction|
   .col-md-4.cs-product
-    = link_to large_image(auction.product, {itemprop: 'image', class: 'cs-image'}), main_app.new_auction_path(product_id: auction.product.id), itemprop: 'url'
+    = link_to large_image(auction.product, {itemprop: 'image', class: 'cs-image'}), main_app.new_auction_path(product_id: auction.product.id, clone_auction_id: auction.id ), itemprop: 'url'
     .cs-product-text.text-center = auction.name
-    .cs-product-text.text-center = "As low as #{auction.quantity} for #{number_to_currency(auction.bids.first.total.to_f)}" unless auction.bids.first.nil? 
+    .cs-product-text.text-center = "As low as #{auction.quantity} for #{number_to_currency(auction.bids.first.total.to_f)}" unless auction.bids.first.nil?

@@ -25,6 +25,12 @@ class Spree::AuctionsController < Spree::StoreController
       require_buyer
       @auction = Spree::Auction.find_by(id: session[:pending_auction_id])
     else
+      if params[:clone_auction_id].present?
+        clone_me = Spree::Auction.find(params[:clone_auction_id])
+        @auction = clone_me.dup
+      end
+    end
+    if @auction.nil?
       @auction = Spree::Auction.new(
         product_id: params[:product_id],
         started: Time.zone.now

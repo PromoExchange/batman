@@ -218,7 +218,6 @@ class Spree::AuctionsController < Spree::StoreController
           "#{address}",
           address.id]
       end
-
     end
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)

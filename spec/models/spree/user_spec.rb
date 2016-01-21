@@ -6,13 +6,13 @@ RSpec.describe Spree::User, type: :model do
     expect(t.macro).to eq :has_many
   end
 
-  it 'should cancel bids' do
-    b = FactoryGirl.create(:bid)
-    u = b.seller
-    count = Spree::Bid.where(seller: b.seller, state: 'open').count
-    expect(count).to eq 1
-    u.cancel_bids
-    count = Spree::Bid.where(seller: b.seller, state: 'open').count
-    expect(count).to eq 0
+  it 'should return shipping address fullname' do
+    u = FactoryGirl.create(:user_with_addresses)
+    expect(u.shipping_name).to eq "John Doe"
+  end
+
+  it 'should return blank for a nil shipping address' do
+    u = FactoryGirl.create(:user)
+    expect(u.shipping_name).to eq ""
   end
 end

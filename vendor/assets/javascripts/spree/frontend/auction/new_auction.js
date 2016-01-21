@@ -9,11 +9,13 @@ $(function() {
 
   $('.swatch-clickable').tooltip();
 
-  $('#auction_pms_colors').tagsinput({
-    itemValue: 'id',
-    itemText: 'text',
-    maxTags: 4
-  });
+  if( $('#auction_clone_id').val() === "") {
+    $('#auction_pms_colors').tagsinput({
+      itemValue: 'id',
+      itemText: 'text',
+      maxTags: 4
+    });
+  }
 
   $(".swatch-clickable").click(function() {
     $('#auction_pms_colors').tagsinput('add', {

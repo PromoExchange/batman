@@ -24,10 +24,14 @@ class Spree::AuctionsController < Spree::StoreController
     if session[:pending_auction_id].present?
       require_buyer
       @auction = Spree::Auction.find_by(id: session[:pending_auction_id])
+      @cloned_pms_colors = @auction.pms_colors.pluck(:id).map(&:inspect).join(',')
     else
       if params[:clone_auction_id].present?
         clone_me = Spree::Auction.find(params[:clone_auction_id])
         @auction = clone_me.dup
+        @auction.clone = clone_me
+        @auction.logo = clone_me.logo
+        @cloned_pms_colors = clone_me.pms_colors.pluck(:id).map(&:inspect).join(',')
       end
     end
     if @auction.nil?
@@ -60,7 +64,8 @@ class Spree::AuctionsController < Spree::StoreController
       ship_to_zip: auction_data[:ship_to_zip],
       logo_id: auction_data[:logo_id],
       custom_pms_colors: auction_data[:custom_pms_colors],
-      started: Time.zone.now
+      started: Time.zone.now,
+      clone_id: auction_data[:clone_id]
     )
     @auction.pms_color_match = true unless auction_data[:custom_pms_colors].blank?
 
@@ -213,6 +218,7 @@ class Spree::AuctionsController < Spree::StoreController
           "#{address}",
           address.id]
       end
+
     end
 
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)

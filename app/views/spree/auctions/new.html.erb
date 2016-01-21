@@ -32,90 +32,22 @@
     <%= f.hidden_field :buyer_id, value: spree_current_user.id if spree_current_user %>
     <%= f.hidden_field :invited_sellers, value: '' %>
     <%= f.hidden_field :request_idea, value: @request_idea_id %>
+    <%= f.hidden_field :clone_id, value: @auction.clone_id %>
     <fieldset>
-      <div class="form-group" id="imprint-methods">
-        <%= f.label(:imprint_method_id, Spree.t(:imprint_method)) %>
-        <%= f.select :imprint_method_id, options_for_select(@imprint_methods, @auction.imprint_method_id),
-          { prompt: 'Please Select' }, { class: 'form-control' } %>
-      </div>
+      <%= render partial: 'spree/auctions/new/imprint_method', locals: {f: f}%>
+      <%= render partial: 'spree/auctions/new/logos', locals: {f: f} %>
+      <%= render partial: 'spree/auctions/new/pms_swatch', locals: {f: f} %>
+      <%= render partial: 'spree/auctions/new/quantity', locals: {f: f} %>
+      <%= render partial: 'spree/auctions/new/ship_to', locals: {f: f} %>
+      <%= render partial: 'spree/auctions/new/main_color', locals: {f: f} %>
 
-      <p><a href="#" data-toggle="modal" data-target="#imprint-definitions-modal" class='btn btn-info btn-xs'>Imprint Method Definitions</a></p>
-
-      <% if spree_current_user %>
-        <div class="form-group">
-          <%= f.label :logo_id, Spree.t(:logo) %>
-          <%= f.select :logo_id,
-            @user.logos.map { |l|  [l.logo_file_file_name, l.id]},
-            { prompt: 'Please Select' } , { class: 'form-control' } %>
-        </div>
-
-        <% if @user.logos.present? %>
-          <% @user.logos.each do |logo|%>
-            <p><%= logo.logo_file_file_name %> <a href='<%="/logos/#{logo.id}/download_logo"%>'><span title="Download file" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>  </a></p>
-          <% end %>
+      <% if @auction.clone.nil? %>
+        <% if @request_idea_id.blank? %>
+          <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>
         <% end %>
-
-        <p><a href="#" id="new-logo-link" data-toggle="modal" data-target="#new-logo-modal" class="btn btn-info btn-xs">Add Logo</a></p>
+        <p>Estimated delivery date: <%= @estimated_ship_date.strftime('%B %e, %Y') %></p>
       <% end %>
 
-      <div class="form-group color-hideable" style="display: none;">
-        <%= f.label(:pms_color_swatch, Spree.t(:pms_colors)) %>
-        <div>
-          <% @pms_colors.each do |cell| %>
-            <div class="imprint_swatch imprint_swatch_<%= cell[4] %>">
-              <div class="swatch swatch-clickable" id="<%= cell[0] %>" name="<%= cell[1] %>" style="background-color:<%= cell[2] %>"></div>
-              <span class="pms-text"><%= cell[1] %><br/><%= cell[3] %></span>
-            </div>
-          <% end %>
-          <div class="imprint_swatch imprint_swatch_custom">
-            <div class="swatch custom-swatch-clickable", title="Add Custom PMS Color">
-              <span class="glyphicon glyphicon-plus"></span>
-            </div>
-            <span class="pms-text">Add Custom <br/> PMS Color</span>
-          </div>
-        </div>
-        <div class="clearfix"></div>
-        <% if @auction.pms_colors%>
-          <% @auction.pms_colors.each do |pms_color|%>
-             <div class="selected-pms" id="<%= pms_color.id %>" name="<%= pms_color.pantone %>"></div>
-          <% end %>
-        <% end %>
-        <input class="form-control tagsinput" data-role="tagsinput" id="auction_pms_colors" name="auction[pms_colors]" type='text'></input>
-        <p>Maxmimum Number of PMS Imprint Colors: 4</p>
-      </div>
-
-      <div class="form-group custom-color-hideable" style="display: none;">
-        <%= f.label(:custom_pms_colors, Spree.t(:custom_pms_colors)) %>
-        <%= f.text_field(:custom_pms_colors, class: 'form-control')%>
-        <p>Enter list of custom PMS colors seperated with a comma (,)</p>
-      </div>
-      <% if @auction.is_wearable? %>
-        <%= render partial: 'spree/auctions/auction_size', locals: {f: f} %>
-      <% else %>
-        <div class="form-group">
-          <%= f.label(:quantity, Spree.t(:quantity)) %>
-          <%= f.number_field(:quantity, class: 'form-control', placeholder: "Minimum Quantity: #{@auction.product.minimum_quantity}")%>
-        </div>
-      <% end %>
-
-      <% if spree_current_user %>
-        <div class="form-group">
-          <%= f.label(:ship_to_zip, 'Shipping Zipcode') %>
-          <%= f.text_field(:ship_to_zip, class: 'form-control', placeholder: '10591') %>
-        </div>
-      <% end %>
-
-      <div class="form-group">
-        <%= f.label(:main_color_id, 'Product Color') %>
-        <%= f.select(:main_color_id, options_for_select(@main_colors, @auction.main_color_id),
-          { prompt: 'Please Select'}, { class: 'form-control' }) %>
-      </div>
-
-      <% if @request_idea_id.blank? %>
-        <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>
-      <% end %>
-
-      <p>Estimated delivery date: <%= @estimated_ship_date.strftime('%B %e, %Y') %></p>
       <div class="form-actions" data-hook="buttons">
         <%= button 'Start Auction', 'ok', 'submit', { class: 'btn-success' } %>
         <span class="or"><%= Spree.t(:or) %></span>

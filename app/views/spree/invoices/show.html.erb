@@ -54,14 +54,16 @@
         <tr>
           <td>Shipping Address:</td>
           <td>
-            <ul class="display-address-ul">
-              <li><%= @auction.shipping_address.firstname %>&nbsp;<%= @auction.shipping_address.lastname %></li>
-              <li><%= @auction.shipping_address.company %></li>
-              <li><%= @auction.shipping_address.address1 %></li>
-              <li><%= @auction.shipping_address.address2 %></li>
-              <li><%= @auction.shipping_address.city %></li>
-              <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
-            </ul>
+            <% unless @auction.shipping_address.nil? %>
+              <ul class="display-address-ul">
+                <li><%= @auction.shipping_address.firstname %>&nbsp;<%= @auction.shipping_address.lastname %></li>
+                <li><%= @auction.shipping_address.company %></li>
+                <li><%= @auction.shipping_address.address1 %></li>
+                <li><%= @auction.shipping_address.address2 %></li>
+                <li><%= @auction.shipping_address.city %></li>
+                <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
+              </ul>
+            <% end %>
           </td>
         </tr>
       </table>

@@ -35,12 +35,14 @@
     <td>Shipping Address:</td>
     <td>
       <ul style='list-style-type: none; margin-left: -40px;'>
-        <li><%= @auction.shipping_address.firstname %>&nbsp;<%= @auction.shipping_address.lastname %></li>
-        <li><%= @auction.shipping_address.company %></li>
-        <li><%= @auction.shipping_address.address1 %></li>
-        <li><%= @auction.shipping_address.address2 %></li>
-        <li><%= @auction.shipping_address.city %></li>
-        <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
+        <% unless @auction.shipping_address.nil? %>
+          <li><%= @auction.shipping_address.firstname %>&nbsp;<%= @auction.shipping_address.lastname %></li>
+          <li><%= @auction.shipping_address.company %></li>
+          <li><%= @auction.shipping_address.address1 %></li>
+          <li><%= @auction.shipping_address.address2 %></li>
+          <li><%= @auction.shipping_address.city %></li>
+          <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
+        <% end %>
       </ul>
     </td>
   </tr>

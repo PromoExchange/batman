@@ -17,7 +17,7 @@
           <% if b.seller.shipping_address.nil? %>
             <td>&nbsp;</td>
           <% else %>
-            <td><%= b.seller.shipping_address.company_name  %> -  <%=b.seller.shipping_address.first_name %>  <%= b.seller.shipping_address.last_name %> </td>
+            <td><%= b.seller.shipping_company %> -  <%=b.seller.shipping_name %></td>
           <% end %>
           <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars, edit_enabled: false %></td>
           <td><%= '$%.2f' % b.bid %></td>

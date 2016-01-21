@@ -35,6 +35,11 @@ Spree::User.class_eval do
 
   def shipping_name
     return shipping_address.full_name if shipping_address.present?
-    ""
+    ''
+  end
+
+  def shipping_company
+    return shipping_address.company if shipping_address.present?
+    ''
   end
 end

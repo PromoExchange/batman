@@ -42,7 +42,7 @@ class Spree::Api::ChargesController < Spree::Api::BaseController
   def create_customer
     stripe_customer = Stripe::Customer.create(
       source: params[:token],
-      description: "User Name : #{current_spree_user.shipping_address.full_name}",
+      description: "User Name : #{current_spree_user.shipping_name}",
       email: current_spree_user.email
     )
 

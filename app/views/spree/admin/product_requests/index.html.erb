@@ -3,8 +3,8 @@
     <div class="buyer-listing">
 
       <ul data-id="<%= product_request.id %>" class="row">
-        <li class="col-md-3"> <%= product_request.buyer.shipping_address.full_name %> </li>
-        <li class="col-md-2"> <%= product_request.buyer.shipping_address.phone %> </li>
+        <li class="col-md-3"> <%= product_request.buyer.shipping_name %> </li>
+        <li class="col-md-2"> <%= product_request.buyer.shipping_address.phone unless roduct_request.buyer.shipping_address.nil? %> </li>
         <li class="col-md-3"> <%= product_request.buyer.email %> </li>
         <li class="col-md-3"> <%= button_tag 'Generate Notification E-mail', class: 'btn-primary generate-notification' %> </li>
         <li class="col-md-1">

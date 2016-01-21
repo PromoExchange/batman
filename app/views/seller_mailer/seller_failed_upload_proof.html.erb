@@ -1,32 +1,36 @@
 <p>RE: Auction <%= @auction.reference %></p>
 
 <p>
-  <%= @auction.winning_bid.seller.shipping_address.company %> has not uploaded the proof for <%= @auction.reference %> for <%= @auction.buyer.billing_address.full_name %> of <%= @auction.product.name %>.
+  <%= @auction.winning_bid.seller.shipping_company %> has not uploaded the proof for <%= @auction.reference %> for <%= @auction.buyer.billing_address.full_name %> of <%= @auction.product.name %>.
 </p>
 
 <h3> Seller Contact Info :</h3>
 <p>
   <ul style='list-style-type: none;'>
-    <li><%= @auction.winning_bid.seller.shipping_address.full_name %></li>
-    <li><%= @auction.winning_bid.seller.shipping_address.company %></li>
-    <li><%= @auction.winning_bid.seller.shipping_address.address1 %></li>
-    <li><%= @auction.winning_bid.seller.shipping_address.address2 %></li>
-    <li><%= @auction.winning_bid.seller.shipping_address.city %></li>
-    <li><%= @auction.winning_bid.seller.shipping_address.state_text %>&nbsp;<%= @auction.winning_bid.seller.shipping_address.zipcode %></li>
-    <li><%= @auction.winning_bid.seller.shipping_address.phone %></li>
+    <% unless @auction.winning_bid.seller.shipping_address.nil? %>
+      <li><%= @auction.winning_bid.seller.shipping_address.full_name %></li>
+      <li><%= @auction.winning_bid.seller.shipping_address.company %></li>
+      <li><%= @auction.winning_bid.seller.shipping_address.address1 %></li>
+      <li><%= @auction.winning_bid.seller.shipping_address.address2 %></li>
+      <li><%= @auction.winning_bid.seller.shipping_address.city %></li>
+      <li><%= @auction.winning_bid.seller.shipping_address.state_text %>&nbsp;<%= @auction.winning_bid.seller.shipping_address.zipcode %></li>
+      <li><%= @auction.winning_bid.seller.shipping_address.phone %></li>
+    <% end %>
   </ul>
 </p>
 
 <h3> Buyer Contact Info :</h3>
 <p>
   <ul style='list-style-type: none;'>
-    <li><%= @auction.shipping_address.full_name %></li>
-    <li><%= @auction.shipping_address.company %></li>
-    <li><%= @auction.shipping_address.address1 %></li>
-    <li><%= @auction.shipping_address.address2 %></li>
-    <li><%= @auction.shipping_address.city %></li>
-    <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
-    <li><%= @auction.shipping_address.phone %></li>
+    <% unless @auction.shipping_address.nil? %>
+      <li><%= @auction.shipping_address.full_name %></li>
+      <li><%= @auction.shipping_address.company %></li>
+      <li><%= @auction.shipping_address.address1 %></li>
+      <li><%= @auction.shipping_address.address2 %></li>
+      <li><%= @auction.shipping_address.city %></li>
+      <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
+      <li><%= @auction.shipping_address.phone %></li>
+    <% end %>
   </ul>
 </p>
 
@@ -37,7 +41,7 @@
     <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>
     <tr><td>Factory:</td><td><%= @auction.product.supplier.name %></td></tr>
     <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
-    <tr><td>Buyer:</td><td><%= @auction.buyer.billing_address.full_name %></td></tr>
+    <tr><td>Buyer:</td><td><%= @auction.buyer.shipping_name %></td></tr>
     <tr><td>Auction Started:</td><td><%= @auction.started.strftime('%B %e, %Y') %></td></tr>
     <tr><td>Quantity:</td><td><%= @auction.quantity %></td></tr>
     <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>
@@ -60,12 +64,14 @@
       <td>Shipping Address:</td>
       <td>
         <ul style='list-style-type: none; margin-left: -40px;'>
-          <li><%= @auction.shipping_address.full_name %></li>
-          <li><%= @auction.shipping_address.company %></li>
-          <li><%= @auction.shipping_address.address1 %></li>
-          <li><%= @auction.shipping_address.address2 %></li>
-          <li><%= @auction.shipping_address.city %></li>
-          <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
+          <% unless @auction.shipping_address.nil? %>
+            <li><%= @auction.shipping_address.full_name %></li>
+            <li><%= @auction.shipping_address.company %></li>
+            <li><%= @auction.shipping_address.address1 %></li>
+            <li><%= @auction.shipping_address.address2 %></li>
+            <li><%= @auction.shipping_address.city %></li>
+            <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
+          <% end %>
         </ul>
       </td>
     </tr>

@@ -23,12 +23,14 @@ Logo:<%= image_tag(@auction.logo.logo_file.url(:thumb), { itemprop: "image", alt
 <% end %>
 
 Shipping Address:
-<%= @auction.shipping_address.firstname %>&nbsp;<%= @auction.shipping_address.lastname %>
-<%= @auction.shipping_address.company %>
-<%= @auction.shipping_address.address1 %>
-<%= @auction.shipping_address.address2 %>
-<%= @auction.shipping_address.city %>
-<%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %>
+<% unless @auction.shipping_address.nil? %>
+  <%= @auction.shipping_address.firstname %>&nbsp;<%= @auction.shipping_address.lastname %>
+  <%= @auction.shipping_address.company %>
+  <%= @auction.shipping_address.address1 %>
+  <%= @auction.shipping_address.address2 %>
+  <%= @auction.shipping_address.city %>
+  <%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %>
+<% end %>
 
 Your fee:
 <%= Spree::Store.first.url %>/invoices/<%= @auction.id %>?tab=pay"><%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %> if paid by Credit Card

@@ -2,7 +2,7 @@ class Spree::Auction < Spree::Base
   before_create :set_default_dates
   after_create :generate_reference
 
-  has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }
+  has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }, dependent: :destroy
 
   has_many :auctions_users, class_name: 'Spree::AuctionsUser'
   has_many :invited_sellers, through: :auctions_users, source: :user

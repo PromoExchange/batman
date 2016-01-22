@@ -34,7 +34,7 @@ Spree::Product.class_eval do
   def wearable?
     # Assume wearable as having Apparal as parent OR as it's main category
     apparel_taxon = Spree::Taxon.where(dc_category_guid: '7F4C59A7-6226-11D4-8976-00105A7027AA')
-    return true if Spree::Classification.where(product: self, taxon: apparel_taxon).first.present?
+    return true if Spree::Classification.find_by(product: self, taxon: apparel_taxon).present?
 
     # Check the children
     children = Spree::Taxon.where(parent: apparel_taxon).pluck(:id)

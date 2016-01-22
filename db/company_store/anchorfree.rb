@@ -173,6 +173,15 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     end
     fail "Invalid carton #{hashed[:sku]}" unless product.carton.active?
 
+    # Category
+    # Add Apparel category to wearable items
+    if hashed[:wearable] == 'yes'
+      apparel_taxon = Spree::Taxon.where(dc_category_guid: '7F4C59A7-6226-11D4-8976-00105A7027AA').first_or_create
+      Spree::Classification.where(
+        taxon_id: apparel_taxon.id,
+        product_id: product.id).first_or_create
+    end
+
     product.check_validity!
     product.loaded! if product.state == 'loading'
   rescue => e

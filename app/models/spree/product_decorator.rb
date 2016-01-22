@@ -1,6 +1,6 @@
 Spree::Product.class_eval do
   include Preconfigure
-  
+
   before_create :build_default_carton
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_many :upcharges, class_name: 'Spree::UpchargeProduct', foreign_key: 'related_id'
@@ -32,8 +32,11 @@ Spree::Product.class_eval do
   end
 
   def wearable?
-    # Assume wearable as having Apparal as parent
+    # Assume wearable as having Apparal as parent OR as it's main category
     apparel_taxon = Spree::Taxon.where(dc_category_guid: '7F4C59A7-6226-11D4-8976-00105A7027AA')
+    return true if Spree::Classification.where(product: self, taxon: apparel_taxon).first.present?
+
+    # Check the children
     children = Spree::Taxon.where(parent: apparel_taxon).pluck(:id)
     Spree::Classification.where(product: self).find_each do |classification|
       return true if children.include?(classification.taxon_id)

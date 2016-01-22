@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
   mount Spree::Core::Engine, at: '/'
 
+  root :to => "company_store#index"
+
   #### TESTING ONLY
   #### IF YOU ADD ITEMS HERE YOU BETTER ADD A GUARD SPEC!
   #### i.e. expect(get: '/memory_load').not_to be_routable
@@ -24,6 +26,7 @@ Rails.application.routes.draw do
   post '/confirm', to: 'spree/api/charges#confirm_deposit'
   post '/send_request', to: 'spree/home#send_request'
 
+  get '/company_store', to: 'spree/company_store#index'
   get '/company_store/:id', to: 'spree/company_store#show'
 
   resources :pxtaxrates,

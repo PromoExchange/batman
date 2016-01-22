@@ -5,8 +5,13 @@ Spree::HomeController.class_eval do
     @products = @searcher.retrieve_products
     @taxonomies = Spree::Taxonomy.includes(root: :children)
     @blog_entries = Spree::BlogEntry.visible.order('created_at DESC').limit(5)
+
+    company_store_id = ENV['COMPANYSTORE_ID']
+    if company_store_id.present?
+      redirect_to "/company_store/#{company_store_id}"
+    end
   end
-  
+
   def send_request
     email = params[:request][:email]
     unless email.present? && (email =~ Devise.email_regexp)

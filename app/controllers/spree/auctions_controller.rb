@@ -95,7 +95,21 @@ class Spree::AuctionsController < Spree::StoreController
 
     create_related_data(auction_data)
 
-    redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
+    if auction_data[:clone_id].present?
+      # Get the prebids NOW
+      prebids = Spree::Prebid.where(supplier: @auction.product.supplier)
+      prebids.each do |p|
+        Rails.logger.info "Prebid Job: requesting bid creation: #{p.id}"
+        p.create_prebid(@auction.id)
+      end
+
+      # Find the lowest bid (first one)
+      bid = @auction.bids.first
+
+      redirect_to "/accept/#{bid.id}"
+    else
+      redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
+    end
   rescue
     supporting_data
     estimated_ship
@@ -272,7 +286,7 @@ class Spree::AuctionsController < Spree::StoreController
     idea = Spree::RequestIdea.where(id: @request_idea_id).take
     idea.update_attributes(auction_id: @auction.id) if idea
 
-    send_prebid_request @auction.id
+    send_prebid_request @auction.id if @auction.clone_id.nil?
 
     unless auction_data[:invited_sellers].nil?
       auction_data[:invited_sellers].split(';').each do |seller_email|

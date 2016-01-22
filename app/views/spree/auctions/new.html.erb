@@ -48,11 +48,7 @@
         <p>Estimated delivery date: <%= @estimated_ship_date.strftime('%B %e, %Y') %></p>
       <% end %>
 
-      <div class="form-actions" data-hook="buttons">
-        <%= button 'Start Auction', 'ok', 'submit', { class: 'btn-success' } %>
-        <span class="or"><%= Spree.t(:or) %></span>
-        <%= button_link_to Spree.t('actions.cancel'), products_path, :icon => 'remove' %>
-      </div>
+      <%= render partial: 'spree/auctions/new/buttons', locals: {f: f} %>
     </fieldset>
     <% end %>
   </div>

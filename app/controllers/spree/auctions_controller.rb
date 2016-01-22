@@ -106,6 +106,10 @@ class Spree::AuctionsController < Spree::StoreController
       # Find the lowest bid (first one)
       bid = @auction.bids.first
 
+      if bid.nil?
+        redirect_to '/', flash: { notice: 'Unable to calculate price, please contact support' }
+      end
+
       redirect_to "/accept/#{bid.id}"
     else
       redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }

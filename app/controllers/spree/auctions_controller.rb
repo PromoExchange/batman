@@ -55,6 +55,16 @@ class Spree::AuctionsController < Spree::StoreController
       @total_size = auction_data[:quantity]
     end
 
+    Rails.logger.info("Product ID: #{auction_data[:product_id]}")
+    Rails.logger.info("Buyer ID: #{auction_data[:buyer_id]}")
+    Rails.logger.info("Quantity: #{auction_data[:quantity]}")
+    Rails.logger.info("imprint_method_id: #{auction_data[:imprint_method_id]}")
+    Rails.logger.info("main_color_id: #{auction_data[:main_color_id]}")
+    Rails.logger.info("ship_to_zip: #{auction_data[:ship_to_zip]}")
+    Rails.logger.info("logo_id: #{auction_data[:logo_id]}")
+    Rails.logger.info("custom_pms_colors: #{auction_data[:custom_pms_colors]}")
+    Rails.logger.info("clone_id: #{auction_data[:clone_id]}")
+
     @auction = Spree::Auction.new(
       product_id: auction_data[:product_id],
       buyer_id: auction_data[:buyer_id],

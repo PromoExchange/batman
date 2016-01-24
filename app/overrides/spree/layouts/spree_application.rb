@@ -1,11 +1,3 @@
-# Add footer
-Deface::Override.new(
-  virtual_path: 'spree/layouts/spree_application',
-  name:         'footer',
-  insert_after: 'div.container',
-  partial:      'spree/shared/footer'
-)
-
 Deface::Override.new(
   virtual_path: 'spree/layouts/spree_application',
   name:         'google_fonts',

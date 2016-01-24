@@ -3,6 +3,8 @@ class Spree::AuctionsController < Spree::StoreController
   before_action :require_login, only: [:edit, :show]
   before_action :fetch_auction, except: [:index, :create, :new, :auction_payment]
 
+  layout 'company_store_layout'
+
   def index
     if params[:buyer_id].present?
       @auctions = Spree::Auction.where(buyer_id: params[:buyer_id])

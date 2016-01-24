@@ -1,6 +1,6 @@
 class Spree::AuctionsController < Spree::StoreController
   before_action :store_location
-  before_action :require_login, only: [:edit, :show, :auction_payment]
+  before_action :require_login, only: [:edit, :show]
   before_action :fetch_auction, except: [:index, :create, :new, :auction_payment]
 
   def index
@@ -22,7 +22,7 @@ class Spree::AuctionsController < Spree::StoreController
 
   def new
     if session[:pending_auction_id].present?
-      require_buyer
+      # require_buyer
       @auction = Spree::Auction.find_by(id: session[:pending_auction_id])
       @cloned_pms_colors = @auction.pms_colors.pluck(:id).map(&:inspect).join(',')
     else
@@ -87,10 +87,12 @@ class Spree::AuctionsController < Spree::StoreController
 
     @auction.save!
 
-    unless current_spree_user
-      @auction.pending
-      session[:pending_auction_id] = @auction.id
-      redirect_to login_url and return
+    if @auction.clone_id.nil?
+      unless current_spree_user
+        @auction.pending
+        session[:pending_auction_id] = @auction.id
+        redirect_to login_url and return
+      end
     end
 
     create_related_data(auction_data)
@@ -176,16 +178,18 @@ class Spree::AuctionsController < Spree::StoreController
   def auction_payment
     @bid = Spree::Bid.find(params[:bid_id])
     @auction = @bid.auction
-    customers = current_spree_user.customers
-    @customers = customers.web_check.verified.concat customers.credit_card
+    if @auction.clone_id.nil?
+      customers = current_spree_user.customers
+      @customers = customers.web_check.verified.concat customers.credit_card
 
-    @addresses = current_spree_user.addresses.active.map do |address|
-      next if address.bill? && !address.ship?
-      ["#{address}", address.id]
+      @addresses = current_spree_user.addresses.active.map do |address|
+        next if address.bill? && !address.ship?
+        ["#{address}", address.id]
+      end
+
+      @pxaddress = Spree::Pxaddress.new
+      estimated_ship
     end
-
-    @pxaddress = Spree::Pxaddress.new
-    estimated_ship
   end
 
   def upload_proof

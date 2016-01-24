@@ -5,57 +5,62 @@
 </script>
 <% end %>
 
-<div class="row" id="show-invoice" data-key="<%= spree_current_user.spree_api_key %>">
-  <% if spree_current_user.has_spree_role?(:buyer) %>
-
+<div class="row" id="show-invoice">
+  <% if spree_current_user && spree_current_user.has_spree_role?(:buyer) %>
+    <% if (@auction.open? or @auction.waiting?) and ( @bid.open? or @bid.lost?) %>
+      <div class="form-group error">
+        <ul></ul>
+      </div>
+      <div class="form-group">
+        <%= label_tag(:payment_method, "Payment Method") %>
+        <ul class="list-group customer-listing">
+          <% @customers.each do |customer| %>
+            <li class='list-group-item customer-listing'>
+              <%= radio_button_tag('auction[customer_id]', customer.id) %> <%= label_tag("#{customer.brand}##{customer.last_4_digits}")%>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
+      <div class="form-group">
+        <%= label_tag(:shipping_address_id, 'Shipping Address') %>
+        <%= select_tag(:shipping_address_id, options_for_select(@addresses, @auction.shipping_address_id),
+           { prompt: 'Please Select' ,  class: 'form-control' }) %>
+      </div>
+      <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
+      <div class="form-group">
+        <%= button 'Submit', 'ok', 'submit', { class: 'btn-success', id: 'accept-bid', data: {bid: @bid.id} } %>
+      </div>
+    <% end %>
     <div class="col-md-6 well">
-      <% if @auction.clone_id.nil? %>
-        <% if (@auction.open? or @auction.waiting?) and ( @bid.open? or @bid.lost?) %>
-          <div class="form-group error">
-            <ul></ul>
-          </div>
-          <div class="form-group">
-            <%= label_tag(:payment_method, "Payment Method") %>
-            <ul class="list-group customer-listing">
-              <% @customers.each do |customer| %>
-                <li class='list-group-item customer-listing'>
-                  <%= radio_button_tag('auction[customer_id]', customer.id) %> <%= label_tag("#{customer.brand}##{customer.last_4_digits}")%>
-                </li>
-              <% end %>
-            </ul>
-          </div>
-          <p><%= link_to "Add Payment Method", "/dashboards?tab=payment_method", target: '_blank' %></p>
-          <div class="form-group">
-            <%= label_tag(:shipping_address_id, 'Shipping Address') %>
-            <%= select_tag(:shipping_address_id, options_for_select(@addresses, @auction.shipping_address_id),
-               { prompt: 'Please Select' ,  class: 'form-control' }) %>
-          </div>
-          <p><a href="#" id="add-address-link" data-toggle="modal" data-target="#auction-add-address">Add Address</a></p>
-          <div class="form-group">
-            <%= button 'Submit', 'ok', 'submit', { class: 'btn-success', id: 'accept-bid', data: {bid: @bid.id} } %>
-          </div>
-        <% end %>
-      <% else %>
-      <% payment_amount = @bid.bid %>
-      <form action="/" method="get">
-        <script
-          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-          data-key="<%=ENV['STRIPE_PUBLISHABLE_KEY']%>"
-          data-amount=<%=@bid.bid.to_f * 100%>
-          data-name="AnchorFree"
-          data-description="<%= @auction.name %>"
-          data-image="/images/px_logo.png"
-          data-locale="auto">
-        </script>
-      </form>
-      <% end %>
-
       <% if @bid.accepted? and @auction.waiting_confirmation? %>
         <div class="form-group">
           <p>Thanks for your order! We will be processing your payment and <%= @bid.seller.shipping_address.full_name %> will be confirming and processing your order shortly. </p>
         </div>
         <div class="form-group text-center">
           <%= link_to 'Dashboard', '/dashboards?tab=purchase_history', class: 'btn btn-success' %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <form action="/" method="GET">
+      <script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="<%=ENV['STRIPE_PUBLISHABLE_KEY']%>"
+        data-amount=<%=@bid.bid.to_f * 100%>
+        data-name="AnchorFree"
+        data-description="<%= @auction.name %>"
+        data-image="/images/px_logo.png"
+        data-locale="auto">
+      </script>
+    </form>
+    <div class="col-md-6">
+      <% if @bid.accepted? and @auction.waiting_confirmation? %>
+        <div class="form-group">
+          <p>Thanks for your order! We will be processing your payment and <%= @bid.seller.shipping_address.full_name %> will be confirming and processing your order shortly. </p>
+        </div>
+        <div class="form-group text-center">
+          <%= link_to 'Continue Shopping', '/', class: 'btn btn-success' %>
         </div>
       <% end %>
     </div>
@@ -77,4 +82,7 @@
     </table>
   </div>
 </div>
-<%= render partial: 'spree/auctions/address_modal' %>
+
+<% if @auction.clone_id.nil? %>
+  <%= render partial: 'spree/auctions/address_modal' %>
+<% end %>

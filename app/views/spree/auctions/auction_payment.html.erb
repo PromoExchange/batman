@@ -43,26 +43,28 @@
       <% end %>
     </div>
   <% else %>
-    <form action="/" method="GET">
-      <script
-        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="<%=ENV['STRIPE_PUBLISHABLE_KEY']%>"
-        data-amount=<%=@bid.bid.to_f * 100%>
-        data-name="AnchorFree"
-        data-description="<%= @auction.name %>"
-        data-image="/images/px_logo.png"
-        data-locale="auto">
-      </script>
-    </form>
     <div class="col-md-6">
-      <% if @bid.accepted? and @auction.waiting_confirmation? %>
-        <div class="form-group">
-          <p>Thanks for your order! We will be processing your payment and <%= @bid.seller.shipping_address.full_name %> will be confirming and processing your order shortly. </p>
-        </div>
-        <div class="form-group text-center">
-          <%= link_to 'Continue Shopping', '/', class: 'btn btn-success' %>
-        </div>
-      <% end %>
+      <form action="/" method="GET">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="<%=ENV['STRIPE_PUBLISHABLE_KEY']%>"
+          data-amount=<%=@bid.bid.to_f * 100%>
+          data-name="AnchorFree"
+          data-description="<%= @auction.name %>"
+          data-image="/images/px_logo.png"
+          data-locale="auto">
+        </script>
+      </form>
+      <div>
+        <h3>Shipped to:</h3>
+        <ul class="display-address-ul">
+          <li><%= @auction.shipping_address.company %></li>
+          <li><%= @auction.shipping_address.address1 %></li>
+          <li><%= @auction.shipping_address.address2 %></li>
+          <li><%= @auction.shipping_address.city %></li>
+          <li><%= @auction.shipping_address.state_text %>&nbsp;<%= @auction.shipping_address.zipcode %></li>
+        </ul>
+      </div>
     </div>
   <% end %>
 

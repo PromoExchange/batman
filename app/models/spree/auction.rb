@@ -120,6 +120,10 @@ class Spree::Auction < Spree::Base
       transition unpaid: :complete
     end
 
+    event :clone_confirm_order do
+      transition [:open, :waiting_confirmation, :unpaid] => :in_production
+    end
+
     # Non preferred flow
     event :confirm_order do
       transition [:waiting_confirmation, :unpaid] => :create_proof
@@ -274,6 +278,7 @@ class Spree::Auction < Spree::Base
       InProduction,
       auction_id: id
     )
+    return if clone_id
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
       EmailHelpers.email_delay(Time.zone.now + 48.hours),

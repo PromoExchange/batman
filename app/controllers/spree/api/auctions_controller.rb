@@ -95,13 +95,21 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         winning_bid.order.update_attributes(payment_state: 'completed')
         Spree::OrderUpdater.new(winning_bid.order).update
         if winning_bid.manage_workflow
-          @auction.confirm_order!
+          if @auction.clone_id.nil?
+            @auction.confirm_order!
+          else
+            @auction.clone_confirm_order!
+          end
         else
           @auction.invoice_paid!
           @auction.update_attributes(payment_claimed: true)
         end
       else
-        @auction.confirm_order!
+        if @auction.clone_id.nil?
+          @auction.confirm_order!
+        else
+          @auction.clone_confirm_order!
+        end
       end
     end
     render nothing: true, status: :ok

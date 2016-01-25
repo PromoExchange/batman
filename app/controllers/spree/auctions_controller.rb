@@ -87,6 +87,11 @@ class Spree::AuctionsController < Spree::StoreController
       end
     end
 
+    if @auction.clone_id.present?
+      @auction.shipping_address = Spree::Address.where(company: 'Anchor Free').first
+      @auction.buyer = Spree::User.where(email:'dwittig@anchorfree.com').first
+    end
+
     @auction.save!
 
     if @auction.clone_id.nil?

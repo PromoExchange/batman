@@ -7,17 +7,22 @@
   <head>
     <%= render partial: 'spree/shared/head' %>
   </head>
-  <body class="<%= body_class %>" id="<%= @body_id || 'default' %>">
+  <body class="<%= body_class %>  cs-body" id="<%= @body_id || 'default' %>">
     <%= render partial: 'spree/shared/google_analytics.js' %>
+    <div class="cs-header">
+      <div class="container">
+        <%= render partial: 'shared/company_header' %>
+      </div>
+    </div>
     <div id="cs-container" class="container">
-      <%= render partial: 'shared/company_header' %>
       <div class="row">
-        <div id="content" class="<%= !content_for?(:sidebar) ? "col-sm-12" : "col-sm-8 col-md-9" %>" data-hook>
+        <div id="content">
           <%= flash_messages %>
           <%= yield %>
         </div>
         <%= yield :templates %>
       </div>
+      <%= render partial: 'spree/shared/company_store_footer' %>
     </div>
   </body>
 </html>

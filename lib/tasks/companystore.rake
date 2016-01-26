@@ -6,8 +6,10 @@ namespace :companystore do
     company_store = Spree::CompanyStore.where(slug: 'anchorfree').first
     products = Spree::Product.where(supplier: company_store.supplier).pluck(:id)
     auctions = Spree::Auction.where(product_id: products, state: :custom_auction)
+
     auctions.each do |auction|
-      line_item = auction.bids.first.order.line_items.first
+      bid = auction.bids.first
+      line_item = bid.order.line_items.first
       if auction.product.sku == 'AF-7003-40'
         line_item.price = 487.40
       elsif auction.product.sku == 'AF-3250-99'
@@ -36,7 +38,7 @@ namespace :companystore do
         line_item.price = 461.69
       end
       line_item.save!
-      order_updater = Spree::OrderUpdater.new(auction.bids.first.order)
+      order_updater = Spree::OrderUpdater.new(bid.order)
       order_updater.update
     end
   end

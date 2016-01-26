@@ -131,7 +131,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
           range: range,
           amount: price,
           position: i+1,
-          discount_type: 'price'
+          discount_type: 'price',
+          price_code: hashed[:pricecode]
         ).first_or_create
       end
     end

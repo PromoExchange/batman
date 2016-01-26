@@ -1,7 +1,7 @@
 class Spree::AuctionsController < Spree::StoreController
   before_action :store_location
   before_action :require_login, only: [:edit, :show]
-  before_action :fetch_auction, except: [:index, :create, :new, :auction_payment]
+  before_action :fetch_auction, except: [:index, :create, :new, :auction_payment, :csaccept]
 
   layout 'company_store_layout'
 
@@ -180,6 +180,13 @@ class Spree::AuctionsController < Spree::StoreController
   def destroy
     @auction.update_attributes(status: 'cancelled', cancelled_date: Time.zone.now)
     redirect_to dashboards_path, flash: { notice: 'Auction was cancelled successfully.' }
+  end
+
+  def csaccept
+    @bid = Spree::Bid.find(params[:bid_id])
+    @bid.non_preferred_accept
+    @bid.auction.accept
+    redirect_to '/'
   end
 
   def auction_payment

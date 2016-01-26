@@ -2,7 +2,7 @@ $(function() {
 
   function stripeResponseHandlerBuyer(status, response) {
     var $form = $('#buyer-form');
-    var key = $('#show-invoice').attr('data-key');
+    var key = $('#buyer-form').attr('data-key');
     if (response.error) {
       // Show the errors on the form
       $("body").css("cursor", "default");

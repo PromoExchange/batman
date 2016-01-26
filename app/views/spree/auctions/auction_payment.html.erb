@@ -44,7 +44,7 @@
     </div>
   <% else %>
     <div class="col-md-6">
-      <form action="/" method="GET">
+      <form action="/csaccept/<%= @bid.id %>" method="GET">
         <script
           src="https://checkout.stripe.com/checkout.js" class="stripe-button"
           data-key="<%=ENV['STRIPE_PUBLISHABLE_KEY']%>"

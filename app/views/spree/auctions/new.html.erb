@@ -48,6 +48,7 @@
         <p>Estimated delivery date: <%= @estimated_ship_date.strftime('%B %e, %Y') %></p>
       <% end %>
 
+      <%= render partial: 'spree/auctions/new/price_breaks', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/buttons', locals: {f: f} %>
     </fieldset>
     <% end %>

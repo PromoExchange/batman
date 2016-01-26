@@ -54,7 +54,6 @@ class Spree::Api::BidsController < Spree::Api::BaseController
         @bid.auction.unpaid
         @status = 'succeeded'
       else
-        if params
         @status = @bid.create_payment(@bid.auction.customer.token)
         if %w(succeeded pending).include?(@status)
           @bid.non_preferred_accept

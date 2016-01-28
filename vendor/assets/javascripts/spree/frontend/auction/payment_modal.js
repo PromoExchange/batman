@@ -1,7 +1,6 @@
 $(function() {
 
-  // $('.stripe-button-el').addClass('btn btn-primary btn-success');
-  $('.stripe-button-el').replaceWith('<button type="submit" class="btn btn-primary" style="visibility: visible;">Pay with Card</button>');
+  $('.stripe-button-el').replaceWith('<button type="submit" class="btn btn-primary cs-button" style="visibility: visible;">Pay with Card</button>');
 
   function stripeResponseHandlerBuyer(status, response) {
     var $form = $('#buyer-form');

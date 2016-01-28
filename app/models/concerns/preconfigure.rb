@@ -17,7 +17,7 @@ module Preconfigure
     auction = Spree::Auction.new(
       product_id: id,
       buyer: company_store.buyer,
-      quantity: minimum_quantity,
+      quantity: maximum_quantity,
       imprint_method: preconfigure_data.imprint_method,
       main_color: preconfigure_data.main_color,
       ship_to_zip: supplier.shipping_address.zipcode,

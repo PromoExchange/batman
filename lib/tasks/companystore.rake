@@ -1,48 +1,5 @@
 
 namespace :companystore do
-  desc 'Fix Company Store Bids'
-  task fixanchorfree: :environment do
-    # HACK: Pre Demo price adjustments
-    company_store = Spree::CompanyStore.where(slug: 'anchorfree').first
-    products = Spree::Product.where(supplier: company_store.supplier).pluck(:id)
-    auctions = Spree::Auction.where(product_id: products, state: :custom_auction)
-
-    auctions.each do |auction|
-      bid = auction.bids.first
-      line_item = bid.order.line_items.first
-      if auction.product.sku == 'AF-7003-40'
-        line_item.price = 487.40
-      elsif auction.product.sku == 'AF-3250-99'
-        line_item.price = 628.36
-      elsif auction.product.sku == 'AF-2050-02'
-        line_item.price = 406.26
-      elsif auction.product.sku == 'AF-SM-4125'
-        line_item.price = 299.74
-      elsif auction.product.sku == 'AF-MOLEHRD'
-        line_item.price = 566.47
-      elsif auction.product.sku == 'AF-8500'
-        line_item.price = 151.83
-      elsif auction.product.sku == 'AF-SM-2381'
-        line_item.price = 373.48
-      elsif auction.product.sku == 'AF-P3A3A25'
-        line_item.price = 243.06
-      elsif auction.product.sku == 'AF-5117'
-        line_item.price = 181.40
-      elsif auction.product.sku == 'AF-SG120'
-        line_item.price = 223.44
-      elsif auction.product.sku == 'AF-632418'
-        line_item.price = 882.89
-      elsif auction.product.sku == 'AF-5170'
-        line_item.price = 258.38
-      elsif auction.product.sku == 'AF-71600'
-        line_item.price = 461.69
-      end
-      line_item.save!
-      order_updater = Spree::OrderUpdater.new(bid.order)
-      order_updater.update
-    end
-  end
-
   desc 'Create anchor free company store'
   task anchorfree: :environment do
     user = Spree::User.where(email: 'dwittig@anchorfree.com').first

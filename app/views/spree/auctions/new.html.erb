@@ -2,7 +2,7 @@
 <%= Spree.t(:auction) %>
 <% end %>
 
-<div class="row" id="new-auction" data-key="<%= spree_current_user.spree_api_key if spree_current_user %>">
+<div class="cs-page row" id="new-auction" data-key="<%= spree_current_user.spree_api_key if spree_current_user %>">
   <div class="col-md-6">
     <% url = spree.product_url(@auction.product) %>
     <%= link_to large_image(@auction.product, itemprop: "image", width: '400px'), url, itemprop: 'url' %><br/>

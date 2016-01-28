@@ -1,4 +1,9 @@
 $(function() {
+
+  if ($('.cs-page').length > 0) {
+    $(".cs-footer").addClass("cs-footer-bottom");
+  }
+
   $("#auction_logo_id").imagepicker({
     hide_select: false
   });

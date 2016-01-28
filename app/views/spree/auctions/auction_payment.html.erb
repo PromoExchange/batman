@@ -5,7 +5,7 @@
 </script>
 <% end %>
 
-<div class="row" id="show-invoice">
+<div class="cs-page row" id="show-invoice">
   <% if spree_current_user && spree_current_user.has_spree_role?(:buyer) %>
     <% if (@auction.open? or @auction.waiting?) and ( @bid.open? or @bid.lost?) %>
       <div class="form-group error">

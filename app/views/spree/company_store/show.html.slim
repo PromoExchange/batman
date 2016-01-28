@@ -1,7 +1,9 @@
-.cs-title.text-center = @company_store.display_name
+.cs-title.text-center data-key="#{ENV['SPREE_API_KEY']}"
+  = @company_store.display_name
 .row
 - @auctions.each do |auction|
   .col-md-4.cs-product
     = link_to large_image(auction.product, {itemprop: 'image', class: 'cs-image'}), main_app.new_auction_path(product_id: auction.product.id, clone_auction_id: auction.id ), itemprop: 'url'
     .cs-product-text.text-center = auction.name
-    .cs-product-text.text-center = "As low as #{number_to_currency(auction.best_price(nil) / auction.quantity)}"
+    .cs-product-text.text-center.cs-lowest-bid data-key="#{auction.id}"
+      i.fa.fa-spinner.fa-pulse

@@ -57,6 +57,13 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :internal_server_error
   end
 
+  def best_price
+    best_price = @auction.best_price(params[:quantity])
+    render json: best_price
+  rescue
+    render nothing: true, status: :internal_server_error
+  end
+
   def reject_order
     @auction.order_rejected!
     params[:rejection_reason] = '' if params[:rejection_reason].blank?

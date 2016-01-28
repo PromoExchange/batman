@@ -103,6 +103,7 @@ Rails.application.routes.draw do
     post '/auctions/:id/claim_payment' => 'spree/api/auctions#claim_payment'
     post '/auctions/:id/reject_order' => 'spree/api/auctions#reject_order'
     post '/auctions/:id/resolve_dispute' => 'spree/api/auctions#resolve_dispute'
+    get '/auctions/:id/best_price' => 'spree/api/auctions#best_price'
 
     resources :request_ideas, controller: 'spree/api/request_ideas' do
       member do

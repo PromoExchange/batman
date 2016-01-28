@@ -274,6 +274,12 @@ class Spree::Auction < Spree::Base
   def best_price(which_quantity)
     fail "Not a custom auction" unless state == 'custom_auction'
 
+    divisor = 1
+    if which_quantity.nil?
+      divisor = product.maximum_quantity
+      which_quantity = divisor
+    end
+
     which_quantity ||= product.maximum_quantity
 
     self.quantity = which_quantity
@@ -289,7 +295,7 @@ class Spree::Auction < Spree::Base
 
     lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first
 
-    return lowest_bid.total.to_f unless lowest_bid.nil?
+    return lowest_bid.total.to_f / divisor unless lowest_bid.nil?
 
     0.0
   end

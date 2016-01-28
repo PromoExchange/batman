@@ -17,7 +17,7 @@
     </div>
     <div class="clearfix"></div>
     <% if @auction.pms_colors%>
-      <% @auction.pms_colors.each do |pms_color|%>
+      <% @auction.pms_colors.each do |pms_color| %>
          <div class="selected-pms" id="<%= pms_color.id %>" name="<%= pms_color.pantone %>"></div>
       <% end %>
     <% end %>

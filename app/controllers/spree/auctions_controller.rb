@@ -201,7 +201,7 @@ class Spree::AuctionsController < Spree::StoreController
 
     if @auction.clone_id.present?
       @auction.shipping_address = Spree::Address.where(company: 'Anchor Free').first
-      @auction.buyer = Spree::User.where(email:'dwittig@anchorfree.com').first
+      @auction.buyer = Spree::User.where(email: 'dwittig@anchorfree.com').first
     end
 
     @auction.save!
@@ -238,6 +238,7 @@ class Spree::AuctionsController < Spree::StoreController
   rescue
     supporting_data
     estimated_ship
+    @cloned_pms_colors = @auction.pms_colors.map(&:id)
     render :new
   end
 

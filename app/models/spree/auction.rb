@@ -282,7 +282,7 @@ class Spree::Auction < Spree::Base
 
     which_quantity ||= product.maximum_quantity
 
-    self.quantity = which_quantity
+    self.quantity = which_quantity.to_i
     save!
 
     bids.destroy_all

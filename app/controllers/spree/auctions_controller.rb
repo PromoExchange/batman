@@ -31,6 +31,7 @@ class Spree::AuctionsController < Spree::StoreController
       if params[:clone_auction_id].present?
         clone_me = Spree::Auction.find(params[:clone_auction_id])
         @auction = clone_me.dup
+        @auction.quantity = nil
         @auction.clone = clone_me
         @auction.logo = clone_me.logo
         @cloned_pms_colors = clone_me.pms_colors.pluck(:id).map(&:inspect).join(',')

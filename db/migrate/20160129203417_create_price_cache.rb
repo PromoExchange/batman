@@ -4,6 +4,8 @@ class CreatePriceCache < ActiveRecord::Migration
       t.integer :product_id
       t.string :range
       t.decimal :lowest_price
+      t.integer :position
+      t.timestamps null: false
     end
   end
 end

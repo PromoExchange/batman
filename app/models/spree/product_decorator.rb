@@ -10,6 +10,8 @@ Spree::Product.class_eval do
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
   has_many :imprint_methods, through: :imprint_methods_products
 
+  has_many :price_caches
+
   state_machine initial: :active do
     after_transition on: :invalid, do: :unavailable
     after_transition on: :loaded, do: :available
@@ -144,6 +146,36 @@ Spree::Product.class_eval do
 
   def available
     update_attribute(:available_on, Time.zone.now)
+  end
+
+  def refresh_price_cache
+    # We can only calcuate prices for products that have custom auctions
+    custom_auction = Spree::Auction.find_by(product_id: id, state: 'custom_auction')
+    fail 'refresh_price_cache called for non custom product' if custom_auction.nil?
+
+    how_old = ENV['PRICE_CACHE_REFRESH_HOURS']
+    how_old ||= 24
+
+    oldest_record = price_caches.order('updated_at').first
+    oldest_date = oldest_record.updated_at if oldest_record.present?
+    oldest_date ||= how_old.hours.ago - 1.hour
+
+    if how_old.hours.ago > oldest_date
+      price_caches.destroy_all
+
+      Spree::Variant.find_by(product_id: id).volume_prices(order: 'position asc').each do |price|
+        lowest_range = price.range.split('..')[0].gsub(/\D/, '')
+        best_price = custom_auction.best_price(lowest_range.to_i)
+
+        price_caches << Spree::PriceCache.create!(
+          range: price.range,
+          lowest_price: best_price,
+          position: price.position
+        )
+      end
+    end
+  rescue StandardError => e
+    Rails.logger.error("Failed to calculate price cache, #{e.message}")
   end
 
   def load_image(supplier_item_guid)

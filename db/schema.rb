@@ -658,9 +658,12 @@ ActiveRecord::Schema.define(version: 20160129203417) do
   add_index "spree_preferences", ["key"], name: "index_spree_preferences_on_key", unique: true, using: :btree
 
   create_table "spree_price_caches", force: :cascade do |t|
-    t.integer "product_id"
-    t.string  "range"
-    t.decimal "lowest_price"
+    t.integer  "product_id"
+    t.string   "range"
+    t.decimal  "lowest_price"
+    t.integer  "position"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "spree_prices", force: :cascade do |t|

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120162258) do
+ActiveRecord::Schema.define(version: 20160129203417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -656,6 +656,12 @@ ActiveRecord::Schema.define(version: 20160120162258) do
   end
 
   add_index "spree_preferences", ["key"], name: "index_spree_preferences_on_key", unique: true, using: :btree
+
+  create_table "spree_price_caches", force: :cascade do |t|
+    t.integer "product_id"
+    t.string  "range"
+    t.decimal "lowest_price"
+  end
 
   create_table "spree_prices", force: :cascade do |t|
     t.integer  "variant_id",                          null: false

@@ -167,7 +167,9 @@ $(function() {
       });
       $('.total-qty span:last').text(sum);
       var min = parseInt($("#auction-size").attr('min-quantity'));
+      $(".cs-active-price").hide();
       if (sum >= min) {
+        $("#price-spin").show();
         var auction_clone_id = $("#auction_clone_id").val();
         var api_key = $('#new-auction').attr('data-key');
         var url = '/api/auctions/'+auction_clone_id+'/best_price?quantity='+sum;
@@ -181,9 +183,13 @@ $(function() {
           success: function(data) {
             var money_text = accounting.formatMoney((parseFloat(data)));
             $(".cs-active-price").text(money_text);
+            $("#price-spin").hide();
+            $(".cs-active-price").show();
           },
           error: function(data) {
             $(".cs-active-price").text('No Price found');
+            $("#price-spin").hide();
+            $(".cs-active-price").show();
           }
         });
       }

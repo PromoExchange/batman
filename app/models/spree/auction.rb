@@ -292,7 +292,8 @@ class Spree::Auction < Spree::Base
       bid.delete
     end
 
-    prebids = Spree::Prebid.where(supplier: product.supplier)
+    # Custom product use the original supplier for prebids
+    prebids = Spree::Prebid.where(supplier: product.original_supplier)
 
     prebids.each do |p|
       p.create_prebid(id)

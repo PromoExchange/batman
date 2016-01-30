@@ -112,7 +112,7 @@ class Spree::AuctionsController < Spree::StoreController
 
     if auction_data[:clone_id].present?
       # Get the prebids NOW
-      prebids = Spree::Prebid.where(supplier: @auction.product.supplier)
+      prebids = Spree::Prebid.where(supplier: @auction.product.original_supplier)
       prebids.each do |p|
         Rails.logger.info "Prebid Job: requesting bid creation: #{p.id}"
         p.create_prebid(@auction.id)

@@ -18,7 +18,7 @@ class Spree::DashboardsController < Spree::StoreController
     @tax_rates = Spree::TaxRate.where(user: current_spree_user).order(:name)
 
     create_prebids
-    @prebids = Spree::Prebid.where(seller: current_spree_user).order(:id)
+    @prebids = Spree::Prebid.where(seller: current_spree_user).joins(:supplier).where("spree_suppliers.company_store=false")
   end
 
   private

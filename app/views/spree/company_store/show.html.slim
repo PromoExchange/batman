@@ -5,4 +5,4 @@
   .col-md-4.cs-product
     = link_to large_image(auction.product, {itemprop: 'image', class: 'cs-image'}), main_app.new_auction_path(product_id: auction.product.id, clone_auction_id: auction.id ), itemprop: 'url'
     .cs-product-text.text-center = auction.name
-    .cs-product-text.text-center.cs-lowest-bid = "#{number_to_currency(auction.product.lowest_unit_price)}"
+    .cs-product-text.text-center.cs-lowest-bid = "As low as #{number_to_currency(auction.product.lowest_unit_price)}"

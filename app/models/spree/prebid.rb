@@ -13,7 +13,11 @@ class Spree::Prebid < Spree::Base
     auction = Spree::Auction.find(auction_id)
 
     # Do not create a duplicate prebid
-    return if auction.bids.where(prebid_id: id).present?
+    # warning... This was originally based on the prebid by product prebids
+    # It is now prebid by supplier so I am not sure if this check is still
+    # valid. I do not it causes a problem with best_price so I am removing
+    # it for now.
+    # return if auction.bids.where(prebid_id: id).present?
 
     # Do not prebid if the Quantity > 2 * EQP
     return if auction.quantity > (auction.product.maximum_quantity * 2)

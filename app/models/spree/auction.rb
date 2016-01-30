@@ -285,7 +285,12 @@ class Spree::Auction < Spree::Base
     self.quantity = which_quantity.to_i
     save!
 
-    bids.destroy_all
+    # F YOU
+    # bids.destroy_all
+    Spree::Bid.where(auction_id: id).each do |bid|
+      bid.order.delete
+      bid.delete
+    end
 
     prebids = Spree::Prebid.where(supplier: product.supplier)
 

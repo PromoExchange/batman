@@ -148,6 +148,15 @@ Spree::Product.class_eval do
     update_attribute(:available_on, Time.zone.now)
   end
 
+  def lowest_unit_price
+    refresh_price_cache
+    lowest_cache = price_caches.order(:position).last
+    lowest_range = lowest_cache.range.split('..')[0].gsub(/\D/, '').to_i
+    lowest_cache.lowest_price.to_f / lowest_range
+  rescue StandardError => e
+    Rails.logger.error("Failed to get lowest price, #{e.message}")
+  end
+
   def refresh_price_cache
     # We can only calcuate prices for products that have custom auctions
     custom_auction = Spree::Auction.find_by(product_id: id, state: 'custom_auction')

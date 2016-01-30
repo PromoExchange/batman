@@ -28,7 +28,7 @@ $(function(){
             $(".cs-active-price").text(money_text);
           },
           error: function(data) {
-            e.val('No price found');
+            $(".cs-active-price").text('No Price Found');
           }
         });
       }

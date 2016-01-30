@@ -1,5 +1,14 @@
 
 namespace :companystore do
+  desc 'Create Anchorfree Price Cache'
+  task anchorfree_cache: :environment do
+    company_store = Spree::CompanyStore.where(slug: 'anchorfree').first
+    Spree::Product.where(supplier: company_store.supplier).each do |product|
+      Spree::PriceCache.where(product: product).destroy_all
+      product.refresh_price_cache
+    end
+  end
+
   desc 'Create anchor free company store'
   task anchorfree: :environment do
     user = Spree::User.where(email: 'dwittig@anchorfree.com').first

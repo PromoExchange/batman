@@ -1,0 +1,60 @@
+<div class="modal fade" id="inspire-me-request" tabindex="-1" role="dialog" aria-labelledby="inspire-me-request">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <%= form_for :inspire_me_request, url: '/inspire_me_request', html: {id: 'inspire-me-request', class: 'form'}, remote: true do |f| %>
+          <span class="error-messages"><ul></ul></span>
+          <div class="form-group">
+            <label> It’s okay, we all need help some times. Let our swag pros give you some great unique product ideas based on the details you provide. What do we need to know? Glad you asked. What is the purpose of the product? Do you have a budget in mind? Do you need made in the USA products? Let us know anything and everything you had in mind and we’ll get back to you within 2 days. The more detail you can give us, the better! </label>
+          </div>
+
+          <div class="form-group">
+            <%= f.email_field :email, class: 'form-control', placeholder: 'eMail Address' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.text_field :title, class: 'form-control', placeholder: 'Project Title' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.text_field :quantity, class: 'form-control', placeholder: 'Quantity' %>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">$</div>
+              <%= f.text_field :budget_from, class: 'form-control', placeholder: 'From' %>
+              <div class="input-group-addon">.00</div>
+              <div class="budget-space"></div>
+              <div class="input-group-addon">$</div>
+              <%= f.text_field :budget_to, class: 'form-control', placeholder: 'To' %>
+              <div class="input-group-addon">.00</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-inline">
+              <%= check_box_tag 'product_request[request_type][]', 'Union Made' %> Union Made
+            </label>
+
+            <label class="checkbox-inline">
+              <%= check_box_tag 'product_request[request_type][]', 'Made in the USA' %> Made in the USA
+            </label>
+
+            <label class="checkbox-inline">
+              <%= check_box_tag 'product_request[request_type][]', 'Eco Friendly' %> Eco Friendly
+            </label>
+          </div>
+
+          <div class="form-group">
+            <%= f.text_area :request, class: 'form-control' %>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <%= f.submit 'Submit', class: "btn btn-primary" %>
+        <% end %>
+        <%= button_tag "Close", class: "btn btn-default", data: {dismiss: "modal"} %>
+      </div>
+    </div>
+  </div>
+</div>

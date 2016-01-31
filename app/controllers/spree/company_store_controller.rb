@@ -7,6 +7,14 @@ class Spree::CompanyStoreController < Spree::StoreController
     redirect_to "/company_store/#{company_store_id}"
   end
 
+  def inspire_me
+    @inspire_me_request = params[:inspire_me_request]
+    @product_request = params[:product_request]
+    BuyerMailer.send_inspire_me_request(@inspire_me_request, @product_request).deliver
+    flash[:notice] = 'Your PromoExchange swag pro will have product ideas for you soon!'
+    render :js => "window.location = '/'"
+  end
+
   private
 
   def fetch_company_store
@@ -16,6 +24,6 @@ class Spree::CompanyStoreController < Spree::StoreController
   end
 
   def company_store_params
-    params.require(:company_store).permit(:id)
+    params.require(:company_store).permit(:id,:buyer_id, :title, :request, :budget_from, :budget_to, :quantity, request_type:[])
   end
 end

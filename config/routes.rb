@@ -26,9 +26,10 @@ Rails.application.routes.draw do
   post '/delete_customer/:customer_id', to: 'spree/api/charges#delete_customer'
   post '/confirm', to: 'spree/api/charges#confirm_deposit'
   post '/send_request', to: 'spree/home#send_request'
-
+  
   get '/company_store', to: 'spree/company_store#index'
   get '/company_store/:id', to: 'spree/company_store#show'
+  post '/inspire_me_request', to: 'spree/company_store#inspire_me'
 
   resources :pxtaxrates,
     controller: 'spree/pxtaxrates',

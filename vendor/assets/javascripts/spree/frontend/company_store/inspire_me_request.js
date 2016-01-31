@@ -1,5 +1,5 @@
 $(function() {
-  $("#product_request").on("ajax:success", function(e, data){
+  $("#inspire-me-request").on("ajax:success", function(e, data){
     alert("Your PromoExchange swag pro will have product ideas for you soon!");
   }).on("ajax:error", function(e, data){
     var trHTML = '';
@@ -8,10 +8,10 @@ $(function() {
         trHTML += '<li>' + item + '</li>';
       });
     }
-    $(this).find('.payment-errors ul').html(trHTML);
+    $(this).find('.error-messages ul').html(trHTML);
   });
 
-  $('#get-ideas').click(function(){
-    $('#product_request')[0].reset();
+  $('#inspire-me').click(function(){
+    $('#inspire-me-request')[0].reset();
   });
 });

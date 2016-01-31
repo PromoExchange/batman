@@ -1,5 +1,6 @@
 $(function(){
   $(".cs-lowest-bid").each(function(){
+    return;
     var api_key = $('.cs-title').attr('data-key');
     var url = '/api/auctions/'+$(this).attr('data-key')+'/best_price';
     var e = $(this);

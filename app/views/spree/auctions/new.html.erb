@@ -8,7 +8,11 @@
     <%= link_to large_image(@auction.product, itemprop: "image", width: '400px'), url, itemprop: 'url' %><br/>
     <p><%= @auction.product.description %></p>
 
-    <h5>Factory: <%= @auction.product.supplier.name %></h5>
+    <% if @auction.product.original_supplier.nil? %>
+      <h5>Factory: <%= @auction.product.supplier.name %></h5>
+    <% else %>
+      <h5>Factory: <%= @auction.product.original_supplier.name %></h5>
+    <% end %>
     <h5>SKU: <%= @auction.product.sku %></h5>
 
     <%= render partial: 'spree/shared/properties' %>

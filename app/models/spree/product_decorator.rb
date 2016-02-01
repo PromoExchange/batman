@@ -63,6 +63,14 @@ Spree::Product.class_eval do
     price_ranges.map(&:to_range).map { |v| v.map { volume_prices[price_ranges.map(&:to_range).index(v)] } }.flatten
   end
 
+  def eqp_price
+    last_price = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].last
+    return last_price.amount.to_f if last_price.present?
+    0.0
+  rescue
+    0.0
+  end
+
   def lowest_discounted_volume_price
     volume_prices = Spree::Variant.find_by(product: self).volume_prices
 

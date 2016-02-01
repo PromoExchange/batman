@@ -47,8 +47,18 @@ $(function() {
         var eqp_discount_cell_id = "#prebid-" + prebid_id + " > td.eqp-discount";
         var markup_cell_id = "#prebid-" + prebid_id + " > td.markup";
 
-        $(markup_cell_id).html((markup * 100).toFixed(3));
-        $(eqp_discount_cell_id).html((eqp_discount * 100).toFixed(3));
+        markup_string = '-';
+        if(markup > 0) {
+          markup_string = parseFloat((markup * 100).toFixed(3));
+        }
+        $(markup_cell_id).html(markup_string);
+
+        eqp_string = '-';
+        if(eqp_discount > 0) {
+          eqp_string = parseFloat((eqp_discount * 100).toFixed(3));
+        }
+        $(eqp_discount_cell_id).html(eqp_string);
+
         if(eqp_flag === true) {
           $(eqp_flag_cell_id).html('Yes');
         } else {

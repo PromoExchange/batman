@@ -98,6 +98,10 @@ class Spree::Auction < Spree::Base
       transition open: :custom_auction
     end
 
+    event :pending_accept do
+      transition open: :pending_accept
+    end
+
     event :cancel do
       transition [:open, :waiting_confirmation, :in_dispute] => :cancelled
     end
@@ -107,7 +111,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :accept do
-      transition [:open, :waiting] => :waiting_confirmation
+      transition [:open, :waiting, :pending_accept] => :waiting_confirmation
     end
 
     # Technically this is accept for preferred sellers

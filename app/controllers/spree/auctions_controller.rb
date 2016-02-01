@@ -125,6 +125,8 @@ class Spree::AuctionsController < Spree::StoreController
         redirect_to '/', flash: { notice: 'Unable to calculate price, please contact support' }
       end
 
+      @auction.pending_accept
+
       redirect_to "/accept/#{bid.id}"
     else
       redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }

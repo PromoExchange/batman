@@ -36,7 +36,7 @@ class Spree::AuctionsController < Spree::StoreController
         @auction.logo = clone_me.logo
         @cloned_pms_colors = clone_me.pms_colors.pluck(:id).map(&:inspect).join(',')
         @price_breaks = Array.new
-        @auction.product.price_caches.pluck(:range, :lowest_price).each do |price|
+        @auction.product.price_caches.order(:position).pluck(:range, :lowest_price).each do |price|
           lowest_range = price[0].split('..')[0].gsub(/\D/, '').to_i
           @price_breaks << [ lowest_range, price[1].to_f / lowest_range ]
         end

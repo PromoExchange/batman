@@ -7,8 +7,10 @@
 <p> Budget To: <%= @inspire_me_request[:budget_to] %> </p>
 <p> Request: <%= @inspire_me_request[:request] %> </p>
 
-<% @product_request[:request_type].each do |type| %>
-<p><%= type %> </p>
+<% unless @product_request.nil? %>
+  <% @product_request[:request_type].each do |type| %>
+  <p><%= type %> </p>
+  <% end %>
 <% end %>
 
 <%= render partial: 'email_signature' %>

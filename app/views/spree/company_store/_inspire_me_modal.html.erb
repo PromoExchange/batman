@@ -9,25 +9,25 @@
           </div>
 
           <div class="form-group">
-            <%= f.email_field :email, class: 'form-control', placeholder: 'eMail Address' %>
+            <%= f.email_field :email, class: 'form-control', placeholder: 'eMail Address', required: true %>
           </div>
 
           <div class="form-group">
-            <%= f.text_field :title, class: 'form-control', placeholder: 'Project Title' %>
+            <%= f.text_field :title, class: 'form-control', placeholder: 'Project Title', required: true %>
           </div>
 
           <div class="form-group">
-            <%= f.text_field :quantity, class: 'form-control', placeholder: 'Quantity' %>
+            <%= f.text_field :quantity, class: 'form-control', placeholder: 'Quantity', required: true %>
           </div>
 
           <div class="form-group">
             <div class="input-group">
               <div class="input-group-addon">$</div>
-              <%= f.text_field :budget_from, class: 'form-control', placeholder: 'From' %>
+              <%= f.text_field :budget_from, class: 'form-control', placeholder: 'From' , required: true%>
               <div class="input-group-addon">.00</div>
               <div class="budget-space"></div>
               <div class="input-group-addon">$</div>
-              <%= f.text_field :budget_to, class: 'form-control', placeholder: 'To' %>
+              <%= f.text_field :budget_to, class: 'form-control', placeholder: 'To' , required: true%>
               <div class="input-group-addon">.00</div>
             </div>
           </div>
@@ -47,11 +47,11 @@
           </div>
 
           <div class="form-group">
-            <%= f.text_area :request, class: 'form-control' %>
+            <%= f.text_area :request, class: 'form-control' , required: true %>
           </div>
       </div>
       <div class="modal-footer">
-          <%= f.submit 'Submit', class: "btn btn-primary" %>
+          <%= f.submit 'Submit', class: "btn btn-primary cs-button" %>
         <% end %>
         <%= button_tag "Close", class: "btn btn-default", data: {dismiss: "modal"} %>
       </div>

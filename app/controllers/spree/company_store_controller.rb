@@ -8,7 +8,7 @@ class Spree::CompanyStoreController < Spree::StoreController
   end
 
   def inspire_me
-    BuyerMailer.send_inspire_me_request(params[:inspire_me_request], params[:product_request]).deliver
+    BuyerMailer.send_inspire_me_request(params[:inspire_me_request], params[:product_request]).deliver_now
     flash[:notice] = 'Your PromoExchange swag pro will have product ideas for you soon!'
     render :js => "window.location = '/'"
   end

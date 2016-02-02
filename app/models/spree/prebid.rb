@@ -46,8 +46,10 @@ class Spree::Prebid < Spree::Base
       if eqp_price != 0.0
         auction_data[:messages] << 'Using EQP'
         auction_data[:messages] << "EQP Price (base): #{eqp_price}"
-        auction_data[:messages] << "EQP Discount: #{eqp_discount}"
-        discount_eqp_price = eqp_price * (1 - eqp_discount)
+        discount = eqp_discount
+        discount ||= 0.0
+        auction_data[:messages] << "EQP Discount: #{discount}"
+        discount_eqp_price = eqp_price * (1 - discount)
         auction_data[:messages] << "EQP Price (discounted): #{discount_eqp_price}"
         unit_price = discount_eqp_price
       else
@@ -141,8 +143,10 @@ class Spree::Prebid < Spree::Base
     auction_data[:messages] << "After applying shipping cost: #{auction_data[:running_unit_price]}"
 
     # Seller markup
-    auction_data[:messages] << "Applying markup: #{markup.to_f}"
-    auction_data[:running_unit_price] *= (1 + markup.to_f)
+    seller_markup = markup
+    seller_markup || 0.0
+    auction_data[:messages] << "Applying markup: #{seller_markup.to_f}"
+    auction_data[:running_unit_price] *= (1 + seller_markup.to_f)
     auction_data[:messages] << "After applying markup: #{auction_data[:running_unit_price]}"
 
     # Promo exchange commission

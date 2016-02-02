@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160113185916) do
+ActiveRecord::Schema.define(version: 20160202113448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 20160113185916) do
     t.string   "shipping_agent",                        default: "ups"
     t.integer  "customer_id"
     t.string   "ship_to_zip"
+    t.integer  "clone_id"
   end
 
   add_index "spree_auctions", ["reference"], name: "index_spree_auctions_on_reference", unique: true, using: :btree
@@ -218,6 +219,14 @@ ActiveRecord::Schema.define(version: 20160113185916) do
   end
 
   add_index "spree_color_products", ["product_id"], name: "index_spree_color_products_on_product_id", using: :btree
+
+  create_table "spree_company_stores", force: :cascade do |t|
+    t.string  "name"
+    t.string  "slug"
+    t.integer "supplier_id"
+    t.integer "buyer_id"
+    t.string  "display_name"
+  end
 
   create_table "spree_countries", force: :cascade do |t|
     t.string   "iso_name"
@@ -357,6 +366,7 @@ ActiveRecord::Schema.define(version: 20160113185916) do
     t.string   "logo_file_content_type"
     t.integer  "logo_file_file_size"
     t.datetime "logo_file_updated_at",   precision: 6
+    t.boolean  "custom"
   end
 
   create_table "spree_messages", force: :cascade do |t|
@@ -623,10 +633,19 @@ ActiveRecord::Schema.define(version: 20160113185916) do
   create_table "spree_prebids", force: :cascade do |t|
     t.integer "seller_id",                    null: false
     t.integer "supplier_id",                  null: false
-    t.decimal "markup",       default: 0.0
+    t.decimal "markup"
     t.boolean "eqp",          default: false
-    t.decimal "eqp_discount", default: 0.0
+    t.decimal "eqp_discount"
     t.boolean "live",         default: false
+  end
+
+  create_table "spree_preconfigures", force: :cascade do |t|
+    t.integer "product_id",        null: false
+    t.integer "buyer_id",          null: false
+    t.integer "imprint_method_id", null: false
+    t.integer "main_color_id",     null: false
+    t.integer "logo_id",           null: false
+    t.string  "custom_pms_colors"
   end
 
   create_table "spree_preferences", force: :cascade do |t|
@@ -637,6 +656,15 @@ ActiveRecord::Schema.define(version: 20160113185916) do
   end
 
   add_index "spree_preferences", ["key"], name: "index_spree_preferences_on_key", unique: true, using: :btree
+
+  create_table "spree_price_caches", force: :cascade do |t|
+    t.integer  "product_id"
+    t.string   "range"
+    t.decimal  "lowest_price"
+    t.integer  "position"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
 
   create_table "spree_prices", force: :cascade do |t|
     t.integer  "variant_id",                          null: false
@@ -744,6 +772,8 @@ ActiveRecord::Schema.define(version: 20160113185916) do
     t.datetime "size",                  precision: 6
     t.datetime "weight",                precision: 6
     t.string   "state"
+    t.boolean  "custom_product"
+    t.integer  "original_supplier_id"
   end
 
   add_index "spree_products", ["available_on"], name: "index_spree_products_on_available_on", using: :btree
@@ -1210,9 +1240,10 @@ ActiveRecord::Schema.define(version: 20160113185916) do
 
   create_table "spree_suppliers", force: :cascade do |t|
     t.integer "billing_address_id"
-    t.string  "name",                null: false
+    t.string  "name",                                null: false
     t.string  "dc_acct_num"
     t.integer "shipping_address_id"
+    t.boolean "company_store",       default: false
   end
 
   create_table "spree_tax_categories", force: :cascade do |t|

@@ -35,7 +35,7 @@ $(function() {
       },
       success: function(data) {
         var taxrate_cell_id = "#taxrate-" + taxrate_id + " > td.rate-amount";
-        $(taxrate_cell_id).html((taxrate_value * 100).toFixed(2));
+        $(taxrate_cell_id).html(parseFloat((taxrate_value * 100).toFixed(3)));
 
         var include_cell_id = "#taxrate-" + taxrate_id + " > td.rate-includesandh";
         if(taxrate_include === true) {
@@ -43,10 +43,9 @@ $(function() {
         } else {
           $(include_cell_id).html('No');
         }
-        alert('Tax rate updated');
       },
       error: function(data) {
-        alert('Failed to update tax rate');
+        alert('Failed to update tax rate, please contact support');
       }
     });
   });

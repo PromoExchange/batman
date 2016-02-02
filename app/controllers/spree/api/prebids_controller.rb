@@ -44,8 +44,8 @@ class Spree::Api::PrebidsController < Spree::Api::BaseController
   end
 
   def save_prebid
-    @json = JSON.parse(request.body.read)
-    @prebid.assign_attributes(@json)
+    json = JSON.parse(request.body.read)
+    @prebid.assign_attributes(json)
     if @prebid.save!
       render 'spree/api/prebids/show'
     else

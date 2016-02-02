@@ -23,8 +23,13 @@ $(function() {
     var markup = $("#markup-edit").val();
     var prebids_url = '/api/prebids/' + prebid_id;
 
-    eqp_discount /= 100;
-    markup /= 100;
+    if(eqp_discount !== "") {
+      eqp_discount /= 100;
+    }
+
+    if(markup !== "") {
+      markup /= 100;
+    }
 
     var message = {
       live: live_flag,
@@ -48,13 +53,13 @@ $(function() {
         var markup_cell_id = "#prebid-" + prebid_id + " > td.markup";
 
         markup_string = '-';
-        if(markup > 0) {
+        if(markup !== "") {
           markup_string = parseFloat((markup * 100).toFixed(3));
         }
         $(markup_cell_id).html(markup_string);
 
         eqp_string = '-';
-        if(eqp_discount > 0) {
+        if(eqp_discount !== "" ) {
           eqp_string = parseFloat((eqp_discount * 100).toFixed(3));
         }
         $(eqp_discount_cell_id).html(eqp_string);

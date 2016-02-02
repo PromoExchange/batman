@@ -1,6 +1,10 @@
 module PercentHelper
   def percentage_display(value)
-    return '-' if value.to_f < 0.0001
-    (value.to_f * 100).round(3)
+    return '-' if value.blank?
+    number_with_precision(
+      value.to_f * 100,
+      strip_insignificant_zeros: true,
+      precision: 3
+    )
   end
 end

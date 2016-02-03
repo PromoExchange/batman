@@ -64,6 +64,7 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:messages] << "Item name: #{auction.product.name}"
     auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
+    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}" unless auction.product.original_supplier.nil?
     auction_data[:messages] << "SKU: #{auction.product.master.sku}"
     if auction.preferred?(seller)
       auction_data[:messages] << 'Seller: Preferred'

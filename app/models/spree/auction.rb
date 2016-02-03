@@ -2,7 +2,7 @@ class Spree::Auction < Spree::Base
   before_create :set_default_dates
   after_create :generate_reference
 
-  has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }
+  has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }, dependent: :destroy
 
   has_many :auctions_users, class_name: 'Spree::AuctionsUser'
   has_many :invited_sellers, through: :auctions_users, source: :user
@@ -12,6 +12,7 @@ class Spree::Auction < Spree::Base
   belongs_to :logo
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
   has_one :order
+  belongs_to :clone, class_name: 'Spree::Auction'
 
   has_many :auctions_pms_colors, class_name: 'Spree::AuctionPmsColor'
   has_many :pms_colors, through: :auctions_pms_colors
@@ -55,6 +56,7 @@ class Spree::Auction < Spree::Base
   validate :credit_card_presense, if: -> { customer_id.present? }, on: :update
   delegate :name, to: :product
   delegate :email, to: :buyer, prefix: true
+  delegate :custom_product, to: :product
 
   # preferred
   #   open
@@ -72,6 +74,10 @@ class Spree::Auction < Spree::Base
   #   cancel, only valid before accept
   #   end, At the end of the auctions time
 
+  # custom_auction
+  #   open
+  #   custom_auction
+
   state_machine initial: :open do
     after_transition on: :confirm_order, do: :notification_for_in_production
     after_transition on: :delivered, do: :notification_for_product_delivered
@@ -88,6 +94,14 @@ class Spree::Auction < Spree::Base
       transition open: :ended
     end
 
+    event :custom_auction do
+      transition open: :custom_auction
+    end
+
+    event :pending_accept do
+      transition open: :pending_accept
+    end
+
     event :cancel do
       transition [:open, :waiting_confirmation, :in_dispute] => :cancelled
     end
@@ -97,7 +111,7 @@ class Spree::Auction < Spree::Base
     end
 
     event :accept do
-      transition [:open, :waiting] => :waiting_confirmation
+      transition [:open, :waiting, :pending_accept] => :waiting_confirmation
     end
 
     # Technically this is accept for preferred sellers
@@ -108,6 +122,10 @@ class Spree::Auction < Spree::Base
 
     event :invoice_paid do
       transition unpaid: :complete
+    end
+
+    event :clone_confirm_order do
+      transition [:open, :waiting_confirmation, :unpaid] => :in_production
     end
 
     # Non preferred flow
@@ -257,6 +275,41 @@ class Spree::Auction < Spree::Base
 
   end
 
+  def best_price(which_quantity)
+    fail "Not a custom auction" unless state == 'custom_auction'
+
+    divisor = 1
+    if which_quantity.nil?
+      divisor = product.maximum_quantity
+      which_quantity = divisor
+    end
+
+    which_quantity ||= product.maximum_quantity
+
+    self.quantity = which_quantity.to_i
+    save!
+
+    # F YOU
+    # bids.destroy_all
+    Spree::Bid.where(auction_id: id).each do |bid|
+      bid.order.delete
+      bid.delete
+    end
+
+    # Custom product use the original supplier for prebids
+    prebids = Spree::Prebid.where(supplier: product.original_supplier)
+
+    prebids.each do |p|
+      p.create_prebid(id)
+    end
+
+    lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first
+
+    return lowest_bid.total.to_f / divisor unless lowest_bid.nil?
+
+    0.0
+  end
+
   private
 
   def notification_for_in_production
@@ -264,6 +317,7 @@ class Spree::Auction < Spree::Base
       InProduction,
       auction_id: id
     )
+    return if clone_id
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
       EmailHelpers.email_delay(Time.zone.now + 48.hours),

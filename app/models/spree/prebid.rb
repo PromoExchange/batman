@@ -41,19 +41,22 @@ class Spree::Prebid < Spree::Base
 
     unit_price = auction.product_unit_price
 
-    if eqp?
-      eqp_price = auction.product.eqp_price
-      if eqp_price != 0.0
-        auction_data[:messages] << 'Using EQP'
-        auction_data[:messages] << "EQP Price (base): #{eqp_price}"
-        discount = eqp_discount
-        discount ||= 0.0
-        auction_data[:messages] << "EQP Discount: #{discount}"
-        discount_eqp_price = eqp_price * (1 - discount)
-        auction_data[:messages] << "EQP Price (discounted): #{discount_eqp_price}"
-        unit_price = discount_eqp_price
-      else
-        auction_data[:messages] << 'Unable to get EQP'
+    # If markup = nil we do not use eqp
+    unless markup.nil?
+      if eqp?
+        eqp_price = auction.product.eqp_price
+        if eqp_price != 0.0
+          auction_data[:messages] << 'Using EQP'
+          auction_data[:messages] << "EQP Price (base): #{eqp_price}"
+          discount = eqp_discount
+          discount ||= 0.0
+          auction_data[:messages] << "EQP Discount: #{discount}"
+          discount_eqp_price = eqp_price * (1 - discount)
+          auction_data[:messages] << "EQP Price (discounted): #{discount_eqp_price}"
+          unit_price = discount_eqp_price
+        else
+          auction_data[:messages] << 'Unable to get EQP'
+        end
       end
     end
 

@@ -193,8 +193,17 @@ class Spree::AuctionsController < Spree::StoreController
 
   def csaccept
     @bid = Spree::Bid.find(params[:bid_id])
+
+    Stripe::Charge.create(
+      amount: (@bid.order.total.to_f * 100).to_i,
+      currency: 'usd',
+      source: params[:stripeToken],
+      description: "#{params[:stripeEmail]}"
+    )
+
     @bid.non_preferred_accept
     @bid.auction.accept
+
     redirect_to '/'
   end
 

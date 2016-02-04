@@ -19,6 +19,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         .includes(:invited_sellers, :review, :bids, :product)
         .page(params[:page])
         .per(params[:per_page])
+        .order(:created_at)
     else
       lost_auctions = Spree::Auction.search(
         bids_seller_id_eq: params[:seller_id],

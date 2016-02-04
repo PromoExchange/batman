@@ -187,9 +187,19 @@ class Spree::Auction < Spree::Base
 
   def product_price_code
     price_code = nil
+    price_code_count = 0
     product.master.volume_prices.each do |v|
       if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
         price_code = v.price_code
+
+        # It is possible that the price code is actually the entire price code
+        # Break it out and select the correct one
+        if price_code.length > 1
+          price_code_array = Spree::Price.price_code_to_array(price_code)
+          if price_code_array.length >= price_code_count
+            price_code = price_code_array[price_code_count]
+          end
+        end
         break
       end
     end

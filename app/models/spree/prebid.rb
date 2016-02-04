@@ -36,7 +36,8 @@ class Spree::Prebid < Spree::Base
       messages: [],
       carton: auction.product.carton,
       shipping_cost: 0.0,
-      ship_to_zip: auction.ship_to_zip
+      ship_to_zip: auction.ship_to_zip,
+      used_eqp: false
     }
 
     unit_price = auction.product_unit_price
@@ -50,7 +51,7 @@ class Spree::Prebid < Spree::Base
           auction_data[:messages] << "EQP Price (base): #{eqp_price}"
           # Discount it with price code first
           auction_data[:messages] << "EQP Price code: #{auction_data[:price_code]}"
-          price_codes = Spree::Price::price_code_to_array(auction.product_price_code)
+          price_codes = Spree::Price.price_code_to_array(auction.product_price_code)
           auction_data[:messages] << "EQP Applicable Price code: #{price_codes.last}"
           eqp_price = Spree::Price.discount_price(price_codes.last, eqp_price)
           auction_data[:messages] << "EQP Discounted Price (price_code): #{eqp_price}"
@@ -60,6 +61,7 @@ class Spree::Prebid < Spree::Base
           discount_eqp_price = eqp_price * (1 - discount)
           auction_data[:messages] << "EQP Price (discounted percentage): #{discount_eqp_price}"
           unit_price = discount_eqp_price
+          auction_data[:used_eqp] = true
         else
           auction_data[:messages] << 'Unable to get EQP'
         end
@@ -81,11 +83,15 @@ class Spree::Prebid < Spree::Base
     auction_data[:messages] << "Base Unit Price: #{auction_data[:base_unit_price]}"
 
     # Apply discount to base price
-    auction_data[:messages] << "MSRP Price Code: #{auction.product_price_code || 'V'}"
-    auction_data[:messages] << "Discount percentage: #{Spree::Price.discount_codes[auction_data[:price_code].to_sym]}"
-    auction_data[:messages] << "Initial unit cost: #{auction_data[:running_unit_price]}"
-    apply_price_discount(auction_data, auction.product_price_code)
-    auction_data[:messages] << "Discount unit cost: #{auction_data[:running_unit_price]}"
+    if auction_data[:used_eqp] == false
+      auction_data[:messages] << "MSRP Price Code: #{auction.product_price_code || 'V'}"
+      auction_data[:messages] << "Discount percentage: #{Spree::Price.discount_codes[auction_data[:price_code].to_sym]}"
+      auction_data[:messages] << "Initial unit cost: #{auction_data[:running_unit_price]}"
+      apply_price_discount(auction_data, auction.product_price_code)
+      auction_data[:messages] << "Discount unit cost: #{auction_data[:running_unit_price]}"
+    else
+      auction_data[:messages] << 'Price already EQP adjusted'
+    end
 
     # Supplier level
     auction_data[:supplier_upcharges] = Spree::UpchargeSupplier.where(related_id: supplier_id)

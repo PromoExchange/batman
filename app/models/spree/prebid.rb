@@ -43,6 +43,11 @@ class Spree::Prebid < Spree::Base
     unit_price = auction.product_unit_price
     auction_data[:price_code] ||= 'V'
 
+    auction_data[:messages] << "Item name: #{auction.product.name}"
+    auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
+    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}" unless auction.product.original_supplier.nil?
+    auction_data[:messages] << "SKU: #{auction.product.master.sku}"
+
     unless markup.nil?
       if eqp?
         eqp_price = auction.product.eqp_price
@@ -70,10 +75,6 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:base_unit_price] = unit_price
     auction_data[:running_unit_price] = unit_price
-    auction_data[:messages] << "Item name: #{auction.product.name}"
-    auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
-    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}" unless auction.product.original_supplier.nil?
-    auction_data[:messages] << "SKU: #{auction.product.master.sku}"
     if auction.preferred?(seller)
       auction_data[:messages] << 'Seller: Preferred'
     else

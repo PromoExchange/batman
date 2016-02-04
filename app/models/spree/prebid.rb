@@ -40,28 +40,34 @@ class Spree::Prebid < Spree::Base
     }
 
     unit_price = auction.product_unit_price
+    auction_data[:price_code] ||= 'V'
 
-    if eqp?
-      eqp_price = auction.product.eqp_price
-      if eqp_price != 0.0
-        auction_data[:messages] << 'Using EQP'
-        auction_data[:messages] << "EQP Price (base): #{eqp_price}"
-        discount = eqp_discount
-        discount ||= 0.0
-        auction_data[:messages] << "EQP Discount: #{discount}"
-        discount_eqp_price = eqp_price * (1 - discount)
-        auction_data[:messages] << "EQP Price (discounted): #{discount_eqp_price}"
-        unit_price = discount_eqp_price
-      else
-        auction_data[:messages] << 'Unable to get EQP'
+    unless markup.nil?
+      if eqp?
+        eqp_price = auction.product.eqp_price
+        if eqp_price != 0.0
+          auction_data[:messages] << 'Using EQP'
+          auction_data[:messages] << "EQP Price (base): #{eqp_price}"
+          # Discount it with price code first
+          auction_data[:messages] << "EQP Price code: #{auction_data[:price_code]}"
+          price_codes = Spree::Price::price_code_to_array(auction.product_price_code)
+          auction_data[:messages] << "EQP Applicable Price code: #{price_codes.last}"
+          eqp_price = Spree::Price.discount_price(price_codes.last, eqp_price)
+          auction_data[:messages] << "EQP Discounted Price (price_code): #{eqp_price}"
+          discount = eqp_discount
+          discount ||= 0.0
+          auction_data[:messages] << "EQP Discount: #{discount}"
+          discount_eqp_price = eqp_price * (1 - discount)
+          auction_data[:messages] << "EQP Price (discounted percentage): #{discount_eqp_price}"
+          unit_price = discount_eqp_price
+        else
+          auction_data[:messages] << 'Unable to get EQP'
+        end
       end
     end
 
     auction_data[:base_unit_price] = unit_price
     auction_data[:running_unit_price] = unit_price
-
-    auction_data[:price_code] ||= 'V'
-
     auction_data[:messages] << "Item name: #{auction.product.name}"
     auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
     auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}" unless auction.product.original_supplier.nil?
@@ -222,7 +228,6 @@ class Spree::Prebid < Spree::Base
 
   def apply_price_discount(auction_data, discount_code)
     auction_data[:running_unit_price] = Spree::Price.discount_price(discount_code, auction_data[:base_unit_price])
-    log_debug(auction_data, "running_unit_price=#{auction_data[:running_unit_price]}")
   end
 
   def apply_supplier_upcharges(auction_data)

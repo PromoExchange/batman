@@ -27,7 +27,6 @@ $(function() {
         'X-Spree-Token': key
       },
       success: function(data) {
-        alert('Address added successfully');
         $('#auction-add-address').modal('hide');
         $('#edit-address-modal-form').trigger("reset");
         option_text = data.firstname + ' ' + data.lastname + ': ' + data.address1;
@@ -35,6 +34,8 @@ $(function() {
           .append($("<option></option>")
           .attr('value',data.id)
           .text(option_text));
+        var option_string = '#shipping_address_id option[value=' +data.id + ']';
+        $(option_string).prop("selected", "selected");
       },
       error: function(data) {
         var errors = JSON.parse(data.responseText);

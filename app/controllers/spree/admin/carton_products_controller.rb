@@ -30,7 +30,8 @@ class Spree::Admin::CartonProductsController < Spree::Admin::BaseController
       :height,
       :weight,
       :quantity,
-      :originating_zip
+      :originating_zip,
+      :fixed_price
     )
   end
 end

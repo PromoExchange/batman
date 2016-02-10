@@ -20,7 +20,7 @@
             <td><%= b.seller.shipping_company %> -  <%=b.seller.shipping_name %></td>
           <% end %>
           <td><%= render 'spree/dashboards/shared/stars', stars: b.seller.stars, edit_enabled: false %></td>
-          <td><%= '$%.2f' % b.bid %></td>
+          <td><%= number_to_currency(b.bid) %></td>
           <td>
             <% if b.accepted? %>
               <% if @auction.unpaid? && !b.manage_workflow %>

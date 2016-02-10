@@ -12,14 +12,14 @@
       <tr><td>Product:</td><td><%= @auction.product.name %></td></tr>
       <tr><td>Factory:</td><td><%= @auction.product.supplier.name %></td></tr>
       <tr><td>SKU:</td><td><%= @auction.product.sku %></td></tr>
-      <tr><td>Buyer Zip:</td><td><%= @auction.ship_to_zip %></td></tr>
+      <tr><td>Shipping Zip Code:</td><td><%= @auction.ship_to_zip %></td></tr>
       <tr><td>Started:</td><td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= @auction.started %>'><%= @auction.started %></time></td></tr>
       <tr><td>Quantity:</td><td><%= render partial: 'spree/shared/auction_size_detail', locals: {auction: @auction} %></td></tr>
       <tr><td>Imprint Method:</td><td><%= @auction.imprint_method.name %></td></tr>
       <tr><td>Main Color:</td><td><%= @auction.main_color.color %></td></tr>
       <tr><td>Custom PMS Colors:</td><td><%= @auction.custom_pms_colors %></td></tr>
       <tr>
-        <td>Imprint Colors:</td>
+        <td>Standard Imprint Colors:</td>
         <td>
           <% @auction.pms_colors.each do |c| %>
             <p><%= c.name %>/<%= c.pantone %></p>

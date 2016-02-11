@@ -17,6 +17,7 @@ Spree.config do |config|
   config.logo = 'logo/px_logo.png'
   config.currency = 'USD'
   config.products_per_page = 12
+  config.company = true
 end
 
 Spree::Auth::Config.set(signout_after_password_change: true)

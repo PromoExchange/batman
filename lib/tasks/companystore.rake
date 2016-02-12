@@ -162,7 +162,7 @@ namespace :companystore do
       state = Spree::State.where(name: 'California').first
 
       user.ship_address = Spree::Address.create(
-        company: 'Anchor Free',
+        company: 'AnchorFree',
         firstname: 'Drew',
         lastname: 'Wittig',
         address1: '155 Constitution Drive',
@@ -174,7 +174,7 @@ namespace :companystore do
       )
 
       user.bill_address = Spree::Address.create(
-        company: 'Anchor Free',
+        company: 'AnchorFree',
         firstname: 'Drew',
         lastname: 'Wittig',
         address1: '155 Constitution Drive',

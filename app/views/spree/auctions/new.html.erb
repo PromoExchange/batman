@@ -4,8 +4,7 @@
 
 <div class="cs-page row" id="new-auction" data-key="<%= ENV['SPREE_API_KEY'] %>">
   <div class="col-md-6">
-    <% url = spree.product_url(@auction.product) %>
-    <%= link_to large_image(@auction.product, itemprop: "image", width: '400px'), url, itemprop: 'url' %><br/>
+    <%= large_image(@auction.product, itemprop: "image", width: '400px') %><br/>
     <p><%= @auction.product.description %></p>
 
     <% if @auction.product.original_supplier.nil? %>

@@ -1,5 +1,5 @@
 class Spree::CompanyStoreController < Spree::StoreController
-  layout "company_store_layout"
+  layout 'company_store_layout'
   before_action :fetch_company_store, only: [:show]
 
   def index

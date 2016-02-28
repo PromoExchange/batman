@@ -57,6 +57,11 @@ namespace :product do
       ProductLoader.load('lite', 'leeds')
     end
 
+    desc 'Leeds Carton check'
+    task leeds_carton_check: :environment do
+      ProductLoader.load('lite', 'leeds_carton_check')
+    end
+
     desc 'Logomark Load'
     task logomark: :environment do
       load_files('logomark')

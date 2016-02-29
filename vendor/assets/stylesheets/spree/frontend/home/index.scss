@@ -4,7 +4,6 @@
   .nav-tabs > li, .nav-pills > li {
     float: none;
     display: inline-block;
-    padding-top:50px;
   }
 
   .nav-tabs, .nav-pills {
@@ -14,6 +13,11 @@
 
   p {
     font-size: 1.5em;
+<<<<<<< HEAD
+    text-align: center;
+=======
+    text-align:center;
+>>>>>>> origin/Connor-Dev
   }
 }
 
@@ -21,14 +25,107 @@
   position: relative;
 }
 
-#home_query_section {
-  position:absolute;
-  margin-top: 330px;
-  width: 100%;
-  padding-bottom: 40px;
-  padding-left: 325px;
-  margin-bottom: 10px;
-  background-color: #69cddd;
-  color:white;
+#LearnMore_Homepage{
+  background-color:#45b1e8;
+  border-color: #3097de;
+  margin-left:530px;
+}
+<<<<<<< HEAD
 
+#StartBuying_Button {
+  background-color: #45b1e8;
+  border-color: #3097de;
+}
+
+#SellerHowItWorks {
+  border-radius: 10%;
+  margin-left: 520px; 
+}
+
+#BuyerIcons {
+  margin-bottom: 20px;
+}
+#SellerIcons {
+  margin-bottom: 20px;
+}
+
+//Buyer info Icons
+.SaveMoney {
+  text-align: center;
+}
+.SaveTime {
+  text-align: center;
+}
+.NoHassle {
+  text-align: center;
+}
+.SaveMoney2 {
+  margin-left: 130px;
+}
+.SaveTime2 {
+  margin-left: 130px;
+}
+.NoHassle2 {
+  margin-left: 130px;
+}
+
+
+//Seller info Icons
+.ReachMore {
+  text-align: center;
+}
+.LowerOver {
+  text-align: center;
+}
+.BenefitFrom {
+  text-align: center;
+=======
+
+#BuyerIcons {
+  margin-bottom:20px;
+}
+#SellerIcons {
+  margin-bottom:20px;
+}
+
+// Buyer info icons
+.SaveMoney {
+  text-align:center;
+}
+.SaveTime {
+  text-align:center;
+}
+.NoHassle {
+  text-align:center;
+}
+.SaveMoney2 {
+  margin-left: 130px;
+}
+.SaveTime2 {
+  margin-left: 130px;
+}
+.NoHassle2 {
+  margin-left: 130px;
+}
+
+
+//Seller info Icons
+.ReachMore {
+  text-align:center;
+}
+.LowerOver {
+  text-align:center;
+}
+.BenefitFrom {
+  text-align:center;
+>>>>>>> origin/Connor-Dev
+}
+.ReachMore2 {
+  margin-left: 130px;
+}
+.LowerOver2 {
+  margin-left: 130px;
+}
+.BenefitFrom2 {
+  margin-left: 130px;
 }

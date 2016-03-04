@@ -1,4 +1,3 @@
-
 namespace :companystore do
   desc 'Create Anchorfree Price Cache'
   task anchorfree_cache: :environment do

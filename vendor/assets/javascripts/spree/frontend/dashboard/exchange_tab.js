@@ -25,7 +25,7 @@ $(function() {
       success: function(data) {
         var trHTML = '';
         if (data.length > 0) {
-          action_template = _.template("<td><button type='button' class='btn btn-success open-bid' data-toggle='modal' data-target='#place-bid' data-id='<%= auction_id %>'>Bid</button></td>");
+          action_template = _.template("<td><button type='button' id='BidButtonSellerDashboard' class='btn btn-success open-bid' data-toggle='modal' data-target='#place-bid' data-id='<%= auction_id %>'>Bid</button></td>");
           non_action_template = _.template("<td><button type='button' class='btn btn-success open-view'>Bid</button></td>");
           your_bid_template = _.template("<td id='your_bid_<%= auction_id %>'>no bid</td>");
 
@@ -193,7 +193,7 @@ $(function() {
   if ($($('#seller-live-auction-tab').parent()[0]).hasClass('active')) {
     $('#seller-live-auction-tab').trigger('click');
   }
-  
+
   $('#auction-tab').click(function(){
     window.history.pushState({}, null, '/dashboards');
     $('#seller-live-auction-tab').trigger('click');

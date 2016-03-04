@@ -20,7 +20,7 @@
               <td class="rate-name"><%= t.zone.name %></td>
               <td class="rate-amount pct"><%= (t.amount * 100).round(3) %></td>
               <td class="rate-includesandh text-center"> No </td>
-              <td><button type="button" class="btn btn-success open-tax-rate" data-toggle="modal" data-target="#tax-rate-edit-modal">Edit</button></td>
+              <td><button type="button" class="btn btn-success open-tax-rate" data-toggle="modal" data-target="#tax-rate-edit-modal" id="TaxRateEditButton">Edit</button></td>
             </tr>
           <% end %>
         </tbody>

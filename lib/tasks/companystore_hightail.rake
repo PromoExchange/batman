@@ -1,7 +1,7 @@
 namespace :companystore do
   desc 'Create Hightail company store'
   task hightail: :environment do
-    user = Spree::User.where(email: 'dwittig@anchorfree.com').first
+    user = Spree::User.where(email: 'lindsey.robinson@hightail.com').first
 
     # User
     if user.nil?
@@ -49,7 +49,7 @@ namespace :companystore do
 
     # Add Logo
     if user.logos.where(custom: true).count == 0
-      logo_file_name = File.join(Rails.root, 'db/company_store_data/hightail_logo_black.eps')
+      logo_file_name = File.join(Rails.root, 'db/company_store_data/hightail_logo_black.pdf')
       user.logos << Spree::Logo.create!(user: user, logo_file: open(logo_file_name), custom: true)
     end
 
@@ -84,5 +84,12 @@ namespace :companystore do
 
     # Products
     ProductLoader.load('company_store', 'hightail')
+    ProductLoader.load('company_store', 'hightail_upcharges')
+    ProductLoader.load('company_store', 'hightail_preconfigure')
+
+    Resque.enqueue(
+      CompanyStorePrebid,
+      name: store_name
+    )
   end
 end

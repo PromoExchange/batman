@@ -22,6 +22,14 @@ class Spree::CompanyStoreController < Spree::StoreController
   end
 
   def company_store_params
-    params.require(:company_store).permit(:id,:buyer_id, :title, :request, :budget_from, :budget_to, :quantity, request_type:[])
+    params.require(:company_store).permit(:id,
+      :buyer_id,
+      :title,
+      :request,
+      :budget_from,
+      :budget_to,
+      :quantity,
+      request_type:[]
+    )
   end
 end

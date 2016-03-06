@@ -21,7 +21,7 @@ default_attrs = {
   available_on: Time.zone.now + 100.years
 }
 
-file_name = File.join(Rails.root, 'db/company_store_data/anchorfree.csv')
+file_name = File.join(Rails.root, 'db/company_store_data/hightail.csv')
 
 load_fail = 0
 image_fail = 0
@@ -51,7 +51,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     # Image
     if Rails.configuration.x.load_images
       begin
-        image_path = File.join(Rails.root, "db/product_images/anchorfree/#{product_attrs[:sku]}.jpg")
+        image_path = File.join(Rails.root, "db/product_images/hightail/#{product_attrs[:sku]}.jpg")
         product.images << Spree::Image.create!(
           attachment: open(image_path),
           viewable: product

@@ -1,4 +1,47 @@
 namespace :companystore do
+  desc 'Create Hightail Price Cache'
+  task hightail_cache: :environment do
+    company_store = Spree::CompanyStore.where(slug: 'hightail').first
+    Spree::Product.where(supplier: company_store.supplier).each do |product|
+      Spree::PriceCache.where(product: product).destroy_all
+      product.refresh_price_cache
+    end
+  end
+
+  desc 'Assign orginal hightail suppliers'
+  task hightail_original: :environment do
+    # Leeds
+    leeds = Spree::Supplier.find_by(dc_acct_num: '100306')
+    fail 'Failed to find leeds Supplier' if leeds.nil?
+
+    leeds_sku = [
+      'HT-8150-90'
+    ]
+
+    leeds_sku.each do |product_sku|
+      product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
+      fail "Failed to find product [#{product_sku}]" if product.nil?
+      product.update_attributes(original_supplier: leeds)
+    end
+
+    # American Apparel
+    american_apparel = Spree::Supplier.where(name: 'American Apparel').first_or_create
+    fail 'Failed to find American Apparel Supplier' if american_apparel.nil?
+
+    american_apparel_sku = [
+      'HT-F497',
+      'HT-TRT497',
+      'HT-2001-WHITE',
+      'HT-2001-GREY',
+    ]
+
+    american_apparel_sku.each do |product_sku|
+      product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
+      fail "Failed to find product [#{product_sku}]" if product.nil?
+      product.update_attributes(original_supplier: american_apparel)
+    end
+  end
+
   desc 'Create Hightail company store'
   task hightail: :environment do
     user = Spree::User.where(email: 'lindsey.robinson@hightail.com').first

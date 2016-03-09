@@ -32,7 +32,7 @@
           <td>Logo:</td>
           <td>
             <%= image_tag(Spree::Logo::LOGO_FILE_NAME[@auction.logo.logo_file_file_name.split(".").last.to_sym], { title: @auction.logo.logo_file_file_name, itemprop: "image", alt: @auction.logo.logo_file_file_name, size: "100x100" }) %>
-            <%= link_to "Download", "/logos/#{@auction.logo.id}/download_logo", class: "btn btn-success"%>
+            <%= link_to "Download", "/logos/#{@auction.logo.id}/download_logo", class: "btn btn-success", id: "LogoDownloadButton"%>
           </td>
         </tr>
       <% end %>

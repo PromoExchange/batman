@@ -369,14 +369,16 @@ textarea {
 
 .alert-success {
   color: black;
-  border-color:lightblue;
-  background-color:lightblue;
+  border-color:#71ccdf;
+  background-color: #71ccdf;
+  font-weight: bold;
 }
 
 .alert-notice {
   color: black;
-  border-color:lightblue;
-  background-color:lightblue;
+  border-color:#71ccdf;
+  background-color:#71ccdf;
+  font-weight: bold;
 }
 
 // End of CSS for Logged In/Out Alert Message

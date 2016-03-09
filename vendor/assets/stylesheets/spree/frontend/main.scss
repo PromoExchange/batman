@@ -260,6 +260,11 @@ textarea {
   background-color: #3097de;
 }
 
+#AcceptBidButton {
+  border-color: #45b1e8;
+  background-color: #3097de;
+}
+
 // Buyer FAQ CSS
 
 #headingOne {
@@ -380,6 +385,13 @@ textarea {
 }
 
 .alert-notice {
+  color: black;
+  border-color:#71ccdf;
+  background-color:#71ccdf;
+  font-weight: bold;
+}
+
+.alert-alert {
   color: black;
   border-color:#71ccdf;
   background-color:#71ccdf;

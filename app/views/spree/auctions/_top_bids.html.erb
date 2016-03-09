@@ -30,7 +30,7 @@
               <% end %>
             <% else %>
               <% if (b.lost? && @auction.waiting?) or b.open? %>
-                <%= link_to 'Accept', '#', class: 'accept-link', data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
+                <%= link_to 'Accept', '#', class:"accept-link btn btn-success", id: "AcceptBidButton", data: {id: b.id, bid: b.bid, preferred: b.auction.preferred?(b.seller)} %>
               <% elsif b.rejected? %>
                 Failed to Accept Prior Selection
               <% else %>

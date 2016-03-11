@@ -85,6 +85,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         end
         name = range
 
+        # ap "Range: #{range} Price #{price} PC #{hashed[:pricecode]}"
+
         Spree::VolumePrice.where(
           variant: product.master,
           name: name,
@@ -122,16 +124,22 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     end
 
     # Carton
-    product.carton.weight = hashed[:shipping_weight]
-    product.carton.quantity = hashed[:shipping_quantity]
+    if hashed[:fixed_price].present?
+      product.carton.fixed_price = hashed[:fixed_price]
+    else
+      product.carton.weight = hashed[:shipping_weight]
+      product.carton.quantity = hashed[:shipping_quantity]
+    end
+
     product.carton.originating_zip = hashed[:fob]
+
     if hashed[:shipping_dimensions].present?
       dimensions = hashed[:shipping_dimensions].gsub(/[A-Z]/, '').delete(' ').split('x')
       product.carton.length = dimensions[0]
       product.carton.width = dimensions[1]
       product.carton.height = dimensions[2]
-      product.carton.save!
     end
+    product.carton.save!
     fail "Invalid carton #{hashed[:sku]}" unless product.carton.active?
 
     # Category

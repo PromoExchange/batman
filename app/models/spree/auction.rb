@@ -286,7 +286,7 @@ class Spree::Auction < Spree::Base
   end
 
   def best_price(which_quantity)
-    fail "Not a custom auction" unless state == 'custom_auction'
+    fail 'Not a custom auction' unless state == 'custom_auction'
 
     divisor = 1
     if which_quantity.nil?

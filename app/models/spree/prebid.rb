@@ -371,8 +371,13 @@ class Spree::Prebid < Spree::Base
 
   def calculate_shipping(auction_data)
     carton = auction_data[:carton]
+
     unless carton.fixed_price.nil?
-      auction_data[:shipping_cost] = carton.fixed_price
+      if carton.per_item
+        auction_data[:shipping_cost] = carton.fixed_price * auction_data[:quantity]
+      else
+        auction_data[:shipping_cost] = carton.fixed_price
+      end
       return auction_data[:shipping_cost]
     end
 

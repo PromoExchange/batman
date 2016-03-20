@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160130205928) do
+ActiveRecord::Schema.define(version: 20160320140418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 20160130205928) do
     t.integer "quantity",        default: 0
     t.string  "originating_zip", default: ""
     t.decimal "fixed_price"
+    t.boolean "per_item",        default: false
   end
 
   create_table "spree_color_products", force: :cascade do |t|
@@ -662,8 +663,8 @@ ActiveRecord::Schema.define(version: 20160130205928) do
     t.string   "range"
     t.decimal  "lowest_price"
     t.integer  "position"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",   precision: 6, null: false
+    t.datetime "updated_at",   precision: 6, null: false
   end
 
   create_table "spree_prices", force: :cascade do |t|

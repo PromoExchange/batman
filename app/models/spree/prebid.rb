@@ -373,9 +373,12 @@ class Spree::Prebid < Spree::Base
     carton = auction_data[:carton]
 
     unless carton.fixed_price.nil?
+      auction_data[:messages] << 'Using fixed price shipping'
       if carton.per_item
+        auction_data[:messages] << "Fixed price per item #{carton.fixed_price}"
         auction_data[:shipping_cost] = carton.fixed_price * auction_data[:quantity]
       else
+        auction_data[:messages] << "Fixed price total #{carton.fixed_price}"
         auction_data[:shipping_cost] = carton.fixed_price
       end
       return auction_data[:shipping_cost]

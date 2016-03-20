@@ -126,6 +126,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     # Carton
     if hashed[:fixed_price].present?
       product.carton.fixed_price = hashed[:fixed_price]
+      product.carton.per_item = true
     else
       product.carton.weight = hashed[:shipping_weight]
       product.carton.quantity = hashed[:shipping_quantity]

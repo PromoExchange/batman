@@ -6,7 +6,7 @@
       <div id="category<%= category.id %>" class="col-md-3 col-sm-6 product-list-item">
         <div class="panel panel-default">
           <div class="panel-body text-center product-body">
-            <%= link_to small_image(products.first, itemprop: "image"), url, itemprop: 'url' %><br/>
+            <%= link_to small_image(products.first, itemprop: "image-cat"), url, itemprop: 'url' %><br/>
             <%= link_to truncate(category.name, length: 50), url, class: 'info', itemprop: "name", title: category.name %>
           </div>
         </div>

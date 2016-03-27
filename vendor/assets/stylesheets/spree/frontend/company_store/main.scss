@@ -31,12 +31,21 @@
   background-color: #f8f8f8;
 }
 
+.cs-wrapper {
+  min-height: 100%;
+  margin: 0 auto -60px;
+}
+
 .cs-header{
   background-color: white;
   width: 100%;
 }
 
-.cs-footer{
+.footer-push {
+  height: 60px;
+}
+
+.cs-footer {
   background-color: #222222;
   width: 100%;
 }
@@ -64,4 +73,8 @@
 
 #inspire-me{
   margin-bottom: 20px;
+}
+
+html, body {
+  height: 100%;
 }

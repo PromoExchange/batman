@@ -44,15 +44,15 @@ namespace :companystore do
 
   desc 'Create Xactly company store'
   task xactly: :environment do
-    user = Spree::User.where(email: 'someuser@xactlycorp.com').first
+    user = Spree::User.where(email: 'mkuh@xactlycorp.com').first
 
     # User
     if user.nil?
       role = Spree::Role.where(name: 'buyer').first_or_create
 
       user = Spree::User.create(
-        email: 'someuser@xactlycorp.com',
-        login: 'someuser@xactlycorp.com',
+        email: 'mkuh@xactlycorp.com',
+        login: 'mkuh@xactlycorp.com',
         password: 'password123',
         password_confirmation: 'password123'
       )
@@ -65,11 +65,11 @@ namespace :companystore do
 
       user.ship_address = Spree::Address.create(
         company: 'Xactly',
-        firstname: 'Some',
-        lastname: 'User',
-        address1: '1919 S. Bascom Ave, Suite 650',
-        city: 'Campbell',
-        zipcode: '95008',
+        firstname: 'Marlene',
+        lastname: 'Kuh',
+        address1: '300 Park Ave #1700',
+        city: 'San Jose',
+        zipcode: '95110',
         state_id: state.id,
         country_id: country.id,
         phone: '8665587363'
@@ -77,11 +77,11 @@ namespace :companystore do
 
       user.bill_address = Spree::Address.create(
         company: 'Xactly',
-        firstname: 'Some',
-        lastname: 'User',
-        address1: '1919 S. Bascom Ave, Suite 650',
-        city: 'Campbell',
-        zipcode: '95008',
+        firstname: 'Marlene',
+        lastname: 'Kuh',
+        address1: '300 Park Ave #1700',
+        city: 'San Jose',
+        zipcode: '95110',
         state_id: state.id,
         country_id: country.id,
         phone: '8665587363'

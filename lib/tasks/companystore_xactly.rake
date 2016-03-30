@@ -1,15 +1,15 @@
 namespace :companystore do
-  desc 'Create Hightail Price Cache'
-  task hightail_cache: :environment do
-    company_store = Spree::CompanyStore.where(slug: 'hightail').first
+  desc 'Create Xactly Price Cache'
+  task xactly_cache: :environment do
+    company_store = Spree::CompanyStore.where(slug: 'xactly').first
     Spree::Product.where(supplier: company_store.supplier).each do |product|
       Spree::PriceCache.where(product: product).destroy_all
       product.refresh_price_cache
     end
   end
 
-  desc 'Assign orginal hightail suppliers'
-  task hightail_original: :environment do
+  desc 'Assign orginal xactly suppliers'
+  task xactly_original: :environment do
     # Leeds
     leeds = Spree::Supplier.find_by(dc_acct_num: '100306')
     fail 'Failed to find leeds Supplier' if leeds.nil?
@@ -42,17 +42,17 @@ namespace :companystore do
     end
   end
 
-  desc 'Create Hightail company store'
-  task hightail: :environment do
-    user = Spree::User.where(email: 'lindsey.robinson@hightail.com').first
+  desc 'Create Xactly company store'
+  task xactly: :environment do
+    user = Spree::User.where(email: 'someuser@xactlycorp.com').first
 
     # User
     if user.nil?
       role = Spree::Role.where(name: 'buyer').first_or_create
 
       user = Spree::User.create(
-        email: 'lindsey.robinson@hightail.com',
-        login: 'lindsey.robinson@hightail.com',
+        email: 'someuser@xactlycorp.com',
+        login: 'someuser@xactlycorp.com',
         password: 'password123',
         password_confirmation: 'password123'
       )
@@ -64,9 +64,9 @@ namespace :companystore do
       state = Spree::State.where(name: 'California').first
 
       user.ship_address = Spree::Address.create(
-        company: 'Hightail',
-        firstname: 'Lindsey',
-        lastname: 'Robinson',
+        company: 'Xactly',
+        firstname: 'Some',
+        lastname: 'User',
         address1: '1919 S. Bascom Ave, Suite 650',
         city: 'Campbell',
         zipcode: '95008',
@@ -76,9 +76,9 @@ namespace :companystore do
       )
 
       user.bill_address = Spree::Address.create(
-        company: 'Hightail',
-        firstname: 'Lindsey',
-        lastname: 'Robinson',
+        company: 'Xactly',
+        firstname: 'Some',
+        lastname: 'User',
         address1: '1919 S. Bascom Ave, Suite 650',
         city: 'Campbell',
         zipcode: '95008',
@@ -92,17 +92,17 @@ namespace :companystore do
 
     # Add Logo
     if user.logos.where(custom: true).count == 0
-      logo_file_name = File.join(Rails.root, 'db/company_store_data/hightail_logo_black.pdf')
+      logo_file_name = File.join(Rails.root, 'db/company_store_data/xactly-logo.pdf')
       user.logos << Spree::Logo.create!(user: user, logo_file: open(logo_file_name), custom: true)
     end
 
-    store_name = 'Hightail Company Store'
+    store_name = 'Xactly Company Store'
 
     # Supplier
     supplier = Spree::Supplier.where(name: store_name).first
     if supplier.nil?
       supplier = Spree::Supplier.create(
-        name: 'Hightail Company Store',
+        name: 'Xactly Company Store',
         billing_address: user.bill_address,
         shipping_address: user.ship_address,
         company_store: true
@@ -113,8 +113,8 @@ namespace :companystore do
     # Company Store
     company_store_attr = {
       name: store_name,
-      display_name: 'Hightail',
-      slug: 'hightail',
+      display_name: 'Xactly',
+      slug: 'xactly',
       supplier: supplier,
       buyer: user
     }
@@ -126,13 +126,13 @@ namespace :companystore do
     company_store.save!
 
     # Products
-    ProductLoader.load('company_store', 'hightail')
-    ProductLoader.load('company_store', 'hightail_upcharges')
-    ProductLoader.load('company_store', 'hightail_preconfigure')
+    # ProductLoader.load('company_store', 'xactly')
+    # ProductLoader.load('company_store', 'xactly_upcharges')
+    # ProductLoader.load('company_store', 'xactly_preconfigure')
 
-    Resque.enqueue(
-      CompanyStorePrebid,
-      name: store_name
-    )
+    # Resque.enqueue(
+    #   CompanyStorePrebid,
+    #   name: store_name
+    # )
   end
 end

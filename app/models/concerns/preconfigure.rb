@@ -27,9 +27,9 @@ module Preconfigure
     )
     # TODO: This is for AnchorFree, preconfigure PMS Colors
     auction.pms_colors << Spree::PmsColor.where(
-      name: 'Orange',
-      pantone: 'Orange',
-      hex: '#fe5000'
+      name: 'Gray',
+      pantone: 'Cool Gray 9',
+      hex: '#75787b'
     ).first_or_create
     auction.save!
     auction.custom_auction

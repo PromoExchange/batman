@@ -17,7 +17,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
 
   buyer = Spree::User.where(email: 'mkuh@xactlycorp.com').first
-  fail "Unable to locate XActly user" if buyer.nil?
+  fail 'Unable to locate XActly user' if buyer.nil?
 
   case hashed[:imprint_method]
   when 'embroidery'

@@ -15,7 +15,8 @@ namespace :companystore do
     fail 'Failed to find leeds Supplier' if leeds.nil?
 
     leeds_sku = [
-      'HT-8150-90'
+      'XA-8150-85',
+      'XA-7120-15'
     ]
 
     leeds_sku.each do |product_sku|
@@ -24,15 +25,55 @@ namespace :companystore do
       product.update_attributes(original_supplier: leeds)
     end
 
+    # Bullet
+    bullet = Spree::Supplier.find_by(dc_acct_num: '100383')
+    fail 'Failed to find gemline Supplier' if bullet.nil?
+
+    bullet_sku = [
+      'XA-SM-4125'
+    ]
+
+    bullet_sku.each do |product_sku|
+      product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
+      fail "Failed to find product [#{product_sku}]" if product.nil?
+      product.update_attributes(original_supplier: bullet)
+    end
+
+    # Gemline
+    gemline = Spree::Supplier.find_by(dc_acct_num: '100257')
+    fail 'Failed to find gemline Supplier' if gemline.nil?
+
+    gemline_sku = [
+      'XA-40061'
+    ]
+
+    gemline_sku.each do |product_sku|
+      product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
+      fail "Failed to find product [#{product_sku}]" if product.nil?
+      product.update_attributes(original_supplier: gemline)
+    end
+
+    # American Apparel
+    rivers_end_trading = Spree::Supplier.where(name: 'River\'s End Trading').first_or_create
+    fail 'Failed to find River\'s End Tradomg Supplier' if rivers_end_trading.nil?
+
+    rivers_end_sku = [
+      'XA-6223'
+    ]
+
+    rivers_end_sku.each do |product_sku|
+      product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
+      fail "Failed to find product [#{product_sku}]" if product.nil?
+      product.update_attributes(original_supplier: rivers_end_trading)
+    end
+
     # American Apparel
     american_apparel = Spree::Supplier.where(name: 'American Apparel').first_or_create
     fail 'Failed to find American Apparel Supplier' if american_apparel.nil?
 
     american_apparel_sku = [
-      'HT-F497',
-      'HT-TRT497',
-      'HT-2001-WHITE',
-      'HT-2001-GREY'
+      'XA-F497',
+      'XA-2001-WHITE'
     ]
 
     american_apparel_sku.each do |product_sku|
@@ -127,12 +168,12 @@ namespace :companystore do
 
     # Products
     ProductLoader.load('company_store', 'xactly')
-    # ProductLoader.load('company_store', 'xactly_upcharges')
-    # ProductLoader.load('company_store', 'xactly_preconfigure')
+    ProductLoader.load('company_store', 'xactly_upcharges')
+    ProductLoader.load('company_store', 'xactly_preconfigure')
 
-    # Resque.enqueue(
-    #   CompanyStorePrebid,
-    #   name: store_name
-    # )
+    Resque.enqueue(
+      CompanyStorePrebid,
+      name: store_name
+    )
   end
 end

@@ -1,0 +1,17 @@
+SKU,type,range,value,code,imprint_method
+XA-8150-85,setup,,95,G,screen_print
+XA-8150-85,run,(1..49),0.99,V,screen_print
+XA-8150-85,run,(50..149),0.79,V,screen_print
+XA-8150-85,run,(150..499),0.69,V,screen_print
+XA-8150-85,run,500+,0.49,V,screen_print
+XA-7120-15,setup,,95,G,screen_print
+XA-7120-15,run,(1..49),0.99,V,screen_print
+XA-7120-15,run,(50..149),0.79,V,screen_print
+XA-7120-15,run,(150..499),0.69,V,screen_print
+XA-7120-15,run,500+,0.49,V,screen_print
+XA-SM-4125,setup,,110,G,screen_print
+XA-SM-4125,run,1+,0.30,V,screen_print
+XA-40061,setup,,70,V,deboss
+XA-6223,setup,,130,K,embroidery
+XA-F497,setup,,60,K,screen_print
+XA-2001-WHITE,setup,,40,K,screen_print

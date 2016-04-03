@@ -113,7 +113,7 @@ namespace :companystore do
         zipcode: '95110',
         state_id: state.id,
         country_id: country.id,
-        phone: '8665587363'
+        phone: '4082921153'
       )
 
       user.bill_address = Spree::Address.create(
@@ -125,7 +125,7 @@ namespace :companystore do
         zipcode: '95110',
         state_id: state.id,
         country_id: country.id,
-        phone: '8665587363'
+        phone: '4082921153'
       )
       user.save!
       user.confirm!

@@ -1,9 +1,9 @@
 require 'csv'
 require 'open-uri'
 
-puts 'Loading Hightail custom'
+puts 'Loading Xactly custom'
 
-store_name = 'Hightail Company Store'
+store_name = 'Xactly Company Store'
 
 supplier = Spree::Supplier.where(name: store_name).first
 
@@ -21,7 +21,7 @@ default_attrs = {
   available_on: Time.zone.now + 100.years
 }
 
-file_name = File.join(Rails.root, 'db/company_store_data/hightail.csv')
+file_name = File.join(Rails.root, 'db/company_store_data/xactly.csv')
 
 load_fail = 0
 image_fail = 0
@@ -51,7 +51,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     # Image
     if Rails.configuration.x.load_images
       begin
-        image_path = File.join(Rails.root, "db/product_images/hightail/#{product_attrs[:sku]}.jpg")
+        image_path = File.join(Rails.root, "db/product_images/xactly/#{product_attrs[:sku]}.jpg")
         product.images << Spree::Image.create!(
           attachment: open(image_path),
           viewable: product
@@ -81,7 +81,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
         if i == price_code_array.size - 1
           range = "#{quantity}+"
         else
-          range = "(#{quantity}..#{next_quantity.to_i-1})"
+          range = "(#{quantity}..#{next_quantity.to_i - 1})"
         end
         name = range
 
@@ -92,7 +92,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
           name: name,
           range: range,
           amount: price,
-          position: i+1,
+          position: i + 1,
           discount_type: 'price',
           price_code: hashed[:pricecode]
         ).first_or_create

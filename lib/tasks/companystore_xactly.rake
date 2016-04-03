@@ -126,7 +126,7 @@ namespace :companystore do
     company_store.save!
 
     # Products
-    # ProductLoader.load('company_store', 'xactly')
+    ProductLoader.load('company_store', 'xactly')
     # ProductLoader.load('company_store', 'xactly_upcharges')
     # ProductLoader.load('company_store', 'xactly_preconfigure')
 

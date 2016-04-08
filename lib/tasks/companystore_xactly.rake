@@ -89,6 +89,23 @@ namespace :companystore do
       fail "Failed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: american_apparel)
     end
+
+    # Innovation line
+    innovation_line = Spree::Supplier.where(
+      name: 'Innovation Line',
+      dc_acct_num: '100108'
+    ).first_or_create
+    fail 'Failed to find Innovation Line Supplier' if innovation_line.nil?
+
+    innovation_line_skus = [
+      'XA-5117'
+    ]
+
+    innovation_line_skus.each do |product_sku|
+      product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
+      fail "Failed to find product [#{product_sku}]" if product.nil?
+      product.update_attributes(original_supplier: innovation_line)
+    end
   end
 
   desc 'Create Xactly company store'

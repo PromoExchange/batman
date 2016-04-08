@@ -33,8 +33,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   count += 1
   begin
-    desc = hashed[:product_description]
-
     product_attrs = {
       sku: hashed[:sku],
       name: hashed[:item_name],

@@ -122,20 +122,20 @@ namespace :companystore do
       product.update_attributes(original_supplier: jetline)
     end
 
-    # Quaker City Caps Products
-    quakercity = Spree::Supplier.where(
-      name: 'Quaker City Caps'
+    # Quake City Caps Products
+    quakecity = Spree::Supplier.where(
+      name: 'Quake City Caps'
     ).first_or_create
-    fail 'Failed to find Quaker City Caps Supplier' if quakercity.nil?
+    fail 'Failed to find Quake City Caps Supplier' if quakecity.nil?
 
-    quakercity_skus = [
+    quakecity_skus = [
       'AF-8500'
     ]
 
-    quakercity_skus.each do |product_sku|
+    quakecity_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
       fail "Failed to find product [#{product_sku}]" if product.nil?
-      product.update_attributes(original_supplier: quakercity)
+      product.update_attributes(original_supplier: quakecity)
     end
   end
 

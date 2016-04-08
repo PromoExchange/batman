@@ -1,4 +1,12 @@
 namespace :companystore do
+  desc 'Fix Quake City'
+  task fix_quake_city: :environment do
+    quake_city = Spree::Supplier.where(name: 'Quaker City Caps').first
+    if quake_city.present?
+      quake_city.update_attributes(name: 'Quake City Caps')
+    end
+  end
+
   desc 'Create Xactly Price Cache'
   task xactly_cache: :environment do
     company_store = Spree::CompanyStore.where(slug: 'xactly').first

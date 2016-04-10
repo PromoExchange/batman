@@ -6,7 +6,7 @@ $(function() {
       simple_template = _.template("<td><%= value %></td>");
       image_template = _.template("<td><a href='/auctions/<%= auction_id %>'><img itemprop='image' data-toggle='tooltip' title='<%= name %>' alt='<%= name %>' src='<%= image %>'</a></td>");
       date_template = _.template("<td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= date %>'><%= date %></time></td>");
-      action_template = _.template("<td><ul><li><a href='/auctions/<%= auction_id %>' data-id='<%= auction_id %>'>Go to Auction</a></li><li><a class='cancel' data-confirm='Are you sure?' href='#' data-id='<%= auction_id %>'>Cancel</a></li></ul></td>");
+      action_template = _.template("<td><ul><a href='/auctions/<%= auction_id %>' class='btn btn-success' id='GoToAuctionButton' data-id='<%= auction_id %>'>Go to Auction</a><a class='cancel btn btn-success' id='CancelAuctionButton' data-confirm='Are you sure?' href='#' data-id='<%= auction_id %>'>Cancel</a></ul></td>");
 
       $.each(data, function(i, item) {
         trHTML += "<tr>";
@@ -130,9 +130,9 @@ $(function() {
   if ($($('#live-auction-tab').parent()[0]).hasClass('active')) {
     $('#live-auction-tab').trigger('click');
   }
-  
+
   if ($($('#waiting-auction-tab').parent()[0]).hasClass('active')) {
     $('#waiting-auction-tab').trigger('click');
   }
-  
+
 });

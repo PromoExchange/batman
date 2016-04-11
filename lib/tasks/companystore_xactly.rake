@@ -1,4 +1,15 @@
 namespace :companystore do
+  desc 'Fix Cellphone Wallet'
+  task fix_cell_wallet: :environment do
+    product = Spree::Product.joins(:master).where("spree_variants.sku='XA-5117'").first
+    product.images.destroy_all
+    image_path = File.join(Rails.root, 'db/product_images/xactly/XA-5117.jpg')
+    product.images << Spree::Image.create!(
+      attachment: open(image_path),
+      viewable: product
+    )
+  end
+
   desc 'Fix Quake City'
   task fix_quake_city: :environment do
     quake_city = Spree::Supplier.where(name: 'Quaker City Caps').first

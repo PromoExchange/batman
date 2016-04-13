@@ -294,11 +294,25 @@ textarea {
   border-radius: 50%;
 }
 
+[image="image-main"] {
+  border: 4px solid #3097de;
+  border-radius: 50%;
+  float: right;
+}
+
 [itemprop='image-cat'] {
   border: 4px solid #3097de;
   border-radius: 50%;
   height: 108px;
   width: 108px;
+}
+
+#NewAuctionText {
+  float:right
+}
+
+#NewAuctionText2 {
+  float: left
 }
 
 #GoToAuctionButton {

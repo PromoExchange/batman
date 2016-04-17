@@ -17,7 +17,7 @@
           <tr>
             <td><a href='/auctions/<%= a.id %>'><%= a.reference %></a></td>
             <% url = spree.product_url(a.product) %>
-            <td><a href='/auctions/<%= a.id %>'><%= link_to small_image(a.product, itemprop: "image"), url, itemprop: 'url' %></a></td>
+            <td><a href='/auctions/<%= a.id %>'><%= link_to small_image(a.product, itemprop: "image"), url, itemprop: 'url', height: "108px", width: "108px" %></a></td>
             <td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= a.started %>'><%= a.started %></time></td>
             <td><time data-format='%B %e, %Y %l:%M%P' data-local='time' datetime='<%= a.ended %>'><%= a.ended %></time></td>
             <td><%= a.buyer_email %></td>

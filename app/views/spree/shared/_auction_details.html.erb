@@ -1,7 +1,11 @@
 <div class="col-md-6">
   <% url = spree.product_url(@auction.product) %>
-  <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url', style: "float: right" %><br/>
+  <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url', style: "float: right" %> <br>
+
+
   <p><%= @auction.product.description %></p>
+
+  <br></br>
   <%= render partial: 'spree/shared/properties' %>
 </div>
 <div class="col-md-6 well">

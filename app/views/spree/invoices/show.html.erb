@@ -12,7 +12,7 @@
 <div class="row" id="show-invoice" data-key="<%= spree_current_user.spree_api_key %>">
   <div class="col-md-6">
     <% url = spree.product_url(@auction.product) %>
-    <%= link_to large_image(@auction.product, itemprop: "image"), url, itemprop: 'url' %><br/>
+    <%= link_to large_image(@auction.product, itemprop: "image", height: "108px", width: "108px"), url, itemprop: 'url' %><br/>
     <p><%= @auction.product.description %></p>
     <%= render partial: 'spree/shared/properties' %>
   </div>

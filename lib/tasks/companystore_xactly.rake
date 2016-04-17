@@ -176,7 +176,10 @@ namespace :companystore do
     end
 
     # Logomark
-    logomark = Spree::Supplier.find_by(dc_acct_num: '101044')
+    logomark = Spree::Supplier.where(
+      name: 'Logomark, Inc.',
+      dc_acct_num: '101044'
+    ).first_or_create
     fail 'Failed to find Logomark Supplier' if logomark.nil?
 
     logomark_sku = [

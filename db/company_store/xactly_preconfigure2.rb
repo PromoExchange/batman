@@ -1,17 +1,23 @@
 require 'csv'
+require 'open-uri'
 
-# Product Level
-file_name = File.join(Rails.root, 'db/company_store_data/anchorfree_upcharges.csv')
+puts 'Loading Xactly 2 preconfigures'
+
+store_name = 'Xactly Company Store'
+
+supplier = Spree::Supplier.where(name: store_name).first
+
+fail 'Unable to find supplier' if supplier.nil?
+
+file_name = File.join(Rails.root, 'db/company_store_data/xactly_preconfigure2.csv')
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
+
   product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
 
-  product.loading!
-
-  fail "Failed to find product #{hashed[:sku]}" if product.nil?
-
-  upcharge_type = Spree::UpchargeType.where(name: hashed[:type]).first_or_create
+  buyer = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+  fail 'Unable to locate XActly user' if buyer.nil?
 
   case hashed[:imprint_method]
   when 'embroidery'
@@ -30,19 +36,19 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     puts "Unknown Method - #{imprint}"
   end
 
-  upcharge_attrs = {
-    upcharge_type_id: upcharge_type.id,
-    related_id: product.id,
-    actual: hashed[:type].titleize,
-    price_code: hashed[:code],
-    imprint_method_id: imprint_method.id
+  main_color = Spree::ColorProduct.where(
+    product: product,
+    color: hashed[:color]).first_or_create
+
+  logo = buyer.logos.where(custom: true).first
+
+  attrs = {
+    product: product,
+    buyer: buyer,
+    imprint_method: imprint_method,
+    main_color: main_color,
+    logo: logo
   }
 
-  upcharge_attrs[:value] = hashed[:value]
-  upcharge_attrs[:range] = hashed[:range]
-
-  Spree::UpchargeProduct.where(upcharge_attrs).first_or_create
-
-  product.check_validity!
-  product.loaded! if product.state == 'loading'
+  Spree::Preconfigure.where(attrs).first_or_create
 end

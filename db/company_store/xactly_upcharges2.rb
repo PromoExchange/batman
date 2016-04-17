@@ -1,7 +1,7 @@
 require 'csv'
 
 # Product Level
-file_name = File.join(Rails.root, 'db/company_store_data/anchorfree_upcharges.csv')
+file_name = File.join(Rails.root, 'db/company_store_data/xactly_upcharges2.csv')
 
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash

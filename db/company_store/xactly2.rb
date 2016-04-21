@@ -28,8 +28,21 @@ image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 
+xactly_2_products = [
+  'XA-6240-SXL',
+  'XA-6640-SXL',
+  'XA-PD46P-25',
+  'XA-BA2300',
+  'XA-BTR8',
+  'XA-CPP5579'
+]
+
 CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
+
+  # HACK: Skip original 2 (this is going to get silly)
+  # TODO: I need a cleaner way of adding additional products
+  next if xactly_2_products.include?(hashed[:sku])
 
   count += 1
   begin

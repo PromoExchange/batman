@@ -5,3 +5,6 @@ XA-PD46P-25,setup,,0,K,4color
 XA-BA2300,setup,,56.25,V,laser
 XA-BTR8,setup,,75.00,V,4color
 XA-CPP5579,setup,,76.00,V,screen_print
+XA-20099,setup,,150,V,screen_print
+XA-20099,run,(1..999),0.28,V,screen_print
+XA-20099,run,1000+,0.20,V,screen_print

@@ -1,13 +1,16 @@
 namespace :companystore do
   desc 'Delete part 2 products'
   task delete_2_products: :environment do
+    # xactly_2_products = [
+    #   'XA-6240-SXL',
+    #   'XA-6640-SXL',
+    #   'XA-PD46P-25',
+    #   'XA-BA2300',
+    #   'XA-BTR8',
+    #   'XA-CPP5579'
+    # ]
     xactly_2_products = [
-      'XA-6240-SXL',
-      'XA-6640-SXL',
-      'XA-PD46P-25',
-      'XA-BA2300',
-      'XA-BTR8',
-      'XA-CPP5579'
+      'XA-20099',
     ]
 
     xactly_2_products.each do |sku|
@@ -35,9 +38,7 @@ namespace :companystore do
   desc 'Fix Quake City'
   task fix_quake_city: :environment do
     quake_city = Spree::Supplier.where(name: 'Quaker City Caps').first
-    if quake_city.present?
-      quake_city.update_attributes(name: 'Quake City Caps')
-    end
+    quake_city.update_attributes(name: 'Quake City Caps') if quake_city.present?
   end
 
   desc 'Create Xactly Price Cache'
@@ -108,7 +109,7 @@ namespace :companystore do
       product.update_attributes(original_supplier: rivers_end_trading)
     end
 
-    # Rivers End Trading
+    # American Apparel
     american_apparel = Spree::Supplier.where(name: 'American Apparel').first_or_create
     fail 'Failed to find American Apparel Supplier' if american_apparel.nil?
 
@@ -224,6 +225,20 @@ namespace :companystore do
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
       fail "Failed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: cloth_promotions)
+    end
+
+    # Alpi International
+    alpi_international = Spree::Supplier.where(name: 'Alpi International').first_or_create
+    fail 'Failed to find Alpi International Supplier' if alpi_international.nil?
+
+    alpi_international_skus = [
+      'XA-20099'
+    ]
+
+    alpi_international_skus.each do |product_sku|
+      product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
+      fail "Failed to find product [#{product_sku}]" if product.nil?
+      product.update_attributes(original_supplier: alpi_international)
     end
   end
 

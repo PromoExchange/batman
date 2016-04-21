@@ -1,4 +1,24 @@
 namespace :companystore do
+  desc 'Fix XActly images'
+  task fix_xactly_images: :environment do
+    xactly_products = [
+      'XA-PD46P-25',
+      'XA-BA2300',
+      'XA-BTR8',
+      'XA-CPP5579'
+    ]
+
+    xactly_products.each do |product_sku|
+      product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
+      product.images.destroy_all
+      image_path = File.join(Rails.root, "db/product_images/xactly/#{product_sku}.jpg")
+      product.images << Spree::Image.create!(
+        attachment: open(image_path),
+        viewable: product
+      )
+    end
+  end
+
   desc 'Delete part 2 products'
   task delete_2_products: :environment do
     # xactly_2_products = [
@@ -10,7 +30,7 @@ namespace :companystore do
     #   'XA-CPP5579'
     # ]
     xactly_2_products = [
-      'XA-20099',
+      'XA-20099'
     ]
 
     xactly_2_products.each do |sku|

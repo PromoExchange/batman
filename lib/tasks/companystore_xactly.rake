@@ -1,5 +1,14 @@
 namespace :companystore do
-  desc 'Fix XActly images'
+  desc 'Fix Xactly PMS'
+  task fix_xactly_pms: :environment do
+    company_store = Spree::CompanyStore.where(slug: 'xactly').first
+    Spree::Product.where(supplier: company_store.supplier).each do |p|
+      preconfigure = Spree::Preconfigure.where(product: p).first
+      preconfigure.update_attributes(custom_pms_colors: '166 C')
+    end
+  end
+
+  desc 'Fix Xactly images'
   task fix_xactly_images: :environment do
     xactly_products = [
       'XA-PD46P-25',

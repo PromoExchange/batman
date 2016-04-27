@@ -60,7 +60,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     buyer: buyer,
     imprint_method: imprint_method,
     main_color: main_color,
-    logo: logo
+    logo: logo,
+    custom_pms_colors: '166 C'
   }
 
   Spree::Preconfigure.where(attrs).first_or_create

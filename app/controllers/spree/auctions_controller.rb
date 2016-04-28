@@ -35,10 +35,20 @@ class Spree::AuctionsController < Spree::StoreController
         @auction.clone = clone_me
         @auction.logo = clone_me.logo
         @cloned_pms_colors = clone_me.pms_colors.pluck(:id).map(&:inspect).join(',')
-        @price_breaks = Array.new
+        @price_breaks = []
         @auction.product.price_caches.order(:position).pluck(:range, :lowest_price).each do |price|
           lowest_range = price[0].split('..')[0].gsub(/\D/, '').to_i
-          @price_breaks << [ lowest_range, price[1].to_f / lowest_range ]
+          @price_breaks << [lowest_range, price[1].to_f / lowest_range]
+        end
+
+        user = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+        @addresses = []
+        user.addresses.map do |a|
+          next if a.bill? && !a.ship?
+          address = OpenStruct.new
+          address.id = a.id
+          address.name = a.to_s
+          @addresses << address
         end
       end
     end
@@ -104,7 +114,7 @@ class Spree::AuctionsController < Spree::StoreController
       unless current_spree_user
         @auction.pending
         session[:pending_auction_id] = @auction.id
-        redirect_to login_url and return
+        redirect_to login_url && return
       end
     end
 
@@ -210,18 +220,19 @@ class Spree::AuctionsController < Spree::StoreController
   def auction_payment
     @bid = Spree::Bid.find(params[:bid_id])
     @auction = @bid.auction
-    if @auction.clone_id.nil?
-      customers = current_spree_user.customers
-      @customers = customers.web_check.verified.concat customers.credit_card
 
-      @addresses = current_spree_user.addresses.active.map do |address|
-        next if address.bill? && !address.ship?
-        ["#{address}", address.id]
-      end
+    return unless @auction.clone_id.nil?
 
-      @pxaddress = Spree::Pxaddress.new
-      estimated_ship
+    customers = current_spree_user.customers
+    @customers = customers.web_check.verified.concat customers.credit_card
+
+    @addresses = current_spree_user.addresses.active.map do |address|
+      next if address.bill? && !address.ship?
+      ["#{address}", address.id]
     end
+
+    @pxaddress = Spree::Pxaddress.new
+    estimated_ship
   end
 
   def upload_proof
@@ -230,7 +241,7 @@ class Spree::AuctionsController < Spree::StoreController
     elsif @auction.update_attributes(proof_file: params[:proof_file], proof_feedback: '')
       @auction.upload_proof!
       flash[:notice] = 'Your document uploaded successfully.'
-      render :js => "window.location = '/invoices/#{@auction.id}'"
+      render js: "window.location = '/invoices/#{@auction.id}'"
     else
       render nothing: true, status: :unprocessable_entity, json: 'This is not a supported file format'
     end
@@ -261,10 +272,9 @@ class Spree::AuctionsController < Spree::StoreController
 
   def estimated_ship
     @estimated_ship_date = 21.days.from_now
-    unless @auction.nil?
-      if @auction.product.master.sku == 'Yeti-20'
-        @estimated_ship_date = 7.weeks.from_now
-      end
+    return if @auction.nil?
+    if @auction.product.master.sku == 'Yeti-20'
+      @estimated_ship_date = 7.weeks.from_now
     end
   end
 
@@ -328,29 +338,29 @@ class Spree::AuctionsController < Spree::StoreController
 
     send_prebid_request @auction.id if @auction.clone_id.nil?
 
-    unless auction_data[:invited_sellers].nil?
-      auction_data[:invited_sellers].split(';').each do |seller_email|
-        next if seller_email.blank?
+    return if auction_data[:invited_sellers].nil?
 
-        email_type = :is
-        invited_seller = Spree::User.where(email: seller_email).first
+    auction_data[:invited_sellers].split(';').each do |seller_email|
+      next if seller_email.blank?
 
-        if invited_seller.nil?
-          email_type = :non
-        else
-          Spree::AuctionsUser.create(
-            auction_id: @auction.id,
-            user_id: invited_seller.id
-          )
-        end
+      email_type = :is
+      invited_seller = Spree::User.where(email: seller_email).first
 
-        Resque.enqueue(
-          SellerInvite,
+      if invited_seller.nil?
+        email_type = :non
+      else
+        Spree::AuctionsUser.create(
           auction_id: @auction.id,
-          type: email_type,
-          email_address: seller_email
+          user_id: invited_seller.id
         )
       end
+
+      Resque.enqueue(
+        SellerInvite,
+        auction_id: @auction.id,
+        type: email_type,
+        email_address: seller_email
+      )
     end
   end
 

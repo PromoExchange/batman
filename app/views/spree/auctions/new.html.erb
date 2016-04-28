@@ -40,7 +40,6 @@
       <%= render partial: 'spree/auctions/new/imprint_method', locals: {f: f}%>
       <%= render partial: 'spree/auctions/new/logos', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/pms_swatch', locals: {f: f} %>
-      <%= render partial: 'spree/auctions/new/quantity', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/ship_to', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/main_color', locals: {f: f} %>
 
@@ -51,8 +50,10 @@
         <p>Estimated delivery date: <%= @estimated_ship_date.strftime('%B %e, %Y') %></p>
       <% end %>
 
-      <%= render partial: 'spree/auctions/new/active_price', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/price_breaks', locals: {f: f} %>
+      <%= render partial: 'spree/auctions/new/quantity', locals: {f: f} %>
+      <%= render partial: 'spree/auctions/new/address_drop', locals: {f: f} %>
+      <%= render partial: 'spree/auctions/new/active_price', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/buttons', locals: {f: f} %>
     </fieldset>
     <% end %>

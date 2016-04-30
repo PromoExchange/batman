@@ -30,3 +30,6 @@ public/uploads/**
 .tags*
 
 node_modules
+
+# Local Redis
+dump.rbd

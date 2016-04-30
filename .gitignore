@@ -32,4 +32,4 @@ public/uploads/**
 node_modules
 
 # Local Redis
-dump.rbd
+dump.rdb

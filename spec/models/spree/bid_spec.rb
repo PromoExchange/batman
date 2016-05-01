@@ -78,7 +78,7 @@ RSpec.describe Spree::Bid, type: :model do
     bid = FactoryGirl.build(:bid, :shipping)
     expect(bid.service_name).to eq 'Basic Shipping'
     expect(bid.shipping_cost.to_f).to eq 10.00
-    expect(bid.delivery_days).to eq 2
+    expect(bid.delivery_days).to eq 6
   end
 
   it 'should go to completed after pay event' do
@@ -86,5 +86,10 @@ RSpec.describe Spree::Bid, type: :model do
     bid.non_preferred_accept
     bid.pay
     expect(bid.state).to eq 'completed'
+  end
+
+  it 'has delivery date > 3 days time' do
+    bid = FactoryGirl.build(:bid)
+    expect(bid.delivery_date).to be > Time.zone.now + 3.days
   end
 end

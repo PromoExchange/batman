@@ -43,6 +43,7 @@ class Spree::Bid < Spree::Base
 
   delegate :email, to: :seller
   delegate :total, to: :order
+  delegate :product, to: :auction
 
   def bid
     order.total
@@ -83,6 +84,10 @@ class Spree::Bid < Spree::Base
     @product_requests.each do |product_request|
       product_request.sample_fee if product_request.request_ideas.present?
     end
+  end
+
+  def delivery_date
+    Time.zone.now + (2 + product.production_time + delivery_days).days
   end
 
   private

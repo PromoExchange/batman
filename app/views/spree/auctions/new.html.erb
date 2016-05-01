@@ -46,13 +46,12 @@
         <% if @request_idea_id.blank? %>
           <p><a href="#" id="invite-sellers-link" data-toggle="modal" data-target="#invite-sellers-modal" class="btn btn-info btn-xs">Invite Sellers</a></p>
         <% end %>
-        <p>Estimated delivery date: <%= @estimated_ship_date.strftime('%B %e, %Y') %></p>
       <% end %>
-
       <%= render partial: 'spree/auctions/new/price_breaks', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/quantity', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/ship_to', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/active_price', locals: {f: f} %>
+      <p>Estimated delivery date: <%= content_tag(:span, @estimated_ship_date.strftime('%B %e, %Y'),id:'ship_date') %></p>
       <%= render partial: 'spree/auctions/new/buttons', locals: {f: f} %>
     </fieldset>
     <% end %>

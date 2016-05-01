@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160501162009) do
+ActiveRecord::Schema.define(version: 20160501201523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -174,6 +174,9 @@ ActiveRecord::Schema.define(version: 20160501162009) do
     t.datetime "cancelled_date",  precision: 6
     t.string   "state"
     t.boolean  "manage_workflow",               default: false
+    t.string   "service_name",                  default: ""
+    t.decimal  "shipping_cost",                 default: 0.0
+    t.integer  "delivery_days",                 default: 5
   end
 
   create_table "spree_blog_entries", force: :cascade do |t|

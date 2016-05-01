@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320140418) do
+ActiveRecord::Schema.define(version: 20160501162009) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 20160320140418) do
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
 
   create_table "spree_auction_payments", force: :cascade do |t|
-    t.integer  "bid_id"
+    t.integer  "bid_id",                        null: false
     t.string   "charge_id"
     t.string   "status"
     t.datetime "created_at",      precision: 6, null: false

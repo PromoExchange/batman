@@ -35,7 +35,9 @@ class Spree::Prebid < Spree::Base
       rush: auction.rush?,
       messages: [],
       carton: auction.product.carton,
+      service_name: '',
       shipping_cost: 0.0,
+      delivery_date: Time.zone.now + 5.days,
       ship_to_zip: auction.ship_to_zip,
       used_eqp: false
     }
@@ -151,7 +153,10 @@ class Spree::Prebid < Spree::Base
     # Shipping based on buyers zip
     # Package needs weight, height, width and depth
     shipping_cost = calculate_shipping(auction_data)
+
     auction_data[:messages] << "Shipping cost #{shipping_cost}"
+    auction_data[:messages] << "Shipping method #{auction_data[:service_name]}"
+    auction_data[:messages] << "Shipping delivery date #{auction_data[:delivery_date]}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
     auction_data[:messages] << "After applying shipping cost: #{auction_data[:running_unit_price]}"
 
@@ -429,8 +434,11 @@ class Spree::Prebid < Spree::Base
     )
     response = ups.find_rates(origin, destination, package)
 
-    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price] }
+    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price, rate.delivery_date] }
+
+    auction_data[:service_name] = ups_rates[0][0] unless ups_rates[0][0].blank?
     auction_data[:shipping_cost] = (ups_rates[0][1] * number_of_packages.to_f) / 100
+    auction_data[:delivery_date] = ups_rates[0][2] unless ups_rates[0][2].blank?
     auction_data[:shipping_cost]
   rescue => e
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - Failed to calculate shipping")

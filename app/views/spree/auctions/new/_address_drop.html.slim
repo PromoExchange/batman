@@ -1,2 +1,3 @@
-.div
-  = select_tag :address_drop, options_from_collection_for_select(@addresses, :id, :name)
+.form_group
+  = f.label :ship_to_zip, 'Shipping Address'
+  = f.select :ship_to_zip, options_from_collection_for_select(@addresses, :zipcode, :name), { prompt: 'Select Address' } , { class: 'form-control' }

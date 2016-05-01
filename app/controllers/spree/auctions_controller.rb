@@ -41,12 +41,13 @@ class Spree::AuctionsController < Spree::StoreController
           @price_breaks << [lowest_range, price[1].to_f / lowest_range]
         end
 
+        # TODO: We need to detect which company store we are and use the associated buyer
         user = Spree::User.where(email: 'mkuh@xactlycorp.com').first
         @addresses = []
         user.addresses.map do |a|
           next if a.bill? && !a.ship?
           address = OpenStruct.new
-          address.id = a.id
+          address.zipcode = a.zipcode
           address.name = a.to_s
           @addresses << address
         end
@@ -273,6 +274,7 @@ class Spree::AuctionsController < Spree::StoreController
   def estimated_ship
     @estimated_ship_date = 21.days.from_now
     return if @auction.nil?
+    # HACK: Hack for Cabelas product
     if @auction.product.master.sku == 'Yeti-20'
       @estimated_ship_date = 7.weeks.from_now
     end

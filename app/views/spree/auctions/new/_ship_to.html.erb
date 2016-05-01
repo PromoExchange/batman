@@ -6,5 +6,5 @@
     </div>
   <% end %>
 <% else %>
-  <%= f.hidden_field :ship_to_zip, value: @auction.ship_to_zip %>
+  <%= render partial: 'spree/auctions/new/address_drop', locals: {f: f} %>
 <% end %>

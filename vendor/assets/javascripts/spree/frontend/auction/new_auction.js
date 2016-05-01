@@ -160,6 +160,10 @@ $(function() {
   })();
 
   $('#auction-size .product-size').keyup(function() {
+    if($('#address_drop').val() === '') {
+      return;
+    }
+
     delay(function(){
       var sum = 0;
       $('#auction-size .product-size').each(function() {

@@ -1,4 +1,5 @@
 $(function(){
+  // TODO: Merge with auction/new_auction.js
   var delay = (function(){
     var timer = 0;
     return function(callback, ms){

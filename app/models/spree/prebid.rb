@@ -37,7 +37,7 @@ class Spree::Prebid < Spree::Base
       carton: auction.product.carton,
       service_name: '',
       shipping_cost: 0.0,
-      delivery_date: Time.zone.now + 5.days,
+      delivery_days: 5,
       ship_to_zip: auction.ship_to_zip,
       used_eqp: false
     }
@@ -156,7 +156,7 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:messages] << "Shipping cost #{shipping_cost}"
     auction_data[:messages] << "Shipping method #{auction_data[:service_name]}"
-    auction_data[:messages] << "Shipping delivery date #{auction_data[:delivery_date]}"
+    auction_data[:messages] << "Shipping delivery days #{auction_data[:delivery_days]}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
     auction_data[:messages] << "After applying shipping cost: #{auction_data[:running_unit_price]}"
 
@@ -183,7 +183,10 @@ class Spree::Prebid < Spree::Base
       bid = Spree::Bid.create(
         seller_id: seller_id,
         auction_id: auction.id,
-        prebid_id: id
+        prebid_id: id,
+        service_name: auction_data[:service_name],
+        shipping_cost: auction_data[:shipping_cost],
+        delivery_days: auction_data[:delivery_days]
       )
 
       li = Spree::LineItem.create(
@@ -438,7 +441,20 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:service_name] = ups_rates[0][0] unless ups_rates[0][0].blank?
     auction_data[:shipping_cost] = (ups_rates[0][1] * number_of_packages.to_f) / 100
-    auction_data[:delivery_date] = ups_rates[0][2] unless ups_rates[0][2].blank?
+
+    begin
+      delta = 0
+      if ups_rates[0][2].nil?
+         # Try and use the cheapest and adjust
+        ups_rates[0][2] ||= ups_rates[1][2]
+        delta = 2
+      end
+      days_diff = delta + ((ups_rates[0][2].to_f - Time.zone.now.to_f) / 86400).ceil
+    rescue
+      days_diff = 5
+    end
+
+    auction_data[:delivery_days] = days_diff
     auction_data[:shipping_cost]
   rescue => e
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - Failed to calculate shipping")

@@ -6,5 +6,11 @@ FactoryGirl.define do
     association :order, factory: :order
     association :prebid, factory: :prebid
     state 'open'
+
+    trait :shipping do
+      service_name 'Basic Shipping'
+      shipping_cost 10.00
+      delivery_days 2
+    end
   end
 end

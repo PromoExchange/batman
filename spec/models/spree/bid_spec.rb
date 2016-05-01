@@ -2,24 +2,24 @@ require 'rails_helper'
 
 RSpec.describe Spree::Bid, type: :model do
   it 'should not save with a nil auction_id' do
-    b = FactoryGirl.build(:bid)
-    b.auction_id = nil
-    expect(b.save).to be_falsey
+    bid = FactoryGirl.build(:bid)
+    bid.auction_id = nil
+    expect(bid.save).to be_falsey
   end
 
   it 'should not save with a nil seller_id' do
-    b = FactoryGirl.build(:bid, seller_id: nil)
-    expect(b.save).to be_falsey
+    bid = FactoryGirl.build(:bid, seller_id: nil)
+    expect(bid.save).to be_falsey
   end
 
   it 'should save with valid values' do
-    b = FactoryGirl.build(:bid)
-    expect(b.save).to be_truthy
+    bid = FactoryGirl.build(:bid)
+    expect(bid.save).to be_truthy
   end
 
   it 'should not save with an invalid status' do
-    b = FactoryGirl.build(:bid, state: 'invalid')
-    expect(b.save).to be_falsey
+    bid = FactoryGirl.build(:bid, state: 'invalid')
+    expect(bid.save).to be_falsey
   end
 
   it 'should belong to an auction' do
@@ -38,39 +38,53 @@ RSpec.describe Spree::Bid, type: :model do
   end
 
   it 'should state with an open state' do
-    b = FactoryGirl.build(:bid)
-    expect(b.state).to eq 'open'
+    bid = FactoryGirl.build(:bid)
+    expect(bid.state).to eq 'open'
   end
 
   it 'should go to accepted after accept event' do
-    b = FactoryGirl.build(:bid)
-    b.non_preferred_accept
-    expect(b.state).to eq 'accepted'
+    bid = FactoryGirl.build(:bid)
+    bid.non_preferred_accept
+    expect(bid.state).to eq 'accepted'
   end
 
   it 'should go to cancelled after cancell event' do
-    b = FactoryGirl.build(:bid)
-    b.cancel
-    expect(b.state).to eq 'cancelled'
+    bid = FactoryGirl.build(:bid)
+    bid.cancel
+    expect(bid.state).to eq 'cancelled'
   end
 
   it 'should not go to cancelled after pay event' do
-    b = FactoryGirl.build(:bid)
-    b.pay
-    expect(b.state).to eq 'open'
+    bid = FactoryGirl.build(:bid)
+    bid.pay
+    expect(bid.state).to eq 'open'
   end
 
   it 'should not go to accepted after cancel event (if cancelled)' do
-    b = FactoryGirl.build(:bid)
-    b.non_preferred_accept
-    b.cancel
-    expect(b.state).to eq 'accepted'
+    bid = FactoryGirl.build(:bid)
+    bid.non_preferred_accept
+    bid.cancel
+    expect(bid.state).to eq 'accepted'
+  end
+
+  it 'should create a valid shipping' do
+    bid = FactoryGirl.create(:bid)
+    expect(bid.service_name).to eq ''
+    expect(bid.shipping_cost.to_f).to eq 0.0
+    expect(bid.delivery_days).to eq 5
+  end
+
+  it 'should create a valid shipping trait' do
+    bid = FactoryGirl.build(:bid, :shipping)
+    expect(bid.service_name).to eq 'Basic Shipping'
+    expect(bid.shipping_cost.to_f).to eq 10.00
+    expect(bid.delivery_days).to eq 2
   end
 
   it 'should go to completed after pay event' do
-    b = FactoryGirl.build(:bid)
-    b.non_preferred_accept
-    b.pay
-    expect(b.state).to eq 'completed'
+    bid = FactoryGirl.build(:bid)
+    bid.non_preferred_accept
+    bid.pay
+    expect(bid.state).to eq 'completed'
   end
 end

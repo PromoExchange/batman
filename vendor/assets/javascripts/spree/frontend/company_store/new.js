@@ -9,10 +9,22 @@ $(function(){
   })();
 
   function recalc_price() {
-    var e = $(".cs-quantity");
-    var min = parseInt(e.attr('min'));
-    var actual = parseInt(e.val());
+    var actual = 0;
+    var min = 0;
+
+    if($('#auction-size .product-size').length) {
+      $('#auction-size .product-size').each(function() {
+       actual += parseInt('0'+ $(this).val());
+       min = parseInt($("#auction-size").attr('min-quantity'));
+      });
+    } else {
+      var e = $(".cs-quantity");
+      min = parseInt(e.attr('min'));
+      actual = parseInt(e.val());
+    }
+
     $(".cs-active-price").hide();
+
     if (actual >= min) {
       $("#price-spin").show();
       var auction_clone_id = $("#auction_clone_id").val();
@@ -53,7 +65,7 @@ $(function(){
     if($('#address_drop').val() === '') {
       return;
     }
-    delay(function(){recalc_price();},500)
+    delay(function(){recalc_price();},500);
   });
 
   $('#auction_ship_to_zip').change(function() {

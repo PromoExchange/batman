@@ -26,7 +26,7 @@ $(function(){
             'X-Spree-Token': api_key
           },
           success: function(data) {
-            var money_text = accounting.formatMoney((parseFloat(data)));
+            var money_text = accounting.formatMoney((parseFloat(data.best_price)));
             $(".cs-active-price").text(money_text);
             $(".cs-active-price").show();
             $("#price-spin").hide();

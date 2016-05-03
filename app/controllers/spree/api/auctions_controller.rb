@@ -1,3 +1,4 @@
+
 class Spree::Api::AuctionsController < Spree::Api::BaseController
   before_action :fetch_auction, except: [:index, :create]
 
@@ -58,8 +59,11 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   end
 
   def best_price
-    best_price = @auction.best_price(params[:quantity])
-    render json: best_price
+    response = {
+      best_price: @auction.best_price(params[:quantity]),
+      delivery_days: 21
+    }
+    render json: response
   rescue
     render nothing: true, status: :internal_server_error
   end

@@ -13,32 +13,9 @@ fail 'Unable to find supplier' if supplier.nil?
 imprints = [
   'Embroidery',
   'Screen Print',
-  'Four Color Process',
+  'Pad Print',
   'Deboss',
-  'Colorprint'
 ]
-
-black_pms_color = Spree::PmsColor.where(
-  name: 'Black',
-  pantone: '426',
-  hex: '#25282B'
-).first_or_create
-
-white_pms_color = Spree::PmsColor.where(
-  name: 'White',
-  pantone: '000',
-  hex: '#FFFFFF'
-).first_or_create
-
-imprints.each do |imprint|
-  imprint_method = Spree::ImprintMethod.where(name: imprint).first_or_create
-  Spree::PmsColorsSupplier.where(
-    pms_color: black_pms_color,
-    display_name: '426',
-    supplier: supplier,
-    imprint_method: imprint_method
-  ).first_or_create
-end
 
 # Clean up
 Spree::Product.where(supplier: supplier).each do |product|
@@ -61,7 +38,7 @@ default_attrs = {
   available_on: Time.zone.now + 100.years
 }
 
-file_name = File.join(Rails.root, 'db/company_store_data/anchorfree.csv')
+file_name = File.join(Rails.root, 'db/company_store_data/netmining.csv')
 
 load_fail = 0
 image_fail = 0
@@ -91,7 +68,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     # Image
     if Rails.configuration.x.load_images
       begin
-        image_path = File.join(Rails.root, "db/product_images/anchorfree/#{product_attrs[:sku]}.jpg")
+        image_path = File.join(Rails.root, "db/product_images/netmining/#{product_attrs[:sku]}.jpg")
         product.images << Spree::Image.create!(
           attachment: open(image_path),
           viewable: product

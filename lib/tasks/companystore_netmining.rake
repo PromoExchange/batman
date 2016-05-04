@@ -60,8 +60,8 @@ namespace :companystore do
       role = Spree::Role.where(name: 'buyer').first_or_create
 
       user = Spree::User.create(
-        email: 'mkuh@xactlycorp.com',
-        login: 'mkuh@xactlycorp.com',
+        email: 'Amanda.Witschger@netmining.com',
+        login: 'Amanda.Witschger@netmining.com',
         password: 'password123',
         password_confirmation: 'password123'
       )
@@ -70,30 +70,32 @@ namespace :companystore do
       user.generate_spree_api_key!
 
       country = Spree::Country.where(iso3: 'USA').first
-      state = Spree::State.where(name: 'California').first
+      state = Spree::State.where(name: 'New York').first
 
       user.ship_address = Spree::Address.create(
-        company: 'Xactly',
-        firstname: 'Marlene',
-        lastname: 'Kuh',
-        address1: '300 Park Ave #1700',
-        city: 'San Jose',
-        zipcode: '95110',
+        company: 'Netmining',
+        firstname: 'Amanda',
+        lastname: 'Witschger',
+        address1: '200 Park Ave',
+        address2: '27th Floor',
+        city: 'New York',
+        zipcode: '10166',
         state_id: state.id,
         country_id: country.id,
-        phone: '4082921153'
+        phone: '6463605951'
       )
 
       user.bill_address = Spree::Address.create(
-        company: 'Xactly',
-        firstname: 'Marlene',
-        lastname: 'Kuh',
-        address1: '300 Park Ave #1700',
-        city: 'San Jose',
-        zipcode: '95110',
+        company: 'Netmining',
+        firstname: 'Amanda',
+        lastname: 'Witschger',
+        address1: '200 Park Ave',
+        address2: '27th Floor',
+        city: 'New York',
+        zipcode: '10166',
         state_id: state.id,
         country_id: country.id,
-        phone: '4082921153'
+        phone: '6463605951'
       )
       user.save!
       user.confirm!
@@ -101,37 +103,26 @@ namespace :companystore do
 
     # Add Logo
     if user.logos.where(custom: true).count == 0
-      logo_file_name = File.join(Rails.root, 'db/company_store_data/netmining-logo.pdf')
+      logo_file_name = File.join(Rails.root, 'db/company_store_data/netmining-logo.png')
       user.logos << Spree::Logo.create!(user: user, logo_file: open(logo_file_name), custom: true)
     end
 
     store_name = 'Netmining Company Store'
 
     # Supplier
-    supplier = Spree::Supplier.where(name: store_name).first
-    if supplier.nil?
-      supplier = Spree::Supplier.create!(
-        name: 'Netmining Company Store',
-        billing_address: user.bill_address,
-        shipping_address: user.ship_address,
-        company_store: true
-      )
-    end
+    supplier = Spree::Supplier.where(name: store_name).first_or_create(
+      billing_address: user.bill_address,
+      shipping_address: user.ship_address,
+      company_store: true
+    )
 
     # Company Store
-    company_store_attr = {
-      name: store_name,
+    Spree::CompanyStore.where(name: store_name).first_or_create(
       display_name: 'Netmining',
       slug: 'netmining',
       supplier: supplier,
       buyer: user
-    }
-    company_store = Spree::CompanyStore.where(name: store_name).first
-    if company_store.nil?
-      company_store = Spree::CompanyStore.create(company_store_attr)
-    end
-    company_store.update_attributes(company_store_attr)
-    company_store.save!
+    )
 
     # Products
     ProductLoader.load('company_store', 'netmining')

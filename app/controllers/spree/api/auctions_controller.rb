@@ -1,4 +1,3 @@
-
 class Spree::Api::AuctionsController < Spree::Api::BaseController
   before_action :fetch_auction, except: [:index, :create]
 

@@ -60,8 +60,8 @@ namespace :companystore do
       role = Spree::Role.where(name: 'buyer').first_or_create
 
       user = Spree::User.create(
-        email: 'Amanda.Witschger@netmining.com',
-        login: 'Amanda.Witschger@netmining.com',
+        email: 'amanda.witschger@netmining.com',
+        login: 'amanda.witschger@netmining.com',
         password: 'password123',
         password_confirmation: 'password123'
       )

@@ -49,6 +49,7 @@ class Spree::AuctionsController < Spree::StoreController
           address = OpenStruct.new
           address.zipcode = a.zipcode
           address.name = a.to_s
+          address.id = a.id
           @addresses << address
         end
       end
@@ -105,8 +106,11 @@ class Spree::AuctionsController < Spree::StoreController
     end
 
     if @auction.clone_id.present?
-      @auction.shipping_address = Spree::Address.where(company: 'Xactly').first
       @auction.buyer = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+      @auction.shipping_address = Spree::Address.find(params[:auction][:address_id].to_i)
+      if @auction.shipping_address.nil?
+        @auction.shipping_address = Spree::Address.where(company: 'Xactly').first if @auction.shipping_address
+      end
     end
 
     @auction.save!

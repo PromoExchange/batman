@@ -53,7 +53,17 @@ $(function(){
     delay(function(){recalc_price();},500)
   });
 
-  $('#auction_ship_to_zip').change(function(){
+  $('#auction_ship_to_zip').change(function() {
+    set_address_id();
     recalc_price();
   });
+
+  $(document).ready(function() {
+    set_address_id();
+  });
+
+  function set_address_id() {
+    var address_id = $('#auction_ship_to_zip option:selected').attr('data-id');
+    $('#auction_address_id').val(address_id);
+  }
 });

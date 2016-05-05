@@ -8,7 +8,7 @@ Spree::Address.class_eval do
   alias_attribute :is_ship, :ship?
 
   def to_s
-    "#{address1}, #{city}, #{zipcode}"
+    "#{address1}, #{address2 + ',' if address2.present?}#{city}, #{zipcode}"
   end
 
   def company_name

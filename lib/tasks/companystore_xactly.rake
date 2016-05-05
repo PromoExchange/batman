@@ -1,4 +1,35 @@
 namespace :companystore do
+  desc 'Add Xactly address'
+  task add_xactly_address: :environment do
+    exit if Spree::Address.exists?(
+      company: 'Xactly',
+      address1: 'YRC - T3 Expo',
+      address2: '400 Grandview Drive - Ste. C',
+      city: 'South San Francisco',
+      zipcode: '94080'
+    )
+
+    user = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+
+    country = Spree::Country.where(iso3: 'USA').first
+    state = Spree::State.where(name: 'California').first
+
+    address = Spree::Address.where(
+      company: 'Xactly',
+      firstname: 'Marlene',
+      lastname: 'Kuh',
+      address1: 'YRC - T3 Expo',
+      address2: '400 Grandview Drive - Ste. C',
+      city: 'South San Francisco',
+      zipcode: '94080',
+      state_id: state.id,
+      country_id: country.id,
+      phone: '4082921153'
+    ).first_or_create
+    user.addresses << address
+    user.save!
+  end
+
   desc 'Fix Xactly PMS'
   task fix_xactly_pms: :environment do
     company_store = Spree::CompanyStore.where(slug: 'xactly').first

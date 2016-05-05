@@ -7,6 +7,10 @@ Spree::Address.class_eval do
   alias_attribute :is_bill, :bill?
   alias_attribute :is_ship, :ship?
 
+  def to_s
+    "#{address1}, #{city}, #{zipcode}"
+  end
+
   def company_name
     company || "#{first_name} #{last_name}"
   end

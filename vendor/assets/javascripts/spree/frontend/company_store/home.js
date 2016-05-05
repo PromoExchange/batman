@@ -13,7 +13,7 @@ $(function(){
       },
       success: function(data) {
         var base_text = 'As low as ';
-        var money_text = accounting.formatMoney((parseFloat(data)));
+        var money_text = accounting.formatMoney((parseFloat(data.best_price)));
         e.text(base_text+money_text);
       },
       error: function(data) {

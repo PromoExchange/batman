@@ -58,8 +58,9 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   end
 
   def best_price
+    @auction.ship_to_zip = params[:auction][:ship_to_zip] unless params[:auction][:ship_to_zip].blank?
     response = {
-      best_price: @auction.best_price(params[:quantity]),
+      best_price: @auction.best_price(params[:auction][:quantity]),
       delivery_days: 21
     }
     render json: response

@@ -94,8 +94,8 @@ class Spree::AuctionsController < Spree::StoreController
     end
 
     if @auction.clone_id.present?
-      @auction.shipping_address = Spree::Address.where(company: 'Xactly').first
-      @auction.buyer = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+      @auction.shipping_address = Spree::Address.where(company: 'Netmining').first
+      @auction.buyer = Spree::User.where(email: 'amanda.witschger@netmining.com').first
     end
 
     @auction.save!

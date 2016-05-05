@@ -40,10 +40,10 @@ namespace :companystore do
         skus: ['NM-2001']
       }
     ].each do |supplier_data|
-      supplier = Spree::Supplier.find_by supplier_data.query
-      fail "Failed to find Supplier: #{suuplier_data.query}" unless supplier.blank?
+      supplier = Spree::Supplier.find_by supplier_data[:query]
+      fail "Failed to find Supplier: #{suuplier_data[:query]}" unless supplier.blank?
 
-      supplier_data.skus.each do |product_sku|
+      supplier_data[:skus].each do |product_sku|
         product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
         fail "Failed to find product [#{product_sku}]" if product.nil?
         product.update_attributes(original_supplier: supplier)
@@ -103,7 +103,7 @@ namespace :companystore do
 
     # Add Logo
     if user.logos.where(custom: true).count == 0
-      logo_file_name = File.join(Rails.root, 'db/company_store_data/netmining-logo.png')
+      logo_file_name = File.join(Rails.root, 'db/company_store_data/netmining-logo.pdf')
       user.logos << Spree::Logo.create!(user: user, logo_file: open(logo_file_name), custom: true)
     end
 

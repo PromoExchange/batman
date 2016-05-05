@@ -128,7 +128,7 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
       puts "Unknown Method - #{imprint}"
     end
 
-    if imprint_method.present
+    if imprint_method.present?
       Spree::ImprintMethodsProduct.where(
         imprint_method: imprint_method,
         product: product

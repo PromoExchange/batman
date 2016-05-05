@@ -40,7 +40,7 @@ namespace :companystore do
         skus: ['NM-2001']
       }
     ].each do |supplier_data|
-      supplier = Spree::Supplier.find_by supplier_data[:query]
+      supplier = Spree::Supplier.find_by(supplier_data[:query])
       fail "Failed to find Supplier: #{supplier_data[:query]}" unless supplier.blank?
 
       supplier_data[:skus].each do |product_sku|

@@ -52,8 +52,8 @@ namespace :companystore do
   end
 
   desc 'Create Netmining company store'
-  task xactly: :environment do
-    user = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+  task netmining: :environment do
+    user = Spree::User.where(email: 'amanda.witschger@netmining.com').first
 
     # User
     if user.nil?

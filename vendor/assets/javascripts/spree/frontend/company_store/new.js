@@ -36,6 +36,7 @@ $(function(){
           $(".cs-active-price").text(money_text);
           $(".cs-active-price").show();
           $("#price-spin").hide();
+          $('.cs-purchase-submit').prop('disabled', false);
         },
         error: function(data) {
           $(".cs-active-price").text('No Price Found');
@@ -47,6 +48,7 @@ $(function(){
   }
 
   $(".cs-quantity").keyup(function() {
+    $('.cs-purchase-submit').prop('disabled', true);
     if($('#address_drop').val() === '') {
       return;
     }

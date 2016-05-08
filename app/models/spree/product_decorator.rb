@@ -187,7 +187,7 @@ Spree::Product.class_eval do
 
         price_caches << Spree::PriceCache.create!(
           range: price.range,
-          lowest_price: best_price,
+          lowest_price: best_price.order.total.to_f,
           position: price.position
         )
       end

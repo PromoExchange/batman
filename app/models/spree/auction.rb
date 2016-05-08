@@ -314,7 +314,7 @@ class Spree::Auction < Spree::Base
 
     lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first
     return lowest_bid unless lowest_bid.nil?
-    
+
     nil
   end
 

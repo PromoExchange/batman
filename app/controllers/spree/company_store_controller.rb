@@ -29,7 +29,7 @@ class Spree::CompanyStoreController < Spree::StoreController
       :budget_from,
       :budget_to,
       :quantity,
-      request_type:[]
+      request_type: []
     )
   end
 end

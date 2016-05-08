@@ -1,9 +1,4 @@
 $(function() {
-
-  // if ($('.cs-page').length > 0) {
-  //   $(".cs-footer").addClass("cs-footer-bottom");
-  // }
-
   $("#auction_logo_id").imagepicker({
     hide_select: false
   });
@@ -150,55 +145,6 @@ $(function() {
   });
 
   $('.custom-swatch-clickable').tooltip();
-
-  var delay = (function(){
-    var timer = 0;
-    return function(callback, ms){
-      clearTimeout (timer);
-      timer = setTimeout(callback, ms);
-      };
-  })();
-
-  $('#auction-size .product-size').keyup(function() {
-    if($('#address_drop').val() === '') {
-      return;
-    }
-
-    delay(function(){
-      var sum = 0;
-      $('#auction-size .product-size').each(function() {
-       sum += parseInt('0'+ $(this).val());
-      });
-      $('.total-qty span:last').text(sum);
-      var min = parseInt($("#auction-size").attr('min-quantity'));
-      $(".cs-active-price").hide();
-      if (sum >= min) {
-        $("#price-spin").show();
-        var auction_clone_id = $("#auction_clone_id").val();
-        var api_key = $('#new-auction').attr('data-key');
-        var url = '/api/auctions/'+auction_clone_id+'/best_price?quantity='+sum;
-        $.ajax({
-          type: 'GET',
-          contentType: "application/json",
-          url: url,
-          headers: {
-            'X-Spree-Token': api_key
-          },
-          success: function(data) {
-            var money_text = accounting.formatMoney((parseFloat(data.best_price)));
-            $(".cs-active-price").text(money_text);
-            $("#price-spin").hide();
-            $(".cs-active-price").show();
-          },
-          error: function(data) {
-            $(".cs-active-price").text('No Price found');
-            $("#price-spin").hide();
-            $(".cs-active-price").show();
-          }
-        });
-      }
-    },200);
-  });
 });
 
 $(document).ready(function(){

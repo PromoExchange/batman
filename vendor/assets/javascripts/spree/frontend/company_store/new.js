@@ -47,11 +47,8 @@ $(function(){
           var money_text = accounting.formatMoney((parseFloat(data.best_price)));
           $(".cs-active-price").text(money_text);
           $("#price-spin").hide();
-<<<<<<< 16c7f4256a5332f3314a805fc1c6db33239de168
           $('.cs-purchase-submit').prop('disabled', false);
-=======
           $(".cs-active-price").show();
->>>>>>> Do not get min quantity multiple times for wearables
         },
         error: function(data) {
           $(".cs-active-price").text('No Price Found');
@@ -72,6 +69,16 @@ $(function(){
 
   $('#auction_ship_to_zip').change(function() {
     set_address_id();
+    recalc_price();
+  });
+
+  $('#auction-size .product-size').change(function() {
+    $('.cs-purchase-submit').prop('disabled', true);
+    var sum = 0;
+    $('#auction-size .product-size').each(function() {
+     sum+= parseInt('0'+ $(this).val());
+    });
+    $('.total-qty span:last').text(sum);
     recalc_price();
   });
 

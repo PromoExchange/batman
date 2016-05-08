@@ -288,25 +288,6 @@ textarea {
 }
 
 // End of Email Buttons CSS
-
-[itemprop="image"] {
-  border: 4px solid #3097de;
-  border-radius: 50%;
-}
-
-[image="image-main"] {
-  border: 4px solid #3097de;
-  border-radius: 50%;
-  float: right;
-}
-
-[itemprop='image-cat'] {
-  border: 4px solid #3097de;
-  border-radius: 50%;
-  height: 108px;
-  width: 108px;
-}
-
 #NewAuctionText {
   float: left;
   margin-top: 20px;
@@ -318,8 +299,8 @@ textarea {
 }
 
 #GoToAuctionButton {
-  border-color: #45b1e8;
   background-color: #3097de;
+  border-color: #45b1e8;
 }
 
 #CancelAuctionButton {

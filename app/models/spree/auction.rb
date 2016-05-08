@@ -282,7 +282,6 @@ class Spree::Auction < Spree::Base
       'in_dispute': 'Order being disputed',
       'complete': 'Completed'
     }
-
   end
 
   def best_price(which_quantity)
@@ -314,10 +313,9 @@ class Spree::Auction < Spree::Base
     end
 
     lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first
-
-    return lowest_bid.total.to_f / divisor unless lowest_bid.nil?
-
-    0.0
+    return lowest_bid unless lowest_bid.nil?
+    
+    nil
   end
 
   private

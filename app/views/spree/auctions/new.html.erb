@@ -51,7 +51,7 @@
       <%= render partial: 'spree/auctions/new/quantity', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/ship_to', locals: {f: f} %>
       <%= render partial: 'spree/auctions/new/active_price', locals: {f: f} %>
-      <p>Estimated delivery date: <%= content_tag(:span, @estimated_ship_date.strftime('%B %e, %Y'),id:'ship_date') %></p>
+      <p>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
       <%= render partial: 'spree/auctions/new/buttons', locals: {f: f} %>
     </fieldset>
     <% end %>

@@ -45,6 +45,11 @@ $(function(){
         },
         success: function(data) {
           var money_text = accounting.formatMoney((parseFloat(data.best_price)));
+          $('#ship_date').text(
+            moment(new Date())
+            .add(data.delivery_days, 'days')
+            .format('MMMM Do YYYY')
+          );
           $(".cs-active-price").text(money_text);
           $("#price-spin").hide();
           $('.cs-purchase-submit').prop('disabled', false);
@@ -61,6 +66,7 @@ $(function(){
 
   $(".cs-quantity").keyup(function() {
     $('.cs-purchase-submit').prop('disabled', true);
+    $('#ship_date').text('--');
     if($('#address_drop').val() === '') {
       return;
     }
@@ -69,11 +75,14 @@ $(function(){
 
   $('#auction_ship_to_zip').change(function() {
     set_address_id();
+    $('.cs-purchase-submit').prop('disabled', true);
+    $('#ship_date').text('--');
     recalc_price();
   });
 
   $('#auction-size .product-size').change(function() {
     $('.cs-purchase-submit').prop('disabled', true);
+    $('#ship_date').text('--');
     var sum = 0;
     $('#auction-size .product-size').each(function() {
      sum+= parseInt('0'+ $(this).val());

@@ -59,9 +59,10 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   def best_price
     @auction.ship_to_zip = params[:auction][:ship_to_zip] unless params[:auction][:ship_to_zip].blank?
+    lowest_bid = @auction.best_price(params[:auction][:quantity])
     response = {
-      best_price: @auction.best_price(params[:auction][:quantity]),
-      delivery_days: 21
+      best_price: lowest_bid.order.total.to_f,
+      delivery_days: ((lowest_bid.delivery_date - Time.zone.now) / (60 * 60 * 24)).ceil
     }
     render json: response
   rescue

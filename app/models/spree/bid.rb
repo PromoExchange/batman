@@ -87,7 +87,9 @@ class Spree::Bid < Spree::Base
   end
 
   def delivery_date
-    Time.zone.now + (2 + product.production_time + delivery_days).days
+    production_time = product.production_time
+    production_time ||= 14
+    Time.zone.now + (2 + production_time + delivery_days).days
   end
 
   private

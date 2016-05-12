@@ -284,7 +284,7 @@ class Spree::Auction < Spree::Base
     }
   end
 
-  def best_price(which_quantity)
+  def best_price(which_quantity, shipping_option)
     fail 'Not a custom auction' unless state == 'custom_auction'
 
     divisor = 1
@@ -309,7 +309,7 @@ class Spree::Auction < Spree::Base
     prebids = Spree::Prebid.where(supplier: product.original_supplier)
 
     prebids.each do |p|
-      p.create_prebid(id)
+      p.create_prebid(id, shipping_option)
     end
 
     lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first

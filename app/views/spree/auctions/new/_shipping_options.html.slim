@@ -1,0 +1,4 @@
+p Need it sooner?
+.form-group
+  = label_tag :shipping_option, 'Shipping Option'
+  = select_tag :shipping_option, options_for_select(@shipping_options), { class: 'form-control' }

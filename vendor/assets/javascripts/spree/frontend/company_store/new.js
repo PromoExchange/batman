@@ -31,7 +31,8 @@ $(function(){
       var params = {
         auction: {
           quantity: actual,
-          ship_to_zip: $('#auction_ship_to_zip').val()
+          ship_to_zip: $('#auction_ship_to_zip').val(),
+          shipping_option: $('#shipping_option').val()
         }
       };
       var url = '/api/auctions/'+auction_clone_id+'/best_price';

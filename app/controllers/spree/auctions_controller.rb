@@ -52,6 +52,15 @@ class Spree::AuctionsController < Spree::StoreController
           address.id = a.id
           @addresses << address
         end
+
+        @shipping_options = [
+          ['UPS Ground', Spree::Prebid::SHIPPING_OPTION[:ups_ground]],
+          ['UPS Three-Day Select', Spree::Prebid::SHIPPING_OPTION[:ups_3day_select]],
+          ['UPS Second Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_second_day_air]],
+          ['UPS Next Day Air Saver', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_saver]],
+          ['UPS Next Day Air Early A.M.', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_early_am]],
+          ['UPS Next Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air]],
+        ]
       end
     end
     if @auction.nil?

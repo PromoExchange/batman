@@ -57,7 +57,7 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:messages] << "Item name: #{auction.product.name}"
     auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
-    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}" unless auction.product.original_supplier.nil?
+    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}"
     auction_data[:messages] << "SKU: #{auction.product.master.sku}"
 
     unless markup.nil?
@@ -165,7 +165,7 @@ class Spree::Prebid < Spree::Base
     shipping_cost = calculate_shipping(auction_data, shipping_option)
 
     auction_data[:messages] << "Shipping cost #{shipping_cost}"
-    auction_data[:messages] << "Shipping option #{Spree::Prebid::SHIPPING_OPTION.key(auction_data[:shipping_option]).to_s}"
+    auction_data[:messages] << "Shipping option #{Spree::Prebid::SHIPPING_OPTION.key(auction_data[:shipping_option])}"
     auction_data[:messages] << "Shipping method #{auction_data[:service_name]}"
     auction_data[:messages] << "Shipping delivery days #{auction_data[:delivery_days]}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
@@ -516,6 +516,7 @@ class Spree::Prebid < Spree::Base
     end
 
     auction_data[:delivery_days] = days_diff
+    auction_data[:shipping_cost]
   rescue => e
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - Failed to calculate shipping")
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - #{e.message}")

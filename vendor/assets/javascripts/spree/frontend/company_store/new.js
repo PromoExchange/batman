@@ -81,12 +81,20 @@ $(function(){
     recalc_price();
   });
 
+  $('#shipping_option').change(function() {
+    recalc_price();
+  });
+
+  $('#need_it_sooner').click(function() {
+    $('#shipping_option_group').show();
+  });
+
   $('#auction-size .product-size').change(function() {
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
     var sum = 0;
     $('#auction-size .product-size').each(function() {
-     sum+= parseInt('0'+ $(this).val());
+      sum+= parseInt('0'+ $(this).val());
     });
     $('.total-qty span:last').text(sum);
     recalc_price();

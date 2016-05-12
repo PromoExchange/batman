@@ -40,27 +40,6 @@ class Spree::AuctionsController < Spree::StoreController
           lowest_range = price[0].split('..')[0].gsub(/\D/, '').to_i
           @price_breaks << [lowest_range, price[1].to_f / lowest_range]
         end
-
-        # TODO: We need to detect which company store we are and use the associated buyer
-        user = Spree::User.where(email: 'mkuh@xactlycorp.com').first
-        @addresses = []
-        user.addresses.map do |a|
-          next if a.bill? && !a.ship?
-          address = OpenStruct.new
-          address.zipcode = a.zipcode
-          address.name = a.to_s
-          address.id = a.id
-          @addresses << address
-        end
-
-        @shipping_options = [
-          ['UPS Ground', Spree::Prebid::SHIPPING_OPTION[:ups_ground]],
-          ['UPS Three-Day Select', Spree::Prebid::SHIPPING_OPTION[:ups_3day_select]],
-          ['UPS Second Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_second_day_air]],
-          ['UPS Next Day Air Saver', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_saver]],
-          ['UPS Next Day Air Early A.M.', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_early_am]],
-          ['UPS Next Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air]],
-        ]
       end
     end
     if @auction.nil?
@@ -139,7 +118,7 @@ class Spree::AuctionsController < Spree::StoreController
       prebids = Spree::Prebid.where(supplier: @auction.product.original_supplier)
       prebids.each do |p|
         Rails.logger.info "Prebid Job: requesting bid creation: #{p.id}"
-        p.create_prebid(@auction.id)
+        p.create_prebid(@auction.id,params[:shipping_option])
       end
 
       # Find the lowest bid (first one)
@@ -294,21 +273,6 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def supporting_data
-    if current_spree_user
-      @addresses = []
-      current_spree_user.addresses.active.each do |address|
-        add = true
-        add = false if address.bill?
-        add = true if address.ship?
-
-        next unless add
-
-        @addresses << [
-          "#{address}",
-          address.id]
-      end
-    end
-
     @product_properties = @auction.product.product_properties.accessible_by(current_ability, :read)
 
     @pms_colors = Spree::PmsColorsSupplier
@@ -337,6 +301,27 @@ class Spree::AuctionsController < Spree::StoreController
     @logo = Spree::Logo.new
 
     @pxaddress = Spree::Pxaddress.new
+
+    # TODO: We need to detect which company store we are and use the associated buyer
+    user = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+    @addresses = []
+    user.addresses.map do |a|
+      next if a.bill? && !a.ship?
+      address = OpenStruct.new
+      address.zipcode = a.zipcode
+      address.name = a.to_s
+      address.id = a.id
+      @addresses << address
+    end
+
+    @shipping_options = [
+      ['UPS Ground', Spree::Prebid::SHIPPING_OPTION[:ups_ground]],
+      ['UPS Three-Day Select', Spree::Prebid::SHIPPING_OPTION[:ups_3day_select]],
+      ['UPS Second Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_second_day_air]],
+      ['UPS Next Day Air Saver', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_saver]],
+      ['UPS Next Day Air Early A.M.', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_early_am]],
+      ['UPS Next Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air]],
+    ]
   end
 
   def create_related_data(auction_data)

@@ -86,6 +86,7 @@ $(function(){
   });
 
   $('#need_it_sooner').click(function() {
+    $('#need_it_sooner').hide();
     $('#shipping_option_group').show();
   });
 

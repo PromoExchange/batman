@@ -183,7 +183,7 @@ Spree::Product.class_eval do
 
       Spree::Variant.find_by(product_id: id).volume_prices(order: 'position asc').each do |price|
         lowest_range = price.range.split('..')[0].gsub(/\D/, '')
-        best_price = custom_auction.best_price(lowest_range.to_i)
+        best_price = custom_auction.best_price(lowest_range.to_i, Spree::Prebid::SHIPPING_OPTION[:ups_ground])
 
         price_caches << Spree::PriceCache.create!(
           range: price.range,

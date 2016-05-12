@@ -4,7 +4,6 @@ module CreatePrebids
   def self.perform(auction)
     Rails.logger.info "Prebid Job: prebid task running: #{auction}"
     auction = Spree::Auction.find(auction['auction_id'])
-    # auction = Spree::Auction.find(auction[:auction_id])
     # FIXME: I *think* we might need to use original supplier_id here
     prebids = Spree::Prebid.where(supplier_id: auction.product.supplier_id)
     prebids.each do |p|

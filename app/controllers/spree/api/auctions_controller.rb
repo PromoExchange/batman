@@ -59,6 +59,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   def best_price
     @auction.ship_to_zip = params[:auction][:ship_to_zip] unless params[:auction][:ship_to_zip].blank?
+    # TODO: The additional parameter to best price will go away when we extend the auciton model
     lowest_bid = @auction.best_price(params[:auction][:quantity], params[:auction][:shipping_option])
     response = {
       best_price: lowest_bid.order.total.to_f,

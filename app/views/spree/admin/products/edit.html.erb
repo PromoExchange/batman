@@ -7,7 +7,6 @@
 <%= render partial: 'spree/admin/shared/product_tabs', locals: {current: :details} %>
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
 
-
 <div class="well">
   <p>State: <%= @product.state %> </p>
   <p>Prebidable: <%= @product.prebid_ability?.humanize %></p>
@@ -16,6 +15,7 @@
   <p>Number of Run Upcharges: <%= @product.run_upcharges.count %> </p>
   <p>Number of Imprints: <%= @product.imprint_methods.count %> </p>
   <p>Number of Product colors: <%= @product.color_product.count %> </p>
+  <p>Production Time: <%= @product.production_time %> </p>
 </div>
 
 <%= form_for [:admin, @product], method: :put, html: { multipart: true } do |f| %>

@@ -4,5 +4,6 @@ FactoryGirl.define do
     association :buyer, factory: :user
     slug 'test'
     name 'Company Store Test'
+    host 'test.promox.com'
   end
 end

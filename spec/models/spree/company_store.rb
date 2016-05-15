@@ -26,6 +26,11 @@ RSpec.describe Spree::CompanyStore, type: :model do
     expect(m.save).to be_truthy
   end
 
+  it 'should allow save with a nil host' do
+    m = FactoryGirl.build(:company_store, host: nil)
+    expect(m.save).to be_truthy
+  end
+
   it 'should belong to a supplier' do
     t = Spree::Order.reflect_on_association(:supplier)
     expect(t.macro).to eq :belongs_to

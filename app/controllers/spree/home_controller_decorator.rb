@@ -1,8 +1,13 @@
 Spree::HomeController.class_eval do
   def index
-    company_store_id = ENV['COMPANYSTORE_ID']
-    if company_store_id.present?
-      redirect_to "/company_store/#{company_store_id}"
+    uri = URI(request.referrer)
+    @current_company_store = Spree::CompanyStore.find(host: uri.host)
+    if @current_company_store.nil?
+      @current_company_store = Spree::CompanyStore.find(slug: ENV['COMPANYSTORE_ID'])
+    end
+
+    unless @current_company_store.nil?
+      redirect_to "/company_store/#{@current_company_store.slug}"
     end
     @searcher = build_searcher(params.merge(include_images: true))
     @products = @searcher.retrieve_products

@@ -12,7 +12,7 @@ namespace :companystore do
   task netmining_original: :environment do
     [
       {
-        query: { name: 'Ariel Premium Supply, Inc.' },
+        query: { name: 'Ariel Premium Supply, Inc.', dc_acct_num: '100746' },
         skus: ['NM-EOS-LP15']
       },
       {
@@ -40,7 +40,7 @@ namespace :companystore do
         skus: ['NM-2001']
       }
     ].each do |supplier_data|
-      supplier = Spree::Supplier.find_by(supplier_data[:query])
+      supplier = Spree::Supplier.where(supplier_data[:query]).first_or_create
       fail "Failed to find Supplier: #{supplier_data[:query]}" if supplier.blank?
 
       supplier_data[:skus].each do |product_sku|

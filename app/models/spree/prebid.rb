@@ -33,6 +33,7 @@ class Spree::Prebid < Spree::Base
     # No prebids from banned users
     return if seller.banned?
 
+    # TODO: Move out to lib so we can share
     auction_data = {
       auction_id: auction_id,
       prebid_id: id,
@@ -447,60 +448,31 @@ class Spree::Prebid < Spree::Base
       key: ENV['UPS_API_KEY']
     )
     response = ups.find_rates(origin, destination, package)
+    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price, rate.delivery_date] }
+
+    shipping_option_map = {
+      'UPS Ground' => :ups_ground,
+      'UPS Three-Day Select' => :ups_3day_select,
+      'UPS Second Day Air' => :ups_second_day_air,
+      'UPS Next Day Air Saver' => :ups_next_day_air_saver,
+      'UPS Next Day Air Early A.M.' => :ups_next_day_air_early_am,
+      'UPS Next Day Air' => :ups_next_day_air
+    }.freeze
 
     shipping_sym = Spree::Prebid::SHIPPING_OPTION.key(shipping_option.to_i)
-    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price, rate.delivery_date] }
-    delivery_date = nil
-    got_data = false
 
+    delivery_date = nil
     ups_rates.each do |rate|
-      delivery_date = rate[2]
+      next if shipping_option_map[rate[0]] != shipping_sym
       auction_data[:shipping_cost] = (rate[1] * number_of_packages.to_f) / 100
       auction_data[:service_name] = rate[0] unless rate[0].blank?
-      case rate[0]
-      when 'UPS Ground'
-        if :ups_ground == shipping_sym
-          got_data = true
-          break
-        end
-      when 'UPS Three-Day Select'
-        if :ups_3day_select == shipping_sym
-          got_data = true
-          break
-        end
-      when 'UPS Second Day Air'
-        if :ups_second_day_air == shipping_sym
-          got_data = true
-          break
-        end
-      when 'UPS Next Day Air Saver'
-        if :ups_next_day_air_saver == shipping_sym
-          got_data = true
-          break
-        end
-      when 'UPS Next Day Air Early A.M.'
-        if :ups_next_day_air_early_am == shipping_sym
-          got_data = true
-          break
-        end
-      when 'UPS Next Day Air'
-        if :ups_next_day_air == shipping_sym
-          got_data = true
-          break
-        end
-      end
+      delivery_date = rate[2]
+      break
     end
 
-    # "UPS Ground"
-    # "UPS Three-Day Select"
-    # "UPS Second Day Air"
-    # "UPS Next Day Air Saver"
-    # "UPS Next Day Air Early A.M."
-    # "UPS Next Day Air"
-    if got_data == false
+    if delivery_date.nil?
       auction_data[:service_name] = ups_rates[0][0] unless ups_rates[0][0].blank?
       auction_data[:shipping_cost] = (ups_rates[0][1] * number_of_packages.to_f) / 100
-      delivery_date = nil
     end
 
     begin

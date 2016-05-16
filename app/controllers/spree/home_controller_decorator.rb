@@ -1,8 +1,11 @@
 Spree::HomeController.class_eval do
   def index
-    # Head to a company store if needed
-    uri = URI(request.referrer)
-    @current_company_store = Spree::CompanyStore.find(host: uri.host)
+    # Redirect to a company store if requested
+    # If the URI is
+    # 1. <xxx>.thepromoexchange.com AND xxx matches a slug, we have a store
+    # 2. <xxx>.promox.co AND xxx matches a slug, we have a store
+    host = URI(request.base_url).host
+    @current_company_store = Spree::CompanyStore.where(slug: host.split('.')[0]).first
     if @current_company_store.nil? && ENV['COMPANYSTORE_ID'].present?
       @current_company_store = Spree::CompanyStore.where(slug: ENV['COMPANYSTORE_ID']).first
     end
@@ -20,7 +23,7 @@ Spree::HomeController.class_eval do
 
   def send_request
     email = params[:request][:email]
-    unless email.present? && (email =~ Devise.email_regexp)
+    if email.nil? || !(email =~ Devise.email_regexp)
       @msg = '<div class="alert alert-error">Email is not valid!</div>'
     else
       Resque.enqueue(SendRequestToLearn, email)

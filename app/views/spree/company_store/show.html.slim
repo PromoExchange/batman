@@ -1,5 +1,5 @@
 .cs-title.text-center data-key="#{ENV['SPREE_API_KEY']}"
-  = @company_store.display_name
+  = @current_company_store.display_name
 .row
   - @auctions.each do |auction|
     .col-md-4.cs-product

@@ -94,10 +94,10 @@ class Spree::AuctionsController < Spree::StoreController
     end
 
     if @auction.clone_id.present?
-      @auction.buyer = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+      @auction.buyer = @current_company_store.buyer
       @auction.shipping_address = Spree::Address.find(params[:auction][:address_id].to_i)
       if @auction.shipping_address.nil?
-        @auction.shipping_address = Spree::Address.where(company: 'Xactly').first if @auction.shipping_address
+        @auction.shipping_address = @current_company_store.buyer.shipping_address
       end
     end
 
@@ -302,10 +302,9 @@ class Spree::AuctionsController < Spree::StoreController
 
     @pxaddress = Spree::Pxaddress.new
 
-    # TODO: We need to detect which company store we are and use the associated buyer
-    user = Spree::User.where(email: 'mkuh@xactlycorp.com').first
+    return unless @current_company_store.present?
     @addresses = []
-    user.addresses.map do |a|
+    @current_company_store.buyer.addresses.map do |a|
       next if a.bill? && !a.ship?
       address = OpenStruct.new
       address.zipcode = a.zipcode
@@ -320,7 +319,7 @@ class Spree::AuctionsController < Spree::StoreController
       ['UPS Second Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_second_day_air]],
       ['UPS Next Day Air Saver', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_saver]],
       ['UPS Next Day Air Early A.M.', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_early_am]],
-      ['UPS Next Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air]],
+      ['UPS Next Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air]]
     ]
   end
 

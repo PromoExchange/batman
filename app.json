@@ -11,12 +11,30 @@
     "BUILDPACK_URL":{
       "required":true
     },
+    "DATABASE_URL":{
+      "required":true
+    },
+    "DISTRIBUTOR_CENTRAL_ALL_PRODUCT_CATALOG_ID":{
+      "required":true
+    },
+    "DISTRIBUTOR_CENTRAL_WEBACCTID":{
+      "required":true
+    },
+    "EMAIL_DELAY_TESTMODE":{
+      "required":true
+    },
     "LANG":{
+      "required":true
+    },
+    "LOGENTRIES_KEY":{
       "required":true
     },
     "RACK_ENV":"staging",
     "RAILS_ENV":"staging",
     "RAILS_SERVE_STATIC_FILES":{
+      "required":true
+    },
+    "REDISCLOUD_URL":{
       "required":true
     },
     "S3_IMAGE_BUCKET":{
@@ -28,12 +46,14 @@
     "SECRET_KEY_BASE":{
       "required":true
     },
-    "STRIPE_PUBLISHABLE_KEY":{
+    "SENDGRID_PASSWORD":{
       "required":true
     },
-    "STRIPE_SECRET_KEY":{
+    "SENDGRID_USERNAME":{
       "required":true
     },
+    "STRIPE_PUBLISHABLE_KEY":"pk_test_OAUX2tTaVitolU0iysmyQCHk",
+    "STRIPE_SECRET_KEY":"sk_test_BUEgUvIraeg7Not6KPvNXjXL",
     "UPS_API_KEY":{
       "required":true
     },
@@ -44,10 +64,5 @@
       "required":true
     }
   },
-  "addons":[
-    "redismonitor",
-    "sendgrid",
-    "rediscloud",
-    "heroku-postgresql"
-  ]
+  "addons":[]
 }

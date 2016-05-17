@@ -1,11 +1,6 @@
 Spree::HomeController.class_eval do
   def index
-    # Redirect to a company store if requested
-    # If the URI is
-    # 1. <xxx>.thepromoexchange.com AND xxx matches a slug, we have a store
-    # 2. <xxx>.promox.co AND xxx matches a slug, we have a store
-    host = URI(request.base_url).host
-    @current_company_store = Spree::CompanyStore.where(slug: host.split('.')[0]).first
+    @current_company_store = Spree::CompanyStore.where(host: URI(request.base_url).host).first
     if @current_company_store.nil? && ENV['COMPANYSTORE_ID'].present?
       @current_company_store = Spree::CompanyStore.where(slug: ENV['COMPANYSTORE_ID']).first
     end

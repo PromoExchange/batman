@@ -9,6 +9,8 @@ Spree::HomeController.class_eval do
       redirect_to "/company_store/#{@current_company_store.slug}"
     end
 
+    session.delete(:company_store_id)
+
     # Continue to main site
     @searcher = build_searcher(params.merge(include_images: true))
     @products = @searcher.retrieve_products

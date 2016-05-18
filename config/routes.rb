@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
   mount Spree::Core::Engine, at: '/'
 
+  root :to => "company_store#index"
+
   #### TESTING ONLY
   #### IF YOU ADD ITEMS HERE YOU BETTER ADD A GUARD SPEC!
   #### i.e. expect(get: '/memory_load').not_to be_routable
@@ -19,10 +21,15 @@ Rails.application.routes.draw do
 
   post '/charges', to: 'spree/api/charges#charge'
   get 'accept/:bid_id', to: 'spree/auctions#auction_payment'
+  get 'csaccept/:bid_id', to: 'spree/auctions#csaccept'
   post '/customer', to: 'spree/api/charges#create_customer'
   post '/delete_customer/:customer_id', to: 'spree/api/charges#delete_customer'
   post '/confirm', to: 'spree/api/charges#confirm_deposit'
   post '/send_request', to: 'spree/home#send_request'
+  
+  get '/company_store', to: 'spree/company_store#index'
+  get '/company_store/:id', to: 'spree/company_store#show'
+  post '/inspire_me_request', to: 'spree/company_store#inspire_me'
 
   resources :pxtaxrates,
     controller: 'spree/pxtaxrates',
@@ -97,6 +104,7 @@ Rails.application.routes.draw do
     post '/auctions/:id/claim_payment' => 'spree/api/auctions#claim_payment'
     post '/auctions/:id/reject_order' => 'spree/api/auctions#reject_order'
     post '/auctions/:id/resolve_dispute' => 'spree/api/auctions#resolve_dispute'
+    get '/auctions/:id/best_price' => 'spree/api/auctions#best_price'
 
     resources :request_ideas, controller: 'spree/api/request_ideas' do
       member do

@@ -38,4 +38,8 @@ FactoryGirl.define do
     started nil
     ended nil
   end
+
+  factory :cloned_factory, parent: :auction do
+    association :clone, factory: :auction
+  end
 end

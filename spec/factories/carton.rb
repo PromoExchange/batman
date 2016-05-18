@@ -8,5 +8,6 @@ FactoryGirl.define do
     originating_zip '19020'
     quantity 150
     fixed_price nil
+    per_item false
   end
 end

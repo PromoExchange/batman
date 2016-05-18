@@ -4,10 +4,19 @@ class Spree::Prebid < Spree::Base
   has_many :adjustments
   has_many :bids
 
+  SHIPPING_OPTION = {
+    ups_ground: 1,
+    ups_3day_select: 2,
+    ups_second_day_air: 3,
+    ups_next_day_air_saver: 4,
+    ups_next_day_air_early_am: 5,
+    ups_next_day_air: 6
+  }
+
   validates :seller_id, presence: true
   validates :supplier_id, presence: true
 
-  def create_prebid(auction_id)
+  def create_prebid(auction_id, shipping_option)
     Rails.logger.info 'Prebid: creating prebid'
 
     auction = Spree::Auction.find(auction_id)
@@ -24,6 +33,7 @@ class Spree::Prebid < Spree::Base
     # No prebids from banned users
     return if seller.banned?
 
+    # TODO: Move out to lib so we can share
     auction_data = {
       auction_id: auction_id,
       prebid_id: id,
@@ -35,9 +45,12 @@ class Spree::Prebid < Spree::Base
       rush: auction.rush?,
       messages: [],
       carton: auction.product.carton,
+      service_name: '',
       shipping_cost: 0.0,
+      delivery_days: 5,
       ship_to_zip: auction.ship_to_zip,
-      used_eqp: false
+      used_eqp: false,
+      shipping_option: shipping_option
     }
 
     unit_price = auction.product_unit_price
@@ -45,7 +58,7 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:messages] << "Item name: #{auction.product.name}"
     auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
-    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}" unless auction.product.original_supplier.nil?
+    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}"
     auction_data[:messages] << "SKU: #{auction.product.master.sku}"
 
     unless markup.nil?
@@ -150,8 +163,12 @@ class Spree::Prebid < Spree::Base
 
     # Shipping based on buyers zip
     # Package needs weight, height, width and depth
-    shipping_cost = calculate_shipping(auction_data)
+    shipping_cost = calculate_shipping(auction_data, shipping_option)
+
     auction_data[:messages] << "Shipping cost #{shipping_cost}"
+    auction_data[:messages] << "Shipping option #{Spree::Prebid::SHIPPING_OPTION.key(auction_data[:shipping_option])}"
+    auction_data[:messages] << "Shipping method #{auction_data[:service_name]}"
+    auction_data[:messages] << "Shipping delivery days #{auction_data[:delivery_days]}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
     auction_data[:messages] << "After applying shipping cost: #{auction_data[:running_unit_price]}"
 
@@ -178,7 +195,10 @@ class Spree::Prebid < Spree::Base
       bid = Spree::Bid.create(
         seller_id: seller_id,
         auction_id: auction.id,
-        prebid_id: id
+        prebid_id: id,
+        service_name: auction_data[:service_name],
+        shipping_cost: auction_data[:shipping_cost],
+        delivery_days: auction_data[:delivery_days]
       )
 
       li = Spree::LineItem.create(
@@ -369,13 +389,16 @@ class Spree::Prebid < Spree::Base
     end
   end
 
-  def calculate_shipping(auction_data)
+  def calculate_shipping(auction_data, shipping_option)
     carton = auction_data[:carton]
 
     unless carton.fixed_price.nil?
+      auction_data[:messages] << 'Using fixed price shipping'
       if carton.per_item
+        auction_data[:messages] << "Fixed price per item #{carton.fixed_price}"
         auction_data[:shipping_cost] = carton.fixed_price * auction_data[:quantity]
       else
+        auction_data[:messages] << "Fixed price total #{carton.fixed_price}"
         auction_data[:shipping_cost] = carton.fixed_price
       end
       return auction_data[:shipping_cost]
@@ -425,9 +448,46 @@ class Spree::Prebid < Spree::Base
       key: ENV['UPS_API_KEY']
     )
     response = ups.find_rates(origin, destination, package)
+    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price, rate.delivery_date] }
 
-    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price] }
-    auction_data[:shipping_cost] = (ups_rates[0][1] * number_of_packages.to_f) / 100
+    shipping_option_map = {
+      'UPS Ground' => :ups_ground,
+      'UPS Three-Day Select' => :ups_3day_select,
+      'UPS Second Day Air' => :ups_second_day_air,
+      'UPS Next Day Air Saver' => :ups_next_day_air_saver,
+      'UPS Next Day Air Early A.M.' => :ups_next_day_air_early_am,
+      'UPS Next Day Air' => :ups_next_day_air
+    }.freeze
+
+    shipping_sym = Spree::Prebid::SHIPPING_OPTION.key(shipping_option.to_i)
+
+    delivery_date = nil
+    ups_rates.each do |rate|
+      next if shipping_option_map[rate[0]] != shipping_sym
+      auction_data[:shipping_cost] = (rate[1] * number_of_packages.to_f) / 100
+      auction_data[:service_name] = rate[0] unless rate[0].blank?
+      delivery_date = rate[2]
+      break
+    end
+
+    if delivery_date.nil?
+      auction_data[:service_name] = ups_rates[0][0] unless ups_rates[0][0].blank?
+      auction_data[:shipping_cost] = (ups_rates[0][1] * number_of_packages.to_f) / 100
+    end
+
+    begin
+      delta = 0
+      if delivery_date.nil?
+        # Try and use the cheapest and adjust
+        delivery_date ||= ups_rates[1][2]
+        delta = 2
+      end
+      days_diff = delta + ((delivery_date.to_f - Time.zone.now.to_f) / 86400).ceil
+    rescue
+      days_diff = 5
+    end
+
+    auction_data[:delivery_days] = days_diff
     auction_data[:shipping_cost]
   rescue => e
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - Failed to calculate shipping")

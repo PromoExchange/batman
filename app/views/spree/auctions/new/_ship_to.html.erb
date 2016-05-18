@@ -1,0 +1,10 @@
+<% if @auction.clone.nil? %>
+  <% if spree_current_user %>
+    <div class="form-group">
+      <%= f.label(:ship_to_zip, 'Shipping Zipcode') %>
+      <%= f.text_field(:ship_to_zip, class: 'form-control', placeholder: '10591') %>
+    </div>
+  <% end %>
+<% else %>
+  <%= render partial: 'spree/auctions/new/address_drop', locals: {f: f} %>
+<% end %>

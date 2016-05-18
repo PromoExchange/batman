@@ -21,7 +21,7 @@ class Spree::DashboardsController < Spree::StoreController
     @prebids = Spree::Prebid
       .where(seller: current_spree_user)
       .joins(:supplier)
-      .where("spree_suppliers.company_store=false")
+      .where('spree_suppliers.company_store=false')
       .order('spree_suppliers.name')
   end
 

@@ -1,0 +1,9 @@
+<% if @auction.clone.nil? %>
+  <div class="form-group">
+    <%= f.label(:main_color_id, 'Product Color') %>
+    <%= f.select(:main_color_id, options_for_select(@main_colors, @auction.main_color_id),
+      { prompt: 'Please Select'}, { class: 'form-control' }) %>
+  </div>
+<% else %>
+  <%= f.hidden_field :main_color_id, value: @auction.main_color_id %>
+<% end %>

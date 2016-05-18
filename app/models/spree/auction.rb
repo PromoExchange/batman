@@ -187,9 +187,19 @@ class Spree::Auction < Spree::Base
 
   def product_price_code
     price_code = nil
+    price_code_count = 0
     product.master.volume_prices.each do |v|
       if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
         price_code = v.price_code
+
+        # It is possible that the price code is actually the entire price code
+        # Break it out and select the correct one
+        if price_code.length > 1
+          price_code_array = Spree::Price.price_code_to_array(price_code)
+          if price_code_array.length >= price_code_count
+            price_code = price_code_array[price_code_count]
+          end
+        end
         break
       end
     end
@@ -272,7 +282,40 @@ class Spree::Auction < Spree::Base
       'in_dispute': 'Order being disputed',
       'complete': 'Completed'
     }
+  end
 
+  def best_price(which_quantity, shipping_option)
+    fail 'Not a custom auction' unless state == 'custom_auction'
+
+    divisor = 1
+    if which_quantity.nil?
+      divisor = product.maximum_quantity
+      which_quantity = divisor
+    end
+
+    which_quantity ||= product.maximum_quantity
+
+    self.quantity = which_quantity.to_i
+    save!
+
+    # F YOU
+    # bids.destroy_all
+    Spree::Bid.where(auction_id: id).each do |bid|
+      bid.order.delete
+      bid.delete
+    end
+
+    # Custom product use the original supplier for prebids
+    prebids = Spree::Prebid.where(supplier: product.original_supplier)
+
+    prebids.each do |p|
+      p.create_prebid(id, shipping_option)
+    end
+
+    lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first
+    return lowest_bid unless lowest_bid.nil?
+
+    nil
   end
 
   def best_price(which_quantity)

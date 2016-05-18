@@ -1,4 +1,4 @@
-.cs-title.text-center data-key="#{ENV['SPREE_API_KEY']}"
+.cs-title.text-center data-key="#{@current_company_store.buyer.spree_api_key}"
   = @current_company_store.display_name
 .row
   - @auctions.each do |auction|

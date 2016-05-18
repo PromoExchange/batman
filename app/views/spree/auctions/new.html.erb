@@ -2,7 +2,7 @@
 <%= Spree.t(:auction) %>
 <% end %>
 
-<div class="cs-page row" id="new-auction" data-key="<%= ENV['SPREE_API_KEY'] %>">
+<div class="cs-page row" id="new-auction" data-key="<%= @current_company_store.buyer.spree_api_key %>">
   <div class="col-md-6">
     <%= large_image(@auction.product, itemprop: "image", width: '400px') %><br/>
     <p><%= @auction.product.description %></p>

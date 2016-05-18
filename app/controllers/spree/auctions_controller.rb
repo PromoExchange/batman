@@ -305,7 +305,6 @@ class Spree::AuctionsController < Spree::StoreController
     return unless @current_company_store.present?
     @addresses = []
     @current_company_store.buyer.addresses.map do |a|
-      next if a.bill? && !a.ship?
       address = OpenStruct.new
       address.zipcode = a.zipcode
       address.name = a.to_s

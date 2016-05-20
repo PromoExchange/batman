@@ -284,15 +284,10 @@ class Spree::Auction < Spree::Base
     }
   end
 
+  # TODO: Change params to a hash if we add 1 more
   def best_price(which_quantity, shipping_option)
     fail 'Not a custom auction' unless state == 'custom_auction'
 
-    divisor = 1
-    if which_quantity.nil?
-      divisor = product.maximum_quantity
-      which_quantity = divisor
-    end
-
     which_quantity ||= product.maximum_quantity
 
     self.quantity = which_quantity.to_i
@@ -305,52 +300,18 @@ class Spree::Auction < Spree::Base
       bid.delete
     end
 
-    # Custom product use the original supplier for prebids
-    prebids = Spree::Prebid.where(supplier: product.original_supplier)
-
-    prebids.each do |p|
+    Spree::Prebid.where(supplier: product.original_supplier).each do |p|
       p.create_prebid(id, shipping_option)
     end
 
-    lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first
+    lowest_bid = Spree::Bid
+      .includes(:order)
+      .where(auction_id: id)
+      .order('spree_orders.total ASC').first
+
     return lowest_bid unless lowest_bid.nil?
 
     nil
-  end
-
-  def best_price(which_quantity)
-    fail "Not a custom auction" unless state == 'custom_auction'
-
-    divisor = 1
-    if which_quantity.nil?
-      divisor = product.maximum_quantity
-      which_quantity = divisor
-    end
-
-    which_quantity ||= product.maximum_quantity
-
-    self.quantity = which_quantity.to_i
-    save!
-
-    # F YOU
-    # bids.destroy_all
-    Spree::Bid.where(auction_id: id).each do |bid|
-      bid.order.delete
-      bid.delete
-    end
-
-    # Custom product use the original supplier for prebids
-    prebids = Spree::Prebid.where(supplier: product.original_supplier)
-
-    prebids.each do |p|
-      p.create_prebid(id)
-    end
-
-    lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first
-
-    return lowest_bid.total.to_f / divisor unless lowest_bid.nil?
-
-    0.0
   end
 
   private

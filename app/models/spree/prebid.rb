@@ -33,7 +33,7 @@ class Spree::Prebid < Spree::Base
     # No prebids from banned users
     return if seller.banned?
 
-    # TODO: Move out to lib so we can share
+    # TODO: Move out to lib so we can share and use as an async message
     auction_data = {
       auction_id: auction_id,
       prebid_id: id,

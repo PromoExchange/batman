@@ -24,6 +24,7 @@ class Spree::AuctionsController < Spree::StoreController
 
   def new
     if session[:pending_auction_id].present?
+      # TODO: Do we need to call require_buyer in non CS mode?
       # require_buyer
       @auction = Spree::Auction.find_by(id: session[:pending_auction_id])
       @cloned_pms_colors = @auction.pms_colors.pluck(:id).map(&:inspect).join(',')

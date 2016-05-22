@@ -3,7 +3,11 @@ class Spree::AuctionsController < Spree::StoreController
   before_action :require_login, only: [:edit, :show]
   before_action :fetch_auction, except: [:index, :create, :new, :auction_payment, :csaccept]
 
-  layout 'company_store_layout'
+  layout :get_layout
+
+  def get_layout
+    @auction.clone.present? ? 'company_store_layout' : 'spree/layouts/spree_application'
+  end
 
   def index
     if params[:buyer_id].present?

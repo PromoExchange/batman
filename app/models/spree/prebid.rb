@@ -58,7 +58,7 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:messages] << "Item name: #{auction.product.name}"
     auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
-    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}"
+    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}" if auction.product.original_supplier.present?
     auction_data[:messages] << "SKU: #{auction.product.master.sku}"
 
     unless markup.nil?

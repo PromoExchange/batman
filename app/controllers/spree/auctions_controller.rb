@@ -112,7 +112,7 @@ class Spree::AuctionsController < Spree::StoreController
       unless current_spree_user
         @auction.pending
         session[:pending_auction_id] = @auction.id
-        redirect_to login_url && return
+        redirect_to login_url and return
       end
     end
 

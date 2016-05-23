@@ -14,7 +14,7 @@ $(function(){
     if($('#auction-size .product-size').length) {
       min = parseInt($("#auction-size").attr('min-quantity'));
       $('#auction-size .product-size').each(function() {
-       actual += parseInt('0'+ $(this).val());
+        actual += parseInt('0'+ $(this).val());
       });
     } else {
       var e = $(".cs-quantity");
@@ -65,7 +65,9 @@ $(function(){
     }
   }
 
+  // TODO: Switch style in new auction view
   $(".cs-quantity").keyup(function() {
+    if( $("#auction_clone_id").val() === "") return;
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
     if($('#address_drop').val() === '') {

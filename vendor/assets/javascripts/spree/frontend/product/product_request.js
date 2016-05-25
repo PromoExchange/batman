@@ -1,5 +1,4 @@
-$(function() { 
-
+$(function() {
   $("#product_request").on("ajax:success", function(e, data){
     alert("Your PromoExchange swag pro will have product ideas for you soon!");
   }).on("ajax:error", function(e, data){
@@ -11,10 +10,8 @@ $(function() {
     }
     $(this).find('.payment-errors ul').html(trHTML);
   });
-  
-  
+
   $('#get-ideas').click(function(){
     $('#product_request')[0].reset();
-  })
-
+  });
 });

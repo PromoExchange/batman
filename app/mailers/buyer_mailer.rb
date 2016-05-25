@@ -65,4 +65,10 @@ class BuyerMailer < ApplicationMailer
     @auction_payment = auction_payment
     mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange ACH Account payment status')
   end
+
+  def send_inspire_me_request(inspire_me_request, product_request)
+    @inspire_me_request = inspire_me_request
+    @product_request = product_request
+    mail(to: 'michael.goldstein@thepromoexchange.com', subject: 'PromoExchange Company Store Inspire me request')
+  end
 end

@@ -1,8 +1,10 @@
 $(function() {
 
+  $('.stripe-button-el').replaceWith('<button type="submit" class="btn btn-primary cs-button" style="visibility: visible;">Pay with Card</button>');
+
   function stripeResponseHandlerBuyer(status, response) {
     var $form = $('#buyer-form');
-    var key = $('#show-invoice').attr('data-key');
+    var key = $('#buyer-form').attr('data-key');
     if (response.error) {
       // Show the errors on the form
       $("body").css("cursor", "default");

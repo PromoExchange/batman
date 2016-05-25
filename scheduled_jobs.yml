@@ -12,3 +12,8 @@ AchAccountStatus:
   every: 12h
   queue: :ach_account_status
   description: "Update ACH Account"
+
+RecalcPriceCache:
+  every: 12h
+  queue: :recalc_price_cache
+  description: "Recalc price cache"

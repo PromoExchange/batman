@@ -9,11 +9,13 @@ $(function() {
 
   $('.swatch-clickable').tooltip();
 
-  $('#auction_pms_colors').tagsinput({
-    itemValue: 'id',
-    itemText: 'text',
-    maxTags: 4
-  });
+  if( $('#auction_clone_id').val() === "") {
+    $('#auction_pms_colors').tagsinput({
+      itemValue: 'id',
+      itemText: 'text',
+      maxTags: 4
+    });
+  }
 
   $(".swatch-clickable").click(function() {
     $('#auction_pms_colors').tagsinput('add', {
@@ -143,14 +145,6 @@ $(function() {
   });
 
   $('.custom-swatch-clickable').tooltip();
-
-  $('#auction-size .product-size').change(function() {
-    var sum = 0;
-    $('#auction-size .product-size').each(function() {
-     sum+= parseInt('0'+ $(this).val());
-    });
-    $('.total-qty span:last').text(sum);
-  });
 });
 
 $(document).ready(function(){

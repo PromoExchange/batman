@@ -1,0 +1,87 @@
+$cs-text-color: #636868;
+
+#cs-container {
+  margin: 0 auto;
+  width: 1000px;
+}
+
+.cs-title {
+  font-size: 2em;
+  color: $cs-text-color;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+
+.cs-product {
+  min-height: 250px !important;
+  color: steelblue;
+}
+
+.cs-product-text {
+  color: $cs-text-color;
+  margin-top: 5px;
+  font-size: 1.2em;
+}
+
+.cs-image {
+  width: 150px;
+  margin-left: 66px;
+}
+
+.cs-body {
+  background-color: #f8f8f8;
+}
+
+.cs-wrapper {
+  min-height: 100%;
+  margin: 0 auto -60px;
+}
+
+.cs-header {
+  background-color: white;
+  width: 100%;
+}
+
+.footer-push {
+  height: 60px;
+}
+
+.cs-footer {
+  background-color: #222222;
+  width: 100%;
+}
+
+.cs-footer-bottom {
+  bottom: 0;
+  height: 60px;
+  left: 0;
+  position: fixed;
+}
+
+#cs-container {
+  margin-top: 30px;
+}
+
+.cs-button {
+  background-image: -webkit-linear-gradient(#45b1e8,#3097de) !important;
+  border: 0 !important;
+}
+
+.stripe-button {
+  color: #fff;
+  background-color: #45b1e8;
+  border-color: #45b1e8;
+}
+
+.active_price {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+#inspire-me {
+  margin-bottom: 20px;
+}
+
+html, body {
+  height: 100%;
+}

@@ -187,9 +187,19 @@ class Spree::Auction < Spree::Base
 
   def product_price_code
     price_code = nil
+    price_code_count = 0
     product.master.volume_prices.each do |v|
       if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
         price_code = v.price_code
+
+        # It is possible that the price code is actually the entire price code
+        # Break it out and select the correct one
+        if price_code.length > 1
+          price_code_array = Spree::Price.price_code_to_array(price_code)
+          if price_code_array.length >= price_code_count
+            price_code = price_code_array[price_code_count]
+          end
+        end
         break
       end
     end
@@ -272,17 +282,11 @@ class Spree::Auction < Spree::Base
       'in_dispute': 'Order being disputed',
       'complete': 'Completed'
     }
-
   end
 
-  def best_price(which_quantity)
-    fail "Not a custom auction" unless state == 'custom_auction'
-
-    divisor = 1
-    if which_quantity.nil?
-      divisor = product.maximum_quantity
-      which_quantity = divisor
-    end
+  # TODO: Change params to a hash if we add 1 more
+  def best_price(which_quantity, shipping_option)
+    fail 'Not a custom auction' unless state == 'custom_auction'
 
     which_quantity ||= product.maximum_quantity
 
@@ -296,18 +300,18 @@ class Spree::Auction < Spree::Base
       bid.delete
     end
 
-    # Custom product use the original supplier for prebids
-    prebids = Spree::Prebid.where(supplier: product.original_supplier)
-
-    prebids.each do |p|
-      p.create_prebid(id)
+    Spree::Prebid.where(supplier: product.original_supplier).each do |p|
+      p.create_prebid(id, shipping_option)
     end
 
-    lowest_bid = Spree::Bid.where(auction_id: id).includes(:order).order('spree_orders.total ASC').first
+    lowest_bid = Spree::Bid
+      .includes(:order)
+      .where(auction_id: id)
+      .order('spree_orders.total ASC').first
 
-    return lowest_bid.total.to_f / divisor unless lowest_bid.nil?
+    return lowest_bid unless lowest_bid.nil?
 
-    0.0
+    nil
   end
 
   private

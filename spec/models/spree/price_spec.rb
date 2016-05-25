@@ -58,4 +58,41 @@ RSpec.describe Spree::Price, type: :model do
     t = Spree::Price.discount_price(nil, value)
     expect(((value) - t).abs).to be < 0.0001
   end
+
+  it 'should discount a zero price' do
+    discount = 1.00
+    value = 0
+    t = Spree::Price.discount_price('K', value)
+    expect(((value * discount) - t).abs).to be < 0.0001
+  end
+
+  it 'should split price code array' do
+    price_code_array = Spree::Price.price_code_to_array('5C')
+    expect(price_code_array.size).to be == 5
+    expect(%w(C C C C C) & price_code_array).to be_truthy
+  end
+
+  it 'should split price code array' do
+    price_code_array = Spree::Price.price_code_to_array('CCCCC')
+    expect(price_code_array.size).to be == 5
+    expect(%w(C C C C C) & price_code_array).to be_truthy
+  end
+
+  it 'should split price code array' do
+    price_code_array = Spree::Price.price_code_to_array('1A4C')
+    expect(price_code_array.size).to be == 5
+    expect(%w(A C C C C) & price_code_array).to be_truthy
+  end
+
+  it 'should split price code array' do
+    price_code_array = Spree::Price.price_code_to_array('3B2C')
+    expect(price_code_array.size).to be == 5
+    expect(%w(B B B C C) & price_code_array).to be_truthy
+  end
+
+  it 'should split price code array lower' do
+    price_code_array = Spree::Price.price_code_to_array('3b2c')
+    expect(price_code_array.size).to be == 5
+    expect(%w(b b b c c) & price_code_array).to be_truthy
+  end
 end

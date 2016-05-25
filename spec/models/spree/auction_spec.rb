@@ -17,6 +17,16 @@ RSpec.describe Spree::Auction, type: :model do
     expect(a.save).to be_falsey
   end
 
+  it 'should save with a nil clone' do
+    a = FactoryGirl.build(:auction, clone: nil)
+    expect(a.save).to be_truthy
+  end
+
+  it 'should save a cloned auction' do
+    a = FactoryGirl.build(:cloned_factory, clone: nil)
+    expect(a.save).to be_truthy
+  end
+
   it 'should not save with a nil main color' do
     a = FactoryGirl.build(:auction, main_color: nil)
     expect(a.save).to be_falsey

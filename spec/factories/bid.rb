@@ -10,7 +10,7 @@ FactoryGirl.define do
     trait :shipping do
       service_name 'Basic Shipping'
       shipping_cost 10.00
-      delivery_days 2
+      delivery_days 6
     end
   end
 end

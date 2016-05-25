@@ -12,7 +12,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'pg'
 gem 'unicorn'
 gem 'font-awesome-sass'
-gem 'work_queue'
 gem 'local_time'
 gem 'aws-sdk', '< 2.0'
 gem 'awesome_print', '~> 1.2.0'

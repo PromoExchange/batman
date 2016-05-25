@@ -1,0 +1,9 @@
+SKU,type,range,value,code,imprint_method
+HT-8150-90,setup,,50,V,embroidery
+HT-8150-90,run,(1..49),2.79,G,embroidery
+HT-8150-90,run,(50..149),2.59,G,embroidery
+HT-8150-90,run,(150..499),2.29,G,embroidery
+HT-F497,setup,,60,K,screen_print
+HT-TRT497,setup,,60,K,screen_print
+HT-2001-WHITE,setup,,40,K,screen_print
+HT-2001-GREY,setup,,40,K,screen_print

@@ -24,6 +24,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
   when 'colorprint'
     imprint_method = Spree::ImprintMethod.where(name: 'Colorprint').first_or_create
+  when 'laser'
+    imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
   else
     puts "Unknown Method - #{imprint}"
   end

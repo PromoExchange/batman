@@ -20,7 +20,7 @@ namespace :companystore do
       {
         slug: 'anchorfree',
         email: 'anchorfree_cs@thepromoexchange.com',
-        host: 'anchorfree.thepromoexchange.com'
+        host: 'anchorfree.promox.co'
       }
     ].each do |assignment|
       company_store = Spree::CompanyStore.where(slug: assignment[:slug]).first

@@ -1,0 +1,8 @@
+SKU,type,range,value,code,imprint_method
+NM-EOS-LP15,setup,,16,K,pad_print
+NM-1148WM,setup,,44,K,screen_print
+NM-SM-6319,setup,,44,K,screen_print
+NM-40061,setup,,70,V,deboss
+NM-354055,setup,,75,K,embroidery
+NM-98140,setup,,75,K,embroidery
+NM-2001,setup,,20,K,screen_print

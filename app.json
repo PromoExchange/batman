@@ -11,6 +11,9 @@
     "BUILDPACK_URL":{
       "required":true
     },
+    "CACHE_URL":{
+      "required":true
+    },
     "DATABASE_URL":{
       "required":true
     },
@@ -32,9 +35,6 @@
     "RACK_ENV":"staging",
     "RAILS_ENV":"staging",
     "RAILS_SERVE_STATIC_FILES":{
-      "required":true
-    },
-    "REDISCLOUD_URL":{
       "required":true
     },
     "S3_IMAGE_BUCKET":{

@@ -5,7 +5,7 @@ module ClaimPayment
     @auction = Spree::Auction.find(params['auction_id'])
     SellerMailer.claim_payment(@auction).deliver
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 1.days),
+      EmailHelper.email_delay(Time.zone.now + 1.day),
       ClaimPayment,
       auction_id: id
     )

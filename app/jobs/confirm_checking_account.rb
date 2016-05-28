@@ -7,7 +7,7 @@ module ConfirmCheckingAccount
       BuyerMailer.confirm_checking_account(@customer).deliver
 
       Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 3.days),
+        EmailHelper.email_delay(Time.zone.now + 3.days),
         ConfirmCheckingAccount,
         customer_id:  @customer.id
       )

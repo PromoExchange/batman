@@ -6,7 +6,7 @@ module ProofNeededImmediately
     if @auction.create_proof?
       SellerMailer.proof_needed_immediately(@auction).deliver
       Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now.tomorrow),
+        EmailHelper.email_delay(Time.zone.now.tomorrow),
         ProofNeededImmediately,
         auction_id: @auction.id
       )

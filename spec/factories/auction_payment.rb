@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :auction_payment, class: Spree::AuctionPayment do
     bid
-    charge_id "1234"
+    charge_id '1234'
     status 'pending'
 
     trait :failed do

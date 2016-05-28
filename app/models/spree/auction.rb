@@ -189,19 +189,18 @@ class Spree::Auction < Spree::Base
     price_code = nil
     price_code_count = 0
     product.master.volume_prices.each do |v|
-      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
-        price_code = v.price_code
+      next unless v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
+      price_code = v.price_code
 
-        # It is possible that the price code is actually the entire price code
-        # Break it out and select the correct one
-        if price_code.length > 1
-          price_code_array = Spree::Price.price_code_to_array(price_code)
-          if price_code_array.length >= price_code_count
-            price_code = price_code_array[price_code_count]
-          end
+      # It is possible that the price code is actually the entire price code
+      # Break it out and select the correct one
+      if price_code.length > 1
+        price_code_array = Spree::Price.price_code_to_array(price_code)
+        if price_code_array.length >= price_code_count
+          price_code = price_code_array[price_code_count]
         end
-        break
       end
+      break
     end
     price_code || 'V'
   end
@@ -295,12 +294,12 @@ class Spree::Auction < Spree::Base
 
     # F YOU
     # bids.destroy_all
-    Spree::Bid.where(auction_id: id).each do |bid|
+    Spree::Bid.where(auction_id: id).find_each do |bid|
       bid.order.delete
       bid.delete
     end
 
-    Spree::Prebid.where(supplier: product.original_supplier).each do |p|
+    Spree::Prebid.where(supplier: product.original_supplier).find_each do |p|
       p.create_prebid(id, shipping_option)
     end
 
@@ -439,10 +438,8 @@ class Spree::Auction < Spree::Base
   end
 
   def is_imprint_pms_colors_present?
-    if self.imprint_method_id.blank?
-      return false
-    end
-    Spree::PmsColorsSupplier.where(supplier_id: self.product.supplier_id).map(&:imprint_method_id).exclude? self.imprint_method_id
+    return false if imprint_method_id.blank?
+    Spree::PmsColorsSupplier.where(supplier_id: product.supplier_id).map(&:imprint_method_id).exclude? imprint_method_id
   end
 
   def credit_card_presense

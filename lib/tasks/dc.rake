@@ -185,7 +185,7 @@ namespace :dc do
         ['Beige',  '155 U', '#f7c995'],
         ['Tan', '155 U', '#c1a67f'],
         ['Charcoal', '424 U', '#88898a'],
-        ['Athletic Gold',  '109 U', '#ffc700'],
+        ['Athletic Gold', '109 U', '#ffc700'],
         ['Metallic Gold', '873 U', '#ae906f'],
         ['Gray', '422 U', '#9ea1a2'],
         ['Forest Green', '343 U', '#48655b'],

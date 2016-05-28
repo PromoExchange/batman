@@ -18,7 +18,7 @@ class Spree::Logo < Spree::Base
 
   def artwork
     if logo_file_file_name.present?
-      extension = logo_file_file_name.split(".").last.to_sym
+      extension = logo_file_file_name.split('.').last.to_sym
       "/assets/#{Spree::Logo::LOGO_FILE_NAME[extension]}"
     end
   end

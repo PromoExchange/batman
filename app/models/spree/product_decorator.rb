@@ -49,7 +49,7 @@ Spree::Product.class_eval do
 
   def minimum_quantity
     # HACK: for SanMar
-    sanmar = Spree::Supplier.where(dc_acct_num: '100160').first
+    sanmar = Spree::Supplier.find_by(dc_acct_num: '100160')
     return 12 if supplier == sanmar
     lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).first
     return 50 if lowest_price_range.nil?

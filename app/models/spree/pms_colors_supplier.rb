@@ -11,7 +11,7 @@ class Spree::PmsColorsSupplier < Spree::Base
     attributes = %w(factory imprint_method name display_name pantone hex)
     CSV.generate(headers: true) do |csv|
       csv << attributes
-      all.each do |myrow|
+      all.find_each do |myrow|
         row = []
         factory = Spree::Supplier.find(myrow.supplier_id)
         imprint_method = Spree::ImprintMethod.find(myrow.imprint_method_id)

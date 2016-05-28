@@ -8,7 +8,7 @@ class Spree::PmsColor < Spree::Base
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
-      all.each do |option_mapping|
+      all.find_each do |option_mapping|
         csv << attributes.map { |attr| option_mapping.send(attr) }
       end
     end

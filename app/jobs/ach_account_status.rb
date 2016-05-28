@@ -14,12 +14,11 @@ module AchAccountStatus
         BuyerMailer.ach_account_status(auction_payment).deliver
       end
 
-      if charge.status == 'failed'
-        user_id = auction_payment.bid.auction.buyer.id
-        user = Spree::User.find(user_id)
-        token = user.customers.where(status: 'cc').last.token
-        auction_payment.bid.create_payment(token)
-      end
+      next unless charge.status == 'failed'
+      user_id = auction_payment.bid.auction.buyer.id
+      user = Spree::User.find(user_id)
+      token = user.customers.where(status: 'cc').last.token
+      auction_payment.bid.create_payment(token)
     end
   end
 end

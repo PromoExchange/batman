@@ -1,5 +1,5 @@
-exit
 require 'net/http'
+
 def start_server
   # Remove the X to enable the parameters for tuning.
   # These are the default values as of Ruby 2.2.0.

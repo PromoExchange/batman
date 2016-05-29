@@ -2,8 +2,6 @@ class Spree::Auction < Spree::Base
   before_create :set_default_dates
   after_create :generate_reference
 
-  accepts_nested_attributes_for :auctions_pms_colors
-
   belongs_to :buyer, class_name: 'Spree::User'
   belongs_to :clone, class_name: 'Spree::Auction'
   belongs_to :customer
@@ -47,6 +45,8 @@ class Spree::Auction < Spree::Base
   delegate :email, to: :buyer, prefix: true
   delegate :name, to: :product
   delegate :wearable?, to: :product
+
+  accepts_nested_attributes_for :auctions_pms_colors
 
   # preferred
   #   open

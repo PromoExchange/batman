@@ -7,6 +7,7 @@ class Spree::DcImage
   attr_accessor :image
 
   def self.retrieve(supplier_item_guid)
-    open(URI.parse("http://www.distributorcentral.com/resources/productimage.cfm?Prod=#{supplier_item_guid}&size=large"))
+    url = "http://www.distributorcentral.com/resources/productimage.cfm?Prod=#{supplier_item_guid}&size=large"
+    open(URI.parse(url))
   end
 end

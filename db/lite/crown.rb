@@ -1,44 +1,18 @@
 require 'csv'
 require 'open-uri'
+require './lib/product_loader'
 
-def add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-  if range.blank?
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type
-    ).first_or_create
-  else
-    upcharge = Spree::UpchargeProduct.where(
+def add_qty_upcharges(product, imprint_method, upcharge_type, hashed)
+  quantity_count = 1
+  Spree::VolumePrice.where(variant_id: product.master).order(:position).each do |v|
+    ProductLoader.add_charge(
       product: product,
       imprint_method: imprint_method,
       upcharge_type: upcharge_type,
-      range: range
-    ).first_or_create
-  end
-  upcharge.update_attributes(
-    value: value,
-    range: range,
-    price_code: price_code,
-    position: position
-  )
-end
-
-def add_qty_upcharges(product, imprint_method, upcharge_type, hashed)
-  volume_price = Spree::VolumePrice.where(variant_id: product.master).order(:position)
-  quantity_count = 1
-  volume_price.each do |v|
-    value = hashed["run_chargeqty#{quantity_count}".to_sym]
-    range = v.range
-    position = quantity_count
-    add_charge(
-      product,
-      imprint_method,
-      upcharge_type,
-      value,
-      range,
-      hashed[:code],
-      position
+      value: hashed["run_chargeqty#{quantity_count}".to_sym],
+      range: v.range,
+      price_code: hashed[:code],
+      position: quantity_count
     )
     quantity_count += 1
   end
@@ -193,14 +167,14 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
 
   charge_name = hashed[:charge_name].strip
   if charge_name == 'Set-Up Charge/Change of Copy'
-    add_charge(
-      product,
-      screen_print_imprint,
-      setup_upcharge,
-      hashed[:setup],
-      '1+',
-      hashed[:code],
-      0
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: screen_print_imprint,
+      upcharge_type: setup_upcharge,
+      value: hashed[:setup],
+      range: '1+',
+      price_code: hashed[:code],
+      position: 0
     )
     updated_upcharge_count += 1
   elsif charge_name == 'Per Color Run Charge'
@@ -209,25 +183,25 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     add_qty_upcharges(product, imprint_method, upcharge_type, hashed)
     updated_upcharge_count += 1
   elsif charge_name == 'Debossing Set-Up/Change of Copy'
-    add_charge(
-      product,
-      deboss_imprint,
-      setup_upcharge,
-      hashed[:setup],
-      '1+',
-      hashed[:code],
-      0
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: eboss_imprint,
+      upcharge_type: setup_upcharge,
+      value: hashed[:setup],
+      range: '1+',
+      price_code: hashed[:code],
+      position: 0
     )
     updated_upcharge_count += 1
   elsif charge_name == 'Pen Imprint Set-Up Charge'
-    add_charge(
-      product,
-      pen_imprint,
-      setup_upcharge,
-      hashed[:setup],
-      '1+',
-      hashed[:code],
-      0
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: pen_imprint,
+      upcharge_type: setup_upcharge,
+      value: hashed[:setup],
+      range: '1+',
+      price_code: hashed[:code],
+      position: 0
     )
     updated_upcharge_count += 1
   elsif charge_name == 'Pen Imprint Run Charge'
@@ -272,38 +246,38 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     add_qty_upcharges(product, imprint_method, upcharge_type, hashed)
     updated_upcharge_count += 1
   elsif charge_name == 'Set-Up/Change of Copy/Reorder'
-    add_charge(
-      product,
-      screen_print_imprint,
-      setup_upcharge,
-      hashed[:setup],
-      '1+',
-      hashed[:code],
-      0
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: screen_print_imprint,
+      upcharge_type: setup_upcharge,
+      value: hashed[:setup],
+      range: '1+',
+      price_code: hashed[:code],
+      position: 0
     )
     updated_upcharge_count += 1
   elsif charge_name == 'Sleeve Imprint Run Charge'
     next
   elsif charge_name == 'Silk Screen Set-Up/Change of Copy'
-    add_charge(
-      product,
-      screen_print_imprint,
-      setup_upcharge,
-      hashed[:setup],
-      '1+',
-      hashed[:code],
-      0
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: screen_print_imprint,
+      upcharge_type: setup_upcharge,
+      value: hashed[:setup],
+      range: '1+',
+      price_code: hashed[:code],
+      position: 0
     )
     updated_upcharge_count += 1
   elsif charge_name == 'Laser Engraving Set-Up/Change of Copy'
-    add_charge(
-      product,
-      laser_engraving_imprint,
-      setup_upcharge,
-      hashed[:setup],
-      '1+',
-      hashed[:code],
-      0
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: laser_engraving_imprint,
+      upcharge_type: setup_upcharge,
+      value: hashed[:setup],
+      range: '1+',
+      price_code: hashed[:code],
+      position: 0
     )
     updated_upcharge_count += 1
   elsif charge_name == 'Assembly Charge'
@@ -330,14 +304,14 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     add_qty_upcharges(product, imprint_method, upcharge_type, hashed)
     updated_upcharge_count += 1
   elsif charge_name == 'Color Surge'
-    add_charge(
-      product,
-      four_color_imprint,
-      setup_upcharge,
-      hashed[:setup],
-      '1+',
-      hashed[:code],
-      0
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: four_color_imprint,
+      upcharge_type: setup_upcharge,
+      value: hashed[:setup],
+      range: '1+',
+      price_code: hashed[:code],
+      position: 0
     )
     updated_upcharge_count += 1
   elsif charge_name == 'Color Surge Run Charge'

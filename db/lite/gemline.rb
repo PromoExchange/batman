@@ -1,61 +1,46 @@
 require 'csv'
 require 'open-uri'
-
-def add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-  if range.blank?
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type
-    ).first_or_create
-  else
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type,
-      range: range
-    ).first_or_create
-  end
-  upcharge.update_attributes(
-    value: value,
-    range: range,
-    price_code: price_code,
-    position: position
-  )
-end
+require './lib/product_loader'
 
 def add_upcharges(product)
-
   Spree::UpchargeProduct.where(product: product).destroy_all
 
   # upcharges
-  setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
-  run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
+  setup = Spree::UpchargeType.where(name: 'setup').first
+  run = Spree::UpchargeType.where(name: 'additional_color_run').first
 
-  screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-  deboss_imprint = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
-  logomatic_imprint = Spree::ImprintMethod.where(name: 'Logomatic').first_or_create
-  embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
-  gemphoto_imprint = Spree::ImprintMethod.where(name: 'Gemphoto').first_or_create
+  screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  deboss = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+  logomatic = Spree::ImprintMethod.where(name: 'Logomatic').first_or_create
+  embroidery = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+  gemphoto = Spree::ImprintMethod.where(name: 'Gemphoto').first_or_create
 
-  add_charge(product, screen_print_imprint, setup_upcharge, '55', '', 'V', 0)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.99', '(6..99)', 'V', 1)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.74', '(100..299)', 'V', 2)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.59', '(300..999)', 'V', 2)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.45', '1000+', 'V', 4)
-
-  add_charge(product, embroidery_imprint, run_upcharge, '2.80', '(6..99)', 'V', 1)
-  add_charge(product, embroidery_imprint, run_upcharge, '2.55', '(100..299)', 'V', 2)
-  add_charge(product, embroidery_imprint, run_upcharge, '2.29', '300+', 'V', 3)
-
-  add_charge(product, deboss_imprint, setup_upcharge, '70', '', 'V', 0)
-
-  add_charge(product, logomatic_imprint, setup_upcharge, '55', '', 'V', 0)
-
-  add_charge(product, gemphoto_imprint, run_upcharge, '2.80', '(6..99)', 'V', 1)
-  add_charge(product, gemphoto_imprint, run_upcharge, '2.55', '(100..299)', 'V', 2)
-  add_charge(product, gemphoto_imprint, run_upcharge, '2.20', '(300..999)', 'V', 3)
-  add_charge(product, gemphoto_imprint, run_upcharge, '2.05', '1000+', 'V', 4)
+  [
+    { imprint_method: screen_print, upcharge: setup, value: '55', range: '', position: 0 },
+    { imprint_method: screen_print, upcharge: run, value: '0.99', range: '(6..99)', position: 1 },
+    { imprint_method: screen_print, upcharge: run, value: '0.74', range: '(100..299)', position: 2 },
+    { imprint_method: screen_print, upcharge: run, value: '0.59', range: '(300..999)', position: 2 },
+    { imprint_method: screen_print, upcharge: run, value: '0.45', range: '1000+', position: 4 },
+    { imprint_method: embroidery, upcharge: run, value: '2.8', range: '(6..99)', position: 1 },
+    { imprint_method: embroidery, upcharge: run, value: '2.55', range: '(100..299)', position: 2 },
+    { imprint_method: embroidery, upcharge: run, value: '2.29', range: '300+', position: 3 },
+    { imprint_method: deboss, upcharge: setup, value: '70', range: '', position: 0 },
+    { imprint_method: logomatic, upcharge: setup, value: '55', range: '', position: 0 },
+    { imprint_method: gemphoto, upcharge: run, value: '2.8', range: '(6..99)', position: 1 },
+    { imprint_method: gemphoto, upcharge: run, value: '2.55', range: '(100..299)', position: 2 },
+    { imprint_method: gemphoto, upcharge: run, value: '2.2', range: '(300..999)', position: 3 },
+    { imprint_method: gemphoto, upcharge: run, value: '2.05', range: '1000+', position: 4 },
+  ].each do |charge|
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: charge[:imprint_method],
+      upcharge_type: charge[:upcharge],
+      value: charge[:value],
+      range: charge[:range],
+      price_code: 'V',
+      position: charge[:position]
+    )
+  end
 end
 
 puts 'Loading Gemline products'

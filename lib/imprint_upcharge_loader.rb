@@ -49,7 +49,7 @@ module ImprintUpchargeLoader
         end
       end
     end
-    puts "Loaded imprint upcharges:[#{load_name}]"
-    puts "#{load_count} loaded, #{error_count} errors "
+    Rails.lgoger.debug "Loaded imprint upcharges:[#{load_name}]"
+    Rails.logger.debug "#{load_count} loaded, #{error_count} errors "
   end
 end

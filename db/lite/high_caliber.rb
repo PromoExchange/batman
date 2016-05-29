@@ -1,37 +1,27 @@
 require 'csv'
 require 'open-uri'
-
-def add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-  if range.blank?
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type
-    ).first_or_create
-  else
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type,
-      range: range
-    ).first_or_create
-  end
-  upcharge.update_attributes(
-    value: value,
-    range: range,
-    price_code: price_code,
-    position: position
-  )
-end
+require './lib/product_loader'
 
 def add_upcharges(product)
   Spree::UpchargeProduct.where(product: product).destroy_all
-  setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
-  run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
-  screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  setup = Spree::UpchargeType.where(name: 'setup').first
+  run = Spree::UpchargeType.where(name: 'additional_color_run').first
+  screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
 
-  add_charge(product, screen_print_imprint, setup_upcharge, '50', '', 'V', 0)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.39', '1+', 'V', 1)
+  [
+    { imprint_method: screen_print, upcharge: setup, value: '50', range: '', position: 0 },
+    { imprint_method: creen_print, upcharge: run, value: '0.39', range: '1+', position: 1 }
+  ].each do |charge|
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: charge[:imprint_method],
+      upcharge_type: charge[:upcharge],
+      value: charge[:value],
+      range: charge[:range],
+      price_code: 'V',
+      position: charge[:position]
+    )
+  end
 end
 
 puts 'Loading High Caliber products'

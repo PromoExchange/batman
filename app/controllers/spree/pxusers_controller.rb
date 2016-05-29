@@ -87,10 +87,9 @@ class Spree::PxusersController < Spree::StoreController
 
   def store_auction_location
     session[:previous_urls] ||= []
-    unless params[:auction_ref].nil?
-      session[:previous_urls].prepend params[:auction_ref]
-      session[:previous_urls].pop if session[:previous_urls].count > 3
-    end
+    return if params[:auction_ref].nil?
+    session[:previous_urls].prepend params[:auction_ref]
+    session[:previous_urls].pop if session[:previous_urls].count > 3
   end
 
   def pxuser_params

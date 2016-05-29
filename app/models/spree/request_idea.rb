@@ -27,10 +27,7 @@ class Spree::RequestIdea < Spree::Base
   end
 
   def notification_for_sample_request
-    Resque.enqueue(
-      SampleRequest,
-      request_idea_id: id
-    )
+    Resque.enqueue(SampleRequest, request_idea_id: id)
   end
 
   def image_uri
@@ -45,6 +42,7 @@ class Spree::RequestIdea < Spree::Base
 
   def validate_product
     errors.add(:sku, 'is invalid') unless Spree::Variant.exists?(sku: sku)
-    errors.add(:sku, 'idea already suggested') if Spree::ProductRequest.find(product_request_id).request_ideas.exists?(sku: sku)
+    return unless Spree::ProductRequest.find(product_request_id).request_ideas.exists?(sku: sku)
+    errors.add(:sku, 'idea already suggested')
   end
 end

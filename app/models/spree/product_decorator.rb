@@ -240,7 +240,22 @@ Spree::Product.class_eval do
         :shipping_quantity,
         :shipping_originating_zip
       ],
-      %w(sku name factory num_product_colors num_imprints num_upcharges_setup num_upcharges_run num_prices shipping_weight shipping_dimensions shipping_quantity shipping_originating_zip), true)
+      %w(
+        sku
+        name
+        factory
+        num_product_colors
+        num_imprints
+        num_upcharges_setup
+        num_upcharges_run
+        num_prices
+        shipping_weight
+        shipping_dimensions
+        shipping_quantity
+        shipping_originating_zip
+      ),
+      true
+    )
   end
 
   def to_csv_row

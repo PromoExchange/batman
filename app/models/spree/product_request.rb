@@ -1,15 +1,17 @@
 class Spree::ProductRequest < Spree::Base
   before_create :set_request_type
 
-  has_many :request_ideas
   belongs_to :buyer, class_name: 'Spree::User'
+  has_many :request_ideas
 
-  validates :title, presence: true
-  validates :quantity, presence: true
   validates :budget_from, presence: true
-  validates :budget_to, presence: true
-  validates_numericality_of :budget_to, greater_than: :budget_from, if: -> { budget_from.present? && budget_to.present? }
+  validates :budget_to, presence: true, numericality: {
+    greater_than: :budget_from,
+    if: -> { budget_from.present? && budget_to.present? }
+  }
+  validates :quantity, presence: true
   validates :request, presence: true
+  validates :title, presence: true
 
   state_machine initial: :open do
     after_transition on: :generate_notification, do: :notification_for_new_request_idea
@@ -24,10 +26,7 @@ class Spree::ProductRequest < Spree::Base
   end
 
   def notification_for_new_request_idea
-    Resque.enqueue(
-      NewRequestIdea,
-      product_request_id: id
-    )
+    Resque.enqueue(NewRequestIdea, product_request_id: id)
   end
 
   def sample_fee

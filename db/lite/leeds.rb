@@ -1,86 +1,67 @@
 require 'csv'
 require 'open-uri'
 
-def add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-  if range.blank?
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type
-    ).first_or_create
-  else
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type,
-      range: range
-    ).first_or_create
-  end
-  upcharge.update_attributes(
-    value: value,
-    range: range,
-    price_code: price_code,
-    position: position
-  )
-end
-
 def add_upcharges(product)
-
   Spree::UpchargeProduct.where(product: product).destroy_all
 
-  # upcharges
-  setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
-  run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
+  setup = Spree::UpchargeType.where(name: 'setup').first
+  run = Spree::UpchargeType.where(name: 'additional_color_run').first
 
-  screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-  embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
-  transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
-  deboss_imprint = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
-  pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
-  color_print_imprint = Spree::ImprintMethod.where(name: 'Color Print').first_or_create
-  photo_grafixx_imprint = Spree::ImprintMethod.where(name: 'Photografixx').first_or_create
+  screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  embroidery = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+  transfer = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+  deboss = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+  pad_print = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+  color_print = Spree::ImprintMethod.where(name: 'Color Print').first_or_create
+  photo_grafixx = Spree::ImprintMethod.where(name: 'Photografixx').first_or_create
 
-  add_charge(product, screen_print_imprint, setup_upcharge, '44', '', 'V', 0)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.79', '(1..49)', 'V', 1)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.63', '(50..149)', 'V', 2)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.55', '(150..499)', 'V', 2)
-  add_charge(product, screen_print_imprint, run_upcharge, '0.39', '500+', 'V', 4)
-
-  add_charge(product, embroidery_imprint, setup_upcharge, '44', '', 'V', 0)
-  add_charge(product, embroidery_imprint, run_upcharge, '2.32', '(1..49)', 'V', 1)
-  add_charge(product, embroidery_imprint, run_upcharge, '2.07', '(50..149)', 'V', 2)
-  add_charge(product, embroidery_imprint, run_upcharge, '1.83', '(150..499)', 'V', 2)
-  add_charge(product, embroidery_imprint, run_upcharge, '1.59', '500+', 'V', 4)
-
-  add_charge(product, transfer_imprint, setup_upcharge, '44', '', 'V', 0)
-  add_charge(product, transfer_imprint, run_upcharge, '0.79', '(1..49)', 'V', 1)
-  add_charge(product, transfer_imprint, run_upcharge, '0.63', '(50..149)', 'V', 2)
-  add_charge(product, transfer_imprint, run_upcharge, '0.55', '(150..499)', 'V', 2)
-  add_charge(product, transfer_imprint, run_upcharge, '0.39', '500+', 'V', 4)
-
-  add_charge(product, deboss_imprint, setup_upcharge, '60', '', 'V', 0)
-  add_charge(product, deboss_imprint, run_upcharge, '0.79', '(1..49)', 'V', 1)
-  add_charge(product, deboss_imprint, run_upcharge, '0.63', '(50..149)', 'V', 2)
-  add_charge(product, deboss_imprint, run_upcharge, '0.55', '(150..499)', 'V', 2)
-  add_charge(product, deboss_imprint, run_upcharge, '0.39', '500+', 'V', 4)
-
-  add_charge(product, pad_print_imprint, setup_upcharge, '44', '', 'V', 0)
-  add_charge(product, pad_print_imprint, run_upcharge, '0.28', '(1..49)', 'V', 1)
-  add_charge(product, pad_print_imprint, run_upcharge, '0.03', '(50..149)', 'V', 2)
-  add_charge(product, pad_print_imprint, run_upcharge, '0.02', '(150..499)', 'V', 2)
-  add_charge(product, pad_print_imprint, run_upcharge, '0.02', '500+', 'V', 4)
-
-  add_charge(product, color_print_imprint, setup_upcharge, '44', '', 'V', 0)
-  add_charge(product, color_print_imprint, run_upcharge, '0.28', '(1..49)', 'V', 1)
-  add_charge(product, color_print_imprint, run_upcharge, '0.03', '(50..149)', 'V', 2)
-  add_charge(product, color_print_imprint, run_upcharge, '0.02', '(150..499)', 'V', 2)
-  add_charge(product, color_print_imprint, run_upcharge, '0.02', '500+', 'V', 4)
-
-  add_charge(product, photo_grafixx_imprint, setup_upcharge, '76', '', 'V', 0)
-  add_charge(product, photo_grafixx_imprint, run_upcharge, '2.39', '(1..49)', 'V', 1)
-  add_charge(product, photo_grafixx_imprint, run_upcharge, '1.43', '(50..149)', 'V', 2)
-  add_charge(product, photo_grafixx_imprint, run_upcharge, '1.11', '(150..499)', 'V', 2)
-  add_charge(product, photo_grafixx_imprint, run_upcharge, '0.87', '500+', 'V', 4)
+  [
+    { imprint_method: screen_print, upcharge: setup, value: '44', range: '', position: 0 },
+    { imprint_method: screen_print, upcharge: run, value: '0.79', range: '(1..49)', position: 1 },
+    { imprint_method: screen_print, upcharge: run, value: '0.63', range: '(50..149)', position: 2 },
+    { imprint_method: screen_print, upcharge: run, value: '0.55', range: '(150..499)', position: 2 },
+    { imprint_method: screen_print, upcharge: run, value: '0.39', range: '500+', position: 4 },
+    { imprint_method: embroidery, upcharge: setup, value: '44', range: '', position: 0 },
+    { imprint_method: embroidery, upcharge: run, value: '2.32', range: '(1..49)', position: 1 },
+    { imprint_method: embroidery, upcharge: run, value: '2.07', range: '(50..149)', position: 2 },
+    { imprint_method: embroidery, upcharge: run, value: '1.83', range: '(150..499)', position: 2 },
+    { imprint_method: embroidery, upcharge: run, value: '1.59', range: '500+', position: 4 },
+    { imprint_method: transfer, upcharge: setup, value: '44', range: '', position: 0 },
+    { imprint_method: transfer, upcharge: run, value: '0.79', range: '(1..49)', position: 1 },
+    { imprint_method: transfer, upcharge: run, value: '0.63', range: '(50..149)', position: 2 },
+    { imprint_method: transfer, upcharge: run, value: '0.55', range: '(150..499)', position: 2 },
+    { imprint_method: transfer, upcharge: run, value: '0.39', range: '500+', position: 4 },
+    { imprint_method: eboss, upcharge: setup, value: '60', range: '', position: 0 },
+    { imprint_method: eboss, upcharge: run, value: '0.79', range: '(1..49)', position: 1 },
+    { imprint_method: eboss, upcharge: run, value: '0.63', range: '(50..149)', position: 2 },
+    { imprint_method: eboss, upcharge: run, value: '0.55', range: '(150..499)', position: 2 },
+    { imprint_method: eboss, upcharge: run, value: '0.39', range: '500+', position: 4 },
+    { imprint_method: pad_print, upcharge: setup, value: '44', range: '', position: 0 },
+    { imprint_method: pad_print, upcharge: run, value: '0.28', range: '(1..49)', position: 1 },
+    { imprint_method: pad_print, upcharge: run, value: '0.03', range: '(50..149)', position: 2 },
+    { imprint_method: pad_print, upcharge: run, value: '0.02', range: '(150..499)', position: 2 },
+    { imprint_method: pad_print, upcharge: run, value: '0.02', range: '500+', position: 4 },
+    { imprint_method: color_print, upcharge: setup, value: '44', range: '', position: 0 },
+    { imprint_method: color_print, upcharge: run, value: '0.28', range: '(1..49)', position: 1 },
+    { imprint_method: color_print, upcharge: run, value: '0.03', range: '(50..149)', position: 2 },
+    { imprint_method: color_print, upcharge: run, value: '0.02', range: '(150..499)', position: 2 },
+    { imprint_method: color_print, upcharge: run, value: '0.02', range: '500+', position: 4 },
+    { imprint_method: photo_grafixx, upcharge: setup, value: '76', range: '', position: 0 },
+    { imprint_method: photo_grafixx, upcharge: run, value: '2.39', range: '(1..49)', position: 1 },
+    { imprint_method: photo_grafixx, upcharge: run, value: '1.43', range: '(50..149)', position: 2 },
+    { imprint_method: photo_grafixx, upcharge: run, value: '1.11', range: '(150..499)', position: 2 },
+    { imprint_method: photo_grafixx, upcharge: run, value: '0.87', range: '500+', position: 4 }
+  ].each do |charge|
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: charge[:imprint_method],
+      upcharge_type: charge[:upcharge],
+      value: charge[:value],
+      range: charge[:range],
+      price_code: 'V',
+      position: charge[:position]
+    )
+  end
 end
 
 puts 'Loading Leeds products'

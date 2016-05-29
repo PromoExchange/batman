@@ -58,7 +58,9 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:messages] << "Item name: #{auction.product.name}"
     auction_data[:messages] << "Factory: #{auction.product.supplier.name}"
-    auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}" if auction.product.original_supplier.present?
+    if auction.product.original_supplier.present?
+      auction_data[:messages] << "Original Factory: #{auction.product.original_supplier.name}"
+    end
     auction_data[:messages] << "SKU: #{auction.product.master.sku}"
 
     unless markup.nil?
@@ -350,13 +352,12 @@ class Spree::Prebid < Spree::Base
         next unless in_range
         if auction_data[:num_locations] > 1
           additional_location_charge = product_upcharge[4].to_f
-          auction_data[:running_unit_price] += (
-            Spree::Price.discount_price(price_code, additional_location_charge)
-          )
+          auction_data[:running_unit_price] += (Spree::Price.discount_price(price_code, additional_location_charge))
           auction_data[:messages] << 'Applying additional location charge'
           auction_data[:messages] << "Charge: #{additional_location_charge}"
           auction_data[:messages] << "Price code: #{price_code}"
-          auction_data[:messages] << "Discounted Charge: #{Spree::Price.discount_price(price_code, additional_location_charge)}"
+          discount_price = Spree::Price.discount_price(price_code, additional_location_charge)
+          auction_data[:messages] << "Discounted Charge: #{discount_price}"
           auction_data[:messages] << "After Run applied unit cost: #{auction_data[:running_unit_price]}"
         end
       when 'second_color_run', 'additional_color_run', 'multiple_color_run'
@@ -371,7 +372,8 @@ class Spree::Prebid < Spree::Base
           auction_data[:messages] << "Applying #{auction_data[:num_colors].to_i - 1} additional color charges"
           auction_data[:messages] << "Charge: #{multiple_colors_charge}"
           auction_data[:messages] << "Price code: #{price_code}"
-          auction_data[:messages] << "Discounted Charge: #{Spree::Price.discount_price(price_code, multiple_colors_charge)}"
+          discount_price = Spree::Price.discount_price(price_code, multiple_colors_charge)
+          auction_data[:messages] << "Discounted Charge: #{discount_price}"
           auction_data[:messages] << "After Run applied unit cost: #{auction_data[:running_unit_price]}"
         end
       when 'rush'

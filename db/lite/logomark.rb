@@ -1,65 +1,47 @@
 require 'csv'
 require 'open-uri'
-
-def add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-  if range.blank?
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type
-    ).first_or_create
-  else
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type,
-      range: range
-    ).first_or_create
-  end
-  upcharge.update_attributes(
-    value: value,
-    range: range,
-    price_code: price_code,
-    position: position
-  )
-end
+require './lib/product_loader'
 
 def add_upcharges(product)
-
   Spree::UpchargeProduct.where(product: product).destroy_all
 
-  # upcharges
-  setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
-  run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
+  setup = Spree::UpchargeType.where(name: 'setup').first
+  run = Spree::UpchargeType.where(name: 'additional_color_run').first
 
-  laser_engrave_imprint = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
-  value_mark_imprint = Spree::ImprintMethod.where(name: 'Valuemark').first_or_create
-  logomark_imprint = Spree::ImprintMethod.where(name: 'Logomark').first_or_create
-  vinyl_imprint = Spree::ImprintMethod.where(name: 'Vinyl').first_or_create
-  transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
-  colorsplash_imprint = Spree::ImprintMethod.where(name: 'Colorsplash').first_or_create
-  deboss_imprint = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+  laser_engrave = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
+  value_mark = Spree::ImprintMethod.where(name: 'Valuemark').first_or_create
+  logomark = Spree::ImprintMethod.where(name: 'Logomark').first_or_create
+  vinyl = Spree::ImprintMethod.where(name: 'Vinyl').first_or_create
+  transfer = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+  colorsplash = Spree::ImprintMethod.where(name: 'Colorsplash').first_or_create
+  deboss = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
 
-  add_charge(product, laser_engrave_imprint, setup_upcharge, '45', '', 'V', 0)
-  add_charge(product, laser_engrave_imprint, run_upcharge, '0.32', '1+', 'V', 1)
-
-  add_charge(product, value_mark_imprint, setup_upcharge, '45', '', 'V', 0)
-  add_charge(product, value_mark_imprint, run_upcharge, '0.02', '1+', 'V', 1)
-
-  add_charge(product, logomark_imprint, setup_upcharge, '50', '', 'V', 0)
-  add_charge(product, logomark_imprint, run_upcharge, '0.32', '1+', 'V', 1)
-
-  add_charge(product, vinyl_imprint, setup_upcharge, '45', '', 'V', 0)
-  add_charge(product, vinyl_imprint, run_upcharge, '0.32', '1+', 'V', 1)
-
-  add_charge(product, transfer_imprint, setup_upcharge, '45', '', 'V', 0)
-  add_charge(product, transfer_imprint, run_upcharge, '1', '1+', 'V', 1)
-
-  add_charge(product, colorsplash_imprint, setup_upcharge, '45', '', 'V', 0)
-  add_charge(product, colorsplash_imprint, run_upcharge, '0.32', '1+', 'V', 1)
-
-  add_charge(product, deboss_imprint, setup_upcharge, '80', '', 'V', 0)
-  add_charge(product, deboss_imprint, run_upcharge, '0.32', '1+', 'V', 1)
+  [
+    { imprint_method: laser_engrave, upcharge: setup, value: '45', range: '', position: 0 },
+    { imprint_method: laser_engrave, upcharge: run, value: '0.32', range: '1+', position: 1 },
+    { imprint_method: value_mark, upcharge: setup, value: '45', range: '', position: 0 },
+    { imprint_method: value_mark, upcharge: run, value: '0.02', range: '1+', position: 1 },
+    { imprint_method: logomark, upcharge: setup, value: '50', range: '', position: 0 },
+    { imprint_method: logomark, upcharge: run, value: '0.32', range: '1+', position: 1 },
+    { imprint_method: vinyl, upcharge: setup, value: '45', range: '', position: 0 },
+    { imprint_method: vinyl, upcharge: run, value: '0.32', range: '1+', position: 1 },
+    { imprint_method: transfer, upcharge: setup, value: '45', range: '', position: 0 },
+    { imprint_method: transfer, upcharge: run, value: '1', range: '1+', position: 1 },
+    { imprint_method: colorsplash, upcharge: setup, value: '45', range: '', position: 0 },
+    { imprint_method: colorsplash, upcharge: run, value: '0.32', range: '1+', position: 1 },
+    { imprint_method: eboss, upcharge: setup, value: '80', range: '', position: 0 },
+    { imprint_method: eboss, upcharge: run, value: '0.32', range: '1+', position: 1 }
+  ].each do |charge|
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: charge[:imprint_method],
+      upcharge_type: charge[:upcharge],
+      value: charge[:value],
+      range: charge[:range],
+      price_code: 'V',
+      position: charge[:position]
+    )
+  end
 end
 
 puts 'Loading Logomark products'

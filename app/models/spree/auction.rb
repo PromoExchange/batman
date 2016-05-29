@@ -324,12 +324,12 @@ class Spree::Auction < Spree::Base
     return if clone_id
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      EmailHelper.email_delay(Time.zone.now + 48.hours),
       SellerFailedUploadProof,
       auction_id: id
     )
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      EmailHelper.email_delay(Time.zone.now + 48.hours),
       ProofNeededImmediately,
       auction_id: id
     )
@@ -342,7 +342,7 @@ class Spree::Auction < Spree::Base
     )
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 3.days),
+      EmailHelper.email_delay(Time.zone.now + 3.days),
       ConfirmReceiptReminder,
       auction_id: id
     )
@@ -362,12 +362,12 @@ class Spree::Auction < Spree::Base
     )
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      EmailHelper.email_delay(Time.zone.now + 48.hours),
       SellerFailedUploadProof,
       auction_id: id
     )
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      EmailHelper.email_delay(Time.zone.now + 48.hours),
       ProofNeededImmediately,
       auction_id: id
     )
@@ -380,7 +380,7 @@ class Spree::Auction < Spree::Base
     )
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 15.days),
+      EmailHelper.email_delay(Time.zone.now + 15.days),
       TrackingReminder,
       auction_id: id
     )
@@ -393,7 +393,7 @@ class Spree::Auction < Spree::Base
     )
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 24.hours),
+      EmailHelper.email_delay(Time.zone.now + 24.hours),
       ProofAvailable,
       auction_id: id
     )
@@ -402,7 +402,7 @@ class Spree::Auction < Spree::Base
   def rating_reminder
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 3.days),
+      EmailHelper.email_delay(Time.zone.now + 3.days),
       RatingReminder,
       auction_id: id
     )

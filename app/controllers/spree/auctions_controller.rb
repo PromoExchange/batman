@@ -272,9 +272,7 @@ class Spree::AuctionsController < Spree::StoreController
     @estimated_ship_date = 21.days.from_now
     return if @auction.nil?
     # HACK: Hack for Cabelas product
-    if @auction.product.master.sku == 'Yeti-20'
-      @estimated_ship_date = 7.weeks.from_now
-    end
+    @estimated_ship_date = 7.weeks.from_now if @auction.product.master.sku == 'Yeti-20'
   end
 
   def supporting_data

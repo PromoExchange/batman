@@ -79,7 +79,6 @@ class Spree::Api::BidsController < Spree::Api::BaseController
   def save_bid
     json = JSON.parse(request.body.read)
     @auction = Spree::Auction.find(json['auction_id'])
-    quantity = @auction.quantity
     price = json['per_unit_bid']
     total = price
 

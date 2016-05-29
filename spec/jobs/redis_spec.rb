@@ -8,7 +8,7 @@ describe 'Redis tests' do
   end
 
   it 'should schedule a job' do
-    Resque.enqueue_at(EmailHelpers.email_delay(5.days.from_now), Heartbeat, test_id: 5)
+    Resque.enqueue_at(EmailHelper.email_delay(5.days.from_now), Heartbeat, test_id: 5)
     Resque::Scheduler.clear_schedule!
   end
 end

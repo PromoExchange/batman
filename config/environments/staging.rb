@@ -87,7 +87,7 @@ Rails.application.configure do
     :address => 'mailtrap.io',
     :domain => 'mailtrap.io',
     :port => '2525',
-    :authentication => :plain
+    :authentication => :cram_md5
   }
 
   config.paperclip_defaults = {

@@ -5,7 +5,7 @@ require 'resque/scheduler/tasks'
 namespace :resque do
   task setup: :environment do
     require 'resque'
-    Resque.redis = Redis.new(url: URI.parse(ENV['REDISCLOUD_URL']))
+    Resque.redis = Redis.new url: URI.parse(ENV['CACHE_URL'])
   end
 
   task setup_schedule: :setup do

@@ -3,42 +3,6 @@ class Spree::Pxaddress
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  def initialize
-    @errors = ActiveModel::Errors.new(self)
-  end
-
-  def self.build_address(user, address_type)
-    new_address = Spree::Pxaddress.new
-
-    if address_type == :ship
-      address = user.ship_address
-    else
-      address = user.bill_address
-    end
-
-    return unless address
-
-    fields = %w(
-      company
-      firstname
-      lastname
-      address1
-      address2
-      city
-      state_name
-      country
-      state_id
-      country_id
-      zipcode
-      phone
-    )
-
-    fields.each do |field|
-      new_address.instance_variable_set("@#{field}", eval("address.#{field}"))
-    end
-    new_address
-  end
-
   attr_accessor :company,
     :firstname,
     :lastname,
@@ -51,6 +15,21 @@ class Spree::Pxaddress
     :state_id,
     :zipcode,
     :phone
+
+  def initialize
+    @errors = ActiveModel::Errors.new(self)
+  end
+
+  def self.build_address(user, address_type)
+    new_address = Spree::Pxaddress.new
+    address = address_type == :ship ? user.ship_address : user.bill_address
+
+    return unless address
+
+    fields = %w(company firstname lastname address1 address2 city state_name country state_id country_id zipcode phone)
+    fields.each { |field| new_address.instance_variable_set("@#{field}", address.send(field)) }
+    new_address
+  end
 
   def persisted?
     false

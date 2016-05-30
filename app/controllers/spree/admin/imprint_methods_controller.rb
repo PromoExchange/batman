@@ -17,7 +17,7 @@ class Spree::Admin::ImprintMethodsController < Spree::Admin::ResourceController
   def load_imprint_method
     @imprint_method = Spree::ImprintMethod.find(params[:id])
   end
-  
+
   def collection
     return @collection if @collection.present?
     params[:q] = {} if params[:q].blank?

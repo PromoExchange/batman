@@ -11,6 +11,9 @@
     "BUILDPACK_URL":{
       "required":true
     },
+    "CACHE_URL":{
+      "required":true
+    },
     "DATABASE_URL":{
       "required":true
     },
@@ -34,9 +37,6 @@
     "RAILS_SERVE_STATIC_FILES":{
       "required":true
     },
-    "REDISCLOUD_URL":{
-      "required":true
-    },
     "S3_IMAGE_BUCKET":{
       "required":true
     },
@@ -44,12 +44,6 @@
       "required":true
     },
     "SECRET_KEY_BASE":{
-      "required":true
-    },
-    "SENDGRID_PASSWORD":{
-      "required":true
-    },
-    "SENDGRID_USERNAME":{
       "required":true
     },
     "STRIPE_PUBLISHABLE_KEY":"pk_test_OAUX2tTaVitolU0iysmyQCHk",

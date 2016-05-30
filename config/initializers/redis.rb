@@ -1,1 +1,1 @@
-REDIS = Redis.new(url: URI.parse(ENV['REDISCLOUD_URL']))
+REDIS = Redis.new url: URI.parse(ENV['CACHE_URL'])

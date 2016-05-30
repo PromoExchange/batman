@@ -85,10 +85,16 @@ class SellerMailer < ApplicationMailer
 
   def review_rating(auction)
     @auction = auction
-    @rating_value =  (@auction.review.rating.modulo(1) != 0) ? 5 - ( @auction.review.rating.to_i + 1 ) : 5 - ( @auction.review.rating.to_i)
-    attachments.inline['star-1.png'] =  File.read(Rails.root.join('app', 'assets', 'images', 'star-1.png')) if @auction.review.rating > 0
-    attachments.inline['star-2.png'] =  File.read(Rails.root.join('app', 'assets', 'images', 'star-2.png')) if @auction.review.rating.modulo(1) != 0
-    attachments.inline['star-3.png'] =  File.read(Rails.root.join('app', 'assets', 'images', 'star-3.png')) if @rating_value != 0 
+    @rating_value = (@auction.review.rating.modulo(1) != 0 ? 6 : 5) - @auction.review.rating.to_i
+    if @auction.review.rating > 0
+      attachments.inline['star-1.png'] = File.read(Rails.root.join('app', 'assets', 'images', 'star-1.png'))
+    end
+    if @auction.review.rating.modulo(1) != 0
+      attachments.inline['star-2.png'] = File.read(Rails.root.join('app', 'assets', 'images', 'star-2.png'))
+    end
+    if @rating_value != 0
+      attachments.inline['star-3.png'] = File.read(Rails.root.join('app', 'assets', 'images', 'star-3.png'))
+    end
     mail(to: @auction.winning_bid.email, subject: 'PromoExchange Auction Rate Seller')
   end
 

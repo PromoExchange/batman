@@ -31,7 +31,8 @@ namespace :product do
         product.check_validity!
         product.loaded! if product.state == 'loading'
         product_processed += 1
-        puts "Processed:#{product_processed} of #{product_count}, (%#{(100 * (product_processed.to_f / product_count.to_f)).round(4)})" if (product_processed % 10 ) == 0
+        percentage = (100 * (product_processed.to_f / product_count.to_f)).round(4)
+        puts "Processed:#{product_processed} of #{product_count}, (%#{percentage})" if (product_processed % 10) == 0
       end
       after_count = Spree::Product.where(state: 'invalid').count
       puts "Product invalid before: #{before_count}"

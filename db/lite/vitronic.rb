@@ -1,62 +1,39 @@
 require 'csv'
 require 'open-uri'
-
-def add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-  if range.blank?
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type
-    ).first_or_create
-  else
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type,
-      range: range
-    ).first_or_create
-  end
-  upcharge.update_attributes(
-    value: value,
-    range: range,
-    price_code: price_code,
-    position: position
-  )
-end
+require './lib/product_loader'
 
 def add_upcharges(product)
-
   Spree::UpchargeProduct.where(product: product).destroy_all
 
-  # upcharges
-  setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
-  run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
+  setup = Spree::UpchargeType.where(name: 'setup').first
 
-  screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-  laser_engrave_imprint = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
-  geo_panel_imprint = Spree::ImprintMethod.where(name: 'Geo-Panel').first_or_create
-  digital_laminate_imprint = Spree::ImprintMethod.where(name: 'Digital Laminate Panel').first_or_create
-  pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
-  deboss_imprint = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
-  true_color_direct_imprint = Spree::ImprintMethod.where(name: 'True Color Direct Digital').first_or_create
+  screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  laser_engrave = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
+  geo_panel = Spree::ImprintMethod.where(name: 'Geo-Panel').first_or_create
+  digital_laminate = Spree::ImprintMethod.where(name: 'Digital Laminate Panel').first_or_create
+  pad_print = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+  deboss = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+  true_color_direct = Spree::ImprintMethod.where(name: 'True Color Direct Digital').first_or_create
 
-  logomatic_imprint = Spree::ImprintMethod.where(name: 'Logomatic').first_or_create
-  embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
-  gemphoto_imprint = Spree::ImprintMethod.where(name: 'Gemphoto').first_or_create
-
-  add_charge(product, screen_print_imprint, setup_upcharge, '55', '', 'G', 0)
-
-  add_charge(product, laser_engrave_imprint, setup_upcharge, '55', '', 'G', 0)
-
-  add_charge(product, geo_panel_imprint, setup_upcharge, '55', '', 'G', 0)
-
-  add_charge(product, digital_laminate_imprint, setup_upcharge, '55', '', 'G', 0)
-
-  add_charge(product, pad_print_imprint, setup_upcharge, '55', '', 'G', 0)
-
-  add_charge(product, deboss_imprint, setup_upcharge, '70', '', 'G', 0)
-
-  add_charge(product, true_color_direct_imprint, setup_upcharge, '55', '', 'G', 0)
+  [
+    { imprint_method: screen_print, value: '55' },
+    { imprint_method: laser_engrave, value: '55' },
+    { imprint_method: geo_panel, value: '55' },
+    { imprint_method: igital_laminate, value: '55' },
+    { imprint_method: pad_print, value: '55' },
+    { imprint_method: deboss, value: '70' },
+    { imprint_method: true_color_direct, value: '55' }
+  ].each do |charge|
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: charge[:imprint_method],
+      upcharge_type: setup,
+      value: charge[:value],
+      range: '',
+      price_code: 'G',
+      position: 0
+    )
+  end
 end
 
 puts 'Loading Vitronic products'

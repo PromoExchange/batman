@@ -61,7 +61,7 @@ class Spree::Api::ChargesController < Spree::Api::BaseController
 
     if params[:payment_type] == 'wc'
       Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now + 3.days),
+        EmailHelper.email_delay(Time.zone.now + 3.days),
         ConfirmCheckingAccount,
         customer_id:  customer.id
       )

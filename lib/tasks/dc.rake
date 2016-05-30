@@ -185,7 +185,7 @@ namespace :dc do
         ['Beige',  '155 U', '#f7c995'],
         ['Tan', '155 U', '#c1a67f'],
         ['Charcoal', '424 U', '#88898a'],
-        ['Athletic Gold',  '109 U', '#ffc700'],
+        ['Athletic Gold', '109 U', '#ffc700'],
         ['Metallic Gold', '873 U', '#ae906f'],
         ['Gray', '422 U', '#9ea1a2'],
         ['Forest Green', '343 U', '#48655b'],
@@ -1262,7 +1262,6 @@ namespace :dc do
       task export_factory: :environment do
         CSV.open(File.join(Rails.root, "db/maps/pmscolor_by_factory_export-#{Time.zone.today}.csv"), 'wb') do |csv|
           csv << %w(factory imprint_method name display_name pantone hex)
-          data = ''
           Spree::Supplier.all.each do |factory|
             Spree::PmsColorsSupplier.where(supplier: factory).each do |pms_color_supplier|
               imprint_method = Spree::ImprintMethod.find(pms_color_supplier.imprint_method_id)
@@ -1338,7 +1337,6 @@ namespace :dc do
 
         CSV.open(File.join(Rails.root, "db/maps/pmscolor_by_factory_export-#{Time.zone.today}.csv"), 'wb') do |csv|
           csv << %w(supplier_name imprint_method name display_name pantone hex)
-          data = ''
           Spree::Supplier.all.each do |factory|
             Spree::PmsColorsSupplier.where(supplier: factory).each do |pms_color_supplier|
               imprint_method = Spree::ImprintMethod.find(pms_color_supplier.imprint_method_id)

@@ -11,13 +11,12 @@ class Spree::Pxaccount
   def populate(user)
     user = Spree::User.find(user.id)
 
-    unless user.nil?
-      instance_variable_set(:@email, user.email)
-      instance_variable_set(:@password, '')
-      instance_variable_set(:@password_confirmation, '')
-      instance_variable_set(:@ship_address, Spree::Pxaddress.build_address(user, :ship))
-      instance_variable_set(:@bill_address, Spree::Pxaddress.build_address(user, :bill))
-    end
+    return if user.nil?
+    instance_variable_set(:@email, user.email)
+    instance_variable_set(:@password, '')
+    instance_variable_set(:@password_confirmation, '')
+    instance_variable_set(:@ship_address, Spree::Pxaddress.build_address(user, :ship))
+    instance_variable_set(:@bill_address, Spree::Pxaddress.build_address(user, :bill))
   end
 
   attr_accessor :email,

@@ -27,7 +27,7 @@ class Spree::Admin::PmsColorsController < Spree::Admin::ResourceController
   end
 
   private
-  
+
   def load_pms_color
     @pms_color = Spree::PmsColor.find(params[:id])
   end

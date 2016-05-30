@@ -57,7 +57,7 @@ end
 
 results = []
 
-# You can’t just measure once: memory usage has some variance.
+# You cant just measure once. memory usage has some variance.
 # We will take the mean of 3 runs.
 3.times do
   start_server

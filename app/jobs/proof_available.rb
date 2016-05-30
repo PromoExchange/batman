@@ -6,7 +6,7 @@ module ProofAvailable
     if @auction.waiting_proof_approval?
       BuyerMailer.proof_available(@auction).deliver
       Resque.enqueue_at(
-        EmailHelpers.email_delay(Time.zone.now.tomorrow),
+        EmailHelper.email_delay(Time.zone.now.tomorrow),
         ProofAvailable,
         auction_id: @auction.id
       )

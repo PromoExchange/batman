@@ -53,9 +53,7 @@ class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
     @supplier.ship_address.phone = ship_address_data[:phone]
     @supplier.ship_address.save!
 
-    if @supplier.save!
-      flash.now[:success] = 'Address updated'
-    end
+    flash.now[:success] = 'Address updated' if @supplier.save!
     redirect_to admin_suppliers_path
   end
 

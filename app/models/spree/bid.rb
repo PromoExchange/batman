@@ -101,7 +101,7 @@ class Spree::Bid < Spree::Base
       email_address: seller.email
     )
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.tomorrow.midnight),
+      EmailHelper.email_delay(Time.zone.tomorrow.midnight),
       ConfirmOrderTimeExpire,
       auction_id: auction.id,
       email_address: seller.email
@@ -118,7 +118,7 @@ class Spree::Bid < Spree::Base
       auction_id: auction.id
     )
     Resque.enqueue_at(
-      EmailHelpers.email_delay(3.days.from_now),
+      EmailHelper.email_delay(3.days.from_now),
       UnpaidInvoice,
       auction_id: auction.id
     )

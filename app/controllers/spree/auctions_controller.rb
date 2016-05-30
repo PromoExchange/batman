@@ -3,11 +3,7 @@ class Spree::AuctionsController < Spree::StoreController
   before_action :require_login, only: [:edit, :show]
   before_action :fetch_auction, except: [:index, :create, :new, :auction_payment, :csaccept]
 
-  layout :get_layout
-
-  def get_layout
-    @auction.clone.present? ? 'company_store_layout' : 'spree/layouts/spree_application'
-  end
+  layout -> { @auction.clone.present? ? 'company_store_layout' : 'spree/layouts/spree_application' }
 
   def index
     if params[:buyer_id].present?
@@ -112,7 +108,8 @@ class Spree::AuctionsController < Spree::StoreController
       unless current_spree_user
         @auction.pending
         session[:pending_auction_id] = @auction.id
-        redirect_to login_url and return
+        redirect_to login_url
+        return
       end
     end
 
@@ -272,9 +269,7 @@ class Spree::AuctionsController < Spree::StoreController
     @estimated_ship_date = 21.days.from_now
     return if @auction.nil?
     # HACK: Hack for Cabelas product
-    if @auction.product.master.sku == 'Yeti-20'
-      @estimated_ship_date = 7.weeks.from_now
-    end
+    @estimated_ship_date = 7.weeks.from_now if @auction.product.master.sku == 'Yeti-20'
   end
 
   def supporting_data
@@ -328,7 +323,7 @@ class Spree::AuctionsController < Spree::StoreController
   end
 
   def create_related_data(auction_data)
-    if @auction.is_wearable?
+    if @auction.wearable?
       Spree::AuctionSize.create(
         auction_id: @auction.id,
         product_size: params[:size]

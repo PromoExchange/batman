@@ -1,4 +1,4 @@
-<% if auction.is_wearable? %>
+<% if auction.wearable? %>
   <ul class="display-address-ul">
     <% auction.auction_sizes.each do |key| %>
       <% unless auction.auction_size.product_size[key] == 0 %>

@@ -2,61 +2,51 @@ class Spree::Auction < Spree::Base
   before_create :set_default_dates
   after_create :generate_reference
 
-  has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }, dependent: :destroy
-
-  has_many :auctions_users, class_name: 'Spree::AuctionsUser'
-  has_many :invited_sellers, through: :auctions_users, source: :user
-
   belongs_to :buyer, class_name: 'Spree::User'
+  belongs_to :clone, class_name: 'Spree::Auction'
+  belongs_to :customer
   belongs_to :imprint_method
   belongs_to :logo
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
-  has_one :order
-  belongs_to :clone, class_name: 'Spree::Auction'
-
-  has_many :auctions_pms_colors, class_name: 'Spree::AuctionPmsColor'
-  has_many :pms_colors, through: :auctions_pms_colors
-
   belongs_to :product
   belongs_to :shipping_address, class_name: 'Spree::Address'
-
-  has_one :review
-  has_one :request_idea
-
-  belongs_to :customer
-
+  has_attached_file :proof_file, path: '/proof_file/:id/:basename.:extension'
+  has_many :auctions_pms_colors, class_name: 'Spree::AuctionPmsColor'
+  has_many :auctions_users, class_name: 'Spree::AuctionsUser'
+  has_many :bids, -> { includes(:order).order('spree_orders.total ASC') }, dependent: :destroy
+  has_many :invited_sellers, through: :auctions_users, source: :user
+  has_many :pms_colors, through: :auctions_pms_colors
   has_one :auction_size
-
-  accepts_nested_attributes_for :auctions_pms_colors
-
-  has_attached_file :proof_file,
-    path: '/proof_file/:id/:basename.:extension'
-
+  has_one :order
+  has_one :request_idea
+  has_one :review
   validates_attachment_content_type :proof_file,
     content_type: %w(image/jpeg image/jpg image/png image/gif application/pdf)
-
+  validates :imprint_method_id, presence: true
   validates :logo_id, presence: true, if: -> { buyer_id.present? }
-  validate :pms_colors_presence, unless: -> do
-    Spree::PmsColorsSupplier.find_by(imprint_method_id: imprint_method_id).nil?
-  end
   validates :main_color_id, presence: true
   validates :product_id, presence: true
-  validates :imprint_method_id, presence: true
-  validate :pms_colors_presence, unless: -> do
-    is_imprint_pms_colors_present? || custom_pms_colors.present?
-  end
-  validates :quantity, presence: true
-  validates_numericality_of :quantity, only_integer: true
-  validates_numericality_of :quantity, greater_than_or_equal_to: -> (auction) do
-    50 if auction.product.nil?
-    auction.product.minimum_quantity
-  end
-  validates_inclusion_of :shipping_agent, in: %w(ups fedex), if: -> { buyer_id.present? }
+  validates :quantity, presence: true, numericality: {
+    only_integer: true,
+    greater_than_or_equal_to: (lambda do |auction|
+      50 if auction.product.nil?
+      auction.product.minimum_quantity
+    end)
+  }
+  validates :shipping_agent, inclusion: { in: %w(ups fedex), if: -> { buyer_id.present? } }
+  validate :pms_colors_presence, unless: (lambda do
+    Spree::PmsColorsSupplier.find_by(imprint_method_id: imprint_method_id).nil?
+  end)
+  validate :pms_colors_presence, unless: -> { imprint_pms_colors_present? || custom_pms_colors.present? }
   validate :shipping_zipcode_presence, if: -> { buyer_id.present? }
   validate :credit_card_presense, if: -> { customer_id.present? }, on: :update
-  delegate :name, to: :product
-  delegate :email, to: :buyer, prefix: true
+
   delegate :custom_product, to: :product
+  delegate :email, to: :buyer, prefix: true
+  delegate :name, to: :product
+  delegate :wearable?, to: :product
+
+  accepts_nested_attributes_for :auctions_pms_colors
 
   # preferred
   #   open
@@ -189,19 +179,18 @@ class Spree::Auction < Spree::Base
     price_code = nil
     price_code_count = 0
     product.master.volume_prices.each do |v|
-      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
-        price_code = v.price_code
+      next unless v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
+      price_code = v.price_code
 
-        # It is possible that the price code is actually the entire price code
-        # Break it out and select the correct one
-        if price_code.length > 1
-          price_code_array = Spree::Price.price_code_to_array(price_code)
-          if price_code_array.length >= price_code_count
-            price_code = price_code_array[price_code_count]
-          end
+      # It is possible that the price code is actually the entire price code
+      # Break it out and select the correct one
+      if price_code.length > 1
+        price_code_array = Spree::Price.price_code_to_array(price_code)
+        if price_code_array.length >= price_code_count
+          price_code = price_code_array[price_code_count]
         end
-        break
       end
+      break
     end
     price_code || 'V'
   end
@@ -262,10 +251,6 @@ class Spree::Auction < Spree::Base
     ups.find_tracking_info(tracking_number, test: true)
   end
 
-  def is_wearable?
-    product.wearable?
-  end
-
   def auction_sizes
     %w(S M L XL 2XL)
   end
@@ -295,12 +280,12 @@ class Spree::Auction < Spree::Base
 
     # F YOU
     # bids.destroy_all
-    Spree::Bid.where(auction_id: id).each do |bid|
+    Spree::Bid.where(auction_id: id).find_each do |bid|
       bid.order.delete
       bid.delete
     end
 
-    Spree::Prebid.where(supplier: product.original_supplier).each do |p|
+    Spree::Prebid.where(supplier: product.original_supplier).find_each do |p|
       p.create_prebid(id, shipping_option)
     end
 
@@ -324,12 +309,12 @@ class Spree::Auction < Spree::Base
     return if clone_id
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      EmailHelper.email_delay(Time.zone.now + 48.hours),
       SellerFailedUploadProof,
       auction_id: id
     )
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      EmailHelper.email_delay(Time.zone.now + 48.hours),
       ProofNeededImmediately,
       auction_id: id
     )
@@ -342,7 +327,7 @@ class Spree::Auction < Spree::Base
     )
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 3.days),
+      EmailHelper.email_delay(Time.zone.now + 3.days),
       ConfirmReceiptReminder,
       auction_id: id
     )
@@ -362,12 +347,12 @@ class Spree::Auction < Spree::Base
     )
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      EmailHelper.email_delay(Time.zone.now + 48.hours),
       SellerFailedUploadProof,
       auction_id: id
     )
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 48.hours),
+      EmailHelper.email_delay(Time.zone.now + 48.hours),
       ProofNeededImmediately,
       auction_id: id
     )
@@ -380,7 +365,7 @@ class Spree::Auction < Spree::Base
     )
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 15.days),
+      EmailHelper.email_delay(Time.zone.now + 15.days),
       TrackingReminder,
       auction_id: id
     )
@@ -393,7 +378,7 @@ class Spree::Auction < Spree::Base
     )
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 24.hours),
+      EmailHelper.email_delay(Time.zone.now + 24.hours),
       ProofAvailable,
       auction_id: id
     )
@@ -402,7 +387,7 @@ class Spree::Auction < Spree::Base
   def rating_reminder
     return if winning_bid.manage_workflow
     Resque.enqueue_at(
-      EmailHelpers.email_delay(Time.zone.now + 3.days),
+      EmailHelper.email_delay(Time.zone.now + 3.days),
       RatingReminder,
       auction_id: id
     )
@@ -438,14 +423,13 @@ class Spree::Auction < Spree::Base
     return false
   end
 
-  def is_imprint_pms_colors_present?
-    if self.imprint_method_id.blank?
-      return false
-    end
-    Spree::PmsColorsSupplier.where(supplier_id: self.product.supplier_id).map(&:imprint_method_id).exclude? self.imprint_method_id
+  def imprint_pms_colors_present?
+    return false if imprint_method_id.blank?
+    Spree::PmsColorsSupplier.where(supplier_id: product.supplier_id).map(&:imprint_method_id).exclude? imprint_method_id
   end
 
   def credit_card_presense
-    errors.add(:base, 'At least one Credit Card is required to be on file.') unless buyer.customers.map(&:payment_type).include?('cc')
+    return if buyer.customers.map(&:payment_type).include?('cc')
+    errors.add(:base, 'At least one Credit Card is required to be on file.')
   end
 end

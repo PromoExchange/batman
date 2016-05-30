@@ -10,7 +10,7 @@ module ProductLoader
       fail FileNotFound "File #{file} does not exist"
     end
     require path
-    puts "Loaded #{folder}/#{file}"
+    Rails.logger.debug "Loaded #{folder}/#{file}"
   end
 
   def self.pms_load(file, supplier_id)
@@ -21,7 +21,7 @@ module ProductLoader
       hashed = row.to_hash
       pms = Spree::PmsColor.where(name: hashed[:slug]).first
       if pms.nil?
-        puts "Warning: Unable to locate #{hashed[:slug]} in pms master list"
+        Rails.logger.warn "Unable to locate #{hashed[:slug]} in pms master list"
       else
         imprint = imprint_methods.select { |name, _id| name == hashed[:imprint_method] }
         Spree::PmsColorsSupplier.create(
@@ -53,26 +53,19 @@ module ProductLoader
     main_color_map
   end
 
-  def self.add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-    if range.blank?
-      upcharge = Spree::UpchargeProduct.where(
-        product: product,
-        imprint_method: imprint_method,
-        upcharge_type: upcharge_type
-      ).first_or_create
-    else
-      upcharge = Spree::UpchargeProduct.where(
-        product: product,
-        imprint_method: imprint_method,
-        upcharge_type: upcharge_type,
-        range: range
-      ).first_or_create
-    end
+  def self.add_charge(attributes)
+    upcharge_params = {
+      product: attributes[:product],
+      imprint_method: attributes[:imprint_method],
+      upcharge_type: attributes[:upcharge_type]
+    }
+    upcharge_params[:range] = attributes[:range] unless attributes[:range].blank?
+    upcharge = Spree::UpchargeProduct.where(upcharge_params).first_or_create
     upcharge.update_attributes(
-      value: value,
-      range: range,
-      price_code: price_code,
-      position: position
+      value: attributes[:value],
+      range: attributes[:range],
+      price_code: attributes[:price_code],
+      position: attributes[:position]
     )
   end
 end

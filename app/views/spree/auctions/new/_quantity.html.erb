@@ -1,4 +1,4 @@
-<% if @auction.is_wearable? %>
+<% if @auction.wearable? %>
   <%= render partial: 'spree/auctions/auction_size', locals: {f: f} %>
 <% else %>
   <div class="form-group">

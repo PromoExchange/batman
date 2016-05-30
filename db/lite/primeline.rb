@@ -1,68 +1,49 @@
 require 'csv'
 require 'open-uri'
-
-def add_charge(product, imprint_method, upcharge_type, value, range, price_code, position)
-  if range.blank?
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type
-    ).first_or_create
-  else
-    upcharge = Spree::UpchargeProduct.where(
-      product: product,
-      imprint_method: imprint_method,
-      upcharge_type: upcharge_type,
-      range: range
-    ).first_or_create
-  end
-  upcharge.update_attributes(
-    value: value,
-    range: range,
-    price_code: price_code,
-    position: position
-  )
-end
+require './lib/product_loader'
 
 def add_upcharges(product)
-
   Spree::UpchargeProduct.where(product: product).destroy_all
 
-  # upcharges
-  setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
-  run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
+  setup = Spree::UpchargeType.where(name: 'setup').first
+  run = Spree::UpchargeType.where(name: 'additional_color_run').first
 
-  four_color_process_imprint = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
-  deboss_imprint = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
-  vibratec_imprint = Spree::ImprintMethod.where(name: 'Vibratec').first_or_create
-  laser_engrave_imprint = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
-  screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-  pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
-  embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+  four_color_process = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
+  deboss = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+  vibratec = Spree::ImprintMethod.where(name: 'Vibratec').first_or_create
+  laser_engrave = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
+  screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  pad_print = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+  embroidery = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
 
-  add_charge(product, four_color_process_imprint, setup_upcharge, '60', '', 'G', 0)
-  add_charge(product, four_color_process_imprint, run_upcharge, '0.65', '1+', 'G', 1)
-
-  add_charge(product, four_color_process_imprint, setup_upcharge, '60', '', 'G', 0)
-  add_charge(product, four_color_process_imprint, run_upcharge, '0.65', '1+', 'G', 1)
-
-  add_charge(product, vibratec_imprint, setup_upcharge, '80', '', 'G', 0)
-  add_charge(product, four_color_process_imprint, run_upcharge, '0.65', '1+', 'G', 1)
-
-  add_charge(product, deboss_imprint, setup_upcharge, '80', '', 'G', 0)
-  add_charge(product, deboss_imprint, run_upcharge, '1.25', '1+', 'G', 1)
-
-  add_charge(product, screen_print_imprint, setup_upcharge, '60', '', 'G', 0)
-  add_charge(product, screen_print_imprint, run_upcharge, '1.25', '1+', 'G', 1)
-
-  add_charge(product, laser_engrave_imprint, setup_upcharge, '60', '', 'G', 0)
-  add_charge(product, laser_engrave_imprint, run_upcharge, '1.25', '1+', 'G', 1)
-
-  add_charge(product, pad_print_imprint, setup_upcharge, '60', '', 'G', 0)
-  add_charge(product, pad_print_imprint, run_upcharge, '1.25', '1+', 'G', 1)
-
-  add_charge(product, embroidery_imprint, setup_upcharge, '35', '', 'G', 0)
-  add_charge(product, embroidery_imprint, run_upcharge, '2.25', '1+', 'G', 1)
+  [
+    { imprint_method: four_color_process, upcharge: setup, value: '60', range: '', position: 0 },
+    { imprint_method: four_color_process, upcharge: run, value: '0.65', range: '1+', position: 1 },
+    { imprint_method: four_color_process, upcharge: setup, value: '60', range: '', position: 0 },
+    { imprint_method: four_color_process, upcharge: run, value: '0.65', range: '1+', position: 1 },
+    { imprint_method: vibratec, upcharge: setup, value: '80', range: '', position: 0 },
+    { imprint_method: four_color_process, upcharge: run, value: '0.65', range: '1+', position: 1 },
+    { imprint_method: eboss, upcharge: setup, value: '80', range: '', position: 0 },
+    { imprint_method: eboss, upcharge: run, value: '1.25', range: '1+', position: 1 },
+    { imprint_method: screen_print, upcharge: setup, value: '60', range: '', position: 0 },
+    { imprint_method: screen_print, upcharge: run, value: '1.25', range: '1+', position: 1 },
+    { imprint_method: laser_engrave, upcharge: setup, value: '60', range: '', position: 0 },
+    { imprint_method: laser_engrave, upcharge: run, value: '1.25', range: '1+', position: 1 },
+    { imprint_method: pad_print, upcharge: setup, value: '60', range: '', position: 0 },
+    { imprint_method: pad_print, upcharge: run, value: '1.25', range: '1+', position: 1 },
+    { imprint_method: embroidery, upcharge: setup, value: '35', range: '', position: 0 },
+    { imprint_method: embroidery, upcharge: run, value: '2.25', range: '1+', position: 1 }
+  ].each do |charge|
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: charge[:imprint_method],
+      upcharge_type: charge[:upcharge],
+      value: charge[:value],
+      range: charge[:range],
+      price_code: 'G',
+      position: charge[:position]
+    )
+  end
 end
 
 puts 'Loading Primeline products'

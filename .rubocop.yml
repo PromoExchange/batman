@@ -6,6 +6,7 @@ AllCops:
     - 'config/**/*'
     - 'vendor/**/*'
     - 'Vagrantfile'
+    - 'app/jobs/product_load.rb'
 
 LineLength:
   Description: 'Limit lines to 120 characters.'

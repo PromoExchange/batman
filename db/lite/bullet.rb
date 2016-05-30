@@ -2,98 +2,100 @@ require 'csv'
 require 'open-uri'
 require './lib/product_loader'
 
-def add_upcharges(product, level)
+def add_upcharges(product, level = 'Level 3')
   Spree::UpchargeProduct.where(product: product).destroy_all
 
   # upcharges
-  setup_upcharge = Spree::UpchargeType.where(name: 'setup').first
-  run_upcharge = Spree::UpchargeType.where(name: 'additional_color_run').first
+  setup = Spree::UpchargeType.where(name: 'setup').first
+  run = Spree::UpchargeType.where(name: 'additional_color_run').first
 
-  screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-  laser_engrave_imprint = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
-  color_blast_imprint = Spree::ImprintMethod.where(name: 'Color Blast').first_or_create
-  label_imprint = Spree::ImprintMethod.where(name: 'Label').first_or_create
-  four_color_process_imprint = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
-  deboss_imprint = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
-  transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
-  photografixx_imprint = Spree::ImprintMethod.where(name: 'Photo Grafixx').first_or_create
-  sublimination_imprint = Spree::ImprintMethod.where(name: 'Sublimation').first_or_create
+  screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  laser_engrave = Spree::ImprintMethod.where(name: 'Laser Engraving').first_or_create
+  color_blast = Spree::ImprintMethod.where(name: 'Color Blast').first_or_create
+  label = Spree::ImprintMethod.where(name: 'Label').first_or_create
+  four_color_process = Spree::ImprintMethod.where(name: 'Four Color Process').first_or_create
+  deboss = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+  transfer = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+  photografixx = Spree::ImprintMethod.where(name: 'Photo Grafixx').first_or_create
+  sublimination = Spree::ImprintMethod.where(name: 'Sublimation').first_or_create
 
-  ProductLoader::add_charge(product, screen_print_imprint, setup_upcharge, '55', '', 'G', 0)
-  ProductLoader::add_charge(product, laser_engrave_imprint, setup_upcharge, '55', '', 'G', 0)
-  ProductLoader::add_charge(product, color_blast_imprint, setup_upcharge, '55', '', 'G', 0)
-  ProductLoader::add_charge(product, label_imprint, setup_upcharge, '45', '', 'G', 0)
-  ProductLoader::add_charge(product, four_color_process_imprint, setup_upcharge, '3100', '', 'G', 0)
-  ProductLoader::add_charge(product, deboss_imprint, setup_upcharge, '75', '', 'G', 0)
-  ProductLoader::add_charge(product, transfer_imprint, setup_upcharge, '55', '', 'G', 0)
-  ProductLoader::add_charge(product, photografixx_imprint, setup_upcharge, '55', '', 'G', 0)
-  ProductLoader::add_charge(product, sublimination_imprint, setup_upcharge, '55', '', 'G', 0)
+  charges = [
+    { imprint_method: screen_print, value: '55' },
+    { imprint_method: laser_engrave, value: '55' },
+    { imprint_method: color_blast, value: '55' },
+    { imprint_method: label, value: '45' },
+    { imprint_method: four_color_process, value: '3100' },
+    { imprint_method: deboss, value: '75' },
+    { imprint_method: transfer, value: '55' },
+    { imprint_method: photografixx, value: '55' },
+    { imprint_method: sublimination, value: '55' },
+    { imprint_method: color_blast, value: '0.30', range: '(1..5000)', position: 1 },
+    { imprint_method: color_blast, value: '0.25', range: '(5001..10000)', position: 2 },
+    { imprint_method: color_blast, value: '0.20', range: '(10001..20000)', position: 3 },
+    { imprint_method: color_blast, value: '0.15', range: '(20001..50000)', position: 4 },
+    { imprint_method: color_blast, value: '0.15', range: '50001+', position: 5 },
+    { imprint_method: laser_engrave, value: '0.45', range: '(1..5000)', position: 1 },
+    { imprint_method: laser_engrave, value: '0.40', range: '(5001..10000)', position: 2 },
+    { imprint_method: laser_engrave, value: '0.35', range: '(10001..20000)', position: 3 },
+    { imprint_method: laser_engrave, value: '0.30', range: '(20001..50000)', position: 4 },
+    { imprint_method: laser_engrave, value: '0.25', range: '50001+', position: 5 },
+    { imprint_method: four_color_process, value: '0.075', range: '(5001..10000)', position: 1 },
+    { imprint_method: four_color_process, value: '0.06', range: '(10001..20000)', position: 2 },
+    { imprint_method: four_color_process, value: '0.05', range: '(20001..50000)', position: 3 },
+    { imprint_method: four_color_process, value: '0.025', range: '50001+', position: 4 }
+  ]
 
-  ProductLoader::add_charge(product, color_blast_imprint, run_upcharge, '0.30', '(1..5000)', 'G', 1)
-  ProductLoader::add_charge(product, color_blast_imprint, run_upcharge, '0.25', '(5001..10000)', 'G', 2)
-  ProductLoader::add_charge(product, color_blast_imprint, run_upcharge, '0.20', '(10001..20000)', 'G', 3)
-  ProductLoader::add_charge(product, color_blast_imprint, run_upcharge, '0.15', '(20001..50000)', 'G', 4)
-  ProductLoader::add_charge(product, color_blast_imprint, run_upcharge, '0.15', '50001+', 'G', 5)
-
-  ProductLoader::add_charge(product, laser_engrave_imprint, run_upcharge, '0.45', '(1..5000)', 'G', 1)
-  ProductLoader::add_charge(product, laser_engrave_imprint, run_upcharge, '0.40', '(5001..10000)', 'G', 2)
-  ProductLoader::add_charge(product, laser_engrave_imprint, run_upcharge, '0.35', '(10001..20000)', 'G', 3)
-  ProductLoader::add_charge(product, laser_engrave_imprint, run_upcharge, '0.30', '(20001..50000)', 'G', 4)
-  ProductLoader::add_charge(product, laser_engrave_imprint, run_upcharge, '0.25', '50001+', 'G', 5)
-
-  ProductLoader::add_charge(product, four_color_process_imprint, run_upcharge, '0.075', '(5001..10000)', 'G', 1)
-  ProductLoader::add_charge(product, four_color_process_imprint, run_upcharge, '0.06', '(10001..20000)', 'G', 2)
-  ProductLoader::add_charge(product, four_color_process_imprint, run_upcharge, '0.05', '(20001..50000)', 'G', 3)
-  ProductLoader::add_charge(product, four_color_process_imprint, run_upcharge, '0.025', '50001+', 'G', 4)
-
-  other_imprints = []
-  other_imprints << screen_print_imprint
-  other_imprints << label_imprint
-  other_imprints << deboss_imprint
-  other_imprints << photografixx_imprint
-  other_imprints << sublimination_imprint
-
-  level ||= 'Level 3'
   case level.strip
   when 'Level 1'
-    other_imprints.each do |imprint|
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.30', '(1..5000)', 'G', 1)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.25', '(5001..10000)', 'G', 2)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.20', '(10001..20000)', 'G', 3)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.15', '(20001..50000)', 'G', 4)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.15', '50001+', 'G', 5)
+    [screen_print, label, deboss, photografixx, sublimination].each do |imprint|
+      charges << { imprint_method: imprint, upcharge: run, value: '0.30', range: '(1..5000)', position: 1 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.25', range: '(5001..10000)', position: 2 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.20', range: '(10001..20000)', position: 3 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.15', range: '(20001..50000)', position: 4 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.15', range: '50001+', position: 5 }
     end
   when 'Level 2'
-    other_imprints.each do |imprint|
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.35', '(1..5000)', 'G', 1)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.30', '(5001..10000)', 'G', 2)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.25', '(10001..20000)', 'G', 3)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.20', '(20001..50000)', 'G', 4)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.20', '50001+', 'G', 5)
+    [screen_print, label, deboss, photografixx, sublimination].each do |imprint|
+      charges << { imprint_method: imprint, upcharge: run, value: '0.35', range: '(1..5000)', position: 1 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.30', range: '(5001..10000)', position: 2 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.25', range: '(10001..20000)', position: 3 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.20', range: '(20001..50000)', position: 4 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.20', range: '50001+', position: 5 }
     end
   when 'Level 3'
-    other_imprints.each do |imprint|
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.45', '(1..5000)', 'G', 1)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.40', '(5001..10000)', 'G', 2)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.35', '(10001..20000)', 'G', 3)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.30', '(20001..50000)', 'G', 4)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.25', '50001+', 'G', 5)
+    [screen_print, label, deboss, photografixx, sublimination].each do |imprint|
+      charges << { imprint_method: imprint, upcharge: run, value: '0.45', range: '(1..5000)', position: 1 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.40', range: '(5001..10000)', position: 2 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.35', range: '(10001..20000)', position: 3 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.30', range: '(20001..50000)', position: 4 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.25', range: '50001+', position: 5 }
     end
   when 'Level 4'
-    other_imprints.each do |imprint|
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.50', '1+', 'G', 0)
+    [screen_print, label, deboss, photografixx, sublimination].each do |imprint|
+      charges << { imprint_method: imprint, upcharge: run, value: '0.50', range: '1+' }
     end
   when 'Level 5'
-    other_imprints << transfer_imprint
-    other_imprints.each do |imprint|
-      ProductLoader::add_charge(product, imprint, run_upcharge, '1.00', '(1..5000)', 'G', 1)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.90', '(5001..10000)', 'G', 2)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.80', '(10001..20000)', 'G', 3)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.75', '(20001..50000)', 'G', 4)
-      ProductLoader::add_charge(product, imprint, run_upcharge, '0.70', '50001+', 'G', 5)
+    [screen_print, label, deboss, photografixx, sublimination, transfer].each do |imprint|
+      charges << { imprint_method: imprint, upcharge: run, value: '1.00', range: '(1..5000)', position: 1 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.90', range: '(5001..10000)', position: 2 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.80', range: '(10001..20000)', position: 3 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.75', range: '(20001..50000)', position: 4 }
+      charges << { imprint_method: imprint, upcharge: run, value: '0.70', range: '50001+', position: 5 }
     end
   else
     fail "Unknown level: [#{level}]"
+  end
+
+  charges.each do |charge|
+    ProductLoader.add_charge(
+      product: product,
+      imprint_method: charge[:imprint_method],
+      upcharge_type: charge[:upcharge] or setup,
+      value: charge[:value],
+      range: charge[:range] or '',
+      price_code: 'G',
+      position: charge[:position] or 0
+    )
   end
 end
 
@@ -118,7 +120,11 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   in_file_count += 1
-  product = Spree::Product.joins(:master).where(supplier: supplier).where("spree_variants.sku='#{hashed[:itemno]}'").first
+  product = Spree::Product
+    .joins(:master)
+    .where(supplier: supplier)
+    .where("spree_variants.sku='#{hashed[:itemno]}'")
+    .first
 
   if product.nil?
     db_load_fail += 1
@@ -127,7 +133,6 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   end
 
   found_ids << product.id
-
 
   unless hashed[:catalogweight].blank?
     catalog_weight = hashed[:catalogweight]

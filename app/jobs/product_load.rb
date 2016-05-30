@@ -10,7 +10,6 @@ module ProductLoad
 
   # http://www.distributorcentral.com/resources/xml/item_information.cfm?acctwebguid=F616D9EB-87B9-4B32-9275-0488A733C719&supplieritemguid=6815169A-1A38-46C5-898B-B637AA7E9081
   # Elleven Zippered Padfolio
-
   def self.perform(params)
     beginning_time = Time.zone.now
 

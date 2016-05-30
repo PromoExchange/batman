@@ -1,21 +1,3 @@
-require 'rubygems' if RUBY_VERSION < '1.9'
-require 'rest_client'
-require 'json'
-
-response = RestClient.get "https://mailtrap.io/api/v1/inboxes.json?api_token=#{ENV['MAILTRAP_API_TOKEN']}"
-
-first_inbox = JSON.parse(response)[0]
-
-ActionMailer::Base.delivery_method = :smtp
-ActionMailer::Base.smtp_settings = {
-  :user_name => first_inbox['username'],
-  :password => first_inbox['password'],
-  :address => first_inbox['domain'],
-  :domain => first_inbox['domain'],
-  :port => first_inbox['smtp_ports'][0],
-  :authentication => :plain
-}
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -98,15 +80,15 @@ Rails.application.configure do
   # Seed data, load image files
   config.x.load_images = true
 
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = {
-  #   :user_name => '4a5832b316d92d',
-  #   :password => '70a694dd736070',
-  #   :address => 'mailtrap.io',
-  #   :domain => 'mailtrap.io',
-  #   :port => '2525',
-  #   :authentication => :plain
-  # }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :user_name => '4a5832b316d92d',
+    :password => '70a694dd736070',
+    :address => 'mailtrap.io',
+    :domain => 'mailtrap.io',
+    :port => '2525',
+    :authentication => :plain
+  }
 
   config.paperclip_defaults = {
     storage: :s3,

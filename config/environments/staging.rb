@@ -63,6 +63,15 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :user_name => '34ee36cbc76edb',
+    :password => '557cad6b9f7b28',
+    :address => 'mailtrap.io',
+    :domain => 'mailtrap.io',
+    :port => '2525',
+    :authentication => :cram_md5
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
@@ -79,16 +88,6 @@ Rails.application.configure do
 
   # Seed data, load image files
   config.x.load_images = true
-
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :user_name => '34ee36cbc76edb',
-    :password => '557cad6b9f7b28',
-    :address => 'mailtrap.io',
-    :domain => 'mailtrap.io',
-    :port => '2525',
-    :authentication => :cram_md5
-  }
 
   config.paperclip_defaults = {
     storage: :s3,

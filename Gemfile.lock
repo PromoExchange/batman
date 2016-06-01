@@ -58,13 +58,6 @@ GIT
     spree_volume_pricing (3.3.0)
       spree_core (~> 3.0.0)
 
-GIT
-  remote: https://github.com/dipakgror/spree-blogging-spree.git
-  revision: f920fec94d0ed02afb80f74927de953a01ce6f15
-  specs:
-    spree_blogging_spree (2.3.0)
-      acts-as-taggable-on (~> 3.0.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -116,8 +109,6 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    acts-as-taggable-on (3.0.2)
-      rails (>= 3, < 5)
     acts_as_list (0.7.2)
       activerecord (>= 3.0)
     addressable (2.3.8)
@@ -682,7 +673,6 @@ DEPENDENCIES
   slim (~> 3.0, >= 3.0.6)
   spree (= 3.0.1)
   spree_auth_devise!
-  spree_blogging_spree!
   spree_first_data_gge4
   spree_gateway!
   spree_i18n!

@@ -7,6 +7,7 @@ class Spree::Bid < Spree::Base
   belongs_to :prebid
 
   has_many :auction_payments
+  has_many :shipping_options, dependent: :destroy
 
   validates :auction_id, presence: true
   validates :seller_id, presence: true

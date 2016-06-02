@@ -161,7 +161,8 @@ class Spree::Prebid < Spree::Base
     shipping_cost = calculate_shipping(auction_data, selected_shipping)
 
     auction_data[:messages] << "Selected Shipping cost #{shipping_cost}"
-    auction_data[:messages] << "Selected Shipping option #{Spree::ShippingOption::OPTION.key(auction_data[:selected_shipping])}"
+    shipping_option_text = Spree::ShippingOption::OPTION.key(auction_data[:selected_shipping])
+    auction_data[:messages] << "Selected Shipping option #{shipping_option_text}"
     auction_data[:messages] << "Selected Shipping method #{auction_data[:service_name]}"
     auction_data[:messages] << "Selected Shipping delivery days #{auction_data[:delivery_days]}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])

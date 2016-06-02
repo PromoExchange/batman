@@ -3,5 +3,7 @@ FactoryGirl.define do
     bid
     name 'Ship Option 1'
     delta 1.0
+    delivery_date Time.zone.now + 5.days
+    delivery_days 5
   end
 end

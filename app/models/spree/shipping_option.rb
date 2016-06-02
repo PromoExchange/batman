@@ -13,4 +13,6 @@ class Spree::ShippingOption < ActiveRecord::Base
   validates :name, presence: true
   validates :bid_id, presence: true
   validates :delta, presence: true
+  validates :delivery_date, presence: true
+  validates :delivery_days, presence: true
 end

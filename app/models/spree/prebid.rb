@@ -214,9 +214,9 @@ class Spree::Prebid < Spree::Base
       auction_data[:shipping_options].each do |option|
         bid.shipping_option.create(
           name: option[:service_name],
-          delta: option[:shipping_cost] - auction_data[:shipping_cost]
-          # delivery_date: option[:shipping_cost],
-          # delivery_days: option[:delivery_days]
+          delta: option[:shipping_cost] - auction_data[:shipping_cost],
+          delivery_date: option[:shipping_cost],
+          delivery_days: option[:delivery_days]
         )
       end
     end

@@ -290,7 +290,7 @@ RSpec.describe Spree::Prebid, type: :model do
 
   it 'should provide fixed shipping' do
     auction_data[:carton] = FactoryGirl.build(:carton, originating_zip: '', fixed_price: 1.0)
-    prebid.send(:calculate_shipping, auction_data, Spree::Prebid::SHIPPING_OPTION[:ups_ground])
+    prebid.send(:calculate_shipping, auction_data, Spree::ShippingOption::OPTION[:ups_ground])
     expect(1.0 - auction_data[:shipping_cost]).to be < 0.0001
   end
 end

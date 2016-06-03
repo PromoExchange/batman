@@ -161,8 +161,7 @@ class Spree::Prebid < Spree::Base
     shipping_cost = calculate_shipping(auction_data, selected_shipping)
 
     auction_data[:messages] << "Selected Shipping cost #{shipping_cost}"
-    shipping_option_text = Spree::ShippingOption::OPTION.key(auction_data[:selected_shipping])
-    auction_data[:messages] << "Selected Shipping option #{shipping_option_text}"
+    auction_data[:messages] << "Selected Shipping option #{auction_data[:selected_shipping]}"
     auction_data[:messages] << "Selected Shipping method #{auction_data[:service_name]}"
     auction_data[:messages] << "Selected Shipping delivery days #{auction_data[:delivery_days]}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
@@ -213,11 +212,11 @@ class Spree::Prebid < Spree::Base
       bid.save!
 
       auction_data[:shipping_options].each do |option|
-        bid.shipping_option.create(
-          name: option[:service_name],
+        bid.shipping_options.create(
+          name: option[:name],
           delta: option[:shipping_cost] - auction_data[:shipping_cost],
-          delivery_date: option[:shipping_cost],
-          delivery_days: option[:delivery_days]
+          delivery_date: option[:delivery_date],
+          delivery_days: option[:days_diff]
         )
       end
     end
@@ -226,6 +225,8 @@ class Spree::Prebid < Spree::Base
     auction_data[:messages].each do |message|
       log_debug(auction_data, message)
     end
+  rescue StandardError => e
+    Rails.logger.error("Failed to create prebid #{e.inspect}")
   end
 
   private
@@ -496,7 +497,7 @@ class Spree::Prebid < Spree::Base
 
       auction_data[:shipping_options].push(
         name: service_name,
-        shipping_code: shipping_cost,
+        shipping_cost: shipping_cost,
         delivery_date: delivery_date,
         days_diff: days_diff
       )

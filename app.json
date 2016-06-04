@@ -55,5 +55,13 @@
       "required":true
     }
   },
-  "addons":[]
+  "addons":[],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/ruby"
+    }
+  ]
 }

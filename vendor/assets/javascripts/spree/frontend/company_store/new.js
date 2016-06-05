@@ -53,9 +53,13 @@ $(function(){
           );
           var shipping_option_control = $('#shipping_option');
           shipping_option_control.empty();
-          debugger;
           $.each(data.shipping_options, function(index, option){
-            var new_option = $('<option>',{value: option.shipping_option, delta: option.delta})
+            var new_option = $('<option>',
+              {
+                value: option.shipping_option,
+                delta: option.delta,
+                delivery_date: option.delivery_date
+              })
               .text(option.name + accounting.formatMoney((parseFloat(option.delta))));
             shipping_option_control.append(new_option);
           });
@@ -93,7 +97,19 @@ $(function(){
   });
 
   $('#shipping_option').change(function() {
-    recalc_price();
+    var selected_shipping_option = $('#shipping_option option:selected');
+    var delivery_date = selected_shipping_option.attr('delivery_date');
+    var delta = selected_shipping_option.attr('delta');
+    var old_price = accounting.unformat($(".cs-active-price").text());
+    var new_price = old_price + delta;
+
+    $('#ship_date').text(
+      moment(delivery_date)
+      .format('MMMM Do YYYY')
+    );
+
+    var money_text = accounting.formatMoney(new_price);
+    $(".cs-active-price").text(money_text)
   });
 
   $('#need_it_sooner').click(function() {

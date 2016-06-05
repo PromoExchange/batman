@@ -53,14 +53,20 @@ $(function(){
           );
           var shipping_option_control = $('#shipping_option');
           shipping_option_control.empty();
-          $.each(data.shipping_options, function(index, option){
+          sorted_options = data.shipping_options.sort(function(a,b)
+            { return a.shipping_option - b.shipping_option; });
+          $.each(sorted_options, function(index, option){
+            var sign = '+';
+            if( option.delta < 0 ) sign = '-';
+            var option_text = option.name + ' ' + sign + accounting.formatMoney((parseFloat(option.delta)))
             var new_option = $('<option>',
               {
                 value: option.shipping_option,
                 delta: option.delta,
+                name: option.name,
                 delivery_date: option.delivery_date
               })
-              .text(option.name + accounting.formatMoney((parseFloat(option.delta))));
+              .text(option_text);
             shipping_option_control.append(new_option);
           });
 
@@ -99,7 +105,7 @@ $(function(){
   $('#shipping_option').change(function() {
     var selected_shipping_option = $('#shipping_option option:selected');
     var delivery_date = selected_shipping_option.attr('delivery_date');
-    var delta = selected_shipping_option.attr('delta');
+    var delta = parseFloat(selected_shipping_option.attr('delta'));
     var old_price = accounting.unformat($(".cs-active-price").text());
     var new_price = old_price + delta;
 
@@ -110,6 +116,17 @@ $(function(){
 
     var money_text = accounting.formatMoney(new_price);
     $(".cs-active-price").text(money_text)
+
+    $('#shipping_option > option').each(function() {
+      var option = $(this);
+      var old_delta = parseFloat(option.attr('delta'));
+      var new_delta = (old_price + old_delta) - new_price;
+      option.attr('delta', new_delta)
+      var sign = '+';
+      if( new_delta < 0 ) sign = '';
+      var option_text = option.attr('name') + ' ' + sign + accounting.formatMoney((parseFloat(new_delta)))
+      $(this).text(option_text);
+    });
   });
 
   $('#need_it_sooner').click(function() {

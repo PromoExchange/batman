@@ -53,8 +53,9 @@ $(function(){
           );
           var shipping_option_control = $('#shipping_option');
           shipping_option_control.empty();
+          debugger;
           $.each(data.shipping_options, function(index, option){
-            var new_option = $('<option>',{value: 1, delta: option.delta})
+            var new_option = $('<option>',{value: option.shipping_option, delta: option.delta})
               .text(option.name + accounting.formatMoney((parseFloat(option.delta))));
             shipping_option_control.append(new_option);
           });

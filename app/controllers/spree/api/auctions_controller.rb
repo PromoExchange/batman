@@ -74,7 +74,8 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
         name: option.name,
         delta: option.delta,
         delivery_date: option.delivery_date,
-        delivery_days: option.delivery_days
+        delivery_days: option.delivery_days,
+        shipping_option: option.shipping_option
       )
     end
 

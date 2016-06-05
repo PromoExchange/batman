@@ -216,7 +216,8 @@ class Spree::Prebid < Spree::Base
           name: option[:name],
           delta: option[:shipping_cost] - auction_data[:shipping_cost],
           delivery_date: option[:delivery_date],
-          delivery_days: option[:days_diff]
+          delivery_days: option[:days_diff],
+          shipping_option: option[:shipping_option]
         )
       end
     end
@@ -499,7 +500,8 @@ class Spree::Prebid < Spree::Base
         name: service_name,
         shipping_cost: shipping_cost,
         delivery_date: delivery_date,
-        days_diff: days_diff
+        days_diff: days_diff,
+        shipping_option: Spree::ShippingOption::OPTION[shipping_option_map[rate[0]]]
       )
     end
 

@@ -21,6 +21,11 @@ RSpec.describe Spree::ShippingOption, type: :model do
     expect(shipping_option.save).to be_falsey
   end
 
+  it 'should not save with a nil shipping_option' do
+    shipping_option = FactoryGirl.build(:shipping_option, shipping_option: nil)
+    expect(shipping_option.save).to be_falsey
+  end
+
   it 'should belong to an auction' do
     t = Spree::ShippingOption.reflect_on_association(:bid)
     expect(t.macro).to eq :belongs_to

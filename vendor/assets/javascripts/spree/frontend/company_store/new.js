@@ -51,6 +51,14 @@ $(function(){
             .add(data.delivery_days, 'days')
             .format('MMMM Do YYYY')
           );
+          var shipping_option_control = $('#shipping_option');
+          shipping_option_control.empty();
+          $.each(data.shipping_options, function(index, option){
+            var new_option = $('<option>',{value: 1, delta: option.delta})
+              .text(option.name + accounting.formatMoney((parseFloat(option.delta))));
+            shipping_option_control.append(new_option);
+          });
+
           $(".cs-active-price").text(money_text);
           $("#price-spin").hide();
           $('.cs-purchase-submit').prop('disabled', false);

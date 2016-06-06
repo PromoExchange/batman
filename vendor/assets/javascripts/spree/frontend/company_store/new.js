@@ -8,6 +8,9 @@ $(function(){
   })();
 
   function get_quantity() {
+    var actual = 0;
+    var min = 0;
+
     if($('#auction-size .product-size').length) {
       min = parseInt($("#auction-size").attr('min-quantity'));
       $('#auction-size .product-size').each(function() {

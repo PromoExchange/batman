@@ -67,7 +67,7 @@ $(function(){
             { return a.shipping_option - b.shipping_option; });
           $.each(sorted_options, function(index, option){
             var sign = '+';
-            if( option.delta < 0 ) sign = '-';
+            if( option.delta < 0 ) sign = '';
             var option_text = option.name + ' ' + sign + accounting.formatMoney((parseFloat(option.delta)))
             var new_option = $('<option>',
               {

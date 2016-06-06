@@ -30,14 +30,4 @@ RSpec.describe Spree::CompanyStore, type: :model do
     m = FactoryGirl.build(:company_store, host: nil)
     expect(m.save).to be_truthy
   end
-
-  it 'should belong to a supplier' do
-    t = Spree::Order.reflect_on_association(:supplier)
-    expect(t.macro).to eq :belongs_to
-  end
-
-  it 'should belong to an auction' do
-    t = Spree::Order.reflect_on_association(:buyer)
-    expect(t.macro).to eq :belongs_to
-  end
 end

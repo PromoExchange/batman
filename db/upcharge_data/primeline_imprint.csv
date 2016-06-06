@@ -1,8 +1,0 @@
-imprint_slug,charge_type,range1,range2,range3,range4,range5,price1,price2,price3,price4,price5
-deboss,SETUP,0,0,0,0,0,64,0,0,0,0
-deboss,RUN,1+,0,0,0,0,1,0,0,0,0
-digital-label,SETUP,0,0,0,0,0,48,0,0,0,0
-silk-screen,SETUP,0,0,0,0,0,48,0,0,0,0
-silk-screen,RUN,1+,0,0,0,0,0.52,0,0,0,0
-transfer,SETUP,0,0,0,0,0,48,0,0,0,0
-transfer,RUN,1+,0,0,0,0,0.52,0,0,0,0

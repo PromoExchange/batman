@@ -7,10 +7,7 @@ $(function(){
     };
   })();
 
-  function recalc_price() {
-    var actual = 0;
-    var min = 0;
-
+  function get_quantity() {
     if($('#auction-size .product-size').length) {
       min = parseInt($("#auction-size").attr('min-quantity'));
       $('#auction-size .product-size').each(function() {
@@ -21,7 +18,19 @@ $(function(){
       min = parseInt(e.attr('min'));
       actual = parseInt(e.val());
     }
+    return {
+      min: min,
+      actual: actual
+    };
+  }
 
+  function recalc_price() {
+    var actual = 0;
+    var min = 0;
+
+    var quantities = get_quantity();
+    min = quantities.min;
+    actual = quantities.actual;
     $(".cs-active-price").hide();
 
     if (actual >= min) {
@@ -51,6 +60,7 @@ $(function(){
             .add(data.delivery_days, 'days')
             .format('MMMM Do YYYY')
           );
+          var number_options = 0;
           var shipping_option_control = $('#shipping_option');
           shipping_option_control.empty();
           sorted_options = data.shipping_options.sort(function(a,b)
@@ -68,7 +78,12 @@ $(function(){
               })
               .text(option_text);
             shipping_option_control.append(new_option);
+            number_options++;
           });
+
+          if( number_options > 0 && !$('#need_it_sooner').is(":visible") ) {
+            $('#need_it_sooner').show();
+          }
 
           $(".cs-active-price").text(money_text);
           $("#price-spin").hide();
@@ -84,7 +99,6 @@ $(function(){
     }
   }
 
-  // TODO: Switch style in new auction view
   $(".cs-quantity").keyup(function() {
     if( $("#auction_clone_id").val() === "") return;
     $('.cs-purchase-submit').prop('disabled', true);
@@ -147,6 +161,14 @@ $(function(){
 
   $(document).ready(function() {
     set_address_id();
+    var quantities = get_quantity();
+    if(isNaN(quantities.min)) return;
+    if(quantities.actual > 0) {
+      recalc_price();
+      $('#need_it_sooner').show();
+    } else {
+      $('#need_it_sooner').hide();
+    }
   });
 
   function set_address_id() {

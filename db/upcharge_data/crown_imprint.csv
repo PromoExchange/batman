@@ -1,7 +1,0 @@
-imprint_slug,charge_type,range1,range2,range3,range4,range5,price1,price2,price3,price4,price5
-silk-screen,SETUP,0,0,0,0,0,55,0,0,0,0
-engrave,SETUP,0,0,0,0,0,55,0,0,0,0
-deboss,SETUP,0,0,0,0,0,70,0,0,0,0
-digital-label,SETUP,0,0,0,0,0,55,0,0,0,0
-direct-digital-print,SETUP,0,0,0,0,0,95,0,0,0,0
-direct-digital-print,RUN,1+,0,0,0,0,0.99,0,0,0,0

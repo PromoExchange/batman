@@ -1,9 +1,0 @@
-imprint_slug,charge_type,range1,range2,range3,range4,range5,price1,price2,price3,price4,price5,price_code
-silk-screen,SETUP,0,0,0,0,0,55,0,0,0,0,G
-silk-screen,RUN,1+,0,0,0,0,1,0,0,0,0,G
-direct-digital-print,SETUP,0,0,0,0,0,55,0,0,0,0,G
-direct-digital-print,RUN,1+,0,0,0,0,0.5,0,0,0,0,G
-embroider,SETUP,0,0,0,0,0,80,0,0,0,0,G
-embroider,RUN,(6..23),(24..99),(100.299),(300..399),400+,5.39,3.69,2.99,2.59,2.59,G
-deboss,SETUP,0,0,0,0,0,70,0,0,0,0,G
-deboss,RUN,1+,0,0,0,0,1.20,0,0,0,0,G

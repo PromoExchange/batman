@@ -286,7 +286,7 @@ class Spree::Auction < Spree::Base
     end
 
     Spree::Prebid.where(supplier: product.original_supplier).find_each do |p|
-      p.create_prebid(id, shipping_option)
+      p.create_prebid(auction_id: id, selected_shipping: shipping_option)
     end
 
     lowest_bid = Spree::Bid

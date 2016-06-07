@@ -120,7 +120,10 @@ class Spree::AuctionsController < Spree::StoreController
       prebids = Spree::Prebid.where(supplier: @auction.product.original_supplier)
       prebids.each do |p|
         Rails.logger.info "Prebid Job: requesting bid creation: #{p.id}"
-        p.create_prebid(@auction.id, params[:shipping_option])
+        p.create_prebid(
+          auction_id: @auction.id,
+          selected_shipping: params[:shipping_option]
+        )
       end
 
       # Find the lowest bid (first one)

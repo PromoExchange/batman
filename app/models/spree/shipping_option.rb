@@ -1,6 +1,7 @@
 class Spree::ShippingOption < ActiveRecord::Base
   belongs_to :bid
 
+  # TODO: Should fixed be part of this enum?
   OPTION = {
     ups_ground: 1,
     ups_3day_select: 2,

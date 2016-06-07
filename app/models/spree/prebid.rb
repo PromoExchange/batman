@@ -34,6 +34,7 @@ class Spree::Prebid < Spree::Base
       num_locations: auction.num_locations,
       num_colors: auction.num_colors,
       rush: auction.rush?,
+      preferred: auction.preferred?(seller),
       messages: [],
       carton: auction.product.carton,
       service_name: '',
@@ -83,11 +84,7 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:base_unit_price] = unit_price
     auction_data[:running_unit_price] = unit_price
-    if auction.preferred?(seller)
-      auction_data[:messages] << 'Seller: Preferred'
-    else
-      auction_data[:messages] << 'Seller: Non-preferred'
-    end
+    auction_data[:messages] << "Seller: #{auction_data[:preferred] ? 'Preferred' : 'Non-preferred'}"
     auction_data[:messages] << "Item Count: #{auction_data[:quantity]}"
     auction_data[:messages] << "Base Unit Price: #{auction_data[:base_unit_price]}"
 
@@ -176,14 +173,14 @@ class Spree::Prebid < Spree::Base
 
     # Promo exchange commission
     px_commission = 0.0899
-    px_commission = 0.0399 if auction.preferred?(seller)
+    px_commission = 0.0399 if auction_data[:preferred]
     auction_data[:messages] << "Applying PX commission: #{px_commission}"
     auction_data[:running_unit_price] /= (1 - px_commission)
     auction_data[:messages] << "After applying commission: #{auction_data[:running_unit_price]}"
 
     # Payment processing cost
     auction_data[:messages] << 'Applying processing cost:'
-    apply_processing_fee(auction, auction_data)
+    apply_processing_fee(auction_data)
     auction_data[:messages] << "After applying processing cost: #{auction_data[:running_unit_price]}"
 
     Spree::Bid.transaction do
@@ -232,8 +229,8 @@ class Spree::Prebid < Spree::Base
 
   private
 
-  def apply_processing_fee(auction, auction_data)
-    return if auction.preferred?(seller)
+  def apply_processing_fee(auction_data)
+    return if auction_data[:preferred]
 
     # NOTE: We are charging a flat fee equal to the payment processing fee of a credit card transaction.
     # This is due to us not knowing the payment method at the beginning of an auction. We charge the greater
@@ -245,7 +242,7 @@ class Spree::Prebid < Spree::Base
     auction_data[:messages] << "Payment processing flat fee: #{payment_processing_flat_fee}"
 
     auction_data[:running_unit_price] /= (1 - payment_processing_commission)
-    auction_data[:running_unit_price] += (payment_processing_flat_fee / auction.quantity)
+    auction_data[:running_unit_price] += (payment_processing_flat_fee / auction_data[:quantity])
   end
 
   def log_format(auction_data, message)

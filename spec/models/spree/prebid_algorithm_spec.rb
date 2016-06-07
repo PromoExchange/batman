@@ -10,20 +10,23 @@ RSpec.describe Spree::Prebid, type: :model do
       base_unit_price: 100,
       running_unit_price: 100,
       quantity: 100,
-      messages: []
+      messages: [],
+      preferred: false
     }
   end
 
   it 'should apply payment processing fee for non preferred supplier' do
     previous_running_unit_price = auction_data[:running_unit_price]
-    prebid.send(:apply_processing_fee, auction, auction_data)
+    prebid.send(:apply_processing_fee, auction_data)
     expect(auction_data[:running_unit_price]).to be > previous_running_unit_price
   end
 
   it 'should not apply payment processing fee for preferred supplier' do
     previous_running_unit_price = auction_data[:running_unit_price]
     FactoryGirl.create(:auctions_user, auction: auction, user: prebid.seller)
-    prebid.send(:apply_processing_fee, auction, auction_data)
+    auction_data[:preferred] = true
+    binding.pry
+    prebid.send(:apply_processing_fee, auction_data)
     expect(auction_data[:running_unit_price]).to eq previous_running_unit_price
   end
 

@@ -286,7 +286,8 @@ class Spree::Auction < Spree::Base
     end
 
     seller_email = ENV['SELLER_EMAIL']
-    seller_email ||= 'mikegoldstein4@gmail.com'
+    fail 'Cannot find seller email environment variable' if seller_email.nil?
+
     seller = Spree::User.find_by(email: seller_email)
     fail "Failed to find company store seller: #{seller_email}" if seller.nil?
 

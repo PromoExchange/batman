@@ -53,6 +53,9 @@
     },
     "UPS_API_USERID":{
       "required":true
+    },
+    "SELLER_EMAIL":{
+      "required":true
     }
   },
   "addons":[],

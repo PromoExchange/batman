@@ -292,7 +292,7 @@ class Spree::Auction < Spree::Base
     fail "Failed to find company store seller: #{seller_email}" if seller.nil?
 
     prebid = Spree::Prebid.find_by(supplier: product.original_supplier, seller: seller)
-    fail "Failed to find prebid Seller: #{seller} Supplier: #{product.original_supplier.name}" if prebid.nil?
+    fail "Failed to find prebid Seller: #{seller.email} Supplier: #{product.original_supplier.name}" if prebid.nil?
 
     bid_id = nil
     collected_shipping = []

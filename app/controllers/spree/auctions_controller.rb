@@ -116,15 +116,11 @@ class Spree::AuctionsController < Spree::StoreController
     create_related_data(auction_data)
 
     if auction_data[:clone_id].present?
-      # Get the prebids NOW
-      prebids = Spree::Prebid.where(supplier: @auction.product.original_supplier)
-      prebids.each do |p|
-        Rails.logger.info "Prebid Job: requesting bid creation: #{p.id}"
-        p.create_prebid(@auction.id, params[:shipping_option])
-      end
-
-      # Find the lowest bid (first one)
-      bid = @auction.bids.first
+      bid = @auction.best_price(
+        quantity: @auction.quantity,
+        selected_shipping: params[:shipping_option],
+        all_shipping: false
+      )
 
       if bid.nil?
         redirect_to '/', flash: { notice: 'Unable to calculate price, please contact support' }
@@ -137,6 +133,7 @@ class Spree::AuctionsController < Spree::StoreController
       redirect_to '/dashboards', flash: { notice: 'Auction was created successfully.' }
     end
   rescue
+    Rails.logger.error("Failed to create auction #{e}")
     supporting_data
     estimated_ship
     @cloned_pms_colors = @auction.pms_colors.map(&:id)
@@ -313,12 +310,12 @@ class Spree::AuctionsController < Spree::StoreController
     end
 
     @shipping_options = [
-      ['UPS Ground', Spree::Prebid::SHIPPING_OPTION[:ups_ground]],
-      ['UPS Three-Day Select', Spree::Prebid::SHIPPING_OPTION[:ups_3day_select]],
-      ['UPS Second Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_second_day_air]],
-      ['UPS Next Day Air Saver', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_saver]],
-      ['UPS Next Day Air Early A.M.', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air_early_am]],
-      ['UPS Next Day Air', Spree::Prebid::SHIPPING_OPTION[:ups_next_day_air]]
+      ['UPS Ground', Spree::ShippingOption::OPTION[:ups_ground]],
+      ['UPS Three-Day Select', Spree::ShippingOption::OPTION[:ups_3day_select]],
+      ['UPS Second Day Air', Spree::ShippingOption::OPTION[:ups_second_day_air]],
+      ['UPS Next Day Air Saver', Spree::ShippingOption::OPTION[:ups_next_day_air_saver]],
+      ['UPS Next Day Air Early A.M.', Spree::ShippingOption::OPTION[:ups_next_day_air_early_am]],
+      ['UPS Next Day Air', Spree::ShippingOption::OPTION[:ups_next_day_air]]
     ]
   end
 

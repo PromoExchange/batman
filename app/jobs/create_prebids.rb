@@ -11,7 +11,10 @@ module CreatePrebids
     prebids = Spree::Prebid.where(supplier_id: supplier_id)
     prebids.each do |p|
       Rails.logger.info "Prebid Job: requesting bid creation: #{p.id}"
-      p.create_prebid(auction.id, Spree::Prebid::SHIPPING_OPTION[:ups_ground].to_s)
+      p.create_prebid(
+        auction_id: auction.id,
+        selected_shipping: Spree::ShippingOption::OPTION[:ups_ground].to_s
+      )
     end
   end
 end

@@ -60,14 +60,38 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
 
   def best_price
     @auction.ship_to_zip = params[:auction][:ship_to_zip] unless params[:auction][:ship_to_zip].blank?
-    # TODO: The additional parameter to best price will go away when we extend the auciton model
-    lowest_bid = @auction.best_price(params[:auction][:quantity], params[:auction][:shipping_option])
+
+    if params[:auction][:shipping_option].blank?
+      params[:auction][:shipping_option] = Spree::ShippingOption::OPTION[:ups_ground]
+    end
+
+    lowest_bid = @auction.best_price(
+      quantity: params[:auction][:quantity],
+      selected_shipping: params[:auction][:shipping_option],
+      all_shipping: true
+    )
+
+    fail 'Failed to get best price' if lowest_bid.nil?
+
     response = {
       best_price: lowest_bid.order.total.to_f,
-      delivery_days: ((lowest_bid.delivery_date - Time.zone.now) / (60 * 60 * 24)).ceil
+      delivery_days: ((lowest_bid.delivery_date - Time.zone.now) / (60 * 60 * 24)).ceil,
+      shipping_options: []
     }
+
+    lowest_bid.shipping_options.each do |option|
+      response[:shipping_options].push(
+        name: option.name,
+        delta: option.delta,
+        delivery_date: option.delivery_date,
+        delivery_days: option.delivery_days,
+        shipping_option: option.shipping_option
+      )
+    end
+
     render json: response
-  rescue
+  rescue StandardError => e
+    Rails.logger.error("Failed to get best price: #{e}")
     render nothing: true, status: :internal_server_error
   end
 

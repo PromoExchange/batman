@@ -4,25 +4,23 @@ class Spree::Prebid < Spree::Base
   has_many :adjustments
   has_many :bids
 
-  SHIPPING_OPTION = {
-    ups_ground: 1,
-    ups_3day_select: 2,
-    ups_second_day_air: 3,
-    ups_next_day_air_saver: 4,
-    ups_next_day_air_early_am: 5,
-    ups_next_day_air: 6
-  }
-
   validates :seller_id, presence: true
   validates :supplier_id, presence: true
 
-  def create_prebid(auction_id, shipping_option)
+  # TODO: Move this out an SERIOUSLY refactor.
+  def create_prebid(options = {})
+    options.reverse_merge!(save_bid: true)
+
+    [
+      :auction_id,
+      :selected_shipping
+    ].each do |o|
+      fail "Cannot created prebid, missing required option [#{o}]" unless options.key?(o)
+    end
+
     Rails.logger.info 'Prebid: creating prebid'
 
-    auction = Spree::Auction.find(auction_id)
-
-    # Do not create a duplicate prebid
-    return if auction.bids.where(prebid_id: id).present?
+    auction = Spree::Auction.find(options[:auction_id])
 
     # Do not prebid if the Quantity > 2 * EQP
     return if auction.quantity > (auction.product.maximum_quantity * 2)
@@ -35,7 +33,7 @@ class Spree::Prebid < Spree::Base
 
     # TODO: Move out to lib so we can share and use as an async message
     auction_data = {
-      auction_id: auction_id,
+      auction_id: options[:auction_id],
       prebid_id: id,
       price_code: auction.product_price_code,
       running_unit_price: auction.product_unit_price,
@@ -43,14 +41,17 @@ class Spree::Prebid < Spree::Base
       num_locations: auction.num_locations,
       num_colors: auction.num_colors,
       rush: auction.rush?,
+      preferred: auction.preferred?(seller),
       messages: [],
       carton: auction.product.carton,
       service_name: '',
       shipping_cost: 0.0,
+      delivery_date: nil,
       delivery_days: 5,
       ship_to_zip: auction.ship_to_zip,
       used_eqp: false,
-      shipping_option: shipping_option
+      selected_shipping: options[:selected_shipping],
+      shipping_options: []
     }
 
     unit_price = auction.product_unit_price
@@ -90,11 +91,7 @@ class Spree::Prebid < Spree::Base
 
     auction_data[:base_unit_price] = unit_price
     auction_data[:running_unit_price] = unit_price
-    if auction.preferred?(seller)
-      auction_data[:messages] << 'Seller: Preferred'
-    else
-      auction_data[:messages] << 'Seller: Non-preferred'
-    end
+    auction_data[:messages] << "Seller: #{auction_data[:preferred] ? 'Preferred' : 'Non-preferred'}"
     auction_data[:messages] << "Item Count: #{auction_data[:quantity]}"
     auction_data[:messages] << "Base Unit Price: #{auction_data[:base_unit_price]}"
 
@@ -165,12 +162,12 @@ class Spree::Prebid < Spree::Base
 
     # Shipping based on buyers zip
     # Package needs weight, height, width and depth
-    shipping_cost = calculate_shipping(auction_data, shipping_option)
+    shipping_cost = calculate_shipping(auction_data)
 
-    auction_data[:messages] << "Shipping cost #{shipping_cost}"
-    auction_data[:messages] << "Shipping option #{Spree::Prebid::SHIPPING_OPTION.key(auction_data[:shipping_option])}"
-    auction_data[:messages] << "Shipping method #{auction_data[:service_name]}"
-    auction_data[:messages] << "Shipping delivery days #{auction_data[:delivery_days]}"
+    auction_data[:messages] << "Selected Shipping cost #{shipping_cost}"
+    auction_data[:messages] << "Selected Shipping option #{auction_data[:selected_shipping]}"
+    auction_data[:messages] << "Selected Shipping method #{auction_data[:service_name]}"
+    auction_data[:messages] << "Selected Shipping delivery days #{auction_data[:delivery_days]}"
     auction_data[:running_unit_price] += (shipping_cost / auction_data[:quantity])
     auction_data[:messages] << "After applying shipping cost: #{auction_data[:running_unit_price]}"
 
@@ -183,52 +180,60 @@ class Spree::Prebid < Spree::Base
 
     # Promo exchange commission
     px_commission = 0.0899
-    px_commission = 0.0399 if auction.preferred?(seller)
+    px_commission = 0.0399 if auction_data[:preferred]
     auction_data[:messages] << "Applying PX commission: #{px_commission}"
     auction_data[:running_unit_price] /= (1 - px_commission)
     auction_data[:messages] << "After applying commission: #{auction_data[:running_unit_price]}"
 
     # Payment processing cost
     auction_data[:messages] << 'Applying processing cost:'
-    apply_processing_fee(auction, auction_data)
+    apply_processing_fee(auction_data)
     auction_data[:messages] << "After applying processing cost: #{auction_data[:running_unit_price]}"
 
-    Spree::Bid.transaction do
-      bid = Spree::Bid.create(
-        seller_id: seller_id,
-        auction_id: auction.id,
-        prebid_id: id,
-        service_name: auction_data[:service_name],
-        shipping_cost: auction_data[:shipping_cost],
-        delivery_days: auction_data[:delivery_days]
-      )
+    # TODO: Move out
+    if options[:save_bid]
+      Spree::Bid.transaction do
+        bid = Spree::Bid.create(
+          seller_id: seller_id,
+          auction_id: auction.id,
+          prebid_id: id,
+          service_name: auction_data[:service_name],
+          shipping_cost: auction_data[:shipping_cost],
+          delivery_days: auction_data[:delivery_days]
+        )
 
-      li = Spree::LineItem.create(
-        currency: 'USD',
-        order_id: bid.order.id,
-        quantity: 1,
-        variant: bid.auction.product.master
-      )
+        li = Spree::LineItem.create(
+          currency: 'USD',
+          order_id: bid.order.id,
+          quantity: 1,
+          variant: bid.auction.product.master
+        )
 
-      li.price = auction_data[:running_unit_price] * auction.quantity
-      li.save!
+        li.price = auction_data[:running_unit_price] * auction.quantity
+        li.save!
 
-      order_updater = Spree::OrderUpdater.new(bid.order)
-      order_updater.update
+        order_updater = Spree::OrderUpdater.new(bid.order)
+        order_updater.update
 
-      bid.save!
+        bid.save!
+
+        auction_data[:bid_id] = bid.id
+      end
     end
 
     auction_data[:messages] << "Total prebid bid: #{auction_data[:running_unit_price] * auction.quantity}"
     auction_data[:messages].each do |message|
       log_debug(auction_data, message)
     end
+    auction_data
+  rescue StandardError => e
+    Rails.logger.error("Failed to create prebid #{e}")
   end
 
   private
 
-  def apply_processing_fee(auction, auction_data)
-    return if auction.preferred?(seller)
+  def apply_processing_fee(auction_data)
+    return if auction_data[:preferred]
 
     # NOTE: We are charging a flat fee equal to the payment processing fee of a credit card transaction.
     # This is due to us not knowing the payment method at the beginning of an auction. We charge the greater
@@ -240,7 +245,7 @@ class Spree::Prebid < Spree::Base
     auction_data[:messages] << "Payment processing flat fee: #{payment_processing_flat_fee}"
 
     auction_data[:running_unit_price] /= (1 - payment_processing_commission)
-    auction_data[:running_unit_price] += (payment_processing_flat_fee / auction.quantity)
+    auction_data[:running_unit_price] += (payment_processing_flat_fee / auction_data[:quantity])
   end
 
   def log_format(auction_data, message)
@@ -391,7 +396,7 @@ class Spree::Prebid < Spree::Base
     end
   end
 
-  def calculate_shipping(auction_data, shipping_option)
+  def calculate_shipping(auction_data)
     carton = auction_data[:carton]
 
     unless carton.fixed_price.nil?
@@ -461,7 +466,7 @@ class Spree::Prebid < Spree::Base
       'UPS Next Day Air' => :ups_next_day_air
     }.freeze
 
-    shipping_sym = Spree::Prebid::SHIPPING_OPTION.key(shipping_option.to_i)
+    shipping_sym = Spree::ShippingOption::OPTION.key(auction_data[:selected_shipping].to_i)
 
     delivery_date = nil
     ups_rates.each do |rate|
@@ -489,6 +494,7 @@ class Spree::Prebid < Spree::Base
       days_diff = 5
     end
 
+    auction_data[:delivery_date] = Time.zone.now + days_diff.days
     auction_data[:delivery_days] = days_diff
     auction_data[:shipping_cost]
   rescue => e

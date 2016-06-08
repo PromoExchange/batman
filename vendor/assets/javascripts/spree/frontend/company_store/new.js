@@ -152,8 +152,14 @@ $(function(){
 
       var sign = '+';
       var option_money_text = accounting.formatMoney((parseFloat(new_delta)));
-      if( new_delta <= 0 ) sign = '';
-      if( new_delta == 0 ) option_money_text = '';
+      if( new_delta < 0 ) {
+        sign = '-';
+        option_money_text = accounting.formatMoney((parseFloat(Math.abs(new_delta))));
+      }
+      if( new_delta == 0 ) {
+        sign = '';
+        option_money_text = '';
+      }
 
       var option_text = option.attr('name') + ' ' + sign + option_money_text;
       $(this).text(option_text);

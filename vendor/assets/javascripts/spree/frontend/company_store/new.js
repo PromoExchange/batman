@@ -189,6 +189,7 @@ $(function(){
     $('#auction-size .product-size').each(function() {
       $(this).val('');
     });
+    $('#shipping_option').val(1);
   });
 
   function set_address_id() {

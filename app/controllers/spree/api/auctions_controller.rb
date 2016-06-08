@@ -79,11 +79,15 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
       shipping_options: []
     }
 
+    production_time = @auction.product.production_time
+    production_time ||= 14
+
     lowest_bid.shipping_options.each do |option|
+      adjusted_delivery_date = Time.zone.now + (2 + production_time + option.delivery_days).days
       response[:shipping_options].push(
         name: option.name,
         delta: option.delta,
-        delivery_date: option.delivery_date,
+        delivery_date: adjusted_delivery_date,
         delivery_days: option.delivery_days,
         shipping_option: option.shipping_option
       )

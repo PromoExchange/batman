@@ -270,12 +270,12 @@ class Spree::Auction < Spree::Base
   end
 
   # TODO: Change params to a hash if we add 1 more
-  def best_price(which_quantity, shipping_option)
-    fail 'Not a custom auction' unless state == 'custom_auction'
+  def best_price(options = {})
+    options.reverse_merge!(all_shipping: true)
 
-    which_quantity ||= product.maximum_quantity
+    options[:quantity] ||= product.maximum_quantity
 
-    self.quantity = which_quantity.to_i
+    self.quantity = options[:quantity].to_i
     save!
 
     # F YOU
@@ -285,17 +285,61 @@ class Spree::Auction < Spree::Base
       bid.delete
     end
 
-    Spree::Prebid.where(supplier: product.original_supplier).find_each do |p|
-      p.create_prebid(auction_id: id, selected_shipping: shipping_option)
+    seller_email = ENV['SELLER_EMAIL']
+    seller_email ||= 'mikegoldstein4@gmail.com'
+    seller = Spree::User.find_by(email: seller_email)
+    fail "Failed to find company store seller: #{seller_email}" if seller.nil?
+
+    prebid = Spree::Prebid.find_by(supplier: product.original_supplier, seller: seller)
+    fail "Failed to find prebid Seller: #{seller} Supplier: #{product.original_supplier.name}" if prebid.nil?
+
+    bid_id = nil
+    collected_shipping = []
+
+    if options[:all_shipping] == true
+      Spree::ShippingOption::OPTION.each do |option|
+        save_bid = option[1] == options[:selected_shipping].to_i ? true : false
+        bid_data = prebid.create_prebid(
+          auction_id: id,
+          selected_shipping: option[1],
+          save_bid: save_bid
+        )
+        bid_id = bid_data[:bid_id] if save_bid == true
+        collected_shipping << {
+          name: bid_data[:service_name],
+          total_cost: bid_data[:running_unit_price] * bid_data[:quantity],
+          delivery_date: bid_data[:delivery_date],
+          delivery_days: bid_data[:delivery_days],
+          shipping_option: option[1]
+        }
+      end
+    else
+      bid_data = prebid.create_prebid(
+        auction_id: id,
+        selected_shipping: options[:selected_shipping].to_i,
+        save_bid: true
+      )
+      bid_id = bid_data[:bid_id]
     end
 
-    lowest_bid = Spree::Bid
-      .includes(:order)
-      .where(auction_id: id)
-      .order('spree_orders.total ASC').first
+    return nil if bid_id.nil?
 
+    lowest_bid = Spree::Bid.find(bid_id)
+    lowest_total = lowest_bid.order.total.to_f
+
+    collected_shipping.each do |option|
+      lowest_bid.shipping_options.create(
+        name: option[:name],
+        delta: (option[:total_cost].to_f - lowest_total).round(2),
+        delivery_date: option[:delivery_date],
+        delivery_days: option[:delivery_days],
+        shipping_option: option[:shipping_option]
+      )
+    end
     return lowest_bid unless lowest_bid.nil?
-
+    nil
+  rescue StandardError => e
+    Rails.logger.error("Failed to get best_price #{e}")
     nil
   end
 

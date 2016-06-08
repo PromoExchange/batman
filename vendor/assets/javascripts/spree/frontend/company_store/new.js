@@ -40,11 +40,12 @@ $(function(){
       $("#price-spin").show();
       var auction_clone_id = $("#auction_clone_id").val();
       var api_key = $('#new-auction').attr('data-key');
+      var selected_shipping_option = $('#shipping_option').val();
       var params = {
         auction: {
           quantity: actual,
           ship_to_zip: $('#auction_ship_to_zip').val(),
-          shipping_option: $('#shipping_option').val()
+          shipping_option: selected_shipping_option
         }
       };
       var url = '/api/auctions/'+auction_clone_id+'/best_price';
@@ -70,14 +71,23 @@ $(function(){
             { return a.shipping_option - b.shipping_option; });
           $.each(sorted_options, function(index, option){
             var sign = '+';
-            if( option.delta < 0 ) sign = '';
-            var option_text = option.name + ' ' + sign + accounting.formatMoney((parseFloat(option.delta)))
+            var option_money_text = accounting.formatMoney((parseFloat(option.delta)));
+            if( option.delta < 0.01 ) {
+              sign = '';
+              option_money_text = '';
+            }
+            var option_text = option.name + ' ' + sign + option_money_text;
+            selected_value = false;
+            if(option.shipping_option == selected_shipping_option) {
+              selected_value = true;
+            }
             var new_option = $('<option>',
               {
                 value: option.shipping_option,
                 delta: option.delta,
                 name: option.name,
-                delivery_date: option.delivery_date
+                delivery_date: option.delivery_date,
+                selected: selected_value
               })
               .text(option_text);
             shipping_option_control.append(new_option);
@@ -139,9 +149,13 @@ $(function(){
       var old_delta = parseFloat(option.attr('delta'));
       var new_delta = (old_price + old_delta) - new_price;
       option.attr('delta', new_delta)
+
       var sign = '+';
-      if( new_delta < 0 ) sign = '';
-      var option_text = option.attr('name') + ' ' + sign + accounting.formatMoney((parseFloat(new_delta)))
+      var option_money_text = accounting.formatMoney((parseFloat(new_delta)));
+      if( new_delta <= 0 ) sign = '';
+      if( new_delta == 0 ) option_money_text = '';
+
+      var option_text = option.attr('name') + ' ' + sign + option_money_text;
       $(this).text(option_text);
     });
   });
@@ -164,14 +178,11 @@ $(function(){
 
   $(document).ready(function() {
     set_address_id();
-    var quantities = get_quantity();
-    if(isNaN(quantities.min)) return;
-    if(quantities.actual > 0) {
-      recalc_price();
-      $('#need_it_sooner').show();
-    } else {
-      $('#need_it_sooner').hide();
-    }
+    $('#need_it_sooner').hide();
+    $(".cs-quantity").val('');
+    $('#auction-size .product-size').each(function() {
+      $(this).val('');
+    });
   });
 
   function set_address_id() {

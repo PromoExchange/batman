@@ -22,9 +22,6 @@ class Spree::Prebid < Spree::Base
 
     auction = Spree::Auction.find(options[:auction_id])
 
-    # Do not create a duplicate prebid
-    return if auction.bids.where(prebid_id: id).present?
-
     # Do not prebid if the Quantity > 2 * EQP
     return if auction.quantity > (auction.product.maximum_quantity * 2)
 
@@ -220,15 +217,7 @@ class Spree::Prebid < Spree::Base
 
         bid.save!
 
-        auction_data[:shipping_options].each do |option|
-          bid.shipping_options.create(
-            name: option[:name],
-            delta: option[:shipping_cost] - auction_data[:shipping_cost],
-            delivery_date: option[:delivery_date],
-            delivery_days: option[:days_diff],
-            shipping_option: option[:shipping_option]
-          )
-        end
+        auction_data[:bid_id] = bid.id
       end
     end
 
@@ -481,41 +470,32 @@ class Spree::Prebid < Spree::Base
 
     delivery_date = nil
     ups_rates.each do |rate|
+      next if shipping_option_map[rate[0]] != shipping_sym
+      auction_data[:shipping_cost] = (rate[1] * number_of_packages.to_f) / 100
+      auction_data[:service_name] = rate[0] unless rate[0].blank?
       delivery_date = rate[2]
-
-      begin
-        delta = 0
-        if delivery_date.nil?
-          # Try and use the cheapest and adjust
-          delivery_date ||= ups_rates[1][2]
-          delta = 2
-        end
-        days_diff = delta + ((delivery_date.to_f - Time.zone.now.to_f) / 86400).ceil
-      rescue
-        days_diff = 5
-      end
-
-      delivery_date = Time.zone.now + days_diff.days
-
-      shipping_cost = (rate[1] * number_of_packages.to_f) / 100
-      service_name = rate[0]
-
-      if shipping_option_map[rate[0]] == shipping_sym
-        auction_data[:shipping_cost] = shipping_cost
-        auction_data[:service_name] = service_name
-        auction_data[:delivery_date] = delivery_date
-        auction_data[:delivery_days] = days_diff
-      end
-
-      auction_data[:shipping_options].push(
-        name: service_name,
-        shipping_cost: shipping_cost,
-        delivery_date: delivery_date,
-        days_diff: days_diff,
-        shipping_option: Spree::ShippingOption::OPTION[shipping_option_map[rate[0]]]
-      )
+      break
     end
 
+    if delivery_date.nil?
+      auction_data[:service_name] = ups_rates[0][0] unless ups_rates[0][0].blank?
+      auction_data[:shipping_cost] = (ups_rates[0][1] * number_of_packages.to_f) / 100
+    end
+
+    begin
+      delta = 0
+      if delivery_date.nil?
+        # Try and use the cheapest and adjust
+        delivery_date ||= ups_rates[1][2]
+        delta = 2
+      end
+      days_diff = delta + ((delivery_date.to_f - Time.zone.now.to_f) / 86400).ceil
+    rescue
+      days_diff = 5
+    end
+
+    auction_data[:delivery_date] = Time.zone.now + days_diff.days
+    auction_data[:delivery_days] = days_diff
     auction_data[:shipping_cost]
   rescue => e
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - Failed to calculate shipping")

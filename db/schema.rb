@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160605192424) do
+ActiveRecord::Schema.define(version: 20160607003457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -179,20 +179,6 @@ ActiveRecord::Schema.define(version: 20160605192424) do
     t.integer  "delivery_days",                 default: 5
   end
 
-  create_table "spree_blog_entries", force: :cascade do |t|
-    t.string   "title"
-    t.text     "body"
-    t.string   "permalink"
-    t.datetime "created_at",   precision: 6
-    t.datetime "updated_at",   precision: 6
-    t.boolean  "visible",                    default: false
-    t.datetime "published_at", precision: 6
-    t.text     "summary"
-    t.integer  "author_id"
-  end
-
-  add_index "spree_blog_entries", ["author_id"], name: "index_spree_blog_entries_on_author_id", using: :btree
-
   create_table "spree_calculators", force: :cascade do |t|
     t.string   "type"
     t.integer  "calculable_id"
@@ -281,13 +267,6 @@ ActiveRecord::Schema.define(version: 20160605192424) do
     t.string   "status"
     t.boolean  "active_cc",                   default: false
   end
-
-  create_table "spree_favorites", force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "buyer_id",   null: false
-  end
-
-  add_index "spree_favorites", ["buyer_id"], name: "index_spree_favorites_on_buyer_id", using: :btree
 
   create_table "spree_gateways", force: :cascade do |t|
     t.string   "type"

@@ -191,6 +191,7 @@ CSV.parse(S3_CS_BUCKET.objects['pimco/data/preconfigure.csv'].read, headers: tru
     buyer: buyer,
     imprint_method: imprint_method,
     main_color: Spree::ColorProduct.where(product: product, color: hashed[:color]).first_or_create,
-    logo: buyer.logos.where(custom: true).first
+    logo: buyer.logos.where(custom: true).first,
+    custom_pms_colors: '534 C'
   ).first_or_create
 end

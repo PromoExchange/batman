@@ -176,14 +176,14 @@ CSV.parse(S3_CS_BUCKET.objects['pimco/data/preconfigure.csv'].read, headers: tru
   hashed = row.to_hash
 
   product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
-  buyer = Spree::User.where(email: 'amanda.witschger@netmining.com').first
-  fail 'Unable to locate Netmining user' if buyer.nil?
+  buyer = Spree::User.where(email: 'pimco_cs@thepromoexchange.com').first
+  fail 'Unable to locate PIMCO user' if buyer.nil?
 
   case hashed[:imprint_method]
   when 'screen_print'
     imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
   else
-    puts "Unknown Imprint Method - #{imprint}"
+    puts "Unknown Imprint Method - #{hashed[:imprint_method]}"
   end
 
   Spree::Preconfigure.where(

@@ -105,7 +105,7 @@ CSV.parse(S3_CS_BUCKET.objects['pimco/data/products.csv'].read, headers: true, h
     when 'screen_print'
       imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
     else
-      puts "Unknown Method - #{hashed[:imprint_method}"
+      puts "Unknown Method - #{hashed[:imprint_method]}"
     end
 
     if imprint_method.present?

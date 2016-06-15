@@ -20,7 +20,7 @@ namespace :companystore do
     )
 
     # Load products, upcharches, and preconfigure
-    ProductLoader.load('company_store', 'netmining')
+    ProductLoader.load('company_store', 'pimco')
 
     Resque.enqueue(
       CompanyStorePrebid,

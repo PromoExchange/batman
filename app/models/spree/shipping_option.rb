@@ -17,4 +17,6 @@ class Spree::ShippingOption < ActiveRecord::Base
   validates :delivery_date, presence: true
   validates :delivery_days, presence: true
   validates :shipping_option, presence: true
+  validates :shipping_cost, presence: true
+  validates :total_price, presence: true
 end

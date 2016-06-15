@@ -39,7 +39,7 @@ namespace :companystore do
     # Create Price Cache
     Spree::Product.where(supplier: company_store.supplier).each do |pr|
       Spree::PriceCache.where(product: pr).destroy_all
-      prrefresh_price_cache
+      pr.refresh_price_cache
     end
   end
 end

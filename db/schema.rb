@@ -372,6 +372,14 @@ ActiveRecord::Schema.define(version: 20160616152858) do
     t.boolean  "custom"
   end
 
+  create_table "spree_markups", force: :cascade do |t|
+    t.integer "supplier_id",                  null: false
+    t.decimal "markup",                       null: false
+    t.boolean "eqp",          default: false, null: false
+    t.decimal "eqp_discount", default: 0.0,   null: false
+    t.boolean "live",         default: true,  null: false
+  end
+
   create_table "spree_messages", force: :cascade do |t|
     t.integer  "owner_id",                 null: false
     t.integer  "from_id",                  null: false

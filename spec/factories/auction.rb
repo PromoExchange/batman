@@ -31,8 +31,8 @@ FactoryGirl.define do
     state 'waiting_confirmation'
   end
 
-  factory :delivered, parent: :auction do
-    state 'delivered'
+  factory :cancelled, parent: :auction do
+    state 'cancelled'
   end
 
   factory :no_ref_auction, parent: :auction do

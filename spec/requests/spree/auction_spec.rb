@@ -34,7 +34,7 @@ describe 'Auctions API' do
   it 'should get a list of auctions with multiple states' do
     FactoryGirl.create(:auction)
     FactoryGirl.create(:waiting_confirmation)
-    FactoryGirl.create(:delivered)
+    FactoryGirl.create(:cancelled)
 
     get '/api/auctions', { state: 'open,waiting_confirmation' }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
@@ -64,7 +64,7 @@ describe 'Auctions API' do
   it 'should get a list of completed auctions' do
     FactoryGirl.create_list(:waiting_confirmation, 10)
     FactoryGirl.create(:auction)
-    FactoryGirl.create(:delivered)
+    FactoryGirl.create(:cancelled)
 
     get '/api/auctions', { state: 'waiting_confirmation' }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 

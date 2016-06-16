@@ -18,6 +18,7 @@ FactoryGirl.define do
     association :customer, factory: :customer
   end
 
+  # TODO: Convert to traits
   factory :auction_with_bids, parent: :auction do
     bids { build_list :bid, 10 }
   end
@@ -28,6 +29,10 @@ FactoryGirl.define do
 
   factory :waiting_confirmation, parent: :auction do
     state 'waiting_confirmation'
+  end
+
+  factory :delivered, parent: :auction do
+    state 'delivered'
   end
 
   factory :no_ref_auction, parent: :auction do

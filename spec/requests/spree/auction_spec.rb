@@ -23,6 +23,7 @@ describe 'Auctions API' do
 
   it 'should get a list of open auctions' do
     FactoryGirl.create_list(:auction, 10)
+    FactoryGirl.create_list(:waiting_confirmation, 5)
 
     get '/api/auctions?state=open', nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
@@ -33,6 +34,7 @@ describe 'Auctions API' do
   it 'should get a list of auctions with multiple states' do
     FactoryGirl.create(:auction)
     FactoryGirl.create(:waiting_confirmation)
+    FactoryGirl.create(:delivered)
 
     get '/api/auctions?state=open,waiting_confirmation', nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
@@ -51,6 +53,7 @@ describe 'Auctions API' do
 
   it 'should get an auction for a buyer' do
     auction = FactoryGirl.create(:auction)
+    FactoryGirl.create_list(:auction, 10)
 
     get "/api/auctions?buyer_id=#{auction.buyer_id}", nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
@@ -60,6 +63,8 @@ describe 'Auctions API' do
 
   it 'should get a list of completed auctions' do
     FactoryGirl.create_list(:waiting_confirmation, 10)
+    FactoryGirl.create(:auction)
+    FactoryGirl.create(:delivered)
 
     get '/api/auctions?state=waiting_confirmation', nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
@@ -69,6 +74,7 @@ describe 'Auctions API' do
 
   it 'should get a list of my auctions' do
     auction = FactoryGirl.create(:auction)
+    FactoryGirl.create_list(:waiting_confirmation, 10)
 
     get "/api/auctions?buyer_id=#{auction.buyer_id}", nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 

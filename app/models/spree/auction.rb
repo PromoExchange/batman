@@ -22,10 +22,10 @@ class Spree::Auction < Spree::Base
   has_one :review
   validates_attachment_content_type :proof_file,
     content_type: %w(image/jpeg image/jpg image/png image/gif application/pdf)
-  validates :imprint_method_id, presence: true
-  validates :logo_id, presence: true, if: -> { buyer_id.present? }
-  validates :main_color_id, presence: true
-  validates :product_id, presence: true
+  validates :imprint_method, presence: true
+  validates :logo, presence: true, if: -> { buyer_id.present? }
+  validates :main_color, presence: true
+  validates :product, presence: true
   validates :quantity, presence: true, numericality: {
     only_integer: true,
     greater_than_or_equal_to: (lambda do |auction|

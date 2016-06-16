@@ -2,8 +2,8 @@ FactoryGirl.define do
   factory :bid, class: Spree::Bid do
     auction
     association :seller, factory: :user
-    association :order, factory: :order
-    association :prebid, factory: :prebid
+    association :order
+    association :prebid
     state 'open'
 
     trait :shipping do
@@ -14,7 +14,7 @@ FactoryGirl.define do
 
     trait :with_shipping_options do
       after(:create) do |bid|
-        create_list(:shipping_option, 5, bid: bid)
+        create_list(:shipping_option, 5, :ups_ground, bid: bid)
       end
     end
   end

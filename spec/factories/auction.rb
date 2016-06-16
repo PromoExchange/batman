@@ -1,12 +1,12 @@
 FactoryGirl.define do
   factory :auction, class: Spree::Auction do
-    association :product, factory: :product
+    association :product
     association :buyer, factory: :px_user
-    association :logo, factory: :logo
+    association :logo
     quantity 1111
     started 5.days.ago
     ended nil
-    association :imprint_method, factory: :imprint_method
+    association :imprint_method
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     payment_method 'Credit Card'

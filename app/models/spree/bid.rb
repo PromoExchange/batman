@@ -9,8 +9,8 @@ class Spree::Bid < Spree::Base
   has_many :auction_payments
   has_many :shipping_options, dependent: :destroy
 
-  validates :auction_id, presence: true
-  validates :seller_id, presence: true
+  validates :auction, presence: true
+  validates :seller, presence: true
 
   state_machine initial: :open do
     after_transition on: :non_preferred_accept, do: :notification_for_waiting_confirmation

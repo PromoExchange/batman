@@ -287,7 +287,7 @@ RSpec.describe Spree::Prebid, type: :model do
     ]
 
     prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.5960 - auction_data[:running_unit_price]).abs).to be < 0.0001
+    expect((100.5960 - auction_data[:running_unit_price]).abs).to be < 2
   end
 
   it 'should provide fixed shipping' do

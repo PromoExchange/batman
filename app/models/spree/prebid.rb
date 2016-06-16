@@ -318,7 +318,7 @@ class Spree::Prebid < Spree::Base
         bounds = []
         # Is it open ended
         if product_upcharge[5].include? '+'
-          bounds[0] = product_upcharge[5].delete(/\+/).to_i
+          bounds[0] = product_upcharge[5].gsub(/([()])|\+/, '').to_i
           bounds[1] = bounds[0] * 2
         else
           bounds = product_upcharge[5].gsub(/[()]/, '').split('..').map(&:to_i)

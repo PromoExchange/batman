@@ -27,27 +27,6 @@ class TaxonLoader
     load_taxon_tree(category_root, category_taxonomy, category_taxonomy)
   end
 
-  def self.load_dc_categories
-    category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create
-    tree = Spree::DcCategory.category_tree
-    tree.each do |parent|
-      parent_taxon = Spree::Taxon.create(
-        name: parent.name,
-        dc_category_guid: parent.guid,
-        parent_id: category_taxonomy.id,
-        taxonomy_id: category_taxonomy.id
-      )
-      parent.children.each do |child|
-        Spree::Taxon.create(
-          name: child.name,
-          dc_category_guid: child.guid,
-          parent_id: parent_taxon.id,
-          taxonomy_id: category_taxonomy.id
-        )
-      end
-    end
-  end
-
   def self.load_colors(file_name)
     color_taxonomy = Spree::Taxonomy.where(name: 'Colors').first_or_create
     File.open(file_name).each do |color|
@@ -68,7 +47,6 @@ class TaxonLoader
   end
 end
 
-TaxonLoader.load_dc_categories
 TaxonLoader.load_colors(seed_path('px_colors.txt'))
 
 puts 'Upcharge types'
@@ -103,7 +81,6 @@ state = Spree::State.where(name: 'New York').first
 
 puts 'Users'
 [
-  ['jessica.swanderski@gmail.com', 'admin'],
   ['michael.goldstein@thepromoexchange.com', 'admin'],
   ['kevin.widmaier@thepromoexchange.com', 'buyer'],
   ['connor.labarge@thepromoexchange.com', 'buyer'],
@@ -147,11 +124,4 @@ puts 'Users'
 
   user.save!
   user.confirm!
-end
-
-puts 'Pages'
-CSV.foreach(seed_path('pages.csv'), headers: true, header_converters: :symbol) do |row|
-  page = Spree::Page.create(row.to_hash)
-  page.stores << Spree::Store.first
-  page.save!
 end

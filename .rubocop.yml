@@ -1,5 +1,4 @@
 AllCops:
-  RunRailsCops: true
   Exclude:
     - 'db/**/*'
     - 'bin/**/*'
@@ -7,6 +6,9 @@ AllCops:
     - 'vendor/**/*'
     - 'Vagrantfile'
     - 'app/jobs/product_load.rb'
+
+Rails:
+  Enabled: true
 
 LineLength:
   Description: 'Limit lines to 120 characters.'

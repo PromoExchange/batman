@@ -2,7 +2,7 @@ namespace :companystore do
   desc 'Create PIMCO company store'
   task pimco: :environment do
     user = Spree::User.where(email: 'pimco_cs@thepromoexchange.com').first
-    fail 'Failed to find user' if user.nil?
+    raise 'raiseed to find user' if user.nil?
 
     store_name = 'PIMCO Company Store'
 
@@ -30,7 +30,7 @@ namespace :companystore do
     # Assign original supplier
     product_sku = 'PC-YRAM20'
     product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-    fail "Failed to find product [#{product_sku}]" if product.nil?
+    raise "raiseed to find product [#{product_sku}]" if product.nil?
     product.update_attributes(original_supplier: Spree::Supplier.where(name: 'Yeti').first_or_create)
 
     # Create Price Cache

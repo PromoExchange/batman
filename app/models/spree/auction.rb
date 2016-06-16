@@ -167,7 +167,7 @@ class Spree::Auction < Spree::Base
   def product_unit_price
     unit_price = product.price
     product.master.volume_prices.each do |v|
-      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
+      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).cover?(quantity)
         unit_price = v.amount
         break
       end
@@ -179,7 +179,7 @@ class Spree::Auction < Spree::Base
     price_code = nil
     price_code_count = 0
     product.master.volume_prices.each do |v|
-      next unless v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).include?(quantity)
+      next unless v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).cover?(quantity)
       price_code = v.price_code
 
       # It is possible that the price code is actually the entire price code
@@ -257,15 +257,15 @@ class Spree::Auction < Spree::Base
 
   def bids_status
     {
-      'waiting_confirmation': 'Awaiting Confirmation',
-      'unpaid': 'Awaiting Confirmation',
-      'create_proof': 'Awaiting Virtual Proof',
-      'waiting_proof_approval': 'View Proof',
-      'in_production': 'In Production',
-      'send_for_delivery': 'Track Shipment',
-      'confirm_receipt': 'Awaiting receipt confirmation',
-      'in_dispute': 'Order being disputed',
-      'complete': 'Completed'
+      waiting_confirmation: 'Awaiting Confirmation',
+      unpaid: 'Awaiting Confirmation',
+      create_proof: 'Awaiting Virtual Proof',
+      waiting_proof_approval: 'View Proof',
+      in_production: 'In Production',
+      send_for_delivery: 'Track Shipment',
+      confirm_receipt: 'Awaiting receipt confirmation',
+      in_dispute: 'Order being disputed',
+      complete: 'Completed'
     }
   end
 
@@ -286,13 +286,13 @@ class Spree::Auction < Spree::Base
     end
 
     seller_email = ENV['SELLER_EMAIL']
-    fail 'Cannot find seller email environment variable' if seller_email.nil?
+    raise 'Cannot find seller email environment variable' if seller_email.nil?
 
     seller = Spree::User.find_by(email: seller_email)
-    fail "Failed to find company store seller: #{seller_email}" if seller.nil?
+    raise "Failed to find company store seller: #{seller_email}" if seller.nil?
 
     prebid = Spree::Prebid.find_by(supplier: product.original_supplier, seller: seller)
-    fail "Failed to find prebid Seller: #{seller.email} Supplier: #{product.original_supplier.name}" if prebid.nil?
+    raise "Failed to find prebid Seller: #{seller.email} Supplier: #{product.original_supplier.name}" if prebid.nil?
 
     bid_id = nil
     collected_shipping = []
@@ -457,7 +457,7 @@ class Spree::Auction < Spree::Base
   end
 
   def pms_colors_presence
-    errors.add(:base, 'Must select at least one imprint color (standard or custom PMS color)') if pms_colors.length < 1
+    errors.add(:base, 'Must select at least one imprint color (standard or custom PMS color)') if pms_colors.empty?
   end
 
   def refund_payment

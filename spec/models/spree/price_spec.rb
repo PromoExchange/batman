@@ -56,7 +56,7 @@ RSpec.describe Spree::Price, type: :model do
   it 'should (not) discount price with nil' do
     value = 1200
     t = Spree::Price.discount_price(nil, value)
-    expect(((value) - t).abs).to be < 0.0001
+    expect((value - t).abs).to be < 0.0001
   end
 
   it 'should discount a zero price' do

@@ -1,9 +1,9 @@
 class Spree::Logo < Spree::Base
   LOGO_FILE_NAME = {
-    'pdf': 'artwork/pdf.png',
-    'ai': 'artwork/ai.png',
-    'eps': 'artwork/eps.jpg',
-    'psd': 'artwork/psd.jpg'
+    pdf: 'artwork/pdf.png',
+    ai: 'artwork/ai.png',
+    eps: 'artwork/eps.jpg',
+    psd: 'artwork/psd.jpg'
   }.freeze
 
   belongs_to :user

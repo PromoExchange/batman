@@ -41,11 +41,11 @@ namespace :companystore do
       }
     ].each do |supplier_data|
       supplier = Spree::Supplier.where(supplier_data[:query]).first_or_create
-      fail "Failed to find Supplier: #{supplier_data[:query]}" if supplier.blank?
+      raise "raiseed to find Supplier: #{supplier_data[:query]}" if supplier.blank?
 
       supplier_data[:skus].each do |product_sku|
         product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-        fail "Failed to find product [#{product_sku}]" if product.nil?
+        raise "raiseed to find product [#{product_sku}]" if product.nil?
         product.update_attributes(original_supplier: supplier)
       end
     end

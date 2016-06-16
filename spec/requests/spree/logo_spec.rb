@@ -15,7 +15,7 @@ describe 'Logo API' do
   xit 'should get a list of logos' do
     FactoryGirl.create_list(:logo, 10)
 
-    get '/api/logos', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get '/api/logos', nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
     expect(json.length).to eq(10)
@@ -24,7 +24,7 @@ describe 'Logo API' do
   xit 'should get a single logo' do
     logo = FactoryGirl.create(:logo)
 
-    get "/api/logos/#{logo.id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get "/api/logos/#{logo.id}", nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
   end
@@ -34,7 +34,7 @@ describe 'Logo API' do
 
     mess = logo.to_json
 
-    post '/api/logos', mess, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    post '/api/logos', mess, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
   end

@@ -3,7 +3,7 @@ module CompanyStorePrebid
 
   def self.perform(params)
     company_store = Spree::CompanyStore.where(name: params['name']).first
-    fail "Unable to find company store #{params['name']}" if company_store.nil?
+    raise "Unable to find company store #{params['name']}" if company_store.nil?
 
     products = Spree::Product.where(supplier: company_store.supplier)
     Rails.logger.info "CSTORE: Preconfiguring products [#{products.count}]"

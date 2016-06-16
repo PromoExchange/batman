@@ -37,7 +37,7 @@ Spree::Price.class_eval do
     price_code_array = []
     repeat_count = 1
     price_code.split('').each do |code|
-      if /[1-9]/.match(code)
+      if /[1-9]/ =~ code
         repeat_count = code.to_i
       else
         repeat_count.times { |_i| price_code_array << code }

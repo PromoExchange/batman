@@ -18,7 +18,8 @@ class Spree::PxusersController < Spree::StoreController
         login: pxuser_params[:email_address],
         password: pxuser_params[:password],
         password_confirmation: pxuser_params[:password_confirm],
-        asi_number: pxuser_params[:asi_number])
+        asi_number: pxuser_params[:asi_number]
+      )
 
       user.spree_roles << Spree::Role.find_by_name(pxuser_params[:buyer_seller])
 

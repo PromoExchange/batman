@@ -48,6 +48,9 @@ Style/AlignParameters:
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
 
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
 Style/CaseIndentation:
   IndentWhenRelativeTo: end
 

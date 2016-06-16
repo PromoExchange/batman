@@ -28,19 +28,17 @@ class Spree::AuctionsController < Spree::StoreController
       # require_buyer
       @auction = Spree::Auction.find_by(id: session[:pending_auction_id])
       @cloned_pms_colors = @auction.pms_colors.pluck(:id).map(&:inspect).join(',')
-    else
-      if params[:clone_auction_id].present?
-        clone_me = Spree::Auction.find(params[:clone_auction_id])
-        @auction = clone_me.dup
-        @auction.quantity = nil
-        @auction.clone = clone_me
-        @auction.logo = clone_me.logo
-        @cloned_pms_colors = clone_me.pms_colors.pluck(:id).map(&:inspect).join(',')
-        @price_breaks = []
-        @auction.product.price_caches.order(:position).pluck(:range, :lowest_price).each do |price|
-          lowest_range = price[0].split('..')[0].gsub(/\D/, '').to_i
-          @price_breaks << [lowest_range, price[1].to_f / lowest_range]
-        end
+    elsif params[:clone_auction_id].present?
+      clone_me = Spree::Auction.find(params[:clone_auction_id])
+      @auction = clone_me.dup
+      @auction.quantity = nil
+      @auction.clone = clone_me
+      @auction.logo = clone_me.logo
+      @cloned_pms_colors = clone_me.pms_colors.pluck(:id).map(&:inspect).join(',')
+      @price_breaks = []
+      @auction.product.price_caches.order(:position).pluck(:range, :lowest_price).each do |price|
+        lowest_range = price[0].split('..')[0].gsub(/\D/, '').to_i
+        @price_breaks << [lowest_range, price[1].to_f / lowest_range]
       end
     end
     if @auction.nil?
@@ -200,7 +198,7 @@ class Spree::AuctionsController < Spree::StoreController
       amount: (@bid.order.total.to_f * 100).to_i,
       currency: 'usd',
       source: params[:stripeToken],
-      description: "#{params[:stripeEmail]}"
+      description: params[:stripeEmail].to_s
     )
 
     @bid.non_preferred_accept
@@ -220,7 +218,7 @@ class Spree::AuctionsController < Spree::StoreController
 
     @addresses = current_spree_user.addresses.active.map do |address|
       next if address.bill? && !address.ship?
-      ["#{address}", address.id]
+      [address.to_s, address.id]
     end
 
     @pxaddress = Spree::Pxaddress.new

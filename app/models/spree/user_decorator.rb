@@ -25,11 +25,12 @@ Spree::User.class_eval do
 
   def recalculate_rating
     self[:reviews_count] = review.reload.approved.count
-    if reviews_count > 0
-      self[:avg_rating] = review.approved.sum(:rating).to_f / reviews_count
-    else
-      self[:avg_rating] = 0
-    end
+    self[:avg_rating] =
+      if reviews_count > 0
+        review.approved.sum(:rating).to_f / reviews_count
+      else
+        0
+      end
     save
   end
 

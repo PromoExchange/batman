@@ -9,7 +9,7 @@ class Spree::ShippingOption < ActiveRecord::Base
     ups_next_day_air_saver: 4,
     ups_next_day_air_early_am: 5,
     ups_next_day_air: 6
-  }
+  }.freeze
 
   validates :name, presence: true
   validates :bid_id, presence: true

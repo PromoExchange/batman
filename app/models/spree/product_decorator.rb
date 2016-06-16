@@ -54,7 +54,7 @@ Spree::Product.class_eval do
     lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).first
     return 50 if lowest_price_range.nil?
     lower_value = lowest_price_range.split('..')[0]
-    lower_value.gsub(/\(/, '').to_i
+    lower_value.delete(/\(/).to_i
   end
 
   def maximum_quantity
@@ -62,7 +62,7 @@ Spree::Product.class_eval do
     return 2500 if highest_price_range.nil?
     return 2500 if highest_price_range.include? '+'
     highest_value = highest_price_range.split('..')[1]
-    highest_value.gsub(/\)/, '').to_i
+    highest_value.delete(/\)/).to_i
   end
 
   def all_prices
@@ -169,7 +169,7 @@ Spree::Product.class_eval do
   def refresh_price_cache
     # We can only calcuate prices for products that have custom auctions
     custom_auction = Spree::Auction.find_by(product_id: id, state: 'custom_auction')
-    fail 'refresh_price_cache called for non custom product' if custom_auction.nil?
+    raise 'refresh_price_cache called for non custom product' if custom_auction.nil?
 
     how_old = ENV['PRICE_CACHE_REFRESH_HOURS']
     how_old ||= 24
@@ -295,7 +295,8 @@ Spree::Product.class_eval do
         carton.to_s,
         carton.quantity,
         carton.originating_zip
-      ])
+      ]
+    )
   end
 
   def self.find_in_batches(dc_acct_num)

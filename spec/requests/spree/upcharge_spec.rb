@@ -12,7 +12,7 @@ describe 'Upcharge API' do
   xit 'should get a list of upcharges' do
     upcharges = FactoryGirl.create_list(:upcharge_static_product, 10)
 
-    get "/api/upcharges?product_id=#{upcharges[0].id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get "/api/upcharges?product_id=#{upcharges[0].id}", nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
     expect(json.length).to eq(10)
@@ -21,7 +21,7 @@ describe 'Upcharge API' do
   xit 'should get a single upcharge' do
     upcharge = FactoryGirl.create(:upcharge)
 
-    get "/api/upcharges/#{upcharge.id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get "/api/upcharges/#{upcharge.id}", nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
     expect(json['id']).to eq(upcharge.id)
@@ -30,7 +30,7 @@ describe 'Upcharge API' do
   xit 'should create an upcharge' do
     upcharge = FactoryGirl.build(:upcharge, value: 'test')
 
-    post '/api/upcharges', upcharge.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    post '/api/upcharges', upcharge.to_json, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
     expect(json['value']).to eq('test')
@@ -39,7 +39,7 @@ describe 'Upcharge API' do
   xit 'should not create a duplicate upcharge' do |_member|
     upcharge = FactoryGirl.create(:upcharge)
 
-    post '/api/upcharges', upcharge.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    post '/api/upcharges', upcharge.to_json, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to have_http_status(422)
   end
@@ -47,7 +47,7 @@ describe 'Upcharge API' do
   xit 'should delete an upcharge' do
     upcharge = FactoryGirl.create(:upcharge)
 
-    delete "/api/upcharges/#{upcharge.id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    delete "/api/upcharges/#{upcharge.id}", nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
   end
@@ -55,7 +55,7 @@ describe 'Upcharge API' do
   xit 'should update an upcharge' do
     upcharge = FactoryGirl.create(:prebid, description: 'put subject')
 
-    put "/api/prebids/#{upcharge.id}", upcharge.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    put "/api/prebids/#{upcharge.id}", upcharge.to_json, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
     expect(json['description']).to eq('put subject')

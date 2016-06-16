@@ -1,11 +1,12 @@
 class Spree::Api::ChargesController < Spree::Api::BaseController
   def index
     @customers = current_spree_user.customers
-    if params[:type] == 'credit_card'
-      customers = @customers.credit_card
-    else
-      customers = @customers.web_check.verified
-    end
+    customers =
+      if params[:type] == 'credit_card'
+        @customers.credit_card
+      else
+        @customers.web_check.verified
+      end
     render nothing: true, status: :ok, json: customers
   end
 

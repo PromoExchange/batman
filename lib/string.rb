@@ -8,7 +8,7 @@ class String
       elements = split('...')
       return Range.new(elements[0].to_i, elements[1].to_i - 1)
     else
-      fail ArgumentError "Couldn't convert to Range: #{str}"
+      raise ArgumentError "Couldn't convert to Range: #{str}"
     end
   end
 end

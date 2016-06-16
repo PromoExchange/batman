@@ -21,13 +21,13 @@ class BuyerMailer < ApplicationMailer
 
   def upload_proof(auction)
     @auction = auction
-    attachments["#{@auction.proof_file_file_name}"] = open("#{@auction.proof_file.url}").read
+    attachments[@auction.proof_file_file_name.to_s] = open(@auction.proof_file.url.to_s).read
     mail(to: @auction.buyer.email, subject: 'PromoExchange Auction Proof is available')
   end
 
   def proof_available(auction)
     @auction = auction
-    attachments["#{@auction.proof_file_file_name}"] = open("#{@auction.proof_file.url}").read
+    attachments[@auction.proof_file_file_name.to_s] = open(@auction.proof_file.url.to_s).read
     mail(to: @auction.buyer.email, subject: 'PromoExchange Auction Proof is available')
   end
 

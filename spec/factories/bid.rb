@@ -1,4 +1,3 @@
-require 'ffaker'
 FactoryGirl.define do
   factory :bid, class: Spree::Bid do
     auction

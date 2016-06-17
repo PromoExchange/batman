@@ -425,7 +425,7 @@ class Spree::Prebid < Spree::Base
     number_of_packages = (auction_data[:quantity] / shipping_quantity.to_f).ceil
     auction_data[:messages] << "Number of packages: #{number_of_packages}"
 
-    dimensions = shipping_dimensions.delete(/[A-Z]/).delete(' ').split('x')
+    dimensions = shipping_dimensions.gsub(/[A-Z]/, '').delete(' ').split('x')
     package = ActiveShipping::Package.new(
       shipping_weight.to_i * 16,
       dimensions.map(&:to_i),

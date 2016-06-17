@@ -54,7 +54,7 @@ Spree::Product.class_eval do
     lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).first
     return 50 if lowest_price_range.nil?
     lower_value = lowest_price_range.split('..')[0]
-    lower_value.delete(/\(/).to_i
+    lower_value.delete('(').to_i
   end
 
   def maximum_quantity
@@ -62,7 +62,7 @@ Spree::Product.class_eval do
     return 2500 if highest_price_range.nil?
     return 2500 if highest_price_range.include? '+'
     highest_value = highest_price_range.split('..')[1]
-    highest_value.delete(/\)/).to_i
+    highest_value.delete(')').to_i
   end
 
   def all_prices

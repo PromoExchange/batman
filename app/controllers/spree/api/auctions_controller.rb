@@ -71,7 +71,7 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
       all_shipping: true
     )
 
-    fail 'Failed to get best price' if lowest_bid.nil?
+    raise 'Failed to get best price' if lowest_bid.nil?
 
     response = {
       best_price: lowest_bid.order.total.to_f,
@@ -146,12 +146,10 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
           @auction.invoice_paid!
           @auction.update_attributes(payment_claimed: true)
         end
+      elsif @auction.clone_id.nil?
+        @auction.confirm_order!
       else
-        if @auction.clone_id.nil?
-          @auction.confirm_order!
-        else
-          @auction.clone_confirm_order!
-        end
+        @auction.clone_confirm_order!
       end
     end
     render nothing: true, status: :ok

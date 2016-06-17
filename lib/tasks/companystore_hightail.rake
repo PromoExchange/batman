@@ -12,7 +12,7 @@ namespace :companystore do
   task hightail_original: :environment do
     # Leeds
     leeds = Spree::Supplier.find_by(dc_acct_num: '100306')
-    fail 'Failed to find leeds Supplier' if leeds.nil?
+    raise 'raiseed to find leeds Supplier' if leeds.nil?
 
     leeds_sku = [
       'HT-8150-90'
@@ -20,13 +20,13 @@ namespace :companystore do
 
     leeds_sku.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: leeds)
     end
 
     # American Apparel
     american_apparel = Spree::Supplier.where(name: 'American Apparel').first_or_create
-    fail 'Failed to find American Apparel Supplier' if american_apparel.nil?
+    raise 'raiseed to find American Apparel Supplier' if american_apparel.nil?
 
     american_apparel_sku = [
       'HT-F497',
@@ -37,7 +37,7 @@ namespace :companystore do
 
     american_apparel_sku.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: american_apparel)
     end
   end

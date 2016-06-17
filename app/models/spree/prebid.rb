@@ -15,7 +15,7 @@ class Spree::Prebid < Spree::Base
       :auction_id,
       :selected_shipping
     ].each do |o|
-      fail "Cannot created prebid, missing required option [#{o}]" unless options.key?(o)
+      raise "Cannot created prebid, missing required option [#{o}]" unless options.key?(o)
     end
 
     Rails.logger.info 'Prebid: creating prebid'
@@ -227,7 +227,7 @@ class Spree::Prebid < Spree::Base
     end
     auction_data
   rescue StandardError => e
-    Rails.logger.error("Failed to create prebid #{e}")
+    Rails.logger.error("raiseed to create prebid #{e}")
   end
 
   private
@@ -318,7 +318,7 @@ class Spree::Prebid < Spree::Base
         bounds = []
         # Is it open ended
         if product_upcharge[5].include? '+'
-          bounds[0] = product_upcharge[5].gsub(/\+/, '').to_i
+          bounds[0] = product_upcharge[5].gsub(/([()])|\+/, '').to_i
           bounds[1] = bounds[0] * 2
         else
           bounds = product_upcharge[5].gsub(/[()]/, '').split('..').map(&:to_i)
@@ -345,9 +345,7 @@ class Spree::Prebid < Spree::Base
       when 'run'
         next unless in_range
         run_charge = product_upcharge[4].to_f
-        auction_data[:running_unit_price] += (
-          Spree::Price.discount_price(price_code, run_charge)
-        )
+        auction_data[:running_unit_price] += Spree::Price.discount_price(price_code, run_charge)
         auction_data[:messages] << 'Applying run charge'
         auction_data[:messages] << "Charge: #{run_charge}"
         auction_data[:messages] << "Price code: #{price_code}"
@@ -357,7 +355,7 @@ class Spree::Prebid < Spree::Base
         next unless in_range
         if auction_data[:num_locations] > 1
           additional_location_charge = product_upcharge[4].to_f
-          auction_data[:running_unit_price] += (Spree::Price.discount_price(price_code, additional_location_charge))
+          auction_data[:running_unit_price] += Spree::Price.discount_price(price_code, additional_location_charge)
           auction_data[:messages] << 'Applying additional location charge'
           auction_data[:messages] << "Charge: #{additional_location_charge}"
           auction_data[:messages] << "Price code: #{price_code}"
@@ -370,9 +368,7 @@ class Spree::Prebid < Spree::Base
         if auction_data[:num_colors] > 1
           multiple_colors_charge = product_upcharge[4].to_f
           (2..auction_data[:num_colors].to_i).each do
-            auction_data[:running_unit_price] += (
-              Spree::Price.discount_price(price_code, multiple_colors_charge)
-            )
+            auction_data[:running_unit_price] += Spree::Price.discount_price(price_code, multiple_colors_charge)
           end
           auction_data[:messages] << "Applying #{auction_data[:num_colors].to_i - 1} additional color charges"
           auction_data[:messages] << "Charge: #{multiple_colors_charge}"
@@ -411,15 +407,15 @@ class Spree::Prebid < Spree::Base
       return auction_data[:shipping_cost]
     end
 
-    fail 'Shipping carton weight is nil' if carton.weight.blank?
+    raise 'Shipping carton weight is nil' if carton.weight.blank?
     shipping_weight = carton.weight
 
-    fail 'Shipping carton length is nil' if carton.length.blank?
-    fail 'Shipping carton width is nil' if carton.width.blank?
-    fail 'Shipping carton height is nil' if carton.height.blank?
+    raise 'Shipping carton length is nil' if carton.length.blank?
+    raise 'Shipping carton width is nil' if carton.width.blank?
+    raise 'Shipping carton height is nil' if carton.height.blank?
     shipping_dimensions = carton.to_s
 
-    fail 'Shipping quantity is nil' if carton.quantity <= 0
+    raise 'Shipping quantity is nil' if carton.quantity <= 0
 
     auction_data[:messages] << 'Applying shipping'
 
@@ -498,7 +494,7 @@ class Spree::Prebid < Spree::Base
     auction_data[:delivery_days] = days_diff
     auction_data[:shipping_cost]
   rescue => e
-    Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - Failed to calculate shipping")
+    Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - raiseed to calculate shipping")
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - #{e.message}")
     0.0
   end

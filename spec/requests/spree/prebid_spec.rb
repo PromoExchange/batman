@@ -15,7 +15,7 @@ describe 'Prebids API' do
   it 'should get a list of prebids' do
     FactoryGirl.create_list(:prebid, 10)
 
-    get '/api/prebids', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get '/api/prebids', nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
     expect(json.length).to eq(10)
@@ -24,7 +24,7 @@ describe 'Prebids API' do
   it 'should get a page of prebids' do
     FactoryGirl.create_list(:prebid, 10)
 
-    get '/api/prebids?page=2&per_page=3', nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get '/api/prebids?page=2&per_page=3', nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
     expect(json.length).to eq(3)
@@ -33,7 +33,7 @@ describe 'Prebids API' do
   it 'should get a single prebid' do
     prebid = FactoryGirl.create(:prebid)
 
-    get "/api/prebids/#{prebid.id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    get "/api/prebids/#{prebid.id}", nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
   end
@@ -41,7 +41,7 @@ describe 'Prebids API' do
   it 'should update a prebid' do
     prebid = FactoryGirl.create(:prebid)
 
-    put "/api/prebids/#{prebid.id}", prebid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    put "/api/prebids/#{prebid.id}", prebid.to_json, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
   end
@@ -49,7 +49,7 @@ describe 'Prebids API' do
   it 'should not create a duplicate prebid' do
     prebid = FactoryGirl.create(:prebid)
 
-    post '/api/prebids', prebid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    post '/api/prebids', prebid.to_json, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to have_http_status(422)
   end
@@ -57,7 +57,7 @@ describe 'Prebids API' do
   it 'should create a prebid' do
     prebid = FactoryGirl.build(:prebid)
 
-    post '/api/prebids', prebid.to_json, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    post '/api/prebids', prebid.to_json, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
   end
@@ -65,7 +65,7 @@ describe 'Prebids API' do
   it 'should delete a prebid' do
     prebid = FactoryGirl.create(:prebid)
 
-    delete "/api/prebids/#{prebid.id}", nil, 'X-Spree-Token': "#{current_api_user.spree_api_key}"
+    delete "/api/prebids/#{prebid.id}", nil, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
 
     expect(response).to be_success
   end

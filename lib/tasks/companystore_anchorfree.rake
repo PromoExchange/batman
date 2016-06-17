@@ -12,7 +12,7 @@ namespace :companystore do
   task anchorfree_original: :environment do
     # Sanmar Products
     sanmar = Spree::Supplier.find_by(dc_acct_num: '100160')
-    fail 'Failed to find Sanmar Supplier' if sanmar.nil?
+    raise 'raiseed to find Sanmar Supplier' if sanmar.nil?
 
     sanmar_skus = [
       'AF-632418',
@@ -22,13 +22,13 @@ namespace :companystore do
 
     sanmar_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: sanmar)
     end
 
     # Bullet Products
     bullet = Spree::Supplier.find_by(dc_acct_num: '100383')
-    fail 'Failed to find Bullet Supplier' if bullet.nil?
+    raise 'raiseed to find Bullet Supplier' if bullet.nil?
 
     bullet_skus = [
       'AF-SM-4125',
@@ -37,13 +37,13 @@ namespace :companystore do
 
     bullet_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: bullet)
     end
 
     # Leeds Products
     leeds = Spree::Supplier.find_by(dc_acct_num: '100306')
-    fail 'Failed to find Leeds Supplier' if leeds.nil?
+    raise 'raiseed to find Leeds Supplier' if leeds.nil?
 
     leeds_skus = [
       'AF-7003-40',
@@ -53,13 +53,13 @@ namespace :companystore do
 
     leeds_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: leeds)
     end
 
     # Gemline Products
     gemline = Spree::Supplier.find_by(dc_acct_num: '100306')
-    fail 'Failed to find Gemline Supplier' if gemline.nil?
+    raise 'raiseed to find Gemline Supplier' if gemline.nil?
 
     gemline_skus = [
       'AF-MOLEHRD'
@@ -67,7 +67,7 @@ namespace :companystore do
 
     gemline_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: gemline)
     end
 
@@ -76,7 +76,7 @@ namespace :companystore do
       name: 'BIC Graphic',
       dc_acct_num: '100104'
     ).first_or_create
-    fail 'Failed to find BIC Graphic Supplier' if bic_graphic.nil?
+    raise 'raiseed to find BIC Graphic Supplier' if bic_graphic.nil?
 
     bic_graphic_skus = [
       'AF-P3A3A25'
@@ -84,7 +84,7 @@ namespace :companystore do
 
     bic_graphic_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: bic_graphic)
     end
 
@@ -93,7 +93,7 @@ namespace :companystore do
       name: 'Innovation Line',
       dc_acct_num: '100108'
     ).first_or_create
-    fail 'Failed to find Innovation Line Supplier' if innovation_line.nil?
+    raise 'raiseed to find Innovation Line Supplier' if innovation_line.nil?
 
     innovation_line_skus = [
       'AF-5117'
@@ -101,7 +101,7 @@ namespace :companystore do
 
     innovation_line_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: innovation_line)
     end
 
@@ -110,7 +110,7 @@ namespace :companystore do
       name: 'Jetline',
       dc_acct_num: '120402'
     ).first_or_create
-    fail 'Failed to find Jetline Supplier' if jetline.nil?
+    raise 'raiseed to find Jetline Supplier' if jetline.nil?
 
     jetline_skus = [
       'AF-SG120'
@@ -118,7 +118,7 @@ namespace :companystore do
 
     jetline_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: jetline)
     end
 
@@ -126,7 +126,7 @@ namespace :companystore do
     quakecity = Spree::Supplier.where(
       name: 'Quake City Caps'
     ).first_or_create
-    fail 'Failed to find Quake City Caps Supplier' if quakecity.nil?
+    raise 'raiseed to find Quake City Caps Supplier' if quakecity.nil?
 
     quakecity_skus = [
       'AF-8500'
@@ -134,7 +134,7 @@ namespace :companystore do
 
     quakecity_skus.each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
-      fail "Failed to find product [#{product_sku}]" if product.nil?
+      raise "raiseed to find product [#{product_sku}]" if product.nil?
       product.update_attributes(original_supplier: quakecity)
     end
   end

@@ -27,7 +27,7 @@ class Spree::Quote < Spree::Base
     # Cache the price
     # TODO: Add expiration env/config
     Rails.cache.fetch("#{cache_key}/total_price", expires_in: 12.hours) do
-      best_price
+      best_price(options)
     end
   end
 
@@ -37,7 +37,7 @@ class Spree::Quote < Spree::Base
 
   private
 
-  def best_price(options = {})
-
+  def best_price(_options = {})
+    100.00
   end
 end

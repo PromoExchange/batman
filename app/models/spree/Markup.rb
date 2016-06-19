@@ -1,4 +1,4 @@
-class Spree::Markup < ActiveRecord::Base
+class Spree::Markup < Spree::Base
   belongs_to :supplier
   belongs_to :company_store
 

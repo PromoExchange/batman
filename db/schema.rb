@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160616152858) do
+ActiveRecord::Schema.define(version: 20160619125453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -356,18 +355,6 @@ ActiveRecord::Schema.define(version: 20160616152858) do
     t.integer  "logo_file_file_size"
     t.datetime "logo_file_updated_at"
     t.boolean  "custom"
-  end
-
-  create_table "spree_messages", force: :cascade do |t|
-    t.integer  "owner_id",   null: false
-    t.integer  "from_id",    null: false
-    t.integer  "to_id",      null: false
-    t.string   "status"
-    t.string   "subject"
-    t.string   "body"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer  "product_id", null: false
   end
 
   create_table "spree_option_mappings", force: :cascade do |t|

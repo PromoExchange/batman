@@ -3,6 +3,7 @@ FactoryGirl.define do
     supplier
     markup 0.1
     eqp false
-    eqp_markup 0.0
+    eqp_discount 0.0
+    company_store
   end
 end

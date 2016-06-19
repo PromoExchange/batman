@@ -5,7 +5,6 @@ class Spree::DashboardsController < Spree::StoreController
   def index
     @logo = Spree::Logo.new
     @user = spree_current_user
-    @pxaccount = Spree::Pxaccount.new(@user)
     @pxaddress = Spree::Pxaddress.new
     @tab = params[:tab]
 

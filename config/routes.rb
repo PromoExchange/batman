@@ -31,17 +31,8 @@ Rails.application.routes.draw do
   get '/company_store/:id', to: 'spree/company_store#show'
   post '/inspire_me_request', to: 'spree/company_store#inspire_me'
 
-  resources :pxtaxrates,
-    controller: 'spree/pxtaxrates',
-    as: 'pxtaxrates'
-
-  resources :pxusers,
-    controller: 'spree/pxusers',
-    as: 'pxusers'
-
-  resources :pxaccounts,
-    controller: 'spree/pxaccounts',
-    as: 'pxaccounts'
+  resources :pxtaxrates, controller: 'spree/pxtaxrates', as: 'pxtaxrates'
+  resources :pxusers, controller: 'spree/pxusers', as: 'pxusers'
 
   resources :auctions,
     controller: 'spree/auctions',
@@ -54,15 +45,8 @@ Rails.application.routes.draw do
       end
     end
 
-  resources :dashboards,
-    controller: 'spree/dashboards',
-    as: 'dashboards',
-    only: [:index]
-
-  resources :invoices,
-    controller: 'spree/invoices',
-    as: 'invoices',
-    only: [:index, :show]
+  resources :dashboards, controller: 'spree/dashboards', as: 'dashboards', only: [:index]
+  resources :invoices, controller: 'spree/invoices', as: 'invoices', only: [:index, :show]
 
   resources :logos,
     controller: 'spree/logos',

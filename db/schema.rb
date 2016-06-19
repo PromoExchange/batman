@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160619163104) do
+ActiveRecord::Schema.define(version: 20160619175408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1112,16 +1112,14 @@ ActiveRecord::Schema.define(version: 20160619163104) do
 
   create_table "spree_shipping_options", force: :cascade do |t|
     t.string   "name",                          null: false
-    t.integer  "bid_id",                        null: false
     t.decimal  "delta",                         null: false
     t.datetime "delivery_date",                 null: false
     t.integer  "delivery_days",                 null: false
     t.integer  "shipping_option",               null: false
     t.decimal  "shipping_cost",   default: 0.0, null: false
     t.decimal  "total_price",     default: 0.0, null: false
+    t.integer  "quote_id",                      null: false
   end
-
-  add_index "spree_shipping_options", ["bid_id"], name: "index_spree_shipping_options_on_bid_id", using: :btree
 
   create_table "spree_shipping_rates", force: :cascade do |t|
     t.integer  "shipment_id"

@@ -36,8 +36,8 @@ RSpec.describe Spree::ShippingOption, type: :model do
     expect(shipping_option.save).to be_falsey
   end
 
-  it 'should belong to an auction' do
-    t = Spree::ShippingOption.reflect_on_association(:bid)
+  it 'should belong to an quote' do
+    t = Spree::ShippingOption.reflect_on_association(:quote)
     expect(t.macro).to eq :belongs_to
   end
 end

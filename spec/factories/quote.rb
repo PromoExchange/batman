@@ -1,10 +1,16 @@
 FactoryGirl.define do
   factory :quote, class: Spree::Quote do
-    association :product
+    product
     quantity 1111
-    association :imprint_method
+    imprint_method
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     custom_pms_colors '116C'
+
+    trait :with_shipping_options do
+      after(:create) do |quote|
+        create_list(:shipping_option, 5, :ups_ground, quote: quote)
+      end
+    end
   end
 end

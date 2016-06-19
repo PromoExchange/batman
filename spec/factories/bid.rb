@@ -11,11 +11,5 @@ FactoryGirl.define do
       shipping_cost 10.00
       delivery_days 6
     end
-
-    trait :with_shipping_options do
-      after(:create) do |bid|
-        create_list(:shipping_option, 5, :ups_ground, bid: bid)
-      end
-    end
   end
 end

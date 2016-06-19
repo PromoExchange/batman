@@ -1,5 +1,5 @@
 class Spree::ShippingOption < ActiveRecord::Base
-  belongs_to :bid
+  belongs_to :quote
 
   # TODO: Should fixed be part of this enum?
   OPTION = {
@@ -12,11 +12,11 @@ class Spree::ShippingOption < ActiveRecord::Base
   }.freeze
 
   validates :name, presence: true
-  validates :bid_id, presence: true
   validates :delta, presence: true
   validates :delivery_date, presence: true
   validates :delivery_days, presence: true
   validates :shipping_option, presence: true
   validates :shipping_cost, presence: true
   validates :total_price, presence: true
+  validates :quote_id, presence: true
 end

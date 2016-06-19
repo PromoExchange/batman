@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Spree::Quote, type: :model do
   it 'should not save with a nil main_color' do
-    quote = FactoryGirl.build(:quote, main_color_id: nil)
+    quote = FactoryGirl.build(:quote, main_color: nil)
     expect(quote.save).to be_falsey
   end
 
@@ -24,5 +24,50 @@ RSpec.describe Spree::Quote, type: :model do
   it 'should not save with a less than min quantity' do
     quote = FactoryGirl.build(:quote, quantity: 1)
     expect(quote.save).to be_falsey
+  end
+
+  it 'should save with a value quote' do
+    quote = FactoryGirl.build(:quote)
+    expect(quote.save).to be_truthy
+  end
+
+  it 'should save with a value quote' do
+    quote = FactoryGirl.build(:quote)
+    expect(quote.save).to be_truthy
+  end
+
+  it 'should belong to an main_color' do
+    t = Spree::Quote.reflect_on_association(:main_color)
+    expect(t.macro).to eq :belongs_to
+  end
+
+  it 'should belong to an product' do
+    t = Spree::Quote.reflect_on_association(:product)
+    expect(t.macro).to eq :belongs_to
+  end
+
+  it 'should belong to an shipping_address' do
+    t = Spree::Quote.reflect_on_association(:shipping_address)
+    expect(t.macro).to eq :belongs_to
+  end
+
+  it 'should belong to an imprint_method' do
+    t = Spree::Quote.reflect_on_association(:imprint_method)
+    expect(t.macro).to eq :belongs_to
+  end
+
+  it 'should have many shipping_options' do
+    t = Spree::Quote.reflect_on_association(:shipping_options)
+    expect(t.macro).to eq :has_many
+  end
+
+  it 'should delete shipping_options' do
+    quote_with_shipping = FactoryGirl.create(:quote, :with_shipping_options)
+    expect { quote_with_shipping.destroy }.to change { Spree::ShippingOption.count }.by(-5)
+  end
+
+  xit 'should have a total price of 100.0' do
+    quote = FactoryGirl.build(:quote)
+    expect(quote.total_price).to eq 100.00
   end
 end

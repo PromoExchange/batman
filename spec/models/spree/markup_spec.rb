@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Spree::Markup, type: :model do
   it 'should not save markup with a nil supplier' do
-    markup = FactoryGirl.build(:markup, supplier_id: nil)
+    markup = FactoryGirl.build(:markup, supplier: nil)
     expect(markup.save).to be_falsey
   end
 
@@ -12,7 +12,7 @@ RSpec.describe Spree::Markup, type: :model do
   end
 
   it 'should not save markup with a nil company_store' do
-    markup = FactoryGirl.build(:markup, company_store_id: nil)
+    markup = FactoryGirl.build(:markup, company_store: nil)
     expect(markup.save).to be_falsey
   end
 

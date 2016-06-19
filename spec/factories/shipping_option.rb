@@ -14,7 +14,7 @@ FactoryGirl.define do
     trait :ups_3day_select do
       shipping_option Spree::ShippingOption::OPTION[:ups_3day_select]
       shipping_cost 3.0
-      total_price 10.0
+      total_price 13.0
     end
   end
 end

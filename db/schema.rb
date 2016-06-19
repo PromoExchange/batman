@@ -920,6 +920,15 @@ ActiveRecord::Schema.define(version: 20160616152858) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "spree_quotes", force: :cascade do |t|
+    t.integer "quantity",            null: false
+    t.integer "product_id",          null: false
+    t.integer "imprint_method_id",   null: false
+    t.integer "shipping_address_id", null: false
+    t.integer "main_color_id",       null: false
+    t.string  "custom_pms_colors"
+  end
+
   create_table "spree_refund_reasons", force: :cascade do |t|
     t.string   "name"
     t.boolean  "active",                   default: true
@@ -1109,12 +1118,14 @@ ActiveRecord::Schema.define(version: 20160616152858) do
   end
 
   create_table "spree_shipping_options", force: :cascade do |t|
-    t.string   "name",            null: false
-    t.integer  "bid_id",          null: false
-    t.decimal  "delta",           null: false
-    t.datetime "delivery_date",   null: false
-    t.integer  "delivery_days",   null: false
-    t.integer  "shipping_option", null: false
+    t.string   "name",                          null: false
+    t.integer  "bid_id",                        null: false
+    t.decimal  "delta",                         null: false
+    t.datetime "delivery_date",                 null: false
+    t.integer  "delivery_days",                 null: false
+    t.integer  "shipping_option",               null: false
+    t.decimal  "shipping_cost",   default: 0.0, null: false
+    t.decimal  "total_price",     default: 0.0, null: false
   end
 
   add_index "spree_shipping_options", ["bid_id"], name: "index_spree_shipping_options_on_bid_id", using: :btree

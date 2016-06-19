@@ -5,4 +5,8 @@ module WaitingForConfirmation
     @auction = Spree::Auction.find(params['auction_id'])
     SellerMailer.waiting_for_confirmation(@auction).deliver
   end
+
+  def self.after_perform(*_args)
+    ActiveRecord::Base.connection.disconnect!
+  end
 end

@@ -5,11 +5,7 @@ Congratulations! <%= @buyer.company.present? ? @buyer.company : "#{@buyer.firstn
 Accepting this invitation gives you a leg up on the competition because your PX fee is only 3.99% for this auction.
 
 
-<% if @type == 'non' %>
-  <%= Spree::Store.first.url %>/pxusers/new?auction_ref=<%= Spree::Store.first.url %>/auctions/<%= @auction.id %>">
-<% else %>
-  <%= Spree::Store.first.url %>/auctions/<%= @auction.id %>
-<% end %>
+<%= Spree::Store.first.url %>/auctions/<%= @auction.id %>
 
 Good luck!
 The PromoExchange Team

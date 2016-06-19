@@ -32,7 +32,6 @@ Rails.application.routes.draw do
   post '/inspire_me_request', to: 'spree/company_store#inspire_me'
 
   resources :pxtaxrates, controller: 'spree/pxtaxrates', as: 'pxtaxrates'
-  resources :pxusers, controller: 'spree/pxusers', as: 'pxusers'
 
   resources :auctions,
     controller: 'spree/auctions',

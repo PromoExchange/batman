@@ -5,7 +5,6 @@ class Spree::DashboardsController < Spree::StoreController
   def index
     @logo = Spree::Logo.new
     @user = spree_current_user
-    @pxaddress = Spree::Pxaddress.new
     @tab = params[:tab]
 
     return unless spree_current_user.has_spree_role?(:seller)

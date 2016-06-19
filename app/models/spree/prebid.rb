@@ -227,7 +227,7 @@ class Spree::Prebid < Spree::Base
     end
     auction_data
   rescue StandardError => e
-    Rails.logger.error("raiseed to create prebid #{e}")
+    Rails.logger.error("failed to create prebid #{e}")
   end
 
   private
@@ -494,7 +494,7 @@ class Spree::Prebid < Spree::Base
     auction_data[:delivery_days] = days_diff
     auction_data[:shipping_cost]
   rescue => e
-    Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - raiseed to calculate shipping")
+    Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - failed to calculate shipping")
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - #{e.message}")
     0.0
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160619175408) do
+ActiveRecord::Schema.define(version: 20160620004400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -920,6 +920,7 @@ ActiveRecord::Schema.define(version: 20160619175408) do
     t.integer "shipping_address_id", null: false
     t.integer "main_color_id",       null: false
     t.string  "custom_pms_colors"
+    t.text    "workbook"
   end
 
   create_table "spree_refund_reasons", force: :cascade do |t|

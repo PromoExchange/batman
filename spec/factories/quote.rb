@@ -12,5 +12,9 @@ FactoryGirl.define do
         create_list(:shipping_option, 5, :ups_ground, quote: quote)
       end
     end
+
+    trait :with_workbook do
+      workbook Faker::Lorem.paragraphs(10)
+    end
   end
 end

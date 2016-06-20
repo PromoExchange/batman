@@ -26,8 +26,23 @@ RSpec.describe Spree::Quote, type: :model do
     expect(quote.save).to be_falsey
   end
 
-  it 'should save with a value quote' do
+  it 'should save with a valid quote' do
     quote = FactoryGirl.build(:quote)
+    expect(quote.save).to be_truthy
+  end
+
+  it 'should save with a valid quote, with_shipping' do
+    quote = FactoryGirl.build(:quote, :with_shipping_options)
+    expect(quote.save).to be_truthy
+  end
+
+  it 'should save with a valid quote, with_shipping, with_workbook' do
+    quote = FactoryGirl.build(:quote, :with_shipping_options, :with_workbook)
+    expect(quote.save).to be_truthy
+  end
+
+  it 'should save with a valid quote, with_workbook' do
+    quote = FactoryGirl.build(:quote, :with_workbook)
     expect(quote.save).to be_truthy
   end
 
@@ -59,6 +74,11 @@ RSpec.describe Spree::Quote, type: :model do
   it 'should have many shipping_options' do
     t = Spree::Quote.reflect_on_association(:shipping_options)
     expect(t.macro).to eq :has_many
+  end
+
+  it 'should delete shipping_options' do
+    quote_with_shipping = FactoryGirl.create(:quote, :with_shipping_options)
+    expect { quote_with_shipping.destroy }.to change { Spree::ShippingOption.count }.by(-5)
   end
 
   it 'should delete shipping_options' do

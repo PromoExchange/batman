@@ -83,9 +83,17 @@ class Spree::Quote < Spree::Base
     shipping_options.find_by_shipping_option(selected_shipping_option)
   end
 
-  def refresh_cache
-    Rails.cache.delete("#{cache_key}/total_price")
-    total_price
+  def fields
+    @fields ||= JSON.load(workbook).to_h
+  end
+
+  def messages
+    return @fields['messages'] if fields.key? 'messages'
+    @fields['messages'] = []
+  end
+
+  def log(message)
+    messages.push(message)
   end
 
   def total_price(options = {})

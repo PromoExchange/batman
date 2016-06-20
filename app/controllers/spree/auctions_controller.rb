@@ -221,7 +221,6 @@ class Spree::AuctionsController < Spree::StoreController
       [address.to_s, address.id]
     end
 
-    @pxaddress = Spree::Pxaddress.new
     estimated_ship
   end
 
@@ -294,8 +293,6 @@ class Spree::AuctionsController < Spree::StoreController
     @user = spree_current_user
 
     @logo = Spree::Logo.new
-
-    @pxaddress = Spree::Pxaddress.new
 
     return unless @current_company_store.present?
     @addresses = []

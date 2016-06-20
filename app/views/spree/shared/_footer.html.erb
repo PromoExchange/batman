@@ -3,7 +3,7 @@
     <div class="col-lg-offset-2 col-lg-2">
       <ul>
         <li>Buy</li>
-        <li><%= link_to Spree.t(:register), main_app.new_pxuser_path %></li>
+        <li><%= link_to Spree.t(:register), spree.signup_path %></li>
         <li><a href="/buyer_how_it_works">How it Works</a></li>
         <li><a href="/products">Product Search</a></li>
         <li><a href="/faq#buyer">FAQ</a></li>
@@ -12,7 +12,7 @@
     <div class="col-lg-2">
       <ul>
         <li>Sell</li>
-        <li><%= link_to Spree.t(:register), main_app.new_pxuser_path %></li>
+        <li><%= link_to Spree.t(:register), spree.signup_path %></li>
         <li><a href="/seller_how_it_works">How it Works</a></li>
         <li><%= link_to Spree.t(:marketplace), main_app.dashboards_path %></a></li>
         <li><a href="/faq#seller">FAQ</a></li>
@@ -31,7 +31,7 @@
         <div class="modal-content">
           <div class="modal-header"><h2><%= Spree.t(:user_agreement) %></h2></div>
           <div class="modal-body scrolling" style="color:black">
-            <%= render partial: 'spree/pxusers/user_agreement' %>
+            <%= render partial: 'spree/shared/user_agreement' %>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

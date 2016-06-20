@@ -34,7 +34,7 @@
               <label class="checkbox-inline">
                 <%= check_box_tag 'product_request[request_type][]', 'Union Made' %> Union Made
               </label>
-            
+
               <label class="checkbox-inline">
                 <%= check_box_tag 'product_request[request_type][]', 'Made in the USA' %> Made in the USA
               </label>
@@ -63,7 +63,7 @@
         </div>
         <div class="modal-footer">
           <%= link_to "Login", spree.login_path, class: "btn btn-primary" %>
-          <%= link_to "Register", main_app.new_pxuser_path, class: "btn btn-success" %>
+          <%= link_to "Register", signup.signup_path, class: "btn btn-success" %>
         </div>
       <% end %>
     </div>

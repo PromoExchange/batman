@@ -914,13 +914,13 @@ ActiveRecord::Schema.define(version: 20160620004400) do
   end
 
   create_table "spree_quotes", force: :cascade do |t|
-    t.integer "quantity",            null: false
-    t.integer "product_id",          null: false
-    t.integer "imprint_method_id",   null: false
-    t.integer "shipping_address_id", null: false
-    t.integer "main_color_id",       null: false
+    t.integer "quantity",                         null: false
+    t.integer "product_id",                       null: false
+    t.integer "imprint_method_id",                null: false
+    t.integer "shipping_address_id",              null: false
+    t.integer "main_color_id",                    null: false
     t.string  "custom_pms_colors"
-    t.text    "workbook"
+    t.text    "workbook",            default: ""
   end
 
   create_table "spree_refund_reasons", force: :cascade do |t|

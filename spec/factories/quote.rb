@@ -14,7 +14,7 @@ FactoryGirl.define do
     end
 
     trait :with_workbook do
-      workbook Faker::Lorem.paragraphs(10)
+      workbook "{\"one\":1,\"two\":2}"
     end
   end
 end

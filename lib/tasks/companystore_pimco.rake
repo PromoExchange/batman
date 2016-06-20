@@ -16,7 +16,6 @@ namespace :companystore do
       Spree::Markup.where(
         supplier: supplier,
         markup: 0.10,
-        eqp: false,
         eqp_discount: 0.0,
         live: true,
         company_store: company_store

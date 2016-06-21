@@ -50,11 +50,8 @@
 
 <p>Your fee:</p>
 <p><%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %> if paid by Credit Card</p>
-<p><%= (@auction.winning_bid.seller_fee / (1 - 0.015)).round(2) %> if paid by Web Check/ACH</p>
 
 <p>Payment is due by <%= (Date.today + 10.days).strftime("%D") %></p>
 
 <p>Please contact the Buyer (<%= @auction.buyer.bill_address.phone %>/<%= @auction.buyer.email %>) by the end of the next business day to begin making delivery and payment arrangements.</p>
 <p>Failure to do so can cause this order to be awarded to another Seller and can jeopardize your membership in the PromoExchange community.</p>
-
-<%= render partial: 'email_signature' %>

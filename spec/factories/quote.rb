@@ -6,7 +6,6 @@ FactoryGirl.define do
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     custom_pms_colors '116C'
-    workbook '{"one":1,"two":2}'
     after(:create) do |quote|
       create_list(:shipping_option, 5, :ups_ground, quote: quote)
     end

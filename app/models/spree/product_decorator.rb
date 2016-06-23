@@ -13,6 +13,8 @@ Spree::Product.class_eval do
 
   has_many :price_caches
 
+  has_many :quotes
+
   state_machine initial: :active do
     after_transition on: :invalid, do: :unavailable
     after_transition on: :loaded, do: :available

@@ -1,5 +1,5 @@
 class Spree::Quote < Spree::Base
-  before_save :save_workbook
+  include QuoteCalculator
 
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
   belongs_to :shipping_address, class_name: 'Spree::Address'
@@ -21,19 +21,6 @@ class Spree::Quote < Spree::Base
     end)
   }
 
-  def fields
-    @fields ||= JSON.load(workbook).to_h
-  end
-
-  def messages
-    return @fields['messages'] if fields.key? 'messages'
-    @fields['messages'] = []
-  end
-
-  def log(message)
-    messages.push(message)
-  end
-
   def total_price(options = {})
     options.reverse_merge!(
       shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
@@ -51,10 +38,6 @@ class Spree::Quote < Spree::Base
   end
 
   private
-
-  def save_workbook
-    self.workbook = fields.to_json
-  end
 
   def best_price(_options = {})
     100.00

@@ -6,15 +6,9 @@ FactoryGirl.define do
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     custom_pms_colors '116C'
-
-    trait :with_shipping_options do
-      after(:create) do |quote|
-        create_list(:shipping_option, 5, :ups_ground, quote: quote)
-      end
-    end
-
-    trait :with_workbook do
-      workbook "{\"one\":1,\"two\":2}"
+    workbook '{"one":1,"two":2}'
+    after(:create) do |quote|
+      create_list(:shipping_option, 5, :ups_ground, quote: quote)
     end
   end
 end

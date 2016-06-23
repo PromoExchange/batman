@@ -83,19 +83,6 @@ class Spree::Quote < Spree::Base
     shipping_options.find_by_shipping_option(selected_shipping_option)
   end
 
-  def fields
-    @fields ||= JSON.load(workbook).to_h
-  end
-
-  def messages
-    return @fields['messages'] if fields.key? 'messages'
-    @fields['messages'] = []
-  end
-
-  def log(message)
-    messages.push(message)
-  end
-
   def total_price(options = {})
     options.reverse_merge!(
       selected_shipping_option: :ups_ground

@@ -18,6 +18,8 @@ Spree::Product.class_eval do
 
   validates_associated :carton
 
+  has_many :quotes
+
   state_machine initial: :active do
     after_transition on: :invalid, do: :unavailable
     after_transition on: :loaded, do: :available

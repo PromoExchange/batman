@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :auction, class: Spree::Auction do
-    association :product
+    association :product, factory: :product
     association :buyer, factory: :px_user
     association :logo
     quantity 1111

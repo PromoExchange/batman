@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160619175408) do
+ActiveRecord::Schema.define(version: 20160624000124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -914,12 +914,13 @@ ActiveRecord::Schema.define(version: 20160619175408) do
   end
 
   create_table "spree_quotes", force: :cascade do |t|
-    t.integer "quantity",            null: false
-    t.integer "product_id",          null: false
-    t.integer "imprint_method_id",   null: false
-    t.integer "shipping_address_id", null: false
-    t.integer "main_color_id",       null: false
+    t.integer "quantity",                          null: false
+    t.integer "product_id",                        null: false
+    t.integer "imprint_method_id",                 null: false
+    t.integer "shipping_address_id",               null: false
+    t.integer "main_color_id",                     null: false
     t.string  "custom_pms_colors"
+    t.decimal "unit_price",          default: 0.0
   end
 
   create_table "spree_refund_reasons", force: :cascade do |t|

@@ -159,6 +159,39 @@ Spree::Product.class_eval do
     update_attribute(:available_on, Time.zone.now)
   end
 
+  def unit_price(quantity)
+    return 0.0 if quantity.nil?
+    unit_price = price
+    master.volume_prices.each do |v|
+      if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).cover?(quantity)
+        unit_price = v.amount
+        break
+      end
+    end
+    unit_price
+  end
+
+  def price_code(quantity = nil)
+    return 'V' if quantity.nil?
+    price_code = nil
+    price_code_count = 0
+    master.volume_prices.each do |v|
+      next unless v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).cover?(quantity)
+      price_code = v.price_code
+
+      # It is possible that the price code is actually the entire price code
+      # Break it out and select the correct one
+      if price_code.length > 1
+        price_code_array = Spree::Price.price_code_to_array(price_code)
+        if price_code_array.length >= price_code_count
+          price_code = price_code_array[price_code_count]
+        end
+      end
+      break
+    end
+    price_code || 'V'
+  end
+
   def lowest_unit_price
     refresh_price_cache
     lowest_cache = price_caches.order(:position).last

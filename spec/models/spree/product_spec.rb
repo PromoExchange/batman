@@ -34,4 +34,9 @@ RSpec.describe Spree::Product, type: :model do
     a.deleted!
     expect(a.state).to eq 'deleted'
   end
+
+  it 'should give price code of V' do
+    p = FactoryGirl.build(:product)
+    expect(p.price_code).to eq 'V'
+  end
 end

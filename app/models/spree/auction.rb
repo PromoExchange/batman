@@ -164,7 +164,9 @@ class Spree::Auction < Spree::Base
     product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
   end
 
+  # TODO: Deprecated in favor product.unit_price
   def product_unit_price
+    ActiveSupport::Deprecation.warn('Deprecated go to product.unit_price')
     unit_price = product.price
     product.master.volume_prices.each do |v|
       if v.open_ended? || (v.range.to_range.begin..v.range.to_range.end).cover?(quantity)
@@ -175,7 +177,9 @@ class Spree::Auction < Spree::Base
     unit_price
   end
 
+  # TODO: Deprecatd in favor of product.price_code
   def product_price_code
+    ActiveSupport::Deprecation.warn('Deprecated go to product.price_code')
     price_code = nil
     price_code_count = 0
     product.master.volume_prices.each do |v|

@@ -65,4 +65,10 @@ RSpec.describe Spree::Quote, type: :model do
     quote_with_shipping = FactoryGirl.create(:quote)
     expect { quote_with_shipping.destroy }.to change { Spree::ShippingOption.count }.by(-5)
   end
+
+  it 'should add a log message' do
+    quote = FactoryGirl.build(:quote)
+    5.times { quote.log('Test message') }
+    expect(quote.messages.count).to eq 5
+  end
 end

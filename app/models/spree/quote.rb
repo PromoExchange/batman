@@ -21,6 +21,8 @@ class Spree::Quote < Spree::Base
     end)
   }
 
+  attr_reader :messages
+
   def total_price(options = {})
     options.reverse_merge!(
       shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
@@ -35,6 +37,11 @@ class Spree::Quote < Spree::Base
 
   def cache_key
     "spree/quote/#{product.id}/#{quantity}/#{shipping_option.id}"
+  end
+
+  def log(message)
+    @messages ||= []
+    @messages << message
   end
 
   private

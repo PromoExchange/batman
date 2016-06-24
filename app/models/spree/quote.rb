@@ -44,6 +44,10 @@ class Spree::Quote < Spree::Base
     @messages << message
   end
 
+  def num_colors
+    custom_pms_colors.split(',').count
+  end
+
   private
 
   def best_price(_options = {})

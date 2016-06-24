@@ -79,4 +79,9 @@ RSpec.describe Spree::Quote, type: :model do
     quote2 = Spree::Quote.find(quote.id)
     expect(quote2.messages.count).to eq 5
   end
+
+  it 'should return num of colors' do
+    quote = FactoryGirl.build(:quote)
+    expect(quote.num_colors).to eq 2
+  end
 end

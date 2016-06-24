@@ -49,4 +49,12 @@ class Spree::Quote < Spree::Base
   def best_price(_options = {})
     100.00
   end
+
+  after_find do |_quote|
+    @messages = JSON.parse(workbook).to_a
+  end
+
+  before_save do |_quote|
+    self.workbook = @messages.to_json
+  end
 end

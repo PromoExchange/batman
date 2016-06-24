@@ -71,4 +71,12 @@ RSpec.describe Spree::Quote, type: :model do
     5.times { quote.log('Test message') }
     expect(quote.messages.count).to eq 5
   end
+
+  it 'should save and restore messages' do
+    quote = FactoryGirl.build(:quote)
+    5.times { quote.log('Test message') }
+    quote.save
+    quote2 = Spree::Quote.find(quote.id)
+    expect(quote2.messages.count).to eq 5
+  end
 end

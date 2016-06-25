@@ -4,6 +4,11 @@ class BuyerMailer < ApplicationMailer
     mail(subject: 'PromoExchange product Ideation Request')
   end
 
+  def invoice(auction)
+    @uauction = auction
+    mail(to: @auction.buyer.email, subject: 'Invoice for PromoExchange Purchase')
+  end
+
   def new_request_idea(product_request)
     @product_request = product_request
     mail(to: @product_request.buyer.email, subject: 'You have new product ideas from PromoExchange!')

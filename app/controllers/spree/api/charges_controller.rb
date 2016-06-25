@@ -50,7 +50,7 @@ class Spree::Api::ChargesController < Spree::Api::BaseController
     brand = (params[:payment_type] == 'cc' ? stripe_customer.sources.data.first.brand : params[:nick_name])
     status = (params[:payment_type] == 'wc' ? stripe_customer.sources.data.first.status : 'cc')
 
-    customer = Spree::Customer.create(
+    Spree::Customer.create(
       user_id: current_spree_user.id,
       token: stripe_customer.id,
       brand: brand,

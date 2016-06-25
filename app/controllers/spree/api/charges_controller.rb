@@ -60,14 +60,6 @@ class Spree::Api::ChargesController < Spree::Api::BaseController
       active_cc: params[:active_cc] ||= false
     )
 
-    if params[:payment_type] == 'wc'
-      Resque.enqueue_at(
-        EmailHelper.email_delay(Time.zone.now + 3.days),
-        ConfirmCheckingAccount,
-        customer_id:  customer.id
-      )
-    end
-
     render nothing: true, status: :ok, json: stripe_customer
   rescue
     render nothing: true, status: :internal_server_error

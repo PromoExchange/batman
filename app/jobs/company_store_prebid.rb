@@ -18,10 +18,7 @@ module CompanyStorePrebid
       end
 
       Rails.logger.info "CSTORE: Creating Prebid for [#{product.master.sku}]"
-      Resque.enqueue(
-        CreatePrebids,
-        auction_id: auction.id
-      )
+      Resque.enqueue(CreatePrebids, auction_id: auction.id)
     end
   end
 end

@@ -13,8 +13,7 @@ class Spree::Bid < Spree::Base
   validates :seller_id, presence: true
 
   state_machine initial: :open do
-    after_transition on: :non_preferred_accept, do: :notification_for_waiting_confirmation
-    after_transition on: :preferred_accept, do: :send_invoice
+    after_transition on: :non_preferred_accept, do: :send_invoice
     after_transition on: [:preferred_accept, :non_preferred_accept], do: :other_bids_lost
 
     event :preferred_accept do
@@ -95,18 +94,9 @@ class Spree::Bid < Spree::Base
 
   private
 
-  def notification_for_waiting_confirmation
-    Resque.enqueue(
-      WaitingForConfirmation,
-      auction_id: auction.id,
-      email_address: seller.email
-    )
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.tomorrow.midnight),
-      ConfirmOrderTimeExpire,
-      auction_id: auction.id,
-      email_address: seller.email
-    )
+  def build_order
+    o = Spree::Order.create
+    self.order_id = o.id
   end
 
   def other_bids_lost
@@ -114,19 +104,6 @@ class Spree::Bid < Spree::Base
   end
 
   def send_invoice
-    Resque.enqueue(
-      SendInvoice,
-      auction_id: auction.id
-    )
-    Resque.enqueue_at(
-      EmailHelper.email_delay(3.days.from_now),
-      UnpaidInvoice,
-      auction_id: auction.id
-    )
-  end
-
-  def build_order
-    o = Spree::Order.create
-    self.order_id = o.id
+    Resque.enqueue(SendInvoice, auction_id: auction.id)
   end
 end

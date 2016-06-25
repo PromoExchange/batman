@@ -14,8 +14,6 @@ class Spree::ProductRequest < Spree::Base
   validates :title, presence: true
 
   state_machine initial: :open do
-    after_transition on: :generate_notification, do: :notification_for_new_request_idea
-
     event :generate_notification do
       transition open: :complete
     end
@@ -23,10 +21,6 @@ class Spree::ProductRequest < Spree::Base
     event :pending_notification do
       transition complete: :open
     end
-  end
-
-  def notification_for_new_request_idea
-    Resque.enqueue(NewRequestIdea, product_request_id: id)
   end
 
   def sample_fee

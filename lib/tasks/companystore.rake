@@ -18,10 +18,7 @@ end
 
 def load_products(slug, store_name)
   ProductLoader.load('company_store', slug)
-  Resque.enqueue(
-    CompanyStorePrebid,
-    name: store_name
-  )
+  Resque.enqueue(CompanyStorePrebid, name: store_name)
 end
 
 def assign_original_supplier(config)

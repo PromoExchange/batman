@@ -16,14 +16,4 @@ Spree::HomeController.class_eval do
     @products = @searcher.retrieve_products
     @taxonomies = Spree::Taxonomy.includes(root: :children)
   end
-
-  def send_request
-    email = params[:request][:email]
-    if email.nil? || !(email =~ Devise.email_regexp)
-      @msg = '<div class="alert alert-error">Email is not valid!</div>'
-    else
-      Resque.enqueue(SendRequestToLearn, email)
-      @msg = '<div class="alert alert-success">Request sent successfully.</div>'
-    end
-  end
 end

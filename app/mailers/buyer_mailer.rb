@@ -9,4 +9,9 @@ class BuyerMailer < ApplicationMailer
     @product_request = product_request
     mail(subject: 'PromoExchange Company Store Inspire me request')
   end
+
+  def tracking_info(auction)
+    @auction = auction
+    mail(to: @auction.buyer.email, subject: 'PromoExchange Auction Tracking Information')
+  end
 end

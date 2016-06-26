@@ -1,0 +1,32 @@
+<p>Date: <%= @auction.ended.strftime('%m/%d/%Y') %></p>
+
+<p>Dear <%= @auction.shipping_address.firstname %>,</p>
+<p>Thank you for ordering from PromoExchange<p>
+
+<h4>Ship To:</h4>
+<ul style='list-style: none;'>
+  <li><%= @auction.shipping_address.company %></li>
+  <li><%= @auction.shipping_address.address1 %></li>
+  <li><%= @auction.shipping_address.address2 %></li>
+  <li>
+    <%= @auction.shipping_address.city %>,
+    <%= @auction.shipping_address.state_text %>,
+    <%= @auction.shipping_address.zipcode %>
+  </li>
+</ul>
+
+<p>
+  You can track your order by going to the tracking link below. Please allow several hours from the time of this email
+  until the carrier has updated your tracking information on their website.
+</p>
+
+<a href="<%= @auction.tracking_link %>">UPS Tracking Link</a>
+
+<p>
+  Please Note: Tracking numbers may not be active with the shipping carrier until our close of business,
+  around 6:00 PM ET. If you receive a tracking error, please try again after that time. If the tracking link does not
+  appear due to certain email restrictions, please use the tracking number shown here and insert that onto the carriers
+  tracking website: <%= @auction.tracking_number %>
+</p>
+
+<p>Thanks again for your order!</p>

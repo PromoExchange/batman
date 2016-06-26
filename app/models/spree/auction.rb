@@ -241,6 +241,10 @@ class Spree::Auction < Spree::Base
     ups.find_tracking_info(tracking_number, test: true)
   end
 
+  def tracking_link
+    "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=#{tracking_number}"
+  end
+
   def auction_sizes
     %w(S M L XL 2XL)
   end

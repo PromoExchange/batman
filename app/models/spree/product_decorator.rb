@@ -39,13 +39,13 @@ Spree::Product.class_eval do
   end
 
   def company_store
-    return nil if original_supplier.nil?
+    return nil if supplier.nil?
     Spree::CompanyStore.joins(:supplier)
       .where('spree_suppliers.id = ?', supplier_id)
   end
 
   def markup
-    Spree::Markup.where(supplier: original_supplier).first
+    Spree::Markup.find_by(supplier: original_supplier, company_store: company_store)
   end
 
   def wearable?

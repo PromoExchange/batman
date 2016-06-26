@@ -7,8 +7,8 @@ FactoryGirl.define do
     after(:create) do |product|
       create_list(:color_product, 5, product: product)
       product.imprint_methods << FactoryGirl.create(:imprint_method)
-      company_store = FactoryGirl.create(:company_store, supplier: product.original_supplier)
-      create(:markup, supplier: product.original_supplier, company_store: company_store)
+      company_store = FactoryGirl.create(:company_store, supplier: product.supplier)
+      create(:markup, supplier_id: product.original_supplier_id, company_store_id: company_store.id)
 
       price_code = '3V'
       i = 0
@@ -40,9 +40,7 @@ FactoryGirl.define do
 
     trait :with_eqp do
       after(:create) do |product|
-        company_store = FactoryGirl.create(:company_store, supplier: product.original_supplier)
-        Spree::Markup.destroy_all
-        create(:markup, :eqp_discount, supplier: product.original_supplier, company_store: company_store)
+        product.markup.update_attributes(eqp_discount: 0.20)
       end
     end
   end

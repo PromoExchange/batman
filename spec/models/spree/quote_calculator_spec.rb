@@ -27,19 +27,9 @@ RSpec.describe Spree::Quote, type: :model do
   end
 
   xit 'should apply a pms_color_match upcharge' do
-    auction_data[:flags] = {
-      pms_color_match: true,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
-
+    quote.apply_supplier_upcharges
     prebid.send(:apply_supplier_upcharges, auction_data)
-    expect((100.3 - auction_data[:running_unit_price]).abs).to be < 0.0001
+    expect((quote.unit_price.to_f - 20.792).abs).to be < 0.0001
   end
 
   xit 'should apply a pms_color_match and change_ink upcharge' do

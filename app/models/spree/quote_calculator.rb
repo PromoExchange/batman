@@ -17,6 +17,7 @@ module Spree::QuoteCalculator
       apply_eqp
     else
       self.unit_price = product.unit_price(quantity)
+      apply_price_discount
     end
     log("Unit price: #{unit_price}")
 

@@ -19,6 +19,13 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.unit_price.to_f - 16.6336).abs).to be < 0.0001
   end
 
+  it 'should apply pricing discount' do
+    quote = FactoryGirl.create(:quote)
+    quote.unit_price = quote.product.unit_price(quote.quantity)
+    quote.apply_price_discount
+    expect((quote.unit_price.to_f - 20.792).abs).to be < 0.0001
+  end
+
   xit 'should apply a pms_color_match upcharge' do
     auction_data[:flags] = {
       pms_color_match: true,

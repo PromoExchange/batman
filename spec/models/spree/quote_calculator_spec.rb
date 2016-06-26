@@ -14,9 +14,9 @@ RSpec.describe Spree::Quote, type: :model do
   end
 
   it 'should apply EQP discount' do
-    quote.unit_price = 100
+    quote = FactoryGirl.create(:quote, product: FactoryGirl.create(:px_product, :with_eqp))
     quote.apply_eqp
-    expect(quote.unit_price).to eq 75.00
+    expect((quote.unit_price.to_f - 16.6336).abs).to be < 0.0001
   end
 
   xit 'should apply a pms_color_match upcharge' do

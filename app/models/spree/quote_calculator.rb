@@ -25,28 +25,27 @@ module Spree::QuoteCalculator
   end
 
   def apply_eqp
-    binding.pry
-    if markup.eqp?
-      eqp_price = product.eqp_price
-      log('Using EQP')
-      log("EQP Price (base): #{eqp_price}")
-      log("EQP Price code: #{product.price_code(quantity)}")
+    return unless markup.eqp?
 
-      price_codes = Spree::Price.price_code_to_array(product.price_code)
-      log("EQP Applicable Price code: #{price_codes.last}")
+    eqp_price = product.eqp_price
+    log('Using EQP')
+    log("EQP Price (base): #{eqp_price}")
+    log("EQP Price code: #{product.price_code(quantity)}")
 
-      eqp_price = Spree::Price.discount_price(price_codes.last, eqp_price)
-      log("EQP Discounted Price (price_code): #{eqp_price}")
+    price_codes = Spree::Price.price_code_to_array(product.price_code)
+    log("EQP Applicable Price code: #{price_codes.last}")
 
-      discount = eqp_discount
-      discount ||= 0.0
-      log("EQP Discount: #{discount}")
+    eqp_price = Spree::Price.discount_price(price_codes.last, eqp_price)
+    log("EQP Discounted Price (price_code): #{eqp_price}")
 
-      discount_eqp_price = eqp_price * (1 - discount)
-      log("EQP Price (discounted percentage): #{discount_eqp_price}")
+    discount = markup.eqp_discount
+    discount ||= 0.0
+    log("EQP Discount: #{discount}")
 
-      self.unit_price = discount_eqp_price
-    end
+    discount_eqp_price = eqp_price * (1 - discount)
+    log("EQP Price (discounted percentage): #{discount_eqp_price}")
+
+    self.unit_price = discount_eqp_price
   end
 
   def apply_price_discount(price_code = nil)

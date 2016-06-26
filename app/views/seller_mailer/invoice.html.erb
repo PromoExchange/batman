@@ -38,3 +38,5 @@
     </tr>
   </tbody>
 </table>
+
+<p>PX Fee: <%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %></p>

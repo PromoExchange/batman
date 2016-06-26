@@ -1,6 +1,6 @@
 class BuyerMailer < ApplicationMailer
   def invoice(auction)
-    @uauction = auction
+    @auction = auction
     mail(to: @auction.buyer.email, subject: 'Invoice for PromoExchange Purchase')
   end
 

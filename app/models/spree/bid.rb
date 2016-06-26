@@ -56,15 +56,11 @@ class Spree::Bid < Spree::Base
   end
 
   def create_payment(token)
-    description = "Auction ID: #{auction.reference}, Buyer: #{auction.buyer.email}"
-    customer_token = token ? token : auction.customer.token
-    amount = bid.round(2) * 100
-
     stripe = Stripe::Charge.create(
-      amount: amount.to_i,
+      amount: (bid.round(2) * 100).to_i,
       currency: 'usd',
-      customer: customer_token,
-      description: description
+      customer: (token ? token : auction.customer.token),
+      description: "Auction ID: #{auction.reference}, Buyer: #{auction.buyer.email}"
     )
     if %w(succeeded pending).include?(stripe.status)
       auction_payments.create(

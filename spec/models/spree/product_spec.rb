@@ -39,4 +39,33 @@ RSpec.describe Spree::Product, type: :model do
     p = FactoryGirl.build(:product)
     expect(p.price_code).to eq 'V'
   end
+
+  it 'should have a valid carton' do
+    product = FactoryGirl.build(:px_product)
+    expect(product.carton.active?).to be_truthy
+  end
+
+  it 'should save a valid px_product' do
+    product = FactoryGirl.build(:px_product)
+    expect(product.save).to be_truthy
+  end
+
+  it 'should save a valid px_product with upcharges' do
+    product = FactoryGirl.create(:px_product, :with_upcharges)
+    expect(product.save).to be_truthy
+    product2 = Spree::Product.find(product.id)
+    expect(product2.upcharges.count).to eq 5
+  end
+
+  it 'should save a valid px_product with main_colors' do
+    product = FactoryGirl.create(:px_product)
+    expect(product.save).to be_truthy
+    product2 = Spree::Product.find(product.id)
+    expect(product2.color_product.count).to eq 5
+  end
+
+  it 'should have a valid company store' do
+    product = FactoryGirl.create(:px_product)
+    expect(product.company_store).not_to be_nil
+  end
 end

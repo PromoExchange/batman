@@ -3,14 +3,20 @@ require 'rails_helper'
 RSpec.describe Spree::Quote, type: :model do
   let(:quote) { FactoryGirl.create(:quote) }
 
-  xit 'should apply price discount' do
+  it 'should apply price discount' do
     discount = 0.50
     ('A'..'K').each do |letter|
-      quote.fields[:running_unit_price] = 100
-      quote.send(:apply_price_discount, letter)
-      expect(((discount * 100) - quote.fields[:running_unit_price]).abs).to be < 0.0001
+      quote.unit_price = 100
+      quote.apply_price_discount(letter)
+      expect(((discount * 100) - quote.unit_price).abs).to be < 0.0001
       discount += 0.05
     end
+  end
+
+  it 'should apply EQP discount' do
+    quote.unit_price = 100
+    quote.apply_eqp
+    expect(quote.unit_price).to eq 75.00
   end
 
   xit 'should apply a pms_color_match upcharge' do

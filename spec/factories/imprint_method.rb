@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :imprint_method, class: Spree::ImprintMethod do
-    name 'Imprint'
+    name Faker::Lorem.word
   end
 end

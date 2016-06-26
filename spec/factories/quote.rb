@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :quote, class: Spree::Quote do
-    product
+    association :product, factory: :px_product
     quantity 1111
     imprint_method
     association :shipping_address, factory: :address

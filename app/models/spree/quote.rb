@@ -9,6 +9,8 @@ class Spree::Quote < Spree::Base
   # Assumes products are not shared across company stores
   belongs_to :product
 
+  attr_reader :messages
+
   validates :main_color, presence: true
   validates :product, presence: true
   validates :shipping_address, presence: true
@@ -21,7 +23,8 @@ class Spree::Quote < Spree::Base
     end)
   }
 
-  attr_reader :messages
+  delegate :company_store, to: :product
+  delegate :markup, to: :product
 
   def total_price(options = {})
     options.reverse_merge!(
@@ -51,7 +54,7 @@ class Spree::Quote < Spree::Base
   private
 
   def best_price(_options = {})
-    100.00
+    calculate(options)
   end
 
   after_find do |_quote|

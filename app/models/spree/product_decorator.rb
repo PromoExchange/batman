@@ -9,11 +9,13 @@ Spree::Product.class_eval do
   belongs_to :original_supplier, class_name: 'Spree::Supplier', inverse_of: :products
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
-  has_many :imprint_methods, through: :imprint_methods_products
+  has_many :imprint_methods, through: :imprint_methods_products, inverse_of: :products
 
   has_many :price_caches
 
   has_many :quotes
+
+  accepts_nested_attributes_for :upcharges, :imprint_methods_products
 
   state_machine initial: :active do
     after_transition on: :invalid, do: :unavailable
@@ -34,6 +36,16 @@ Spree::Product.class_eval do
     event :deleted do
       transition active: :deleted
     end
+  end
+
+  def company_store
+    return nil if original_supplier.nil?
+    Spree::CompanyStore.joins(:supplier)
+      .where('spree_suppliers.id = ?', supplier_id)
+  end
+
+  def markup
+    Spree::Markup.where(supplier: original_supplier).first
   end
 
   def wearable?

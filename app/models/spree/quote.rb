@@ -1,6 +1,8 @@
 class Spree::Quote < Spree::Base
   include QuoteCalculator
 
+  after_create :generate_reference
+
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
   belongs_to :shipping_address, class_name: 'Spree::Address'
   belongs_to :imprint_method
@@ -13,6 +15,7 @@ class Spree::Quote < Spree::Base
 
   validates :main_color, presence: true
   validates :product, presence: true
+  validates :reference, presence: true
   validates :shipping_address, presence: true
   validates :imprint_method, presence: true
   validates :quantity, presence: true, numericality: {
@@ -55,6 +58,15 @@ class Spree::Quote < Spree::Base
 
   def best_price(_options = {})
     calculate(options)
+  end
+
+  def generate_reference
+    update_column :reference, SecureRandom.hex(3).upcase
+  rescue ActiveRecord::RecordNotUnique => e
+    @reference_attempts ||= 0
+    @reference_attempts += 1
+    retry if @reference_attempts < 5
+    raise e, 'Retries exhausted'
   end
 
   after_find do |_quote|

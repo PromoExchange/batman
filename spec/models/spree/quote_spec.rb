@@ -26,6 +26,11 @@ RSpec.describe Spree::Quote, type: :model do
     expect(quote.save).to be_falsey
   end
 
+  it 'should not save with a nil reference' do
+    quote = FactoryGirl.build(:quote, reference: nil)
+    expect(quote.save).to be_falsey
+  end
+
   it 'should save with a valid quote' do
     quote = FactoryGirl.build(:quote)
     expect(quote.save).to be_truthy

@@ -150,7 +150,7 @@ CSV.parse(S3_CS_BUCKET.objects['facebook/data/products.csv'].read, headers: true
 end
 
 # UPCHARGES
-puts 'Loading Facebook preconfigures'
+puts 'Loading Facebook upcharges'
 CSV.parse(S3_CS_BUCKET.objects['facebook/data/upcharges.csv'].read, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
   product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first

@@ -134,4 +134,14 @@ namespace :company_store do
     assign_original_supplier([{ query: { name: 'Yeti' }, skus: ['PC-YRAM20'] }])
     create_price_cache(company_store.supplier)
   end
+
+  desc 'Create Facebook company store'
+  task pimco: :environment do
+    store_name = 'Facebook Company Store'
+    slug = 'facebook'
+    company_store = create_company_store('facebook_cs@thepromoexchange.com', store_name, 'Facebook', slug)
+    load_products(slug, store_name)
+    assign_original_supplier([{ query: { name: 'Brunswick' }, skus: ['FB-BRU181'] }])
+    create_price_cache(company_store.supplier)
+  end
 end

@@ -38,8 +38,6 @@ default_attrs = {
   available_on: Time.zone.now + 100.years
 }
 
-file_name = File.join(Rails.root, 'db/company_store_data/netmining.csv')
-
 load_fail = 0
 image_fail = 0
 count = 0
@@ -68,9 +66,8 @@ CSV.parse(S3_CS_BUCKET.objects['netmining/data/netmining.csv'].read, headers: tr
     # Image
     if Rails.configuration.x.load_images
       begin
-        image_path = File.join(Rails.root, "db/product_images/netmining/#{product_attrs[:sku]}.jpg")
         product.images << Spree::Image.create!(
-          attachment: open(image_path),
+          attachment: open(S3_CS_BUCKET.objects["netmining/data/product_images/#{product_attrs[:sku]}.jpg"].public_url),
           viewable: product
         )
       rescue => e

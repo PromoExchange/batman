@@ -51,9 +51,8 @@ CSV.parse(S3_CS_BUCKET.objects['hightail/data/hightail.csv'].read, headers: true
     # Image
     if Rails.configuration.x.load_images
       begin
-        image_path = File.join(Rails.root, "db/product_images/hightail/#{product_attrs[:sku]}.jpg")
         product.images << Spree::Image.create!(
-          attachment: open(image_path),
+          attachment: open(S3_CS_BUCKET.objects["hightail/data/product_images/#{product_attrs[:sku]}.jpg"].public_url),
           viewable: product
         )
       rescue => e

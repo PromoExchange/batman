@@ -89,9 +89,8 @@ CSV.parse(S3_CS_BUCKET.objects['anchorfree/data/anchorfree.csv'].read, headers: 
     # Image
     if Rails.configuration.x.load_images
       begin
-        image_path = File.join(Rails.root, "db/product_images/anchorfree/#{product_attrs[:sku]}.jpg")
         product.images << Spree::Image.create!(
-          attachment: open(image_path),
+          attachment: open(S3_CS_BUCKET.objects["anchorfree/data/product_images/#{product_attrs[:sku]}.jpg"].public_url),
           viewable: product
         )
       rescue => e

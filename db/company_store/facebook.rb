@@ -1,21 +1,12 @@
 require 'csv'
 require 'open-uri'
 
-puts 'Loading Netmining custom'
+puts 'Loading Facebook custom'
 
-store_name = 'Netmining Company Store'
+store_name = 'Facebook Company Store'
 
 supplier = Spree::Supplier.where(name: store_name).first
-
 fail 'Unable to find supplier' if supplier.nil?
-
-# PMS by Imprint
-imprints = [
-  'Embroidery',
-  'Screen Print',
-  'Pad Print',
-  'Deboss',
-]
 
 # Clean up
 Spree::Product.where(supplier: supplier).each do |product|
@@ -38,14 +29,12 @@ default_attrs = {
   available_on: Time.zone.now + 100.years
 }
 
-file_name = File.join(Rails.root, 'db/company_store_data/netmining.csv')
-
 load_fail = 0
 image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 
-CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
+CSV.parse(S3_CS_BUCKET.objects['facebook/data/products.csv'].read, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   count += 1
@@ -68,9 +57,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     # Image
     if Rails.configuration.x.load_images
       begin
-        image_path = File.join(Rails.root, "db/product_images/netmining/#{product_attrs[:sku]}.jpg")
         product.images << Spree::Image.create!(
-          attachment: open(image_path),
+          attachment: open(S3_CS_BUCKET.objects["facebook/data/product_images/#{product_attrs[:sku]}.jpg"].public_url),
           viewable: product
         )
       rescue => e
@@ -116,14 +104,8 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
     # Imprint method
     imprint = hashed[:imprint_method]
     case imprint
-    when 'embroidery'
-      imprint_method = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
-    when 'screen_print'
-      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-    when 'pad_print'
-      imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
-    when 'deboss'
-      imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+    when 'etching'
+      imprint_method = Spree::ImprintMethod.where(name: 'Etching').first_or_create
     else
       puts "Unknown Method - #{imprint}"
     end
@@ -165,4 +147,59 @@ CSV.foreach(file_name, headers: true, header_converters: :symbol) do |row|
   ensure
     ActiveRecord::Base.clear_active_connections!
   end
+end
+
+# UPCHARGES
+puts 'Loading Facebook preconfigures'
+CSV.parse(S3_CS_BUCKET.objects['facebook/data/upcharges.csv'].read, headers: true, header_converters: :symbol) do |row|
+  hashed = row.to_hash
+  product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
+  product.loading!
+
+  fail "Failed to find product #{hashed[:sku]}" if product.nil?
+
+  case hashed[:imprint_method]
+  when 'etching'
+    imprint_method = Spree::ImprintMethod.where(name: 'Etching').first_or_create
+  else
+    puts "Unknown Method - #{imprint}"
+  end
+
+  Spree::UpchargeProduct.where(
+    upcharge_type_id: Spree::UpchargeType.where(name: hashed[:type]).first_or_create.id,
+    related_id: product.id,
+    actual: hashed[:type].titleize,
+    price_code: hashed[:code],
+    imprint_method_id: imprint_method.id,
+    value: hashed[:value],
+    range: hashed[:range]
+  ).first_or_create
+
+  product.check_validity!
+  product.loaded! if product.state == 'loading'
+end
+
+# PRECONFIGURE
+puts 'Loading Facebook preconfigures'
+CSV.parse(S3_CS_BUCKET.objects['facebook/data/preconfigure.csv'].read, headers: true, header_converters: :symbol) do |row|
+  hashed = row.to_hash
+
+  product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
+  buyer = Spree::User.where(email: 'facebook_cs@thepromoexchange.com').first
+  fail 'Unable to locate Facebok user' if buyer.nil?
+
+  case hashed[:imprint_method]
+  when 'etching'
+    imprint_method = Spree::ImprintMethod.where(name: 'Etching').first_or_create
+  else
+    puts "Unknown Imprint Method - #{imprint}"
+  end
+
+  Spree::Preconfigure.where(
+    product: product,
+    buyer: buyer,
+    imprint_method: imprint_method,
+    main_color: Spree::ColorProduct.where(product: product, color: hashed[:color]).first_or_create,
+    logo: buyer.logos.where(custom: true).first
+  ).first_or_create
 end

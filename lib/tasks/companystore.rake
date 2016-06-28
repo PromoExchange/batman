@@ -23,8 +23,7 @@ end
 
 def assign_original_supplier(config)
   config.each do |supplier_data|
-    supplier = Spree::Supplier.where(supplier_data[:query]).first
-    raise "failed to find Supplier: #{supplier_data[:query]}" if supplier.nil?
+    supplier = Spree::Supplier.where(supplier_data[:query]).first_or_create
 
     supplier_data[:skus].each do |product_sku|
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{product_sku}'").first
@@ -129,6 +128,16 @@ namespace :company_store do
     company_store = create_company_store('pimco_cs@thepromoexchange.com', store_name, 'PIMCO', slug)
     load_products(slug, store_name)
     assign_original_supplier([{ query: { name: 'Yeti' }, skus: ['PC-YRAM20'] }])
+    create_price_cache(company_store.supplier)
+  end
+
+  desc 'Create Facebook company store'
+  task facebook: :environment do
+    store_name = 'Facebook Company Store'
+    slug = 'facebook'
+    company_store = create_company_store('facebook_cs@thepromoexchange.com', store_name, 'Facebook', slug)
+    load_products(slug, store_name)
+    assign_original_supplier([{ query: { name: 'Brunswick' }, skus: ['FB-BRU181'] }])
     create_price_cache(company_store.supplier)
   end
 end

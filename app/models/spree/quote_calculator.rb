@@ -17,9 +17,15 @@ module Spree::QuoteCalculator
       apply_eqp
     else
       self.unit_price = product.unit_price(quantity)
+      log("Base Unit price: #{unit_price}")
       apply_price_discount
     end
     log("Unit price: #{unit_price}")
+    log("Item Count: #{quantity}")
+
+    apply_product_upcharges
+
+    log("Number of imprint colors: #{auction_data[:num_colors]}")
 
   rescue StandardError => e
     Rails.logger.error(e.to_s)
@@ -53,5 +59,8 @@ module Spree::QuoteCalculator
     price_code ||= product.price_code(quantity)
     self.unit_price =
       Spree::Price.discount_price(price_code, unit_price)
+  end
+
+  def apply_product_upcharges
   end
 end

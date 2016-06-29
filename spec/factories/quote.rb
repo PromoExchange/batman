@@ -7,9 +7,10 @@ FactoryGirl.define do
     association :main_color, factory: :color_product
     custom_pms_colors '116C, 115B'
     unit_price 0.0
-    reference SecureRandom.hex(3)
+    # reference SecureRandom.hex(3)
     after(:create) do |quote|
       create_list(:shipping_option, 5, :ups_ground, quote: quote)
     end
+    workbook ''
   end
 end

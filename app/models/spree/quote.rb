@@ -15,7 +15,6 @@ class Spree::Quote < Spree::Base
 
   validates :main_color, presence: true
   validates :product, presence: true
-  validates :reference, presence: true
   validates :shipping_address, presence: true
   validates :imprint_method, presence: true
   validates :quantity, presence: true, numericality: {
@@ -70,10 +69,11 @@ class Spree::Quote < Spree::Base
   end
 
   after_find do |_quote|
-    @messages = JSON.parse(workbook).to_a
+    @messages = []
+    @messages = JSON.parse(workbook).to_a unless workbook.blank?
   end
 
   before_save do |_quote|
-    self.workbook = @messages.to_json
+    self.workbook = @messages.to_json unless @messages.nil?
   end
 end

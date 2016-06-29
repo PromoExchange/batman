@@ -26,11 +26,6 @@ RSpec.describe Spree::Quote, type: :model do
     expect(quote.save).to be_falsey
   end
 
-  it 'should not save with a nil reference' do
-    quote = FactoryGirl.build(:quote, reference: nil)
-    expect(quote.save).to be_falsey
-  end
-
   it 'should save with a valid quote' do
     quote = FactoryGirl.build(:quote)
     expect(quote.save).to be_truthy
@@ -88,5 +83,11 @@ RSpec.describe Spree::Quote, type: :model do
   it 'should return num of colors' do
     quote = FactoryGirl.build(:quote)
     expect(quote.num_colors).to eq 2
+  end
+
+  it 'should generate a reference' do
+    quote = FactoryGirl.create(:quote, reference: nil)
+    quote2 = Spree::Quote.find(quote.id)
+    expect(quote2.reference).not_to be_empty
   end
 end

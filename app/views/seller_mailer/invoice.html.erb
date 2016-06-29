@@ -1,0 +1,44 @@
+<h2>Sales Receipt: <%= @auction.reference %></h2>
+<p>Date: <%= @auction.ended.strftime('%m/%d/%Y') %></p>
+
+
+<h4>Bill To:</h4>
+<ul style='list-style: none;'>
+  <li><%= @auction.shipping_address.company %></li>
+  <li><%= @auction.shipping_address.address1 %></li>
+  <li><%= @auction.shipping_address.address2 %></li>
+  <li>
+    <%= @auction.shipping_address.city %>,
+    <%= @auction.shipping_address.state_text %>,
+    <%= @auction.shipping_address.zipcode %>
+  </li>
+</ul>
+
+
+<% if @auction.winning_bid.auction_payments.size > 0 %>
+  <h4>Payment Method:</h4>
+  <p>Credit Card: <%= @auction.winning_bid.auction_payments.first.credit_card.display_number %></p>
+<% end %>
+
+
+<h4>Order:</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @auction.product.name %></td>
+      <td><%= render partial: '/spree/shared/auction_size_detail', locals: { auction: @auction } %></td>
+      <td><%= @auction.winning_bid.bid %></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>PX Fee: <%= ((@auction.winning_bid.seller_fee / (1 - 0.029)) + 0.30).round(2) %></p>
+
+<p>Please contact support@thepromoexchange.com immediately if you cannot fulfill this order</p>

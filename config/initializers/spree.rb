@@ -21,7 +21,6 @@ Spree.config do |config|
 end
 
 Spree::Auth::Config.set(signout_after_password_change: true)
-Spree::Auth::Config[:confirmable] = true
 
 Spree.user_class = 'Spree::User'
 

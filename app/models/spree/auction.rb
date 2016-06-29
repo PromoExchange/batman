@@ -69,16 +69,6 @@ class Spree::Auction < Spree::Base
   #   custom_auction
 
   state_machine initial: :open do
-    after_transition on: :confirm_order, do: :notification_for_in_production
-    after_transition on: :delivered, do: :notification_for_product_delivered
-    after_transition on: :delivery_confirmed, do: :notification_for_confirm_received
-    after_transition on: :reject_proof, do: :notification_for_reject_proof
-    after_transition on: :approve_proof, do: :notification_for_approve_proof
-    after_transition on: :upload_proof, do: :notification_for_upload_proof
-    after_transition on: :cancel, do: :remove_request_idea
-    after_transition on: :delivery_confirmed, do: :rating_reminder
-    after_transition on: :no_confirm_late, do: :refund_payment
-
     # TODO: When auction created, schedule job to end it
     event :end do
       transition open: :ended
@@ -251,6 +241,10 @@ class Spree::Auction < Spree::Base
     ups.find_tracking_info(tracking_number, test: true)
   end
 
+  def tracking_link
+    "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=#{tracking_number}"
+  end
+
   def auction_sizes
     %w(S M L XL 2XL)
   end
@@ -345,98 +339,6 @@ class Spree::Auction < Spree::Base
   end
 
   private
-
-  def notification_for_in_production
-    Resque.enqueue(
-      InProduction,
-      auction_id: id
-    )
-    return if clone_id
-    return if winning_bid.manage_workflow
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.now + 48.hours),
-      SellerFailedUploadProof,
-      auction_id: id
-    )
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.now + 48.hours),
-      ProofNeededImmediately,
-      auction_id: id
-    )
-  end
-
-  def notification_for_product_delivered
-    Resque.enqueue(
-      ProductDelivered,
-      auction_id: id
-    )
-    return if winning_bid.manage_workflow
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.now + 3.days),
-      ConfirmReceiptReminder,
-      auction_id: id
-    )
-  end
-
-  def notification_for_confirm_received
-    Resque.enqueue(
-      ConfirmReceived,
-      auction_id: id
-    )
-  end
-
-  def notification_for_reject_proof
-    Resque.enqueue(
-      RejectProof,
-      auction_id: id
-    )
-    return if winning_bid.manage_workflow
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.now + 48.hours),
-      SellerFailedUploadProof,
-      auction_id: id
-    )
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.now + 48.hours),
-      ProofNeededImmediately,
-      auction_id: id
-    )
-  end
-
-  def notification_for_approve_proof
-    Resque.enqueue(
-      ApproveProof,
-      auction_id: id
-    )
-    return if winning_bid.manage_workflow
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.now + 15.days),
-      TrackingReminder,
-      auction_id: id
-    )
-  end
-
-  def notification_for_upload_proof
-    Resque.enqueue(
-      UploadProof,
-      auction_id: id
-    )
-    return if winning_bid.manage_workflow
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.now + 24.hours),
-      ProofAvailable,
-      auction_id: id
-    )
-  end
-
-  def rating_reminder
-    return if winning_bid.manage_workflow
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.now + 3.days),
-      RatingReminder,
-      auction_id: id
-    )
-  end
 
   def generate_reference
     update_column :reference, SecureRandom.hex(3).upcase

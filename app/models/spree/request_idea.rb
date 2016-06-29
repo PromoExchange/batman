@@ -11,8 +11,6 @@ class Spree::RequestIdea < Spree::Base
   scope :with_states, -> { where(state: %w(open complete)) }
 
   state_machine initial: :open do
-    after_transition on: :request_sample, do: :notification_for_sample_request
-
     event :request_sample do
       transition open: :complete
     end
@@ -24,10 +22,6 @@ class Spree::RequestIdea < Spree::Base
     event :auction_close do
       transition [:open, :cancelled, :complete] => :closed
     end
-  end
-
-  def notification_for_sample_request
-    Resque.enqueue(SampleRequest, request_idea_id: id)
   end
 
   def image_uri

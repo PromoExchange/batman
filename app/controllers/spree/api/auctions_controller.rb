@@ -99,19 +99,6 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :internal_server_error
   end
 
-  def reject_order
-    @auction.order_rejected!
-    params[:rejection_reason] = '' if params[:rejection_reason].blank?
-    Resque.enqueue(
-      RejectOrder,
-      auction_id: params[:id],
-      rejection_reason: params[:rejection_reason]
-    )
-    render nothing: true, status: :ok
-  rescue
-    render nothing: true, status: :internal_server_error
-  end
-
   def resolve_dispute
     @auction.dispute_resolved!
     render nothing: true, status: :ok
@@ -164,22 +151,6 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
     render nothing: true, status: :internal_server_error
   end
 
-  def claim_payment
-    Resque.enqueue(
-      ClaimPaymentRequest,
-      auction_id: @auction.id,
-      payment_type: params['payment_type'],
-      bank_name: params['bank_name'],
-      bank_branch: params['bank_branch'],
-      bank_routing: params['bank_routing'],
-      bank_acct_number: params['bank_acct_number']
-    )
-    @auction.update_attributes(payment_claimed: true)
-    render nothing: true, status: :ok
-  rescue
-    render nothing: true, status: :internal_server_error
-  end
-
   def tracking
     if params[:tracking_number].present?
       @auction.update_attributes(
@@ -198,20 +169,6 @@ class Spree::Api::AuctionsController < Spree::Api::BaseController
   def confirmed_delivery
     @auction.delivery_confirmed! if @auction.confirm_receipt? || @auction.send_for_delivery?
 
-    if params[:status][:status] == 'submit'
-      @review = Spree::Review.new(
-        rating: params[:rating],
-        auction_id: @auction.id,
-        user_id: @auction.winning_bid.seller.id,
-        review: params[:review],
-        ip_address: request.remote_ip
-      )
-      if @review.save
-        Resque.enqueue(ReviewRating, auction_id: @auction.id)
-      else
-        flash[:error] = @review.errors.first[1]
-      end
-    end
     render nothing: true, status: :ok
   rescue
     render nothing: true, status: :internal_server_error

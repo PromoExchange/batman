@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160626202043) do
+ActiveRecord::Schema.define(version: 20160629021819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -610,10 +610,11 @@ ActiveRecord::Schema.define(version: 20160626202043) do
   add_index "spree_payments", ["source_id", "source_type"], name: "index_spree_payments_on_source_id_and_source_type", using: :btree
 
   create_table "spree_pms_colors", force: :cascade do |t|
-    t.string "name",         null: false
-    t.string "pantone"
-    t.string "hex"
-    t.string "display_name"
+    t.string  "name",                         null: false
+    t.string  "pantone"
+    t.string  "hex"
+    t.string  "display_name"
+    t.boolean "custom",       default: false
   end
 
   create_table "spree_pms_colors_suppliers", force: :cascade do |t|

@@ -7,6 +7,7 @@ class Spree::Quote < Spree::Base
   belongs_to :shipping_address, class_name: 'Spree::Address'
   belongs_to :imprint_method
   has_many :shipping_options, dependent: :destroy
+  has_many :pms_colors
 
   # Assumes products are not shared across company stores
   belongs_to :product

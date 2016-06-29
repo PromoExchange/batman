@@ -56,6 +56,11 @@ RSpec.describe Spree::Quote, type: :model do
     expect(t.macro).to eq :has_many
   end
 
+  it 'should have many pms_colors' do
+    t = Spree::Quote.reflect_on_association(:pms_colors)
+    expect(t.macro).to eq :has_many
+  end
+
   it 'should delete shipping_options' do
     quote_with_shipping = FactoryGirl.create(:quote)
     expect { quote_with_shipping.destroy }.to change { Spree::ShippingOption.count }.by(-5)

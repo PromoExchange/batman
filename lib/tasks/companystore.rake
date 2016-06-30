@@ -140,4 +140,30 @@ namespace :company_store do
     assign_original_supplier([{ query: { name: 'Brunswick' }, skus: ['FB-BRU181'] }])
     create_price_cache(company_store.supplier)
   end
+
+  desc 'Create Pavia company store'
+  task pavia: :environment do
+    store_name = 'Pavia Company Store'
+    slug = 'pavia'
+    company_store = create_company_store('lindsay.bertsch@paviasystems.com', store_name, 'Pavia', slug)
+    load_products(slug, store_name)
+    assign_original_supplier(
+      [
+        { query: { dc_acct_num: '100257' }, skus: ['PA-40060'] },
+        { query: { dc_acct_num: '100108' }, skus: ['PA-5117'] },
+        { query: { name: 'Pinnacle' }, skus: ['PA-SM-4125'] },
+        {
+          query: { dc_acct_num: '100306' },
+          skus: ['PA-7120-18', 'PA-7199-32', 'PA-1621-11', 'PA-7199-60', 'PA-9350-22']
+        },
+        { query: { dc_acct_num: '100160' }, skus: ['PA-3250-99'] },
+        { query: { name: 'Deluxe' }, skus: ['PA-SM-9734'] },
+        { query: { name: 'Magnetic Attractions' }, skus: ['PA-ARI251'] },
+        { query: { name: 'Imprint Items' }, skus: ['PA-JK-7000'] },
+        { query: { name: 'Leader' }, skus: ['PA-98070'] },
+        { query: { name: 'Columbia' }, skus: ['PA-6223'] }
+      ]
+    )
+    create_price_cache(company_store.supplier)
+  end
 end

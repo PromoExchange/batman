@@ -1,21 +1,10 @@
 require 'csv'
 require 'open-uri'
 
-puts 'Loading Netmining custom'
-
-store_name = 'Netmining Company Store'
-
+puts 'Loading Pavia custom'
+store_name = 'Pavia Company Store'
 supplier = Spree::Supplier.where(name: store_name).first
-
 fail 'Unable to find supplier' if supplier.nil?
-
-# PMS by Imprint
-imprints = [
-  'Embroidery',
-  'Screen Print',
-  'Pad Print',
-  'Deboss',
-]
 
 # Clean up
 Spree::Product.where(supplier: supplier).each do |product|
@@ -43,7 +32,7 @@ image_fail = 0
 count = 0
 beginning_time = Time.zone.now
 
-CSV.parse(S3_CS_BUCKET.objects['netmining/data/netmining.csv'].read, headers: true, header_converters: :symbol) do |row|
+CSV.parse(S3_CS_BUCKET.objects['pavia/data/products.csv'].read, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   count += 1
@@ -55,19 +44,19 @@ CSV.parse(S3_CS_BUCKET.objects['netmining/data/netmining.csv'].read, headers: tr
       name: hashed[:item_name],
       description: hashed[:product_description],
       price: 1.0,
+      production_time: hashed[:production_time],
       supplier_id: supplier.id,
       custom_product: true
     }
 
     product = Spree::Product.create!(default_attrs.merge(product_attrs))
-
     product.loading!
 
     # Image
     if Rails.configuration.x.load_images
       begin
         product.images << Spree::Image.create!(
-          attachment: open(S3_CS_BUCKET.objects["netmining/data/product_images/#{product_attrs[:sku]}.jpg"].public_url),
+          attachment: open(S3_CS_BUCKET.objects["pavia/data/product_images/#{product_attrs[:sku]}.jpg"].public_url),
           viewable: product
         )
       rescue => e
@@ -111,18 +100,21 @@ CSV.parse(S3_CS_BUCKET.objects['netmining/data/netmining.csv'].read, headers: tr
     end
 
     # Imprint method
-    imprint = hashed[:imprint_method]
-    case imprint
+    case hashed[:imprint_method]
     when 'embroidery'
       imprint_method = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
     when 'screen_print'
       imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-    when 'pad_print'
-      imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+    when 'laser_engraved'
+      imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraved').first_or_create
+    when 'laser_etched'
+      imprint_method = Spree::ImprintMethod.where(name: 'Laser Etched').first_or_create
+    when 'heat_transfer'
+      imprint_method = Spree::ImprintMethod.where(name: 'Heat Transfer').first_or_create
     when 'deboss'
       imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
     else
-      puts "Unknown Method - #{imprint}"
+      puts "Unknown Method - #{hashed[:imprint_method]}"
     end
 
     if imprint_method.present?
@@ -165,24 +157,29 @@ CSV.parse(S3_CS_BUCKET.objects['netmining/data/netmining.csv'].read, headers: tr
 end
 
 # UPCHARGES
-CSV.parse(S3_CS_BUCKET.objects['netmining/data/netmining_upcharges.csv'].read, headers: true, header_converters: :symbol) do |row|
+CSV.parse(S3_CS_BUCKET.objects['pavia/data/upcharges.csv'].read, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
   product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
   product.loading!
 
   fail "Failed to find product #{hashed[:sku]}" if product.nil?
 
+  # Imprint method
   case hashed[:imprint_method]
   when 'embroidery'
     imprint_method = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
   when 'screen_print'
     imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-  when 'pad_print'
-    imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+  when 'laser_engraved'
+    imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraved').first_or_create
+  when 'laser_etched'
+    imprint_method = Spree::ImprintMethod.where(name: 'Laser Etched').first_or_create
+  when 'heat_transfer'
+    imprint_method = Spree::ImprintMethod.where(name: 'Heat Transfer').first_or_create
   when 'deboss'
     imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
   else
-    puts "Unknown Method - #{imprint}"
+    puts "Unknown Method - #{hashed[:imprint_method]}"
   end
 
   Spree::UpchargeProduct.where(
@@ -200,26 +197,30 @@ CSV.parse(S3_CS_BUCKET.objects['netmining/data/netmining_upcharges.csv'].read, h
 end
 
 # PRECONFIGURE
-puts 'Loading Netmining preconfigures'
-
-CSV.parse(S3_CS_BUCKET.objects['netmining/data/netmining_preconfigure.csv'].read, headers: true, header_converters: :symbol) do |row|
+puts 'Loading Pavia preconfigures'
+CSV.parse(S3_CS_BUCKET.objects['pavia/data/preconfigure.csv'].read, headers: true, header_converters: :symbol) do |row|
   hashed = row.to_hash
 
   product = Spree::Product.joins(:master).where("spree_variants.sku='#{hashed[:sku]}'").first
-  buyer = Spree::User.where(email: 'amanda.witschger@netmining.com').first
-  fail 'Unable to locate Netmining user' if buyer.nil?
+  buyer = Spree::User.where(email: 'lindsay.bertsch@paviasystems.com').first
+  fail 'Unable to locate Pavia user' if buyer.nil?
 
+  # Imprint method
   case hashed[:imprint_method]
   when 'embroidery'
     imprint_method = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
   when 'screen_print'
     imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-  when 'pad_print'
-    imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+  when 'laser_engraved'
+    imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraved').first_or_create
+  when 'laser_etched'
+    imprint_method = Spree::ImprintMethod.where(name: 'Laser Etched').first_or_create
+  when 'heat_transfer'
+    imprint_method = Spree::ImprintMethod.where(name: 'Heat Transfer').first_or_create
   when 'deboss'
     imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
   else
-    puts "Unknown Imprint Method - #{imprint}"
+    puts "Unknown Method - #{hashed[:imprint_method]}"
   end
 
   Spree::Preconfigure.where(

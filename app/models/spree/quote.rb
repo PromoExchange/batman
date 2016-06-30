@@ -51,7 +51,9 @@ class Spree::Quote < Spree::Base
   end
 
   def num_colors
-    custom_pms_colors.split(',').count
+    standard_color_color = pms_colors.count
+    custom_color_count = custom_pms_colors.split(',').count
+    standard_color_color + custom_color_count
   end
 
   private

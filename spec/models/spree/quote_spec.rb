@@ -86,8 +86,8 @@ RSpec.describe Spree::Quote, type: :model do
   end
 
   it 'should return num of colors' do
-    quote = FactoryGirl.build(:quote)
-    expect(quote.num_colors).to eq 2
+    quote = FactoryGirl.create(:quote)
+    expect(quote.num_colors).to eq 4
   end
 
   it 'should generate a reference' do

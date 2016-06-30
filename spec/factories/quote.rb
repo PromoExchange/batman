@@ -12,5 +12,6 @@ FactoryGirl.define do
       create_list(:pms_color, 2, quote: quote)
     end
     workbook ''
+    selected_shipping_option Spree::ShippingOption::OPTION[:ups_ground]
   end
 end

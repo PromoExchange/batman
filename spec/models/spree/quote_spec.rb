@@ -21,6 +21,11 @@ RSpec.describe Spree::Quote, type: :model do
     expect(quote.save).to be_falsey
   end
 
+  it 'should not save with a nil selected_shipping_option' do
+    quote = FactoryGirl.build(:quote, selected_shipping_option: nil)
+    expect(quote.save).to be_falsey
+  end
+
   it 'should not save with a less than min quantity' do
     quote = FactoryGirl.build(:quote, quantity: 1)
     expect(quote.save).to be_falsey

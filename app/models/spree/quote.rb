@@ -12,10 +12,25 @@ class Spree::Quote < Spree::Base
   # Assumes products are not shared across company stores
   belongs_to :product
 
-  attr_reader :messages
+  attr_writer :messages
+  attr_writer :cache_expiration
+  attr_writer :write_log
+
+  def messages
+    @messages ||= []
+  end
+
+  def cache_expiration
+    @cache_expiration || 12
+  end
+
+  def write_log
+    @write_log || true
+  end
 
   validates :main_color, presence: true
   validates :product, presence: true
+  validates :selected_shipping_option, presence: true
   validates :shipping_address, presence: true
   validates :imprint_method, presence: true
   validates :quantity, presence: true, numericality: {
@@ -33,10 +48,7 @@ class Spree::Quote < Spree::Base
     options.reverse_merge!(
       shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
     )
-
-    # Cache the price
-    # TODO: Add expiration env/config
-    Rails.cache.fetch("#{cache_key}/total_price", expires_in: 12.hours) do
+    Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
       best_price(options)
     end
   end
@@ -46,8 +58,7 @@ class Spree::Quote < Spree::Base
   end
 
   def log(message)
-    @messages ||= []
-    @messages << message
+    messages << message if write_log == true
   end
 
   def num_colors
@@ -73,11 +84,10 @@ class Spree::Quote < Spree::Base
   end
 
   after_find do |_quote|
-    @messages = []
-    @messages = JSON.parse(workbook).to_a unless workbook.blank?
+    self.messages = JSON.parse(workbook).to_a unless workbook.blank?
   end
 
   before_save do |_quote|
-    self.workbook = @messages.to_json unless @messages.nil?
+    self.workbook = messages.to_json
   end
 end

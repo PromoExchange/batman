@@ -1,10 +1,14 @@
 module Spree::QuoteCalculator
+  include QuoteCalculatorUpcharge
+
   def calculate(options = {})
     [
       :selected_shipping
     ].each do |o|
       raise "Cannot calculate quote, missing required option [#{o}]" unless options.key?(o)
     end
+
+    binding.pry
 
     log('Quote: Calculating')
     log("Item name: #{auction.product.name}")
@@ -59,8 +63,5 @@ module Spree::QuoteCalculator
     price_code ||= product.price_code(quantity)
     self.unit_price =
       Spree::Price.discount_price(price_code, unit_price)
-  end
-
-  def apply_product_upcharges
   end
 end

@@ -59,6 +59,7 @@ class Spree::Quote < Spree::Base
   private
 
   def best_price(_options = {})
+    # @see module Spree::QuoteCalculator
     calculate(options)
   end
 

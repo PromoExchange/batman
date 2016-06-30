@@ -26,42 +26,17 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.unit_price.to_f - 20.792).abs).to be < 0.0001
   end
 
+  it 'should calculate quote' do
+    quote = FactoryGirl.create(:quote)
+    expect(quote.total_price).to be 100.00
+  end
+
   xit 'should apply product setup charge' do
-    auction_data[:flags] = {
-      pms_color_match: false,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
     auction_data[:product_upcharges] = [
       [1, 'setup', 'Setup Test', 'C', 50.00, nil]
     ]
-
     prebid.send(:apply_product_upcharges, auction_data)
     expect((100.3 - auction_data[:running_unit_price]).abs).to be < 0.0001
-  end
-
-  xit 'should apply product rush charge' do
-    auction_data[:flags] = {
-      pms_color_match: false,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
-    auction_data[:product_upcharges] = [
-      [1, 'rush', 'Rush Test', 'C', 100.00, nil]
-    ]
-
-    prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.6 - auction_data[:running_unit_price]).abs).to be < 0.0001
   end
 
   xit 'should apply additional location charge' do

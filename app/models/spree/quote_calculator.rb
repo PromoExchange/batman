@@ -3,12 +3,10 @@ module Spree::QuoteCalculator
 
   def calculate(options = {})
     [
-      :selected_shipping
+      :selected_shipping_option
     ].each do |o|
       raise "Cannot calculate quote, missing required option [#{o}]" unless options.key?(o)
     end
-
-    binding.pry
 
     log('Quote: Calculating')
     log("Item name: #{auction.product.name}")
@@ -31,6 +29,7 @@ module Spree::QuoteCalculator
 
     log("Number of imprint colors: #{auction_data[:num_colors]}")
 
+    100.00
   rescue StandardError => e
     Rails.logger.error(e.to_s)
   end

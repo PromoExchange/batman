@@ -46,7 +46,7 @@ class Spree::Quote < Spree::Base
 
   def total_price(options = {})
     options.reverse_merge!(
-      shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+      selected_shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
     )
     Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
       best_price(options)
@@ -54,7 +54,7 @@ class Spree::Quote < Spree::Base
   end
 
   def cache_key
-    "spree/quote/#{product.id}/#{quantity}/#{shipping_option.id}"
+    "spree/quote/#{product.id}/#{quantity}/#{selected_shipping_option}"
   end
 
   def log(message)
@@ -69,7 +69,7 @@ class Spree::Quote < Spree::Base
 
   private
 
-  def best_price(_options = {})
+  def best_price(options = {})
     # @see module Spree::QuoteCalculator
     calculate(options)
   end

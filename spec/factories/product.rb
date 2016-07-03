@@ -54,6 +54,32 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_additional_location_upcharge do
+      after(:create) do |product|
+        create(
+          :product_additional_location_upcharge,
+          range: '(25..99)',
+          value: '00.10',
+          related_id: product.id,
+          imprint_method_id: product.imprint_method.id
+        )
+        create(
+          :product_additional_location_upcharge,
+          range: '(100..199)',
+          value: '00.08',
+          related_id: product.id,
+          imprint_method_id: product.imprint_method.id
+        )
+        create(
+          :product_additional_location_upcharge,
+          range: '200+',
+          value: '00.05',
+          related_id: product.id,
+          imprint_method_id: product.imprint_method.id
+        )
+      end
+    end
+
     trait :with_eqp do
       after(:create) do |product|
         product.markup.update_attributes(eqp_discount: 0.20)

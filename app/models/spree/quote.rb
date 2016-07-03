@@ -14,6 +14,7 @@ class Spree::Quote < Spree::Base
   attr_writer :messages
   attr_writer :cache_expiration
   attr_writer :write_log
+  attr_writer :num_locations
 
   def messages
     @messages ||= []
@@ -25,6 +26,11 @@ class Spree::Quote < Spree::Base
 
   def write_log
     @write_log || true
+  end
+
+  def num_locations
+    # TODO: Move to product
+    @num_locations || 1
   end
 
   validates :main_color, presence: true

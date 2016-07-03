@@ -62,7 +62,7 @@ module Spree::QuoteCalculatorUpcharge
         log("After applying charge unit cost: #{self.unit_price}")
       when 'additional_location_run'
         next unless in_range
-        if auction_data[:num_locations] > 1
+        if num_locations > 1
           additional_location_charge = product_upcharge[4].to_f
           self.unit_price += Spree::Price.discount_price(price_code, additional_location_charge)
           log('Applying additional location charge')

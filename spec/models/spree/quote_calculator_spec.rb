@@ -42,168 +42,48 @@ RSpec.describe Spree::Quote, type: :model do
   end
 
   it 'should apply product setup charge' do
-    quote = FactoryGirl.create(:quote, :with_setup_upcharges)
-    expect((quote.total_price - 799.8).abs).to be < 0.001
+    quote2 = FactoryGirl.create(:quote, :with_setup_upcharges)
+    expect((quote2.total_price - 799.8).abs).to be < 0.001
+    expect(quote2.total_price).to be > quote.total_price
   end
 
   it 'should apply product run charges' do
-    quote = FactoryGirl.create(:quote, :with_run_upcharges)
-    expect((quote.total_price - 609.0).abs).to be < 0.001
+    quote2 = FactoryGirl.create(:quote, :with_run_upcharges)
+    expect((quote2.total_price - 609.0).abs).to be < 0.001
+    expect(quote2.total_price).to be > quote.total_price
   end
 
   it 'should apply product setup and run charges' do
-    quote = FactoryGirl.create(:quote, :with_setup_and_run_upcharges)
-    expect((quote.total_price - 809).abs).to be < 0.001
+    quote2 = FactoryGirl.create(:quote, :with_setup_and_run_upcharges)
+    expect((quote2.total_price - 809).abs).to be < 0.001
+    expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should apply additional location charge' do
-    auction_data[:flags] = {
-      pms_color_match: false,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:num_locations] = 2
-    auction_data[:num_colors] = 2
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
-    auction_data[:product_upcharges] = [
-      [6, 'additional_location_run', 'additional_location_run', 'C', 1.10, '(0..49)'],
-      [7, 'additional_location_run', 'additional_location_run', 'C', 1.20, '(50..99)'],
-      [8, 'additional_location_run', 'additional_location_run', 'C', 1.30, '(100..149)'],
-      [9, 'additional_location_run', 'additional_location_run', 'C', 1.40, '(150..199)']
-    ]
+  it 'should apply additional location charge', active: 'true' do
+    quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge)
+    quote2.num_locations = 2
+    expect((quote2.total_price - 601.8).abs).to be < 0.001
+    expect(quote2.total_price).to be > quote.total_price
+  end
 
-    prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.78 - auction_data[:running_unit_price]).abs).to be < 0.0001
+  it 'should apply additional location charge with quantity', active: 'true' do
+    quote = FactoryGirl.create(:quote, quantity: 125)
+    quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge, quantity: 125)
+    quote2.num_locations = 2
+    expect((quote2.total_price - 2807.0).abs).to be < 0.001
+    expect(quote2.total_price).to be > quote.total_price
   end
 
   xit 'should apply second color charge' do
-    auction_data[:flags] = {
-      pms_color_match: false,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:num_locations] = 2
-    auction_data[:num_colors] = 2
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
-    auction_data[:product_upcharges] = [
-      [6, 'second_color_run', 'second_color_run', 'C', 1.20, '(0..49)'],
-      [7, 'second_color_run', 'second_color_run', 'C', 1.30, '(50..99)'],
-      [8, 'second_color_run', 'second_color_run', 'C', 1.40, '(100..149)'],
-      [9, 'second_color_run', 'second_color_run', 'C', 1.50, '(150..199)']
-    ]
-
-    prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.84 - auction_data[:running_unit_price]).abs).to be < 0.0001
+    pending('Implemented in QuoteCalculatorUpcharges but not tested (no requirement)')
   end
 
-  xit 'should apply additional color charge' do
-    auction_data[:flags] = {
-      pms_color_match: false,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:num_locations] = 2
-    auction_data[:num_colors] = 2
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
-    auction_data[:product_upcharges] = [
-      [6, 'additional_color_run', 'additional_color_run', 'C', 1.20, '(0..49)'],
-      [7, 'additional_color_run', 'additional_color_run', 'C', 1.30, '(50..99)'],
-      [8, 'additional_color_run', 'additional_color_run', 'C', 1.40, '(100..149)'],
-      [9, 'additional_color_run', 'additional_color_run', 'C', 1.50, '(150..199)']
-    ]
-
-    prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.84 - auction_data[:running_unit_price]).abs).to be < 0.0001
+  xit 'should apply additional color run charge' do
+    pending('Implemented in QuoteCalculatorUpcharges but not tested (no requirement)')
   end
 
-  xit 'should apply multiple color charge' do
-    auction_data[:flags] = {
-      pms_color_match: false,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:num_locations] = 2
-    auction_data[:num_colors] = 2
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
-    auction_data[:product_upcharges] = [
-      [6, 'multiple_color_run', 'multiple_color_run', 'C', 1.33, '(0..49)'],
-      [7, 'multiple_color_run', 'multiple_color_run', 'C', 1.44, '(50..99)'],
-      [8, 'multiple_color_run', 'multiple_color_run', 'C', 1.55, '(100..149)'],
-      [9, 'multiple_color_run', 'multiple_color_run', 'C', 1.66, '(150..199)']
-    ]
-
-    prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.93 - auction_data[:running_unit_price]).abs).to be < 0.0001
-  end
-
-  xit 'should apply multiple upcharges' do
-    auction_data[:flags] = {
-      pms_color_match: true,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:quantity] = 151
-    auction_data[:num_locations] = 2
-    auction_data[:num_colors] = 2
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
-    auction_data[:product_upcharges] = [
-      [1, 'setup', 'Setup Test', 'C', 50.00, nil],
-      [1, 'rush', 'Rush Test', 'C', 50.00, nil],
-      [6, 'multiple_color_run', 'multiple_color_run', 'C', 2.33, '(0..49)'],
-      [7, 'multiple_color_run', 'multiple_color_run', 'C', 2.44, '(50..99)'],
-      [8, 'multiple_color_run', 'multiple_color_run', 'C', 2.55, '(100..149)'],
-      [9, 'multiple_color_run', 'multiple_color_run', 'C', 2.66, '(150..199)']
-    ]
-
-    prebid.send(:apply_product_upcharges, auction_data)
-    expect((102.1920 - auction_data[:running_unit_price]).abs).to be < 0.0001
-  end
-
-  xit 'should process open ended range' do
-    auction_data[:flags] = {
-      pms_color_match: true,
-      change_ink: false,
-      no_under_over: false
-    }
-    auction_data[:quantity] = 151
-    auction_data[:num_locations] = 2
-    auction_data[:num_colors] = 2
-    auction_data[:supplier_upcharges] = [
-      [1, 'pms_color_match', 'C', 50.00],
-      [2, 'ink_change', 'C', 60.00],
-      [3, 'no_under_over', 'C', 70.00]
-    ]
-    auction_data[:product_upcharges] = [
-      [1, 'setup', 'Setup Test', 'C', 50.00, nil],
-      [1, 'rush', 'Rush Test', 'C', 50.00, nil],
-      [6, 'multiple_color_run', 'multiple_color_run', 'C', 2.33, '(0..49)'],
-      [7, 'multiple_color_run', 'multiple_color_run', 'C', 2.44, '(50..99)'],
-      [8, 'multiple_color_run', 'multiple_color_run', 'C', 2.55, '(100..149)'],
-      [9, 'multiple_color_run', 'multiple_color_run', 'C', 2.66, '(150+)']
-    ]
-
-    prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.5960 - auction_data[:running_unit_price]).abs).to be < 2
+  xit 'should apply additional color run charge' do
+    pending('Implemented in QuoteCalculatorUpcharges but not tested (no requirement)')
   end
 
   xit 'should provide fixed shipping' do

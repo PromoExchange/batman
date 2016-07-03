@@ -32,7 +32,8 @@ module Spree::QuoteCalculator
 
     unit_price * quantity
   rescue StandardError => e
-    Rails.logger.error("#{e}")
+    log(e.to_s)
+    Rails.logger.error(e.to_s)
     0.0
   end
 

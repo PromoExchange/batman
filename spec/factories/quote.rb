@@ -21,11 +21,20 @@ FactoryGirl.define do
       association :product, factory: [:px_product, :with_run_upcharges]
     end
 
+    # TODO: Research better way to DRY these. Same with product factory
+    # FIX: create([:quote,:with_run_upcharges,:with_setup_upcharges ])
     trait :with_setup_and_run_upcharges do
       association :product, factory: [
         :px_product,
         :with_setup_upcharges,
         :with_run_upcharges
+      ]
+    end
+
+    trait :with_additional_location_upcharge do
+      association :product, factory: [
+        :px_product,
+        :with_additional_location_upcharge
       ]
     end
   end

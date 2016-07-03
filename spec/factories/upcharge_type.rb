@@ -9,5 +9,9 @@ FactoryGirl.define do
     trait :setup_charge do
       name 'setup'
     end
+
+    trait :additional_location_charge do
+      name 'additional_location_run'
+    end
   end
 end

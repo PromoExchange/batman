@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :quote, class: Spree::Quote do
-    association :product, factory: [:px_product, :with_setup_upcharges]
-    quantity 1111
+    association :product, factory: [:px_product]
+    quantity 25
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     custom_pms_colors '116C, 115B'
@@ -12,5 +12,21 @@ FactoryGirl.define do
     end
     workbook ''
     selected_shipping_option Spree::ShippingOption::OPTION[:ups_ground]
+
+    trait :with_setup_upcharges do
+      association :product, factory: [:px_product, :with_setup_upcharges]
+    end
+
+    trait :with_run_upcharges do
+      association :product, factory: [:px_product, :with_run_upcharges]
+    end
+
+    trait :with_setup_and_run_upcharges do
+      association :product, factory: [
+        :px_product,
+        :with_setup_upcharges,
+        :with_run_upcharges
+      ]
+    end
   end
 end

@@ -16,27 +16,44 @@ RSpec.describe Spree::Quote, type: :model do
   it 'should apply EQP discount' do
     quote = FactoryGirl.create(:quote, product: FactoryGirl.create(:px_product, :with_eqp))
     quote.apply_eqp
-    expect((quote.unit_price.to_f - 16.6336).abs).to be < 0.0001
+    expect((quote.unit_price - 16.6336).abs).to be < 0.0001
   end
 
   it 'should apply pricing discount' do
     quote = FactoryGirl.create(:quote)
     quote.unit_price = quote.product.unit_price(quote.quantity)
     quote.apply_price_discount
-    expect((quote.unit_price.to_f - 20.79).abs).to be < 0.01
+    expect((quote.unit_price - 23.992).abs).to be < 0.001
   end
 
-  it 'should calculate quote' do
+  it 'should calculate quote with 25 quantity' do
     quote = FactoryGirl.create(:quote)
-    expect((quote.total_price - 23299.91).abs).to be < 0.01
+    expect((quote.total_price - 599.8).abs).to be < 0.001
   end
 
-  xit 'should apply product setup charge' do
-    auction_data[:product_upcharges] = [
-      [1, 'setup', 'Setup Test', 'C', 50.00, nil]
-    ]
-    prebid.send(:apply_product_upcharges, auction_data)
-    expect((100.3 - auction_data[:running_unit_price]).abs).to be < 0.0001
+  it 'should calculate quote with 125 quantity' do
+    quote = FactoryGirl.create(:quote, quantity: 125)
+    expect((quote.total_price - 2799.0).abs).to be < 0.001
+  end
+
+  it 'should calculate quote with 225 quantity' do
+    quote = FactoryGirl.create(:quote, quantity: 225)
+    expect((quote.total_price - 4678.2).abs).to be < 0.001
+  end
+
+  it 'should apply product setup charge' do
+    quote = FactoryGirl.create(:quote, :with_setup_upcharges)
+    expect((quote.total_price - 799.8).abs).to be < 0.001
+  end
+
+  it 'should apply product run charges' do
+    quote = FactoryGirl.create(:quote, :with_run_upcharges)
+    expect((quote.total_price - 609.0).abs).to be < 0.001
+  end
+
+  it 'should apply product setup and run charges' do
+    quote = FactoryGirl.create(:quote, :with_setup_and_run_upcharges)
+    expect((quote.total_price - 809).abs).to be < 0.001
   end
 
   xit 'should apply additional location charge' do

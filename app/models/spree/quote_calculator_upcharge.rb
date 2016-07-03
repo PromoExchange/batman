@@ -29,12 +29,11 @@ module Spree::QuoteCalculatorUpcharge
         # Is it open ended
         if product_upcharge[5].include? '+'
           bounds[0] = product_upcharge[5].gsub(/([()])|\+/, '').to_i
-          bounds[1] = bounds[0] * 2
+          bounds[1] = product.maximum_quantity * 2
         else
           bounds = product_upcharge[5].gsub(/[()]/, '').split('..').map(&:to_i)
         end
-        range = Range.new(bounds[0], bounds[1])
-        in_range = range.member?(quantity)
+        in_range = Range.new(bounds[0], bounds[1]).member?(quantity)
       end
 
       case product_upcharge[1]

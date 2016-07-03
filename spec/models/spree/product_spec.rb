@@ -51,10 +51,10 @@ RSpec.describe Spree::Product, type: :model do
   end
 
   it 'should save a valid px_product with upcharges' do
-    product = FactoryGirl.create(:px_product, :with_upcharges)
+    product = FactoryGirl.create(:px_product, :with_run_upcharges, :with_setup_upcharges)
     expect(product.save).to be_truthy
     product2 = Spree::Product.find(product.id)
-    expect(product2.upcharges.count).to eq 5
+    expect(product2.upcharges.count).to eq 3
   end
 
   it 'should save a valid px_product with main_colors' do
@@ -67,5 +67,10 @@ RSpec.describe Spree::Product, type: :model do
   it 'should have a valid company store' do
     product = FactoryGirl.create(:px_product)
     expect(product.company_store).not_to be_nil
+  end
+
+  it 'should return the first imprint method' do
+    product = FactoryGirl.create(:px_product)
+    expect(product.imprint_method).to eq(product.imprint_methods.first)
   end
 end

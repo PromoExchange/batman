@@ -11,11 +11,6 @@ RSpec.describe Spree::Quote, type: :model do
     expect(quote.save).to be_falsey
   end
 
-  it 'should not save with a nil imprint_method' do
-    quote = FactoryGirl.build(:quote, imprint_method: nil)
-    expect(quote.save).to be_falsey
-  end
-
   it 'should not save with a nil quantity' do
     quote = FactoryGirl.build(:quote, quantity: nil)
     expect(quote.save).to be_falsey
@@ -48,11 +43,6 @@ RSpec.describe Spree::Quote, type: :model do
 
   it 'should belong to an shipping_address' do
     t = Spree::Quote.reflect_on_association(:shipping_address)
-    expect(t.macro).to eq :belongs_to
-  end
-
-  it 'should belong to an imprint_method' do
-    t = Spree::Quote.reflect_on_association(:imprint_method)
     expect(t.macro).to eq :belongs_to
   end
 

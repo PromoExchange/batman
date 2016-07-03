@@ -5,5 +5,9 @@ FactoryGirl.define do
     trait :run_charge do
       name 'run'
     end
+
+    trait :setup_charge do
+      name 'setup'
+    end
   end
 end

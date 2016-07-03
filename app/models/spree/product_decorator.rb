@@ -10,9 +10,14 @@ Spree::Product.class_eval do
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
   has_many :imprint_methods, through: :imprint_methods_products, inverse_of: :products
+  # TODO: ImprintMethods will turn into a has_one
+  # This will depend on what we decide to do with preconfigure
+  # For now we will *fake* a has_one my having a singular
+  def imprint_method
+    imprint_methods.first
+  end
 
   has_many :price_caches
-
   has_many :quotes
 
   accepts_nested_attributes_for :upcharges, :imprint_methods_products

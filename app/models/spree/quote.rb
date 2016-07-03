@@ -5,7 +5,6 @@ class Spree::Quote < Spree::Base
 
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
   belongs_to :shipping_address, class_name: 'Spree::Address'
-  belongs_to :imprint_method
   has_many :shipping_options, dependent: :destroy
   has_many :pms_colors
 
@@ -32,7 +31,6 @@ class Spree::Quote < Spree::Base
   validates :product, presence: true
   validates :selected_shipping_option, presence: true
   validates :shipping_address, presence: true
-  validates :imprint_method, presence: true
   validates :quantity, presence: true, numericality: {
     only_integer: true,
     greater_than_or_equal_to: (lambda do |quote|
@@ -43,14 +41,16 @@ class Spree::Quote < Spree::Base
 
   delegate :company_store, to: :product
   delegate :markup, to: :product
+  delegate :imprint_method, to: :product
 
   def total_price(options = {})
     options.reverse_merge!(
       selected_shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
     )
-    Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
+    total_price = Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
       best_price(options)
     end
+    total_price
   end
 
   def cache_key

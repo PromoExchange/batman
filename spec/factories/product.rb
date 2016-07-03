@@ -32,9 +32,25 @@ FactoryGirl.define do
       end
     end
 
-    trait :with_upcharges do
+    trait :with_run_upcharges do
       after(:create) do |product|
-        create_list(:product_upcharge, 5, related_id: product.id)
+        create_list(
+          :product_run_upcharge,
+          2,
+          related_id: product.id,
+          imprint_method_id: product.imprint_method.id
+        )
+      end
+    end
+
+    trait :with_setup_upcharges do
+      after(:create) do |product|
+        create_list(
+          :product_setup_upcharge,
+          1,
+          related_id: product.id,
+          imprint_method_id: product.imprint_method.id
+        )
       end
     end
 

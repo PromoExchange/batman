@@ -9,10 +9,11 @@ module Spree::QuoteCalculator
     end
 
     log('Quote: Calculating')
-    log("Item name: #{auction.product.name}")
-    log("Factory: #{auction.product.supplier.name}")
-    log("Original Factory: #{auction.product.original_supplier.name}")
-    log("SKU: #{auction.product.master.sku}")
+    log("Item name: #{product.name}")
+    log("Factory: #{product.supplier.name}")
+    log("Original Factory: #{product.original_supplier.name}")
+    log("SKU: #{product.master.sku}")
+    log("Item Count: #{quantity}")
 
     # raise "Unable to find markup if" markup.nil?
     if markup.eqp?
@@ -22,16 +23,17 @@ module Spree::QuoteCalculator
       log("Base Unit price: #{unit_price}")
       apply_price_discount
     end
-    log("Unit price: #{unit_price}")
-    log("Item Count: #{quantity}")
+    log("Running Unit price: #{unit_price}")
 
+    # @see QuoteCalculatorUpcharge
     apply_product_upcharges
 
-    log("Number of imprint colors: #{auction_data[:num_colors]}")
+    log("Number of imprint colors: #{num_colors}")
 
-    100.00
+    unit_price * quantity
   rescue StandardError => e
-    Rails.logger.error(e.to_s)
+    Rails.logger.error("#{e}")
+    0.0
   end
 
   def apply_eqp
@@ -60,7 +62,10 @@ module Spree::QuoteCalculator
 
   def apply_price_discount(price_code = nil)
     price_code ||= product.price_code(quantity)
+    log("Discounting price with code [#{price_code}]")
+    log("Before discount running unit price[#{unit_price}]")
     self.unit_price =
       Spree::Price.discount_price(price_code, unit_price)
+    log("Post discount running unit price[#{unit_price}]")
   end
 end

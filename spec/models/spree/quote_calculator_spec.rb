@@ -23,12 +23,12 @@ RSpec.describe Spree::Quote, type: :model do
     quote = FactoryGirl.create(:quote)
     quote.unit_price = quote.product.unit_price(quote.quantity)
     quote.apply_price_discount
-    expect((quote.unit_price.to_f - 20.792).abs).to be < 0.0001
+    expect((quote.unit_price.to_f - 20.79).abs).to be < 0.01
   end
 
-  xit 'should calculate quote' do
+  it 'should calculate quote' do
     quote = FactoryGirl.create(:quote)
-    expect(quote.total_price).to eq 100.00
+    expect((quote.total_price - 23299.91).abs).to be < 0.01
   end
 
   xit 'should apply product setup charge' do

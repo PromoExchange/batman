@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :quote, class: Spree::Quote do
-    association :product, factory: :px_product
+    association :product, factory: [:px_product, :with_setup_upcharges]
     quantity 1111
-    imprint_method
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     custom_pms_colors '116C, 115B'

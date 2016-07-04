@@ -59,14 +59,14 @@ RSpec.describe Spree::Quote, type: :model do
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  it 'should apply additional location charge', active: 'true' do
+  it 'should apply additional location charge' do
     quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge)
     quote2.num_locations = 2
     expect((quote2.total_price - 601.8).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  it 'should apply additional location charge with quantity', active: 'true' do
+  it 'should apply additional location charge with quantity' do
     quote = FactoryGirl.create(:quote, quantity: 125)
     quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge, quantity: 125)
     quote2.num_locations = 2

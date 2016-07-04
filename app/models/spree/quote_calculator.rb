@@ -3,7 +3,7 @@ module Spree::QuoteCalculator
 
   def calculate(options = {})
     clear_log
-  
+
     [
       :selected_shipping_option
     ].each do |o|
@@ -32,7 +32,7 @@ module Spree::QuoteCalculator
 
     log("Number of imprint colors: #{num_colors}")
 
-    # apply_tax_rate
+    apply_tax_rate
 
     unit_price * quantity
   rescue StandardError => e
@@ -75,5 +75,14 @@ module Spree::QuoteCalculator
   end
 
   def apply_tax_rate
+    tax_rate = 0.0
+    seller = company_store.seller
+    log('WARN: Failed to find company store seller') if seller.nil?
+
+    tax_rate = seller.tax_rate(shipping_address) unless seller.nil?
+
+    log("Applying tax rate #{tax_rate}")
+    self.unit_price /= (1 - tax_rate)
+    log("After applying tax rate: #{self.unit_price}")
   end
 end

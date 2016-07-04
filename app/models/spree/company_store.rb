@@ -7,4 +7,8 @@ class Spree::CompanyStore < Spree::Base
   validates :supplier_id, presence: true
   validates :slug, presence: true
   validates :name, presence: true
+
+  def seller
+    Spree::User.find_by(email: ENV['SELLER_EMAIL'])
+  end
 end

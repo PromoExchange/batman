@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :px_product, class: Spree::Product, parent: :product do
-    carton
+    association :carton, factory: :carton
     association :supplier, factory: :supplier_company_store
     association :original_supplier, factory: :supplier
 

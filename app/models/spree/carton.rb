@@ -2,9 +2,14 @@ class Spree::Carton < Spree::Base
   belongs_to :product
   validates :product_id, presence: true
 
+  attr_writer :default_dimension
+
+  def default_dimension
+    @default_dimension ||= 12
+  end
+
   def to_s
-    return "#{length}L x #{width}W x #{height}H" if length.present?
-    ''
+    "#{length || default_dimension}L x #{width || default_dimension}W x #{height || default_dimension}H"
   end
 
   def active?

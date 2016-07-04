@@ -12,12 +12,10 @@ module Spree::QuoteCalculatorShipping
     return calculate_fixed_price unless product.carton.fixed_price.nil?
     carton = product.carton
 
-    raise 'Shipping carton weight is nil' if carton.weight.blank?
-    shipping_weight = carton.weight
+    log("Carton: #{carton}")
 
-    raise 'Shipping carton length is nil' if carton.length.blank?
-    raise 'Shipping carton width is nil' if carton.width.blank?
-    raise 'Shipping carton height is nil' if carton.height.blank?
+    raise 'Shipping carton weight is not active' unless carton.active?
+    shipping_weight = carton.weight
     shipping_dimensions = carton.to_s
 
     raise 'Shipping quantity is nil' if carton.quantity <= 0

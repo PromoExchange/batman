@@ -50,4 +50,19 @@ RSpec.describe Spree::Carton, type: :model do
     c = FactoryGirl.build(:carton, originating_zip: '', fixed_price: 1.0)
     expect(c.active?).to be_truthy
   end
+
+  it 'should produce a valid string' do
+    carton = FactoryGirl.build(:carton)
+    expect(carton.to_s).to eq '11L x 10W x 12H'
+  end
+
+  it 'should produce a valid string with invalid dimensions' do
+    carton = FactoryGirl.build(
+      :carton,
+      width: nil,
+      length: nil,
+      height: nil
+    )
+    expect(carton.to_s).to eq '12L x 12W x 12H'
+  end
 end

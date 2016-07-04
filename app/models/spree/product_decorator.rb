@@ -46,8 +46,7 @@ Spree::Product.class_eval do
   def company_store
     # TODO: Direction association once we move the preconfigure in
     return nil if supplier.nil?
-    Spree::CompanyStore.joins(:supplier)
-      .where('spree_suppliers.id = ?', supplier_id).first
+    Spree::CompanyStore.find_by_supplier_id(supplier.id)
   end
 
   def markup

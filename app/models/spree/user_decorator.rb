@@ -54,7 +54,7 @@ Spree::User.class_eval do
     #   .includes(:zone)
     #   .pluck('spree_zones.id').first
 
-    tax_rate = tax_rates.where(zone_id: address.state.id).first
+    tax_rate = tax_rates.find_by_zone_id(address.state.id)
 
     tax_rate.nil? ? 0.0 : tax_rate.amount.to_f
   end

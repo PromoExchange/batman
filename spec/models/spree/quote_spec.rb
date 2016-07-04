@@ -90,4 +90,12 @@ RSpec.describe Spree::Quote, type: :model do
     quote2 = Spree::Quote.find(quote.id)
     expect(quote2.reference).not_to be_empty
   end
+
+  it 'should clear messages' do
+    quote = FactoryGirl.create(:quote)
+    5.times { quote.log('Test Message') }
+    expect(quote.messages.count).to eq 5
+    quote.clear_log
+    expect(quote.messages.count).to eq 0
+  end
 end

@@ -2,6 +2,8 @@ module Spree::QuoteCalculator
   include QuoteCalculatorUpcharge
 
   def calculate(options = {})
+    clear_log
+  
     [
       :selected_shipping_option
     ].each do |o|

@@ -73,6 +73,10 @@ class Spree::Quote < Spree::Base
     standard_color_color + custom_color_count
   end
 
+  def clear_log
+    messages.clear
+  end
+
   private
 
   def best_price(options = {})

@@ -99,5 +99,12 @@ FactoryGirl.define do
         create(:carton, :with_fixed_price_total, product: product)
       end
     end
+
+    trait :with_carton do
+      after(:create) do |product|
+        product.carton.destroy unless product.carton.nil?
+        create(:carton, product: product)
+      end
+    end
   end
 end

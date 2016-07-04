@@ -1,5 +1,6 @@
 module Spree::QuoteCalculator
   include QuoteCalculatorUpcharge
+  include QuoteCalculatorShipping
 
   def calculate(options = {})
     clear_log
@@ -27,12 +28,15 @@ module Spree::QuoteCalculator
     end
     log("Running Unit price: #{unit_price}")
 
-    # @see QuoteCalculatorUpcharge
+    # @see module QuoteCalculatorUpcharge
     apply_product_upcharges
 
     log("Number of imprint colors: #{num_colors}")
 
     apply_tax_rate
+
+    # @see module QuoteCalculatorShipping
+    apply_shipping
 
     unit_price * quantity
   rescue StandardError => e

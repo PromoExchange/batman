@@ -26,7 +26,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.unit_price - 23.992).abs).to be < 0.001
   end
 
-  it 'should calculate quote with 25 quantity' do
+  it 'should calculate quote with 25 quantity', active: true do
     quote = FactoryGirl.create(:quote)
     expect((quote.total_price - 599.8).abs).to be < 0.001
   end
@@ -86,10 +86,13 @@ RSpec.describe Spree::Quote, type: :model do
     pending('Implemented in QuoteCalculatorUpcharges but not tested (no requirement)')
   end
 
-  xit 'should provide fixed shipping' do
-    auction_data[:carton] = FactoryGirl.build(:carton, originating_zip: '', fixed_price: 1.0)
-    auction_data[:selected_shipping] = Spree::ShippingOption::OPTION[:ups_ground]
-    prebid.send(:calculate_shipping, auction_data)
-    expect(1.0 - auction_data[:shipping_cost]).to be < 0.0001
+  it 'should provide fixed shipping per item' do
+    quote = FactoryGirl.create(:quote, :with_fixed_price_per_item)
+    expect((quote.total_price - 662.3).abs).to be < 0.001
+  end
+
+  it 'should provide fixed shipping total' do
+    quote = FactoryGirl.create(:quote, :with_fixed_price_total)
+    expect((quote.total_price - 699.8).abs).to be < 0.001
   end
 end

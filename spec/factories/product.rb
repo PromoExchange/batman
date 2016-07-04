@@ -85,5 +85,19 @@ FactoryGirl.define do
         product.markup.update_attributes(eqp_discount: 0.20)
       end
     end
+
+    trait :with_fixed_price_per_item_carton do
+      after(:create) do |product|
+        product.carton.destroy unless product.carton.nil?
+        create(:carton, :with_fixed_price_per_item, product: product)
+      end
+    end
+
+    trait :with_fixed_price_total_carton do
+      after(:create) do |product|
+        product.carton.destroy unless product.carton.nil?
+        create(:carton, :with_fixed_price_total, product: product)
+      end
+    end
   end
 end

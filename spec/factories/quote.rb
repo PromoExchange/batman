@@ -37,5 +37,19 @@ FactoryGirl.define do
         :with_additional_location_upcharge
       ]
     end
+
+    trait :with_fixed_price_per_item do
+      association :product, factory: [
+        :px_product,
+        :with_fixed_price_per_item_carton
+      ]
+    end
+
+    trait :with_fixed_price_total do
+      association :product, factory: [
+        :px_product,
+        :with_fixed_price_total_carton
+      ]
+    end
   end
 end

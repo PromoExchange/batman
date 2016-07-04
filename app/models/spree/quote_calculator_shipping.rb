@@ -3,14 +3,13 @@ module Spree::QuoteCalculatorShipping
     shipping_cost = calculate_shipping
 
     log("Selected Shipping cost #{shipping_cost}")
-    log("Selected Shipping option #{selected_shipping_option}")
+    log("Selected Shipping option #{Spree::ShippingOption::OPTION.key(selected_shipping_option)}")
     self.unit_price += (shipping_cost / quantity)
     log("After applying shipping cose: #{self.unit_price}")
   end
 
   def calculate_shipping
     return calculate_fixed_price unless product.carton.fixed_price.nil?
-
     carton = product.carton
 
     raise 'Shipping carton weight is nil' if carton.weight.blank?

@@ -43,4 +43,19 @@ Spree::User.class_eval do
     return shipping_address.company if shipping_address.present?
     ''
   end
+
+  # Get the tax rate this user charges for a given address
+  # Applicable to seller accounts only.
+  def tax_rate(address)
+    return 0.0 if address.nil?
+
+    # tax_zone_id = Spree::ZoneMember
+    #   .where(zoneable_id: address.state_id)
+    #   .includes(:zone)
+    #   .pluck('spree_zones.id').first
+
+    tax_rate = tax_rates.where(zone_id: address.state.id).first
+
+    tax_rate.nil? ? 0.0 : tax_rate.amount.to_f
+  end
 end

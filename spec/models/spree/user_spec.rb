@@ -25,4 +25,15 @@ RSpec.describe Spree::User, type: :model do
     u = FactoryGirl.create(:user)
     expect(u.shipping_company).to eq ''
   end
+
+  it 'should get a valid tax rate' do
+    shipping_address = FactoryGirl.create(:address)
+    user = FactoryGirl.create(:px_user)
+    user.tax_rates << FactoryGirl.create(
+      :tax_rate,
+      zone_id: shipping_address.state.id,
+      user_id: user.id
+    )
+    expect(user.tax_rate(shipping_address)).to eq 0.1
+  end
 end

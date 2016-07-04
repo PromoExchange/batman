@@ -30,6 +30,8 @@ module Spree::QuoteCalculator
 
     log("Number of imprint colors: #{num_colors}")
 
+    # apply_tax_rate
+
     unit_price * quantity
   rescue StandardError => e
     log(e.to_s)
@@ -68,5 +70,8 @@ module Spree::QuoteCalculator
     self.unit_price =
       Spree::Price.discount_price(price_code, unit_price)
     log("Post discount running unit price[#{unit_price}]")
+  end
+
+  def apply_tax_rate
   end
 end

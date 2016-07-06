@@ -41,7 +41,7 @@ class Spree::Quote < Spree::Base
   validates :quantity, presence: true, numericality: {
     only_integer: true,
     greater_than_or_equal_to: (lambda do |quote|
-      50 if quote.product.nil?
+      return 50 if quote.product.nil?
       quote.product.minimum_quantity
     end)
   }

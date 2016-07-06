@@ -35,5 +35,6 @@ node_modules
 # Local Redis
 dump.rdb
 
-.irbrc
-coverage/
+
+# SimpleCov data
+coverage

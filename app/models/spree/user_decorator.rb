@@ -48,14 +48,7 @@ Spree::User.class_eval do
   # Applicable to seller accounts only.
   def tax_rate(address)
     return 0.0 if address.nil?
-
-    # tax_zone_id = Spree::ZoneMember
-    #   .where(zoneable_id: address.state_id)
-    #   .includes(:zone)
-    #   .pluck('spree_zones.id').first
-
     tax_rate = tax_rates.find_by_zone_id(address.state.id)
-
     tax_rate.nil? ? 0.0 : tax_rate.amount.to_f
   end
 end

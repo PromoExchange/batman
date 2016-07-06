@@ -9,6 +9,12 @@ class Spree::CompanyStore < Spree::Base
   validates :name, presence: true
 
   def seller
-    Spree::User.find_by(email: ENV['SELLER_EMAIL'])
+    Rails.cache.fetch("#{cache_key}/seller", expires_in: 5.minutes) do
+      Spree::User.find_by(email: ENV['SELLER_EMAIL'])
+    end
+  end
+
+  def cache_key
+    "spree/company_store/#{id}"
   end
 end

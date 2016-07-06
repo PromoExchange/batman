@@ -10,12 +10,6 @@ Spree::Product.class_eval do
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
   has_many :imprint_methods, through: :imprint_methods_products, inverse_of: :products
-  # TODO: ImprintMethods will turn into a has_one
-  # This will depend on what we decide to do with preconfigure
-  # For now we will *fake* a has_one my having a singular
-  def imprint_method
-    imprint_methods.first
-  end
 
   has_many :price_caches
   has_many :quotes
@@ -44,13 +38,26 @@ Spree::Product.class_eval do
   end
 
   def company_store
-    # TODO: Direction association once we move the preconfigure in
+    # TODO: Direct association once we move the preconfigure in
     return nil if supplier.nil?
-    Spree::CompanyStore.find_by_supplier_id(supplier.id)
+    Rails.cache.fetch("#{cache_key}/supplier", expires_in: 5.minutes) do
+      Spree::CompanyStore.find_by_supplier_id(supplier.id)
+    end
   end
 
   def markup
-    Spree::Markup.find_by(supplier: original_supplier, company_store: company_store)
+    Rails.cache.fetch("#{cache_key}/markup", expires_in: 5.minutes) do
+      Spree::Markup.find_by(supplier: original_supplier, company_store: company_store)
+    end
+  end
+
+  # TODO: ImprintMethods will turn into a has_one
+  # This will depend on what we decide to do with preconfigure
+  # For now we will *fake* a has_one my having a singular
+  def imprint_method
+    Rails.cache.fetch("#{cache_key}/imprint_method", expires_in: 5.minutes) do
+      imprint_methods.first
+    end
   end
 
   def wearable?
@@ -356,6 +363,10 @@ Spree::Product.class_eval do
     where(supplier: supplier).find_each do |product|
       yield product
     end
+  end
+
+  def cache_key
+    "spree/product/#{id}"
   end
 
   private

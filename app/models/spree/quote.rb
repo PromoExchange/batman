@@ -8,6 +8,7 @@ class Spree::Quote < Spree::Base
   has_many :shipping_options, dependent: :destroy
   has_many :pms_colors
 
+  # TODO: Fix association between quote and product
   # Assumes products are not shared across company stores
   belongs_to :product
 

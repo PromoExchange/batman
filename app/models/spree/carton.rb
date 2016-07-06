@@ -2,14 +2,10 @@ class Spree::Carton < Spree::Base
   belongs_to :product
   validates :product_id, presence: true
 
-  attr_writer :default_dimension
-
-  def default_dimension
-    @default_dimension ||= 12
-  end
+  DEFAULT_DIMENSION = 12
 
   def to_s
-    "#{length || default_dimension}L x #{width || default_dimension}W x #{height || default_dimension}H"
+    "#{length || DEFAULT_DIMENSION}L x #{width || DEFAULT_DIMENSION}W x #{height || DEFAULT_DIMENSION}H"
   end
 
   def active?

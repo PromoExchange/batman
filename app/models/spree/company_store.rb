@@ -15,6 +15,6 @@ class Spree::CompanyStore < Spree::Base
   end
 
   def cache_key
-    "spree/company_store/#{id}"
+    "#{model_name.cache_key}/#{id || 'new'}"
   end
 end

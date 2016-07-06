@@ -30,4 +30,16 @@ RSpec.describe Spree::CompanyStore, type: :model do
     m = FactoryGirl.build(:company_store, host: nil)
     expect(m.save).to be_truthy
   end
+
+  it 'should have a specific cache key', active: true do
+    company_store = FactoryGirl.create(:company_store)
+    expect(company_store.cache_key =~ /#{company_store.id}/).to be_truthy
+    expect(company_store.cache_key =~ /^#{company_store.model_name.cache_key}/).to be_truthy
+  end
+
+  it 'should have a specific cache key for new', active: true do
+    company_store = FactoryGirl.build(:company_store)
+    expect(company_store.cache_key =~ /new/).to be_truthy
+    expect(company_store.cache_key =~ /^#{company_store.model_name.cache_key}/).to be_truthy
+  end
 end

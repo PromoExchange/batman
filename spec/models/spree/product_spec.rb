@@ -73,4 +73,16 @@ RSpec.describe Spree::Product, type: :model do
     product = FactoryGirl.create(:px_product)
     expect(product.imprint_method).to eq(product.imprint_methods.first)
   end
+
+  it 'should have a specific cache key', active: true do
+    product = FactoryGirl.create(:px_product)
+    expect(product.cache_key =~ /#{product.id}/).to be_truthy
+    expect(product.cache_key =~ /^#{product.model_name.cache_key}/).to be_truthy
+  end
+
+  it 'should have a specific cache key for new', active: true do
+    product = FactoryGirl.build(:px_product)
+    expect(product.cache_key =~ /new/).to be_truthy
+    expect(product.cache_key =~ /^#{product.model_name.cache_key}/).to be_truthy
+  end
 end

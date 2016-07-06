@@ -366,7 +366,7 @@ Spree::Product.class_eval do
   end
 
   def cache_key
-    "spree/product/#{id}"
+    "#{model_name.cache_key}/#{id || 'new'}"
   end
 
   private

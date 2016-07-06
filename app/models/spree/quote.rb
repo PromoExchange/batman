@@ -61,7 +61,7 @@ class Spree::Quote < Spree::Base
   end
 
   def cache_key
-    "spree/quote/#{product.id}/#{quantity}/#{selected_shipping_option}"
+    "#{model_name.cache_key}/#{product.id}/#{quantity}/#{selected_shipping_option}"
   end
 
   def log(message)

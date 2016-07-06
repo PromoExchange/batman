@@ -98,4 +98,20 @@ RSpec.describe Spree::Quote, type: :model do
     quote.clear_log
     expect(quote.messages.count).to eq 0
   end
+
+  it 'should have a specific cache key', active: true do
+    quote = FactoryGirl.create(:quote)
+    expect(quote.cache_key =~ /#{quote.product.id}/).to be_truthy
+    expect(quote.cache_key =~ /#{quote.quantity}/).to be_truthy
+    expect(quote.cache_key =~ /#{quote.selected_shipping_option}/).to be_truthy
+    expect(quote.cache_key =~ /#{quote.model_name.cache_key}/).to be_truthy
+  end
+
+  it 'should have a specific cache key for new', active: true do
+    quote = FactoryGirl.build(:quote)
+    expect(quote.cache_key =~ /#{quote.product.id}/).to be_truthy
+    expect(quote.cache_key =~ /#{quote.quantity}/).to be_truthy
+    expect(quote.cache_key =~ /#{quote.selected_shipping_option}/).to be_truthy
+    expect(quote.cache_key =~ /#{quote.model_name.cache_key}/).to be_truthy
+  end
 end

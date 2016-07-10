@@ -26,7 +26,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.unit_price - 23.992).abs).to be < 0.001
   end
 
-  it 'should calculate quote with 25 quantity', active: true do
+  it 'should calculate quote with 25 quantity' do
     quote = FactoryGirl.create(:quote)
     expect((quote.total_price - 599.8).abs).to be < 0.001
   end
@@ -96,7 +96,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.total_price - 699.8).abs).to be < 0.001
   end
 
-  xit 'should use non fixed shipping', active: true do
+  it 'should use non fixed shipping', active: true do
     quote = FactoryGirl.create(:quote, :with_carton)
     expect((quote.total_price - 699.8).abs).to be < 0.001
   end

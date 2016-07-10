@@ -51,5 +51,12 @@ FactoryGirl.define do
         :with_fixed_price_total_carton
       ]
     end
+
+    trait :with_carton do
+      association :product, factory: [
+        :px_product,
+        :with_carton
+      ]
+    end
   end
 end

@@ -11,7 +11,6 @@ module Spree::QuoteCalculatorShipping
   def calculate_shipping
     return calculate_fixed_price unless product.carton.fixed_price.nil?
     carton = product.carton
-
     log("Carton: #{carton}")
 
     raise 'Shipping carton weight is not active' unless carton.active?
@@ -20,13 +19,13 @@ module Spree::QuoteCalculatorShipping
 
     raise 'Shipping quantity is nil' if carton.quantity <= 0
 
-    auction_data[:messages] << 'Applying shipping'
+    log('Applying shipping')
 
     shipping_quantity = carton.quantity
-    auction_data[:messages] << "Carton quantity: #{shipping_quantity}"
+    log("Carton quantity: #{shipping_quantity}")
 
-    number_of_packages = (auction_data[:quantity] / shipping_quantity.to_f).ceil
-    auction_data[:messages] << "Number of packages: #{number_of_packages}"
+    number_of_packages = (quantity / shipping_quantity.to_f).ceil
+    log("Number of packages: #{number_of_packages}")
 
     dimensions = shipping_dimensions.gsub(/[A-Z]/, '').delete(' ').split('x')
     package = ActiveShipping::Package.new(
@@ -35,17 +34,17 @@ module Spree::QuoteCalculatorShipping
       units: :imperial
     )
 
-    auction_data[:messages] << "Originating zip: #{carton.originating_zip}"
+    log("Originating zip: #{carton.originating_zip}")
     origin = ActiveShipping::Location.new(
       country: 'USA',
       zip: carton.originating_zip
     )
 
-    auction_data[:messages] << "Destination zip: #{auction_data[:ship_to_zip]}"
+    log("Destination zip: #{shipping_address.zipcode}")
 
     destination = ActiveShipping::Location.new(
       country: 'USA',
-      zip: auction_data[:ship_to_zip]
+      zip: shipping_address.zipcode
     )
 
     ups = ActiveShipping::UPS.new(
@@ -65,7 +64,9 @@ module Spree::QuoteCalculatorShipping
       'UPS Next Day Air' => :ups_next_day_air
     }.freeze
 
-    shipping_sym = Spree::ShippingOption::OPTION.key(auction_data[:selected_shipping].to_i)
+    shipping_sym = Spree::ShippingOption::OPTION.key(selected_shipping_option)
+
+    binding.pry
 
     delivery_date = nil
     ups_rates.each do |rate|

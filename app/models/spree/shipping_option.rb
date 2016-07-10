@@ -12,11 +12,9 @@ class Spree::ShippingOption < ActiveRecord::Base
   }.freeze
 
   validates :name, presence: true
-  validates :delta, presence: true
   validates :delivery_date, presence: true
   validates :delivery_days, presence: true
   validates :shipping_option, presence: true
   validates :shipping_cost, presence: true
-  validates :total_price, presence: true
   validates :quote_id, presence: true
 end

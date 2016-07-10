@@ -98,6 +98,7 @@ RSpec.describe Spree::Quote, type: :model do
 
   it 'should use non fixed shipping', active: true do
     quote = FactoryGirl.create(:quote, :with_carton)
+    binding.pry
     expect((quote.total_price - 699.8).abs).to be < 0.001
   end
 end

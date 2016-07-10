@@ -36,9 +36,18 @@ module Spree::QuoteCalculator
     apply_tax_rate
 
     # @see module QuoteCalculatorShipping
-    apply_shipping
+    # @note: Unit price is *not* adjusted in calculate_shipping
+    shipping_cost = calculate_shipping
 
-    unit_price * quantity
+    log("Selected Shipping cost #{shipping_cost}")
+    log("Selected Shipping option #{Spree::ShippingOption::OPTION.key(selected_shipping_option)}")
+    unit_price_with_shipping = unit_price + (shipping_cost / quantity)
+    log("After applying shipping #{unit_price_with_shipping}")
+
+    binding.pry
+    save!
+
+    unit_price_with_shipping * quantity
   rescue StandardError => e
     log(e.to_s)
     Rails.logger.error(e.to_s)

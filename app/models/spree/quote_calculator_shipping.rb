@@ -1,13 +1,4 @@
 module Spree::QuoteCalculatorShipping
-  def apply_shipping
-    shipping_cost = calculate_shipping
-
-    log("Selected Shipping cost #{shipping_cost}")
-    log("Selected Shipping option #{Spree::ShippingOption::OPTION.key(selected_shipping_option)}")
-    self.unit_price += (shipping_cost / quantity)
-    log("After applying shipping cose: #{self.unit_price}")
-  end
-
   def calculate_shipping
     return calculate_fixed_price unless product.carton.fixed_price.nil?
     carton = product.carton
@@ -66,37 +57,46 @@ module Spree::QuoteCalculatorShipping
 
     shipping_sym = Spree::ShippingOption::OPTION.key(selected_shipping_option)
 
-    binding.pry
+    shipping_options.destroy_all
+
+    shipping_cost = 0.0
 
     delivery_date = nil
     ups_rates.each do |rate|
-      next if shipping_option_map[rate[0]] != shipping_sym
-      auction_data[:shipping_cost] = (rate[1] * number_of_packages.to_f) / 100
-      auction_data[:service_name] = rate[0] unless rate[0].blank?
-      delivery_date = rate[2]
-      break
-    end
-
-    if delivery_date.nil?
-      auction_data[:service_name] = ups_rates[0][0] unless ups_rates[0][0].blank?
-      auction_data[:shipping_cost] = (ups_rates[0][1] * number_of_packages.to_f) / 100
-    end
-
-    begin
-      delta = 0
-      if delivery_date.nil?
-        # Try and use the cheapest and adjust
-        delivery_date ||= ups_rates[1][2]
-        delta = 2
+      if shipping_option_map[rate[0]] != shipping_sym
+        shipping_cost = (ups_rates[0][1] * number_of_packages.to_f) / 100
       end
-      days_diff = delta + ((delivery_date.to_f - Time.zone.now.to_f) / 86400).ceil
-    rescue
-      days_diff = 5
-    end
 
-    auction_data[:delivery_date] = Time.zone.now + days_diff.days
-    auction_data[:delivery_days] = days_diff
-    auction_data[:shipping_cost]
+      delivery_date = rate[2]
+
+      service_name = rate[0]
+
+      if delivery_date.nil?
+        service_name = ups_rates[0][0] unless ups_rates[0][0].blank?
+        shipping_cost = (ups_rates[0][1] * number_of_packages.to_f) / 100
+      end
+
+      begin
+        delta = 0
+        if delivery_date.nil?
+          # Try and use the cheapest and adjust
+          delivery_date ||= ups_rates[1][2]
+          delta = 2
+        end
+        days_diff = delta + ((delivery_date.to_f - Time.zone.now.to_f) / 86400).ceil
+      rescue
+        days_diff = 5
+      end
+
+      shipping_options.build(
+        name: service_name,
+        delivery_date: Time.zone.now + days_diff.days,
+        delivery_days: days_diff,
+        shipping_option: Spree::ShippingOption::OPTION[shipping_option_map[rate[0]]],
+        shipping_cost: shipping_cost
+      )
+    end
+    shipping_cost
   rescue => e
     log("ERROR (calculate shipping): #{e}")
     0.0

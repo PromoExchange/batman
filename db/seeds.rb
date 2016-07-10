@@ -148,10 +148,3 @@ puts 'Users'
   user.save!
   user.confirm!
 end
-
-puts 'Pages'
-CSV.foreach(seed_path('pages.csv'), headers: true, header_converters: :symbol) do |row|
-  page = Spree::Page.create(row.to_hash)
-  page.stores << Spree::Store.first
-  page.save!
-end

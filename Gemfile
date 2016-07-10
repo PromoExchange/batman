@@ -38,7 +38,6 @@ gem 'spree_gateway',        github: 'spree/spree_gateway', branch: '3-0-stable'
 gem 'spree_auth_devise',    github: 'spree/spree_auth_devise', branch: '3-0-stable'
 gem 'spree_volume_pricing', github: 'spree/spree_volume_pricing', branch: '3-0-stable'
 gem 'spree_i18n',           github: 'spree-contrib/spree_i18n', branch: '3-0-stable'
-gem 'spree_static_content', github: 'spree-contrib/spree_static_content', branch: '3-0-stable'
 gem 'spree_first_data_gge4'
 gem 'deface', git: 'git://github.com/spree/deface.git', branch: 'master'
 

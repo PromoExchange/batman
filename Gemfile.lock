@@ -12,14 +12,6 @@ GIT
       spree_core (~> 3.0.5)
 
 GIT
-  remote: git://github.com/spree-contrib/spree_static_content.git
-  revision: 80a74e1ad8e1843c6bfabcd700dc8edb84822fdd
-  branch: 3-0-stable
-  specs:
-    spree_static_content (3.0.1)
-      spree_core (~> 3.0.0)
-
-GIT
   remote: git://github.com/spree/deface.git
   revision: 49fad6ecab83139352070f8964f2e1ae2eb23c12
   branch: master
@@ -670,7 +662,6 @@ DEPENDENCIES
   spree_first_data_gge4
   spree_gateway!
   spree_i18n!
-  spree_static_content!
   spree_volume_pricing!
   spring
   spring-commands-rspec

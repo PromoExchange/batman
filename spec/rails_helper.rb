@@ -1,7 +1,8 @@
-ENV['RAILS_ENV'] ||= 'test'
+ENV['RAILS_ENV'] = 'test'
 require 'spec_helper'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
+require 'database_cleaner'
 
 require 'spree_first_data_gge4/factories'
 require 'spree/testing_support/factories'

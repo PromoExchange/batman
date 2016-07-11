@@ -98,7 +98,7 @@ module Spree::QuoteCalculatorShipping
     end
     shipping_cost
   rescue => e
-    log("ERROR (calculate shipping): #{e}")
+    log("ERROR: (calculate shipping): #{e}")
     0.0
   end
 

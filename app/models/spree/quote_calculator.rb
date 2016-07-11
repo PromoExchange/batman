@@ -44,7 +44,6 @@ module Spree::QuoteCalculator
     unit_price_with_shipping = unit_price + (shipping_cost / quantity)
     log("After applying shipping #{unit_price_with_shipping}")
 
-    binding.pry
     save!
 
     unit_price_with_shipping * quantity

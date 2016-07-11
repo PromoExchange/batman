@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160703193023) do
+ActiveRecord::Schema.define(version: 20160710192543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1117,12 +1117,10 @@ ActiveRecord::Schema.define(version: 20160703193023) do
 
   create_table "spree_shipping_options", force: :cascade do |t|
     t.string   "name",                          null: false
-    t.decimal  "delta",                         null: false
     t.datetime "delivery_date",                 null: false
     t.integer  "delivery_days",                 null: false
     t.integer  "shipping_option",               null: false
     t.decimal  "shipping_cost",   default: 0.0, null: false
-    t.decimal  "total_price",     default: 0.0, null: false
     t.integer  "quote_id",                      null: false
   end
 

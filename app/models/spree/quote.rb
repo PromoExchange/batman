@@ -61,8 +61,9 @@ class Spree::Quote < Spree::Base
     end
   end
 
-  def cache_key
-    "#{model_name.cache_key}/#{product.id}/#{selected_shipping_option}/#{quantity}"
+  def cache_key(shipping_option = nil)
+    shipping_option ||= selected_shipping_option
+    "#{model_name.cache_key}/#{product.id}/#{shipping_option}/#{quantity}"
   end
 
   def log(message)
@@ -84,7 +85,20 @@ class Spree::Quote < Spree::Base
   def best_price(options = {})
     log("Best price called #{options}")
     # @see module Spree::QuoteCalculator
-    calculate(options)
+    best_price = calculate(options)
+
+    # If we get here, we have rerun the price calculations
+    # We have saved the database all of the shipping options
+    # Let's refresh the cache here for all of them
+    shipping_options.each do |shipping_option|
+      unit_price_with_shipping = unit_price + (shipping_option.shipping_cost / quantity)
+      Rails.cache.write(
+        "#{cache_key(shipping_option.shipping_option)}/total_price",
+        unit_price_with_shipping * quantity,
+        expires_in: cache_expiration.hours
+      )
+    end
+    best_price
   end
 
   def generate_reference

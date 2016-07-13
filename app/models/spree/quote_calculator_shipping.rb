@@ -73,7 +73,7 @@ module Spree::QuoteCalculatorShipping
       begin
         delta = 0
         if delivery_date.nil?
-          # UPS Ground does not always have a delivery delivery delivery_date
+          # UPS Ground does not always have a delivery_date
           # We take the next rate delivery date and add 2
           delivery_date ||= ups_rates[1][2]
           delta = 2

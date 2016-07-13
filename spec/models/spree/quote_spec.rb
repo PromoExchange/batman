@@ -72,5 +72,13 @@ describe Spree::Quote, type: :model do
       expect(quote.cache_key =~ /#{quote.selected_shipping_option}/).to be_truthy
       expect(quote.cache_key =~ /#{quote.model_name.cache_key}/).to be_truthy
     end
+
+    it 'should have a specific cache key with shipping option' do
+      quote = FactoryGirl.create(:quote)
+      expect(quote.cache_key(5) =~ /#{quote.product.id}/).to be_truthy
+      expect(quote.cache_key(5) =~ /#{quote.quantity}/).to be_truthy
+      expect(quote.cache_key(5) =~ /#{5}/).to be_truthy
+      expect(quote.cache_key(5) =~ /#{quote.model_name.cache_key}/).to be_truthy
+    end
   end
 end

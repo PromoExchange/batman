@@ -107,7 +107,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.total_price(selected_shipping_option: :ups_3day_select) - 637.81).abs).to be < 0.001
   end
 
-  xit 'should use higher cost for express shipping', active: true do
+  xit 'should use higher cost for express shipping' do
     quote = FactoryGirl.create(:quote, :with_carton)
     standard_price = quote.total_price(selected_shipping_option: :ups_ground)
     express_price = quote.total_price(selected_shipping_option: :ups_next_day_air)

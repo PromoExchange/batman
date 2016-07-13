@@ -55,31 +55,26 @@ module Spree::QuoteCalculatorShipping
       'UPS Next Day Air' => :ups_next_day_air
     }.freeze
 
-    shipping_sym = Spree::ShippingOption::OPTION.key(selected_shipping_option)
-
     shipping_options.destroy_all
 
+    shipping_sym = Spree::ShippingOption::OPTION.key(selected_shipping_option)
+
     shipping_cost = 0.0
-
+    selected_shipping_cost = 0.0
     delivery_date = nil
+
     ups_rates.each do |rate|
-      if shipping_option_map[rate[0]] != shipping_sym
-        shipping_cost = (ups_rates[0][1] * number_of_packages.to_f) / 100
-      end
-
+      shipping_cost = (rate[1] * number_of_packages.to_f) / 100
       delivery_date = rate[2]
-
       service_name = rate[0]
 
-      if delivery_date.nil?
-        service_name = ups_rates[0][0] unless ups_rates[0][0].blank?
-        shipping_cost = (ups_rates[0][1] * number_of_packages.to_f) / 100
-      end
+      selected_shipping_cost = shipping_cost if shipping_option_map[rate[0]] == shipping_sym
 
       begin
         delta = 0
         if delivery_date.nil?
-          # Try and use the cheapest and adjust
+          # UPS Ground does not always have a delivery delivery delivery_date
+          # We take the next rate delivery date and add 2
           delivery_date ||= ups_rates[1][2]
           delta = 2
         end
@@ -96,7 +91,7 @@ module Spree::QuoteCalculatorShipping
         shipping_cost: shipping_cost
       )
     end
-    shipping_cost
+    selected_shipping_cost
   rescue => e
     log("ERROR: (calculate shipping): #{e}")
     0.0

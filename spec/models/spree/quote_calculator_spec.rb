@@ -104,6 +104,13 @@ RSpec.describe Spree::Quote, type: :model do
 
   xit 'should use non fixed shipping 3day', active: true do
     quote = FactoryGirl.create(:quote, :with_carton)
-    expect((quote.total_price(selected_shipping_option: :ups_3day_select) - 617.17).abs).to be < 0.001
+    expect((quote.total_price(selected_shipping_option: :ups_3day_select) - 637.81).abs).to be < 0.001
+  end
+
+  xit 'should use higher cost for express shipping', active: true do
+    quote = FactoryGirl.create(:quote, :with_carton)
+    standard_price = quote.total_price(selected_shipping_option: :ups_ground)
+    express_price = quote.total_price(selected_shipping_option: :ups_next_day_air)
+    expect(express_price).to be > standard_price
   end
 end

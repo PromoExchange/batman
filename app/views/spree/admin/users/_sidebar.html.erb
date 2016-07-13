@@ -11,7 +11,7 @@
       <%= link_to_with_icon 'user', Spree.t(:"admin.user.addresses"), spree.addresses_admin_user_path(@user) %>
     </li>
     <li<%== ' class="active"' if current == :logo %>>
-      <%= link_to_with_icon 'user', Spree.t(:"admin.user.logos"), "/admin/users/#{@user.id}/logos" %>
+      <%= link_to_with_icon 'user', Spree.t(:"admin.user.logos"), spree.admin_user_logos_path(@user) %>
     </li>
     <li<%== ' class="active"' if current == :orders %>>
       <%= link_to_with_icon 'shopping-cart', Spree.t(:"admin.user.orders"), spree.orders_admin_user_path(@user) %>

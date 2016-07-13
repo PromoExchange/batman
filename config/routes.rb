@@ -125,8 +125,10 @@ Rails.application.routes.draw do
         resources :upcharge_products
         resources :carton_products
       end
-      
+
       resources :users do
+        resources :logos
+
         member do
           get :addresses
           put :addresses
@@ -134,8 +136,6 @@ Rails.application.routes.draw do
           put :generate_api_key
           get :items
           get :orders
-
-          resources :logos
         end
       end
     end

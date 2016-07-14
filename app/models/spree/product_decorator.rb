@@ -16,6 +16,8 @@ Spree::Product.class_eval do
 
   accepts_nested_attributes_for :upcharges, :imprint_methods_products
 
+  validates_associated :carton
+
   state_machine initial: :active do
     after_transition on: :invalid, do: :unavailable
     after_transition on: :loaded, do: :available

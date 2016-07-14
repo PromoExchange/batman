@@ -1,14 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Spree::Product, type: :model do
-  it 'should belong to a supplier' do
-    t = Spree::Product.reflect_on_association(:supplier)
-    expect(t.macro).to eq :belongs_to
-  end
-
-  it 'should have many and belongs to imprint_methods' do
-    t = Spree::Product.reflect_on_association(:imprint_methods)
-    expect(t.macro).to eq :has_many
+  describe 'associations' do
+    it { should belong_to(:supplier) }
+    it { should have_many(:imprint_methods) }
   end
 
   it 'should start with an active state' do
@@ -41,7 +36,7 @@ RSpec.describe Spree::Product, type: :model do
   end
 
   it 'should have a valid carton' do
-    product = FactoryGirl.build(:px_product)
+    product = FactoryGirl.create(:px_product)
     expect(product.carton.active?).to be_truthy
   end
 

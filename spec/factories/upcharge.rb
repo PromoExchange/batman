@@ -3,7 +3,7 @@ FactoryGirl.define do
     upcharge_type
 
     factory :supplier_upcharge, class: Spree::UpchargeSupplier do
-      association :related, factory: :supplier
+      association :supplier, factory: :supplier
       value '55.00'
     end
 

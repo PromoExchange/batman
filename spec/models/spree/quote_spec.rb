@@ -1,7 +1,49 @@
 require 'rails_helper'
 
 describe Spree::Quote, type: :model do
-  describe 'model' do
+  describe 'factory' do
+    it 'should build with a valid quote' do
+      quote = FactoryGirl.build(:quote)
+      expect(quote.valid?).to be_truthy
+    end
+
+    it 'should build a valid quote with_setup_upcharges' do
+      quote = FactoryGirl.build(:quote, :with_setup_upcharges)
+      expect(quote.valid?).to be_truthy
+    end
+
+    it 'should build a valid quote with_run_upcharges' do
+      quote = FactoryGirl.build(:quote, :with_run_upcharges)
+      expect(quote.valid?).to be_truthy
+    end
+
+    it 'should build a valid quote with_setup_and_run_upcharges' do
+      quote = FactoryGirl.build(:quote, :with_setup_and_run_upcharges)
+      expect(quote.valid?).to be_truthy
+    end
+
+    it 'should build a valid quote with_additional_location_upcharge' do
+      quote = FactoryGirl.build(:quote, :with_additional_location_upcharge)
+      expect(quote.valid?).to be_truthy
+    end
+
+    it 'should build a valid quote with_fixed_price_per_item' do
+      quote = FactoryGirl.build(:quote, :with_fixed_price_per_item)
+      expect(quote.valid?).to be_truthy
+    end
+
+    it 'should build a valid quote with_fixed_price_total' do
+      quote = FactoryGirl.build(:quote, :with_fixed_price_total)
+      expect(quote.valid?).to be_truthy
+    end
+
+    it 'should build a valid quote with_carton' do
+      quote = FactoryGirl.build(:quote, :with_carton)
+      expect(quote.valid?).to be_truthy
+    end
+  end
+
+  describe 'validations' do
     it { should validate_presence_of(:main_color) }
     it { should validate_presence_of(:shipping_address) }
     it { should validate_presence_of(:quantity) }
@@ -9,11 +51,6 @@ describe Spree::Quote, type: :model do
     it { should_not allow_value(1).for(:quantity) }
     it { should allow_value(50).for(:quantity) }
     it { should validate_numericality_of(:quantity).only_integer }
-
-    it 'should save with a valid quote' do
-      quote = FactoryGirl.build(:quote)
-      expect(quote.save).to be_truthy
-    end
   end
 
   describe 'associations' do

@@ -45,6 +45,10 @@ class Spree::Quote < Spree::Base
       quote.product.minimum_quantity
     end)
   }
+  validates_associated :product
+  validates_associated :main_color
+  validates_associated :shipping_address
+  validates_associated :pms_colors
 
   delegate :company_store, to: :product
   delegate :markup, to: :product
@@ -52,9 +56,10 @@ class Spree::Quote < Spree::Base
 
   def total_price(options = {})
     options.reverse_merge!(
-      selected_shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+      selected_shipping_option: :ups_ground
     )
     self.selected_shipping_option = Spree::ShippingOption::OPTION[options[:selected_shipping_option]]
+
     log("Total price called #{options}")
     Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
       best_price(options)

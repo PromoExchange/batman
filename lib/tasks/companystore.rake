@@ -166,4 +166,40 @@ namespace :company_store do
     )
     create_price_cache(company_store.supplier)
   end
+
+  desc 'Create Longboard company store'
+  task longboard: :environment do
+    store_name = 'Longboard Company Store'
+    slug = 'longboard'
+    company_store = create_company_store('kate@longboard-am.com', store_name, 'Longboard', slug)
+    load_products(slug, store_name)
+    assign_original_supplier(
+      [
+        {
+          query: { dc_acct_num: '100306' },
+          skus: [
+            'LB-9350-78',
+            'LB-5300-68',
+            'LB-4004-04',
+            'LB-4004-19',
+            'LB-4004-01',
+            'LB-9860-11',
+            'LB-4004-11',
+            'LB-2090-03',
+            'LB-6050-51',
+            'LB-9860-69',
+            'LB-6050-76',
+            'LB-6050-78'
+          ]
+        },
+        { query: { name: 'Spector' }, skus: ['LB-G3112'] },
+        { query: { name: 'ETS Express' }, skus: ['LB-33162'] },
+        { query: { name: 'Chameleon Like' }, skus: ['LB-VPM'] },
+        { query: { name: 'Marmot' }, skus: ['LB-98070'] },
+        { query: { name: 'Columbia' }, skus: ['LB-6223'] },
+        { query: { name: 'Prime Line' }, skus: ['LB-PL-4525'] }
+      ]
+    )
+    create_price_cache(company_store.supplier)
+  end
 end

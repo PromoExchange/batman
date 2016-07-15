@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# Skipped (by file name) pending reorganize
 RSpec.describe Spree::ShippingOption, type: :model do
   it 'should not save with a nil name' do
     shipping_option = FactoryGirl.build(:shipping_option, name: nil)

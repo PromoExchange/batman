@@ -104,8 +104,18 @@ CSV.parse(S3_CS_BUCKET.objects['longboard/data/products.csv'].read, headers: tru
     # Imprint method
     imprint = hashed[:imprint_method]
     case imprint
-    when 'etching'
-      imprint_method = Spree::ImprintMethod.where(name: 'Etching').first_or_create
+    when 'embroidery'
+      imprint_method = Spree::ImprintMethod.where(name: 'Embroider').first_or_create
+    when 'laser engraved'
+      imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraved').first_or_create
+    when 'screen print'
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+    when 'deboss'
+      imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+    when 'pad printed'
+      imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+    when 'transfer'
+      imprint_method = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
     else
       puts "Unknown Method - #{imprint}"
     end
@@ -159,10 +169,20 @@ CSV.parse(S3_CS_BUCKET.objects['longboard/data/upcharges.csv'].read, headers: tr
   fail "Failed to find product #{hashed[:sku]}" if product.nil?
 
   case hashed[:imprint_method]
-  when 'etching'
-    imprint_method = Spree::ImprintMethod.where(name: 'Etching').first_or_create
+  when 'embroidery'
+    imprint_method = Spree::ImprintMethod.where(name: 'Embroider').first_or_create
+  when 'laser engraved'
+    imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraved').first_or_create
+  when 'screen print'
+    imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  when 'deboss'
+    imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+  when 'pad printed'
+    imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+  when 'transfer'
+    imprint_method = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
   else
-    puts "Unknown Method - #{imprint}"
+    puts "Unknown Method - #{hashed[:imprint_method]}"
   end
 
   Spree::UpchargeProduct.where(
@@ -189,10 +209,20 @@ CSV.parse(S3_CS_BUCKET.objects['longboard/data/preconfigure.csv'].read, headers:
   fail 'Unable to locate Longboard user' if buyer.nil?
 
   case hashed[:imprint_method]
-  when 'etching'
-    imprint_method = Spree::ImprintMethod.where(name: 'Etching').first_or_create
+  when 'embroidery'
+    imprint_method = Spree::ImprintMethod.where(name: 'Embroider').first_or_create
+  when 'laser engraved'
+    imprint_method = Spree::ImprintMethod.where(name: 'Laser Engraved').first_or_create
+  when 'screen print'
+    imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+  when 'deboss'
+    imprint_method = Spree::ImprintMethod.where(name: 'Deboss').first_or_create
+  when 'pad printed'
+    imprint_method = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+  when 'transfer'
+    imprint_method = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
   else
-    puts "Unknown Imprint Method - #{imprint}"
+    puts "Unknown Imprint Method - #{hashed[:imprint_method]}"
   end
 
   Spree::Preconfigure.where(

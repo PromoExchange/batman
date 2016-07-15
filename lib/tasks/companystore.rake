@@ -175,19 +175,29 @@ namespace :company_store do
     load_products(slug, store_name)
     assign_original_supplier(
       [
-        { query: { dc_acct_num: '100257' }, skus: ['PA-40060'] },
-        { query: { dc_acct_num: '100108' }, skus: ['PA-5117'] },
-        { query: { name: 'Pinnacle' }, skus: ['PA-SM-4125'] },
         {
           query: { dc_acct_num: '100306' },
-          skus: ['PA-7120-18', 'PA-7199-32', 'PA-1621-11', 'PA-7199-60', 'PA-9350-22']
+          skus: [
+            'LB-9350-78',
+            'LB-5300-68',
+            'LB-4004-04',
+            'LB-4004-19',
+            'LB-4004-01',
+            'LB-9860-11',
+            'LB-4004-11',
+            'LB-2090-03',
+            'LB-6050-51',
+            'LB-9860-69',
+            'LB-6050-76',
+            'LB-6050-78'
+          ]
         },
-        { query: { dc_acct_num: '100160' }, skus: ['PA-3250-99'] },
-        { query: { name: 'Deluxe' }, skus: ['PA-SM-9734'] },
-        { query: { name: 'Magnetic Attractions' }, skus: ['PA-ARI251'] },
-        { query: { name: 'Imprint Items' }, skus: ['PA-JK-7000'] },
-        { query: { name: 'Leader' }, skus: ['PA-98070'] },
-        { query: { name: 'Columbia' }, skus: ['PA-6223'] }
+        { query: { name: 'Spector' }, skus: ['LB-G3112'] },
+        { query: { name: 'ETS Express' }, skus: ['LB-33162'] },
+        { query: { name: 'Chameleon Like' }, skus: ['LB-VPM'] },
+        { query: { name: 'Marmot' }, skus: ['LB-98070'] },
+        { query: { name: 'Columbia' }, skus: ['LB-6223'] },
+        { query: { name: 'Prime Line' }, skus: ['LB-PL-4525'] }
       ]
     )
     create_price_cache(company_store.supplier)

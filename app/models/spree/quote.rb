@@ -54,6 +54,10 @@ class Spree::Quote < Spree::Base
   delegate :markup, to: :product
   delegate :imprint_method, to: :product
 
+  def selected_shipping
+    shipping_options.find_by_shipping_option(selected_shipping_option)
+  end
+
   def total_price(options = {})
     options.reverse_merge!(
       selected_shipping_option: :ups_ground

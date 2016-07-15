@@ -26,17 +26,17 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.unit_price - 23.992).abs).to be < 0.001
   end
 
-  xit 'should calculate quote with 25 quantity', focus: true do
+  xit 'should calculate quote with 25 quantity' do
     quote = FactoryGirl.create(:quote)
     expect((quote.total_price - 616.17).abs).to be < 0.001
   end
 
-  xit 'should calculate quote with 125 quantity', focus: true do
+  xit 'should calculate quote with 125 quantity' do
     quote = FactoryGirl.create(:quote, quantity: 125)
     expect((quote.total_price - 2815.37).abs).to be < 0.001
   end
 
-  xit 'should calculate quote with 225 quantity', focus: true do
+  xit 'should calculate quote with 225 quantity' do
     quote = FactoryGirl.create(:quote, quantity: 225)
     expect((quote.total_price - 4710.94).abs).to be < 0.001
   end
@@ -112,5 +112,11 @@ RSpec.describe Spree::Quote, type: :model do
     standard_price = quote.total_price(selected_shipping_option: :ups_ground)
     express_price = quote.total_price(selected_shipping_option: :ups_next_day_air)
     expect(express_price).to be > standard_price
+  end
+
+  it 'should return selected shipping option', focus: true do
+    quote = FactoryGirl.create(:quote, :with_carton)
+    quote.total_price(selected_shipping_option: :ups_ground)
+    expect(quote.selected_shipping.shipping_option).to eq Spree::ShippingOption::OPTION[:ups_ground]
   end
 end

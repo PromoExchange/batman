@@ -4,6 +4,12 @@ RSpec.describe Spree::Product, type: :model do
   describe 'associations' do
     it { should belong_to(:supplier) }
     it { should have_many(:imprint_methods) }
+    it { should have_one(:preconfigure) }
+    it { should have_many(:upcharges) }
+    it { should have_many(:color_product) }
+    it { should have_one(:carton) }
+    it { should belong_to(:original_supplier) }
+    it { should have_many(:imprint_methods_products) }
   end
 
   it 'should start with an active state' do

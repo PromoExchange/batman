@@ -98,7 +98,7 @@ RSpec.describe Spree::Bid, type: :model do
     expect(t.macro).to eq :has_many
   end
 
-  # Skipping pending reorganize 
+  # Skipping pending reorganize
   xit 'should delete shipping_options' do
     bid_with_shipping = FactoryGirl.create(:bid, :with_shipping_options)
     expect { bid_with_shipping.destroy }.to change { Spree::ShippingOption.count }.by(-5)

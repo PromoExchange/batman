@@ -1,7 +1,7 @@
 require 'csv'
 require 'open-uri'
 
-class SpreeCompanyStoreLoader
+class CompanyStoreLoader
   DEFAULT_PRODUCT_ATTRS = {
     shipping_category: Spree::ShippingCategory.find_by_name!('Default'),
     tax_category: Spree::TaxCategory.find_by_name!('Default'),

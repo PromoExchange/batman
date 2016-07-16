@@ -1,5 +1,3 @@
-require '../../db/company_store_loader'
-
 def create_company_store(params)
   user = Spree::User.where(email: params[:email]).first
   raise "failed to find user: #{params[:email]}" if user.nil?

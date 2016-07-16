@@ -17,7 +17,7 @@ def create_company_store(params)
 end
 
 def load_products(params)
-  CompanyStoreLoader.load(params)
+  CompanyStoreLoader.load!(params)
   Resque.enqueue(CompanyStorePrebid, name: params[:name])
 end
 

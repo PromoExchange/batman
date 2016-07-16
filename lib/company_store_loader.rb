@@ -9,14 +9,14 @@ class CompanyStoreLoader
   }.freeze
 
   def self.load!(params)
-    raise 'Invalid params' unless params[:email].present? && params[:store_name].present? && params[:slug].present?
+    raise 'Invalid params' unless params[:email].present? && params[:name].present? && params[:slug].present?
     new(params).load!
   end
 
   def initialize(params)
     @user = Spree::User.where(email: params[:email]).first
     raise "Unable to find #{params[:email]}" if @user.nil?
-    @supplier = Spree::Supplier.where(name: params[:store_name]).first
+    @supplier = Spree::Supplier.where(name: params[:name]).first
     raise 'Unable to find supplier' if @supplier.nil?
     @slug = params[:slug]
   end
@@ -37,7 +37,7 @@ class CompanyStoreLoader
   end
 
   def clean
-    Spree::Product.where(supplier: supplier).each do |product|
+    Spree::Product.where(supplier: @supplier).each do |product|
       Spree::Auction.where(state: :custom_auction, product: product).each do |auction|
         Spree::Bid.where(auction: auction).destroy_all
         auction.destroy
@@ -56,13 +56,13 @@ class CompanyStoreLoader
           name: data[:item_name],
           description: data[:product_description],
           price: 1.0,
-          supplier_id: supplier.id,
+          supplier_id: @supplier.id,
           custom_product: true,
           color_product: []
         )
       )
       product.images << Spree::Image.create!(attachment: get_image(product.sku), viewable: product)
-      product.color_product << Spree::ColorProduct.where(product: product).first_or_create
+      product.color_product << Spree::ColorProduct.where(color: data[:color], product: product).first_or_create
       product.imprint_methods << Spree::ImprintMethod.where(name: data[:imprint_method]).first_or_create
       load_prices(data, product) if data[:pricecode].present?
       raise "Invalid carton #{product.sku}" unless load_carton(product, data)
@@ -74,7 +74,7 @@ class CompanyStoreLoader
   end
 
   def load_prices(data, product)
-    price_code_array = Spree::Price.price_code_to_array(price_code)
+    price_code_array = Spree::Price.price_code_to_array(data[:pricecode])
     price_code_array.size.times do |i|
       quantity = data["qty#{i + 1}".to_sym]
 

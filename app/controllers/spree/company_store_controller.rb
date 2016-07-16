@@ -21,6 +21,7 @@ class Spree::CompanyStoreController < Spree::StoreController
     session[:company_store_id] = @current_company_store.id
     products = Spree::Product.where(supplier: @current_company_store.supplier)
     @auctions = Spree::Auction.where(product_id: products.pluck(:id), state: :custom_auction).order(:id)
+    @auctions
   end
 
   def company_store_params

@@ -1,24 +1,24 @@
-def create_company_store(email, name, display_name, slug)
-  user = Spree::User.where(email: email).first
-  raise "failed to find user: #{email}" if user.nil?
+def create_company_store(params)
+  user = Spree::User.where(email: params[:email]).first
+  raise "failed to find user: #{params[:email]}" if user.nil?
 
-  supplier = Spree::Supplier.where(name: name).first_or_create(
+  supplier = Spree::Supplier.where(name: params[:name]).first_or_create(
     billing_address: user.bill_address,
     shipping_address: user.ship_address,
     company_store: true
   )
 
-  Spree::CompanyStore.where(name: name).first_or_create(
-    display_name: display_name,
-    slug: slug,
+  Spree::CompanyStore.where(name: params[:name]).first_or_create(
+    display_name: params[:display_name],
+    slug: params[:slug],
     supplier: supplier,
     buyer: user
   )
 end
 
-def load_products(slug, store_name)
-  ProductLoader.load('company_store', slug)
-  Resque.enqueue(CompanyStorePrebid, name: store_name)
+def load_products(params)
+  CompanyStoreLoader.load!(params)
+  Resque.enqueue(CompanyStorePrebid, name: params[:name])
 end
 
 def assign_original_supplier(config)
@@ -43,10 +43,15 @@ end
 namespace :company_store do
   desc 'Create Xactly company store'
   task xactly: :environment do
-    store_name = 'Xactly Company Store'
-    slug = 'xactly'
-    company_store = create_company_store('xactly_cs@thepromoexchange.com', store_name, 'Xactly', slug)
-    load_products(slug, store_name)
+    params = {
+      display_name: 'Xactly',
+      email: 'xactly_cs@thepromoexchange.com',
+      slug: 'xactly',
+      name: 'Xactly Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
     assign_original_supplier(
       [
         { query: { dc_acct_num: '100306' }, skus: ['XA-8150-85', 'XA-7120-15'] },
@@ -68,30 +73,41 @@ namespace :company_store do
 
   desc 'Create anchor free company store'
   task anchorfree: :environment do
-    store_name = 'Anchorfree Company Store'
-    slug = 'anchorfree'
-    company_store = create_company_store('anchorfree_cs@thepromoexchange.com', store_name, 'Anchorfree', slug)
-    products = [
-      { query: { dc_acct_num: '100160' }, skus: ['AF-632418', 'AF-5170', 'AF-71600'] }, # Sanmar Products
-      { query: { dc_acct_num: '100383' }, skus: ['AF-SM-4125', 'AF-SM-2381'] }, # Bullet Products
-      { query: { dc_acct_num: '100306' }, skus: ['AF-7003-40', 'AF-3250-99', 'AF-2050-02'] }, # Leeds Products
-      { query: { dc_acct_num: '100306' }, skus: ['AF-MOLEHRD'] }, # Gemline Products
-      { query: { dc_acct_num: '100104' }, skus: ['AF-P3A3A25'] }, # BIC Graphic Products
-      { query: { dc_acct_num: '100108' }, skus: ['AF-5117'] }, # Innovation Line Products
-      { query: { dc_acct_num: '120402' }, skus: ['AF-SG120'] }, # Jetline Products
-      { query: { name: 'Quake City Caps' }, skus: ['AF-8500'] } # Quake City Caps Products
-    ]
-    load_products(slug, store_name)
-    assign_original_supplier(products)
+    params = {
+      display_name: 'Anchorfree',
+      email: 'anchorfree_cs@thepromoexchange.com',
+      slug: 'anchorfree',
+      name: 'Anchorfree Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
+    assign_original_supplier(
+      [
+        { query: { dc_acct_num: '100160' }, skus: ['AF-632418', 'AF-5170', 'AF-71600'] }, # Sanmar Products
+        { query: { dc_acct_num: '100383' }, skus: ['AF-SM-4125', 'AF-SM-2381'] }, # Bullet Products
+        { query: { dc_acct_num: '100306' }, skus: ['AF-7003-40', 'AF-3250-99', 'AF-2050-02'] }, # Leeds Products
+        { query: { dc_acct_num: '100306' }, skus: ['AF-MOLEHRD'] }, # Gemline Products
+        { query: { dc_acct_num: '100104' }, skus: ['AF-P3A3A25'] }, # BIC Graphic Products
+        { query: { dc_acct_num: '100108' }, skus: ['AF-5117'] }, # Innovation Line Products
+        { query: { dc_acct_num: '120402' }, skus: ['AF-SG120'] }, # Jetline Products
+        { query: { name: 'Quake City Caps' }, skus: ['AF-8500'] } # Quake City Caps Products
+      ]
+    )
     create_price_cache(company_store.supplier)
   end
 
   desc 'Create Hightail company store'
   task hightail: :environment do
-    store_name = 'Hightail Company Store'
-    slug = 'hightail'
-    company_store = create_company_store('hightail_cs@thepromoexchange.com', store_name, 'Hightail', slug)
-    load_products(slug, store_name)
+    params = {
+      display_name: 'Hightail',
+      email: 'hightail_cs@thepromoexchange.com',
+      slug: 'hightail',
+      name: 'Hightail Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
     assign_original_supplier(
       [
         { query: { dc_acct_num: '100306' }, skus: ['HT-8150-90'] }, # Leeds Products
@@ -103,10 +119,15 @@ namespace :company_store do
 
   desc 'Create Netmining company store'
   task netmining: :environment do
-    store_name = 'Netmining Company Store'
-    slug = 'netmining'
-    company_store = create_company_store('netmining_cs@thepromoexchange.com', store_name, 'Netmining', slug)
-    load_products(slug, store_name)
+    params = {
+      display_name: 'Netmining',
+      email: 'netmining_cs@thepromoexchange.com',
+      slug: 'netmining',
+      name: 'Netmining Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
     assign_original_supplier(
       [
         { query: { dc_acct_num: '100746' }, skus: ['NM-EOS-LP15'] },
@@ -123,30 +144,45 @@ namespace :company_store do
 
   desc 'Create PIMCO company store'
   task pimco: :environment do
-    store_name = 'PIMCO Company Store'
-    slug = 'pimco'
-    company_store = create_company_store('pimco_cs@thepromoexchange.com', store_name, 'PIMCO', slug)
-    load_products(slug, store_name)
+    params = {
+      display_name: 'PIMCO',
+      email: 'pimco_cs@thepromoexchange.com',
+      slug: 'pimco',
+      name: 'PIMCO Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
     assign_original_supplier([{ query: { name: 'Yeti' }, skus: ['PC-YRAM20'] }])
     create_price_cache(company_store.supplier)
   end
 
   desc 'Create Facebook company store'
   task facebook: :environment do
-    store_name = 'Facebook Company Store'
-    slug = 'facebook'
-    company_store = create_company_store('facebook_cs@thepromoexchange.com', store_name, 'Facebook', slug)
-    load_products(slug, store_name)
+    params = {
+      display_name: 'Facebook',
+      email: 'facebook_cs@thepromoexchange.com',
+      slug: 'facebook',
+      name: 'Facebook Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
     assign_original_supplier([{ query: { name: 'Brunswick' }, skus: ['FB-BRU181'] }])
     create_price_cache(company_store.supplier)
   end
 
   desc 'Create Pavia company store'
   task pavia: :environment do
-    store_name = 'Pavia Company Store'
-    slug = 'pavia'
-    company_store = create_company_store('lindsay.bertsch@paviasystems.com', store_name, 'Pavia', slug)
-    load_products(slug, store_name)
+    params = {
+      display_name: 'Pavia',
+      email: 'lindsay.bertsch@paviasystems.com',
+      slug: 'pavia',
+      name: 'Pavia Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
     assign_original_supplier(
       [
         { query: { dc_acct_num: '100257' }, skus: ['PA-40060'] },
@@ -169,10 +205,15 @@ namespace :company_store do
 
   desc 'Create Longboard company store'
   task longboard: :environment do
-    store_name = 'Longboard Company Store'
-    slug = 'longboard'
-    company_store = create_company_store('kate@longboard-am.com', store_name, 'Longboard', slug)
-    load_products(slug, store_name)
+    params = {
+      display_name: 'Longboard',
+      email: 'kate@longboard-am.com',
+      slug: 'longboard',
+      name: 'Longboard Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
     assign_original_supplier(
       [
         {

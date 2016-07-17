@@ -1,0 +1,39 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :color_products } %>
+
+<% content_for :page_actions do %>
+  <% if can?(:create, Spree::ColorProduct) %>
+    <%= button_link_to Spree.t(:new_color), new_admin_product_color_product_path, { class: 'btn-success', icon: 'add' } %>
+  <% end %>
+<% end %>
+
+<div class="well">
+  <% if @color_products.any? %>
+    <table class='table sortable' data-hook='colors_table'>
+      <thead>
+        <tr data-hook="images_header">
+          <th>
+            <%= Spree.t(:color) %>
+          </th>
+          <th class="actions actions-2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @color_products.each do |color_product| %>
+          <tr id='<%= spree_dom_id color_product %>'>
+            <td>
+              <p><%= color_product.color %></p>
+            </td>
+            <td class="actions actions-2 text-right">
+              <%= link_to_with_icon('edit', Spree.t(:edit), edit_admin_product_color_product_path(color_product.product, color_product), class: 'btn btn-primary btn-sm', no_text: true, data: { action: :edit }) if can? :edit, color_product %>
+              <%= link_to_delete(color_product, { url: admin_product_color_product_path(color_product.product, color_product), no_text: true }) if can? :destroy, color_product %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="alert alert-info no-objects-found">
+      <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::ColorProduct)) %>.
+    </div>
+  <% end %>
+</div>

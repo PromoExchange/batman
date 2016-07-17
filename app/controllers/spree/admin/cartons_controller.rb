@@ -1,16 +1,6 @@
-class Spree::Admin::CartonProductsController < Spree::Admin::BaseController
+class Spree::Admin::CartonsController < Spree::Admin::ResourceController
   before_action :load_product
   before_action :load_carton, only: [:edit, :update]
-
-  def edit
-    @carton = Spree::Carton.new if @carton.nil?
-  end
-
-  def update
-    @carton.update_attributes(carton_product_params)
-    flash[:success] = 'Carton updated'
-    redirect_to edit_admin_product_url(@product)
-  end
 
   private
 
@@ -22,7 +12,11 @@ class Spree::Admin::CartonProductsController < Spree::Admin::BaseController
     @carton = Spree::Carton.find(params[:id])
   end
 
-  def carton_product_params
+  def location_after_save
+    edit_admin_product_path(@product)
+  end
+
+  def carton_params
     params.require(:carton).permit(
       :product_id,
       :width,

@@ -1,31 +1,8 @@
-class Spree::Admin::ColorProductsController < Spree::Admin::BaseController
+class Spree::Admin::ColorProductsController < Spree::Admin::ResourceController
   before_action :load_product
   before_action :load_color_product, only: [:edit, :update, :destroy]
+  before_action :load_color_products, only: [:index]
   after_action :set_validity, only: [:create, :update, :destroy]
-
-  def index
-    @color_products = Spree::ColorProduct.where(product: @product)
-  end
-
-  def new
-    @color_product = Spree::ColorProduct.new
-  end
-
-  def create
-    Spree::ColorProduct.create(color_product_params)
-    redirect_to action: :index
-  end
-
-  def update
-    @color_product.update_attributes(color_product_params)
-    redirect_to action: :index
-  end
-
-  def destroy
-    @color_product.destroy
-    flash[:success] = flash_message_for(@color_product, :successfully_removed)
-    redirect_to action: :index
-  end
 
   private
 
@@ -41,6 +18,14 @@ class Spree::Admin::ColorProductsController < Spree::Admin::BaseController
 
   def load_color_product
     @color_product = Spree::ColorProduct.find(params[:id])
+  end
+
+  def load_color_products
+    @color_products = Spree::ColorProduct.where(product: @product)
+  end
+
+  def location_after_save
+    admin_product_color_products_url(@product)
   end
 
   def color_product_params

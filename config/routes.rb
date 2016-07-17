@@ -101,6 +101,11 @@ Rails.application.routes.draw do
           post 'generate_notification'
         end
       end
+      resources :company_stores do
+        member do
+          post :clone
+        end
+      end
       resources :product_loads
       resources :pms_colors
       resources :imprint_methods
@@ -123,7 +128,7 @@ Rails.application.routes.draw do
         resources :color_products
         resources :imprint_methods_products
         resources :upcharge_products
-        resources :carton_products
+        resources :cartons
       end
 
       resources :users do

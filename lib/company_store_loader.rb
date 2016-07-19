@@ -134,13 +134,16 @@ class CompanyStoreLoader
       product = Spree::Product.joins(:master).where("spree_variants.sku='#{data[:sku]}'").first
       raise "Failed to find product #{data[:sku]}" if product.nil?
 
-      Spree::Preconfigure.where(
+      preconfigure = Spree::Preconfigure.where(
         product: product,
         buyer: @user,
         imprint_method: Spree::ImprintMethod.where(name: data[:imprint_method]).first_or_create,
         main_color: Spree::ColorProduct.where(product: product, color: data[:color]).first_or_create,
         logo: @user.logos.where(custom: true).first
       ).first_or_create
+
+      preconfigure.custom_pms_colors = data[:custom_pms_colors] if data[:custom_pms_colors].present?
+      preconfigure.save!
     end
   end
 end

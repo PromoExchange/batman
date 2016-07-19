@@ -243,4 +243,26 @@ namespace :company_store do
     )
     create_price_cache(company_store.supplier)
   end
+
+  desc 'Create Bastide company store'
+  task bastide: :environment do
+    params = {
+      display_name: 'Bastide',
+      email: 'bastide_cs@thepromoexchange.com',
+      slug: 'bastide',
+      name: 'Bastide Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
+    assign_original_supplier(
+      [
+        {
+          query: { dc_acct_num: '100306' },
+          skus: ['BA-1690-49', 'BA-1695-05', 'BA-1690-63', 'BA-1693-86', 'BA-1691-61']
+        }
+      ]
+    )
+    create_price_cache(company_store.supplier)
+  end
 end

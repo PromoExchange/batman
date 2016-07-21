@@ -176,7 +176,7 @@ class Spree::Prebid < Spree::Base
     seller_markup || 0.0
 
     # HACK: For Yeti
-    seller_markup = 7.66103970737429 if auction.product.master.sku == 'PC-YRAM20'
+    seller_markup = 0.0766103970737429 if auction.product.master.sku == 'PC-YRAM20'
 
     auction_data[:messages] << "Applying markup: #{seller_markup.to_f}"
     auction_data[:running_unit_price] *= (1 + seller_markup.to_f)

@@ -47,7 +47,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should apply product run charges' do
+  it 'should apply product run charges' do
     quote2 = FactoryGirl.create(:quote, :with_run_upcharges)
     expect((quote2.total_price - 625.37).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
@@ -114,7 +114,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect(express_price).to be > standard_price
   end
 
-  it 'should return selected shipping option', focus: true do
+  it 'should return selected shipping option' do
     quote = FactoryGirl.create(:quote, :with_carton)
     quote.total_price(selected_shipping_option: :ups_ground)
     expect(quote.selected_shipping.shipping_option).to eq Spree::ShippingOption::OPTION[:ups_ground]

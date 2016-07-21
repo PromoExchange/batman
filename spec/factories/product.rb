@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :px_product, class: Spree::Product, parent: :product do
     association :supplier, factory: :supplier_company_store
     association :original_supplier, factory: :supplier
+    preconfigure
 
     after(:create) do |product|
       FactoryGirl.create_list(:color_product, 5, product: product)

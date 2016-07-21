@@ -1,5 +1,6 @@
 Spree::Api::V1::ProductsController.class_eval do
   def best_price
+    # TODO: Move this to the product model
     @product = find_product(params[:id])
     quantity = params[:quantity] || @product.minimum_quantity
     shipping_address = params[:shipping_address]
@@ -9,11 +10,10 @@ Spree::Api::V1::ProductsController.class_eval do
     # TODO: Move cache point to here
     quote = @product.quotes.where(
       quantity: quantity,
-      main_color: preconfigure.main_color,
-      shipping_address: shipping_address,
-      imprint_method: preconfigure.imprint_method,
-      custom_pms_colors: preconfigure.custom_pms_colors,
-      selected_shipping_option: shipping_option
+      main_color: @product.preconfigure.main_color,
+      shipping_address: shipping_address.to_i,
+      custom_pms_colors: @product.preconfigure.custom_pms_colors,
+      selected_shipping_option: shipping_option.to_i
     ).first_or_create
 
     @best_prices = []

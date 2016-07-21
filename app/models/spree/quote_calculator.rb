@@ -18,7 +18,6 @@ module Spree::QuoteCalculator
     log("SKU: #{product.master.sku}")
     log("Item Count: #{quantity}")
 
-    # raise "Unable to find markup if" markup.nil?
     if markup.eqp?
       apply_eqp
     else

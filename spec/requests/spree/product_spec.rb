@@ -49,7 +49,7 @@ describe 'Products API' do
     expect(json[0]['delivery_days']).to eq 7
   end
 
-  xit 'must get a best price with fixed shipping per item', focus: true do
+  xit 'must get a best price with fixed shipping per item' do
     product = FactoryGirl.create(
       :px_product,
       :with_setup_upcharges,
@@ -68,7 +68,7 @@ describe 'Products API' do
     expect(json[0]['delivery_days']).to eq 7
   end
 
-  xit 'must get a best price with fixed shipping per item with quantity', focus: true do
+  xit 'must get a best price with fixed shipping per item with quantity' do
     product = FactoryGirl.create(
       :px_product,
       :with_setup_upcharges,
@@ -88,7 +88,7 @@ describe 'Products API' do
     expect(json[0]['delivery_days']).to eq 7
   end
 
-  xit 'must get a best price with fixed shipping total', focus: true do
+  xit 'must get a best price with fixed shipping total' do
     product = FactoryGirl.create(
       :px_product,
       :with_setup_upcharges,
@@ -107,7 +107,7 @@ describe 'Products API' do
     expect(json[0]['delivery_days']).to eq 7
   end
 
-  xit 'must get a best price with fixed shipping total with quantity', focus: true do
+  xit 'must get a best price with fixed shipping total with quantity' do
     product = FactoryGirl.create(
       :px_product,
       :with_setup_upcharges,
@@ -124,6 +124,27 @@ describe 'Products API' do
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '4382.0'
+    expect(json[0]['delivery_days']).to eq 7
+  end
+
+  xit 'must get a best price with fixed shipping total with quantity express', focus: true do
+    product = FactoryGirl.create(
+      :px_product,
+      :with_setup_upcharges,
+      :with_run_upcharges,
+      :with_carton
+    )
+    shipping_address = FactoryGirl.create(:address)
+    get "/api/products/#{product.id}/best_price",
+      {
+        quantity: 200,
+        id: product.id,
+        shipping_address: shipping_address.id,
+        shipping_option: Spree::ShippingOption::OPTION[:ups_next_day_air]
+      }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
+    expect(response).to have_http_status(200)
+    # FFFF
+    expect(json[0]['best_price']).to eq '4314.74'
     expect(json[0]['delivery_days']).to eq 7
   end
 end

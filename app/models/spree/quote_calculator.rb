@@ -1,4 +1,5 @@
 module Spree::QuoteCalculator
+  # TODO: Create a quote namespace
   include QuoteCalculatorUpcharge
   include QuoteCalculatorShipping
 
@@ -34,7 +35,7 @@ module Spree::QuoteCalculator
 
     apply_tax_rate
 
-    # @see module QuoteCalculatorShipping
+    # @see module Spree::QuoteCalculatorShipping
     # @note: Unit price is *not* adjusted in calculate_shipping
     shipping_cost = calculate_shipping
 

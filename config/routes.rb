@@ -13,12 +13,6 @@ Rails.application.routes.draw do
 
   root :to => "company_store#index"
 
-  #### TESTING ONLY
-  #### IF YOU ADD ITEMS HERE YOU BETTER ADD A GUARD SPEC!
-  #### i.e. expect(get: '/memory_load').not_to be_routable
-  # get '/memory_load', to: 'spree/api/testers#memory_load'
-  #### TESTING ONLY
-
   post '/charges', to: 'spree/api/charges#charge'
   get 'accept/:bid_id', to: 'spree/auctions#auction_payment'
   get 'csaccept/:bid_id', to: 'spree/auctions#csaccept'
@@ -73,9 +67,6 @@ Rails.application.routes.draw do
     end
     resources :bids, controller: 'spree/api/bids', as: 'api_bids'
     match '/bids/:id/accept' => 'spree/api/bids#accept', via: :post
-    resources :messages, controller: 'spree/api/messages', as: 'api_messages'
-    resources :prebids, controller: 'spree/api/prebids', as: 'api_prebids'
-    resources :upcharges, controller: 'spree/api/upcharges', as: 'api_upcharges'
     resources :taxrates, controller: 'spree/api/taxrates', as: 'api_taxrates'
     post '/auctions/:id/order_confirm' => 'spree/api/auctions#order_confirm'
     post '/auctions/:id/in_production' => 'spree/api/auctions#in_production'

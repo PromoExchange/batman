@@ -260,6 +260,10 @@ namespace :company_store do
         {
           query: { dc_acct_num: '112242' },
           skus: ['BA-T550', 'BA-T515', 'BA-T5580', 'BA-T501BK', 'BA-T523', 'BA-T524']
+        },
+        {
+          query: { dc_acct_num: '100306' },
+          skus: ['BA-1690-49', 'BA-1695-05', 'BA-1690-63', 'BA-1693-86', 'BA-1691-61']
         }
       ]
     )

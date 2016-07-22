@@ -29,6 +29,10 @@ class Spree::Quote < Spree::Base
     @write_log || true
   end
 
+  def fixed_price_delivery_days
+    @fixed_price_delivery_days || 7
+  end
+
   def num_locations
     # TODO: Move to product
     @num_locations || 1

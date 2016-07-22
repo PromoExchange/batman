@@ -93,21 +93,21 @@ FactoryGirl.define do
 
     trait :with_fixed_price_per_item_carton do
       after(:create) do |product|
-        product.carton.destroy unless product.carton.nil?
+        Spree::Carton.destroy_all
         create(:carton, :with_fixed_price_per_item, product: product)
       end
     end
 
     trait :with_fixed_price_total_carton do
       after(:create) do |product|
-        product.carton.destroy unless product.carton.nil?
+        Spree::Carton.destroy_all
         create(:carton, :with_fixed_price_total, product: product)
       end
     end
 
     trait :with_carton do
       after(:create) do |product|
-        product.carton.destroy unless product.carton.nil?
+        Spree::Carton.destroy_all
         create(:carton, product: product)
       end
     end

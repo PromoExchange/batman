@@ -19,7 +19,7 @@ Spree::Api::V1::ProductsController.class_eval do
     @best_prices = []
     @best_prices << {
       best_price: quote.total_price,
-      delivery_days: ((quote.selected_shipping_option.delivery_date - Time.zone.now) / (60 * 60 * 24)).ceil
+      delivery_days: ((quote.selected_shipping.delivery_date - Time.zone.now) / 1.day.to_i).ceil
     }
 
     # There is no set way to extend a Spree API endpoint

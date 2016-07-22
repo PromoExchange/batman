@@ -7,7 +7,7 @@ FactoryGirl.define do
     custom_pms_colors '116C, 115B'
     unit_price 0.0
     after(:create) do |quote|
-      FactoryGirl.create_list(:shipping_option, 5, :ups_ground, quote: quote)
+      FactoryGirl.create_list(:shipping_option, 5, quote: quote)
       FactoryGirl.create_list(:pms_color, 2, quote: quote)
     end
     workbook ''

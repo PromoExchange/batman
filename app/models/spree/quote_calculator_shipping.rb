@@ -1,10 +1,11 @@
 module Spree::QuoteCalculatorShipping
   def calculate_shipping
-    return calculate_fixed_price unless product.carton.fixed_price.nil?
     carton = product.carton
     log("Carton: #{carton}")
 
     raise 'Shipping carton weight is not active' unless carton.active?
+    return calculate_fixed_price unless product.carton.fixed_price.nil?
+
     shipping_weight = carton.weight
     shipping_dimensions = carton.to_s
 
@@ -32,7 +33,6 @@ module Spree::QuoteCalculatorShipping
     )
 
     log("Destination zip: #{shipping_address.zipcode}")
-
     destination = ActiveShipping::Location.new(
       country: 'USA',
       zip: shipping_address.zipcode
@@ -98,17 +98,27 @@ module Spree::QuoteCalculatorShipping
   end
 
   def calculate_fixed_price
-    carton = product.carton
-    return if carton.fixed_price.nil?
     shipping_cost = 0.0
     log('Using fixed price shipping')
-    if carton.per_item
-      log("Fixed price per item #{carton.fixed_price}")
-      shipping_cost = carton.fixed_price * quantity
+    if product.carton.per_item
+      log("Fixed price per item #{product.carton.fixed_price}")
+      shipping_cost = product.carton.fixed_price * quantity
+      shipping_option = Spree::ShippingOption::OPTION[:fixed_price_per_item]
     else
-      log("Fixed price total #{carton.fixed_price}")
-      shipping_cost = carton.fixed_price
+      log("Fixed price total #{product.carton.fixed_price}")
+      shipping_cost = product.carton.fixed_price
+      shipping_option = Spree::ShippingOption::OPTION[:fixed_price_total]
     end
+
+    self.selected_shipping_option = shipping_option
+
+    shipping_options.build(
+      name: 'Fixed price',
+      delivery_date: Time.zone.now + fixed_price_delivery_days.days,
+      delivery_days: fixed_price_delivery_days,
+      shipping_option: shipping_option,
+      shipping_cost: shipping_cost
+    )
     shipping_cost
   end
 end

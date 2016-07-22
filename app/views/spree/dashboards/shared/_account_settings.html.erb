@@ -32,9 +32,6 @@
 <div class="tab-content">
   <% active_me = nil %>
   <% active_me = 'active' unless ['address', 'logo', 'payment_method','prebids', 'taxrates'].include? @tab %>
-  <div class="tab-pane <%= active_me %>" id="contact-tab">
-    <%= render partial: 'spree/dashboards/shared/contact_tab' %>
-  </div>
   <% if spree_current_user.has_spree_role?(:buyer) || spree_current_user.has_spree_role?(:admin) %>
     <% active_me = nil %>
     <% active_me = 'active' if @tab == 'payment_method' %>

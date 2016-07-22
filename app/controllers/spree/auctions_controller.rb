@@ -221,7 +221,6 @@ class Spree::AuctionsController < Spree::StoreController
       [address.to_s, address.id]
     end
 
-    @pxaddress = Spree::Pxaddress.new
     estimated_ship
   end
 
@@ -295,8 +294,6 @@ class Spree::AuctionsController < Spree::StoreController
 
     @logo = Spree::Logo.new
 
-    @pxaddress = Spree::Pxaddress.new
-
     return unless @current_company_store.present?
     @addresses = []
     @current_company_store.buyer.addresses.map do |a|
@@ -336,23 +333,12 @@ class Spree::AuctionsController < Spree::StoreController
     auction_data[:invited_sellers].split(';').each do |seller_email|
       next if seller_email.blank?
 
-      email_type = :is
       invited_seller = Spree::User.where(email: seller_email).first
 
-      if invited_seller.nil?
-        email_type = :non
-      else
-        Spree::AuctionsUser.create(
-          auction_id: @auction.id,
-          user_id: invited_seller.id
-        )
-      end
-
-      Resque.enqueue(
-        SellerInvite,
+      next unless invited_seller.nil?
+      Spree::AuctionsUser.create(
         auction_id: @auction.id,
-        type: email_type,
-        email_address: seller_email
+        user_id: invited_seller.id
       )
     end
   end

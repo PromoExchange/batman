@@ -13,8 +13,7 @@ class Spree::Bid < Spree::Base
   validates :seller, presence: true
 
   state_machine initial: :open do
-    after_transition on: :non_preferred_accept, do: :notification_for_waiting_confirmation
-    after_transition on: :preferred_accept, do: :send_invoice
+    after_transition on: :non_preferred_accept, do: :send_invoice
     after_transition on: [:preferred_accept, :non_preferred_accept], do: :other_bids_lost
 
     event :preferred_accept do
@@ -57,15 +56,11 @@ class Spree::Bid < Spree::Base
   end
 
   def create_payment(token)
-    description = "Auction ID: #{auction.reference}, Buyer: #{auction.buyer.email}"
-    customer_token = token ? token : auction.customer.token
-    amount = bid.round(2) * 100
-
     stripe = Stripe::Charge.create(
-      amount: amount.to_i,
+      amount: (bid.round(2) * 100).to_i,
       currency: 'usd',
-      customer: customer_token,
-      description: description
+      customer: (token ? token : auction.customer.token),
+      description: "Auction ID: #{auction.reference}, Buyer: #{auction.buyer.email}"
     )
     if %w(succeeded pending).include?(stripe.status)
       auction_payments.create(
@@ -95,18 +90,9 @@ class Spree::Bid < Spree::Base
 
   private
 
-  def notification_for_waiting_confirmation
-    Resque.enqueue(
-      WaitingForConfirmation,
-      auction_id: auction.id,
-      email_address: seller.email
-    )
-    Resque.enqueue_at(
-      EmailHelper.email_delay(Time.zone.tomorrow.midnight),
-      ConfirmOrderTimeExpire,
-      auction_id: auction.id,
-      email_address: seller.email
-    )
+  def build_order
+    o = Spree::Order.create
+    self.order_id = o.id
   end
 
   def other_bids_lost
@@ -114,19 +100,6 @@ class Spree::Bid < Spree::Base
   end
 
   def send_invoice
-    Resque.enqueue(
-      SendInvoice,
-      auction_id: auction.id
-    )
-    Resque.enqueue_at(
-      EmailHelper.email_delay(3.days.from_now),
-      UnpaidInvoice,
-      auction_id: auction.id
-    )
-  end
-
-  def build_order
-    o = Spree::Order.create
-    self.order_id = o.id
+    Resque.enqueue(SendInvoice, auction_id: auction.id)
   end
 end

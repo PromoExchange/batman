@@ -31,18 +31,6 @@ Rails.application.routes.draw do
   get '/company_store/:id', to: 'spree/company_store#show'
   post '/inspire_me_request', to: 'spree/company_store#inspire_me'
 
-  resources :pxtaxrates,
-    controller: 'spree/pxtaxrates',
-    as: 'pxtaxrates'
-
-  resources :pxusers,
-    controller: 'spree/pxusers',
-    as: 'pxusers'
-
-  resources :pxaccounts,
-    controller: 'spree/pxaccounts',
-    as: 'pxaccounts'
-
   resources :auctions,
     controller: 'spree/auctions',
     as: 'auctions' do
@@ -54,15 +42,8 @@ Rails.application.routes.draw do
       end
     end
 
-  resources :dashboards,
-    controller: 'spree/dashboards',
-    as: 'dashboards',
-    only: [:index]
-
-  resources :invoices,
-    controller: 'spree/invoices',
-    as: 'invoices',
-    only: [:index, :show]
+  resources :dashboards, controller: 'spree/dashboards', as: 'dashboards', only: [:index]
+  resources :invoices, controller: 'spree/invoices', as: 'invoices', only: [:index, :show]
 
   resources :logos,
     controller: 'spree/logos',
@@ -96,8 +77,6 @@ Rails.application.routes.draw do
     resources :prebids, controller: 'spree/api/prebids', as: 'api_prebids'
     resources :upcharges, controller: 'spree/api/upcharges', as: 'api_upcharges'
     resources :taxrates, controller: 'spree/api/taxrates', as: 'api_taxrates'
-    resources :pxaddresses, controller: 'spree/api/pxaddresses', as: 'api_addresses'
-    post '/pxaddresses/:id/type' => 'spree/api/pxaddresses#type'
     post '/auctions/:id/order_confirm' => 'spree/api/auctions#order_confirm'
     post '/auctions/:id/in_production' => 'spree/api/auctions#in_production'
     post '/auctions/:id/claim_payment' => 'spree/api/auctions#claim_payment'

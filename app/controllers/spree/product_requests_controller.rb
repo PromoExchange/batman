@@ -3,7 +3,6 @@ class Spree::ProductRequestsController < Spree::StoreController
     @product_request = Spree::ProductRequest.new(product_request_params)
 
     if @product_request.save
-      Resque.enqueue(IdeationRequest, request_id: @product_request.id)
       flash[:notice] = 'Your PromoExchange swag pro will have product ideas for you soon!'
       render js: "window.location = '/dashboards'"
     else

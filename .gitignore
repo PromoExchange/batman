@@ -36,6 +36,4 @@ node_modules
 dump.rdb
 
 .irbrc
-
-# SimpleCov data
-coverage
+coverage/

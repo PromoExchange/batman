@@ -1,8 +1,9 @@
 module SendInvoice
-  @queue = :send_invoices
+  @queue = :send_invoice
 
-  def self.perform(auction)
-    @auction = Spree::Auction.find(auction['auction_id'])
-    SellerMailer.initial_invoice(@auction).deliver
+  def self.perform(params)
+    @auction = Spree::Auction.find(params['auction_id'])
+    SellerMailer.invoice(@auction).deliver
+    BuyerMailer.invoice(@auction).deliver
   end
 end

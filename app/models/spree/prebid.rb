@@ -227,7 +227,7 @@ class Spree::Prebid < Spree::Base
     end
     auction_data
   rescue StandardError => e
-    Rails.logger.error("raiseed to create prebid #{e}")
+    Rails.logger.error("failed to create prebid #{e}")
   end
 
   private
@@ -315,16 +315,16 @@ class Spree::Prebid < Spree::Base
 
       in_range = false
       unless product_upcharge[5].blank?
-        bounds = []
-        # Is it open ended
+        in_range = false
         if product_upcharge[5].include? '+'
-          bounds[0] = product_upcharge[5].gsub(/([()])|\+/, '').to_i
-          bounds[1] = bounds[0] * 2
+          # It is open ended i.e. 100+ will match quantities > 100
+          in_range = (auction_data[:quantity] > product_upcharge[5].gsub(/([()])|\+/, '').to_i)
         else
+          # It is closed range i.e. (100..200) which match quantities between 100 and 200
           bounds = product_upcharge[5].gsub(/[()]/, '').split('..').map(&:to_i)
+          range = Range.new(bounds[0], bounds[1])
+          in_range = range.member?(auction_data[:quantity])
         end
-        range = Range.new(bounds[0], bounds[1])
-        in_range = range.member?(auction_data[:quantity])
       end
 
       case product_upcharge[1]
@@ -494,7 +494,7 @@ class Spree::Prebid < Spree::Base
     auction_data[:delivery_days] = days_diff
     auction_data[:shipping_cost]
   rescue => e
-    Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - raiseed to calculate shipping")
+    Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - failed to calculate shipping")
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - #{e.message}")
     0.0
   end

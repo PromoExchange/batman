@@ -269,4 +269,27 @@ namespace :company_store do
     )
     create_price_cache(company_store.supplier)
   end
+
+  desc 'Create AQR company store'
+  task aqr: :environment do
+    params = {
+      display_name: 'AQR',
+      email: 'susanne.quattrochi@aqr.com',
+      slug: 'aqr',
+      name: 'AQR Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
+    assign_original_supplier(
+      [
+        { query: { name: 'Ball Pro' }, skus: ['AQR-TPVN'] },
+        { query: { dc_acct_num: '100160' }, skus: ['AQR-5250'] },
+        { query: { name: 'Alphabroder' }, skus: ['AQR-98070', 'AQR-98140'] },
+        { query: { dc_acct_num: '100306' }, skus: ['AQR-1015-74'] },
+        { query: { dc_acct_num: '100383' }, skus: ['AQR-SM-4840'] }
+      ]
+    )
+    create_price_cache(company_store.supplier)
+  end
 end

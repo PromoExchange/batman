@@ -37,7 +37,8 @@ Rails.application.configure do
   config.assets.raise_runtime_errors = true
 
   # Use Redis as cache store
-  config.cache_store = :redis_store, ENV['CACHE_URL']
+  # config.cache_store = :redis_store, ENV['CACHE_URL']
+  config.cache_store = :null_store
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

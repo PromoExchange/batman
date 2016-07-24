@@ -85,7 +85,8 @@ class Spree::Quote < Spree::Base
 
   def num_colors
     standard_color_color = pms_colors.count
-    custom_color_count = custom_pms_colors.split(',').count
+    custom_color_count = 0
+    custom_color_count = custom_pms_colors.split(',').count if custom_pms_colors
     standard_color_color + custom_color_count
   end
 
@@ -100,6 +101,8 @@ class Spree::Quote < Spree::Base
     # @see module Spree::QuoteCalculator
     best_price = calculate(options)
 
+    has_quantity = options.key?(:quantity)
+
     # If we get here, we have rerun the price calculations
     # We have saved the database all of the shipping options
     # Let's refresh the cache here for all of them
@@ -111,7 +114,8 @@ class Spree::Quote < Spree::Base
         expires_in: cache_expiration.hours
       )
     end
-    best_price
+    divider = (has_quantity ? options[:quantity] : product.minimum_quantity)
+    best_price / divider
   end
 
   def generate_reference

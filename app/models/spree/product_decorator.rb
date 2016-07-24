@@ -247,9 +247,11 @@ Spree::Product.class_eval do
       selected_shipping_option: Spree::ShippingOption::OPTION[options[:shipping_option]]
     ).first_or_create
 
+    raise 'Failed to get price' if quote.nil?
+
     {
       best_price: quote.total_price,
-      delivery_days: production_time + quote.selected_shipping.delivery_days
+      delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21)
     }
   rescue StandardError => e
     Rails.logger.error("Failed to get best price: #{e}")

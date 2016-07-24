@@ -227,30 +227,33 @@ Spree::Product.class_eval do
   end
 
   def best_price(options = {})
+    raise 'Cannot find buyer' if company_store.buyer.nil?
+    raise 'Cannot find shipping adddress' if company_store.buyer.shipping_address.nil?
+
     options.reverse_merge!(
       quantity: minimum_quantity,
       shipping_option: :ups_ground,
-      shipping_address: Spree::Address.first.id
+      shipping_address: company_store.buyer.shipping_address.id
     )
+
+    options[:quantity] ||= minimum_quantity
 
     # TODO: Move cache point to here
     quote = quotes.where(
-      quantity: quantity,
+      quantity: options[:quantity].to_i,
       main_color: preconfigure.main_color,
-      shipping_address: shipping_address.to_i,
+      shipping_address: options[:shipping_address].to_i,
       custom_pms_colors: preconfigure.custom_pms_colors,
-      selected_shipping_option: shipping_option.to_i
+      selected_shipping_option: Spree::ShippingOption::OPTION[options[:shipping_option]]
     ).first_or_create
 
-    best_prices = []
-    best_prices << {
+    {
       best_price: quote.total_price,
-      delivery_days: ((quote.selected_shipping.delivery_date - Time.zone.now) / 1.day.to_i).ceil
+      delivery_days: production_time + quote.selected_shipping.delivery_days
     }
-    best_prices
   rescue StandardError => e
     Rails.logger.error("Failed to get best price: #{e}")
-    nil
+    { best_price: 0.0, delivery_days: 14 }
   end
 
   def refresh_price_cache

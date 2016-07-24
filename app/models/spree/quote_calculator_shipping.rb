@@ -82,7 +82,7 @@ module Spree::QuoteCalculatorShipping
           delivery_date ||= ups_rates[1][2]
           delta = 2
         end
-        days_diff = delta + ((delivery_date.to_f - Time.zone.now.to_f) / 86400).ceil
+        days_diff = delta + ((delivery_date.to_f - Time.zone.now.to_f) / 1.day.to_i).ceil
       rescue
         days_diff = 5
       end

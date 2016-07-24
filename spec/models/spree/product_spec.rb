@@ -12,6 +12,24 @@ RSpec.describe Spree::Product, type: :model do
     it { should have_many(:imprint_methods_products) }
   end
 
+  describe 'methods' do
+    xit 'should get a best price' do
+      product = FactoryGirl.create(
+        :px_product,
+        :with_setup_upcharges,
+        :with_run_upcharges,
+        :with_carton
+      )
+      shipping_address = FactoryGirl.create(:address)
+      best_price = product.best_price(
+        shipping_address: shipping_address.id,
+        shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+      )
+      expect(best_price[:best_price].to_f).to eq 675.37
+      expect(best_price[:delivery_days]).to eq 12
+    end
+  end
+
   it 'should start with an active state' do
     a = FactoryGirl.build(:product)
     expect(a.state).to eq 'active'

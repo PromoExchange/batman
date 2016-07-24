@@ -10,7 +10,7 @@ describe 'Products API' do
     expect(response).to have_http_status(401)
   end
 
-  xit 'must get a best price' do
+  xit 'must get a best price', active: true do
     product = FactoryGirl.create(
       :px_product,
       :with_setup_upcharges,
@@ -26,10 +26,10 @@ describe 'Products API' do
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '675.37'
-    expect(json[0]['delivery_days']).to eq 7
+    expect(json[0]['delivery_days']).to eq 12
   end
 
-  xit 'must get a best price with quantity' do
+  xit 'must get a best price with quantity', active: true do
     product = FactoryGirl.create(
       :px_product,
       :with_setup_upcharges,
@@ -46,7 +46,7 @@ describe 'Products API' do
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '6430.74'
-    expect(json[0]['delivery_days']).to eq 7
+    expect(json[0]['delivery_days']).to eq 12
   end
 
   xit 'must get a best price with fixed shipping per item' do
@@ -65,7 +65,7 @@ describe 'Products API' do
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '721.5'
-    expect(json[0]['delivery_days']).to eq 7
+    expect(json[0]['delivery_days']).to eq 14
   end
 
   xit 'must get a best price with fixed shipping per item with quantity' do
@@ -85,7 +85,7 @@ describe 'Products API' do
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '4782.0'
-    expect(json[0]['delivery_days']).to eq 7
+    expect(json[0]['delivery_days']).to eq 14
   end
 
   xit 'must get a best price with fixed shipping total' do
@@ -104,7 +104,7 @@ describe 'Products API' do
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '759.0'
-    expect(json[0]['delivery_days']).to eq 7
+    expect(json[0]['delivery_days']).to eq 14
   end
 
   xit 'must get a best price with fixed shipping total with quantity' do
@@ -124,7 +124,7 @@ describe 'Products API' do
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '4382.0'
-    expect(json[0]['delivery_days']).to eq 7
+    expect(json[0]['delivery_days']).to eq 14
   end
 
   xit 'must get a best price with fixed shipping total with quantity express', focus: true do
@@ -143,8 +143,7 @@ describe 'Products API' do
         shipping_option: Spree::ShippingOption::OPTION[:ups_next_day_air]
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
-    # FFFF
     expect(json[0]['best_price']).to eq '4314.74'
-    expect(json[0]['delivery_days']).to eq 7
+    expect(json[0]['delivery_days']).to eq 12
   end
 end

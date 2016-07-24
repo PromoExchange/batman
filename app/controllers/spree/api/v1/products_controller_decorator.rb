@@ -1,8 +1,11 @@
 Spree::Api::V1::ProductsController.class_eval do
   def best_price
     @product = find_product(params[:id])
-    binding.pry
-    best_prices = @product.best_price
+    best_prices = @product.best_price(
+      quantity: params[:quantity],
+      shipping_option: Spree::ShippingOptions::OPTION.keys[params[:shipping_option]],
+      shipping_address: params[:shipping_address]
+    )
 
     # There is no set way to extend a Spree API endpoint
     # The standard spree way would be to add a attribute array to

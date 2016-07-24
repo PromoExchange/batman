@@ -12,9 +12,10 @@ class ExtendPages < ActiveRecord::Migration
       if Page.table_exists?
         Page.order(:updated_at).each_with_index{|page,x| page.update_attribute(:position, x+1)}
       else
-        Spree::Page.order(:updated_at).each_with_index{|page,x| page.update_attribute(:position, x+1)}
+        if defined?(Spree::Page) == 'constant' && Spree::Page.class == Class
+          Spree::Page.order(:updated_at).each_with_index{|page,x| page.update_attribute(:position, x+1)}
+        end
       end
-
     end
   end
 

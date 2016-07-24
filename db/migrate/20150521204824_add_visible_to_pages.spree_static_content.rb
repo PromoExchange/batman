@@ -8,7 +8,9 @@ class AddVisibleToPages < ActiveRecord::Migration
     if Page.table_exists?
       Page.update_all :visible => true
     else
-      Spree::Page.update_all :visible => true
+      if defined?(Spree::Page) == 'constant' && Spree::Page.class == Class
+        Spree::Page.update_all :visible => true
+      end
     end
   end
 

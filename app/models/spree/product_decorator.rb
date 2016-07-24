@@ -226,6 +226,33 @@ Spree::Product.class_eval do
     Rails.logger.error("Failed to get lowest price, #{e.message}")
   end
 
+  def best_price(options = {})
+    options.reverse_merge!(
+      quantity: minimum_quantity,
+      shipping_option: :ups_ground,
+      shipping_address: Spree::Address.first.id
+    )
+
+    # TODO: Move cache point to here
+    quote = quotes.where(
+      quantity: quantity,
+      main_color: preconfigure.main_color,
+      shipping_address: shipping_address.to_i,
+      custom_pms_colors: preconfigure.custom_pms_colors,
+      selected_shipping_option: shipping_option.to_i
+    ).first_or_create
+
+    best_prices = []
+    best_prices << {
+      best_price: quote.total_price,
+      delivery_days: ((quote.selected_shipping.delivery_date - Time.zone.now) / 1.day.to_i).ceil
+    }
+    best_prices
+  rescue StandardError => e
+    Rails.logger.error("Failed to get best price: #{e}")
+    nil
+  end
+
   def refresh_price_cache
     # We can only calcuate prices for products that have custom auctions
     custom_auction = Spree::Auction.find_by(product_id: id, state: 'custom_auction')

@@ -1,0 +1,14 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :imprint_methods } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @imprint_methods_product } %>
+
+<%= form_for [:admin, @imprint_methods_product], url: "/admin/products/#{@product.id}/imprint_methods_products", html: { method: :post } do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+
+    <div class="form-actions">
+      <%= button Spree.t('actions.update'), 'save' %>
+      <span class="or"><%= Spree.t(:or) %></span>
+      <%= button_link_to Spree.t('actions.cancel'), "/admin/products/#{@product.id}/imprint_methods_products", icon: 'delete', id: 'cancel_link' %>
+    </div>
+  </fieldset>
+<% end %>

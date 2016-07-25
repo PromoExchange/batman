@@ -1,0 +1,32 @@
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:imprint_method), new_admin_product_imprint_methods_product_path, { class: 'btn-success', icon: 'add' } %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :imprint_methods } %>
+
+<div class="well">
+  <% if @imprint_methods_products.any? %>
+    <table class='table sortable' data-hook='colors_table'>
+      <thead>
+        <tr>
+          <th><%= Spree.t(:imprint_method) %></th>
+          <th class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @imprint_methods_products.each do |imprint_method| %>
+          <tr id='<%= spree_dom_id imprint_method %>'>
+            <td><p><%= imprint_method.name %></p></td>
+            <td class="actions actions-1 text-right">
+              <%= link_to_delete(imprint_method, { url: admin_product_imprint_methods_product_path(imprint_method.product, imprint_method), no_text: true }) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="alert alert-info no-objects-found">
+      <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::ImprintMethod)) %>.
+    </div>
+  <% end %>
+</div>

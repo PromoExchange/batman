@@ -1,4 +1,5 @@
 <%= render partial: 'spree/admin/users/sidebar', locals: { current: :logo } %>
+
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:back_to_logos_list), admin_user_logos_url, class: 'btn-success', icon: 'chevron-left' %>
 <% end %>

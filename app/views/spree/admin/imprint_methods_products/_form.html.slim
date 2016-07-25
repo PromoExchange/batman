@@ -1,8 +1,0 @@
-.row
-  .col-md-12
-    = f.hidden_field :product_id, value: @product.id
-    = f.field_container :imprint_method, class: ['form-group'] do
-      = f.label :imprint_method_id, "Imprint Method"
-      span.required *
-      = f.collection_select :imprint_method_id, @imprint_methods, :id, :name, \
-        {}, { class: "select2" }

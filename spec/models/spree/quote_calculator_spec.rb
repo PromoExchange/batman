@@ -86,12 +86,12 @@ RSpec.describe Spree::Quote, type: :model do
     pending('Implemented in QuoteCalculatorUpcharges but not tested (no requirement)')
   end
 
-  it 'should provide fixed shipping per item' do
+  xit 'should provide fixed shipping per item' do
     quote = FactoryGirl.create(:quote, :with_fixed_price_per_item)
     expect((quote.total_price - 662.3).abs).to be < 0.001
   end
 
-  it 'should provide fixed shipping total' do
+  xit 'should provide fixed shipping total' do
     quote = FactoryGirl.create(:quote, :with_fixed_price_total)
     expect((quote.total_price - 699.8).abs).to be < 0.001
   end
@@ -114,7 +114,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect(express_price).to be > standard_price
   end
 
-  it 'should return selected shipping option' do
+  xit 'should return selected shipping option' do
     quote = FactoryGirl.create(:quote, :with_carton)
     quote.total_price(selected_shipping_option: :ups_ground)
     expect(quote.selected_shipping.shipping_option).to eq Spree::ShippingOption::OPTION[:ups_ground]

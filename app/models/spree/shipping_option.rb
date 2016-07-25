@@ -17,6 +17,7 @@ class Spree::ShippingOption < ActiveRecord::Base
   validates :delivery_days, presence: true
   # TODO: Shorten these to option and cost
   validates :shipping_option, presence: true
+  validates :shipping_option, inclusion: { in: Spree::ShippingOption::OPTION.values }
   validates :shipping_cost, presence: true
   validates :quote_id, presence: true
 end

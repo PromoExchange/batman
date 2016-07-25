@@ -38,18 +38,19 @@
         <% end %>
       </div>
 
-      <div data-hook="admin_product_form_cost_price" class="alpha two columns">
-        <%= f.field_container :cost_price, class: ['form-group'] do %>
-          <%= f.label :cost_price, Spree.t(:cost_price) %>
-          <%= f.text_field :cost_price, value: number_to_currency(@product.cost_price, unit: ''), class: 'form-control' %>
-          <%= f.error_message_on :cost_price %>
+      <div data-hook="admin_product_form_supplier">
+        <%= f.field_container :supplier, class: ['form-group'] do %>
+          <%= f.label :supplier_id, Spree.t(:company_store) %>
+          <%= f.collection_select(:supplier_id, @suppliers, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2', disabled: (cannot? :edit, Spree::Supplier) }) %>
+          <%= f.error_message_on :supplier %>
         <% end %>
       </div>
-      <div data-hook="admin_product_form_cost_currency" class="omega two columns">
-        <%= f.field_container :cost_currency, class: ['form-group'] do %>
-          <%= f.label :cost_currency, Spree.t(:cost_currency) %>
-          <%= f.text_field :cost_currency, class: 'form-control' %>
-          <%= f.error_message_on :cost_currency %>
+
+      <div data-hook="admin_product_form_supplier">
+        <%= f.field_container :original_supplier, class: ['form-group'] do %>
+          <%= f.label :original_supplier_id, Spree.t(:supplier) %>
+          <%= f.collection_select(:original_supplier_id, @suppliers, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2', disabled: (cannot? :edit, Spree::Supplier) }) %>
+          <%= f.error_message_on :original_supplier %>
         <% end %>
       </div>
 

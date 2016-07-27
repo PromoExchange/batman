@@ -1,0 +1,4 @@
+.form_group
+  = f.label :ship_to_zip, 'Shipping Address'
+  = f.select :ship_to_zip, options_for_select(@addresses.map{ |address| [ address.name, address.zipcode, { 'data-id': address.id }]}), { prompt: 'Select Address' } , { class: 'form-control' }
+  = f.hidden_field :address_id, value: 0

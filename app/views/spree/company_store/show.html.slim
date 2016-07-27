@@ -3,7 +3,7 @@
 .row
   - @products.each do |product|
     .col-md-4.cs-product
-      = link_to large_image(product, {itemprop: 'image', class: 'cs-image'}), main_app.new_auction_path(product_id: product.id ), itemprop: 'url'
+      = link_to large_image(product, {itemprop: 'image', class: 'cs-image'}), main_app.new_purchase_path( purchase: { product_id: product.id } ), itemprop: 'url'
       .cs-product-text.text-center = product.name
       .cs-product-text.text-center.cs-lowest-bid = "As low as #{number_to_currency(product.best_price[:best_price].to_f)}"
 div.text-center

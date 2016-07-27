@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="form-group purchase-size" id="purchase-size" min-quantity="<%= @product.minimum_quantity %>">
+    <div class="col-md-3">
+      <h3>Enter Quantity</h3><span>min. <%= @product.minimum_quantity %></span>
+    </div>
+    <div class="col-md-9 purchase-list">
+      <ul>
+        <% @purchase.sizes.each do |key| %>
+          <% size_value = @size_quantity.present? ? @size_quantity[key] : 0 %>
+          <li class="col-md-2">
+            <%= text_field_tag key, size_value, name:"size[#{key}]", class: 'product-size form-control' %>
+            <span><%= key %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="total-qty pull-right">
+      <span class="pull-left">Total Qty:</span>
+      <span class='pull-right'><%= @total_size.present? ? @total_size : '0' %></span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<% content_for :page_title do %>
+<%= Spree.t(:Purchase) %>
+<% end %>
+
+<%- api_key = @current_company_store.buyer.spree_api_key unless @current_company_store.nil? %>
+<%- api_key = spree_current_user.spree_api_key if api_key.nil? && spree_current_user.present? %>
+
+<div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
+  <div class="col-md-6">
+    <%= large_image(@product, itemprop: "image", width: '400px') %><br/>
+    <p><%= @product.product.description %></p>
+
+    <% if @product.product.original_supplier.nil? %>
+      <h5>Factory: <%= @product.product.supplier.name %></h5>
+    <% else %>
+      <h5>Factory: <%= @product.product.original_supplier.name %></h5>
+    <% end %>
+    <h5>SKU: <%= @product.product.sku %></h5>
+
+    <%= render partial: 'spree/shared/properties' %>
+  </div>
+  <div class="col-md-6 well">
+    <h2><%= @product.name %></h2>
+    <% url = main_app.purchases_path %>
+    <%= form_for @purchase, url: url, class: 'form' do |f| %>
+    <% if @purchase.errors.any? %>
+      <p class="alert alert-error">Errors</p>
+      <ul>
+        <% @purchase.errors.full_messages.each do |message| %>
+          <li class="error"><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% @request_idea_id ||= params[:request_idea_id] %>
+
+    <%= f.hidden_field :product_id, value: @product.id %>
+    <%= f.hidden_field :buyer_id, value: @purchase.buyer_id %>
+    <fieldset>
+      <%= render partial: 'imprint_method', locals: {f: f}%>
+      <%= render partial: 'logos', locals: {f: f} %>
+      <%= render partial: 'pms_swatch', locals: {f: f} %>
+      <%= render partial: 'main_color', locals: {f: f} %>
+      <%= render partial: 'price_breaks', locals: {f: f} %>
+      <%= render partial: 'quantity', locals: {f: f} %>
+      <%= render partial: 'ship_to', locals: {f: f} %>
+      <p>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
+      <%= render partial: 'shipping_options', locals: {f: f} %>
+      <%= render partial: 'active_price', locals: {f: f} %>
+      <%= render partial: 'buttons', locals: {f: f} %>
+    </fieldset>
+    <% end %>
+  </div>
+</div>

@@ -258,6 +258,12 @@ Spree::Product.class_eval do
     { best_price: 0.0, delivery_days: 14 }
   end
 
+  def price_breaks
+    breaks = Spree::Variant.find_by(product_id: id)
+      .volume_prices(order: 'position asc')
+    breaks.map(&:range)
+  end
+
   def refresh_price_cache
     # We can only calcuate prices for products that have custom auctions
     custom_auction = Spree::Auction.find_by(product_id: id, state: 'custom_auction')

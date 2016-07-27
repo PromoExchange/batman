@@ -47,6 +47,11 @@ Rails.application.routes.draw do
       end
     end
 
+  resources :purchases,
+    controller: 'spree/purchases',
+    as: 'purchases',
+    only: [:new]
+
   resources :product_requests,
     controller: 'spree/product_requests',
     as: 'product_requests',

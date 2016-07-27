@@ -32,8 +32,6 @@
       </ul>
     <% end %>
 
-    <% @request_idea_id ||= params[:request_idea_id] %>
-
     <%= f.hidden_field :product_id, value: @product.id %>
     <%= f.hidden_field :buyer_id, value: @purchase.buyer_id %>
     <fieldset>
@@ -43,7 +41,7 @@
       <%= render partial: 'main_color', locals: {f: f} %>
       <%= render partial: 'price_breaks', locals: {f: f} %>
       <%= render partial: 'quantity', locals: {f: f} %>
-      <%= render partial: 'ship_to', locals: {f: f} %>
+      <%= render partial: 'address_drop', locals: {f: f} %>
       <p>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
       <%= render partial: 'shipping_options', locals: {f: f} %>
       <%= render partial: 'active_price', locals: {f: f} %>

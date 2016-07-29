@@ -9,6 +9,7 @@ FactoryGirl.define do
     buyer_id 1
     price_breaks []
     sizes []
+    ship_to_zip 11111
     after(:build) do |purchase|
       purchase.price_breaks << [100, 10.00]
       purchase.price_breaks << [200, 9.00]

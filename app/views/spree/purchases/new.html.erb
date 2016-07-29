@@ -8,20 +8,15 @@
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
     <%= large_image(@product, itemprop: "image", width: '400px') %><br/>
-    <p><%= @product.product.description %></p>
+    <p><%= @product.description %></p>
 
-    <% if @product.product.original_supplier.nil? %>
-      <h5>Factory: <%= @product.product.supplier.name %></h5>
-    <% else %>
-      <h5>Factory: <%= @product.product.original_supplier.name %></h5>
-    <% end %>
-    <h5>SKU: <%= @product.product.sku %></h5>
-
-    <%= render partial: 'spree/shared/properties' %>
+    <h5>Factory: <%= @product.original_supplier.name %></h5>
+    <h5>SKU: <%= @product.sku %></h5>
+    <%= render partial: 'properties' %>
   </div>
   <div class="col-md-6 well">
     <h2><%= @product.name %></h2>
-    <% url = main_app.purchases_path %>
+    <% url = main_app.new_purchase_path %>
     <%= form_for @purchase, url: url, class: 'form' do |f| %>
     <% if @purchase.errors.any? %>
       <p class="alert alert-error">Errors</p>
@@ -37,7 +32,6 @@
     <fieldset>
       <%= render partial: 'imprint_method', locals: {f: f}%>
       <%= render partial: 'logos', locals: {f: f} %>
-      <%= render partial: 'pms_swatch', locals: {f: f} %>
       <%= render partial: 'main_color', locals: {f: f} %>
       <%= render partial: 'price_breaks', locals: {f: f} %>
       <%= render partial: 'quantity', locals: {f: f} %>

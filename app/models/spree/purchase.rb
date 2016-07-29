@@ -11,7 +11,8 @@ class Spree::Purchase
     :main_color_id,
     :buyer_id,
     :price_breaks,
-    :sizes
+    :sizes,
+    :ship_to_zip
 
   validates :quantity, presence: true
   validates :product_id, presence: true
@@ -20,9 +21,11 @@ class Spree::Purchase
   validates :main_color_id, presence: true
   validates :buyer_id, presence: true
   validates :price_breaks, presence: true
+  validates :ship_to_zip, presence: true
 
-  def initialize
+  def initialize(attributes = {})
     @errors = ActiveModel::Errors.new(self)
+    attributes.each { |k, v| instance_variable_set("@#{k}", v) }
   end
 
   def persisted?

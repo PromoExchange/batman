@@ -2,23 +2,26 @@ class Spree::PurchasesController < Spree::StoreController
   layout 'company_store_layout'
 
   def new
-    @product = Spree::Product.find(purchase_params[:id])
-    @purchase = {
+    @product = Spree::Product.find(purchase_params[:product_id])
+
+    @purchase = Spree::Purchase.new(
       quantity: nil,
-      product_id: params[:id],
-      logo_id: product.company_store.buyer.logos.first.id,
-      custom_pms_colors: product.preconfigure.custom_pms_colors,
-      imprint_method_id: product.preconfigure.imprint_method_id,
-      main_color_id: product.preconfigure.main_color_id,
-      buyer_id: product.company_store.buyer.id,
+      product_id: purchase_params[:product_id].to_i,
+      logo_id: @product.company_store.buyer.logos.first.id,
+      custom_pms_colors: @product.preconfigure.custom_pms_colors,
+      imprint_method_id: @product.preconfigure.imprint_method_id,
+      main_color_id: @product.preconfigure.main_color_id,
+      buyer_id: @product.company_store.buyer.id,
       price_breaks: [],
       sizes: []
-    }
+    )
 
-    product.price_breaks.each do |price_break|
+    @product.price_breaks.each do |price_break|
       lowest_range = price_break[0].split('..')[0].gsub(/\D/, '').to_i
-      @purchase.price_breaks << [lowest_range, product.best_price(quantity: lowest_range)]
+      @purchase.price_breaks << [lowest_range, @product.best_price(quantity: lowest_range)]
     end
+
+    # TODO: Add sizes
 
     supporting_data
 

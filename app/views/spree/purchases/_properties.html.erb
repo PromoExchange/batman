@@ -1,0 +1,17 @@
+<% unless @product.product_properties.empty? %>
+  <h3 class="product-section-title">Product Details</h3>
+  <table id="product-properties" class="table table-striped" data-hook>
+    <tbody>
+      <% @product.product_properties.each do |product_property| %>
+        <% unless product_property.property.do_not_display %>
+          <% css_class = cycle('even', 'odd', name: 'properties') %>
+          <tr class="<%= css_class %>">
+            <td><strong><%= product_property.property.presentation %></strong></td>
+            <td><%= product_property.value %></td>
+          </tr>
+        <% end %>
+      <% end %>
+      <% reset_cycle('properties') %>
+    </tbody>
+  </table>
+<% end %>

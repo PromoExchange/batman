@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   resources :purchases,
     controller: 'spree/purchases',
     as: 'purchases',
-    only: [:new]
+    only: [:new, :create]
 
   resources :product_requests,
     controller: 'spree/product_requests',

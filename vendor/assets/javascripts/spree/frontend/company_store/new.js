@@ -50,8 +50,6 @@ $(function(){
         }
       };
 
-      debugger;
-
       var url = '/api/products/'+product_id+'/best_price';
       $.ajax({
         type: 'GET',

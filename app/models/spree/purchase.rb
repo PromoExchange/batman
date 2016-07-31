@@ -12,7 +12,8 @@ class Spree::Purchase
     :buyer_id,
     :price_breaks,
     :sizes,
-    :ship_to_zip
+    :ship_to_zip,
+    :shipping_option
 
   validates :quantity, presence: true
   validates :product_id, presence: true
@@ -22,6 +23,7 @@ class Spree::Purchase
   validates :buyer_id, presence: true
   validates :price_breaks, presence: true
   validates :ship_to_zip, presence: true
+  validates :shipping_option, presence: true
 
   def initialize(attributes = {})
     @errors = ActiveModel::Errors.new(self)

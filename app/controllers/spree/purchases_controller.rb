@@ -2,6 +2,7 @@ class Spree::PurchasesController < Spree::StoreController
   layout 'company_store_layout'
 
   def new
+    # TODO: Allow creation with shipping_option
     @product = Spree::Product.find(purchase_params[:product_id])
 
     @purchase = Spree::Purchase.new(
@@ -13,7 +14,8 @@ class Spree::PurchasesController < Spree::StoreController
       main_color_id: @product.preconfigure.main_color_id,
       buyer_id: @product.company_store.buyer.id,
       price_breaks: [],
-      sizes: []
+      sizes: [],
+      shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
     )
 
     @product.price_breaks.each do |price_break|
@@ -29,6 +31,51 @@ class Spree::PurchasesController < Spree::StoreController
   rescue StandardError => e
     Rails.logger.error(e)
     render nothing: true, status: 500
+  end
+
+  def create
+    if params[:size].present?
+      params[:size] = params[:size].merge(params[:size]) { |_k, val| (val.to_i < 0) ? 0 : val.to_i }
+      @size_quantity = params[:size]
+      purchase_params[:quantity] = params[:size].values.map(&:to_i).reduce(:+)
+      @total_size = purchase_params[:quantity]
+    end
+
+    Rails.logger.info("Product ID: #{purchase_params[:product_id]}")
+    Rails.logger.info("Buyer ID: #{purchase_params[:buyer_id]}")
+    Rails.logger.info("Quantity: #{purchase_params[:quantity]}")
+    Rails.logger.info("imprint_method_id: #{purchase_params[:imprint_method_id]}")
+    Rails.logger.info("main_color_id: #{purchase_params[:main_color_id]}")
+    Rails.logger.info("ship_to_zip: #{purchase_params[:ship_to_zip]}")
+    Rails.logger.info("logo_id: #{purchase_params[:logo_id]}")
+    Rails.logger.info("custom_pms_colors: #{purchase_params[:custom_pms_colors]}")
+
+    order = Spree::Order.create(user_id: purchase_params[:buyer_id])
+
+    # TODO: Factory method to get quote object
+    product = Spree::Product.find(purchase_params[:product_id])
+
+    # TODO: Get from form selection (currently ship_to_zip)
+    best_price = product.best_price(
+      quantity: purchase_params[:quantity].to_i,
+      shipping_option: Spree::ShippingOption::OPTION.keys[purchase_params[:shipping_option].to_i],
+      shipping_address: product.company_store.buyer.shipping_address.id
+    )
+
+    # TODO: Once the quote structure gets recast as a
+    # as calculator we can have a real quantity here.
+
+    li = Spree::LineItem.create(
+      currency: 'USD',
+      order_id: order.id,
+      quantity: 1,
+      variant: product.master
+    )
+
+    li.price = (best_price[:best_price] * purchase_params[:quantity].to_i).to_f
+    li.save!
+
+    Spree::OrderUpdater.new(order).update
   end
 
   def supporting_data
@@ -54,6 +101,9 @@ class Spree::PurchasesController < Spree::StoreController
     ]
   end
 
+  def create_related_data(auction_data)
+  end
+
   def purchase_params
     params.require(:purchase).permit(
       :product_id,
@@ -62,6 +112,7 @@ class Spree::PurchasesController < Spree::StoreController
       :started,
       :pms_colors,
       :custom_pms_colors,
+      :ship_to_zip,
       :quantity,
       :imprint_method_id,
       :main_color_id,

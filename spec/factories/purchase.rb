@@ -14,6 +14,7 @@ FactoryGirl.define do
       purchase.price_breaks << [100, 10.00]
       purchase.price_breaks << [200, 9.00]
     end
+    shipping_option 1
 
     trait :with_sizes do
       after(:build) do |purchase|

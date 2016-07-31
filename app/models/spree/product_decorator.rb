@@ -249,10 +249,36 @@ Spree::Product.class_eval do
 
     raise 'Failed to get price' if quote.nil?
 
-    {
+    # TODO: Move this documention creation to API (maybe)
+    response = {
       best_price: quote.total_price,
-      delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21)
+      delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21),
+      shipping_options: []
     }
+
+    lowest_total = Float::MAX
+
+    quote.shipping_options.each do |option|
+      adjusted_delivery_date = Time.zone.now + (2 + production_time + option.delivery_days).days
+      total_cost = quote.total_price(
+        selected_shipping_option: Spree::ShippingOption::OPTION.keys[option.shipping_option]
+      )
+      lowest_total = [lowest_total, total_cost].min
+      response[:shipping_options].push(
+        name: option.name,
+        total_cost: total_cost,
+        delta: 0.0,
+        delivery_date: adjusted_delivery_date,
+        delivery_days: option.delivery_days,
+        shipping_option: option.shipping_option
+      )
+    end
+
+    response[:shipping_options].each do |option|
+      option[:delta] = (option[:total_cost].to_f - lowest_total).round(2)
+    end
+
+    response
   rescue StandardError => e
     Rails.logger.error("Failed to get best price: #{e}")
     { best_price: 0.0, delivery_days: 14 }

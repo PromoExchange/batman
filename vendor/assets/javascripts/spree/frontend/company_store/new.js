@@ -38,17 +38,21 @@ $(function(){
 
     if (actual >= min) {
       $("#price-spin").show();
-      var auction_clone_id = $("#auction_clone_id").val();
-      var api_key = $('#new-auction').attr('data-key');
+      var api_key = $('#new-purchase').attr('data-key');
+      var product_id = $('#purchase_product_id').val();
       var selected_shipping_option = $('#shipping_option').val();
+      var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
       var params = {
-        auction: {
+        purchase: {
           quantity: actual,
-          ship_to_zip: $('#auction_ship_to_zip').val(),
+          shipping_address: address_id,
           shipping_option: selected_shipping_option
         }
       };
-      var url = '/api/auctions/'+auction_clone_id+'/best_price';
+
+      debugger;
+
+      var url = '/api/products/'+product_id+'/best_price';
       $.ajax({
         type: 'GET',
         contentType: "application/json",

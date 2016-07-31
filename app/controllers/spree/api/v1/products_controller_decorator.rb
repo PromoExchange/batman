@@ -1,10 +1,11 @@
 Spree::Api::V1::ProductsController.class_eval do
   def best_price
-    @product = find_product(params[:id])
+    @product = Spree::Product.find(params[:id])
+
     best_prices = @product.best_price(
-      quantity: params[:quantity],
-      shipping_option: Spree::ShippingOptions::OPTION.keys[params[:shipping_option]],
-      shipping_address: params[:shipping_address]
+      quantity: purchase_params[:quantity].to_i,
+      shipping_option: Spree::ShippingOption::OPTION.keys[purchase_params[:shipping_option].to_i],
+      shipping_address: purchase_params[:shipping_address].to_i
     )
 
     # There is no set way to extend a Spree API endpoint
@@ -15,5 +16,14 @@ Spree::Api::V1::ProductsController.class_eval do
   rescue StandardError => e
     Rails.logger.error("Failed to get best price: #{e}")
     render nothing: true, status: :internal_server_error
+  end
+
+  def purchase_params
+    params.require(:purchase).permit(
+      :product_id,
+      :quantity,
+      :shipping_address,
+      :shipping_option
+    )
   end
 end

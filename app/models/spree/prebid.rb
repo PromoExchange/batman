@@ -343,7 +343,7 @@ class Spree::Prebid < Spree::Base
         auction_data[:messages] << "Surcharge: #{less_than_minimum_surcharge}"
         auction_data[:messages] << "Price code: #{price_code}"
         auction_data[:messages] << "Discounted Surcharge: #{Spree::Price.discount_price(price_code, setup_charge)}"
-        auction_data[:messages] << "After applying less_than_minimum surcharge unit cost: #{auction_data[:running_unit_price]}"
+        auction_data[:messages] << "After applying surcharge unit cost: #{auction_data[:running_unit_price]}"
       when 'setup'
         setup_charge = product_upcharge[4].to_f
         num_setups = [auction_data[:num_colors].to_i, 1].max

@@ -197,7 +197,8 @@ namespace :company_store do
         { query: { name: 'Magnetic Attractions' }, skus: ['PA-ARI251'] },
         { query: { name: 'Imprint Items' }, skus: ['PA-JK-7000'] },
         { query: { name: 'Leader' }, skus: ['PA-98070'] },
-        { query: { name: 'Columbia' }, skus: ['PA-6223'] }
+        { query: { name: 'Columbia' }, skus: ['PA-6223'] },
+        { query: { name: 'Snugz' }, skus: ['PA-LS34M.ZIP', 'PA-LP34M.ZIP'] }
       ]
     )
     create_price_cache(company_store.supplier)

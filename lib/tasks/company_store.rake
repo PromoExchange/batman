@@ -198,7 +198,8 @@ namespace :company_store do
         { query: { name: 'Imprint Items' }, skus: ['PA-JK-7000'] },
         { query: { name: 'Leader' }, skus: ['PA-98070'] },
         { query: { name: 'Columbia' }, skus: ['PA-6223'] },
-        { query: { name: 'Snugz' }, skus: ['PA-LS34M.ZIP', 'PA-LP34M.ZIP'] }
+        { query: { name: 'Snugz' }, skus: ['PA-LS34M.ZIP', 'PA-LP34M.ZIP'] },
+        { query: { dc_acct_num: '100383' }, skus: ['PA-SM-2404', 'PA-SM-2381', 'PA-SM-2428', 'PA-SM-8045'] }
       ]
     )
     create_price_cache(company_store.supplier)

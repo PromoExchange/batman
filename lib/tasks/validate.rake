@@ -3,6 +3,44 @@ def prod_desc(p)
 end
 
 namespace :product do
+  task shipping_estimate: :environment do
+    # SM-2404
+    shipping_dimensions = [12, 12, 12]
+    shipping_weight = 20 * 16
+    originating_zip = '33013'
+    destination_zip = '98109'
+
+    package = ActiveShipping::Package.new(
+      shipping_weight,
+      shipping_dimensions,
+      units: :imperial
+    )
+
+    origin = ActiveShipping::Location.new(
+      country: 'USA',
+      zip: originating_zip
+    )
+
+    destination = ActiveShipping::Location.new(
+      country: 'USA',
+      zip: destination_zip
+    )
+
+    ups = ActiveShipping::UPS.new(
+      login: ENV['UPS_API_USERID'],
+      password: ENV['UPS_API_PASSWORD'],
+      key: ENV['UPS_API_KEY']
+    )
+
+    response = ups.find_rates(origin, destination, package)
+
+    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price, rate.delivery_date] }
+
+    ups_rates.each do |rate|
+      puts "Shipping name #{rate[0]} Rate #{rate[1]} Delivery Date #{rate[2]}"
+    end
+  end
+
   task auction_report: :environment do
     puts "Users: #{Spree::User.count}"
     puts "Products: #{Spree::Product.count}"

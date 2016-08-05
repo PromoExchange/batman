@@ -67,18 +67,20 @@ class Spree::Prebid < Spree::Base
     unless markup.nil?
       if eqp?
         eqp_price = auction.product.eqp_price
+
         apply_eqp = eqp_price != 0.0
 
         auction_data[:messages] << 'no_eqp_range not set' if auction.product.no_eqp_range.nil?
 
-        # Do not apply EQP if quantity is within EQP Range
+        # Do not apply EQP if quantity is within no EQP Range
         if auction.product.no_eqp_range.present?
           auction_data[:messages] << "no_eqp_range #{auction.product.no_eqp_range}"
           bounds = auction.product.no_eqp_range.gsub(/[()]/, '').split('..').map(&:to_i)
           range = Range.new(bounds[0], bounds[1])
           apply_eqp = !range.member?(auction_data[:quantity])
-          auction_data[:messages] << 'Turning off EQP because of no_eql_range check'
         end
+
+        auction_data[:messages] << 'Not applying EQP because of no_eql_range check' unless apply_eqp
 
         if apply_eqp
           auction_data[:messages] << 'Using EQP'
@@ -96,8 +98,6 @@ class Spree::Prebid < Spree::Base
           auction_data[:messages] << "EQP Price (discounted percentage): #{discount_eqp_price}"
           unit_price = discount_eqp_price
           auction_data[:used_eqp] = true
-        else
-          auction_data[:messages] << 'Unable to get EQP'
         end
       end
     end

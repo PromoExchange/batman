@@ -5,8 +5,4 @@ class Spree::Markup < Spree::Base
   validates :supplier_id, presence: true
   validates :company_store_id, presence: true
   validates :markup, presence: true
-
-  def eqp?
-    eqp_discount != 0.0
-  end
 end

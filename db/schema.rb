@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160710192543) do
+ActiveRecord::Schema.define(version: 20160808203044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -358,11 +358,12 @@ ActiveRecord::Schema.define(version: 20160710192543) do
   end
 
   create_table "spree_markups", force: :cascade do |t|
-    t.integer "supplier_id",                     null: false
-    t.decimal "markup",                          null: false
-    t.decimal "eqp_discount",     default: 0.0,  null: false
-    t.boolean "live",             default: true, null: false
-    t.integer "company_store_id",                null: false
+    t.integer "supplier_id",                      null: false
+    t.decimal "markup",                           null: false
+    t.decimal "eqp_discount",     default: 0.0,   null: false
+    t.boolean "live",             default: true,  null: false
+    t.integer "company_store_id",                 null: false
+    t.boolean "eqp",              default: false
   end
 
   create_table "spree_option_mappings", force: :cascade do |t|
@@ -729,6 +730,7 @@ ActiveRecord::Schema.define(version: 20160710192543) do
     t.string   "state"
     t.boolean  "custom_product"
     t.integer  "original_supplier_id"
+    t.string   "no_eqp_range"
   end
 
   add_index "spree_products", ["available_on"], name: "index_spree_products_on_available_on", using: :btree

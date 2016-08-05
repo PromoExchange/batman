@@ -37,6 +37,10 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_no_eqp_range do
+      no_eqp_range '(25..150)'
+    end
+
     trait :with_less_than_minimum do
       after(:create) do |product|
         create_list(
@@ -98,7 +102,7 @@ FactoryGirl.define do
 
     trait :with_eqp do
       after(:create) do |product|
-        product.markup.update_attributes(eqp_discount: 0.20)
+        product.markup.update_attributes(eqp_discount: 0.20, eqp: true)
       end
     end
 

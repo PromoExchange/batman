@@ -13,10 +13,18 @@ RSpec.describe Spree::Quote, type: :model do
     end
   end
 
-  it 'should apply EQP discount' do
+  it 'should apply EQP discount', focus: true do
     quote = FactoryGirl.create(:quote, product: FactoryGirl.create(:px_product, :with_eqp))
     quote.apply_eqp
     expect((quote.unit_price - 16.6336).abs).to be < 0.0001
+  end
+
+  it 'should not apply no_eqp_range', focus: true do
+    quote = FactoryGirl.create(:quote, product: FactoryGirl.create(:px_product,
+      :with_eqp,
+      :with_no_eqp_range))
+    quote.apply_eqp
+    expect((quote.unit_price - 29.99).abs).to be < 0.0001
   end
 
   it 'should apply pricing discount' do

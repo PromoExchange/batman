@@ -30,8 +30,13 @@ RSpec.describe Spree::Markup, type: :model do
       expect(markup.eqp?).to be_falsey
     end
 
-    it 'should return true for eqp?' do
+    it 'should return false for just discount' do
       markup = FactoryGirl.build(:markup, :eqp_discount)
+      expect(markup.eqp?).to be_falsey
+    end
+
+    it 'should return true for eqp' do
+      markup = FactoryGirl.build(:markup, :with_eqp)
       expect(markup.eqp?).to be_truthy
     end
   end

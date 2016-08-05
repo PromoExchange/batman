@@ -67,7 +67,16 @@ class Spree::Prebid < Spree::Base
     unless markup.nil?
       if eqp?
         eqp_price = auction.product.eqp_price
-        if eqp_price != 0.0
+        apply_eqp = eqp_price != 0.0
+
+        # Do not apply EQP if quantity is within EQP Range
+        if auction.product.no_eqp_range.present?
+          bounds = auction.product.no_eqp_range.gsub(/[()]/, '').split('..').map(&:to_i)
+          range = Range.new(bounds[0], bounds[1])
+          apply_eqp != range.member?(auction_data[:quantity])
+        end
+
+        if apply_eqp
           auction_data[:messages] << 'Using EQP'
           auction_data[:messages] << "EQP Price (base): #{eqp_price}"
           # Discount it with price code first

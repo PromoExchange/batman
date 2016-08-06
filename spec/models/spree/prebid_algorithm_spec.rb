@@ -121,6 +121,23 @@ RSpec.describe Spree::Prebid, type: :model do
     expect((100.3 - auction_data[:running_unit_price]).abs).to be < 0.0001
   end
 
+  it 'should apply a less than minimum surcharge', focus: true do
+    auction_data[:product_upcharges] = [
+      [1, 'less_than_minimum', 'Less than minimum', 'C', 60.00, '(50..150)']
+    ]
+    prebid.send(:apply_product_upcharges, auction_data)
+    expect((100.36 - auction_data[:running_unit_price]).abs).to be < 0.0001
+  end
+
+  it 'should apply a less than minimum surcharge and setup', focus: true do
+    auction_data[:product_upcharges] = [
+      [1, 'less_than_minimum', 'Less than minimum', 'C', 60.00, '(50..150)'],
+      [1, 'setup', 'Setup Test', 'C', 50.00, nil]
+    ]
+    prebid.send(:apply_product_upcharges, auction_data)
+    expect((100.66 - auction_data[:running_unit_price]).abs).to be < 0.0001
+  end
+
   it 'should apply product rush charge' do
     auction_data[:flags] = {
       pms_color_match: false,

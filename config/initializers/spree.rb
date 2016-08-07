@@ -41,6 +41,12 @@ Spree::Bid.whitelisted_ransackable_attributes = [
   'state'
 ]
 
+Spree::OptionMapping.whitelisted_ransackable_attributes |= [
+  'dc_acct_num',
+  'dc_name',
+  'px_name'
+]
+
 Spree::Product.whitelisted_ransackable_attributes |= [
   'state',
   'supplier_name',

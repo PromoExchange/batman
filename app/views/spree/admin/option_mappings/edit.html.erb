@@ -1,0 +1,8 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @option_mapping } %>
+
+<%= form_for [:admin, @option_mapping] do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+  </fieldset>
+<% end %>

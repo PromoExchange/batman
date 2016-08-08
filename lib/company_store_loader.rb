@@ -62,9 +62,8 @@ class CompanyStoreLoader
           price: 1.0,
           original_supplier: Spree::Supplier.find_by(name: data[:supplier]),
           production_time: (data[:production_time] || 7),
-          supplier: @supplier,
-          custom_product: true,
-          color_product: []
+          supplier_id: @supplier.id,
+          custom_product: true
         )
       )
       product.images << Spree::Image.create!(attachment: get_image(product.sku), viewable: product)

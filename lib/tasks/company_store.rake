@@ -38,7 +38,7 @@ namespace :company_store do
       name: 'Xactly Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end
@@ -52,7 +52,7 @@ namespace :company_store do
       name: 'Anchorfree Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end
@@ -66,7 +66,7 @@ namespace :company_store do
       name: 'Hightail Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end
@@ -80,7 +80,7 @@ namespace :company_store do
       name: 'Netmining Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end
@@ -94,7 +94,7 @@ namespace :company_store do
       name: 'PIMCO Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end
@@ -108,7 +108,7 @@ namespace :company_store do
       name: 'Facebook Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     assign_original_supplier([{ query: { name: 'Brunswick' }, skus: ['FB-BRU181'] }])
   end
@@ -122,7 +122,7 @@ namespace :company_store do
       name: 'Pavia Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end
@@ -136,7 +136,7 @@ namespace :company_store do
       name: 'Longboard Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end
@@ -150,7 +150,7 @@ namespace :company_store do
       name: 'Bastide Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end
@@ -164,7 +164,7 @@ namespace :company_store do
       name: 'AQR Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end

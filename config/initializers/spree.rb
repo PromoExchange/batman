@@ -47,6 +47,12 @@ Spree::OptionMapping.whitelisted_ransackable_attributes |= [
   'px_name'
 ]
 
+Spree::PmsColor.whitelisted_ransackable_attributes = [
+  'display_name',
+  'hex',
+  'pantone'
+]
+
 Spree::Product.whitelisted_ransackable_attributes |= [
   'state',
   'supplier_name',

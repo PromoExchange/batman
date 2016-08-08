@@ -129,6 +129,7 @@ Rails.application.routes.draw do
         resources :imprint_methods_products
         resources :upcharge_products
         resources :cartons
+        resources :preconfigure
       end
 
       resources :users do

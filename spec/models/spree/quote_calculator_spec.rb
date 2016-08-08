@@ -41,6 +41,12 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.total_price - 4710.94).abs).to be < 0.001
   end
 
+  xit 'should apply product less_than_minimum charge' do
+    quote2 = FactoryGirl.create(:quote, :with_less_than_minimum)
+    expect((quote2.total_price(quantity: 75) - 676.21).abs).to be < 0.001
+    expect(quote2.total_price).to be > quote.total_price
+  end
+
   xit 'should apply product setup charge' do
     quote2 = FactoryGirl.create(:quote, :with_setup_upcharges)
     expect((quote2.total_price - 816.17).abs).to be < 0.001
@@ -72,18 +78,6 @@ RSpec.describe Spree::Quote, type: :model do
     quote2.num_locations = 2
     expect((quote2.total_price - 2823.37).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
-  end
-
-  xit 'should apply second color charge' do
-    pending('Implemented in QuoteCalculatorUpcharges but not tested (no requirement)')
-  end
-
-  xit 'should apply additional color run charge' do
-    pending('Implemented in QuoteCalculatorUpcharges but not tested (no requirement)')
-  end
-
-  xit 'should apply additional color run charge' do
-    pending('Implemented in QuoteCalculatorUpcharges but not tested (no requirement)')
   end
 
   xit 'should provide fixed shipping per item' do

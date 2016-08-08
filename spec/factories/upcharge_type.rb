@@ -2,6 +2,10 @@ FactoryGirl.define do
   factory :upcharge_type, class: Spree::UpchargeType do
     name 'pms_color_match'
 
+    trait :less_than_minimum do
+      name 'less_than_minimum'
+    end
+
     trait :run_charge do
       name 'run'
     end

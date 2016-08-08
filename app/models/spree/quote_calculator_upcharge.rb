@@ -37,6 +37,19 @@ module Spree::QuoteCalculatorUpcharge
       end
 
       case product_upcharge[1]
+      when 'less_than_minimum'
+        next unless in_range
+        less_than_minimum_surcharge = product_upcharge[4].to_f
+        self.unit_price += (
+          Spree::Price.discount_price(price_code, less_than_minimum_surcharge) /
+            quantity
+        )
+        log('Applying less than minimum surcharge')
+        log("Surcharge: #{less_than_minimum_surcharge}")
+        log("Price code: #{price_code}")
+        log('Discounted Surcharge: '\
+          "#{Spree::Price.discount_price(price_code, less_than_minimum_surcharge)}")
+        log("After applying surcharge unit cost: #{self.unit_price}")
       when 'setup'
         setup_charge = product_upcharge[4].to_f
         num_setups = [num_colors, 1].max
@@ -71,20 +84,6 @@ module Spree::QuoteCalculatorUpcharge
           discount_price = Spree::Price.discount_price(price_code, additional_location_charge)
           log("Discounted Charge: #{discount_price}")
           log("After Run applied unit cost: #{unit_price}")
-        end
-      when 'second_color_run', 'additional_color_run', 'multiple_color_run'
-        next unless in_range
-        if auction_data[:num_colors] > 1
-          multiple_colors_charge = product_upcharge[4].to_f
-          (2..auction_data[:num_colors].to_i).each do
-            self.unit_price += Spree::Price.discount_price(price_code, multiple_colors_charge)
-          end
-          log("Applying #{auction_data[:num_colors].to_i - 1} additional color charges")
-          log("Charge: #{multiple_colors_charge}")
-          log("Price code: #{price_code}")
-          discount_price = Spree::Price.discount_price(price_code, multiple_colors_charge)
-          log("Discounted Charge: #{discount_price}")
-          log("After Run applied unit cost: #{self.unit_price}")
         end
       when 'rush'
         # No ranges

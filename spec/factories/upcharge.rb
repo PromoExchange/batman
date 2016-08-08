@@ -8,6 +8,14 @@ FactoryGirl.define do
     end
 
     # TODO: DRY These
+    factory :less_than_minimum_upcharge, class: Spree::UpchargeProduct do
+      association :related, factory: :product
+      association :upcharge_type, factory: [:upcharge_type, :less_than_minimum]
+      value '60.00'
+      price_code 'K'
+      range '(25..50)'
+    end
+
     factory :product_run_upcharge, class: Spree::UpchargeProduct do
       association :related, factory: :product
       association :upcharge_type, factory: [:upcharge_type, :run_charge]

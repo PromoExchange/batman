@@ -64,7 +64,7 @@ RSpec.describe Spree::Product, type: :model do
     expect(product.carton.active?).to be_truthy
   end
 
-  it 'should have a valid preconfig', focus: true do
+  it 'should have a valid preconfig' do
     product = FactoryGirl.create(:px_product)
     expect(product.preconfigure.custom_pms_colors).to eq '321'
   end

@@ -127,7 +127,7 @@ describe 'Products API' do
     expect(json[0]['delivery_days']).to eq 14
   end
 
-  xit 'must get a best price with fixed shipping total with quantity express', focus: true do
+  xit 'must get a best price with fixed shipping total with quantity express' do
     product = FactoryGirl.create(
       :px_product,
       :with_setup_upcharges,

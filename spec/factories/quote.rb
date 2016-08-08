@@ -13,6 +13,10 @@ FactoryGirl.define do
     workbook ''
     selected_shipping_option Spree::ShippingOption::OPTION[:ups_ground]
 
+    trait :with_less_than_minimum do
+      association :product, factory: [:px_product, :with_less_than_minimum]
+    end
+
     trait :with_setup_upcharges do
       association :product, factory: [:px_product, :with_setup_upcharges]
     end

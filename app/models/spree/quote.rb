@@ -101,8 +101,6 @@ class Spree::Quote < Spree::Base
     # @see module Spree::QuoteCalculator
     best_price = calculate(options)
 
-    has_quantity = options.key?(:quantity)
-
     # If we get here, we have rerun the price calculations
     # We have saved the database all of the shipping options
     # Let's refresh the cache here for all of them
@@ -114,8 +112,8 @@ class Spree::Quote < Spree::Base
         expires_in: cache_expiration.hours
       )
     end
-    divider = (has_quantity ? options[:quantity] : product.minimum_quantity)
-    best_price / divider
+    # divider = (has_quantity ? options[:quantity] : product.minimum_quantity)
+    best_price
   end
 
   def generate_reference

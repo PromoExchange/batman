@@ -146,7 +146,7 @@ namespace :company_store do
   task pimco: :environment do
     params = {
       display_name: 'PIMCO',
-      email: 'pimco_cs@thepromoexchange.com',
+      email: 'robin.fremont@pimco.com',
       slug: 'pimco',
       name: 'PIMCO Company Store'
     }

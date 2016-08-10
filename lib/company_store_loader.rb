@@ -56,6 +56,7 @@ class CompanyStoreLoader
           name: data[:item_name],
           description: data[:product_description],
           price: 1.0,
+          production_time: (data[:production_time] || 7),
           supplier_id: @supplier.id,
           custom_product: true,
           color_product: []

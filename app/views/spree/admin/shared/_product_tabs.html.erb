@@ -26,8 +26,5 @@
     <%= content_tag :li, class: ('active' if current == :carton) do %>
       <%= link_to_with_icon 'list-alt', 'Carton', spree.edit_admin_product_carton_url(@product, @product.carton) %>
     <% end if can?(:admin, Spree::Carton) %>
-    <%= content_tag :li, class: ('active' if current == :preconfigure) do %>
-      <%= link_to_with_icon 'list-alt', 'Preconfigure', spree.edit_admin_product_preconfigure_url(@product, @product.preconfigure) %>
-    <% end if can?(:admin, Spree::Preconfigure) %>
   </ul>
 <% end %>

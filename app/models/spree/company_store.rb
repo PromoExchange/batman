@@ -8,6 +8,8 @@ class Spree::CompanyStore < Spree::Base
   validates :slug, presence: true
   validates :name, presence: true
 
+  delegate :products, to: :supplier
+
   def seller
     Rails.cache.fetch("#{cache_key}/seller", expires_in: 5.minutes) do
       Spree::User.find_by(email: ENV['SELLER_EMAIL'])

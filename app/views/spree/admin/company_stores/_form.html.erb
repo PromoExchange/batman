@@ -1,4 +1,6 @@
 <div data-hook="admin_company_store_form_fields">
+  <%= f.hidden_field :company_store_id, value: @company_store.id %>
+
   <div class="row">
     <div class="col-md-4" data-hook="admin_company_store_form_slug">
       <%= f.field_container :slug, class: ['form-group'] do %>
@@ -16,6 +18,17 @@
       <% end %>
     </div>
 
+    <div class="col-md-4" data-hook="admin_company_store_form_supplier">
+      <%= f.field_container :supplier, class: ['form-group'] do %>
+        <%= f.label :supplier, Spree.t(:supplier) %>
+        <span class='required'>*</span>
+        <%= f.collection_select(:supplier_id, @suppliers, :id, :name, { }, { class: 'select2', selected: @company_store.supplier }) %>
+        <%= f.error_message_on :user %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-md-4" data-hook="admin_company_store_form_display_name">
       <%= f.field_container :display_name, class: ['form-group'] do %>
         <%= f.label :display_name, raw(Spree.t(:display_name) + content_tag(:span, ' *', class: 'required')) %>
@@ -23,15 +36,27 @@
         <%= f.error_message_on :display_name %>
       <% end %>
     </div>
-  </div>
 
-  <div class="row">
     <div class="col-md-4" data-hook="admin_company_store_form_host">
       <%= f.field_container :host, class: ['form-group'] do %>
         <%= f.label :host, raw(Spree.t(:host) + content_tag(:span, ' *', class: 'required')) %>
         <%= f.text_field :host, class: 'form-control title' %>
         <%= f.error_message_on :host %>
       <% end %>
+    </div>
+
+    <div class="col-md-4" data-hook="admin_company_store_form_buyer">
+      <%= f.field_container :buyer, class: ['form-group'] do %>
+        <%= f.label :buyer, Spree.t(:buyer) %>
+        <span class='required'>*</span>
+        <%= f.collection_select(:buyer_id, @users, :id, :email, { }, { class: 'select2', selected: @company_store.buyer }) %>
+        <%= f.error_message_on :user %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12" data-hook="admin_company_store_form_products">
     </div>
   </div>
 </div>

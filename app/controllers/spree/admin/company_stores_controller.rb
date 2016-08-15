@@ -1,5 +1,6 @@
 class Spree::Admin::CompanyStoresController < Spree::Admin::ResourceController
   before_action :load_company_store, only: [:edit, :update]
+  before_action :load_data, only: [:edit, :new]
   helper_method :clone_object_url
 
   def clone
@@ -46,9 +47,18 @@ class Spree::Admin::CompanyStoresController < Spree::Admin::ResourceController
     @company_store = Spree::CompanyStore.find(params[:id])
   end
 
+  def load_data
+    @users = Spree::User.joins(:spree_roles).where(spree_roles: { name: 'buyer' })
+    @suppliers = Spree::Supplier.where(company_store: true)
+  end
+
   def company_store_params
     params.require(:company_store).permit(
-      :name
+      :buyer_id,
+      :display_name,
+      :name,
+      :slug,
+      :supplier_id
     )
   end
 end

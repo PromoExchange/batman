@@ -2,6 +2,7 @@ class Spree::Admin::ImprintMethodsProductsController < Spree::Admin::BaseControl
   prepend_before_action :load_product
   before_action :load_imprint_methods, only: [:edit, :new]
   before_action :load_imprint_methods_product, only: [:edit, :update, :destroy]
+  after_action :set_preconfigure, only: [:create, :update]
   after_action :set_validity, only: [:create, :update, :destroy]
 
   def index
@@ -29,6 +30,10 @@ class Spree::Admin::ImprintMethodsProductsController < Spree::Admin::BaseControl
   end
 
   private
+
+  def set_preconfigure
+    @product.preconfigure.update_attribute(:imprint_method, @product.imprint_method)
+  end
 
   def set_validity
     @product.loading!

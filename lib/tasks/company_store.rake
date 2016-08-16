@@ -155,8 +155,7 @@ namespace :company_store do
     load_products(params)
     assign_original_supplier(
       [
-        { query: { name: 'Yeti' }, skus: ['PC-YRAM20'] },
-        { query: { name: 'Marmot' }, skus: ['PC-98070'] }
+        { query: { name: 'Yeti' }, skus: ['PC-YRAM20'] }
       ]
     )
     create_price_cache(company_store.supplier)

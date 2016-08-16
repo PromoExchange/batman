@@ -29,6 +29,9 @@
     "LOGENTRIES_KEY":{
       "required":true
     },
+    "MAILTRAP_API_TOKEN":{
+      "required":true
+    },
     "RACK_ENV":"staging",
     "RAILS_ENV":"staging",
     "RAILS_SERVE_STATIC_FILES":{

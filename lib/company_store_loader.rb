@@ -130,6 +130,11 @@ class CompanyStoreLoader
         value: data[:value],
         range: data[:range]
       ).first_or_create
+
+      if data[:type] == 'no_eqp_range'
+        product.no_eqp_range = data[:range]
+        product.save!
+      end
     end
   end
 

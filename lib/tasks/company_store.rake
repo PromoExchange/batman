@@ -146,14 +146,18 @@ namespace :company_store do
   task pimco: :environment do
     params = {
       display_name: 'PIMCO',
-      email: 'pimco_cs@thepromoexchange.com',
+      email: 'robin.fremont@pimco.com',
       slug: 'pimco',
       name: 'PIMCO Company Store'
     }
 
     company_store = create_company_store(params)
     load_products(params)
-    assign_original_supplier([{ query: { name: 'Yeti' }, skus: ['PC-YRAM20'] }])
+    assign_original_supplier(
+      [
+        { query: { name: 'Yeti' }, skus: ['PC-YRAM20'] }
+      ]
+    )
     create_price_cache(company_store.supplier)
   end
 
@@ -197,7 +201,10 @@ namespace :company_store do
         { query: { name: 'Magnetic Attractions' }, skus: ['PA-ARI251'] },
         { query: { name: 'Imprint Items' }, skus: ['PA-JK-7000'] },
         { query: { name: 'Leader' }, skus: ['PA-98070'] },
-        { query: { name: 'Columbia' }, skus: ['PA-6223'] }
+        { query: { name: 'Columbia' }, skus: ['PA-6223'] },
+        { query: { name: 'Snugz' }, skus: ['PA-LS34M.ZIP', 'PA-LP34M.ZIP'] },
+        { query: { dc_acct_num: '100383' }, skus: ['PA-SM-2404', 'PA-SM-2381', 'PA-SM-2428', 'PA-SM-8045'] },
+        { query: { dc_acct_num: '100306' }, skus: ['PA-6002-17', 'PA-6002-55', 'PA-1067-01'] }
       ]
     )
     create_price_cache(company_store.supplier)
@@ -265,6 +272,29 @@ namespace :company_store do
           query: { dc_acct_num: '100306' },
           skus: ['BA-1690-49', 'BA-1695-05', 'BA-1690-63', 'BA-1693-86', 'BA-1691-61']
         }
+      ]
+    )
+    create_price_cache(company_store.supplier)
+  end
+
+  desc 'Create AQR company store'
+  task aqr: :environment do
+    params = {
+      display_name: 'AQR',
+      email: 'susanne.quattrochi@aqr.com',
+      slug: 'aqr',
+      name: 'AQR Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
+    assign_original_supplier(
+      [
+        { query: { name: 'Ball Pro' }, skus: ['AQR-TPVN'] },
+        { query: { dc_acct_num: '100160' }, skus: ['AQR-5250'] },
+        { query: { name: 'Alphabroder' }, skus: ['AQR-98070', 'AQR-98140'] },
+        { query: { dc_acct_num: '100306' }, skus: ['AQR-1015-74'] },
+        { query: { dc_acct_num: '100383' }, skus: ['AQR-SM-4840'] }
       ]
     )
     create_price_cache(company_store.supplier)

@@ -67,14 +67,20 @@ class Spree::Prebid < Spree::Base
     unless markup.nil?
       if eqp?
         eqp_price = auction.product.eqp_price
+
         apply_eqp = eqp_price != 0.0
 
-        # Do not apply EQP if quantity is within EQP Range
+        auction_data[:messages] << 'no_eqp_range not set' if auction.product.no_eqp_range.nil?
+
+        # Do not apply EQP if quantity is within no EQP Range
         if auction.product.no_eqp_range.present?
+          auction_data[:messages] << "no_eqp_range #{auction.product.no_eqp_range}"
           bounds = auction.product.no_eqp_range.gsub(/[()]/, '').split('..').map(&:to_i)
           range = Range.new(bounds[0], bounds[1])
-          apply_eqp != range.member?(auction_data[:quantity])
+          apply_eqp = !range.member?(auction_data[:quantity])
         end
+
+        auction_data[:messages] << 'Not applying EQP because of no_eql_range check' unless apply_eqp
 
         if apply_eqp
           auction_data[:messages] << 'Using EQP'
@@ -92,8 +98,6 @@ class Spree::Prebid < Spree::Base
           auction_data[:messages] << "EQP Price (discounted percentage): #{discount_eqp_price}"
           unit_price = discount_eqp_price
           auction_data[:used_eqp] = true
-        else
-          auction_data[:messages] << 'Unable to get EQP'
         end
       end
     end
@@ -185,7 +189,7 @@ class Spree::Prebid < Spree::Base
     seller_markup || 0.0
 
     # HACK: For Yeti
-    seller_markup = 0.0766103970737429 if auction.product.master.sku == 'PC-YRAM20'
+    seller_markup = 0.057773719921 if auction.product.master.sku == 'PC-YRAM20'
 
     auction_data[:messages] << "Applying markup: #{seller_markup.to_f}"
     auction_data[:running_unit_price] *= (1 + seller_markup.to_f)
@@ -341,6 +345,19 @@ class Spree::Prebid < Spree::Base
       end
 
       case product_upcharge[1]
+      when 'less_than_minimum'
+        next unless in_range
+        less_than_minimum_surcharge = product_upcharge[4].to_f
+        auction_data[:running_unit_price] += (
+          Spree::Price.discount_price(price_code, less_than_minimum_surcharge) /
+            auction_data[:quantity]
+        )
+        auction_data[:messages] << 'Applying less than minimum surcharge'
+        auction_data[:messages] << "Surcharge: #{less_than_minimum_surcharge}"
+        auction_data[:messages] << "Price code: #{price_code}"
+        auction_data[:messages] << 'Discounted Surcharge: '\
+          "#{Spree::Price.discount_price(price_code, less_than_minimum_surcharge)}"
+        auction_data[:messages] << "After applying surcharge unit cost: #{auction_data[:running_unit_price]}"
       when 'setup'
         setup_charge = product_upcharge[4].to_f
         num_setups = [auction_data[:num_colors].to_i, 1].max

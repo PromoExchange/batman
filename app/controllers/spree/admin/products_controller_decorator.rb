@@ -3,6 +3,7 @@ Spree::Admin::ProductsController.class_eval do
   after_action :preconfigure, only: :create
 
   def load
+    Resque.enqueue(CompanyStoreProductPrebid, company_store: @product.company_store, id: @product.id)
     redirect_to action: :edit
   end
 

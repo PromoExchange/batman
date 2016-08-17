@@ -59,10 +59,11 @@ class CompanyStoreLoader
           sku: data[:sku],
           name: data[:item_name],
           description: data[:product_description],
+          original_supplier: Spree::Supplier.where(name: data[:supplier]).first,
           price: 1.0,
           original_supplier: Spree::Supplier.find_by(name: data[:supplier]),
           production_time: (data[:production_time] || 7),
-          supplier_id: @supplier.id,
+          supplier: @supplier,
           custom_product: true
         )
       )

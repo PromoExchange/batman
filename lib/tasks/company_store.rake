@@ -110,7 +110,7 @@ namespace :company_store do
 
     company_store = create_company_store(params)
     load_products(params)
-    assign_original_supplier([{ query: { name: 'Brunswick' }, skus: ['FB-BRU181'] }])
+    create_price_cache(company_store.supplier)
   end
 
   desc 'Create Pavia company store'

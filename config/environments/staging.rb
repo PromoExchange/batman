@@ -90,7 +90,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Seed data, load image files
-  config.x.load_images = true
+  config.x.load_images = ENV['PRODUCT_LOAD_IMAGES']
 
   config.paperclip_defaults = {
     storage: :s3,

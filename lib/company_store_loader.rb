@@ -33,7 +33,11 @@ class CompanyStoreLoader
   end
 
   def get_image(name)
-    open(S3_CS_BUCKET.objects["#{@slug}/data/product_images/#{name}.jpg"].public_url)
+    image_url = 'http://placekitten.com/g/600/600'
+    if Rails.application.config.x.load_images == true
+      image_url = S3_CS_BUCKET.objects["#{@slug}/data/product_images/#{name}.jpg"].public_url
+    end
+    open(image_url)
   end
 
   def clean

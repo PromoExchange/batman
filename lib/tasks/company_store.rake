@@ -54,17 +54,23 @@ namespace :company_store do
     load_products(params)
     assign_original_supplier(
       [
-        { query: { dc_acct_num: '100306' }, skus: ['XA-8150-85', 'XA-7120-15'] },
-        { query: { dc_acct_num: '100383' }, skus: ['XA-SM-4125'] },
-        { query: { dc_acct_num: '100257' }, skus: ['XA-40061'] },
+        { query: { dc_acct_num: '100306', name: "Leed's / Leeds" }, skus: ['XA-8150-85', 'XA-7120-15'] },
+        {
+          query: { dc_acct_num: '100383', name: 'Bullet' },
+          skus: ['XA-SM-4125']
+        },
+        { query: { dc_acct_num: '100257', name: 'Gemline' }, skus: ['XA-40061'] },
         { query: { name: 'River\'s End Trading' }, skus: ['XA-6223'] },
         { query: { name: 'American Apparel' }, skus: ['XA-F497', 'XA-2001-WHITE'] },
-        { query: { dc_acct_num: '100108' }, skus: ['XA-5117'] },
+        {
+          query: { dc_acct_num: '100108', name: 'Innovation Line' },
+          skus: ['XA-5117']
+        },
         { query: { name: 'Next Level' }, skus: ['XA-6240-SXL', 'XA-6640-SXL'] },
-        { query: { dc_acct_num: '101760' }, skus: ['XA-PD46P-25'] },
-        { query: { dc_acct_num: '101044' }, skus: ['XA-BA2300'] },
-        { query: { dc_acct_num: '101371' }, skus: ['XA-BTR8'] },
-        { query: { dc_acct_num: '446654' }, skus: ['XA-CPP5579'] },
+        { query: { dc_acct_num: '101760', name: '3M Promotional Markets' }, skus: ['XA-PD46P-25'] },
+        { query: { dc_acct_num: '101044', name: 'Logomark, Inc.' }, skus: ['XA-BA2300'] },
+        { query: { dc_acct_num: '101371', name: 'DIGISPEC' }, skus: ['XA-BTR8'] },
+        { query: { dc_acct_num: '446654', name: 'Clothpromotions Plus' }, skus: ['XA-CPP5579'] },
         { query: { name: 'Alpi International' }, skus: ['XA-20099'] }
       ]
     )
@@ -84,13 +90,19 @@ namespace :company_store do
     load_products(params)
     assign_original_supplier(
       [
-        { query: { dc_acct_num: '100160' }, skus: ['AF-632418', 'AF-5170', 'AF-71600'] }, # Sanmar Products
-        { query: { dc_acct_num: '100383' }, skus: ['AF-SM-4125', 'AF-SM-2381'] }, # Bullet Products
-        { query: { dc_acct_num: '100306' }, skus: ['AF-7003-40', 'AF-3250-99', 'AF-2050-02'] }, # Leeds Products
-        { query: { dc_acct_num: '100306' }, skus: ['AF-MOLEHRD'] }, # Gemline Products
-        { query: { dc_acct_num: '100104' }, skus: ['AF-P3A3A25'] }, # BIC Graphic Products
-        { query: { dc_acct_num: '100108' }, skus: ['AF-5117'] }, # Innovation Line Products
-        { query: { dc_acct_num: '120402' }, skus: ['AF-SG120'] }, # Jetline Products
+        {
+          query: { dc_acct_num: '100160', name: 'SanMar' },
+          skus: ['AF-632418', 'AF-5170', 'AF-71600']
+        }, # Sanmar Products
+        { query: { dc_acct_num: '100383', name: 'Bullet' }, skus: ['AF-SM-4125', 'AF-SM-2381'] }, # Bullet Products
+        {
+          query: { dc_acct_num: '100306', name: "Leed's / Leeds" },
+          skus: ['AF-7003-40', 'AF-3250-99', 'AF-2050-02']
+        }, # Leeds Products
+        { query: { dc_acct_num: '100306', name: "Leed's / Leeds" }, skus: ['AF-MOLEHRD'] }, # Gemline Products
+        { query: { dc_acct_num: '100104', name: 'BIC Graphic' }, skus: ['AF-P3A3A25'] }, # BIC Graphic Products
+        { query: { dc_acct_num: '100108', name: 'Innovation Line' }, skus: ['AF-5117'] }, # Innovation Line Products
+        { query: { dc_acct_num: '120402', name: 'Jetline' }, skus: ['AF-SG120'] }, # Jetline Products
         { query: { name: 'Quake City Caps' }, skus: ['AF-8500'] } # Quake City Caps Products
       ]
     )
@@ -110,7 +122,7 @@ namespace :company_store do
     load_products(params)
     assign_original_supplier(
       [
-        { query: { dc_acct_num: '100306' }, skus: ['HT-8150-90'] }, # Leeds Products
+        { query: { dc_acct_num: '100306', name: "Leed's / Leeds" }, skus: ['HT-8150-90'] }, # Leeds Products
         { query: { name: 'American Apparel' }, skus: ['HT-F497', 'HT-TRT497', 'HT-2001-WHITE', 'HT-2001-GREY'] } # AA
       ]
     )
@@ -130,11 +142,17 @@ namespace :company_store do
     load_products(params)
     assign_original_supplier(
       [
-        { query: { dc_acct_num: '100746' }, skus: ['NM-EOS-LP15'] },
+        { query: { dc_acct_num: '100746', name: 'Ariel Premium Supply, Inc.' }, skus: ['NM-EOS-LP15'] },
         { query: { name: 'Brand Box' }, skus: ['NM-1148WM'] },
-        { query: { dc_acct_num: '100383' }, skus: ['NM-SM-6319'] },
-        { query: { dc_acct_num: '100257' }, skus: ['NM-40061'] },
-        { query: { dc_acct_num: '100160' }, skus: ['NM-354055'] },
+        {
+          query: { dc_acct_num: '100383', name: 'Bullet' },
+          skus: ['NM-SM-6319']
+        },
+        {
+          query: { dc_acct_num: '100257', name: 'Gemline' },
+          skus: ['NM-40061']
+        },
+        { query: { dc_acct_num: '100160', name: 'SanMar' }, skus: ['NM-354055'] },
         { query: { name: 'Marmot' }, skus: ['NM-98140'] },
         { query: { name: 'American Apparel' }, skus: ['NM-2001'] }
       ]
@@ -189,22 +207,25 @@ namespace :company_store do
     load_products(params)
     assign_original_supplier(
       [
-        { query: { dc_acct_num: '100257' }, skus: ['PA-40060'] },
-        { query: { dc_acct_num: '100108' }, skus: ['PA-5117'] },
+        { query: { dc_acct_num: '100257', name: 'Gemline' }, skus: ['PA-40060'] },
+        { query: { dc_acct_num: '100108', name: 'Innovation Line' }, skus: ['PA-5117'] },
         { query: { name: 'Pinnacle' }, skus: ['PA-SM-4125'] },
         {
-          query: { dc_acct_num: '100306' },
+          query: { dc_acct_num: '100306', name: "Leed's / Leeds" },
           skus: ['PA-7120-18', 'PA-7199-32', 'PA-1621-11', 'PA-7199-60', 'PA-9350-22']
         },
-        { query: { dc_acct_num: '100160' }, skus: ['PA-3250-99'] },
+        { query: { dc_acct_num: '100160', name: 'SanMar' }, skus: ['PA-3250-99'] },
         { query: { name: 'Deluxe' }, skus: ['PA-SM-9734'] },
         { query: { name: 'Magnetic Attractions' }, skus: ['PA-ARI251'] },
         { query: { name: 'Imprint Items' }, skus: ['PA-JK-7000'] },
         { query: { name: 'Leader' }, skus: ['PA-98070'] },
         { query: { name: 'Columbia' }, skus: ['PA-6223'] },
         { query: { name: 'Snugz' }, skus: ['PA-LS34M.ZIP', 'PA-LP34M.ZIP'] },
-        { query: { dc_acct_num: '100383' }, skus: ['PA-SM-2404', 'PA-SM-2381', 'PA-SM-2428', 'PA-SM-8045'] },
-        { query: { dc_acct_num: '100306' }, skus: ['PA-6002-17', 'PA-6002-55', 'PA-1067-01'] }
+        {
+          query: { dc_acct_num: '100383', name: 'Bullet' },
+          skus: ['PA-SM-2404', 'PA-SM-2381', 'PA-SM-2428', 'PA-SM-8045']
+        },
+        { query: { dc_acct_num: '100306', name: "Leed's / Leeds" }, skus: ['PA-6002-17', 'PA-6002-55', 'PA-1067-01'] }
       ]
     )
     create_price_cache(company_store.supplier)
@@ -224,7 +245,7 @@ namespace :company_store do
     assign_original_supplier(
       [
         {
-          query: { dc_acct_num: '100306' },
+          query: { dc_acct_num: '100306', name: "Leed's / Leeds" },
           skus: [
             'LB-9350-78',
             'LB-5300-68',
@@ -265,11 +286,11 @@ namespace :company_store do
     assign_original_supplier(
       [
         {
-          query: { dc_acct_num: '112242' },
+          query: { dc_acct_num: '112242', name: 'Hirsch Gift' },
           skus: ['BA-T550', 'BA-T515', 'BA-T5580', 'BA-T501BK', 'BA-T523', 'BA-T524']
         },
         {
-          query: { dc_acct_num: '100306' },
+          query: { dc_acct_num: '100306', name: "Leed's / Leeds" },
           skus: ['BA-1690-49', 'BA-1695-05', 'BA-1690-63', 'BA-1693-86', 'BA-1691-61']
         }
       ]
@@ -291,10 +312,10 @@ namespace :company_store do
     assign_original_supplier(
       [
         { query: { name: 'Ball Pro' }, skus: ['AQR-TPVN'] },
-        { query: { dc_acct_num: '100160' }, skus: ['AQR-5250'] },
+        { query: { dc_acct_num: '100160', name: 'SanMar' }, skus: ['AQR-5250'] },
         { query: { name: 'Alphabroder' }, skus: ['AQR-98070', 'AQR-98140'] },
-        { query: { dc_acct_num: '100306' }, skus: ['AQR-1015-74'] },
-        { query: { dc_acct_num: '100383' }, skus: ['AQR-SM-4840'] }
+        { query: { dc_acct_num: '100306', name: "Leed's / Leeds" }, skus: ['AQR-1015-74'] },
+        { query: { dc_acct_num: '100383', name: 'Bullet' }, skus: ['AQR-SM-4840'] }
       ]
     )
     create_price_cache(company_store.supplier)

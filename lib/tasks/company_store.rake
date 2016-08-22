@@ -212,7 +212,17 @@ namespace :company_store do
         { query: { name: 'Pinnacle' }, skus: ['PA-SM-4125'] },
         {
           query: { dc_acct_num: '100306', name: "Leed's / Leeds" },
-          skus: ['PA-7120-18', 'PA-7199-32', 'PA-1621-11', 'PA-7199-60', 'PA-9350-22']
+          skus:
+          [
+            'PA-7120-18',
+            'PA-7199-32',
+            'PA-1621-11',
+            'PA-7199-60',
+            'PA-9350-22',
+            'PA-1624-07',
+            'PA-1622-71',
+            'PA-1624-78'
+          ]
         },
         { query: { dc_acct_num: '100160', name: 'SanMar' }, skus: ['PA-3250-99'] },
         { query: { name: 'Deluxe' }, skus: ['PA-SM-9734'] },

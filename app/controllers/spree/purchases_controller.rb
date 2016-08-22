@@ -19,7 +19,7 @@ class Spree::PurchasesController < Spree::StoreController
     )
 
     @product.price_breaks.each do |price_break|
-      lowest_range = price_break[0].split('..')[0].gsub(/\D/, '').to_i
+      lowest_range = price_break.split('..')[0].gsub(/\D/, '').to_i
       @purchase.price_breaks << [lowest_range, @product.best_price(quantity: lowest_range)]
     end
 

@@ -62,6 +62,11 @@ class Spree::Quote < Spree::Base
     shipping_options.find_by_shipping_option(selected_shipping_option)
   end
 
+  def refresh_cache
+    Rails.cache.delete("#{cache_key}/total_price")
+    total_price
+  end
+
   def total_price(options = {})
     options.reverse_merge!(
       selected_shipping_option: :ups_ground

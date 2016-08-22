@@ -33,13 +33,6 @@ def assign_original_supplier(config)
   end
 end
 
-def create_price_cache(supplier)
-  Spree::Product.where(supplier: supplier).each do |product|
-    Spree::PriceCache.where(product: product).destroy_all
-    product.refresh_price_cache
-  end
-end
-
 namespace :company_store do
   desc 'Create Xactly company store'
   task xactly: :environment do
@@ -50,7 +43,7 @@ namespace :company_store do
       name: 'Xactly Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
@@ -74,7 +67,6 @@ namespace :company_store do
         { query: { name: 'Alpi International' }, skus: ['XA-20099'] }
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create anchor free company store'
@@ -86,7 +78,7 @@ namespace :company_store do
       name: 'Anchorfree Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
@@ -106,7 +98,6 @@ namespace :company_store do
         { query: { name: 'Quake City Caps' }, skus: ['AF-8500'] } # Quake City Caps Products
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create Hightail company store'
@@ -118,7 +109,7 @@ namespace :company_store do
       name: 'Hightail Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
@@ -126,7 +117,6 @@ namespace :company_store do
         { query: { name: 'American Apparel' }, skus: ['HT-F497', 'HT-TRT497', 'HT-2001-WHITE', 'HT-2001-GREY'] } # AA
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create Netmining company store'
@@ -138,7 +128,7 @@ namespace :company_store do
       name: 'Netmining Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
@@ -157,7 +147,6 @@ namespace :company_store do
         { query: { name: 'American Apparel' }, skus: ['NM-2001'] }
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create PIMCO company store'
@@ -169,14 +158,13 @@ namespace :company_store do
       name: 'PIMCO Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
         { query: { name: 'Yeti' }, skus: ['PC-YRAM20'] }
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create Facebook company store'
@@ -188,10 +176,9 @@ namespace :company_store do
       name: 'Facebook Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier([{ query: { name: 'Brunswick' }, skus: ['FB-BRU181'] }])
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create Pavia company store'
@@ -203,7 +190,7 @@ namespace :company_store do
       name: 'Pavia Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
@@ -238,7 +225,6 @@ namespace :company_store do
         { query: { dc_acct_num: '100306', name: "Leed's / Leeds" }, skus: ['PA-6002-17', 'PA-6002-55', 'PA-1067-01'] }
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create Longboard company store'
@@ -250,7 +236,7 @@ namespace :company_store do
       name: 'Longboard Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
@@ -279,7 +265,6 @@ namespace :company_store do
         { query: { name: 'Prime Line' }, skus: ['LB-PL-4525'] }
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create Bastide company store'
@@ -291,7 +276,7 @@ namespace :company_store do
       name: 'Bastide Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
@@ -305,7 +290,6 @@ namespace :company_store do
         }
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 
   desc 'Create AQR company store'
@@ -317,7 +301,7 @@ namespace :company_store do
       name: 'AQR Company Store'
     }
 
-    company_store = create_company_store(params)
+    create_company_store(params)
     load_products(params)
     assign_original_supplier(
       [
@@ -328,6 +312,5 @@ namespace :company_store do
         { query: { dc_acct_num: '100383', name: 'Bullet' }, skus: ['AQR-SM-4840'] }
       ]
     )
-    create_price_cache(company_store.supplier)
   end
 end

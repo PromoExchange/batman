@@ -5,7 +5,7 @@ class CompanyStoreLoader
   DEFAULT_PRODUCT_ATTRS = {
     shipping_category: Spree::ShippingCategory.find_by_name!('Default'),
     tax_category: Spree::TaxCategory.find_by_name!('Default'),
-    available_on: Time.zone.now + 100.years
+    available_on: Time.zone.now
   }.freeze
 
   def self.load!(params)

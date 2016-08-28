@@ -43,6 +43,11 @@ Importing from heroku
 1. `curl -o latest.dump `` `heroku pg:backups public-url --app px-batman` `` `
 1. `pg_restore --verbose --clean --no-acl -h localhost -U postgres -d batman_dev latest.dump`
 
+Moving databases between apps
+-----------------------------
+1. Backup target: `heroku pg:backups capture -a <preview app>`
+1. Copy Database: `heroku pg:copy px-batman-stage::HEROKU_POSTGRESQL_PINK_URL HEROKU_POSTGRESQL_WHITE_URL -a <preview app>`
+
 Running the App
 ---------------
 1. Ensure postgres and redis-server are running

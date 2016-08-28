@@ -14,8 +14,8 @@ Rails.application.routes.draw do
   root :to => "company_store#index"
 
   post '/charges', to: 'spree/api/charges#charge'
-  get 'accept/:bid_id', to: 'spree/auctions#auction_payment'
-  get 'csaccept/:bid_id', to: 'spree/auctions#csaccept'
+  get 'accept/:order_id', to: 'spree/purchases#purchase_payment'
+  get 'csaccept/:order_id', to: 'spree/purchases#csaccept'
   post '/customer', to: 'spree/api/charges#create_customer'
   post '/delete_customer/:customer_id', to: 'spree/api/charges#delete_customer'
   post '/confirm', to: 'spree/api/charges#confirm_deposit'

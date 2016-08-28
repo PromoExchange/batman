@@ -24,8 +24,6 @@ class Spree::PurchasesController < Spree::StoreController
       @purchase.price_breaks << [lowest_range, best_price]
     end
 
-    # TODO: Add sizes
-
     supporting_data
 
     render :new
@@ -73,10 +71,33 @@ class Spree::PurchasesController < Spree::StoreController
       variant: product.master
     )
 
-    li.price = (best_price[:best_price] * purchase_params[:quantity].to_i).to_f
+    li.price = best_price[:best_price].to_f
     li.save!
 
     Spree::OrderUpdater.new(order).update
+
+    redirect_to "/accept/#{order.id}"
+  rescue StandardError => e
+    Rails.logger.error("Failed to create auction #{e}")
+    supporting_data
+    render :new, flash: { error: 'There was an error creating purchase' }
+  end
+
+  def purchase_payment
+    @order = Spree::Order.find(params[:order_id])
+  end
+
+  def csaccept
+    @order = Spree::Order.find(params[:order_id])
+
+    Stripe::Charge.create(
+      amount: (@order.total.to_f * 100).to_i,
+      currency: 'usd',
+      source: params[:stripeToken],
+      description: params[:stripeEmail].to_s
+    )
+
+    redirect_to '/'
   end
 
   def supporting_data

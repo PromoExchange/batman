@@ -4,13 +4,13 @@
 
 <h4>Bill To:</h4>
 <ul style='list-style: none;'>
-  <li><%= @auction.shipping_address.company %></li>
-  <li><%= @auction.shipping_address.address1 %></li>
-  <li><%= @auction.shipping_address.address2 %></li>
+  <li><%= @auction.buyer.bill_address.company %></li>
+  <li><%= @auction.buyer.bill_address.address1 %></li>
+  <li><%= @auction.buyer.bill_address.address2 %></li>
   <li>
-    <%= @auction.shipping_address.city %>,
-    <%= @auction.shipping_address.state_text %>,
-    <%= @auction.shipping_address.zipcode %>
+    <%= @auction.buyer.bill_address.city %>,
+    <%= @auction.buyer.bill_address.state_text %>,
+    <%= @auction.buyer.bill_address.zipcode %>
   </li>
 </ul>
 

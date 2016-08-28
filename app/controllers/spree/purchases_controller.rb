@@ -20,7 +20,8 @@ class Spree::PurchasesController < Spree::StoreController
 
     @product.price_breaks.each do |price_break|
       lowest_range = price_break.split('..')[0].gsub(/\D/, '').to_i
-      @purchase.price_breaks << [lowest_range, @product.best_price(quantity: lowest_range)]
+      best_price = @product.best_price(quantity: lowest_range)[:best_price].to_f / lowest_range
+      @purchase.price_breaks << [lowest_range, best_price]
     end
 
     # TODO: Add sizes

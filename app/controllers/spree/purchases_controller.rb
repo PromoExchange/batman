@@ -97,7 +97,7 @@ class Spree::PurchasesController < Spree::StoreController
       description: params[:stripeEmail].to_s
     )
 
-    redirect_to '/'
+    redirect_to "/company_store/#{current_company_store.slug}"
   end
 
   def supporting_data

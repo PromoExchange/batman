@@ -37,6 +37,12 @@ Installation
 5. `bundle exec rake db:seed`
 6. `PRODUCT_LOAD_IMAGES=true bundle exec rake product:load:all`, this will take a significant amount of time, as it is loading the database with all product information and images pulled from the internet.
 
+Importing from heroku
+---------------------
+1. `heroku pg:backups capture --app px-batman`
+1. `curl -o latest.dump `` `heroku pg:backups public-url --app px-batman` `` `
+1. `pg_restore --verbose --clean --no-acl -h localhost -U postgres -d batman_dev latest.dump`
+
 Running the App
 ---------------
 1. Ensure postgres and redis-server are running

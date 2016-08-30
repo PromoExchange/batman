@@ -20,10 +20,6 @@
           .form-group
             = f.label :name_cont, Spree.t(:name)
             = f.text_field :name_cont, class: "form-control js-quick-search-target"
-        .col.col-md-4
-          .form-group
-            = f.label :dc_acct_num_cont, 'DC Acct Number'
-            = f.text_field :dc_acct_num_cont, class: "form-control"
       .form-actions
         = button Spree.t(:search), 'search'
 .well

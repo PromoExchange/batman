@@ -3,7 +3,6 @@ class Spree::Admin::LogosController < Spree::Admin::ResourceController
   before_action :load_logo, only: [:destroy, :show]
 
   def create
-    binding.pry
   end
 
   def destroy

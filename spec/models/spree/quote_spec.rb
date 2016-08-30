@@ -118,49 +118,4 @@ describe Spree::Quote, type: :model do
       expect(quote.cache_key(5) =~ /#{quote.model_name.cache_key}/).to be_truthy
     end
   end
-
-  it 'should save with a value quote' do
-    quote = FactoryGirl.build(:quote)
-    expect(quote.save).to be_truthy
-  end
-
-  it 'should save with a value quote' do
-    quote = FactoryGirl.build(:quote)
-    expect(quote.save).to be_truthy
-  end
-
-  it 'should belong to an main_color' do
-    t = Spree::Quote.reflect_on_association(:main_color)
-    expect(t.macro).to eq :belongs_to
-  end
-
-  it 'should belong to an product' do
-    t = Spree::Quote.reflect_on_association(:product)
-    expect(t.macro).to eq :belongs_to
-  end
-
-  it 'should belong to an shipping_address' do
-    t = Spree::Quote.reflect_on_association(:shipping_address)
-    expect(t.macro).to eq :belongs_to
-  end
-
-  it 'should belong to an imprint_method' do
-    t = Spree::Quote.reflect_on_association(:imprint_method)
-    expect(t.macro).to eq :belongs_to
-  end
-
-  it 'should have many shipping_options' do
-    t = Spree::Quote.reflect_on_association(:shipping_options)
-    expect(t.macro).to eq :has_many
-  end
-
-  it 'should delete shipping_options' do
-    quote_with_shipping = FactoryGirl.create(:quote)
-    expect { quote_with_shipping.destroy }.to change { Spree::ShippingOption.count }.by(-5)
-  end
-
-  it 'should delete shipping_options' do
-    quote_with_shipping = FactoryGirl.create(:quote)
-    expect { quote_with_shipping.destroy }.to change { Spree::ShippingOption.count }.by(-5)
-  end
 end

@@ -2,6 +2,7 @@ module Spree::QuoteCalculator
   # TODO: Create a quote namespace
   include QuoteCalculatorUpcharge
   include QuoteCalculatorShipping
+  include QuoteCalculatorFees
 
   def calculate(options = {})
     clear_log
@@ -43,12 +44,16 @@ module Spree::QuoteCalculator
 
     log("Selected Shipping cost #{shipping_cost}")
     log("Selected Shipping option #{Spree::ShippingOption::OPTION.key(selected_shipping_option)}")
-    unit_price_with_shipping = unit_price + (shipping_cost / quantity)
-    log("After applying shipping #{unit_price_with_shipping}")
+    self.unit_price += (shipping_cost / quantity)
+    log("After applying shipping #{self.unit_price}")
+
+    # @see module Spree:QuoteCalculatorFees
+    apply_seller_markup
+    apply_px_commission
+    apply_processing_fee
 
     save!
-
-    unit_price_with_shipping * quantity
+    unit_price * quantity
   rescue StandardError => e
     log(e.to_s)
     Rails.logger.error(e.to_s)

@@ -7,7 +7,7 @@ module Spree::QuoteCalculatorShipping
 
     raise 'Shipping carton weight is not active' unless carton.active?
 
-    # @see Spree::QuoteCalculatorShipping
+    # @see Spree::QuoteCalculatorFixedShipping
     return calculate_fixed_price unless product.carton.fixed_price.nil?
 
     shipping_weight = carton.weight
@@ -71,8 +71,11 @@ module Spree::QuoteCalculatorShipping
       shipping_cost = (rate[1] * number_of_packages.to_f) / 100
       delivery_date = rate[2]
       service_name = rate[0]
+      mapped_shipping_option = shipping_option_map[rate[0]]
 
-      selected_shipping_cost = shipping_cost if shipping_option_map[rate[0]] == shipping_sym
+      raise "Unable to find mapped shipping options for #{rate[0]}" if mapped_shipping_option.nil?
+
+      selected_shipping_cost = shipping_cost if mapped_shipping_option == shipping_sym
 
       begin
         delta = 0
@@ -91,7 +94,7 @@ module Spree::QuoteCalculatorShipping
         name: service_name,
         delivery_date: Time.zone.now + days_diff.days,
         delivery_days: days_diff,
-        shipping_option: Spree::ShippingOption::OPTION[shipping_option_map[rate[0]]],
+        shipping_option: Spree::ShippingOption::OPTION[mapped_shipping_option],
         shipping_cost: shipping_cost
       )
     end

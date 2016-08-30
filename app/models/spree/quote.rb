@@ -16,6 +16,9 @@ class Spree::Quote < Spree::Base
   attr_writer :cache_expiration
   attr_writer :write_log
   attr_writer :num_locations
+  attr_writer :px_commission_rate
+  attr_writer :payment_processing_commission
+  attr_writer :payment_processing_flat_fee
 
   def messages
     @messages ||= []
@@ -36,6 +39,18 @@ class Spree::Quote < Spree::Base
   def num_locations
     # TODO: Move to product
     @num_locations || 1
+  end
+
+  def px_commission_rate
+    @px_commission || 0.0899
+  end
+
+  def payment_processing_commission
+    @payment_processing_commission || 0.029
+  end
+
+  def payment_processing_flat_fee
+    @payment_processing_flat_fee || 0.30
   end
 
   validates :main_color, presence: true

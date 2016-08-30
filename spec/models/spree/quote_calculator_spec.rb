@@ -13,13 +13,13 @@ RSpec.describe Spree::Quote, type: :model do
     end
   end
 
-  it 'should apply EQP discount', focus: true do
+  it 'should apply EQP discount' do
     quote = FactoryGirl.create(:quote, product: FactoryGirl.create(:px_product, :with_eqp))
     quote.apply_eqp
     expect((quote.unit_price - 16.6336).abs).to be < 0.0001
   end
 
-  it 'should not apply no_eqp_range', focus: true do
+  it 'should not apply no_eqp_range' do
     quote = FactoryGirl.create(:quote, product: FactoryGirl.create(:px_product,
       :with_eqp,
       :with_no_eqp_range))
@@ -34,79 +34,107 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.unit_price - 23.992).abs).to be < 0.001
   end
 
-  xit 'should calculate quote with 25 quantity' do
+  it 'should apply seller markup' do
     quote = FactoryGirl.create(:quote)
-    expect((quote.total_price - 616.17).abs).to be < 0.001
+    quote.unit_price = quote.product.unit_price(quote.quantity)
+    quote.apply_seller_markup
+    expect((quote.unit_price - 32.989).abs).to be < 0.001
   end
 
-  xit 'should calculate quote with 125 quantity' do
+  it 'should apply PX commission' do
+    quote = FactoryGirl.create(:quote)
+    quote.unit_price = quote.product.unit_price(quote.quantity)
+    quote.apply_px_commission
+    expect((quote.unit_price - 32.9524).abs).to be < 0.001
+  end
+
+  it 'should apply processing fee' do
+    quote = FactoryGirl.create(:quote)
+    quote.unit_price = quote.product.unit_price(quote.quantity)
+    quote.apply_processing_fee
+    expect((quote.unit_price - 30.897).abs).to be < 0.001
+  end
+
+  it 'should calculate quote with 25 quantity' do
+    quote = FactoryGirl.create(:quote)
+    expect((quote.total_price - 767.331).abs).to be < 0.001
+  end
+
+  it 'should calculate quote with 125 quantity' do
     quote = FactoryGirl.create(:quote, quantity: 125)
-    expect((quote.total_price - 2815.37).abs).to be < 0.001
+    expect((quote.total_price - 3504.799).abs).to be < 0.001
   end
 
-  xit 'should calculate quote with 225 quantity' do
+  it 'should calculate quote with 225 quantity' do
     quote = FactoryGirl.create(:quote, quantity: 225)
-    expect((quote.total_price - 4710.94).abs).to be < 0.001
+    expect((quote.total_price - 5864.371).abs).to be < 0.001
   end
 
-  xit 'should apply product less_than_minimum charge' do
+  it 'should apply product less_than_minimum charge' do
     quote2 = FactoryGirl.create(:quote, :with_less_than_minimum)
-    expect((quote2.total_price(quantity: 75) - 676.21).abs).to be < 0.001
+    expect((quote2.total_price(quantity: 75) - 842.016).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should apply product setup charge' do
+  it 'should apply product setup charge' do
     quote2 = FactoryGirl.create(:quote, :with_setup_upcharges)
-    expect((quote2.total_price - 816.17).abs).to be < 0.001
+    expect((quote2.total_price - 1016.282).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should apply product run charges' do
+  it 'should apply product run charges' do
     quote2 = FactoryGirl.create(:quote, :with_run_upcharges)
-    expect((quote2.total_price - 625.37).abs).to be < 0.001
+    expect((quote2.total_price - 778.783).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should apply product setup and run charges' do
+  it 'should apply product setup and run charges' do
     quote2 = FactoryGirl.create(:quote, :with_setup_and_run_upcharges)
-    expect((quote2.total_price - 825.37).abs).to be < 0.001
+    expect((quote2.total_price - 1027.734).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should apply additional location charge' do
+  it 'should apply product setup and run charges with quantity' do
+    quote2 = FactoryGirl.create(:quote, :with_setup_and_run_upcharges)
+    quote2.quantity = 125
+    expect((quote2.total_price - 3811.009).abs).to be < 0.001
+    expect(quote2.total_price).to be > quote.total_price
+  end
+
+  it 'should apply additional location charge' do
     quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge)
     quote2.num_locations = 2
-    expect((quote2.total_price - 618.17).abs).to be < 0.001
+    expect((quote2.total_price - 769.820).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should apply additional location charge with quantity' do
+  it 'should apply additional location charge with quantity', focus: true do
     quote = FactoryGirl.create(:quote, quantity: 125)
     quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge, quantity: 125)
     quote2.num_locations = 2
-    expect((quote2.total_price - 2823.37).abs).to be < 0.001
+    expect((quote2.total_price - 3514.757).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should provide fixed shipping per item' do
+  it 'should provide fixed shipping per item' do
     quote = FactoryGirl.create(:quote, :with_fixed_price_per_item)
-    expect((quote.total_price - 662.3).abs).to be < 0.001
+    expect((quote.total_price - 824.702).abs).to be < 0.001
   end
 
-  xit 'should provide fixed shipping total' do
+  it 'should provide fixed shipping total' do
     quote = FactoryGirl.create(:quote, :with_fixed_price_total)
-    expect((quote.total_price - 699.8).abs).to be < 0.001
+    expect((quote.total_price - 871.380).abs).to be < 0.001
   end
 
   # TODO: Mock UPS calls!
   xit 'should use non fixed shipping' do
     quote = FactoryGirl.create(:quote, :with_carton)
-    expect((quote.total_price - 616.17).abs).to be < 0.001
+    expect((quote.total_price - 767.331).abs).to be < 0.001
   end
 
   xit 'should use non fixed shipping 3day' do
     quote = FactoryGirl.create(:quote, :with_carton)
-    expect((quote.total_price(selected_shipping_option: :ups_3day_select) - 637.81).abs).to be < 0.001
+    expect((quote.total_price(selected_shipping_option: :ups_3day_select) - 794.442).abs).to be < 0.001
   end
 
   xit 'should use higher cost for express shipping' do

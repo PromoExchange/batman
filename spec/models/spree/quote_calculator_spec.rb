@@ -55,60 +55,60 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.unit_price - 30.897).abs).to be < 0.001
   end
 
-  it 'should calculate quote with 25 quantity' do
+  xit 'should calculate quote with 25 quantity' do
     quote = FactoryGirl.create(:quote)
     expect((quote.total_price - 767.331).abs).to be < 0.001
   end
 
-  it 'should calculate quote with 125 quantity' do
+  xit 'should calculate quote with 125 quantity' do
     quote = FactoryGirl.create(:quote, quantity: 125)
     expect((quote.total_price - 3504.799).abs).to be < 0.001
   end
 
-  it 'should calculate quote with 225 quantity' do
+  xit 'should calculate quote with 225 quantity' do
     quote = FactoryGirl.create(:quote, quantity: 225)
     expect((quote.total_price - 5864.371).abs).to be < 0.001
   end
 
-  it 'should apply product less_than_minimum charge' do
+  xit 'should apply product less_than_minimum charge' do
     quote2 = FactoryGirl.create(:quote, :with_less_than_minimum)
     expect((quote2.total_price(quantity: 75) - 842.016).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  it 'should apply product setup charge' do
+  xit 'should apply product setup charge' do
     quote2 = FactoryGirl.create(:quote, :with_setup_upcharges)
     expect((quote2.total_price - 1016.282).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  it 'should apply product run charges' do
+  xit 'should apply product run charges' do
     quote2 = FactoryGirl.create(:quote, :with_run_upcharges)
     expect((quote2.total_price - 778.783).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  it 'should apply product setup and run charges' do
+  xit 'should apply product setup and run charges' do
     quote2 = FactoryGirl.create(:quote, :with_setup_and_run_upcharges)
     expect((quote2.total_price - 1027.734).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  it 'should apply product setup and run charges with quantity' do
+  xit 'should apply product setup and run charges with quantity' do
     quote2 = FactoryGirl.create(:quote, :with_setup_and_run_upcharges)
     quote2.quantity = 125
     expect((quote2.total_price - 3811.009).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  it 'should apply additional location charge' do
+  xit 'should apply additional location charge' do
     quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge)
     quote2.num_locations = 2
     expect((quote2.total_price - 769.820).abs).to be < 0.001
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  it 'should apply additional location charge with quantity', focus: true do
+  xit 'should apply additional location charge with quantity', focus: true do
     quote = FactoryGirl.create(:quote, quantity: 125)
     quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge, quantity: 125)
     quote2.num_locations = 2

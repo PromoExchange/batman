@@ -48,8 +48,17 @@ module Spree::QuoteCalculatorShipping
       key: ENV['UPS_API_KEY']
     )
     response = ups.find_rates(origin, destination, package)
+
+    if response.message != 'Success'
+      log('ERROR: Failed to get UPS shipping rates')
+      self.error_code = :shipping_calculation_error
+      return nil
+    end
+
+    # TODO: Why? Directly access the rates hash
     ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price, rate.delivery_date] }
 
+    # TODO: Use Service code!
     shipping_option_map = {
       'UPS Ground' => :ups_ground,
       'UPS Three-Day Select' => :ups_3day_select,

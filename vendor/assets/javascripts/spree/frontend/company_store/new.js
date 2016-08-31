@@ -60,6 +60,14 @@ $(function(){
           'X-Spree-Token': api_key
         },
         success: function(data) {
+          if (typeof data.error_message !== typeof undefined ? true : false) {
+            $(".cs-active-price").text(data.error_message);
+            $("#price-spin").hide();
+            $('.cs-purchase-submit').prop('disabled', false);
+            $(".cs-active-price").show();
+            return;
+          }
+
           var money_text = accounting.formatMoney((parseFloat(data.best_price)));
           $('#ship_date').text(
             moment(new Date())

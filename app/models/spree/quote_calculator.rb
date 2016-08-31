@@ -41,6 +41,7 @@ module Spree::QuoteCalculator
     # @see module Spree::QuoteCalculatorShipping
     # @note: Unit price is *not* adjusted in calculate_shipping
     shipping_cost = calculate_shipping
+    raise 'Failed to calculate shipping' if shipping_cost.nil?
 
     log("Selected Shipping cost #{shipping_cost}")
     log("Selected Shipping option #{Spree::ShippingOption::OPTION.key(selected_shipping_option)}")
@@ -53,11 +54,12 @@ module Spree::QuoteCalculator
     apply_processing_fee
 
     save!
+
     unit_price * quantity
   rescue StandardError => e
-    log(e.to_s)
+    log("ERROR: #{e}")
     Rails.logger.error(e.to_s)
-    0.0
+    nil
   end
 
   def apply_eqp

@@ -250,8 +250,20 @@ Spree::Product.class_eval do
     raise 'Failed to get price' if quote.nil?
 
     # TODO: Move this documention creation to API (maybe)
+    total_price = quote.total_price
+
+    if total_price.nil?
+      return {
+        error_code: quote.error_code.to_s,
+        error_message: quote.messages.last,
+        best_price: nil,
+        delivery_days: nil,
+        shipping_options: []
+      }
+    end
+
     response = {
-      best_price: quote.total_price,
+      best_price: total_price,
       delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21),
       shipping_options: []
     }

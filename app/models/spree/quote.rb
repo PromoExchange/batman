@@ -19,9 +19,14 @@ class Spree::Quote < Spree::Base
   attr_writer :px_commission_rate
   attr_writer :payment_processing_commission
   attr_writer :payment_processing_flat_fee
+  attr_writer :error_code
 
   def messages
     @messages ||= []
+  end
+
+  def error_code
+    @error_code ||= :no_error
   end
 
   def cache_expiration
@@ -121,6 +126,8 @@ class Spree::Quote < Spree::Base
     # @see module Spree::QuoteCalculator
     best_price = calculate(options)
 
+    return best_price if best_price.nil?
+
     # If we get here, we have rerun the price calculations
     # We have saved the database all of the shipping options
     # Let's refresh the cache here for all of them
@@ -132,7 +139,6 @@ class Spree::Quote < Spree::Base
         expires_in: cache_expiration.hours
       )
     end
-    # divider = (has_quantity ? options[:quantity] : product.minimum_quantity)
     best_price
   end
 

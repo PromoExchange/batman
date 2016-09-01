@@ -94,9 +94,13 @@ class Spree::Quote < Spree::Base
     self.selected_shipping_option = Spree::ShippingOption::OPTION[options[:selected_shipping_option]]
 
     log("Total price called #{options}")
-    Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
+    from_cache = true
+    best_price = Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
+      from_cache = false
       best_price(options)
     end
+    log("Retrieved from cache [#{from_cache.to_s}]")
+    best_price
   end
 
   def cache_key(shipping_option = nil)

@@ -11,9 +11,9 @@ $(function(){
     var actual = 0;
     var min = 0;
 
-    if($('#auction-size .product-size').length) {
-      min = parseInt($("#auction-size").attr('min-quantity'));
-      $('#auction-size .product-size').each(function() {
+    if($('#purchase-size .product-size').length) {
+      min = parseInt($("#purchase-size").attr('min-quantity'));
+      $('#purchase-size .product-size').each(function() {
         actual += parseInt('0'+ $(this).val());
       });
     } else {
@@ -123,7 +123,6 @@ $(function(){
   }
 
   $(".cs-quantity").keyup(function() {
-    if( $("#auction_clone_id").val() === "") return;
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
     if($('#address_drop').val() === '') {
@@ -132,7 +131,7 @@ $(function(){
     delay(function(){recalc_price();},500);
   });
 
-  $('#auction_ship_to_zip').change(function() {
+  $('#purchase_ship_to_zip').change(function() {
     set_address_id();
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
@@ -181,11 +180,11 @@ $(function(){
     $('#shipping_option_group').show();
   });
 
-  $('#auction-size .product-size').change(function() {
+  $('#purchase-size .product-size').change(function() {
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
     var sum = 0;
-    $('#auction-size .product-size').each(function() {
+    $('#purchase-size .product-size').each(function() {
       sum+= parseInt('0'+ $(this).val());
     });
     $('.total-qty span:last').text(sum);
@@ -196,14 +195,14 @@ $(function(){
     set_address_id();
     $('#need_it_sooner').hide();
     $(".cs-quantity").val('');
-    $('#auction-size .product-size').each(function() {
+    $('#purchase-size .product-size').each(function() {
       $(this).val('');
     });
     $('#shipping_option').val(1);
   });
 
   function set_address_id() {
-    var address_id = $('#auction_ship_to_zip option:selected').attr('data-id');
-    $('#auction_address_id').val(address_id);
+    var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
+    $('#purchase_address_id').val(address_id);
   }
 });

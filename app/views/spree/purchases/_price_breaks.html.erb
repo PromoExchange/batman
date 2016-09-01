@@ -1,0 +1,12 @@
+<% if @purchase.price_breaks.present? %>
+  <div>
+    <table class="table">
+      <thead>
+        <tr><th>Quantity</th><th>Price</th></tr>
+      </thead>
+      <% @purchase.price_breaks.each do |preak| %>
+        <tr><td><%= preak[0] %></td><td><%= number_to_currency(preak[1]) %> each</td></tr>
+      <% end %>
+    </table>
+  </div>
+<% end %>

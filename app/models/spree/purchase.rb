@@ -33,4 +33,8 @@ class Spree::Purchase
   def persisted?
     false
   end
+
+  def sizes
+    %w(S M L XL 2XL)
+  end
 end

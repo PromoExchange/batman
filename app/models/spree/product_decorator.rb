@@ -209,7 +209,7 @@ Spree::Product.class_eval do
   end
 
   def price_code(quantity = nil)
-    return 'V' if quantity.nil?
+    quantity ||= minimum_quantity
     price_code = nil
     price_code_count = 0
     master.volume_prices.each do |v|

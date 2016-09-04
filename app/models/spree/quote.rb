@@ -155,11 +155,12 @@ class Spree::Quote < Spree::Base
     raise e, 'Retries exhausted'
   end
 
-  after_find do |_quote|
-    self.messages = JSON.parse(workbook).to_a unless workbook.blank?
+  after_find do |quote|
+    quote.messages = JSON.parse(quote.workbook).to_a unless quote.workbook.blank?
   end
 
-  before_save do |_quote|
-    self.workbook = messages.to_json
+  before_save do |quote|
+    quote.messages.each { |m| Rails.logger.info(m) }
+    quote.workbook = quote.messages.to_json
   end
 end

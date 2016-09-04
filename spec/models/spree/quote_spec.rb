@@ -73,12 +73,12 @@ describe Spree::Quote, type: :model do
       expect(quote.messages.count).to eq 5
     end
 
-    it 'should save and restore messages' do
+    it 'should save and restore messages', active: true do
       quote = FactoryGirl.build(:quote)
-      5.times { quote.log('Test message') }
+      15.times { |i| quote.log("Test message #{i}") }
       quote.save
       quote2 = Spree::Quote.find(quote.id)
-      expect(quote2.messages.count).to eq 5
+      expect(quote2.messages.count).to eq 15
     end
 
     it 'should clear messages' do

@@ -22,13 +22,16 @@ module Spree::QuoteCalculator
 
     log('no_eqp_range not set') if product.no_eqp_range.nil?
 
+    eqp_applied = false
     if markup.eqp?
-      apply_eqp
+      eqp_applied = apply_eqp
     else
       self.unit_price = product.unit_price(quantity)
       log("Base Unit price: #{unit_price}")
-      apply_price_discount
     end
+
+    apply_price_discount unless eqp_applied
+
     log("Running Unit price: #{unit_price}")
 
     # @see module QuoteCalculatorUpcharge
@@ -63,9 +66,8 @@ module Spree::QuoteCalculator
   end
 
   def apply_eqp
-    return unless markup.eqp?
-
     set_price = nil
+    eqp_applied = false
 
     # Do not apply EQP if quantity is within EQP Range
     if product.no_eqp_range.present?
@@ -96,9 +98,11 @@ module Spree::QuoteCalculator
 
       set_price = eqp_price * (1 - discount)
       log("EQP Price (discounted percentage): #{set_price}")
+      eqp_applied = true
     end
 
     self.unit_price = set_price
+    eqp_applied
   end
 
   def apply_price_discount(price_code = nil)

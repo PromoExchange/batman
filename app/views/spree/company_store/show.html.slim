@@ -5,7 +5,7 @@
     .col-md-4.cs-product
       = link_to large_image(product, {itemprop: 'image', class: 'cs-image'}), main_app.new_purchase_path( purchase: { product_id: product.id } ), itemprop: 'url'
       .cs-product-text.text-center = product.name
-      .cs-product-text.text-center.cs-lowest-bid = "As low as #{number_to_currency(product.best_price[:best_price].to_f / product.minimum_quantity ) }"
+      .cs-product-text.text-center.cs-lowest-bid = "As low as #{number_to_currency(product.best_price()[:best_price].to_f / product.last_price_break_minimum ) }"
 div.text-center
   p Can't find the product you are looking for? Let the PromoExchange swag pros provide you with some custom ideas.
   = button_tag "Inspire me with new product ideas!", class: 'btn btn-success cs-button',id: "inspire-me", data: {toggle: "modal", target: "#inspire-me-request"}

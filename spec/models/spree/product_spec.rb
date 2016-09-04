@@ -30,6 +30,21 @@ RSpec.describe Spree::Product, type: :model do
     end
   end
 
+  it 'should get minimum_quantity', focus: true do
+    product = FactoryGirl.create(:px_product)
+    expect(product.minimum_quantity).to eq 25
+  end
+
+  it 'should get maximum_quantity', focus: true do
+    product = FactoryGirl.create(:px_product)
+    expect(product.maximum_quantity).to eq 2500
+  end
+
+  it 'should get last price break minimum', focus: true do
+    product = FactoryGirl.create(:px_product)
+    expect(product.last_price_break_minimum).to eq 200
+  end
+
   it 'should start with an active state' do
     a = FactoryGirl.build(:product)
     expect(a.state).to eq 'active'

@@ -61,6 +61,10 @@ Spree::Product.class_eval do
     end
   end
 
+  def volume_prices
+    Spree::Variant.find_by(product_id: id).volume_prices
+  end
+
   def wearable?
     # Assume wearable as having Apparal as parent OR as it's main category
     apparel_taxon = Spree::Taxon.where(dc_category_guid: '7F4C59A7-6226-11D4-8976-00105A7027AA')
@@ -78,18 +82,26 @@ Spree::Product.class_eval do
     # HACK: for SanMar
     sanmar = Spree::Supplier.find_by(dc_acct_num: '100160')
     return 12 if supplier == sanmar
-    lowest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).first
+    lowest_price_range = volume_prices[0..-1].map(&:range).first
     return 50 if lowest_price_range.nil?
     lower_value = lowest_price_range.split('..')[0]
     lower_value.delete('(').to_i
   end
 
   def maximum_quantity
-    highest_price_range = Spree::Variant.find_by(product_id: id).volume_prices[0..-1].map(&:range).last
+    highest_price_range = volume_prices.map(&:range).last
     return 2500 if highest_price_range.nil?
+    # TODO: I think we should actually be 2 x last_price_break_minimum
     return 2500 if highest_price_range.include? '+'
     highest_value = highest_price_range.split('..')[1]
     highest_value.delete(')').to_i
+  end
+
+  def last_price_break_minimum
+    last_price_break_minimum = volume_prices.map(&:range).last
+    return last_price_break_minimum.split('+')[0].to_i if last_price_break_minimum.include? '+'
+    last_price_break_minimum = last_price_break_minimum.split('..')[1]
+    last_price_break_minimum.delete(')').to_i
   end
 
   def all_prices
@@ -231,12 +243,12 @@ Spree::Product.class_eval do
     raise 'Cannot find shipping adddress' if company_store.buyer.shipping_address.nil?
 
     options.reverse_merge!(
-      quantity: minimum_quantity,
+      quantity: last_price_break_minimum,
       shipping_option: :ups_ground,
       shipping_address: company_store.buyer.shipping_address.id
     )
 
-    options[:quantity] ||= minimum_quantity
+    options[:quantity] ||= last_price_break_minimum
 
     # TODO: Move cache point to here
     quote = quotes.where(
@@ -264,6 +276,7 @@ Spree::Product.class_eval do
 
     response = {
       best_price: total_price,
+      quantity: options[:quantity].to_i,
       delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21),
       shipping_options: []
     }

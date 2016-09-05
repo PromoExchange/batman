@@ -55,6 +55,7 @@ class Spree::Admin::CompanyStoresController < Spree::Admin::ResourceController
   def company_store_params
     params.require(:company_store).permit(
       :buyer_id,
+      :company_store,
       :display_name,
       :name,
       :slug,

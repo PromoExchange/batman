@@ -12,14 +12,6 @@
     = search_form_for [:admin, @search] do |f|
       - locals = {:f => f}
       .row
-        .col.col-md-4
-          .form-group
-            = f.label :id_eq, Spree.t(:ID)
-            = f.text_field :id_eq, class: "form-control"
-        .col.col-md-4
-          .form-group
-            = f.label :name_cont, Spree.t(:name)
-            = f.text_field :name_cont, class: "form-control js-quick-search-target"
       .form-actions
         = button Spree.t(:search), 'search'
 .well

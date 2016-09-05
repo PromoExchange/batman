@@ -61,7 +61,7 @@ Spree::Product.whitelisted_ransackable_attributes |= [
 ]
 Spree::Product.whitelisted_ransackable_associations |= ['supplier']
 
-Spree::Supplier.whitelisted_ransackable_attributes |= ['name', 'dc_acct_num']
+Spree::Supplier.whitelisted_ransackable_attributes |= ['id', 'name', 'dc_acct_num']
 
 {
   s3_credentials: {

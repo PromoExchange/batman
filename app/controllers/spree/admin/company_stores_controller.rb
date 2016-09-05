@@ -52,11 +52,11 @@ class Spree::Admin::CompanyStoresController < Spree::Admin::ResourceController
     @suppliers = Spree::Supplier.where(company_store: true)
   end
 
-  def company_store_params
+  def permitted_resource_params
     params.require(:company_store).permit(
       :buyer_id,
-      :company_store,
       :display_name,
+      :host,
       :name,
       :slug,
       :supplier_id

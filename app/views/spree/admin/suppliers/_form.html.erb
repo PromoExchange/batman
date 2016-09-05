@@ -20,7 +20,7 @@
   <div class="col-md-4">
     <%= f.field_container :company_store, class: ['form-group'] do %>
       <%= f.label :company_store, Spree.t(:company_store) %>
-      <%= f.radio_button :company_store, true, class: ['form-group'] %>
+      <%= f.check_box :company_store, class: ['form-group'] %>
       <%= f.error_message_on :company_store %>
     <% end %>
   </div>

@@ -83,7 +83,7 @@ class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
   end
 
   def supplier_params
-    params.require(:supplier).permit([:name, :dc_acct_num] | [
+    params.require(:supplier).permit([:name, :company_store, :dc_acct_num] | [
       ship_address_attributes: permitted_address_attributes,
       bill_address_attributes: permitted_address_attributes
     ])

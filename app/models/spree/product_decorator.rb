@@ -286,7 +286,7 @@ Spree::Product.class_eval do
     quote.shipping_options.each do |option|
       adjusted_delivery_date = Time.zone.now + (2 + production_time + option.delivery_days).days
       total_cost = quote.total_price(
-        selected_shipping_option: Spree::ShippingOption::OPTION.keys[option.shipping_option]
+        selected_shipping_option: Spree::ShippingOption::OPTION.key(option.shipping_option)
       )
       lowest_total = [lowest_total, total_cost].min
       response[:shipping_options].push(

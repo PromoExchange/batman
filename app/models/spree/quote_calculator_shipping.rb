@@ -72,8 +72,8 @@ module Spree::QuoteCalculatorShipping
 
     shipping_sym = Spree::ShippingOption::OPTION.key(selected_shipping_option)
 
-    shipping_cost = 0.0
-    selected_shipping_cost = 0.0
+    shipping_cost = nil
+    selected_shipping_cost = nil
     delivery_date = nil
 
     ups_rates.each do |rate|
@@ -107,6 +107,13 @@ module Spree::QuoteCalculatorShipping
         shipping_cost: shipping_cost
       )
     end
+
+    if selected_shipping_cost.nil?
+      log('ERROR: Failed to get UPS shipping rates')
+      self.error_code = :shipping_calculation_error
+      return nil
+    end
+
     selected_shipping_cost
   rescue => e
     log("ERROR: (calculate shipping): #{e}")

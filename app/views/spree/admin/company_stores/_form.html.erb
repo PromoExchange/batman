@@ -54,4 +54,33 @@
       <% end %>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-6" data-hook="admin_company_store_form_logo">
+      <%= f.field_container :logo, class: ['form-group'] do %>
+        <%= f.label :logo, Spree.t(:add_logo) %>
+        <%= f.file_field :logo %>
+        <p>Acceptable file formats: (.png, .jpeg)
+          <span
+            class='glyphicon glyphicon-question-sign'
+            data-toggle='tooltip'
+            data-placement='top'
+            title='Please contact our support team to find out how to get the correct file format if you do not currently have it available.'>
+          </span>
+        </p>
+
+        <script>$(document).ready(function() { $('[data-toggle="tooltip"]').tooltip(); });</script>
+
+        <%= button 'Upload', 'ok', 'submit', { class: 'btn-success', id: 'LogoUploadButton' } %>
+
+        <%= f.error_message_on :logo %>
+      <% end %>
+    </div>
+
+    <div class="col-md-6">
+      <% if !@company_store.logo.nil? %>
+        <%= link_to image_tag(@company_store.logo.url) %>
+      <% end %>
+    </div>
+  </div>
 </div>

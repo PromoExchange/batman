@@ -57,6 +57,7 @@ class Spree::Admin::CompanyStoresController < Spree::Admin::ResourceController
       :buyer_id,
       :display_name,
       :host,
+      :logo,
       :name,
       :slug,
       :supplier_id

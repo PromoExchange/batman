@@ -10,6 +10,11 @@ class Spree::CompanyStore < Spree::Base
 
   delegate :products, to: :supplier
 
+  has_attached_file :logo, path: '/company_store/:id/:style/:basename.:extension'
+  validates_attachment :logo, presence: true
+  validates_attachment_content_type :logo,
+    content_type: %w(image/jpeg image/png)
+
   def seller
     Rails.cache.fetch("#{cache_key}/seller", expires_in: 5.minutes) do
       Spree::User.find_by(email: ENV['SELLER_EMAIL'])

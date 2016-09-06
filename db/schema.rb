@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20160929164217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -216,12 +217,16 @@ ActiveRecord::Schema.define(version: 20160929164217) do
   add_index "spree_color_products", ["product_id"], name: "index_spree_color_products_on_product_id", using: :btree
 
   create_table "spree_company_stores", force: :cascade do |t|
-    t.string  "name"
-    t.string  "slug"
-    t.integer "supplier_id"
-    t.integer "buyer_id"
-    t.string  "display_name"
-    t.string  "host"
+    t.string   "name"
+    t.string   "slug"
+    t.integer  "supplier_id"
+    t.integer  "buyer_id"
+    t.string   "display_name"
+    t.string   "host"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
   end
 
   create_table "spree_countries", force: :cascade do |t|

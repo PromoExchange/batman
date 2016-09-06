@@ -1,1 +1,1 @@
-= link_to image_tag("logo/#{@current_company_store.slug}-logo.png", alt: "#{@current_company_store.slug.titleize}", width:200, class: 'top_logo'), "/"
+= link_to image_tag(@current_company_store.logo.url, alt: "#{@current_company_store.slug.titleize}", width:200, class: 'top_logo'), "/"

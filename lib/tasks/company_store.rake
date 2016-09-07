@@ -178,7 +178,7 @@ namespace :company_store do
       name: 'VFA Company Store'
     }
 
-    create_company_store(params)
+    company_store = create_company_store(params)
     load_products(params)
     create_price_cache(company_store.supplier)
   end

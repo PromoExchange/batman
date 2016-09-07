@@ -60,7 +60,7 @@ class CompanyStoreLoader
           name: data[:item_name],
           description: data[:product_description],
           price: 1.0,
-          original_supplier: Spree::Supplier.find(data[:supplier]).first,
+          original_supplier: Spree::Supplier.find_by(name: data[:supplier]).first,
           production_time: (data[:production_time] || 7),
           supplier: @supplier,
           custom_product: true,

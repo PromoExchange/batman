@@ -168,4 +168,18 @@ namespace :company_store do
     load_products(params)
     create_price_cache(company_store.supplier)
   end
+
+  desc 'Create VFA company store'
+  task vfa: :environment do
+    params = {
+      display_name: 'Venture for America',
+      email: 'helen@ventureforamerica.org',
+      slug: 'vfa',
+      name: 'VFA Company Store'
+    }
+
+    company_store = create_company_store(params)
+    load_products(params)
+    create_price_cache(company_store.supplier)
+  end
 end

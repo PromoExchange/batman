@@ -40,7 +40,7 @@ $(function(){
       $("#price-spin").show();
       var api_key = $('#new-purchase').attr('data-key');
       var product_id = $('#purchase_product_id').val();
-      var selected_shipping_option = $('#shipping_option').val();
+      var selected_shipping_option = $('#purchase_shipping_option').val();
       var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
       var params = {
         purchase: {
@@ -75,7 +75,7 @@ $(function(){
             .format('MMMM Do YYYY')
           );
           var number_options = 0;
-          var shipping_option_control = $('#shipping_option');
+          var shipping_option_control = $('#purchase_shipping_option');
           shipping_option_control.empty();
           sorted_options = data.shipping_options.sort(function(a,b)
             { return a.shipping_option - b.shipping_option; });
@@ -138,8 +138,8 @@ $(function(){
     recalc_price();
   });
 
-  $('#shipping_option').change(function() {
-    var selected_shipping_option = $('#shipping_option option:selected');
+  $('#purchase_shipping_option').change(function() {
+    var selected_shipping_option = $('#purchase_shipping_option option:selected');
     var delivery_date = selected_shipping_option.attr('delivery_date');
     var delta = parseFloat(selected_shipping_option.attr('delta'));
     var old_price = accounting.unformat($(".cs-active-price").text());
@@ -153,7 +153,7 @@ $(function(){
     var money_text = accounting.formatMoney(new_price);
     $(".cs-active-price").text(money_text)
 
-    $('#shipping_option > option').each(function() {
+    $('#purchase_shipping_option > option').each(function() {
       var option = $(this);
       var old_delta = parseFloat(option.attr('delta'));
       var new_delta = (old_price + old_delta) - new_price;
@@ -198,7 +198,7 @@ $(function(){
     $('#purchase-size .product-size').each(function() {
       $(this).val('');
     });
-    $('#shipping_option').val(1);
+    $('#purchase_shipping_option').val(1);
   });
 
   function set_address_id() {

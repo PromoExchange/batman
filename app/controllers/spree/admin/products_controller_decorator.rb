@@ -10,13 +10,15 @@ Spree::Admin::ProductsController.class_eval do
   protected
 
   def preconfigure
+    return if params[:product][:supplier_id].blank?
     user = Spree::CompanyStore.find_by(supplier: params[:product][:supplier_id]).buyer
-    @product.preconfigure = Spree::Preconfigure.first_or_create(
+    @product.preconfigure = Spree::Preconfigure.where(
       buyer: user,
       imprint_method: @product.imprint_method,
       main_color: @product.color_product.first,
       logo: user.logos.where(custom: true).first
-    )
+    ).first_or_create
+    @product.save!
   end
 
   def load_data

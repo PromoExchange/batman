@@ -1,3 +1,3 @@
 Spree::Order.class_eval do
-  has_one :bid
+  has_one :purchase
 end

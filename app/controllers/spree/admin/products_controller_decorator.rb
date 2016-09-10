@@ -1,6 +1,6 @@
 Spree::Admin::ProductsController.class_eval do
   create.before :set_custom
-  after_action :preconfigure, only: :create
+  after_action :preconfigure, only: [:create, :update]
 
   def load
     Resque.enqueue(CompanyStoreProductPrebid, company_store: @product.company_store.slug, id: @product.id)
@@ -11,7 +11,7 @@ Spree::Admin::ProductsController.class_eval do
 
   def preconfigure
     user = Spree::CompanyStore.find_by(supplier: params[:product][:supplier_id]).buyer
-    @product.preconfigure = Spree::Preconfigure.new(
+    @product.preconfigure = Spree::Preconfigure.first_or_create(
       buyer: user,
       imprint_method: @product.imprint_method,
       main_color: @product.color_product.first,

@@ -1,20 +1,4 @@
-class Spree::Purchase
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
-  attr_accessor :quantity,
-    :product_id,
-    :logo_id,
-    :custom_pms_colors,
-    :imprint_method_id,
-    :main_color_id,
-    :buyer_id,
-    :price_breaks,
-    :sizes,
-    :ship_to_zip,
-    :shipping_option
-
+class Spree::Purchase < Spree::Base
   validates :quantity, presence: true
   validates :product_id, presence: true
   validates :logo_id, presence: true
@@ -25,17 +9,8 @@ class Spree::Purchase
   validates :ship_to_zip, presence: true
   validates :shipping_option, presence: true
 
-  # belongs_to :order
-
-  def initialize(attributes = {})
-    @errors = ActiveModel::Errors.new(self)
-    attributes.each { |k, v| instance_variable_set("@#{k}", v) }
-  end
-
-  def persisted?
-    false
-  end
-
+  belongs_to :order
+  
   def sizes
     %w(S M L XL 2XL)
   end

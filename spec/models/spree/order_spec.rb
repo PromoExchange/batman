@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Spree::Order, type: :model do
-  it 'should belong to an auction' do
-    t = Spree::Order.reflect_on_association(:bid)
-    expect(t.macro).to eq :has_one
+  describe 'associations' do
+    it { should have_one(:purchase) }
   end
 end

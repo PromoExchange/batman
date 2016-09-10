@@ -25,7 +25,7 @@ class Spree::Purchase
   validates :ship_to_zip, presence: true
   validates :shipping_option, presence: true
 
-  belongs_to :order
+  # belongs_to :order
 
   def initialize(attributes = {})
     @errors = ActiveModel::Errors.new(self)

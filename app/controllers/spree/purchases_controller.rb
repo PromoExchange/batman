@@ -62,6 +62,8 @@ class Spree::PurchasesController < Spree::StoreController
     )
 
     Spree::Purchase.transaction do
+      binding.pry
+
       purchase = Spree::Purchase.create(purchase_params)
 
       order = Spree::Order.create(user_id: purchase_params[:buyer_id])

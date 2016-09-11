@@ -21,6 +21,7 @@ RSpec.describe Spree::Purchase, type: :model do
     it { should validate_presence_of(:main_color_id) }
     it { should validate_presence_of(:buyer_id) }
     it { should validate_presence_of(:shipping_option) }
+    it { should validate_presence_of(:address_id) }
   end
 
   describe 'methods' do

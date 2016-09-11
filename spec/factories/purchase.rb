@@ -1,4 +1,5 @@
 FactoryGirl.define do
+  # TODO: Create proper associations
   factory :purchase, class: Spree::Purchase do
     quantity 200
     product_id 1
@@ -10,6 +11,7 @@ FactoryGirl.define do
     price_breaks []
     sizes []
     ship_to_zip 11111
+    address_id 1
     after(:build) do |purchase|
       purchase.price_breaks << [100, 10.00]
       purchase.price_breaks << [200, 9.00]

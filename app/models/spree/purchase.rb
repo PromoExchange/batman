@@ -12,6 +12,7 @@ class Spree::Purchase < Spree::Base
   validates :buyer_id, presence: true
   validates :price_breaks, presence: true
   validates :shipping_option, presence: true
+  validates :address_id, presence: true
 
   belongs_to :order
 

@@ -874,7 +874,7 @@ ActiveRecord::Schema.define(version: 20160910001001) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "spree_purchase", force: :cascade do |t|
+  create_table "spree_purchases", force: :cascade do |t|
     t.integer "quantity",          null: false
     t.integer "product_id",        null: false
     t.integer "logo_id",           null: false
@@ -882,6 +882,7 @@ ActiveRecord::Schema.define(version: 20160910001001) do
     t.integer "main_color_id",     null: false
     t.integer "buyer_id",          null: false
     t.integer "order_id"
+    t.integer "shipping_option",   null: false
   end
 
   create_table "spree_quotes", force: :cascade do |t|

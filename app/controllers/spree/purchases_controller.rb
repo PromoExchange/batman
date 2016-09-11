@@ -33,6 +33,7 @@ class Spree::PurchasesController < Spree::StoreController
   end
 
   def create
+    # TODO: Move :size into purchase_params
     if params[:size].present?
       params[:size] = params[:size].merge(params[:size]) { |_k, val| (val.to_i < 0) ? 0 : val.to_i }
       @size_quantity = params[:size]
@@ -48,15 +49,16 @@ class Spree::PurchasesController < Spree::StoreController
     Rails.logger.info("ship_to_zip: #{purchase_params[:ship_to_zip]}")
     Rails.logger.info("logo_id: #{purchase_params[:logo_id]}")
     Rails.logger.info("custom_pms_colors: #{purchase_params[:custom_pms_colors]}")
+    Rails.logger.info("address_id: #{purchase_params[:address_id]}")
+    Rails.logger.info("shipping_option: #{purchase_params[:shipping_option]}")
 
     # TODO: Factory method to get quote object
     product = Spree::Product.find(purchase_params[:product_id])
 
-    # TODO: Get from form selection (currently ship_to_zip)
     best_price = product.best_price(
       quantity: purchase_params[:quantity].to_i,
-      shipping_option: Spree::ShippingOption::OPTION.keys[purchase_params[:shipping_option].to_i],
-      shipping_address: product.company_store.buyer.shipping_address.id
+      shipping_option: Spree::ShippingOption::OPTION.key(purchase_params[:shipping_option].to_i),
+      shipping_address: purchase_params[:address_id]
     )
 
     Spree::Purchase.transaction do
@@ -133,17 +135,12 @@ class Spree::PurchasesController < Spree::StoreController
       :product_id,
       :buyer_id,
       :logo_id,
-      :started,
-      :pms_colors,
-      :custom_pms_colors,
       :ship_to_zip,
       :quantity,
       :imprint_method_id,
       :main_color_id,
-      :shipping_address_id,
-      :payment_method,
-      :ended,
-      :invited_sellers
+      :address_id,
+      :shipping_option
     )
   end
 end

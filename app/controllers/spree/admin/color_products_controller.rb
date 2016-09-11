@@ -2,14 +2,9 @@ class Spree::Admin::ColorProductsController < Spree::Admin::ResourceController
   before_action :load_product
   before_action :load_color_product, only: [:edit, :update, :destroy]
   before_action :load_color_products, only: [:index]
-  after_action :set_preconfigure, only: [:create, :update]
   after_action :set_validity, only: [:create, :update, :destroy]
 
   private
-
-  def set_preconfigure
-    @product.preconfigure.update_attribute(:main_color, @product.color_product.first)
-  end
 
   def set_validity
     @product.loading!

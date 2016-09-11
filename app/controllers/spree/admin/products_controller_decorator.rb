@@ -19,6 +19,8 @@ Spree::Admin::ProductsController.class_eval do
       logo: user.logos.where(custom: true).first
     ).first_or_create
     @product.save!
+  rescue => e
+    Rails.logger.warn "Unable to create preconfigure: #{e}"
   end
 
   def load_data

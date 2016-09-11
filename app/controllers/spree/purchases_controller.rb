@@ -49,8 +49,6 @@ class Spree::PurchasesController < Spree::StoreController
     Rails.logger.info("logo_id: #{purchase_params[:logo_id]}")
     Rails.logger.info("custom_pms_colors: #{purchase_params[:custom_pms_colors]}")
 
-    order = Spree::Order.create(user_id: purchase_params[:buyer_id])
-
     # TODO: Factory method to get quote object
     product = Spree::Product.find(purchase_params[:product_id])
 
@@ -61,21 +59,25 @@ class Spree::PurchasesController < Spree::StoreController
       shipping_address: product.company_store.buyer.shipping_address.id
     )
 
-    # TODO: Once the quote structure gets recast as a
-    # as calculator we can have a real quantity here.
+    Spree::Purchase.transaction do
+      purchase = Spree::Purchase.create(purchase_params)
 
-    li = Spree::LineItem.create(
-      currency: 'USD',
-      order_id: order.id,
-      quantity: 1,
-      variant: product.master
-    )
+      order = Spree::Order.create(user_id: purchase_params[:buyer_id])
 
-    li.price = best_price[:best_price].to_f
-    li.save!
+      # TODO: Once the quote structure gets recast as a
+      # as calculator we can have a real quantity here.
+      li = Spree::LineItem.create(
+        currency: 'USD',
+        order_id: order.id,
+        quantity: 1,
+        variant: product.master
+      )
 
-    Spree::OrderUpdater.new(order).update
+      li.price = best_price[:best_price].to_f
+      li.save!
 
+      Spree::OrderUpdater.new(order).update
+    end
     redirect_to "/accept/#{order.id}"
   rescue StandardError => e
     Rails.logger.error("Failed to create auction #{e}")

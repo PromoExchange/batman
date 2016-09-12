@@ -15,9 +15,4 @@ RSpec.describe Spree::ColorProduct, type: :model do
     m = FactoryGirl.build(:color_product)
     expect(m.save).to be_truthy
   end
-
-  it 'should belong to a product' do
-    t = Spree::ColorProduct.reflect_on_association(:product)
-    expect(t.macro).to eq :belongs_to
-  end
 end

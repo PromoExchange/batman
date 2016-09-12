@@ -10,6 +10,7 @@ RSpec.describe Spree::Product, type: :model do
     it { should have_one(:carton) }
     it { should belong_to(:original_supplier) }
     it { should have_many(:imprint_methods_products) }
+    it { should have_many(:purchase) }
   end
 
   describe 'methods' do

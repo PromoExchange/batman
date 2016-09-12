@@ -5,4 +5,9 @@ RSpec.describe Spree::Logo, type: :model do
     logo = FactoryGirl.build(:logo)
     expect(logo.save).to be_truthy
   end
+
+  describe 'associations' do
+    it { should belong_to(:user) }
+    it { should have_many(:purchase) }
+  end
 end

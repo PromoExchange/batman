@@ -7,6 +7,7 @@ class Spree::Logo < Spree::Base
   }.freeze
 
   belongs_to :user
+  has_many :purchase
 
   has_attached_file :logo_file, path: '/logo_file/:id/:style/:basename.:extension'
 

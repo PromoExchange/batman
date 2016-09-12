@@ -33,5 +33,12 @@ RSpec.describe Spree::Purchase, type: :model do
 
   describe 'associations' do
     it { should belong_to(:order) }
+    it { should belong_to(:product) }
+    it { should belong_to(:logo) }
+    it { should belong_to(:imprint_method) }
+    it { should belong_to(:main_color) }
+    it { should belong_to(:buyer) }
+    it { should belong_to(:address) }
+    it { should belong_to(:order) }
   end
 end

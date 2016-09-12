@@ -43,7 +43,7 @@
     <table id="auction-product-properties" class="table table-striped">
       <tbody>
         <tr><td><strong>Color:</strong></td><td><%= @order.purchase.main_color.color %></td></tr>
-        <tr><td><strong>QTY:</strong></td><td><%= @total_size %></td></tr>
+        <tr><td><strong>QTY:</strong></td><td><%= @order.purchase.quantity %></td></tr>
         <tr><td><strong>Total Amount:</strong></td><td><%= number_to_currency(@order.total.to_f) %></td></tr>
       </tbody>
     </table>

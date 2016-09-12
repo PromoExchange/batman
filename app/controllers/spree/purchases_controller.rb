@@ -41,6 +41,8 @@ class Spree::PurchasesController < Spree::StoreController
       @total_size = purchase_params[:quantity]
     end
 
+    @total_size ||= purchase_params[:quantity]
+
     Rails.logger.info("Product ID: #{purchase_params[:product_id]}")
     Rails.logger.info("Buyer ID: #{purchase_params[:buyer_id]}")
     Rails.logger.info("Quantity: #{purchase_params[:quantity]}")
@@ -61,12 +63,14 @@ class Spree::PurchasesController < Spree::StoreController
       shipping_address: purchase_params[:address_id]
     )
 
-    Spree::Purchase.transaction do
-      binding.pry
+    order = nil
 
-      purchase = Spree::Purchase.create(purchase_params)
+    Spree::Purchase.transaction do
+      purchase = Spree::Purchase.new(purchase_params)
 
       order = Spree::Order.create(user_id: purchase_params[:buyer_id])
+
+      purchase.order_id = order.id
 
       # TODO: Once the quote structure gets recast as a
       # as calculator we can have a real quantity here.
@@ -81,6 +85,8 @@ class Spree::PurchasesController < Spree::StoreController
       li.save!
 
       Spree::OrderUpdater.new(order).update
+
+      purchase.save!
     end
     redirect_to "/accept/#{order.id}"
   rescue StandardError => e
@@ -127,9 +133,6 @@ class Spree::PurchasesController < Spree::StoreController
       ['UPS Next Day Air Early A.M.', Spree::ShippingOption::OPTION[:ups_next_day_air_early_am]],
       ['UPS Next Day Air', Spree::ShippingOption::OPTION[:ups_next_day_air]]
     ]
-  end
-
-  def create_related_data(auction_data)
   end
 
   def purchase_params

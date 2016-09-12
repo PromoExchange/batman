@@ -6,6 +6,7 @@ Spree::Product.class_eval do
   has_one :carton, dependent: :destroy
   belongs_to :original_supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_one :preconfigure
+  has_many :purchase
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
   has_many :imprint_methods, through: :imprint_methods_products, inverse_of: :products

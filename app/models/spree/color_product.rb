@@ -1,5 +1,7 @@
 class Spree::ColorProduct < Spree::Base
   belongs_to :product
-  validates :product_id, presence: true
+  has_many :purchases
+
+  validates :product, presence: true
   validates :color, presence: true
 end

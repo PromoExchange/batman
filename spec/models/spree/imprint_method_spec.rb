@@ -11,8 +11,7 @@ RSpec.describe Spree::ImprintMethod, type: :model do
     expect(i.save).to be_truthy
   end
 
-  it 'should have many products' do
-    t = Spree::ImprintMethod.reflect_on_association(:products)
-    expect(t.macro).to eq :has_and_belongs_to_many
+  describe 'associations' do
+    it { should have_many(:purchases) }
   end
 end

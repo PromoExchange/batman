@@ -21,7 +21,7 @@ RSpec.describe Spree::ImprintMethodsProduct, type: :model do
     expect(t.macro).to eq :belongs_to
   end
 
-  it 'should belong to an auction' do
+  it 'should belong to an imprint method' do
     t = Spree::ImprintMethodsProduct.reflect_on_association(:imprint_method)
     expect(t.macro).to eq :belongs_to
   end

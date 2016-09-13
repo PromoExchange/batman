@@ -150,6 +150,11 @@ class Spree::Auction < Spree::Base
     end
   end
 
+  def initialize
+    ActiveSupport::Deprecation.warn 'Auction is DEPRECATED', caller
+    super
+  end
+
   def image_uri
     product.images.empty? ? 'noimage/mini.png' : product.images.first.attachment.url('mini')
   end
@@ -381,4 +386,6 @@ class Spree::Auction < Spree::Base
     return if buyer.customers.map(&:payment_type).include?('cc')
     errors.add(:base, 'At least one Credit Card is required to be on file.')
   end
+
+  deprecate(*public_instance_methods(false))
 end

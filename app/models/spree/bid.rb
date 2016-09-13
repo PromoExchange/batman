@@ -45,6 +45,11 @@ class Spree::Bid < Spree::Base
   delegate :total, to: :order
   delegate :product, to: :auction
 
+  def initialize
+    ActiveSupport::Deprecation.warn 'Bid is DEPRECATED', caller
+    super
+  end
+
   def bid
     order.total
   end
@@ -102,4 +107,6 @@ class Spree::Bid < Spree::Base
   def send_invoice
     Resque.enqueue(SendInvoice, auction_id: auction.id)
   end
+
+  deprecate(*public_instance_methods(false))
 end

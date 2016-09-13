@@ -1,6 +1,6 @@
 class SellerMailer < ApplicationMailer
-  def invoice(auction)
-    @auction = auction
-    mail(subject: "Invoice for PromoExchange Purchase: #{@auction.reference}")
+  def invoice(purchase)
+    @purchase = purchase
+    mail(subject: "Invoice for PromoExchange Purchase: #{@purchase.reference}")
   end
 end

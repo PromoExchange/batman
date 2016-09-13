@@ -1,6 +1,7 @@
 class Spree::Quote < Spree::Base
   include QuoteCalculator
 
+  # TODO: remove reference, moved to purchase
   after_create :generate_reference
 
   belongs_to :main_color, class_name: 'Spree::ColorProduct'

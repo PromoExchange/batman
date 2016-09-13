@@ -11,7 +11,10 @@ class Spree::Purchase < Spree::Base
   belongs_to :main_color, class_name: 'Spree::ColorProduct', foreign_key: 'main_color_id'
   belongs_to :buyer, class_name: 'Spree::User'
   belongs_to :address, class_name: 'Spree::Address'
-  belongs_to :order
+  belongs_to :order, dependent: :destroy
+
+  # TODO: remove reference, moved to purchase
+  after_create :generate_reference
 
   attr_accessor :price_breaks,
     :sizes,
@@ -29,5 +32,21 @@ class Spree::Purchase < Spree::Base
 
   def self.sizes
     %w(S M L XL 2XL)
+  end
+
+  def seller_fee
+    return 0.0 if order.nil?
+    (order.total * 0.0899).round(2)
+  end
+
+  private
+
+  def generate_reference
+    update_column :reference, SecureRandom.hex(3).upcase
+  rescue ActiveRecord::RecordNotUnique => e
+    @reference_attempts ||= 0
+    @reference_attempts += 1
+    retry if @reference_attempts < 5
+    raise e, 'Retries exhausted'
   end
 end

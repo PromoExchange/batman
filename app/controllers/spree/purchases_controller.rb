@@ -54,9 +54,9 @@ class Spree::PurchasesController < Spree::StoreController
     Rails.logger.info("address_id: #{purchase_params[:address_id]}")
     Rails.logger.info("shipping_option: #{purchase_params[:shipping_option]}")
 
-    # TODO: Factory method to get quote object
     product = Spree::Product.find(purchase_params[:product_id])
 
+    # TODO: Move this logic into a/ purchase model OR b/ product
     best_price = product.best_price(
       quantity: purchase_params[:quantity].to_i,
       shipping_option: Spree::ShippingOption::OPTION.key(purchase_params[:shipping_option].to_i),
@@ -102,12 +102,17 @@ class Spree::PurchasesController < Spree::StoreController
   def csaccept
     @order = Spree::Order.find(params[:order_id])
 
+    Rails.logger.info("Stripe Charge: #{(@order.total.to_f * 100).to_i}, "\
+      "token: #{params[:stripeToken]} description: #{params[:stripeEmail]}")
+
     Stripe::Charge.create(
       amount: (@order.total.to_f * 100).to_i,
       currency: 'usd',
       source: params[:stripeToken],
       description: params[:stripeEmail].to_s
     )
+
+    Resque.enqueue(SendInvoice, order_id: @order.id)
 
     redirect_to "/company_store/#{current_company_store.slug}"
   end

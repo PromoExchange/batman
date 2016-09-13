@@ -1,4 +1,4 @@
-Spree::Api::V1::ProductsController.class_eval do
+Spree::Api::ProductsController.class_eval do
   def best_price
     @product = Spree::Product.find(params[:id])
 

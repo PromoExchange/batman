@@ -29,6 +29,20 @@ RSpec.describe Spree::Purchase, type: :model do
       expect(Spree::Purchase.sizes.is_a?(Array)).to be_truthy
       expect(Spree::Purchase.sizes.length).to eq 5
     end
+
+    it 'should generate a reference' do
+      purchase = FactoryGirl.create(:purchase)
+      purchase2 = Spree::Purchase.find(purchase.id)
+      expect(purchase2.reference).not_to be_empty
+    end
+
+    xit 'should destroy dependent order' do
+      # TODO: Need factories to complete purchase
+      purchase = FactoryGirl.create(:purchase)
+      expect { purchase.destroy }.to change { Spree::Order.count }.by(-1)
+    end
+
+    # TODO: Need tests for accept and invoice emails
   end
 
   describe 'associations' do

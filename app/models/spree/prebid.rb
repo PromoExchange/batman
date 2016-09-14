@@ -7,6 +7,11 @@ class Spree::Prebid < Spree::Base
   validates :seller_id, presence: true
   validates :supplier_id, presence: true
 
+  def initialize
+    ActiveSupport::Deprecation.warn 'Prebid is DEPRECATED', caller
+    super
+  end
+
   # TODO: Move this out an SERIOUSLY refactor.
   def create_prebid(options = {})
     options.reverse_merge!(save_bid: true)
@@ -528,4 +533,6 @@ class Spree::Prebid < Spree::Base
     Rails.logger.error("PREBID ERROR A:#{auction_data[:auction_id]} P:#{id} - #{e.message}")
     0.0
   end
+
+  deprecate(*public_instance_methods(false))
 end

@@ -10,13 +10,27 @@
 
 <div class="well">
   <p>State: <%= @product.state %> </p>
-  <p>Prebidable: <%= @product.prebid_ability?.humanize %></p>
   <p>Carton Active: <%= @product.carton.active?.humanize %></p>
   <p>Number of Setup upcharges: <%= @product.setup_upcharges.count %> </p>
   <p>Number of Run Upcharges: <%= @product.run_upcharges.count %> </p>
   <p>Number of Imprints: <%= @product.imprint_methods.count %> </p>
   <p>Number of Product colors: <%= @product.color_product.count %> </p>
   <p>Production Time: <%= @product.production_time %> </p>
+</div>
+
+<div class="well">
+  <% if @price_breaks.present? %>
+    <div>
+      <table class="table">
+        <thead>
+          <tr><th>Quantity</th><th>Price</th></tr>
+        </thead>
+        <% @price_breaks.each do |preak| %>
+          <tr><td><%= preak[0] %></td><td><%= number_to_currency(preak[1]) %> each</td></tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
 </div>
 
 <%= form_for [:admin, @product], method: :put, html: { multipart: true } do |f| %>

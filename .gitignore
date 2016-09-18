@@ -38,3 +38,5 @@ dump.rdb
 
 # SimpleCov data
 coverage
+
+.irbrc

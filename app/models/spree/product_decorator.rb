@@ -262,8 +262,7 @@ Spree::Product.class_eval do
 
     raise 'Failed to get price' if quote.nil?
 
-    # TODO: Move this documention creation to API (maybe)
-    total_price = quote.total_price
+    total_price = quote.total_price(selected_shipping_option: options[:shipping_option])
 
     if total_price.nil?
       return {

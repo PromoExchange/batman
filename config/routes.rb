@@ -128,8 +128,6 @@ Rails.application.routes.draw do
   Spree::Core::Engine.add_routes do
     namespace :admin do
       resources :products do
-        post 'load', on: :member
-
         resources :color_products
         resources :imprint_methods_products
         resources :upcharge_products

@@ -1,0 +1,32 @@
+<%= render 'spree/admin/shared/product_tabs', current: Spree.t(:volume_pricing) %>
+<%= render 'spree/shared/error_messages', target: @variant %>
+
+<% content_for :page_actions do %>
+  <span id="new_add_volume_price" data-hook>
+    <%= button_link_to Spree.t(:add_volume_price), 'javascript:;', {
+      icon: 'add', :'data-target' => 'tbody#volume_prices', class: 'btn-success spree_add_fields', id: 'add_volume_price'} %>
+  </span>
+<% end %>
+
+<%= form_for(@variant, url: admin_product_variant_path(@product, @variant), html: { method: :put }) do |f| %>
+  <h3><%= Spree.t(:volume_prices) %></h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= Spree.t(:name) %></th>
+        <th><%= Spree.t(:discount_type) %></th>
+        <th><%= Spree.t(:range) %></th>
+        <th><%= Spree.t(:amount) %></th>
+        <th><%= Spree.t(:position) %></th>
+        <th><%= Spree.t(:price_code) %></th>
+        <th class="actions"></th>
+      </tr>
+    </thead>
+    <tbody id="volume_prices">
+      <%= f.fields_for :volume_prices do |vp_form| %>
+        <%= render partial: 'spree/admin/volume_prices/volume_price_fields', locals: { f: vp_form } %>
+      <% end %>
+    </tbody>
+  </table>
+  <%= render 'spree/admin/shared/edit_resource_links' %>
+<% end %>

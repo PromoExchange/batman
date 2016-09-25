@@ -35,7 +35,8 @@ Spree::Admin::ProductsController.class_eval do
     @option_types = Spree::OptionType.order(:name)
     @tax_categories = Spree::TaxCategory.order(:name)
     @shipping_categories = Spree::ShippingCategory.order(:name)
-    @suppliers = Spree::Supplier.order(:name)
+    @suppliers = Spree::Supplier.where(company_store: false).order(:name)
+    @company_stores = Spree::Supplier.where(company_store: true).order(:name)
   end
 
   private

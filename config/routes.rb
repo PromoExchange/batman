@@ -105,6 +105,7 @@ Rails.application.routes.draw do
         member do
           post :clone
         end
+        resources :markups
       end
       resources :product_loads
       resources :pms_colors
@@ -119,6 +120,8 @@ Rails.application.routes.draw do
         get :imprint_methods
         put :imprint_methods
       end
+
+      delete '/markups/:id', to: 'markups#destroy', as: :markup
     end
   end
 

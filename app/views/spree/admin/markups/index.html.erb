@@ -1,0 +1,30 @@
+<%= render 'spree/admin/shared/company_store_tabs', current: :markups %>
+<%= render 'spree/shared/error_messages', target: @company_store %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to(Spree.t(:add_markup), "javascript:;", { icon: 'add', :'data-target' => "tbody#markups", class: 'btn-success spree_add_fields' }) %>
+<% end if can? :create, Spree::Markup %>
+
+<%= form_for @company_store, url: spree.admin_company_store_url(@company_store), method: :put do |f| %>
+  <fieldset>
+    <div id="prototypes" data-hook></div>
+
+    <table class="table sortable" data-hook>
+      <thead>
+        <tr data-hook="markups_header">
+          <th><%= Spree.t(:supplier) %></th>
+          <th><%= Spree.t(:markup) %></th>
+          <th><%= Spree.t(:eqp) %></th>
+          <th class="actions"></th>
+        </tr>
+      </thead>
+      <tbody id="markups" data-hook>
+        <%= f.fields_for :markups do |markup_form| %>
+          <%= render 'markup_fields', f: markup_form %>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= render('spree/admin/shared/edit_resource_links') if can? :update, Spree::Markup %>
+  </fieldset>
+<% end %>

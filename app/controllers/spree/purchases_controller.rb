@@ -37,7 +37,7 @@ class Spree::PurchasesController < Spree::StoreController
     if params[:size].present?
       params[:size] = params[:size].merge(params[:size]) { |_k, val| (val.to_i < 0) ? 0 : val.to_i }
       @size_quantity = params[:size]
-      purchase_params[:quantity] = params[:size].values.map(&:to_i).reduce(:+)
+      params[:purchase][:quantity] = params[:size].values.map(&:to_i).reduce(:+)
       @total_size = purchase_params[:quantity]
     end
 
@@ -54,10 +54,10 @@ class Spree::PurchasesController < Spree::StoreController
     Rails.logger.info("address_id: #{purchase_params[:address_id]}")
     Rails.logger.info("shipping_option: #{purchase_params[:shipping_option]}")
 
-    product = Spree::Product.find(purchase_params[:product_id])
+    @product = Spree::Product.find(purchase_params[:product_id])
 
     # TODO: Move this logic into a/ purchase model OR b/ product
-    best_price = product.best_price(
+    best_price = @product.best_price(
       quantity: purchase_params[:quantity].to_i,
       shipping_option: Spree::ShippingOption::OPTION.key(purchase_params[:shipping_option].to_i),
       shipping_address: purchase_params[:address_id]
@@ -78,7 +78,7 @@ class Spree::PurchasesController < Spree::StoreController
         currency: 'USD',
         order_id: order.id,
         quantity: 1,
-        variant: product.master
+        variant: @product.master
       )
 
       li.price = best_price[:best_price].to_f
@@ -90,7 +90,7 @@ class Spree::PurchasesController < Spree::StoreController
     end
     redirect_to "/accept/#{order.id}"
   rescue StandardError => e
-    Rails.logger.error("Failed to create auction #{e}")
+    Rails.logger.error("Failed to create purchase #{e}")
     supporting_data
     render :new, flash: { error: 'There was an error creating purchase' }
   end

@@ -51,6 +51,8 @@ module Spree::QuoteCalculator
     self.unit_price += (shipping_cost / quantity)
     log("After applying shipping #{self.unit_price}")
 
+    apply_shipping_upcharge
+
     # @see module Spree:QuoteCalculatorFees
     apply_seller_markup
     apply_px_commission

@@ -108,7 +108,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect(quote2.total_price).to be > quote.total_price
   end
 
-  xit 'should apply additional location charge with quantity', focus: true do
+  xit 'should apply additional location charge with quantity' do
     quote = FactoryGirl.create(:quote, quantity: 125)
     quote2 = FactoryGirl.create(:quote, :with_additional_location_upcharge, quantity: 125)
     quote2.num_locations = 2
@@ -135,6 +135,16 @@ RSpec.describe Spree::Quote, type: :model do
   xit 'should use non fixed shipping 3day' do
     quote = FactoryGirl.create(:quote, :with_carton)
     expect((quote.total_price(selected_shipping_option: :ups_3day_select) - 794.442).abs).to be < 0.001
+  end
+
+  it 'should use carton upcharge' do
+    quote = FactoryGirl.create(:quote, :with_carton_upcharge)
+    expect((quote.total_price - 781.110).abs).to be < 0.001
+  end
+
+  it 'should use carton upcharge with multiple cartons' do
+    quote = FactoryGirl.create(:quote, :with_carton_upcharge, quantity: 250)
+    expect((quote.total_price - 6538.955).abs).to be < 0.001
   end
 
   xit 'should use higher cost for express shipping' do

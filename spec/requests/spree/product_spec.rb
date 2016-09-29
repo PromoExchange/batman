@@ -68,6 +68,30 @@ describe 'Products API' do
     expect(json[0]['delivery_days']).to eq 14
   end
 
+  xit 'must get a best price with upcharge carton', focus: true do
+    product = FactoryGirl.create(
+      :px_product,
+      :with_setup_upcharges,
+      :with_run_upcharges,
+      :with_upcharge_carton
+    )
+    shipping_address = FactoryGirl.create(:address)
+    product.company_store.buyer.ship_address_id = shipping_address.id
+    product.save!
+    get "/api/products/#{product.id}/best_price",
+      {
+        id: product.id,
+        purchase:
+        {
+          shipping_address: shipping_address.id,
+          shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+        }
+      }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
+    expect(response).to have_http_status(200)
+    expect(json[0]['best_price']).to eq '721.5'
+    expect(json[0]['delivery_days']).to eq 14
+  end
+
   xit 'must get a best price with fixed shipping per item with quantity' do
     product = FactoryGirl.create(
       :px_product,

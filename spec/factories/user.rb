@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :px_user, parent: :user do
     customers { build_list :customer, 1 }
+    association :ship_address, factory: :address
   end
 
   trait :with_tax_rates do

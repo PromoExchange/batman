@@ -241,7 +241,7 @@ Spree::Product.class_eval do
 
   def best_price(options = {})
     raise 'Cannot find buyer' if company_store.buyer.nil?
-    raise 'Cannot find shipping adddress' if company_store.buyer.shipping_address.nil?
+    raise 'Cannot find default shipping adddress' if company_store.buyer.shipping_address.nil?
 
     options.reverse_merge!(
       quantity: last_price_break_minimum,

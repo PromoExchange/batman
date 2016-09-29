@@ -62,5 +62,12 @@ FactoryGirl.define do
         :with_carton
       ]
     end
+
+    trait :with_carton_upcharge do
+      association :product, factory: [
+        :px_product,
+        :with_upcharge_carton
+      ]
+    end
   end
 end

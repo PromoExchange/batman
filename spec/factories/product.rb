@@ -126,5 +126,12 @@ FactoryGirl.define do
         create(:carton, product: product)
       end
     end
+
+    trait :with_upcharge_carton do
+      after(:create) do |product|
+        Spree::Carton.destroy_all
+        create(:carton, :with_upcharge, product: product)
+      end
+    end
   end
 end

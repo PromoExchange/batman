@@ -9,6 +9,7 @@ FactoryGirl.define do
     quantity 150
     fixed_price nil
     per_item false
+    upcharge nil
 
     trait :with_fixed_price_per_item do
       after(:build) do |carton|
@@ -22,6 +23,10 @@ FactoryGirl.define do
         carton.fixed_price = 100.00
         carton.per_item = false
       end
+    end
+
+    trait :with_upcharge do
+      upcharge 11.11
     end
   end
 end

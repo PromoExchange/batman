@@ -6,6 +6,8 @@ Spree::User.class_eval do
   has_many :product_requests, foreign_key: 'buyer_id'
   has_many :customers
 
+  after_save :set_addresses
+
   def ban
     cancel_bids
     update_attribute(:banned, true)
@@ -50,5 +52,12 @@ Spree::User.class_eval do
     return 0.0 if address.nil?
     tax_rate = tax_rates.find_by_zone_id(address.state.id)
     tax_rate.nil? ? 0.0 : tax_rate.amount.to_f
+  end
+
+  private
+
+  def set_addresses
+    return unless shipping_address
+    self.addresses |= [shipping_address]
   end
 end

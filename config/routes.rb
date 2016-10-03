@@ -101,6 +101,12 @@ Rails.application.routes.draw do
           post 'generate_notification'
         end
       end
+      resources :company_stores do
+        member do
+          post :clone
+        end
+        resources :markups
+      end
       resources :product_loads
       resources :pms_colors
       resources :imprint_methods
@@ -114,6 +120,8 @@ Rails.application.routes.draw do
         get :imprint_methods
         put :imprint_methods
       end
+
+      delete '/markups/:id', to: 'markups#destroy', as: :markup
     end
   end
 
@@ -123,7 +131,21 @@ Rails.application.routes.draw do
         resources :color_products
         resources :imprint_methods_products
         resources :upcharge_products
-        resources :carton_products
+        resources :cartons
+        resources :preconfigure
+      end
+
+      resources :users do
+        resources :logos
+
+        member do
+          get :addresses
+          put :addresses
+          put :clear_api_key
+          put :generate_api_key
+          get :items
+          get :orders
+        end
       end
     end
   end

@@ -15,16 +15,16 @@
       <%= link_to_with_icon 'list-alt', Spree.t(:properties), spree.admin_product_product_properties_url(@product) %>
     <% end if can?(:admin, Spree::ProductProperty) %>
     <%= content_tag :li, class: ('active' if current == :color_products) do %>
-      <%= link_to_with_icon 'list-alt', 'Product Colors', admin_product_color_products_url(@product) %>
+      <%= link_to_with_icon 'list-alt', 'Colors', spree.admin_product_color_products_url(@product) %>
     <% end if can?(:admin, Spree::ColorProduct) %>
     <%= content_tag :li, class: ('active' if current == :upcharges) do %>
-      <%= link_to_with_icon 'list-alt', 'Upcharges', admin_product_upcharge_products_url(@product) %>
+      <%= link_to_with_icon 'list-alt', 'Upcharges', spree.admin_product_upcharge_products_url(@product) %>
     <% end if can?(:admin, Spree::UpchargeType) %>
     <%= content_tag :li, class: ('active' if current == :imprint_method) do %>
-      <%= link_to_with_icon 'list-alt', 'Imprint Methods', admin_product_imprint_methods_products_url(@product) %>
+      <%= link_to_with_icon 'list-alt', 'Imprint Methods', spree.admin_product_imprint_methods_products_url(@product) %>
     <% end if can?(:admin, Spree::ImprintMethodsProduct) %>
     <%= content_tag :li, class: ('active' if current == :carton) do %>
-      <%= link_to_with_icon 'list-alt', 'Carton', edit_admin_product_carton_product_url(@product,@product.carton) %>
-    <% end if can?(:admin, Spree::ImprintMethodsProduct) %>
+      <%= link_to_with_icon 'list-alt', 'Carton', spree.edit_admin_product_carton_url(@product, @product.carton) %>
+    <% end if can?(:admin, Spree::Carton) %>
   </ul>
 <% end %>

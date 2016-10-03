@@ -1,0 +1,73 @@
+<% content_for :page_title do %>
+  <%= plural_resource_name(Spree::OptionMapping) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_option_mapping), new_admin_option_mapping_path, { class: 'btn-success', icon: 'add', 'data-update' => 'new_option_mapping', id: 'new_option_mapping_link' } %>
+<% end %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_option_mappings_sidebar">
+    <%= search_form_for [:admin, @search] do |f| %>
+      <%- locals = { f: f } %>
+      <div data-hook="admin_option_mappings_index_search" class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.label :dc_acct_num_cont, Spree.t(:factory_number) %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.label :dc_name_cont, Spree.t(:dc_name) %>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.label :px_name_cont, Spree.t(:px_name) %>
+          </div>
+        </div>
+      </div>
+
+      <div data-hook="admin_options_mappings_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @option_mappings.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= Spree.t(:factory_name) %></th>
+        <th><%= Spree.t(:dc_name) %></th>
+        <th><%= Spree.t(:px_name) %></th>
+        <th><%= Spree.t(:ignore) %></th>
+        <th class="actions actions-2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @option_mappings.each do |option_mapping| %>
+          <tr>
+            <td><%= option_mapping.dc_acct_num %></td>
+            <td><%= option_mapping.dc_name %></td>
+            <td><%= option_mapping.px_name %></td>
+            <td><%= option_mapping.do_not_save.humanize %></td>
+            <td class="actions actions-2 text-right">
+              <%= link_to_edit option_mapping, no_text: true %>
+              <%= link_to_delete option_mapping, no_text: true %>
+            </td>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::OptionMapping)) %>,
+    <%= link_to Spree.t(:add_one), new_object_url %>!
+  </div>
+<% end %>
+
+<%= paginate @collection %>

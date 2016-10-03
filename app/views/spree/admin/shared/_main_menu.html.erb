@@ -6,7 +6,7 @@
 
 <% if can? :admin, Spree::Product %>
   <ul class="nav nav-sidebar">
-    <%= main_menu_tree Spree.t(:products), icon: "th-large", sub_menu: "product", url: "#sidebar-product" %>
+    <%= main_menu_tree Spree.t(:products), icon: 'th-large', sub_menu: 'product', url: '#sidebar-product' %>
   </ul>
 <% end %>
 
@@ -18,7 +18,7 @@
 
 <% if can? :admin, Spree::Promotion %>
   <ul class="nav nav-sidebar">
-    <%= main_menu_tree Spree.t(:promotions), icon: "gift", sub_menu: "promotion", url: "#sidebar-promotions" %>
+    <%= main_menu_tree Spree.t(:promotions), icon: 'gift', sub_menu: 'promotion', url: '#sidebar-promotions' %>
   </ul>
 <% end %>
 
@@ -48,6 +48,12 @@
 
 <% if can? :admin, current_store %>
   <ul class="nav nav-sidebar">
-    <%= main_menu_tree Spree.t(:configurations), icon: "wrench", sub_menu: "configuration", url: "#sidebar-configuration" %>
+    <%= main_menu_tree Spree.t(:configurations), icon: 'wrench', sub_menu: 'configuration', url: '#sidebar-configuration' %>
+  </ul>
+<% end %>
+
+<% if can? :admin, Spree::CompanyStore %>
+  <ul class="nav nav-sidebar">
+    <%= tab :company_stores, url: spree.admin_company_stores_path, icon: 'fire' %>
   </ul>
 <% end %>

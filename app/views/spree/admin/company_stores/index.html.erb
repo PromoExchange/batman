@@ -1,0 +1,43 @@
+<% content_for :page_title do %>
+  <%= plural_resource_name(Spree::CompanyStore) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_company_store), new_object_url, { class: 'btn-success', icon: 'add', id: 'admin_new_company_store' } %>
+<% end if can?(:create, Spree::CompanyStore) %>
+
+<% if @collection.any? %>
+  <table class="table" id="listing_company_storess">
+    <thead>
+      <tr data-hook="admin_company_stores_index_headers">
+        <th><%= Spree.t(:slug) %></th>
+        <th><%= Spree.t(:name) %></th>
+        <th><%= Spree.t(:display_name) %></th>
+        <th><%= Spree.t(:host) %></th>
+        <th data-hook="admin_company_stores_index_header_actions" class="actions"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @collection.each do |company_store| %>
+        <tr id="<%= spree_dom_id company_store %>" data-hook="admin_company_stores_index_rows" class="<%= cycle('odd', 'even') %>">
+          <td class="slug"><%= company_store.slug %></td>
+          <td><%= link_to company_store.try(:name), edit_admin_company_store_path(company_store) %></td>
+          <td class="display_name"><%= company_store.display_name %></td>
+          <td class="host"><%= link_to(company_store.host, (company_store.host.present? ? "http://#{company_store.host}" : ''), target: '_blank', rel: 'nofollow') %></td>
+          <td class="actions actions-3 text-right" data-hook="admin_company_stores_index_row_actions">
+            <%= link_to_edit company_store, no_text: true, class: 'edit' if can? :edit, company_store %>
+            <%= link_to_delete company_store, no_text: true if can? :delete, company_store %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::CompanyStore)) %>,
+    <%= link_to Spree.t(:add_one), new_object_url %>!
+  </div>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>

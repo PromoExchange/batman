@@ -1,0 +1,23 @@
+<tr class="markup fields" data-hook="markup">
+  <td class="markup_supplier">
+    <%= f.collection_select(:supplier_id, Spree::Supplier.all, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' }) %>
+  </td>
+
+  <td class='markup_markup'>
+    <%= f.text_field :markup, class: 'form-control' %>
+  </td>
+
+  <td class='eqp'>
+    <%= f.check_box :eqp, class: 'form-control' %>
+  </td>
+
+  <td class='live'>
+    <%= f.check_box :live, class: 'form-control' %>
+  </td>
+
+  <td class="actions actions-1">
+    <% if f.object.persisted? && can?(:destroy, f.object) %>
+      <%= link_to_delete f.object, no_text: true %>
+    <% end %>
+  </td>
+</tr>

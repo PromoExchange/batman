@@ -1,0 +1,39 @@
+<%= render partial: 'spree/admin/users/sidebar', locals: { current: :logo } %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_logo), new_admin_user_logo_url, class: 'btn-success', icon: 'add', id: 'admin_new_logo_link' %>
+<% end %>
+
+<% content_for :page_title do %>
+  <%= link_to @user.email, spree.edit_admin_user_url(@user) %> /
+  <%= Spree.t(:logos) %>
+<% end %>
+
+<% unless @user.logos.any? %>
+  <div class="alert alert-warning">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Image)) %>.
+  </div>
+<% else %>
+  <table class="table sortable" data-hook="images_table" data-sortable-link="<%= admin_user_logos_path(@user.id) %>">
+    <thead>
+      <tr data-hook="images_header">
+        <th><%= Spree.t(:logo) %></th>
+        <th><%= Spree.t(:file_name) %></th>
+        <th class="actions"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% (@user.logos).each do |image| %>
+        <tr id="<%= spree_dom_id image %>" data-hook="images_row">
+          <td class="image">
+            <%= link_to image_tag(image.logo_file.url(:thumb)) %>
+          </td>
+          <td><%= image.logo_file_file_name %></td>
+          <td class="actions actions-1 text-right">
+            <%= link_to_delete(image, { url: "/admin/users/#{@user.id}/logos/#{image.id}", no_text: true }) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

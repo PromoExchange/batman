@@ -41,6 +41,28 @@ Spree::Bid.whitelisted_ransackable_attributes = [
   'state'
 ]
 
+Spree::OptionMapping.whitelisted_ransackable_attributes |= [
+  'dc_acct_num',
+  'dc_name',
+  'px_name'
+]
+
+Spree::PmsColor.whitelisted_ransackable_attributes = [
+  'display_name',
+  'hex',
+  'pantone'
+]
+
+Spree::Product.whitelisted_ransackable_attributes |= [
+  'state',
+  'supplier_name',
+  'supplier_dc_acct_num',
+  'supplier_name_or_supplier_dc_acct_num'
+]
+Spree::Product.whitelisted_ransackable_associations |= ['supplier']
+
+Spree::Supplier.whitelisted_ransackable_attributes |= ['id', 'name', 'dc_acct_num']
+
 {
   s3_credentials: {
     access_key_id: ENV['AWS_ACCESS_KEY_ID'],

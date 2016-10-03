@@ -1,0 +1,37 @@
+<%= render partial: 'spree/admin/users/sidebar', locals: { current: :logo } %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:back_to_logos_list), admin_user_logos_url, class: 'btn-success', icon: 'chevron-left' %>
+<% end %>
+
+<% content_for :page_title do %>
+  <%= link_to @user.email, spree.edit_admin_user_url(@user) %> /
+  <%= Spree.t(:logos) %>
+<% end %>
+
+<div class="panel panel-default">
+  <div class="panel-body" id="logo-panel-edit">
+    <div id="user-logo-tab">
+      <%= form_for @logo, multipart: true, url: admin_user_logos_url, class: 'form' do |f| %>
+        <%= f.hidden_field :user_id, value: @user.id %>
+
+        <div class="form-group">
+          <%= f.label :logo_file, Spree.t(:add_logo) %>
+          <%= f.file_field :logo_file %>
+          <p>Acceptable file formats: (.pdf, .ai, .eps, .psd)
+            <span
+              class='glyphicon glyphicon-question-sign'
+              data-toggle='tooltip'
+              data-placement='top'
+              title='Please contact our support team to find out how to get the correct file format if you do not currently have it available.'>
+            </span>
+          </p>
+
+          <script>$(document).ready(function() { $('[data-toggle="tooltip"]').tooltip(); });</script>
+
+          <%= button 'Upload', 'ok', 'submit', { class: 'btn-success', id: 'LogoUploadButton' } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

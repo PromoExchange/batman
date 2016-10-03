@@ -1,0 +1,14 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :color_products } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @color_product } %>
+
+<%= form_for [:admin, @color_product], url: "/admin/products/#{@product.id}/color_products", html: { method: :post } do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+
+    <div class="form-actions">
+      <%= button Spree.t('actions.save'), 'save' %>
+      <span class="or"><%= Spree.t(:or) %></span>
+      <%= button_link_to Spree.t('actions.cancel'), spree.admin_product_color_products_url(@product), icon: 'delete', id: 'cancel_link' %>
+    </div>
+  </fieldset>
+<% end %>

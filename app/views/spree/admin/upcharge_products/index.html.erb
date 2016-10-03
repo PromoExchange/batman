@@ -1,0 +1,41 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :upcharges } %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:upcharge), new_admin_product_upcharge_product_path, { class: 'btn-success', icon: 'add' } %>
+<% end %>
+
+<div class="well">
+  <% if @upcharges.any? %>
+    <table class='table sortable' data-hook='colors_table'>
+      <thead>
+        <tr>
+          <th><%= Spree.t(:type) %></th>
+          <th><%= Spree.t(:value) %></th>
+          <th><%= Spree.t(:price_code) %></th>
+          <th><%= Spree.t(:range) %></th>
+          <th><%= Spree.t(:imprint_method) %></th>
+          <th class="actions actions-2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @upcharges.each do |upcharge| %>
+          <tr id='<%= spree_dom_id upcharge %>'>
+            <td><p><%= upcharge.upcharge_type.name %></p></td>
+            <td><p><%= upcharge.value.to_f.round(2) %></p></td>
+            <td><p><%= upcharge.price_code %></p></td>
+            <td><p><%= upcharge.range %></p></td>
+            <td><p><%= upcharge.imprint_method.name if upcharge.imprint_method.present? %></p></td>
+            <td class="actions actions-2 text-right">
+              <%= link_to_with_icon('edit', Spree.t(:edit), edit_admin_product_upcharge_product_path(upcharge.product, upcharge), class: 'btn btn-primary btn-sm', no_text: true, data: { action: :edit }) %>
+              <%= link_to_delete(upcharge, { url: admin_product_upcharge_product_path(upcharge.product, upcharge), no_text: true }) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="alert alert-info no-objects-found">
+      <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Upcharge)) %>.
+    </div>
+  <% end %>
+</div>

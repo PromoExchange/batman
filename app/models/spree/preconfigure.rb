@@ -1,4 +1,6 @@
 class Spree::Preconfigure < Spree::Base
+  after_save :clear_cache
+
   belongs_to :product
   belongs_to :buyer, class_name: 'Spree::User'
   belongs_to :imprint_method
@@ -10,4 +12,6 @@ class Spree::Preconfigure < Spree::Base
   validates :imprint_method_id, presence: true
   validates :main_color_id, presence: true
   validates :logo_id, presence: true
+
+  delegate :clear_cache, to: :product
 end

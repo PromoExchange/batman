@@ -1,5 +1,7 @@
 Spree::Product.class_eval do
   before_create :build_default_carton
+  after_save :clear_cache
+
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_many :upcharges, class_name: 'Spree::UpchargeProduct', foreign_key: 'related_id'
   has_many :color_product
@@ -37,6 +39,13 @@ Spree::Product.class_eval do
     event :deleted do
       transition active: :deleted
     end
+  end
+
+  def clear_cache
+    quotes.each do |q|
+      Rails.cache.delete("#{q.cache_key}/total_price")
+    end
+    quotes.destroy_all
   end
 
   def company_store
@@ -313,41 +322,6 @@ Spree::Product.class_eval do
     breaks = Spree::Variant.find_by(product_id: id)
       .volume_prices(order: 'position asc')
     breaks.map(&:range)
-  end
-
-  def refresh_price_cache
-    # We can only calcuate prices for products that have custom auctions
-    custom_auction = Spree::Auction.find_by(product_id: id, state: 'custom_auction')
-    raise 'refresh_price_cache called for non custom product' if custom_auction.nil?
-
-    how_old = ENV['PRICE_CACHE_REFRESH_HOURS']
-    how_old ||= 24
-
-    oldest_record = price_caches.order('updated_at').first
-    oldest_date = oldest_record.updated_at if oldest_record.present?
-    oldest_date ||= how_old.hours.ago - 1.hour
-
-    if how_old.hours.ago > oldest_date
-      price_caches.destroy_all
-
-      Spree::Variant.find_by(product_id: id).volume_prices(order: 'position asc').each do |price|
-        lowest_range = price.range.split('..')[0].gsub(/\D/, '')
-
-        best_price = custom_auction.best_price(
-          quantity: lowest_range.to_i,
-          selected_shipping: Spree::ShippingOption::OPTION[:ups_ground],
-          all_shipping: false
-        )
-
-        price_caches << Spree::PriceCache.create!(
-          range: price.range,
-          lowest_price: best_price.order.total.to_f,
-          position: price.position
-        )
-      end
-    end
-  rescue StandardError => e
-    Rails.logger.error("Failed to calculate price cache, #{e.message}")
   end
 
   def load_image(supplier_item_guid)

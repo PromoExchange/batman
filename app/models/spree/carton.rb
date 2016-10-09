@@ -1,6 +1,10 @@
 class Spree::Carton < Spree::Base
+  after_save :clear_cache
+
   belongs_to :product
   validates :product_id, presence: true
+
+  delegate :clear_cache, to: :product
 
   DEFAULT_DIMENSION = 12
 

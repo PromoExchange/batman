@@ -25,7 +25,8 @@ class Spree::Admin::CartonsController < Spree::Admin::ResourceController
       :weight,
       :quantity,
       :originating_zip,
-      :fixed_price
+      :fixed_price,
+      :upcharge
     )
   end
 end

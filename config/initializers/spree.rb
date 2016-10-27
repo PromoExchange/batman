@@ -28,19 +28,6 @@ Rails.application.config.spree.payment_methods << Spree::Gateway::FirstdataE4
 
 Spree::PermittedAttributes.user_attributes << :company
 
-Spree::Auction.whitelisted_ransackable_associations = ['bids']
-Spree::Auction.whitelisted_ransackable_attributes = [
-  'seller_id',
-  'buyer_id',
-  'state'
-]
-
-Spree::Bid.whitelisted_ransackable_attributes = [
-  'seller_id',
-  'auction_id',
-  'state'
-]
-
 Spree::OptionMapping.whitelisted_ransackable_attributes |= [
   'dc_acct_num',
   'dc_name',

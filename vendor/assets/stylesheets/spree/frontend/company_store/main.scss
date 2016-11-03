@@ -15,17 +15,25 @@ $cs-text-color: #313131;
 .cs-product {
   min-height: 250px !important;
   color: steelblue;
+  margin-top: 20px;
 }
 
 .cs-product-text {
   color: $cs-text-color;
   margin-top: 5px;
-  font-size: 1.2em;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1.25px;
+  text-transform: uppercase;
+}
+
+.cs-lowest-bid {
+  color: #000;
 }
 
 .cs-image {
-  width: 150px;
-  margin-left: 66px;
+  width: 300px;
+  // margin-left: 66px;
 }
 
 .cs-body {
@@ -76,6 +84,10 @@ $cs-text-color: #313131;
 .active_price {
   margin-top: 20px;
   margin-bottom: 10px;
+}
+
+.product-ideas {
+  margin-top: 50px;
 }
 
 #inspire-me {

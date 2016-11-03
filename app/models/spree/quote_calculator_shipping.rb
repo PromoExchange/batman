@@ -83,6 +83,8 @@ module Spree::QuoteCalculatorShipping
       service_name = rate[0]
       mapped_shipping_option = shipping_option_map[rate[0]]
 
+      next unless mapped_shipping_option == :ups_ground
+
       raise "Unable to find mapped shipping options for #{rate[0]}" if mapped_shipping_option.nil?
 
       selected_shipping_cost = shipping_cost if mapped_shipping_option == shipping_sym

@@ -104,9 +104,10 @@ $(function(){
             number_options++;
           });
 
-          if( number_options > 0 && !$('#need_it_sooner').is(":visible") ) {
-            $('#need_it_sooner').show();
-          }
+          // Disabled for now, only support UPS ground
+          // if( number_options > 0 && !$('#need_it_sooner').is(":visible") ) {
+          //   $('#need_it_sooner').show();
+          // }
 
           $(".cs-active-price").text(money_text);
           $("#price-spin").hide();

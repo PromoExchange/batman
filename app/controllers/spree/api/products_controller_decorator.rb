@@ -4,7 +4,9 @@ Spree::Api::ProductsController.class_eval do
 
     best_prices = @product.best_price(
       quantity: purchase_params[:quantity].to_i,
-      shipping_option: Spree::ShippingOption::OPTION.key((shipping_option || '1').to_i),
+      shipping_option: Spree::ShippingOption::OPTION.key(
+        (purchase_params[:shipping_option] || Spree::ShippingOption::OPTION[:ups_ground]).to_i
+      ),
       shipping_address: purchase_params[:shipping_address].to_i
     )
 

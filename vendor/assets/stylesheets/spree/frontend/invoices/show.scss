@@ -5,3 +5,19 @@
     margin-left: -40px;
   }
 }
+
+#invoice-table {
+  tbody {
+    tr:last-child {
+      border-bottom: 2px solid #ddd;
+      // border-color: inherit;
+      // border-top: none;
+      // border-left: none;
+      // border-right: none;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+  }
+}

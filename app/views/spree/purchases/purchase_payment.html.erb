@@ -1,15 +1,51 @@
 <% content_for :head do %>
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-<script type="text/javascript">
-  Stripe.setPublishableKey('<%= ENV["STRIPE_PUBLISHABLE_KEY"] %>');
-</script>
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+  <script type="text/javascript">
+    Stripe.setPublishableKey('<%= ENV["STRIPE_PUBLISHABLE_KEY"] %>');
+  </script>
 <% end %>
 
 <%- product = @order.line_items.first.product %>
 
+<table id="invoice-table" class="table">
+  <% url = spree.product_url(product) %>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= link_to small_image(product, itemprop: 'image'), url, itemprop: 'url' %></td>
+      <td>
+        <div class="purchase-product-name"><%= product.name %></div>
+        <div class="purchase-product-color"<%= @order.purchase.main_color.color %></div>
+      </td>
+      <td><%= @order.purchase.quantity %></td>
+      <td><%= number_to_currency(@order.total.to_f) %></td>
+    </tr>
+  </tbody>
+</table>
+
 <div class="cs-page row" id="show-invoice">
   <div class="col-md-6">
-    <form action="/csaccept/<%= @order.id %>" method="GET">
+    <div>
+      <h4>Destination:</h3>
+      <ul class="display-address-ul">
+        <%- address = @order.line_items.first.product.company_store.buyer.ship_address %>
+        <li><%= address.company %></li>
+        <li><%= address.address1 %></li>
+        <li><%= address.address2 %></li>
+        <li><%= address.city %></li>
+        <li><%= address.state_text %>&nbsp;<%= address.zipcode %></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <form class="pull-right" action="/csaccept/<%= @order.id %>" method="GET">
       <script
         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
         data-key="<%=ENV['STRIPE_PUBLISHABLE_KEY']%>"
@@ -21,31 +57,5 @@
         data-locale="auto">
       </script>
     </form>
-    <div>
-      <h3>Shipped to:</h3>
-      <ul class="display-address-ul">
-        <%- address = @order.line_items.first.product.company_store.buyer.ship_address %>
-        <li><%= address.company %></li>
-        <li><%= address.address1 %></li>
-        <li><%= address.address2 %></li>
-        <li><%= address.city %></li>
-        <li><%= address.state_text %>&nbsp;<%= address.zipcode %></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="col-md-6">
-    <% url = spree.product_url(product) %>
-    <div>
-      <div class="col-md-3"><%= link_to small_image(product, itemprop: "image"), url, itemprop: 'url' %></div>
-      <div class="col-md-9"><br><%= product.description %></div>
-    </div>
-    <table id="auction-product-properties" class="table table-striped">
-      <tbody>
-        <tr><td><strong>Color:</strong></td><td><%= @order.purchase.main_color.color %></td></tr>
-        <tr><td><strong>QTY:</strong></td><td><%= @order.purchase.quantity %></td></tr>
-        <tr><td><strong>Total Amount:</strong></td><td><%= number_to_currency(@order.total.to_f) %></td></tr>
-      </tbody>
-    </table>
   </div>
 </div>

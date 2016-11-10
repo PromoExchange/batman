@@ -41,6 +41,8 @@ Spree::Product.class_eval do
     end
   end
 
+  delegate :fixed_price_shipping?, to: :carton
+
   def clear_cache
     quotes.each do |q|
       Rails.cache.delete("#{q.cache_key}/total_price")
@@ -266,12 +268,12 @@ Spree::Product.class_eval do
       main_color: preconfigure.main_color,
       shipping_address: options[:shipping_address].to_i,
       custom_pms_colors: preconfigure.custom_pms_colors,
-      selected_shipping_option: Spree::ShippingOption::OPTION[options[:shipping_option]]
+      shipping_option: Spree::ShippingOption::OPTION[options[:shipping_option]]
     ).first_or_create
 
     raise 'Failed to get price' if quote.nil?
 
-    total_price = quote.total_price(selected_shipping_option: options[:shipping_option])
+    total_price = quote.total_price(shipping_option: options[:shipping_option])
 
     if total_price.nil?
       return {
@@ -285,6 +287,7 @@ Spree::Product.class_eval do
 
     response = {
       best_price: total_price,
+      shipping_option: 1,
       quantity: options[:quantity].to_i,
       delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21),
       shipping_options: []
@@ -294,10 +297,13 @@ Spree::Product.class_eval do
 
     quote.shipping_options.each do |option|
       adjusted_delivery_date = Time.zone.now + (2 + production_time + option.delivery_days).days
+
       total_cost = quote.total_price(
-        selected_shipping_option: Spree::ShippingOption::OPTION.key(option.shipping_option)
+        shipping_option: Spree::ShippingOption::OPTION.key(option.shipping_option)
       )
+
       lowest_total = [lowest_total, total_cost].min
+      response[:shipping_option] = option.shipping_option if lowest_total == total_cost
       response[:shipping_options].push(
         name: option.name,
         total_cost: total_cost,

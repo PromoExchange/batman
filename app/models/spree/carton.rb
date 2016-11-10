@@ -12,6 +12,10 @@ class Spree::Carton < Spree::Base
     "#{length || DEFAULT_DIMENSION}L x #{width || DEFAULT_DIMENSION}W x #{height || DEFAULT_DIMENSION}H"
   end
 
+  def fixed_price_shipping?
+    fixed_price.present?
+  end
+
   def active?
     return true if fixed_price.present?
     length.present? &&

@@ -71,7 +71,7 @@ module Spree::QuoteCalculatorShipping
 
     shipping_options.destroy_all
 
-    shipping_sym = Spree::ShippingOption::OPTION.key(selected_shipping_option)
+    shipping_sym = Spree::ShippingOption::OPTION.key(shipping_option)
 
     shipping_cost = nil
     selected_shipping_cost = nil
@@ -82,8 +82,6 @@ module Spree::QuoteCalculatorShipping
       delivery_date = rate[2]
       service_name = rate[0]
       mapped_shipping_option = shipping_option_map[rate[0]]
-
-      next unless mapped_shipping_option == :ups_ground
 
       raise "Unable to find mapped shipping options for #{rate[0]}" if mapped_shipping_option.nil?
 

@@ -1,17 +1,31 @@
 class Spree::Quote < Spree::Base
   include QuoteCalculator
 
-  # TODO: remove reference, moved to purchase
+  enum shipping_option: [
+    :ups_ground,
+    :ups_3day_select,
+    :ups_second_day_air,
+    :ups_next_day_air_saver,
+    :ups_next_day_air_early_am,
+    :ups_next_day_air,
+    :fixed_price_per_item,
+    :fixed_price_total
+  ]
+
+  # TODO: remove reference, move to purchase
   after_create :generate_reference
 
   belongs_to :main_color, class_name: 'Spree::ColorProduct'
+
+  # TODO: Remove, delegate to buyer (via CS)
   belongs_to :shipping_address, class_name: 'Spree::Address'
-  has_many :shipping_options, dependent: :destroy
   has_many :pms_colors
 
   # TODO: Fix association between quote and product
   # Assumes products are not shared across company stores
   belongs_to :product
+
+  delegate :fixed_price_shipping?, to: :product
 
   attr_writer :messages
   attr_writer :cache_expiration
@@ -59,9 +73,14 @@ class Spree::Quote < Spree::Base
     @payment_processing_flat_fee || 0.30
   end
 
+  def shipping_option_name
+    return 'Fixed Price' if fixed_price_shipping?
+    shipping_option.to_s.titleize.sub!('Ups', 'UPS')
+  end
+
   validates :main_color, presence: true
   validates :product, presence: true
-  validates :selected_shipping_option, presence: true
+  validates :shipping_option, presence: true
   validates :shipping_address, presence: true
   validates :quantity, presence: true, numericality: {
     only_integer: true,
@@ -79,10 +98,6 @@ class Spree::Quote < Spree::Base
   delegate :markup, to: :product
   delegate :imprint_method, to: :product
 
-  def selected_shipping
-    shipping_options.find_by_shipping_option(selected_shipping_option)
-  end
-
   def refresh_cache
     Rails.cache.delete("#{cache_key}/total_price")
     total_price
@@ -90,9 +105,9 @@ class Spree::Quote < Spree::Base
 
   def total_price(options = {})
     options.reverse_merge!(
-      selected_shipping_option: :ups_ground
+      shipping_option: :ups_ground
     )
-    self.selected_shipping_option = Spree::ShippingOption::OPTION[options[:selected_shipping_option]]
+    self.shipping_option = Spree::ShippingOption::OPTION[options[:shipping_option]]
 
     log("Total price called #{options}")
     from_cache = true
@@ -104,9 +119,8 @@ class Spree::Quote < Spree::Base
     best_price
   end
 
-  def cache_key(shipping_option = nil)
-    shipping_option ||= selected_shipping_option
-    "#{model_name.cache_key}/#{product.id}/#{shipping_option}/#{quantity}"
+  def cache_key(specific_shipping_option = nil)
+    "#{model_name.cache_key}/#{product.id}/#{(specific_shipping_option || shipping_option)}/#{quantity}"
   end
 
   def log(message)

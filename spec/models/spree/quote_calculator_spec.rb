@@ -134,7 +134,7 @@ RSpec.describe Spree::Quote, type: :model do
 
   xit 'should use non fixed shipping 3day' do
     quote = FactoryGirl.create(:quote, :with_carton)
-    expect((quote.total_price(selected_shipping_option: :ups_3day_select) - 794.442).abs).to be < 0.001
+    expect((quote.total_price(shipping_option: :ups_3day_select) - 794.442).abs).to be < 0.001
   end
 
   xit 'should use carton upcharge' do
@@ -149,14 +149,14 @@ RSpec.describe Spree::Quote, type: :model do
 
   xit 'should use higher cost for express shipping' do
     quote = FactoryGirl.create(:quote, :with_carton)
-    standard_price = quote.total_price(selected_shipping_option: :ups_ground)
-    express_price = quote.total_price(selected_shipping_option: :ups_next_day_air)
+    standard_price = quote.total_price(shipping_option: :ups_ground)
+    express_price = quote.total_price(shipping_option: :ups_next_day_air)
     expect(express_price).to be > standard_price
   end
 
   xit 'should return selected shipping option' do
     quote = FactoryGirl.create(:quote, :with_carton)
-    quote.total_price(selected_shipping_option: :ups_ground)
-    expect(quote.selected_shipping.shipping_option).to eq Spree::ShippingOption::OPTION[:ups_ground]
+    quote.total_price(shipping_option: :ups_ground)
+    expect(quote.shipping.shipping_option).to eq Spree::ShippingOption::OPTION[:ups_ground]
   end
 end

@@ -42,6 +42,7 @@ $(function(){
       var product_id = $('#purchase_product_id').val();
       var selected_shipping_option = $('#purchase_shipping_option').val();
       var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
+      debugger;
       var params = {
         purchase: {
           quantity: actual,
@@ -76,6 +77,9 @@ $(function(){
           );
           var number_options = 0;
           var shipping_option_control = $('#purchase_shipping_option');
+          if( typeof selected_shipping_option == 'undefined' ) {
+            selected_shipping_option = data.shipping_option;
+          }
           shipping_option_control.empty();
           sorted_options = data.shipping_options.sort(function(a,b)
             { return a.shipping_option - b.shipping_option; });
@@ -88,7 +92,7 @@ $(function(){
             }
             var option_text = option.name + ' ' + sign + option_money_text;
             selected_value = false;
-            if(option.shipping_option == selected_shipping_option) {
+            if( option.shipping_option == selected_shipping_option ) {
               selected_value = true;
             }
             var new_option = $('<option>',
@@ -104,10 +108,9 @@ $(function(){
             number_options++;
           });
 
-          // Disabled for now, only support UPS ground
-          // if( number_options > 0 && !$('#need_it_sooner').is(":visible") ) {
-          //   $('#need_it_sooner').show();
-          // }
+          if( number_options > 0 && !$('#need_it_sooner').is(":visible") ) {
+            $('#need_it_sooner').show();
+          }
 
           $(".cs-active-price").text(money_text);
           $("#price-spin").hide();
@@ -199,7 +202,7 @@ $(function(){
     $('#purchase-size .product-size').each(function() {
       $(this).val('');
     });
-    $('#purchase_shipping_option').val(1);
+    // $('#purchase_shipping_option').val(1);
   });
 
   function set_address_id() {

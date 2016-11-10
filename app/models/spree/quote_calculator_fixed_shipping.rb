@@ -12,7 +12,7 @@ module Spree::QuoteCalculatorFixedShipping
       shipping_option = Spree::ShippingOption::OPTION[:fixed_price_total]
     end
 
-    self.selected_shipping_option = shipping_option
+    self.shipping_option = shipping_option
 
     shipping_options.build(
       name: 'Fixed price',

@@ -7,11 +7,10 @@ FactoryGirl.define do
     custom_pms_colors '116C, 115B'
     unit_price 0.0
     after(:create) do |quote|
-      FactoryGirl.create_list(:shipping_option, 5, quote: quote)
       FactoryGirl.create_list(:pms_color, 2, quote: quote)
     end
     workbook ''
-    selected_shipping_option Spree::ShippingOption::OPTION[:ups_ground]
+    shipping_option :ups_ground
 
     trait :with_less_than_minimum do
       association :product, factory: [:px_product, :with_less_than_minimum]
@@ -47,6 +46,7 @@ FactoryGirl.define do
         :px_product,
         :with_fixed_price_per_item_carton
       ]
+      shipping_option :fixed_price_per_item
     end
 
     trait :with_fixed_price_total do
@@ -54,6 +54,7 @@ FactoryGirl.define do
         :px_product,
         :with_fixed_price_total_carton
       ]
+      shipping_option :fixed_price_total
     end
 
     trait :with_carton do
@@ -68,6 +69,11 @@ FactoryGirl.define do
         :px_product,
         :with_upcharge_carton
       ]
+    end
+
+    # Shipping Traits
+    trait :with_3day_select do
+      shipping_option :ups_3day_select
     end
   end
 end

@@ -7,8 +7,7 @@
   </div>
 
   <div class="col-md-6">
-    <h2 class="purchase-product-name"><%= @product.name %></h2>
-    <p><%= @product.description %></p>
+    <h1><%= @product.name %></h1>
 
     <%= form_for @purchase, url: main_app.purchases_path, class: 'form' do |f| %>
       <%= f.hidden_field :product_id, value: @product.id %>
@@ -28,13 +27,31 @@
         <%= render partial: 'logos', locals: { f: f } %>
         <%= render partial: 'main_color', locals: { f: f } %>
         <%= render partial: 'price_breaks', locals: { f: f } %>
-        <%= render partial: 'quantity', locals: { f: f } %>
-        <%= render partial: 'address_drop', locals: { f: f } %>
+        <% if @product.wearable? %>
+          <%= render partial: 'quantity', locals: { f: f } %>
+          <%= render partial: 'address_drop', locals: { f: f } %>
+        <% else %>
+          <div class="row">
+            <div class="col-md-4">
+              <%= render partial: 'quantity', locals: { f: f } %>
+            </div>
+            <div class="col-md-8">
+              <%= render partial: 'address_drop', locals: { f: f } %>
+            </div>
+          </div>
+        <% end %>
         <p>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
         <%= render partial: 'shipping_options', locals: { f: f } %>
         <%= render partial: 'active_price', locals: { f: f } %>
         <%= render partial: 'buttons', locals: { f: f } %>
       </fieldset>
+
     <% end %>
+
+    <% if @product.description %>
+      <p><strong>Description:</strong> <%= @product.description %></p>
+    <% end %>
+    <p><strong>Factory:</strong> <%= @product.original_supplier.name %></p>
+    <p><strong>SKU:</strong> <%= @product.sku %></p>
   </div>
 </div>

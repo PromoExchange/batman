@@ -1,12 +1,6 @@
 def add_pms_color(supplier, imprint_method, name, pantone, hex)
-  pms_color = Spree::PmsColor.where(
-    name: name,
-    pantone: pantone,
-    hex: hex
-  ).first_or_create
-
   Spree::PmsColorsSupplier.where(
-    pms_color: pms_color,
+    pms_color: Spree::PmsColor.where(name: name, pantone: pantone, hex: hex).first_or_create,
     display_name: pantone,
     supplier: supplier,
     imprint_method: imprint_method
@@ -17,7 +11,7 @@ def wrap_string(string)
   "\"#{string.gsub(/\"/, '""')}\""
 end
 
-namespace :dc do
+namespace :distributor_central do
   # Fixes
   namespace :fix do
     desc 'Delete all existing prebids'
@@ -1247,14 +1241,14 @@ namespace :dc do
       task import: :environment do
         begin
           import_file = File.join(Rails.root, 'db/maps/pmscolor_import.csv')
-          fail "PMS Color import file is missing: #{import_file}" unless File.exist?(import_file)
+          raise "PMS Color import file is missing: #{import_file}" unless File.exist?(import_file)
           Spree::PmsColor.destroy_all
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
             hashed = row.to_hash
             Spree::PmsColor.create(hashed)
           end
         rescue => e
-          puts "ERROR: #{e}"
+          Rails.logger.error e
         end
       end
 
@@ -1283,7 +1277,7 @@ namespace :dc do
       task import_factory: :environment do
         begin
           import_file = File.join(Rails.root, 'db/maps/pmscolor_by_factory_import.csv')
-          fail "PMS Color by factory import file is missing: #{import_file}" unless File.exist?(import_file)
+          raise "PMS Color by factory import file is missing: #{import_file}" unless File.exist?(import_file)
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
             hashed = row.to_hash
             supplier = Spree::Supplier.where(name: hashed[:factory]).first_or_create
@@ -1291,20 +1285,20 @@ namespace :dc do
             next if hashed[:display_name].blank?
 
             if supplier.nil?
-              puts "Failed to local supplier #{hashed[:factory]}"
+              Rails.logger.warning "Failed to local supplier #{hashed[:factory]}"
               next
             end
 
             imprint = Spree::ImprintMethod.where(name: hashed[:imprint_method].strip).first_or_create
 
             if imprint.nil?
-              puts "Failed to find imprint #{hashed[:imprint_method]}"
+              Rails.logger.warning "Failed to find imprint #{hashed[:imprint_method]}"
               next
             end
 
             pms_color = Spree::PmsColor.where(name: hashed[:name]).first_or_create
             if pms_color.nil?
-              puts "Failed to find pms color #{hashed[:name]}"
+              Rails.logger.warning "Failed to find pms color #{hashed[:name]}"
               next
             end
 
@@ -1332,7 +1326,7 @@ namespace :dc do
             )
           end
         rescue => e
-          puts "ERROR: #{e}"
+          Rails.logger.error e
         end
 
         CSV.open(File.join(Rails.root, "db/maps/pmscolor_by_factory_export-#{Time.zone.today}.csv"), 'wb') do |csv|
@@ -1375,7 +1369,7 @@ namespace :dc do
       task import: :environment do
         begin
           import_file = File.join(Rails.root, 'db/maps/option_import.csv')
-          fail "Option Mapping import file is missing: #{import_file}" unless File.exist?(import_file)
+          raise "Option Mapping import file is missing: #{import_file}" unless File.exist?(import_file)
           Spree::OptionMapping.destroy_all
           count = 1
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
@@ -1384,7 +1378,7 @@ namespace :dc do
             count += 1
           end
         rescue => e
-          puts "ERROR: #{e}"
+          Rails.logger.error e
         end
       end
     end

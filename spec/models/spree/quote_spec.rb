@@ -47,6 +47,7 @@ describe Spree::Quote, type: :model do
     it { should validate_presence_of(:main_color) }
     it { should validate_presence_of(:shipping_address) }
     it { should validate_presence_of(:quantity) }
+    it { should validate_presence_of(:shipping_days) }
     it { should validate_presence_of(:shipping_option) }
     it { should_not allow_value(1).for(:quantity) }
     it { should allow_value(50).for(:quantity) }
@@ -108,6 +109,11 @@ describe Spree::Quote, type: :model do
     it 'should return shipping option name (Fixed Price total)' do
       quote = FactoryGirl.create(:quote, :with_fixed_price_total)
       expect(quote.shipping_option_name).to eq('Fixed Price')
+    end
+
+    it 'should have a default shipping days of 5 (Fixed Price)' do
+      quote = FactoryGirl.create(:quote, :with_fixed_price_total)
+      expect(quote.shipping_days).to eq(5)
     end
 
     it 'should generate a reference' do

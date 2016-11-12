@@ -83,6 +83,7 @@ class Spree::Quote < Spree::Base
   # NOTE: This will become stale because holidays days may be different
   # from the time of the original quote and now
   validates :shipping_days, presence: true
+  validates :shipping_cost, presence: true
   validates :shipping_option, presence: true
   validates :shipping_address, presence: true
   validates :quantity, presence: true, numericality: {

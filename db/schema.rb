@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161112175440) do
+ActiveRecord::Schema.define(version: 20161112182220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -835,6 +835,7 @@ ActiveRecord::Schema.define(version: 20161112175440) do
     t.string  "reference",           default: ""
     t.integer "shipping_option",     default: 1
     t.integer "shipping_days",       default: 5,   null: false
+    t.decimal "shipping_cost"
   end
 
   create_table "spree_refund_reasons", force: :cascade do |t|

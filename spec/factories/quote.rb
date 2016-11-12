@@ -3,6 +3,7 @@ FactoryGirl.define do
     association :product, factory: :px_product
     quantity 25
     shipping_days 5
+    shipping_cost 100.0
     association :shipping_address, factory: :address
     association :main_color, factory: :color_product
     custom_pms_colors '116C, 115B'

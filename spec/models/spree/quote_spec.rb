@@ -48,6 +48,7 @@ describe Spree::Quote, type: :model do
     it { should validate_presence_of(:shipping_address) }
     it { should validate_presence_of(:quantity) }
     it { should validate_presence_of(:shipping_days) }
+    it { should validate_presence_of(:shipping_cost) }
     it { should validate_presence_of(:shipping_option) }
     it { should_not allow_value(1).for(:quantity) }
     it { should allow_value(50).for(:quantity) }

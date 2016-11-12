@@ -6,9 +6,9 @@ class DistributorCentral::ItemCategory
   attr_accessor :guid, :name
 
   def self.extract(node)
-    rec = Spree::DcItemCategory.new
-    rec.guid = node.xpath('PRODUCTCATEGORYGUID').text
-    rec.name = node.xpath('PRODUCTCATEGORYNAME').text
-    rec
+    DistributorCentral::ItemCategory.new(
+      guid: node.xpath('PRODUCTCATEGORYGUID').text,
+      name: node.xpath('PRODUCTCATEGORYNAME').text
+    )
   end
 end

@@ -19,21 +19,21 @@ class DistributorCentral::OptionChoice
     :increment
 
   def self.extract(node)
-    rec = Spree::DcOptionChoice.new
-    rec.guid = node.xpath('maininfo/ItemOptionChoiceGUID').text
-    rec.name = node.xpath('maininfo/ItemOptionChoiceName').text
-    rec.description = node.xpath('maininfo/ItemOptionDescription').text
-    rec.hex_num = node.xpath('maininfo/HexNo').text
-    rec.image_available = node.xpath('maininfo/ImageAvailable').text
-    rec.use_hex = node.xpath('maininfo/UseHex').text
-    rec.num = node.xpath('maininfo/SupplierItemOptionChoiceNo').text
-    rec.display_num = node.xpath('maininfo/SupplierItemOptionChoiceDisplayNo').text
-    rec.display_name = node.xpath('maininfo/SupplierItemOptionChoiceDisplayName').text
-    rec.min_main_qty = node.xpath('maininfo/MinMainQty').text
-    rec.max_main_qty = node.xpath('maininfo/MaxMainQty').text
-    rec.min_choice_qty = node.xpath('maininfo/MinChoiceQty').text
-    rec.max_choice_qty = node.xpath('maininfo/MaxChoiceQty').text
-    rec.increment = node.xpath('maininfo/Increment').text
-    rec
+    DistributorCentral::OptionChoice.new(
+      guid: node.xpath('maininfo/ItemOptionChoiceGUID').text,
+      name: node.xpath('maininfo/ItemOptionChoiceName').text,
+      description: node.xpath('maininfo/ItemOptionDescription').text,
+      hex_num: node.xpath('maininfo/HexNo').text,
+      image_available: node.xpath('maininfo/ImageAvailable').text,
+      use_hex: node.xpath('maininfo/UseHex').text,
+      num: node.xpath('maininfo/SupplierItemOptionChoiceNo').text,
+      display_num: node.xpath('maininfo/SupplierItemOptionChoiceDisplayNo').text,
+      display_name: node.xpath('maininfo/SupplierItemOptionChoiceDisplayName').text,
+      min_main_qty: node.xpath('maininfo/MinMainQty').text,
+      max_main_qty: node.xpath('maininfo/MaxMainQty').text,
+      min_choice_qty: node.xpath('maininfo/MinChoiceQty').text,
+      max_choice_qty: node.xpath('maininfo/MaxChoiceQty').text,
+      increment: node.xpath('maininfo/Increment').text
+    )
   end
 end

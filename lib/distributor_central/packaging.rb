@@ -9,10 +9,10 @@ class DistributorCentral::Packaging
     :weight
 
   def self.extract(node)
-    rec = Spree::DcPackaging.new
-    rec.orig_zip = node.xpath('ORIGZIP').text
-    rec.quantity = node.xpath('QTY').text
-    rec.weight = node.xpath('WEIGHT').text
-    rec
+    DistributorCentral::Packaging.new(
+      orig_zip: node.xpath('ORIGZIP').text,
+      quantity: node.xpath('QTY').text,
+      weight: node.xpath('WEIGHT').text
+    )
   end
 end

@@ -12,7 +12,6 @@ def wrap_string(string)
 end
 
 namespace :distributor_central do
-  # Fixes
   namespace :fix do
     desc 'Delete all existing prebids'
     task delete_prebids: :environment do
@@ -48,27 +47,18 @@ namespace :distributor_central do
     task cabelas: :environment do
       supplier = Spree::Supplier.where(name: 'Cabelas').first
       return if supplier.nil?
-      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-      add_these_colors = [
+
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          screen_print,
-          color[0],
-          color[1],
-          color[2]
-        )
-      end
+      ].each { |color| add_pms_color(supplier, screen_print, color[0], color[1], color[2]) }
 
-      upcharge_type_id = Spree::UpchargeType.find_by_name('pms_color_match').id
       Spree::UpchargeSupplier.where(
-        upcharge_type_id: upcharge_type_id,
-        related_id: supplier.id,
+        upcharge_type: Spree::UpchargeType.find_by_name('pms_color_match'),
+        related: supplier,
         value: 25
-      ).first_or_create
+      ).first_or_create!
     end
 
     desc 'Fix Fields PMS Colors'
@@ -562,12 +552,12 @@ namespace :distributor_central do
       supplier = Spree::Supplier.where(dc_acct_num: '100383').first
       return if supplier.nil?
 
-      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-      color_blast_imprint = Spree::ImprintMethod.where(name: 'Color Blast').first_or_create
-      label_imprint = Spree::ImprintMethod.where(name: 'Label').first_or_create
-      transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
+      color_blast_imprint = Spree::ImprintMethod.where(name: 'Color Blast').first_or_create!
+      label_imprint = Spree::ImprintMethod.where(name: 'Label').first_or_create!
+      transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Yellow', '012 C', '#ffd700'],
@@ -581,50 +571,20 @@ namespace :distributor_central do
         ['Light Gray', '428 C', '#703f2a'],
         ['Metallic Gold', '871 C', '#84754e'],
         ['Metallic Silver', '877 C', '#8d9092']
-      ]
-      add_these_colors.each do |color|
-        screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-        color_blast_imprint = Spree::ImprintMethod.where(name: 'Color Blast').first_or_create
-        label_imprint = Spree::ImprintMethod.where(name: 'Label').first_or_create
-        transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
-
-        add_pms_color(
-          supplier,
-          screen_print_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          color_blast_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          label_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          transfer_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, screen_print_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, color_blast_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, label_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, transfer_imprint, color[0], color[1], color[2])
       end
     end
 
     desc 'Fix American Accent Napkins'
     task american_accents: :environment do
-      supplier = Spree::Supplier.where(name: 'American Accents').first_or_create
-      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      supplier = Spree::Supplier.where(name: 'American Accents').first_or_create!
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Yellow', 'Yellow C', '#fedd00'],
@@ -648,18 +608,9 @@ namespace :distributor_central do
         ['Matte Gold', '873 C', '#866d4b'],
         ['Orange', '021 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          screen_print,
-          color[0],
-          color[1],
-          color[2]
-        )
-      end
+      ].each { |color| add_pms_color(supplier, screen_print, color[0], color[1], color[2]) }
 
-      napkins = [
+      [
         ['White', 'A04A0EF9-8CB3-4771-B6EC-40E0A7EFCC6C'],
         ['White', 'AFC06A67-02E1-429E-B18D-AE5CD89BEFD8'],
         ['White', 'D662D322-CFE8-4E03-9759-B6FD038818F5'],
@@ -705,23 +656,14 @@ namespace :distributor_central do
         ['Chocolate', '41D407BB-E6F9-4C2E-B826-AFD8D1D3BC6D'],
         ['Dark Blue', '53A020FC-2360-4235-BFB7-5D166A1BB24C'],
         ['Dark Green', '93D34317-AA3D-47E7-A815-3DE4C3C953F4']
-      ]
-
-      napkins.each do |napkin|
+      ].each do |napkin|
         product = Spree::Product.where(supplier_item_guid: napkin[1]).first
         next if product.nil?
 
         product.loading
 
-        Spree::ImprintMethodsProduct.where(
-          imprint_method: screen_print,
-          product: product
-        ).first_or_create
-
-        Spree::ColorProduct.where(
-          product: product,
-          color: napkin[0]
-        ).first_or_create
+        Spree::ImprintMethodsProduct.where(imprint_method: screen_print, product: product).first_or_create!
+        Spree::ColorProduct.where(product: product, color: napkin[0]).first_or_create!
 
         product.check_validity!
         product.loaded if product.state == 'loading'
@@ -730,11 +672,11 @@ namespace :distributor_central do
 
     desc 'Fix SanMar Apparel'
     task sanmar: :environment do
-      supplier = Spree::Supplier.where(name: 'SanMar').first_or_create
-      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-      embroidery = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
+      supplier = Spree::Supplier.where(name: 'SanMar').first_or_create!
+      screen_print = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
+      embroidery = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Yellow', 'Yellow C', '#fedd00'],
@@ -758,38 +700,16 @@ namespace :distributor_central do
         ['Matte Gold', '873 C', '#866d4b'],
         ['Orange', '21 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          screen_print,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          embroidery,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, screen_print, color[0], color[1], color[2])
+        add_pms_color(supplier, embroidery, color[0], color[1], color[2])
       end
 
-      products = Spree::Product.where(supplier: supplier)
-
-      products.each do |product|
+      Spree::Product.where(supplier: supplier).each do |product|
         product.loading
 
-        Spree::ImprintMethodsProduct.where(
-          imprint_method: screen_print,
-          product: product
-        ).first_or_create
-
-        Spree::ImprintMethodsProduct.where(
-          imprint_method: embroidery,
-          product: product
-        ).first_or_create
+        Spree::ImprintMethodsProduct.where(imprint_method: screen_print, product: product).first_or_create!
+        Spree::ImprintMethodsProduct.where(imprint_method: embroidery, product: product).first_or_create!
 
         product.check_validity!
         product.loaded if product.state == 'loading'
@@ -801,11 +721,11 @@ namespace :distributor_central do
       supplier = Spree::Supplier.where(dc_acct_num: '100306').first
       return if supplier.nil?
 
-      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-      transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create
-      pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
+      transfer_imprint = Spree::ImprintMethod.where(name: 'Transfer').first_or_create!
+      pad_print_imprint = Spree::ImprintMethod.where(name: 'Pad Print').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Yellow', 'Yellow C', '#fedd00'],
@@ -829,29 +749,10 @@ namespace :distributor_central do
         ['Matte Gold', '873 C', '#866d4b'],
         ['Orange', '21 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          screen_print_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          transfer_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          pad_print_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, screen_print_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, transfer_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, pad_print_imprint, color[0], color[1], color[2])
       end
     end
 
@@ -1184,10 +1085,7 @@ namespace :distributor_central do
     task reload_all: :environment do
       Spree::Product.all.each do |product|
         product.loading
-        Resque.enqueue(
-          ProductLoad,
-          supplier_item_guid: product.supplier_item_guid
-        )
+        Resque.enqueue(ProductLoad, supplier_item_guid: product.supplier_item_guid)
       end
     end
 
@@ -1195,10 +1093,7 @@ namespace :distributor_central do
     task reload_invalid: :environment do
       Spree::Product.where(state: 'invalid').each do |product|
         product.loading
-        Resque.enqueue(
-          ProductLoad,
-          supplier_item_guid: product.supplier_item_guid
-        )
+        Resque.enqueue(ProductLoad, supplier_item_guid: product.supplier_item_guid)
       end
     end
 
@@ -1206,10 +1101,7 @@ namespace :distributor_central do
     task reload_loading: :environment do
       Spree::Product.where(state: 'loading').each do |product|
         product.loading
-        Resque.enqueue(
-          ProductLoad,
-          supplier_item_guid: product.supplier_item_guid
-        )
+        Resque.enqueue(ProductLoad, supplier_item_guid: product.supplier_item_guid)
       end
     end
 
@@ -1219,21 +1111,13 @@ namespace :distributor_central do
     end
   end
 
-  # Maps
   namespace :maps do
     namespace :pms do
       desc 'Export PMS colors'
       task export: :environment do
         CSV.open(File.join(Rails.root, 'db/maps/pmscolor_export.csv'), 'wb') do |csv|
           csv << %w(name display_name pantone hex)
-          Spree::PmsColor.all.each do |pms_color|
-            row = []
-            row << pms_color.name
-            row << pms_color.display_name
-            row << pms_color.pantone
-            row << pms_color.hex
-            csv << row
-          end
+          csv.concat(Spree::PmsColor.all.map { |pms| [pms.name, pms.display_name, pms.pantone, pms.hex] })
         end
       end
 
@@ -1244,8 +1128,7 @@ namespace :distributor_central do
           raise "PMS Color import file is missing: #{import_file}" unless File.exist?(import_file)
           Spree::PmsColor.destroy_all
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
-            hashed = row.to_hash
-            Spree::PmsColor.create(hashed)
+            Spree::PmsColor.create(row.to_hash)
           end
         rescue => e
           Rails.logger.error e
@@ -1259,15 +1142,8 @@ namespace :distributor_central do
           Spree::Supplier.all.each do |factory|
             Spree::PmsColorsSupplier.where(supplier: factory).each do |pms_color_supplier|
               imprint_method = Spree::ImprintMethod.find(pms_color_supplier.imprint_method_id)
-              pms_color = Spree::PmsColor.find(pms_color_supplier.pms_color_id)
-              row = []
-              row << factory.name
-              row << imprint_method.name
-              row << pms_color.name
-              row << pms_color.display_name
-              row << pms_color.pantone
-              row << pms_color.hex
-              csv << row
+              pms = Spree::PmsColor.find(pms_color_supplier.pms_color_id)
+              csv << [factory.name, imprint_method.name, pms.name, pms.display_name, pms.pantone, pms.hex]
             end
           end
         end
@@ -1334,15 +1210,8 @@ namespace :distributor_central do
           Spree::Supplier.all.each do |factory|
             Spree::PmsColorsSupplier.where(supplier: factory).each do |pms_color_supplier|
               imprint_method = Spree::ImprintMethod.find(pms_color_supplier.imprint_method_id)
-              pms_color = Spree::PmsColor.find(pms_color_supplier.pms_color_id)
-              row = []
-              row << factory.name
-              row << imprint_method.name
-              row << pms_color.name
-              row << pms_color.display_name
-              row << pms_color.pantone
-              row << pms_color.hex
-              csv << row
+              pms = Spree::PmsColor.find(pms_color_supplier.pms_color_id)
+              csv << [factory.name, imprint_method.name, pms.name, pms.display_name, pms.pantone, pms.hex]
             end
           end
         end
@@ -1354,14 +1223,9 @@ namespace :distributor_central do
       task export: :environment do
         CSV.open(File.join(Rails.root, 'db/maps/option_export.csv'), 'wb') do |csv|
           csv << %w(dc_acct_num dc_name px_name do_not_save)
-          Spree::OptionMapping.all.each do |option_map|
-            row = []
-            row << option_map.dc_acct_num
-            row << option_map.dc_name.strip
-            row << option_map.px_name
-            row << option_map.do_not_save
-            csv << row
-          end
+          csv.concat(Spree::OptionMapping.all.map do |option_map|
+            [option_map.dc_acct_num, option_map.dc_name.strip, option_map.px_name, option_map.do_not_save]
+          end)
         end
       end
 
@@ -1371,11 +1235,8 @@ namespace :distributor_central do
           import_file = File.join(Rails.root, 'db/maps/option_import.csv')
           raise "Option Mapping import file is missing: #{import_file}" unless File.exist?(import_file)
           Spree::OptionMapping.destroy_all
-          count = 1
           CSV.foreach(import_file, headers: true, header_converters: :symbol) do |row|
-            hashed = row.to_hash
-            Spree::OptionMapping.create(hashed)
-            count += 1
+            Spree::OptionMapping.create(row.to_hash)
           end
         rescue => e
           Rails.logger.error e
@@ -1384,34 +1245,26 @@ namespace :distributor_central do
     end
   end
 
-  # Categories
   namespace :category do
     desc 'Reload DC Categories'
     task reload: :environment do
-      category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create
-      Spree::Taxon.where(taxonomy_id: category_taxonomy.id).destroy_all
+      category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create!
 
-      category_taxonomy = Spree::Taxonomy.where(name: 'Categories').first_or_create
-      category_taxon = Spree::Taxon.where(
-        name: 'Categories',
-        parent_id: nil,
-        taxonomy_id: category_taxonomy.id
-      ).first_or_create
+      Spree::Taxon.where(taxonomy: category_taxonomy).destroy_all
+      category_taxon = Spree::Taxon.where(name: 'Categories', parent: nil, taxonomy: category_taxonomy).first_or_create!
 
-      tree = Spree::DcCategory.category_tree
-      tree.each do |parent|
-        parent_taxon = Spree::Taxon.create(
-          name: parent.name,
-          dc_category_guid: parent.guid,
-          parent_id: category_taxon.id,
-          taxonomy_id: category_taxonomy.id
-        )
+      DistributorCentral::Category.category_tree.each do |parent|
         parent.children.each do |child|
           Spree::Taxon.create(
             name: child.name,
             dc_category_guid: child.guid,
-            parent_id: parent_taxon.id,
-            taxonomy_id: category_taxonomy.id
+            parent: Spree::Taxon.create(
+              name: parent.name,
+              dc_category_guid: parent.guid,
+              parent: category_taxon,
+              taxonomy: category_taxonomy
+            ),
+            taxonomy: category_taxonomy
           )
         end
       end

@@ -11,13 +11,13 @@ class DistributorCentral::Price
     :unit_of_measure
 
   def self.extract(node)
-    rec = Spree::DcPrice.new
-    rec.code = node.xpath('CODE').text
-    rec.issetup = node.xpath('ISSETUP').text
-    rec.net = node.xpath('NET').text
-    rec.qty = node.xpath('QTY').text
-    rec.retail = node.xpath('RETAIL').text
-    rec.unit_of_measure = node.xpath('UNITOFMEASURE').text
-    rec
+    DistributorCentral::Price.new(
+      code: node.xpath('CODE').text,
+      issetup: node.xpath('ISSETUP').text,
+      net: node.xpath('NET').text,
+      qty: node.xpath('QTY').text,
+      retail: node.xpath('RETAIL').text,
+      unit_of_measure: node.xpath('UNITOFMEASURE').text
+    )
   end
 end

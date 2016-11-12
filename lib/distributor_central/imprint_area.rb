@@ -16,21 +16,18 @@ class DistributorCentral::ImprintArea
     :options
 
   def self.extract(node)
-    rec = DistributorCentral::ImprintArea.new
-    rec.name = node.xpath('ImprintAreaName').text
-    rec.description = node.xpath('ImprintAreaDescription').text
-    rec.required = node.xpath('Required').text
-    rec.max_lines = node.xpath('ImprintMaxLines').text
-    rec.height = node.xpath('ImprintHeight').text
-    rec.length = node.xpath('ImprintLength').text
-    rec.radius = node.xpath('ImprintRadius').text
-    rec.width = node.xpath('ImprintWidth').text
-    rec.instructions = node.xpath('ImprintAreaInstructions').text
-    rec.decoration_limit = node.xpath('DecorationLimit').text
-    rec.options = []
-    node.xpath('OPTIONS').each do |option|
-      rec.options << option.xpath('OPTIONGUID').text
-    end
-    rec
+    DistributorCentral::ImprintArea.new(
+      name: node.xpath('ImprintAreaName').text,
+      description: node.xpath('ImprintAreaDescription').text,
+      required: node.xpath('Required').text,
+      max_lines: node.xpath('ImprintMaxLines').text,
+      height: node.xpath('ImprintHeight').text,
+      length: node.xpath('ImprintLength').text,
+      radius: node.xpath('ImprintRadius').text,
+      width: node.xpath('ImprintWidth').text,
+      instructions: node.xpath('ImprintAreaInstructions').text,
+      decoration_limit: node.xpath('DecorationLimit').text,
+      options: node.xpath('OPTIONS').map { |option| option.xpath('OPTIONGUID').text }
+    )
   end
 end

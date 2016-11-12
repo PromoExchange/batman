@@ -4,8 +4,6 @@ class DistributorCentral::Supplier
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  base_uri 'http://www.distributorcentral.com/resources/xml/supplier_list.cfm'
-
   attr_accessor :acct_guid,
     :add1,
     :add2,
@@ -19,31 +17,31 @@ class DistributorCentral::Supplier
     :url,
     :zipcode
 
+  base_uri "#{ENV['DISTRIBUTOR_CENTRAL_URL']}//resources/xml/supplier_list.cfm"
+
   def self.supplier_list
     response = get("#{base_uri}?acctwebguid=#{ENV['DISTRIBUTOR_CENTRAL_WEBACCTID']}")
-    coll = []
-    return coll unless response.success?
-    doc = Nokogiri::XML(response.body)
+    raise HTTParty::ResponseError('HTTP Failure') unless response.success?
 
-    doc.xpath('//SUPPLIER').each do |item|
-      rec = Spree::DcSupplier.new
-      rec.acct_guid = item.xpath('ACCTGUID').text
-      rec.add1 = item.xpath('ADD1').text
-      rec.add2 = item.xpath('ADD2').text
-      rec.city = item.xpath('CITY').text
-      rec.company_name = item.xpath('COMPANYNAME').text
-      rec.dc_acct_num = item.xpath('DCACCTNO').text
-      rec.email = item.xpath('EMAIL').text
-      rec.fax = item.xpath('FAX').text
-      rec.phone = item.xpath('PHONE').text
-      rec.state = item.xpath('ST').text
-      rec.url = item.xpath('URL').text
-      rec.zipcode = item.xpath('ZIP').text
-      coll << rec
+    Nokogiri::XML(response.body).xpath('//SUPPLIER').map do |item|
+      DistributorCentral::Supplier.new(
+        acct_guid: item.xpath('ACCTGUID').text,
+        add1: item.xpath('ADD1').text,
+        add2: item.xpath('ADD2').text,
+        city: item.xpath('CITY').text,
+        company_name: item.xpath('COMPANYNAME').text,
+        dc_acct_num: item.xpath('DCACCTNO').text,
+        email: item.xpath('EMAIL').text,
+        fax: item.xpath('FAX').text,
+        phone: item.xpath('PHONE').text,
+        state: item.xpath('ST').text,
+        url: item.xpath('URL').text,
+        zipcode: item.xpath('ZIP').text
+      )
     end
-    coll
-  rescue
-    return []
+  rescue => e
+    Rails.logger.error("DC: Failed to get supplier: #{e.message}")
+    []
   end
 
   def persisted?

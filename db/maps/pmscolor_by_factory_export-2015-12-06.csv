@@ -1,0 +1,67 @@
+supplier_name,imprint_method,name,display_name,pantone,hex
+"Evans Manufacturing, Inc.",Screen Print,Black,,426,#25282B
+"Evans Manufacturing, Inc.",Screen Print,White,,000,#FFFFFF
+"Evans Manufacturing, Inc.",Screen Print,Ivory,,7527,#d6d2c4
+"Evans Manufacturing, Inc.",Screen Print,Grey,,Cool Gray 10,#63666a
+"Evans Manufacturing, Inc.",Screen Print,Yellow,,123 C,#ffc72c
+"Evans Manufacturing, Inc.",Screen Print,Orange,,166 C,#e35205
+"Evans Manufacturing, Inc.",Screen Print,Red,,186 C,#c8102e
+"Evans Manufacturing, Inc.",Screen Print,Burgundy,,202 C,#862633
+"Evans Manufacturing, Inc.",Screen Print,Purple,,259 C,#6d2077
+"Evans Manufacturing, Inc.",Screen Print,Royal Blue,,286 C,#0033a0
+"Evans Manufacturing, Inc.",Screen Print,Dark Blue,,289 C,#0c2340
+"Evans Manufacturing, Inc.",Screen Print,Process Blue,,307 C,#0085ca
+"Evans Manufacturing, Inc.",Screen Print,Dark Green,,343 C,#115740
+"Evans Manufacturing, Inc.",Screen Print,Green,,343 C,#00843d
+"Evans Manufacturing, Inc.",Screen Print,Teal,,3278 C,#009b77
+"Evans Manufacturing, Inc.",Screen Print,Brown,,476 C,#4e3629
+"Evans Manufacturing, Inc.",Screen Print,Gold,,872 C,#85714d
+"Evans Manufacturing, Inc.",Screen Print,Silver,,877 C,#8a8d8f
+"Evans Manufacturing, Inc.",Screen Print,Pink,,189 C,#f8a3bc
+"Evans Manufacturing, Inc.",Screen Print,Neon Pink,,806 C,#ff3eb5
+SanMar,Screen Print,Black,,426,#25282B
+SanMar,Embroidery,Black,,426,#25282B
+SanMar,Screen Print,White,,000,#FFFFFF
+SanMar,Embroidery,White,,000,#FFFFFF
+SanMar,Screen Print,Yellow,,Yellow C,#fedd00
+SanMar,Embroidery,Yellow,,Yellow C,#fedd00
+SanMar,Screen Print,Gold,,123 C,#ffc72c
+SanMar,Embroidery,Gold,,123 C,#ffc72c
+SanMar,Screen Print,Orange,,1495 C,#ff8f1c
+SanMar,Embroidery,Orange,,1495 C,#ff8f1c
+SanMar,Screen Print,Warm Red,,485 C,#da291c
+SanMar,Embroidery,Warm Red,,485 C,#da291c
+SanMar,Screen Print,Red,,186 C,#c8102e
+SanMar,Embroidery,Red,,186 C,#c8102e
+SanMar,Screen Print,Maroon,,202 C,#862633
+SanMar,Embroidery,Maroon,,202 C,#862633
+SanMar,Screen Print,Pink,,Rhodamine,#e10098
+SanMar,Embroidery,Pink,,Rhodamine,#e10098
+SanMar,Screen Print,Gray,,Gray 9,#75787b
+SanMar,Embroidery,Gray,,Gray 9,#75787b
+SanMar,Screen Print,Violet,,Violet C,#440099
+SanMar,Embroidery,Violet,,Violet C,#440099
+SanMar,Screen Print,Royal Blue,,Reflex Blue C,#001489
+SanMar,Embroidery,Royal Blue,,Reflex Blue C,#001489
+SanMar,Screen Print,Navy Blue,,281 C,#00205b
+SanMar,Embroidery,Navy Blue,,281 C,#00205b
+SanMar,Screen Print,Cyan,,299 C,#00a3e0
+SanMar,Embroidery,Cyan,,299 C,#00a3e0
+SanMar,Screen Print,Process Blue,,Process Blue,#0085ca
+SanMar,Embroidery,Process Blue,,Process Blue,#0085ca
+SanMar,Screen Print,Teal,,321 C,#008c95
+SanMar,Embroidery,Teal,,321 C,#008c95
+SanMar,Screen Print,Green,,348 C,#00843d
+SanMar,Embroidery,Green,,348 C,#00843d
+SanMar,Screen Print,Dark Green,,336 C,#00664f
+SanMar,Embroidery,Dark Green,,336 C,#00664f
+SanMar,Screen Print,Brown,,498 C,#00664f
+SanMar,Embroidery,Brown,,498 C,#00664f
+SanMar,Screen Print,Matte Silver,,877 C,#8a8d8f
+SanMar,Embroidery,Matte Silver,,877 C,#8a8d8f
+SanMar,Screen Print,Matte Gold,,873 C,#866d4b
+SanMar,Embroidery,Matte Gold,,873 C,#866d4b
+SanMar,Screen Print,Orange,,21 C,#fe5000
+SanMar,Embroidery,Orange,,21 C,#fe5000
+SanMar,Screen Print,Lime Green,,375 C,#97d700
+SanMar,Embroidery,Lime Green,,375 C,#97d700

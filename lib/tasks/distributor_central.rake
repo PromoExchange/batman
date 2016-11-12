@@ -761,10 +761,10 @@ namespace :distributor_central do
       supplier = Spree::Supplier.where(dc_acct_num: '101684').first
       return if supplier.nil?
 
-      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-      color_label_imprint = Spree::ImprintMethod.where(name: 'Color Label').first_or_create
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
+      color_label_imprint = Spree::ImprintMethod.where(name: 'Color Label').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Yellow', 'Yellow C', '#fedd00'],
@@ -788,31 +788,18 @@ namespace :distributor_central do
         ['Matte Gold', '873 C', '#866d4b'],
         ['Orange', '21 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          screen_print_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          color_label_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, screen_print_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, color_label_imprint, color[0], color[1], color[2])
       end
     end
 
     desc 'Fix AIO Drives'
     task aio: :environment do
-      supplier = Spree::Supplier.where(name: 'All in One').first_or_create
-      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      supplier = Spree::Supplier.where(name: 'All in One').first_or_create!
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Brown', '498 C', '#00664f'],
@@ -831,33 +818,20 @@ namespace :distributor_central do
         ['Teal', '321 C', '#008c95'],
         ['Violet', 'Violet C', '#440099'],
         ['Yellow', 'Yellow C', '#fedd00']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          imprint_method,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, imprint_method, color[0], color[1], color[2])
       end
 
-      product_guids = [
+      [
         'E41E27A5-DCE5-4648-9042-6527DBD4A56F',
         '50C83239-E2AA-4297-B445-884392332F0D'
-      ]
-
-      product_guids.each do |product_guid|
+      ].each do |product_guid|
         product = Spree::Product.where(supplier_item_guid: product_guid).first
-
         next unless product
 
         product.loading
 
-        Spree::ImprintMethodsProduct.where(
-          imprint_method: imprint_method,
-          product: product
-        ).first_or_create
+        Spree::ImprintMethodsProduct.where(imprint_method: imprint_method, product: product).first_or_create!
 
         product.check_validity!
         product.loaded if product.state == 'loading'
@@ -868,12 +842,12 @@ namespace :distributor_central do
     task gemline: :environment do
       supplier = Spree::Supplier.where(dc_acct_num: '100257').first_or_create
 
-      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
-      logomatic_imprint = Spree::ImprintMethod.where(name: 'Logomatic').first_or_create
-      embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create
-      gemphoto_imprint = Spree::ImprintMethod.where(name: 'Gemphoto').first_or_create
+      screen_print_imprint = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
+      logomatic_imprint = Spree::ImprintMethod.where(name: 'Logomatic').first_or_create!
+      embroidery_imprint = Spree::ImprintMethod.where(name: 'Embroidery').first_or_create!
+      gemphoto_imprint = Spree::ImprintMethod.where(name: 'Gemphoto').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Yellow', 'Yellow C', '#fedd00'],
@@ -897,45 +871,20 @@ namespace :distributor_central do
         ['Matte Gold', '873 C', '#866d4b'],
         ['Orange', '21 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          screen_print_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          logomatic_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          embroidery_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
-        add_pms_color(
-          supplier,
-          gemphoto_imprint,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, screen_print_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, logomatic_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, embroidery_imprint, color[0], color[1], color[2])
+        add_pms_color(supplier, gemphoto_imprint, color[0], color[1], color[2])
       end
     end
 
     desc 'Fix Sweda'
     task sweda: :environment do
       supplier = Spree::Supplier.where(dc_acct_num: '119303').first
-      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Yellow', 'Yellow C', '#fedd00'],
@@ -959,24 +908,17 @@ namespace :distributor_central do
         ['Matte Gold', '873 C', '#866d4b'],
         ['Orange', '21 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          imprint_method,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, imprint_method, color[0], color[1], color[2])
       end
     end
 
     desc 'Fix Garyline'
     task garyline: :environment do
       supplier = Spree::Supplier.where(name: 'Garyline').first_or_create
-      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Yellow', 'Yellow C', '#fedd00'],
@@ -1000,26 +942,14 @@ namespace :distributor_central do
         ['Matte Gold', '873 C', '#866d4b'],
         ['Orange', '21 C', '#fe5000'],
         ['Lime Green', '375 C', '#97d700']
-      ]
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          imprint_method,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, imprint_method, color[0], color[1], color[2])
       end
 
-      products = Spree::Product.where(supplier: supplier)
-
-      products.each do |product|
+      Spree::Product.where(supplier: supplier).each do |product|
         product.loading
 
-        Spree::ImprintMethodsProduct.where(
-          imprint_method: imprint_method,
-          product: product
-        ).first_or_create
+        Spree::ImprintMethodsProduct.where(imprint_method: imprint_method, product: product).first_or_create!
 
         product.check_validity!
         product.loaded if product.state == 'loading'
@@ -1028,10 +958,10 @@ namespace :distributor_central do
 
     desc 'Fix Evans'
     task evans: :environment do
-      supplier = Spree::Supplier.where(name: 'Evans Manufacturing, Inc.').first_or_create
-      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create
+      supplier = Spree::Supplier.where(name: 'Evans Manufacturing, Inc.').first_or_create!
+      imprint_method = Spree::ImprintMethod.where(name: 'Screen Print').first_or_create!
 
-      add_these_colors = [
+      [
         ['Black', '426', '#25282B'],
         ['White', '000', '#FFFFFF'],
         ['Ivory', '7527', '#d6d2c4'],
@@ -1052,27 +982,14 @@ namespace :distributor_central do
         ['Silver', '877 C', '#8a8d8f'],
         ['Pink', '189 C', '#f8a3bc'],
         ['Neon Pink', '806 C', '#ff3eb5']
-      ]
-
-      add_these_colors.each do |color|
-        add_pms_color(
-          supplier,
-          imprint_method,
-          color[0],
-          color[1],
-          color[2]
-        )
+      ].each do |color|
+        add_pms_color(supplier, imprint_method, color[0], color[1], color[2])
       end
 
-      products = Spree::Product.where(supplier: supplier)
-
-      products.each do |product|
+      Spree::Product.where(supplier: supplier).each do |product|
         product.loading
 
-        Spree::ImprintMethodsProduct.where(
-          imprint_method: imprint_method,
-          product: product
-        ).first_or_create
+        Spree::ImprintMethodsProduct.where(imprint_method: imprint_method, product: product).first_or_create!
 
         product.check_validity!
         product.loaded if product.state == 'loading'

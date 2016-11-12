@@ -24,7 +24,7 @@ RSpec.describe Spree::Product, type: :model do
       shipping_address = FactoryGirl.create(:address)
       best_price = product.best_price(
         shipping_address: shipping_address.id,
-        shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+        shipping_option: :ups_ground
       )
       expect(best_price[:best_price].to_f).to eq 675.37
       expect(best_price[:delivery_days]).to eq 12

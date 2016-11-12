@@ -15,7 +15,7 @@ class Spree::PurchasesController < Spree::StoreController
       buyer_id: @product.company_store.buyer.id,
       price_breaks: [],
       sizes: [],
-      shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+      shipping_option: :ups_ground
     )
 
     @product.price_breaks.each do |price_break|
@@ -59,7 +59,7 @@ class Spree::PurchasesController < Spree::StoreController
     # TODO: Move this logic into a/ purchase model OR b/ product
     best_price = @product.best_price(
       quantity: purchase_params[:quantity].to_i,
-      shipping_option: Spree::ShippingOption::OPTION.key(purchase_params[:shipping_option].to_i),
+      shipping_option: :shipping_option,
       shipping_address: purchase_params[:address_id]
     )
 
@@ -131,12 +131,12 @@ class Spree::PurchasesController < Spree::StoreController
     end
 
     @shipping_options = [
-      ['UPS Ground', Spree::ShippingOption::OPTION[:ups_ground]],
-      ['UPS Three-Day Select', Spree::ShippingOption::OPTION[:ups_3day_select]],
-      ['UPS Second Day Air', Spree::ShippingOption::OPTION[:ups_second_day_air]],
-      ['UPS Next Day Air Saver', Spree::ShippingOption::OPTION[:ups_next_day_air_saver]],
-      ['UPS Next Day Air Early A.M.', Spree::ShippingOption::OPTION[:ups_next_day_air_early_am]],
-      ['UPS Next Day Air', Spree::ShippingOption::OPTION[:ups_next_day_air]]
+      ['UPS Ground', :ups_ground],
+      ['UPS Three-Day Select', :ups_3day_select],
+      ['UPS Second Day Air', :ups_second_day_air],
+      ['UPS Next Day Air Saver', :ups_next_day_air_saver],
+      ['UPS Next Day Air Early A.M.', :ups_next_day_air_early_am],
+      ['UPS Next Day Air', :ups_next_day_air]
     ]
   end
 

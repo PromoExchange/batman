@@ -5,11 +5,11 @@ module Spree::QuoteCalculatorFixedShipping
     if product.carton.per_item
       log("Fixed price per item #{product.carton.fixed_price}")
       shipping_cost = product.carton.fixed_price * quantity
-      shipping_option = Spree::ShippingOption::OPTION[:fixed_price_per_item]
+      shipping_option = :fixed_price_per_item
     else
       log("Fixed price total #{product.carton.fixed_price}")
       shipping_cost = product.carton.fixed_price
-      shipping_option = Spree::ShippingOption::OPTION[:fixed_price_total]
+      shipping_option = :fixed_price_total
     end
 
     self.shipping_option = shipping_option

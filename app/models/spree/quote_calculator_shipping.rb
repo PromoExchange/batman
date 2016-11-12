@@ -71,7 +71,7 @@ module Spree::QuoteCalculatorShipping
 
     shipping_options.destroy_all
 
-    shipping_sym = Spree::ShippingOption::OPTION.key(shipping_option)
+    shipping_sym = shipping_option
 
     shipping_cost = nil
     selected_shipping_cost = nil
@@ -104,7 +104,7 @@ module Spree::QuoteCalculatorShipping
         name: service_name,
         delivery_date: Time.zone.now + days_diff.days,
         delivery_days: days_diff,
-        shipping_option: Spree::ShippingOption::OPTION[mapped_shipping_option],
+        shipping_option: mapped_shipping_option,
         shipping_cost: shipping_cost
       )
     end

@@ -47,7 +47,7 @@ module Spree::QuoteCalculator
     raise 'Failed to calculate shipping' if shipping_cost.nil?
 
     log("Selected Shipping cost #{shipping_cost}")
-    log("Selected Shipping option #{Spree::ShippingOption::OPTION.key(shipping_option)}")
+    log("Selected Shipping option #{shipping_option}")
     self.unit_price += (shipping_cost / quantity)
     log("After applying shipping #{self.unit_price}")
 

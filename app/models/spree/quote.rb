@@ -111,7 +111,7 @@ class Spree::Quote < Spree::Base
     options.reverse_merge!(
       shipping_option: :ups_ground
     )
-    self.shipping_option = Spree::ShippingOption::OPTION[options[:shipping_option]]
+    self.shipping_option = options[:shipping_option]
 
     log("Total price called #{options}")
     from_cache = true

@@ -157,6 +157,6 @@ RSpec.describe Spree::Quote, type: :model do
   xit 'should return selected shipping option' do
     quote = FactoryGirl.create(:quote, :with_carton)
     quote.total_price(shipping_option: :ups_ground)
-    expect(quote.shipping.shipping_option).to eq Spree::ShippingOption::OPTION[:ups_ground]
+    expect(quote.shipping.shipping_option).to eq :ups_ground
   end
 end

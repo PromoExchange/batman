@@ -268,7 +268,7 @@ Spree::Product.class_eval do
       main_color: preconfigure.main_color,
       shipping_address: options[:shipping_address].to_i,
       custom_pms_colors: preconfigure.custom_pms_colors,
-      shipping_option: Spree::ShippingOption::OPTION[options[:shipping_option]]
+      shipping_option: options[:shipping_option]
     ).first_or_create
 
     raise 'Failed to get price' if quote.nil?
@@ -299,7 +299,7 @@ Spree::Product.class_eval do
       adjusted_delivery_date = Time.zone.now + (2 + production_time + option.delivery_days).days
 
       total_cost = quote.total_price(
-        shipping_option: Spree::ShippingOption::OPTION.key(option.shipping_option)
+        shipping_option: option.shipping_option
       )
 
       lowest_total = [lowest_total, total_cost].min

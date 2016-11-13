@@ -3,6 +3,6 @@
 <% else %>
   <div class="form-group">
     <%= f.label(:quantity, Spree.t(:quantity)) %>
-    <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: @product.minimum_quantity, placeholder: "Minimum Quantity: #{@product.minimum_quantity}")%>
+    <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: @product.minimum_quantity, placeholder: "Minimum #{@product.minimum_quantity}")%>
   </div>
 <% end %>

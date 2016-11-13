@@ -1,4 +1,4 @@
-$cs-text-color: #636868;
+$cs-text-color: #313131;
 
 #cs-container {
   margin: 0 auto;
@@ -13,23 +13,30 @@ $cs-text-color: #636868;
 }
 
 .cs-product {
-  min-height: 250px !important;
+  min-height: 400px !important;
   color: steelblue;
+  margin-top: 20px;
 }
 
 .cs-product-text {
   color: $cs-text-color;
   margin-top: 5px;
-  font-size: 1.2em;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1.25px;
+  text-transform: uppercase;
+}
+
+.cs-lowest-bid {
+  color: #000;
 }
 
 .cs-image {
-  width: 150px;
-  margin-left: 66px;
+  width: 300px;
 }
 
 .cs-body {
-  background-color: #f8f8f8;
+  background-color: white;
 }
 
 .cs-wrapper {
@@ -78,8 +85,24 @@ $cs-text-color: #636868;
   margin-bottom: 10px;
 }
 
+.product-ideas {
+  margin-top: 50px;
+}
+
 #inspire-me {
   margin-bottom: 20px;
+}
+
+.top-logo {
+  width: 600px;
+}
+
+.purchase-product-name {
+  font-size: 17px;
+}
+
+.new_purchase {
+  margin-bottom: 25px;
 }
 
 html, body {

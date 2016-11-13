@@ -256,13 +256,12 @@ Spree::Product.class_eval do
 
     options.reverse_merge!(
       quantity: last_price_break_minimum,
-      shipping_option: :ups_ground,
+      shipping_option: :ups_ground, # Still assuming ups_ground is best
       shipping_address: company_store.buyer.shipping_address.id
     )
 
     options[:quantity] ||= last_price_break_minimum
 
-    # TODO: Move cache point to here
     quote = quotes.where(
       quantity: options[:quantity].to_i,
       main_color: preconfigure.main_color,
@@ -286,12 +285,14 @@ Spree::Product.class_eval do
     end
 
     response = {
+      quote_id: quote.id,
       best_price: total_price,
       shipping_option: 1,
       quantity: options[:quantity].to_i,
-      delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21),
-      shipping_options: []
+      delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21)
     }
+
+    return response
 
     lowest_total = Float::MAX
 

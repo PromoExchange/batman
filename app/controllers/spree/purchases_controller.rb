@@ -59,7 +59,7 @@ class Spree::PurchasesController < Spree::StoreController
     # TODO: Move this logic into a/ purchase model OR b/ product
     best_price = @product.best_price(
       quantity: purchase_params[:quantity].to_i,
-      shipping_option: :shipping_option,
+      shipping_option: purchase_params[:shipping_option].to_sym,
       shipping_address: purchase_params[:address_id]
     )
 

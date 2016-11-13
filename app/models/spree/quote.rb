@@ -6,8 +6,8 @@ class Spree::Quote < Spree::Base
     :ups_3day_select,
     :ups_second_day_air,
     :ups_next_day_air_saver,
-    :ups_next_day_air_early_am,
     :ups_next_day_air,
+    :ups_next_day_air_early_am,
     :fixed_price_per_item,
     :fixed_price_total
   ]

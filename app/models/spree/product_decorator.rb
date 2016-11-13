@@ -298,9 +298,9 @@ Spree::Product.class_eval do
     response = {
       quote_id: quote.id,
       best_price: total_price,
-      shipping_option: 1,
+      shipping_option: quote.shipping_option,
       quantity: options[:quantity].to_i,
-      delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21)
+      delivery_days: production_time + quote.shipping_days
     }
 
     response

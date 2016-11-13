@@ -5,3 +5,15 @@
     margin-left: -40px;
   }
 }
+
+#invoice-table {
+  tbody {
+    tr:last-child {
+      border-bottom: 2px solid #ddd;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+  }
+}

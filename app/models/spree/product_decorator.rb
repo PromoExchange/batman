@@ -250,13 +250,25 @@ Spree::Product.class_eval do
     Rails.logger.error("Failed to get lowest price, #{e.message}")
   end
 
+  def available_shipping_options
+    unless fixed_price_shipping?
+      return Spree::Quote.shipping_options.except('fixed_price_per_item', 'fixed_price_total')
+    end
+    carton.per_item ? ['fixed_price_per_item'] : ['fixed_price_total']
+  end
+
+  def valid_shipping_option?(shipping_option)
+    available_shipping_options.include?(shipping_option.to_s)
+  end
+
   def best_price(options = {})
     raise 'Cannot find buyer' if company_store.buyer.nil?
     raise 'Cannot find default shipping adddress' if company_store.buyer.shipping_address.nil?
+    raise 'Invalid shipping option requested' unless valid_shipping_option?(options[:shipping_option] || :ups_ground)
 
     options.reverse_merge!(
       quantity: last_price_break_minimum,
-      shipping_option: :ups_ground, # Still assuming ups_ground is best
+      shipping_option: :ups_ground,
       shipping_address: company_store.buyer.shipping_address.id
     )
 
@@ -279,8 +291,7 @@ Spree::Product.class_eval do
         error_code: quote.error_code.to_s,
         error_message: quote.messages.last,
         best_price: nil,
-        delivery_days: nil,
-        shipping_options: []
+        delivery_days: nil
       }
     end
 
@@ -291,33 +302,6 @@ Spree::Product.class_eval do
       quantity: options[:quantity].to_i,
       delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21)
     }
-
-    return response
-
-    lowest_total = Float::MAX
-
-    quote.shipping_options.each do |option|
-      adjusted_delivery_date = Time.zone.now + (2 + production_time + option.delivery_days).days
-
-      total_cost = quote.total_price(
-        shipping_option: option.shipping_option
-      )
-
-      lowest_total = [lowest_total, total_cost].min
-      response[:shipping_option] = option.shipping_option if lowest_total == total_cost
-      response[:shipping_options].push(
-        name: option.name,
-        total_cost: total_cost,
-        delta: 0.0,
-        delivery_date: adjusted_delivery_date,
-        delivery_days: option.delivery_days,
-        shipping_option: option.shipping_option
-      )
-    end
-
-    response[:shipping_options].each do |option|
-      option[:delta] = (option[:total_cost].to_f - lowest_total).round(2)
-    end
 
     response
   rescue StandardError => e

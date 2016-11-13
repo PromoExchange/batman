@@ -58,8 +58,7 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Use Redis as cache store
-  # config.cache_store = :redis_store, ENV['CACHE_URL']
-  config.cache_store = :null_store
+  config.cache_store = :redis_store, ENV['CACHE_URL']
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'

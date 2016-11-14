@@ -40,6 +40,10 @@
   </ul>
 <% end %>
 
+<ul class="nav nav-sidebar">
+  <%= tab :product_load, url: spree.admin_product_loads_path, icon: 'file' %>
+</ul>
+
 <% if can? :admin, Spree::PmsColorsSupplier %>
   <ul class="nav nav-sidebar">
     <%= tab :pms_colors_supplier, url: spree.admin_pms_colors_suppliers_path, icon: 'file' %>

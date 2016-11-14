@@ -1,0 +1,117 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:product_load) %>
+<% end %>
+
+<div class="well">
+  <h4>Current Stats</h4>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>State</th>
+        <th>#</th>
+        <th>%</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Factories Defined</td>
+        <td><%= @num_factories %></td>
+        <td></td>
+      <tr>
+      <tr>
+        <td>Active Products In Database</td>
+        <td><%= @num_states['active'].nil? ? 0 : @num_states['active'] %></td>
+        <td><%= ((@num_states['active'].to_f / @num_database) * 100).round(2) if @num_database > 0 %></td>
+      <tr>
+      <tr>
+        <td>Loading Products In Database</td>
+        <td><%= @num_states['loading'].nil? ? 0 : @num_states['loading'] %></td>
+        <td><%= ((@num_states['loading'].to_f / @num_database) * 100 ).round(2) if @num_database > 0 %></td>
+      <tr>
+      <tr>
+        <td>Invalid Products In Database</td>
+        <td><%= @num_states['invalid'].nil? ? 0 : @num_states['invalid'] %></td>
+        <td><%= ((@num_states['invalid'].to_f / @num_database) * 100 ).round(2) if @num_database > 0 %></td>
+      <tr>
+      <tr>
+        <td>Total Products In Database</td>
+        <td><%= @num_database %></td>
+        <td></td>
+      <tr>
+      <tr>
+        <td>In Factory Load Queue</td>
+        <td><%= @num_factory_queue %></td>
+        <td></td>
+      <tr>
+      <tr>
+        <td>In Product Update Queue</td>
+        <td><%= @num_product_queue %></td>
+        <td></td>
+      <tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="well">
+  <h4>By Factory/State</h4>
+
+  <div class="scrolling">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Factory</th>
+          <th>DC Account Num</th>
+          <th>State</th>
+          <th>Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @loaded_factories.each do |k, v| %>
+          <tr>
+            <td><%= k[0] %></td>
+            <td><%= k[1] %></td>
+            <td><%= k[2].humanize %></td>
+            <td><%= v %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="well">
+  <h4>Available Factories</h4>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Factory</th>
+        <th>DC Account Num</th>
+        <th>URL</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @dc_suppliers.each do |supplier| %>
+        <% cache do %>
+          <tr>
+            <td><%= supplier.company_name %></td>
+            <td><%= supplier.dc_acct_num %></td>
+            <td><a href="<%= "http://#{supplier.url}" %>"><%= supplier.url %></a></td>
+            <td>
+              <%=
+                button_to(
+                  'Load',
+                  spree.admin_product_loads_path,
+                  params: { factory_name: supplier.company_name, dc_acct_num: supplier.dc_acct_num },
+                  method: :post,
+                  class: 'btn btn-success btn-xs'
+                )
+              %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

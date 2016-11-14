@@ -329,7 +329,7 @@ Spree::Product.class_eval do
     begin
       images.destroy_all # Only one image allowed
       images << Spree::Image.create!(
-        attachment: Spree::DcImage.retrieve(supplier_item_guid),
+        attachment: DistributorCentral::Image.retrieve(supplier_item_guid),
         viewable: self
       )
     rescue StandardError => e

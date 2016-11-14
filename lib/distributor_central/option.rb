@@ -1,8 +1,4 @@
-class DistributorCentral::Option
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::Option < DistributorCentral::Base
   attr_accessor :name,
     :guid,
     :type,

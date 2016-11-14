@@ -1,8 +1,4 @@
-class DistributorCentral::Packaging
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::Packaging < DistributorCentral::Base
   attr_accessor :orig_zip,
     :quantity,
     :dimensions,

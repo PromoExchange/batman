@@ -1,8 +1,4 @@
-class DistributorCentral::Price
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::Price < DistributorCentral::Base
   attr_accessor :code,
     :issetup,
     :net,

@@ -28,7 +28,7 @@ class DistributorCentral::OptionDetail
     response = get("#{base_uri}?acctwebguid=#{ENV['DISTRIBUTOR_CENTRAL_WEBACCTID']}&optionguid=#{option_guid}")
     doc = Nokogiri::XML(response.body)
 
-    Spree::DcOptionDetail.new(
+    DistributorCentral::OptionDetail.new(
       supplier_item_num: doc.xpath('option/maininfo/SuplItemOptionNo').text,
       name: doc.xpath('option/maininfo/OptionName').text,
       description: doc.xpath('option/maininfo/OptionDescription').text,

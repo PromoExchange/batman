@@ -1,8 +1,4 @@
-class DistributorCentral::Image
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::Image < DistributorCentral::Base
   attr_accessor :image
 
   def self.retrieve(supplier_item_guid)

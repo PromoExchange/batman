@@ -1,9 +1,4 @@
-class DistributorCentral::FullProduct
-  include HTTParty
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::FullProduct < DistributorCentral::Base
   attr_accessor :acct_guid,
     :add_info,
     :company_name,

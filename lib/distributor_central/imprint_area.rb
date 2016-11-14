@@ -1,8 +1,4 @@
-class DistributorCentral::ImprintArea
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::ImprintArea < DistributorCentral::Base
   attr_accessor :name,
     :description,
     :required,

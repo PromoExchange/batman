@@ -1,9 +1,4 @@
-class DistributorCentral::Category
-  include HTTParty
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::Category < DistributorCentral::Base
   base_uri "#{ENV['DISTRIBUTOR_CENTRAL_URL']}/resources/xml/category_list.cfm"
 
   attr_accessor :guid, :name, :children

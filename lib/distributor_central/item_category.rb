@@ -1,8 +1,4 @@
-class DistributorCentral::ItemCategory
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::ItemCategory < DistributorCentral::Base
   attr_accessor :guid, :name
 
   def self.extract(node)

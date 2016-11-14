@@ -1,9 +1,4 @@
-class DistributorCentral::Product
-  include HTTParty
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::Product < DistributorCentral::Base
   attr_accessor :company_name,
     :item_name,
     :max_retail,
@@ -21,8 +16,8 @@ class DistributorCentral::Product
   def self.product_list(factory_name)
     coll = []
     uri = "#{base_uri}?acctwebguid="\
-          "#{ENV['DISTRIBUTOR_CENTRAL_WEBACCTID']}&"\
-          "companyinfo=#{URI.encode(factory_name)}&MaxRows=0"
+      "#{ENV['DISTRIBUTOR_CENTRAL_WEBACCTID']}&"\
+      "companyinfo=#{URI.encode(factory_name)}&MaxRows=0"
 
     (0..Nokogiri::XML(get(uri).body).xpath('//totalresults').text.to_i).step(30) do |x|
       uri = "#{base_uri}?acctwebguid="\

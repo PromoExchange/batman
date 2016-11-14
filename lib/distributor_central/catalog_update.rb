@@ -1,9 +1,4 @@
-class DistributorCentral::CatalogUpdate
-  include HTTParty
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
+class DistributorCentral::CatalogUpdate < DistributorCentral::Base
   attr_accessor :acct_guid,
     :date_added_search,
     :company_name,

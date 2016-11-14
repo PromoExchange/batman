@@ -77,7 +77,7 @@ $(function(){
           );
           var number_options = 0;
           var shipping_option_control = $('#purchase_shipping_option');
-          if( typeof selected_shipping_option == 'undefined' ) {
+          if(typeof selected_shipping_option == 'undefined') {
             selected_shipping_option = data.shipping_option;
           }
           shipping_option_control.empty();
@@ -86,13 +86,13 @@ $(function(){
           $.each(sorted_options, function(index, option){
             var sign = '+';
             var option_money_text = accounting.formatMoney((parseFloat(option.delta)));
-            if( option.delta < 0.01 ) {
+            if(option.delta < 0.01) {
               sign = '';
               option_money_text = '';
             }
             var option_text = option.name + ' ' + sign + option_money_text;
             selected_value = false;
-            if( option.shipping_option == selected_shipping_option ) {
+            if(option.shipping_option == selected_shipping_option) {
               selected_value = true;
             }
             var new_option = $('<option>',
@@ -108,7 +108,7 @@ $(function(){
             number_options++;
           });
 
-          if( number_options > 0 && !$('#need_it_sooner').is(":visible") ) {
+          if(number_options > 0 && !$('#need_it_sooner').is(":visible") ) {
             $('#need_it_sooner').show();
           }
 
@@ -202,7 +202,6 @@ $(function(){
     $('#purchase-size .product-size').each(function() {
       $(this).val('');
     });
-    // $('#purchase_shipping_option').val(1);
   });
 
   function set_address_id() {

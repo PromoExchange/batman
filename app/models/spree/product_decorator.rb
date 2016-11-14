@@ -264,10 +264,8 @@ Spree::Product.class_eval do
   def best_price(options = {})
     raise 'Cannot find buyer' if company_store.buyer.nil?
     raise 'Cannot find default shipping adddress' if company_store.buyer.shipping_address.nil?
-    if options[:shipping_option].nil?
-      if fixed_price_shipping?
-        options[:shipping_option] = carton.per_item? ? :fixed_price_per_item : :fixed_price_total
-      end
+    if options[:shipping_option].nil? && fixed_price_shipping?
+      options[:shipping_option] = carton.per_item? ? :fixed_price_per_item : :fixed_price_total
     end
     raise 'Invalid shipping option requested' unless valid_shipping_option?(options[:shipping_option] || :ups_ground)
 

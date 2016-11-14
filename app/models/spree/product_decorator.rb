@@ -41,6 +41,8 @@ Spree::Product.class_eval do
     end
   end
 
+  delegate :fixed_price_shipping?, to: :carton
+
   def clear_cache
     quotes.each do |q|
       Rails.cache.delete("#{q.cache_key}/total_price")
@@ -248,9 +250,24 @@ Spree::Product.class_eval do
     Rails.logger.error("Failed to get lowest price, #{e.message}")
   end
 
+  def available_shipping_options
+    unless fixed_price_shipping?
+      return Spree::Quote.shipping_options.except('fixed_price_per_item', 'fixed_price_total')
+    end
+    carton.per_item ? ['fixed_price_per_item'] : ['fixed_price_total']
+  end
+
+  def valid_shipping_option?(shipping_option)
+    available_shipping_options.include?(shipping_option.to_s)
+  end
+
   def best_price(options = {})
     raise 'Cannot find buyer' if company_store.buyer.nil?
     raise 'Cannot find default shipping adddress' if company_store.buyer.shipping_address.nil?
+    if options[:shipping_option].nil? && fixed_price_shipping?
+      options[:shipping_option] = carton.per_item? ? :fixed_price_per_item : :fixed_price_total
+    end
+    raise 'Invalid shipping option requested' unless valid_shipping_option?(options[:shipping_option] || :ups_ground)
 
     options.reverse_merge!(
       quantity: last_price_break_minimum,
@@ -260,57 +277,34 @@ Spree::Product.class_eval do
 
     options[:quantity] ||= last_price_break_minimum
 
-    # TODO: Move cache point to here
     quote = quotes.where(
       quantity: options[:quantity].to_i,
       main_color: preconfigure.main_color,
       shipping_address: options[:shipping_address].to_i,
       custom_pms_colors: preconfigure.custom_pms_colors,
-      selected_shipping_option: Spree::ShippingOption::OPTION[options[:shipping_option]]
+      shipping_option: options[:shipping_option]
     ).first_or_create
 
     raise 'Failed to get price' if quote.nil?
 
-    total_price = quote.total_price(selected_shipping_option: options[:shipping_option])
+    total_price = quote.total_price(shipping_option: options[:shipping_option])
 
     if total_price.nil?
       return {
         error_code: quote.error_code.to_s,
         error_message: quote.messages.last,
         best_price: nil,
-        delivery_days: nil,
-        shipping_options: []
+        delivery_days: nil
       }
     end
 
     response = {
+      quote_id: quote.id,
       best_price: total_price,
+      shipping_option: quote.shipping_option,
       quantity: options[:quantity].to_i,
-      delivery_days: production_time + (quote.selected_shipping.present? ? quote.selected_shipping.delivery_days : 21),
-      shipping_options: []
+      delivery_days: production_time + quote.shipping_days
     }
-
-    lowest_total = Float::MAX
-
-    quote.shipping_options.each do |option|
-      adjusted_delivery_date = Time.zone.now + (2 + production_time + option.delivery_days).days
-      total_cost = quote.total_price(
-        selected_shipping_option: Spree::ShippingOption::OPTION.key(option.shipping_option)
-      )
-      lowest_total = [lowest_total, total_cost].min
-      response[:shipping_options].push(
-        name: option.name,
-        total_cost: total_cost,
-        delta: 0.0,
-        delivery_date: adjusted_delivery_date,
-        delivery_days: option.delivery_days,
-        shipping_option: option.shipping_option
-      )
-    end
-
-    response[:shipping_options].each do |option|
-      option[:delta] = (option[:total_cost].to_f - lowest_total).round(2)
-    end
 
     response
   rescue StandardError => e

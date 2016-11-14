@@ -4,11 +4,13 @@ module Spree::QuoteCalculator
   include QuoteCalculatorShipping
   include QuoteCalculatorFees
 
-  def calculate(options = {})
+  def best_price(options = {})
     clear_log
 
+    log("Best price called #{options}")
+
     [
-      :selected_shipping_option
+      :shipping_option
     ].each do |o|
       raise "Cannot calculate quote, missing required option [#{o}]" unless options.key?(o)
     end
@@ -42,15 +44,9 @@ module Spree::QuoteCalculator
     apply_tax_rate
 
     # @see module Spree::QuoteCalculatorShipping
-    # @note: Unit price is *not* adjusted in calculate_shipping
-    shipping_cost = calculate_shipping
-    raise 'Failed to calculate shipping' if shipping_cost.nil?
+    apply_shipping_cost
 
-    log("Selected Shipping cost #{shipping_cost}")
-    log("Selected Shipping option #{Spree::ShippingOption::OPTION.key(selected_shipping_option)}")
-    self.unit_price += (shipping_cost / quantity)
-    log("After applying shipping #{self.unit_price}")
-
+    # @see module Spree::QuoteCalculatorShippingUpcharge
     apply_shipping_upcharge
 
     # @see module Spree:QuoteCalculatorFees

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161027142927) do
+ActiveRecord::Schema.define(version: 20161112213905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -826,15 +826,17 @@ ActiveRecord::Schema.define(version: 20161027142927) do
   end
 
   create_table "spree_quotes", force: :cascade do |t|
-    t.integer "quantity",                               null: false
-    t.integer "product_id",                             null: false
-    t.integer "shipping_address_id",                    null: false
-    t.integer "main_color_id",                          null: false
+    t.integer "quantity",                          null: false
+    t.integer "product_id",                        null: false
+    t.integer "shipping_address_id",               null: false
+    t.integer "main_color_id",                     null: false
     t.string  "custom_pms_colors"
-    t.decimal "unit_price",               default: 0.0
-    t.text    "workbook",                 default: ""
-    t.string  "reference",                default: ""
-    t.integer "selected_shipping_option", default: 1
+    t.decimal "unit_price",          default: 0.0
+    t.text    "workbook",            default: ""
+    t.string  "reference",           default: ""
+    t.integer "shipping_option",     default: 1
+    t.integer "shipping_days",       default: 5,   null: false
+    t.decimal "shipping_cost"
   end
 
   create_table "spree_refund_reasons", force: :cascade do |t|
@@ -1023,15 +1025,6 @@ ActiveRecord::Schema.define(version: 20161027142927) do
   create_table "spree_shipping_methods_zones", id: false, force: :cascade do |t|
     t.integer "shipping_method_id"
     t.integer "zone_id"
-  end
-
-  create_table "spree_shipping_options", force: :cascade do |t|
-    t.string   "name",                          null: false
-    t.datetime "delivery_date",                 null: false
-    t.integer  "delivery_days",                 null: false
-    t.integer  "shipping_option",               null: false
-    t.decimal  "shipping_cost",   default: 0.0, null: false
-    t.integer  "quote_id",                      null: false
   end
 
   create_table "spree_shipping_rates", force: :cascade do |t|

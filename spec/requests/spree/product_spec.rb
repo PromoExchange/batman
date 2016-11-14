@@ -22,7 +22,7 @@ describe 'Products API' do
       {
         id: product.id,
         shipping_address: shipping_address.id,
-        shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+        shipping_option: :ups_ground
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '675.37'
@@ -42,7 +42,7 @@ describe 'Products API' do
         quantity: 300,
         id: product.id,
         shipping_address: shipping_address.id,
-        shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+        shipping_option: :ups_ground
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '6430.74'
@@ -61,7 +61,7 @@ describe 'Products API' do
       {
         id: product.id,
         shipping_address: shipping_address.id,
-        shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+        shipping_option: :ups_ground
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '721.5'
@@ -84,7 +84,7 @@ describe 'Products API' do
         purchase:
         {
           shipping_address: shipping_address.id,
-          shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+          shipping_option: :ups_ground
         }
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
@@ -105,7 +105,7 @@ describe 'Products API' do
         quantity: 200,
         id: product.id,
         shipping_address: shipping_address.id,
-        shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+        shipping_option: :ups_ground
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '4782.0'
@@ -124,7 +124,7 @@ describe 'Products API' do
       {
         id: product.id,
         shipping_address: shipping_address.id,
-        shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+        shipping_option: :ups_ground
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '759.0'
@@ -144,7 +144,7 @@ describe 'Products API' do
         quantity: 200,
         id: product.id,
         shipping_address: shipping_address.id,
-        shipping_option: Spree::ShippingOption::OPTION[:ups_ground]
+        shipping_option: :ups_ground
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '4382.0'
@@ -164,7 +164,7 @@ describe 'Products API' do
         quantity: 200,
         id: product.id,
         shipping_address: shipping_address.id,
-        shipping_option: Spree::ShippingOption::OPTION[:ups_next_day_air]
+        shipping_option: :ups_next_day_air
       }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
     expect(response).to have_http_status(200)
     expect(json[0]['best_price']).to eq '4314.74'

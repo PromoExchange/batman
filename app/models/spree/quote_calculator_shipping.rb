@@ -2,14 +2,14 @@ module Spree::QuoteCalculatorShipping
   include QuoteCalculatorFixedShipping
   include QuoteCalculatorShippingUpcharge
 
-  def calculate_shipping
+  def apply_shipping_cost
     carton = product.carton
     log("Carton: #{carton}")
 
     raise 'Shipping carton is not active' unless carton.active?
 
     # @see Spree::QuoteCalculatorFixedShipping
-    return calculate_fixed_price unless product.carton.fixed_price.nil?
+    return apply_fixed_price_shipping unless product.carton.fixed_price.nil?
 
     shipping_weight = carton.weight
     shipping_dimensions = carton.to_s
@@ -56,68 +56,36 @@ module Spree::QuoteCalculatorShipping
       return nil
     end
 
-    # TODO: Why? Directly access the rates hash
-    ups_rates = response.rates.sort_by(&:price).collect { |rate| [rate.service_name, rate.price, rate.delivery_date] }
-
-    # TODO: Use Service code!
-    shipping_option_map = {
-      'UPS Ground' => :ups_ground,
-      'UPS Three-Day Select' => :ups_3day_select,
-      'UPS Second Day Air' => :ups_second_day_air,
-      'UPS Next Day Air Saver' => :ups_next_day_air_saver,
-      'UPS Next Day Air Early A.M.' => :ups_next_day_air_early_am,
-      'UPS Next Day Air' => :ups_next_day_air
+    service_code_rate_map = {
+      ups_ground: '03',
+      ups_3day_select: '12',
+      ups_second_day_air: '02',
+      ups_next_day_air_saver: '13',
+      ups_next_day_air: '01',
+      ups_next_day_air_early_am: '14'
     }.freeze
 
-    shipping_options.destroy_all
+    rate = response.rates.find { |r| r.service_code == service_code_rate_map[shipping_option.to_sym] }
 
-    shipping_sym = Spree::ShippingOption::OPTION.key(selected_shipping_option)
-
-    shipping_cost = nil
-    selected_shipping_cost = nil
-    delivery_date = nil
-
-    ups_rates.each do |rate|
-      shipping_cost = (rate[1] * number_of_packages.to_f) / 100
-      delivery_date = rate[2]
-      service_name = rate[0]
-      mapped_shipping_option = shipping_option_map[rate[0]]
-
-      next unless mapped_shipping_option == :ups_ground
-
-      raise "Unable to find mapped shipping options for #{rate[0]}" if mapped_shipping_option.nil?
-
-      selected_shipping_cost = shipping_cost if mapped_shipping_option == shipping_sym
-
-      begin
-        delta = 0
-        if delivery_date.nil?
-          # UPS Ground does not always have a delivery_date
-          # We take the next rate delivery date and add 2
-          delivery_date ||= ups_rates[1][2]
-          delta = 2
-        end
-        days_diff = delta + ((delivery_date.to_f - Time.zone.now.to_f) / 1.day.to_i).ceil
-      rescue
-        days_diff = 5
-      end
-
-      shipping_options.build(
-        name: service_name,
-        delivery_date: Time.zone.now + days_diff.days,
-        delivery_days: days_diff,
-        shipping_option: Spree::ShippingOption::OPTION[mapped_shipping_option],
-        shipping_cost: shipping_cost
-      )
+    delivery_date = rate.delivery_date
+    if delivery_date.nil?
+      delivery_date = response.rates.find do |r|
+        r.service_code == service_code_rate_map[:ups_3day_select]
+      end.delivery_date + 2.days
     end
 
-    if selected_shipping_cost.nil?
-      log('ERROR: Failed to get UPS shipping rates')
-      self.error_code = :shipping_calculation_error
-      return nil
-    end
+    self.shipping_days = ((delivery_date.to_f - Time.zone.now.to_f) / 1.day.to_i).ceil
+    log("Shipping days #{shipping_days}")
 
-    selected_shipping_cost
+    log("Estimated delivery date (if shipped today) #{delivery_date}")
+
+    self.shipping_cost = (rate.total_price * number_of_packages.to_f) / 100
+    log("Shipping cost #{shipping_cost}")
+
+    log("Selected Shipping option #{shipping_option}")
+
+    self.unit_price += (shipping_cost / quantity)
+    log("After applying shipping cost #{self.unit_price}")
   rescue => e
     log("ERROR: (calculate shipping): #{e}")
     0.0

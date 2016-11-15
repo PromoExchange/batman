@@ -82,12 +82,11 @@ module Spree::QuoteCalculator
       eqp_price = product.eqp_price
       log('Using EQP')
       log("EQP Price (base): #{eqp_price}")
-      log("EQP Price code: #{product.price_code(quantity)}")
 
-      price_codes = Spree::Price.price_code_to_array(product.price_code(quantity))
-      log("EQP Applicable Price code: #{price_codes.last}")
+      eqp_price_code = Spree::Price.price_code_to_array(p.eqp_price_code).last
+      log("EQP Applicable Price code: #{eqp_price_code}")
 
-      eqp_price = Spree::Price.discount_price(price_codes.last, eqp_price)
+      eqp_price = Spree::Price.discount_price(eqp_price_code, eqp_price)
       log("EQP Discounted Price (price_code): #{eqp_price}")
 
       discount = markup.eqp_discount

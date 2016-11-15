@@ -3,6 +3,7 @@ FactoryGirl.define do
     association :supplier, factory: :supplier_company_store
     association :original_supplier, factory: :supplier
     preconfigure
+    price_code = '3V'
 
     after(:create) do |product|
       FactoryGirl.create_list(:color_product, 5, product: product)
@@ -15,7 +16,6 @@ FactoryGirl.define do
         company_store_id: company_store.id
       )
 
-      price_code = '3V'
       i = 0
       [
         ['(25..99)', 29.99],
@@ -39,6 +39,10 @@ FactoryGirl.define do
 
     trait :with_no_eqp_range do
       no_eqp_range '(25..150)'
+    end
+
+    trait :with_price_codes do
+      price_code = 'PQR'
     end
 
     trait :with_less_than_minimum do

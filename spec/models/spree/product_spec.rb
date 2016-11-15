@@ -58,6 +58,16 @@ RSpec.describe Spree::Product, type: :model do
       expect(p.price_code).to eq 'V'
     end
 
+    it 'should give a eqp price_code', focus: true do
+      p = FactoryGirl.create(:px_product, :with_price_codes)
+      expect(p.eqp_price_code).to eq 'R'
+    end
+
+    it 'should give a eqp price', focus: true do
+      p = FactoryGirl.create(:px_product)
+      expect(p.eqp_price).to eq 25.99
+    end
+
     it 'should have a valid carton' do
       product = FactoryGirl.create(:px_product)
       expect(product.carton.active?).to be_truthy

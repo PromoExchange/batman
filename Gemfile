@@ -32,6 +32,7 @@ gem 'remotipart'
 gem 'slim', '~> 3.0', '>= 3.0.6'
 gem 'nokogiri'
 gem 'ruby-prof'
+gem 'slack-notifier'
 
 # spree ecommerce
 gem 'spree', '3.0.5'

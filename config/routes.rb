@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   get '/company_store', to: 'spree/company_store#index'
   get '/company_store/:id', to: 'spree/company_store#show'
   post '/inspire_me_request', to: 'spree/company_store#inspire_me'
+  get 'company_store/:id/products', to: 'spree/company_store#products'
 
   resources :auctions,
     controller: 'spree/auctions',

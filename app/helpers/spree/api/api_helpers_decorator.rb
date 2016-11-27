@@ -118,4 +118,16 @@ Spree::Api::ApiHelpers.module_eval do
       :slug
     ])
   mattr_reader :product_attributes
+
+  class_variable_set(:@@company_store_attributes,
+    [
+      :id,
+      :name,
+      :slug,
+      :supplier_id,
+      :buyer_id,
+      :display_name,
+      :host
+    ])
+  mattr_reader :company_store_attributes
 end

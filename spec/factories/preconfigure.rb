@@ -6,5 +6,6 @@ FactoryGirl.define do
     logo
     association :main_color, factory: :color_product
     custom_pms_colors '321'
+    primary true
   end
 end

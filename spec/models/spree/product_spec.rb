@@ -4,7 +4,7 @@ RSpec.describe Spree::Product, type: :model do
   describe 'associations' do
     it { should belong_to(:supplier) }
     it { should have_many(:imprint_methods) }
-    it { should have_one(:preconfigure) }
+    it { should have_many(:preconfigures) }
     it { should have_many(:upcharges) }
     it { should have_many(:color_product) }
     it { should have_one(:carton) }
@@ -63,9 +63,14 @@ RSpec.describe Spree::Product, type: :model do
       expect(product.carton.active?).to be_truthy
     end
 
+    it 'should only have 1 primary configuration' do
+      product = FactoryGirl.create(:px_product)
+      expect(product.primary_configuration).not_to be_nil
+    end
+
     it 'should have a valid preconfig' do
       product = FactoryGirl.create(:px_product)
-      expect(product.preconfigure.custom_pms_colors).to eq '321'
+      expect(product.primary_configuration.custom_pms_colors).to eq '321'
     end
 
     it 'should save a valid px_product' do

@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     post '/auctions/:id/reject_order' => 'spree/api/auctions#reject_order'
     post '/auctions/:id/resolve_dispute' => 'spree/api/auctions#resolve_dispute'
     get '/products/:id/best_price' => 'spree/api/products#best_price'
+    post '/products/:id/configure' => 'spree/api/products#configure'
 
     resources :request_ideas, controller: 'spree/api/request_ideas' do
       member do

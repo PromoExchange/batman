@@ -2,11 +2,10 @@ FactoryGirl.define do
   factory :px_product, class: Spree::Product, parent: :product do
     association :supplier, factory: :supplier_company_store
     association :original_supplier, factory: :supplier
-    preconfigure
 
     after(:create) do |product|
       FactoryGirl.create_list(:color_product, 5, product: product)
-      FactoryGirl.create(:carton, product: product)
+      product.carton = FactoryGirl.create(:carton, product_id: product.id)
       product.imprint_methods << FactoryGirl.create(:imprint_method)
       company_store = FactoryGirl.create(:company_store, supplier: product.supplier)
       FactoryGirl.create(
@@ -14,6 +13,8 @@ FactoryGirl.define do
         supplier_id: product.original_supplier_id,
         company_store_id: company_store.id
       )
+
+      product.preconfigures << FactoryGirl.create(:preconfigure)
 
       price_code = '3V'
       i = 0

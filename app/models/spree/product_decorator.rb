@@ -7,7 +7,7 @@ Spree::Product.class_eval do
   has_many :color_product
   has_one :carton, dependent: :destroy
   belongs_to :original_supplier, class_name: 'Spree::Supplier', inverse_of: :products
-  has_one :preconfigure, dependent: :destroy
+  has_many :preconfigures, dependent: :destroy
   has_many :purchase
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
@@ -42,6 +42,11 @@ Spree::Product.class_eval do
   end
 
   delegate :fixed_price_shipping?, to: :carton
+
+  def primary_configuration
+    raise 'More than one primary configuration' if preconfigures.where(primary: true).count > 1
+    preconfigures.find_by(primary: true)
+  end
 
   def clear_cache
     quotes.each do |q|
@@ -262,11 +267,10 @@ Spree::Product.class_eval do
   end
 
   def best_price(options = {})
-    raise 'Cannot find buyer' if company_store.buyer.nil?
-    raise 'Cannot find default shipping adddress' if company_store.buyer.shipping_address.nil?
     if options[:shipping_option].nil? && fixed_price_shipping?
       options[:shipping_option] = carton.per_item? ? :fixed_price_per_item : :fixed_price_total
     end
+
     raise 'Invalid shipping option requested' unless valid_shipping_option?(options[:shipping_option] || :ups_ground)
 
     options.reverse_merge!(
@@ -275,13 +279,19 @@ Spree::Product.class_eval do
       shipping_address: company_store.buyer.shipping_address.id
     )
 
-    options[:quantity] ||= last_price_break_minimum
+    configuration = primary_configuration
+
+    if options[:configuration].present?
+      configuration = Spree::Preconfigure.find(options[:configuration].to_i)
+    end
+
+    raise 'Unable to find product configuration' if configuration.nil?
 
     quote = quotes.where(
-      quantity: options[:quantity].to_i,
-      main_color: preconfigure.main_color,
-      shipping_address: options[:shipping_address].to_i,
-      custom_pms_colors: preconfigure.custom_pms_colors,
+      quantity: options[:quantity],
+      main_color: configuration.main_color,
+      shipping_address: options[:shipping_address],
+      custom_pms_colors: configuration.custom_pms_colors,
       shipping_option: options[:shipping_option]
     ).first_or_create
 
@@ -308,8 +318,9 @@ Spree::Product.class_eval do
 
     response
   rescue StandardError => e
-    Rails.logger.error("Failed to get best price: #{e}")
-    { best_price: 0.0, delivery_days: 14 }
+    error_msg = "Failed to get best price: #{e}"
+    Rails.logger.error(error_msg)
+    { best_price: 0.0, delivery_days: 14, error: error_msg }
   end
 
   def price_breaks

@@ -27,17 +27,14 @@
         <%= render partial: 'logos', locals: { f: f } %>
         <%= render partial: 'main_color', locals: { f: f } %>
         <%= render partial: 'price_breaks', locals: { f: f } %>
-        <% if @product.wearable? %>
+        <div class="<%= 'col-md-4' unless @product.wearable? %>">
           <%= render partial: 'quantity', locals: { f: f } %>
-          <%= render partial: 'address_drop', locals: { f: f } %>
+        </div>
+        <% if @current_company_store.slug == 'gooten' %>
+          <%= render partial: 'address', locals: { f: f } %>
         <% else %>
-          <div class="row">
-            <div class="col-md-4">
-              <%= render partial: 'quantity', locals: { f: f } %>
-            </div>
-            <div class="col-md-8">
-              <%= render partial: 'address_drop', locals: { f: f } %>
-            </div>
+          <div class="<%= 'col-md-8' unless @product.wearable? %>">
+            <%= render partial: 'address_drop', locals: { f: f } %>
           </div>
         <% end %>
         <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>

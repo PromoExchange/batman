@@ -22,3 +22,37 @@ html, body {
 .top-logo {
   width: 290px;
 }
+
+.mobile-image {
+  width:300px;
+}
+
+#need_it_sooner {
+  display: flex;
+  justify-content: center;
+}
+
+#new_purchase_name {
+  text-align: center;
+}
+
+#new_purchase {
+  padding: 10px;
+  margin: 0;
+  border: 0;
+  min-width: 0;
+}
+
+#mobile-align-center {
+  margin: 0 0 10px;
+  text-align: center;
+  padding-top: 10px;
+}
+.active_price {
+  text-align:center;
+}
+
+.form-actions {
+  text-align:center;
+  margin:auto;
+}

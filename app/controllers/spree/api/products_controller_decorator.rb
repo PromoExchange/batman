@@ -2,36 +2,26 @@ Spree::Api::ProductsController.class_eval do
   def best_price
     @product = Spree::Product.find(params[:id])
 
-    best_price_params = {
-      quantity: params[:quantity],
-      shipping_option: params[:shipping_option],
-      shipping_address: params[:shipping_address],
-      configuration: params[:configuration]
-    }
+    best_price_params = {}
+    purchase_params = params[:purchase]
 
-    best_price_params[:quantity] &&= best_price_params[:quantity].to_i
-    best_price_params[:quantity] ||= @product.last_price_break_minimum
+    best_price_params[:quantity] = (purchase_params && purchase_params.key?(:quantity)) && purchase_params[:quantity].to_i
+    best_price_params[:quantity] ||= params[:quantity] && params[:quantity].to_i
+    best_price_params[:quantity] ||= @product.minimum_quantity
 
-    best_price_params[:shipping_option] &&= best_price_params[:shipping_option].to_sym
+    best_price_params[:shipping_option] = (purchase_params && purchase_params.key?(:shipping_option)) && purchase_params[:shipping_option].to_sym
+    best_price_params[:shipping_option] ||= params[:shipping_option] && params[:shipping_option].to_sym
     best_price_params[:shipping_option] ||= :ups_ground
 
+    best_price_params[:shipping_address] = (purchase_params && purchase_params.key?(:shipping_address)) && purchase_params[:shipping_address].to_i
+    best_price_params[:shipping_address] ||= params[:shipping_address] && params[:shipping_address].to_i
     best_price_params[:shipping_address] ||= @product.company_store.buyer.shipping_address.id
-
-    # Called from the website JS
-    if params[:purchase].present?
-      best_price_params = {
-        quantity: params[:purchase][:quantity].to_i,
-        shipping_option: (params[:purchase][:shipping_option].to_sym || :ups_ground),
-        shipping_address: params[:purchase][:shipping_address].to_i
-      }
-    end
 
     if best_price_params[:configuration].present?
       configuration = Spree::Preconfigure.find(best_price_params[:configuration])
       best_price_params = best_price_parms.reverse_merge.configuration.best_price_params
     end
 
-    # Best price for the supplied shipping option (the selected)
     requested_price = @product.best_price(best_price_params)
 
     response = {
@@ -42,7 +32,7 @@ Spree::Api::ProductsController.class_eval do
     }
 
     @product.available_shipping_options.each do |soption|
-      this_shipping_option = soption[0].to_sym
+      this_shipping_option = soption.to_sym
       alternate_price = @product.best_price(
         quantity: best_price_params[:quantity],
         shipping_option: this_shipping_option,

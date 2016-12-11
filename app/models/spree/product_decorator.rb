@@ -257,7 +257,7 @@ Spree::Product.class_eval do
 
   def available_shipping_options
     unless fixed_price_shipping?
-      return Spree::Quote.shipping_options.except('fixed_price_per_item', 'fixed_price_total')
+      return Spree::Quote.shipping_options.except('fixed_price_per_item', 'fixed_price_total').keys
     end
     carton.per_item ? ['fixed_price_per_item'] : ['fixed_price_total']
   end

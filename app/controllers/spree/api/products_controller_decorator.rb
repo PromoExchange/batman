@@ -5,22 +5,20 @@ Spree::Api::ProductsController.class_eval do
     best_price_params = {}
     purchase_params = params[:purchase]
 
-    best_price_params[:quantity] = (purchase_params && purchase_params.key?(:quantity)) && purchase_params[:quantity].to_i
+    best_price_params[:quantity] = (purchase_params && purchase_params.key?(:quantity)) &&
+      purchase_params[:quantity].to_i
     best_price_params[:quantity] ||= params[:quantity] && params[:quantity].to_i
     best_price_params[:quantity] ||= @product.minimum_quantity
 
-    best_price_params[:shipping_option] = (purchase_params && purchase_params.key?(:shipping_option)) && purchase_params[:shipping_option].to_sym
+    best_price_params[:shipping_option] = (purchase_params && purchase_params.key?(:shipping_option)) &&
+      purchase_params[:shipping_option].to_sym
     best_price_params[:shipping_option] ||= params[:shipping_option] && params[:shipping_option].to_sym
     best_price_params[:shipping_option] ||= :ups_ground
 
-    best_price_params[:shipping_address] = (purchase_params && purchase_params.key?(:shipping_address)) && purchase_params[:shipping_address].to_i
+    best_price_params[:shipping_address] = (purchase_params && purchase_params.key?(:shipping_address)) &&
+      purchase_params[:shipping_address].to_i
     best_price_params[:shipping_address] ||= params[:shipping_address] && params[:shipping_address].to_i
     best_price_params[:shipping_address] ||= @product.company_store.buyer.shipping_address.id
-
-    if best_price_params[:configuration].present?
-      configuration = Spree::Preconfigure.find(best_price_params[:configuration])
-      best_price_params = best_price_parms.reverse_merge.configuration.best_price_params
-    end
 
     requested_price = @product.best_price(best_price_params)
 

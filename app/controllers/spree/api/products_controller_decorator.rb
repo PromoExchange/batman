@@ -15,10 +15,17 @@ Spree::Api::ProductsController.class_eval do
     best_price_params[:shipping_option] ||= params[:shipping_option] && params[:shipping_option].to_sym
     best_price_params[:shipping_option] ||= :ups_ground
 
-    best_price_params[:shipping_address] = (purchase_params && purchase_params.key?(:shipping_address)) &&
-      purchase_params[:shipping_address].to_i
-    best_price_params[:shipping_address] ||= params[:shipping_address] && params[:shipping_address].to_i
-    best_price_params[:shipping_address] ||= @product.company_store.buyer.shipping_address.id
+    # Shipping address can either be an ID
+    if params[:shipping_address] && !(params[:shipping_address].class == String)
+      params[:shipping_address][:country_id] = Spree::Country.find_by(iso: 'US').id
+      address = Spree::Address.where(params[:shipping_address].to_hash).first_or_create
+      best_price_params[:shipping_address] = address.id
+    else
+      best_price_params[:shipping_address] = (purchase_params && purchase_params.key?(:shipping_address)) &&
+        purchase_params[:shipping_address].to_i
+      best_price_params[:shipping_address] ||= params[:shipping_address] && params[:shipping_address].to_i
+      best_price_params[:shipping_address] ||= @product.company_store.buyer.shipping_address.id
+    end
 
     requested_price = @product.best_price(best_price_params)
 

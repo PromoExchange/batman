@@ -55,7 +55,7 @@ RSpec.describe Spree::Quote, type: :model do
     expect((quote.unit_price - 30.89).abs).to be < 0.01
   end
 
-  describe 'Can only run locally', need_ups: true do
+  describe '(Can only run locally)', need_ups: true do
     it 'should calculate quote with 25 quantity' do
       quote = FactoryGirl.create(:quote, quantity: 25)
       expect((quote.total_price - 767.33).abs).to be < 0.01

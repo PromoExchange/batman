@@ -10,7 +10,7 @@ describe 'Products API' do
     expect(response).to have_http_status(401)
   end
 
-  describe 'Can only run locally', need_ups: true do
+  describe '(Can only run locally)', need_ups: true do
     it 'must get a best price' do
       product = FactoryGirl.create(
         :px_product,
@@ -41,34 +41,30 @@ describe 'Products API' do
       expect(json).not_to be_empty
     end
 
-    xit 'must get a best price with a configuration' do
+    it 'must get a best price with a specified address' do
       product = FactoryGirl.create(:px_product)
-      shipping_address = FactoryGirl.create(:address)
       get "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          shipping_address: shipping_address.id,
+          shipping_address:
+          {
+            company: 'company',
+            firstname: 'test_firstname',
+            lastname: 'test_lastname',
+            address1: 'address1',
+            address2: 'address2',
+            city: 'city',
+            zipcode: '19020',
+            phone: '123-456-7890',
+            state_id: 1
+          },
           shipping_option: :ups_ground
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect(json).not_to be_empty
-      expect(json.length).to eq 5
+      expect((json['best_price'].to_f - 764.59).abs).to be < 0.01
     end
 
-    xit 'must create a product configuration' do
-      product = FactoryGirl.create(:px_product)
-      configuration = FactoryGirl.create(:preconfigure)
-      shipping_address = FactoryGirl.create(:address)
-      post "/api/products/#{product.id}/configure", {
-        imprint_method: configuration.imprint_method,
-        main_color: configuration.main_color.color,
-        custom_pms_colors: configuration.custom_pms_colors,
-        address: shipping_address.as_json
-      }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
-      expect(response).to have_http_status(200)
-    end
-
-    it 'must get a best price with quantity' do
+    it 'must get a best price with quantity', focus: true do
       product = FactoryGirl.create(
         :px_product,
         :with_setup_upcharges,

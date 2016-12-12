@@ -33,6 +33,7 @@ html, body {
   max-width: 100%;
 }
 
+<<<<<<< HEAD
 .mobile-image {
   width:300px;
 }
@@ -80,5 +81,12 @@ html, body {
   #show-invoice li, h4 {
   text-align:center;
   margin:auto;
+=======
+@media only screen and (max-width: 900px) {
+  .cs-image {
+    width: 200px;
+    margin: auto;
+    display:block;
+>>>>>>> a016a2e42f693a211a07f76586a9a04b7bb09c0c
     }
 }

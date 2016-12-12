@@ -8,10 +8,20 @@
   width: auto;
 }
 
+@media only screen and (max-width: 900px) {
 #cs-container {
   margin: 0 auto;
   width: auto;
   overflow-x: scroll;
+      }
+}
+
+@media only screen and (max-width: 900px) {
+  .cs-image {
+    width: 200px;
+    margin: auto;
+    display:block;
+    }
 }
 
 html, body {
@@ -20,16 +30,18 @@ html, body {
 }
 
 .top-logo {
-  width: 290px;
+  max-width: 100%;
 }
 
 .mobile-image {
   width:300px;
 }
 
-#need_it_sooner {
+@media only screen and (max-width: 900px) {
+  #need_it_sooner {
   display: flex;
   justify-content: center;
+    }
 }
 
 #new_purchase_name {
@@ -43,21 +55,30 @@ html, body {
   min-width: 0;
 }
 
-#mobile-align-center {
-  margin: 0 0 10px;
-  text-align: center;
-  padding-top: 10px;
-}
-.active_price {
-  text-align:center;
-}
-
-.form-actions {
-  text-align:center;
-  margin:auto;
+@media only screen and (max-width: 900px) {
+  #mobile-align-center {
+   margin: 0 0 10px;
+   text-align: center;
+   padding-top: 10px;
+    }
 }
 
-#show-invoice li, h4 {
+@media only screen and (max-width: 900px) {
+  .active_price {
+  text-align:center;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+  .form-actions {
   text-align:center;
   margin:auto;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+  #show-invoice li, h4 {
+  text-align:center;
+  margin:auto;
+    }
 }

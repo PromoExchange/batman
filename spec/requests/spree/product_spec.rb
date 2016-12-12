@@ -64,7 +64,55 @@ describe 'Products API' do
       expect((json['best_price'].to_f - 764.59).abs).to be < 0.01
     end
 
-    it 'must get a best price with quantity', focus: true do
+    it 'must get a best price with a specified address and quantity of 1' do
+      product = FactoryGirl.create(:px_product)
+      get "/api/products/#{product.id}/best_price",
+        {
+          id: product.id,
+          quantity: 1,
+          shipping_address:
+          {
+            company: 'company',
+            firstname: 'test_firstname',
+            lastname: 'test_lastname',
+            address1: 'address1',
+            address2: 'address2',
+            city: 'city',
+            zipcode: '19020',
+            phone: '123-456-7890',
+            state_id: 1
+          },
+          shipping_option: :ups_ground
+        }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
+      expect(response).to have_http_status(200)
+      expect((json['best_price'].to_f - 43.86).abs).to be < 0.01
+    end
+
+    it 'must get a best price with a specified address and quantity of 1 and :with_less_than_minimum', focus: true do
+      product = FactoryGirl.create(:px_product, :with_less_than_minimum)
+      get "/api/products/#{product.id}/best_price",
+        {
+          id: product.id,
+          quantity: 1,
+          shipping_address:
+          {
+            company: 'company',
+            firstname: 'test_firstname',
+            lastname: 'test_lastname',
+            address1: 'address1',
+            address2: 'address2',
+            city: 'city',
+            zipcode: '19020',
+            phone: '123-456-7890',
+            state_id: 1
+          },
+          shipping_option: :ups_ground
+        }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
+      expect(response).to have_http_status(200)
+      expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
+    end
+
+    it 'must get a best price with quantity' do
       product = FactoryGirl.create(
         :px_product,
         :with_setup_upcharges,

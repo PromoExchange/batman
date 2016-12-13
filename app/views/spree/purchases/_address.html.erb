@@ -1,1 +1,21 @@
-This is the darn address
+<%= f.fields_for :address, class: 'form' do |f| %>
+  <div class="form-group">
+    <%= f.label(:company, Spree.t(:company)) %>
+    <%= f.text_field(:company, class: 'form-control', placeholder: 'Company Name')%>
+
+    <%= f.label(:address1, Spree.t(:address_1)) %>
+    <%= f.text_field(:address1, class: 'form-control', placeholder: 'Address 1')%>
+
+    <%= f.label(:address2, Spree.t(:address_2)) %>
+    <%= f.text_field(:address2, class: 'form-control', placeholder: 'Address 2')%>
+
+    <%= f.label(:city, Spree.t(:city)) %>
+    <%= f.text_field(:city, class: 'form-control', placeholder: 'City')%>
+
+    <%= f.label(:state, Spree.t(:state)) %>
+    <%= f.select :state, options_for_select(@states.map { |state| [state.name, state.id] }), {}, { class: 'form-control' } %>
+
+    <%= f.label(:zipcode, Spree.t(:zip_code)) %>
+    <%= f.text_field(:zipcode, class: 'form-control', placeholder: 'Zip Code')%>
+  </div>
+<% end %>

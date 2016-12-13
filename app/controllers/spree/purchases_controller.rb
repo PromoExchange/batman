@@ -130,6 +130,8 @@ class Spree::PurchasesController < Spree::StoreController
       @addresses << address
     end
 
+    @states = Spree::State.where(country: Spree::Country.find_by(iso: 'US'))
+
     @shipping_options = [
       ['UPS Ground', :ups_ground],
       ['UPS Three-Day Select', :ups_3day_select],

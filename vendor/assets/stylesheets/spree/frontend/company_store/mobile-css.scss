@@ -1,0 +1,92 @@
+.product-ideas {
+  margin-top: 50px;
+  line-break: normal;
+}
+
+.cs-body {
+  background-color: white;
+  width: auto;
+}
+
+@media only screen and (max-width: 900px) {
+#cs-container {
+  margin: 0 auto;
+  width: auto;
+  overflow-x: scroll;
+      }
+}
+
+@media only screen and (max-width: 900px) {
+  .cs-image {
+    width: 300px;
+    margin: auto;
+    display:block;
+    }
+}
+
+html, body {
+  height: 100%;
+  overflow-x: scroll;
+}
+
+.top-logo {
+  max-width: 100%;
+}
+
+<<<<<<< HEAD
+.mobile-image {
+  width:300px;
+}
+
+@media only screen and (max-width: 900px) {
+  #need_it_sooner {
+  display: flex;
+  justify-content: center;
+    }
+}
+
+#new_purchase_name {
+  text-align: center;
+}
+
+#new_purchase {
+  padding: 10px;
+  margin: 0;
+  border: 0;
+  min-width: 0;
+}
+
+@media only screen and (max-width: 900px) {
+  #mobile-align-center {
+   margin: 0 0 10px;
+   text-align: center;
+   padding-top: 10px;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+  .active_price {
+  text-align:center;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+  .form-actions {
+  text-align:center;
+  margin:auto;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+  #show-invoice li, h4 {
+  text-align:center;
+  margin:auto;
+=======
+@media only screen and (max-width: 900px) {
+  .cs-image {
+    width: 200px;
+    margin: auto;
+    display:block;
+>>>>>>> a016a2e42f693a211a07f76586a9a04b7bb09c0c
+    }
+}

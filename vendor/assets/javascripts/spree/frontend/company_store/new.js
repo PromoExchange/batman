@@ -1,8 +1,8 @@
-$(function(){
-  var delay = (function(){
+$(function() {
+  var delay = (function() {
     var timer = 0;
-    return function(callback, ms){
-      clearTimeout (timer);
+    return function(callback, ms) {
+      clearTimeout(timer);
       timer = setTimeout(callback, ms);
     };
   })();
@@ -21,6 +21,7 @@ $(function(){
       min = parseInt(e.attr('min'));
       actual = parseInt(e.val());
     }
+
     return {
       min: min,
       actual: actual
@@ -32,7 +33,9 @@ $(function(){
     var min = 0;
 
     var quantities = get_quantity();
-    min = quantities.min;
+    if ($('#purchase_company_store_slug').val() !== 'gooten') {
+      min = quantities.min;
+    }
     actual = quantities.actual;
     $(".cs-active-price").hide();
 
@@ -42,20 +45,26 @@ $(function(){
       var product_id = $('#purchase_product_id').val();
       var selected_shipping_option = $('#purchase_shipping_option').val();
       var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
-      debugger;
       var params = {
         purchase: {
           quantity: actual,
-          shipping_address: address_id,
+          shipping_address: {
+            company: company,
+            address1: address1,
+            address2: address2,
+            city: city,
+            state_id: state_id,
+            zip_code: zip_code
+          },
           shipping_option: selected_shipping_option
+          pms_colors: ['1', '2', '3'] # TODO: Make this dynamic
         }
       };
 
-      var url = '/api/products/'+product_id+'/best_price';
       $.ajax({
         type: 'GET',
         contentType: "application/json",
-        url: url,
+        url: '/api/products/' + product_id + '/best_price',
         data: params,
         headers: {
           'X-Spree-Token': api_key
@@ -81,29 +90,26 @@ $(function(){
             selected_shipping_option = data.shipping_option;
           }
           shipping_option_control.empty();
-          sorted_options = data.shipping_options.sort(function(a,b)
-            { return a.shipping_option - b.shipping_option; });
-          $.each(sorted_options, function(index, option){
+          sorted_options = data.shipping_options.sort(function(a, b) { return a.shipping_option - b.shipping_option });
+          $.each(sorted_options, function(index, option) {
             var sign = '+';
             var option_money_text = accounting.formatMoney((parseFloat(option.delta)));
-            if(option.delta < 0.01) {
+            if (option.delta < 0.01) {
               sign = '';
               option_money_text = '';
             }
             var option_text = option.name + ' ' + sign + option_money_text;
             selected_value = false;
-            if(option.shipping_option == selected_shipping_option) {
+            if (option.shipping_option == selected_shipping_option) {
               selected_value = true;
             }
-            var new_option = $('<option>',
-              {
+            var new_option = $('<option>', {
                 value: option.shipping_option,
                 delta: option.delta,
                 name: option.name,
                 delivery_date: option.delivery_date,
                 selected: selected_value
-              })
-              .text(option_text);
+            }).text(option_text);
             shipping_option_control.append(new_option);
             number_options++;
           });
@@ -132,7 +138,9 @@ $(function(){
     if($('#address_drop').val() === '') {
       return;
     }
-    delay(function(){recalc_price();},500);
+    delay(function() {
+      recalc_price();
+    }, 500);
   });
 
   $('#purchase_ship_to_zip').change(function() {
@@ -150,8 +158,7 @@ $(function(){
     var new_price = old_price + delta;
 
     $('#ship_date').text(
-      moment(delivery_date)
-      .format('MMMM Do YYYY')
+      moment(delivery_date).format('MMMM Do YYYY');
     );
 
     var money_text = accounting.formatMoney(new_price);
@@ -161,15 +168,14 @@ $(function(){
       var option = $(this);
       var old_delta = parseFloat(option.attr('delta'));
       var new_delta = (old_price + old_delta) - new_price;
-      option.attr('delta', new_delta)
+      option.attr('delta', new_delta);
 
       var sign = '+';
       var option_money_text = accounting.formatMoney((parseFloat(new_delta)));
-      if( new_delta < 0 ) {
+      if (new_delta < 0) {
         sign = '-';
         option_money_text = accounting.formatMoney((parseFloat(Math.abs(new_delta))));
-      }
-      if( new_delta == 0 ) {
+      } else if (new_delta == 0) {
         sign = '';
         option_money_text = '';
       }
@@ -189,7 +195,7 @@ $(function(){
     $('#ship_date').text('--');
     var sum = 0;
     $('#purchase-size .product-size').each(function() {
-      sum+= parseInt('0'+ $(this).val());
+      sum += parseInt('0'+ $(this).val());
     });
     $('.total-qty span:last').text(sum);
     recalc_price();

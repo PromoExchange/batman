@@ -66,7 +66,7 @@ RSpec.describe Spree::Quote, type: :model do
       expect((quote.total_price - 3504.79).abs).to be < 0.01
     end
 
-    it 'should calculate quote with 225 quantity', focus: true do
+    it 'should calculate quote with 225 quantity' do
       quote = FactoryGirl.create(:quote, quantity: 225)
       expect((quote.total_price - 5864.37).abs).to be < 0.01
     end

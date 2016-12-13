@@ -119,7 +119,7 @@ describe Spree::Quote, type: :model do
       expect(quote2.reference).not_to be_empty
     end
 
-    it 'should have a specific cache key', focus: true do
+    it 'should have a specific cache key' do
       quote = FactoryGirl.create(:quote)
       expect(quote.cache_key =~ /#{quote.product.id}/).to be_truthy
       expect(quote.cache_key =~ /#{quote.quantity}/).to be_truthy

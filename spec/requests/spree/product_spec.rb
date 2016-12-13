@@ -88,7 +88,7 @@ describe 'Products API' do
       expect((json['best_price'].to_f - 43.86).abs).to be < 0.01
     end
 
-    it 'must get a best price with a specified address and quantity of 1 and :with_less_than_minimum', focus: true do
+    it 'must get a best price with a specified address and quantity of 1 and :with_less_than_minimum' do
       product = FactoryGirl.create(:px_product, :with_less_than_minimum)
       get "/api/products/#{product.id}/best_price",
         {
@@ -110,6 +110,81 @@ describe 'Products API' do
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
+    end
+
+    xit 'must get a best price with a specified address, quantity of 1 and pms_color of 1' do
+      product = FactoryGirl.create(:px_product, :with_run_upcharges)
+      get "/api/products/#{product.id}/best_price",
+        {
+          id: product.id,
+          quantity: 1,
+          custom_pms_colors: '321',
+          shipping_address:
+          {
+            company: 'company',
+            firstname: 'test_firstname',
+            lastname: 'test_lastname',
+            address1: 'address1',
+            address2: 'address2',
+            city: 'city',
+            zipcode: '19020',
+            phone: '123-456-7890',
+            state_id: 1
+          },
+          shipping_option: :ups_ground
+        }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
+      expect(response).to have_http_status(200)
+      expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
+    end
+
+    xit 'must get a best price with a specified address, quantity of 1 and pms_color of 2' do
+      product = FactoryGirl.create(:px_product, :with_run_upcharges)
+      get "/api/products/#{product.id}/best_price",
+        {
+          id: product.id,
+          quantity: 1,
+          custom_pms_colors: '321,123',
+          shipping_address:
+          {
+            company: 'company',
+            firstname: 'test_firstname',
+            lastname: 'test_lastname',
+            address1: 'address1',
+            address2: 'address2',
+            city: 'city',
+            zipcode: '19020',
+            phone: '123-456-7890',
+            state_id: 1
+          },
+          shipping_option: :ups_ground
+        }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
+      expect(response).to have_http_status(200)
+      expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
+    end
+
+    it 'must return an address error with an invalid address', focus: true do
+      product = FactoryGirl.create(:px_product, :with_run_upcharges)
+      get "/api/products/#{product.id}/best_price",
+        {
+          id: product.id,
+          quantity: 1,
+          custom_pms_colors: '321,123',
+          shipping_address:
+          {
+            company: 'company',
+            firstname: 'test_firstname',
+            lastname: 'test_lastname',
+            address1: 'address1',
+            address2: 'address2',
+            zipcode: '19020',
+            phone: '123-456-7890',
+            state_id: 1
+          },
+          shipping_option: :ups_ground
+        }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
+      expect(response).to have_http_status(400)
+      expect(json['errors'].any?).to be_truthy
+      expect(json['errors'].include?("City can't be blank")).to be_truthy
     end
 
     it 'must get a best price with quantity' do

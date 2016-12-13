@@ -281,9 +281,7 @@ Spree::Product.class_eval do
 
     configuration = primary_configuration
 
-    if options[:configuration].present?
-      configuration = Spree::Preconfigure.find(options[:configuration].to_i)
-    end
+    configuration[:custom_pms_colors] = options[:custom_pms_colors] if options[:custom_pms_colors].present?
 
     raise 'Unable to find product configuration' if configuration.nil?
 

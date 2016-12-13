@@ -112,13 +112,13 @@ describe 'Products API' do
       expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
     end
 
-    xit 'must get a best price with a specified address, quantity of 1 and pms_color of 1' do
-      product = FactoryGirl.create(:px_product, :with_run_upcharges)
+    it 'must get a best price with a specified address, quantity of 1 and pms_color of 1', focus: true do
+      product = FactoryGirl.create(:px_product, :with_setup_upcharges)
       get "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           quantity: 1,
-          custom_pms_colors: '321',
+          custom_pms_colors: '123',
           shipping_address:
           {
             company: 'company',
@@ -134,16 +134,16 @@ describe 'Products API' do
           shipping_option: :ups_ground
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
+      expect((json['best_price'].to_f - 106.10).abs).to be < 0.01
     end
 
-    xit 'must get a best price with a specified address, quantity of 1 and pms_color of 2' do
-      product = FactoryGirl.create(:px_product, :with_run_upcharges)
+    it 'must get a best price with a specified address, quantity of 1 and pms_color of 2', focus: true do
+      product = FactoryGirl.create(:px_product, :with_setup_upcharges)
       get "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           quantity: 1,
-          custom_pms_colors: '321,123',
+          custom_pms_colors: '123,456',
           shipping_address:
           {
             company: 'company',
@@ -159,10 +159,10 @@ describe 'Products API' do
           shipping_option: :ups_ground
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
+      expect((json['best_price'].to_f - 168.34).abs).to be < 0.01
     end
 
-    it 'must return an address error with an invalid address', focus: true do
+    it 'must return an address error with an invalid address' do
       product = FactoryGirl.create(:px_product, :with_run_upcharges)
       get "/api/products/#{product.id}/best_price",
         {

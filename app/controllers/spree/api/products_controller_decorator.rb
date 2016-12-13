@@ -1,5 +1,4 @@
 Spree::Api::ProductsController.class_eval do
-
   def errors
     @errors ||= []
   end
@@ -19,6 +18,8 @@ Spree::Api::ProductsController.class_eval do
       purchase_params[:shipping_option].to_sym
     best_price_params[:shipping_option] ||= params[:shipping_option] && params[:shipping_option].to_sym
     best_price_params[:shipping_option] ||= :ups_ground
+
+    best_price_params[:custom_pms_colors] = params[:custom_pms_colors] if params.key?(:custom_pms_colors)
 
     # Shipping address can either be an ID or a hash
     if params[:shipping_address] && !(params[:shipping_address].class == String)
@@ -72,8 +73,8 @@ Spree::Api::ProductsController.class_eval do
   rescue StandardError => e
     Rails.logger.error("Failed to get best price: #{e}")
     if errors.any?
-      errors.each{ |error| Rails.logger.error(error.to_s) }
-      render json: {errors: errors}, status: :bad_request
+      errors.each { |error| Rails.logger.error(error.to_s) }
+      render json: { errors: errors }, status: :bad_request
     else
       render nothing: true, status: :internal_server_error
     end

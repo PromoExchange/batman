@@ -7,7 +7,7 @@ Spree::Product.class_eval do
   has_many :color_product
   has_one :carton, dependent: :destroy
   belongs_to :original_supplier, class_name: 'Spree::Supplier', inverse_of: :products
-  has_many :preconfigures, dependent: :destroy
+  has_one :preconfigure, dependent: :destroy
   has_many :purchase
 
   has_many :imprint_methods_products, class_name: 'Spree::ImprintMethodsProduct'
@@ -42,11 +42,6 @@ Spree::Product.class_eval do
   end
 
   delegate :fixed_price_shipping?, to: :carton
-
-  def primary_configuration
-    raise 'More than one primary configuration' if preconfigures.where(primary: true).count > 1
-    preconfigures.find_by(primary: true)
-  end
 
   def clear_cache
     quotes.each do |q|
@@ -287,7 +282,7 @@ Spree::Product.class_eval do
       shipping_address: company_store.buyer.shipping_address.id
     )
 
-    configuration = primary_configuration
+    configuration = preconfigure
 
     configuration[:custom_pms_colors] = options[:custom_pms_colors] if options[:custom_pms_colors].present?
 

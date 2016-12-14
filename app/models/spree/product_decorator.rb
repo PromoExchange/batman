@@ -132,7 +132,15 @@ Spree::Product.class_eval do
     return last_price.amount.to_f if last_price.present?
     0.0
   rescue
+    Rails.logger.error('Failed to get eqp_price, defaulting to 0.0')
     0.0
+  end
+
+  def eqp_price_code
+    Spree::Variant.find_by(product_id: id).volume_prices[0..-1].last.price_code.last
+  rescue
+    Rails.logger.error('Failed to get eqp_price_code, defaulting to V')
+    'V'
   end
 
   def lowest_discounted_volume_price

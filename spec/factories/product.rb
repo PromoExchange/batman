@@ -15,8 +15,8 @@ FactoryGirl.define do
       )
 
       product.preconfigures << FactoryGirl.create(:preconfigure)
-
       price_code = '3V'
+
       i = 0
       [
         ['(25..99)', 29.99],
@@ -40,6 +40,12 @@ FactoryGirl.define do
 
     trait :with_no_eqp_range do
       no_eqp_range '(25..150)'
+    end
+
+    trait :with_price_codes do
+      after(:create) do |product|
+        Spree::VolumePrice.where(variant: product.master).update_all(price_code: 'PQR')
+      end
     end
 
     trait :with_less_than_minimum do

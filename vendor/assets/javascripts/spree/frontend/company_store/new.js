@@ -44,22 +44,40 @@ $(function() {
       var api_key = $('#new-purchase').attr('data-key');
       var product_id = $('#purchase_product_id').val();
       var selected_shipping_option = $('#purchase_shipping_option').val();
-      var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
-      var params = {
-        purchase: {
-          quantity: actual,
-          shipping_address: {
-            company: company,
-            address1: address1,
-            address2: address2,
-            city: city,
-            state_id: state_id,
-            zip_code: zip_code
-          },
-          shipping_option: selected_shipping_option
-          pms_colors: ['1', '2', '3'] # TODO: Make this dynamic
-        }
-      };
+
+      if ($('#purchase_company_store_slug').val() !== 'gooten') {
+        var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
+        var params = {
+          purchase: {
+            quantity: actual,
+            shipping_address: address_id
+            shipping_option: selected_shipping_option
+          }
+        };
+      } else {
+        company = $('#purchase_company').val();
+        address1 = $('#purchase_address1').val();
+        address2 = $('#purchase_address2').val();
+        city = $('#purchase_city').val();
+        state_id = $('#purchase_state_id').val();
+        zip_code = $('#purchase_zip_code').val();
+
+        var params = {
+          purchase: {
+            quantity: actual,
+            address: {
+              company: company,
+              address1: address1,
+              address2: address2,
+              city: city,
+              state_id: state_id,
+              zip_code: zip_code
+            },
+            shipping_option: selected_shipping_option,
+            pms_colors: '123,456,789' # TODO: Make this dynamic
+          }
+        };
+      }
 
       $.ajax({
         type: 'GET',

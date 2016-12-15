@@ -56,17 +56,29 @@ class Spree::PurchasesController < Spree::StoreController
 
     @product = Spree::Product.find(purchase_params[:product_id])
 
+    if purchase_params[:address] && purchase_params[:address].class != String
+      address_params = purchase_params[:address]
+      address_params[:country_id] = Spree::Country.find_by(iso: 'US').id
+      address_params[:firstname] = 'John'
+      address_params[:lastname] = 'Smith'
+      address_params[:phone] = '123-456-7890'
+      address_id = Spree::Address.where(address_params).first_or_create.id
+    else
+      address_id = purchase_params[:address_id]
+    end
+
     # TODO: Move this logic into a/ purchase model OR b/ product
     best_price = @product.best_price(
       quantity: purchase_params[:quantity].to_i,
       shipping_option: purchase_params[:shipping_option].to_sym,
-      shipping_address: purchase_params[:address_id]
+      shipping_address: address_id
     )
 
     order = nil
 
     Spree::Purchase.transaction do
-      purchase = Spree::Purchase.new(purchase_params)
+      new_purchase_params = purchase_params.except(:address)
+      purchase = Spree::Purchase.new(new_purchase_params.merge(address_id: address_id))
 
       order = Spree::Order.create(user_id: purchase_params[:buyer_id])
 
@@ -152,7 +164,8 @@ class Spree::PurchasesController < Spree::StoreController
       :imprint_method_id,
       :main_color_id,
       :address_id,
-      :shipping_option
+      :shipping_option,
+      address: [:company, :address1, :address2, :city, :state_id, :zipcode]
     )
   end
 end

@@ -1,7 +1,6 @@
 <%- api_key = @current_company_store.buyer.spree_api_key unless @current_company_store.nil? %>
 <%- api_key = spree_current_user.spree_api_key if api_key.nil? && spree_current_user.present? %>
 
-
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
     <%= large_image(@product, itemprop: 'image', width: '400px', class: 'mobile-image center-block') %><br/>

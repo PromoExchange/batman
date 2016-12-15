@@ -50,16 +50,17 @@ $(function() {
           }
         };
       } else {
-        company = $('#purchase_company').val();
-        address1 = $('#purchase_address1').val();
-        address2 = $('#purchase_address2').val();
-        city = $('#purchase_city').val();
-        state_id = $('#purchase_state_id').val();
-        zip_code = $('#purchase_zip_code').val();
         var params = {
           purchase: {
             quantity: actual,
-            shipping_address: address_id,
+            shipping_address: {
+              company: $('#purchase_address_company').val(),
+              address1: $('#purchase_address_address1').val(),
+              address2: $('#purchase_address_address2').val(),
+              city: $('#purchase_address_city').val(),
+              state_id: $('#purchase_address_state_id').val(),
+              zip_code: $('#purchase_address_zip_code').val()
+            },
             shipping_option: selected_shipping_option,
             pms_colors: '123,456,789' // TODO: Make this dynamic
           }

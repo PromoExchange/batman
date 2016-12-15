@@ -6,7 +6,7 @@ describe 'Products API' do
 
   it 'must require an api key' do
     product = FactoryGirl.create(:product)
-    get "/api/products/#{product.id}/best_price"
+    post "/api/products/#{product.id}/best_price"
     expect(response).to have_http_status(401)
   end
 
@@ -19,7 +19,7 @@ describe 'Products API' do
         :with_carton
       )
       shipping_address = FactoryGirl.create(:address)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           quantity: 25,
           id: product.id,
@@ -33,7 +33,7 @@ describe 'Products API' do
 
     it 'must get a best price without parameters' do
       product = FactoryGirl.create(:px_product)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
@@ -43,7 +43,7 @@ describe 'Products API' do
 
     it 'must get a best price with a specified address' do
       product = FactoryGirl.create(:px_product)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           shipping_address:
@@ -66,7 +66,7 @@ describe 'Products API' do
 
     it 'must get a best price with a specified address and quantity of 1' do
       product = FactoryGirl.create(:px_product)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           quantity: 1,
@@ -90,7 +90,7 @@ describe 'Products API' do
 
     it 'must get a best price with a specified address and quantity of 1 and :with_less_than_minimum' do
       product = FactoryGirl.create(:px_product, :with_less_than_minimum)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           quantity: 1,
@@ -114,7 +114,7 @@ describe 'Products API' do
 
     it 'must get a best price with a specified address, quantity of 1 and pms_color of 1', focus: true do
       product = FactoryGirl.create(:px_product, :with_setup_upcharges)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           quantity: 1,
@@ -139,11 +139,11 @@ describe 'Products API' do
 
     it 'must get a best price with a specified address, quantity of 1 and pms_color of 2', focus: true do
       product = FactoryGirl.create(:px_product, :with_setup_upcharges)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           quantity: 1,
-          custom_pms_colors: '123,456',
+          custom_pms_colors: '123,456,567',
           shipping_address:
           {
             company: 'company',
@@ -164,7 +164,7 @@ describe 'Products API' do
 
     it 'must return an address error with an invalid address' do
       product = FactoryGirl.create(:px_product, :with_run_upcharges)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           quantity: 1,
@@ -195,7 +195,7 @@ describe 'Products API' do
         :with_carton
       )
       shipping_address = FactoryGirl.create(:address)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           quantity: 300,
           id: product.id,
@@ -215,7 +215,7 @@ describe 'Products API' do
         :with_fixed_price_per_item_carton
       )
       shipping_address = FactoryGirl.create(:address)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           shipping_address: shipping_address.id,
@@ -236,7 +236,7 @@ describe 'Products API' do
       shipping_address = FactoryGirl.create(:address)
       product.company_store.buyer.ship_address_id = shipping_address.id
       product.save!
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           purchase:
@@ -258,7 +258,7 @@ describe 'Products API' do
         :with_fixed_price_per_item_carton
       )
       shipping_address = FactoryGirl.create(:address)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           quantity: 200,
           id: product.id,
@@ -278,7 +278,7 @@ describe 'Products API' do
         :with_fixed_price_total_carton
       )
       shipping_address = FactoryGirl.create(:address)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
           shipping_address: shipping_address.id,
@@ -297,7 +297,7 @@ describe 'Products API' do
         :with_fixed_price_total_carton
       )
       shipping_address = FactoryGirl.create(:address)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           quantity: 200,
           id: product.id,
@@ -317,7 +317,7 @@ describe 'Products API' do
         :with_carton
       )
       shipping_address = FactoryGirl.create(:address)
-      get "/api/products/#{product.id}/best_price",
+      post "/api/products/#{product.id}/best_price",
         {
           quantity: 200,
           id: product.id,

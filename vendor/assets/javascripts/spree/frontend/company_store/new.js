@@ -58,11 +58,11 @@ $(function() {
               address1: $('#purchase_address_address1').val(),
               address2: $('#purchase_address_address2').val(),
               city: $('#purchase_address_city').val(),
-              state_id: $('#purchase_address_state_id').val(),
-              zip_code: $('#purchase_address_zip_code').val()
+              state_id: $('#purchase_address_state').val(),
+              zipcode: $('#purchase_address_zipcode').val()
             },
             shipping_option: selected_shipping_option,
-            pms_colors: '123,456,789' // TODO: Make this dynamic
+            custom_pms_colors: '123,456' // TODO: Make this dynamic
           }
         };
       }

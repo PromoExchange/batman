@@ -22,9 +22,12 @@ Spree::Api::ProductsController.class_eval do
     best_price_params[:custom_pms_colors] = params[:custom_pms_colors] if params.key?(:custom_pms_colors)
 
     # Shipping address can either be an ID or a hash
-    if params[:shipping_address] && !(params[:shipping_address].class == String)
-      params[:shipping_address][:country_id] = Spree::Country.find_by(iso: 'US').id
-      address = Spree::Address.where(params[:shipping_address].to_hash).first_or_create
+    if purchase_params[:shipping_address] && !(purchase_params[:shipping_address].class == String)
+      purchase_params[:shipping_address][:country_id] = Spree::Country.find_by(iso: 'US').id
+      purchase_params[:shipping_address][:firstname] = 'John'
+      purchase_params[:shipping_address][:lastname] = 'Smith'
+      purchase_params[:shipping_address][:phone] = '123-456-7890'
+      address = Spree::Address.where(purchase_params[:shipping_address].to_hash).first_or_create
       if address.errors.any?
         errors = address.errors.full_messages
         raise 'Failed address validation'

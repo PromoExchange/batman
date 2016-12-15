@@ -76,9 +76,11 @@ class Spree::PurchasesController < Spree::StoreController
 
     order = nil
 
+    binding.pry
     Spree::Purchase.transaction do
       new_purchase_params = purchase_params.except(:address)
-      purchase = Spree::Purchase.new(new_purchase_params.merge(address_id: address_id))
+      new_purchase_params[:address_id] = address_id
+      purchase = Spree::Purchase.new(new_purchase_params)
 
       order = Spree::Order.create(user_id: purchase_params[:buyer_id])
 

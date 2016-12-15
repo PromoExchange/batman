@@ -1,8 +1,9 @@
 $(function() {
-  var delay = (function() {
+  var delay = (function(){
     var timer = 0;
+
     return function(callback, ms) {
-      clearTimeout(timer);
+      clearTimeout (timer);
       timer = setTimeout(callback, ms);
     };
   })();
@@ -22,10 +23,7 @@ $(function() {
       actual = parseInt(e.val());
     }
 
-    return {
-      min: min,
-      actual: actual
-    };
+    return { min: min, actual: actual };
   }
 
   function recalc_price() {
@@ -34,23 +32,20 @@ $(function() {
 
     var quantities = get_quantity();
     if ($('#purchase_company_store_slug').val() !== 'gooten') {
-      min = quantities.min;
+       min = quantities.min;
     }
     actual = quantities.actual;
     $(".cs-active-price").hide();
 
     if (actual >= min) {
       $("#price-spin").show();
-      var api_key = $('#new-purchase').attr('data-key');
-      var product_id = $('#purchase_product_id').val();
       var selected_shipping_option = $('#purchase_shipping_option').val();
-
+      var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
       if ($('#purchase_company_store_slug').val() !== 'gooten') {
-        var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
         var params = {
           purchase: {
             quantity: actual,
-            shipping_address: address_id
+            shipping_address: address_id,
             shipping_option: selected_shipping_option
           }
         };
@@ -61,20 +56,12 @@ $(function() {
         city = $('#purchase_city').val();
         state_id = $('#purchase_state_id').val();
         zip_code = $('#purchase_zip_code').val();
-
         var params = {
           purchase: {
             quantity: actual,
-            address: {
-              company: company,
-              address1: address1,
-              address2: address2,
-              city: city,
-              state_id: state_id,
-              zip_code: zip_code
-            },
+            shipping_address: address_id,
             shipping_option: selected_shipping_option,
-            pms_colors: '123,456,789' # TODO: Make this dynamic
+            pms_colors: '123,456,789' // TODO: Make this dynamic
           }
         };
       }
@@ -82,10 +69,10 @@ $(function() {
       $.ajax({
         type: 'GET',
         contentType: "application/json",
-        url: '/api/products/' + product_id + '/best_price',
+        url: '/api/products/' + $('#purchase_product_id').val() + '/best_price',
         data: params,
         headers: {
-          'X-Spree-Token': api_key
+          'X-Spree-Token': $('#new-purchase').attr('data-key')
         },
         success: function(data) {
           if (typeof data.error_message !== typeof undefined ? true : false) {
@@ -97,18 +84,15 @@ $(function() {
           }
 
           var money_text = accounting.formatMoney((parseFloat(data.best_price)));
-          $('#ship_date').text(
-            moment(new Date())
-            .add(data.delivery_days, 'days')
-            .format('MMMM Do YYYY')
-          );
+          $('#ship_date').text(moment(new Date()).add(data.delivery_days, 'days').format('MMMM Do YYYY'));
           var number_options = 0;
           var shipping_option_control = $('#purchase_shipping_option');
-          if(typeof selected_shipping_option == 'undefined') {
+          if (typeof selected_shipping_option == 'undefined') {
             selected_shipping_option = data.shipping_option;
           }
           shipping_option_control.empty();
           sorted_options = data.shipping_options.sort(function(a, b) { return a.shipping_option - b.shipping_option });
+
           $.each(sorted_options, function(index, option) {
             var sign = '+';
             var option_money_text = accounting.formatMoney((parseFloat(option.delta)));
@@ -122,17 +106,17 @@ $(function() {
               selected_value = true;
             }
             var new_option = $('<option>', {
-                value: option.shipping_option,
-                delta: option.delta,
-                name: option.name,
-                delivery_date: option.delivery_date,
-                selected: selected_value
+              value: option.shipping_option,
+              delta: option.delta,
+              name: option.name,
+              delivery_date: option.delivery_date,
+              selected: selected_value
             }).text(option_text);
             shipping_option_control.append(new_option);
             number_options++;
           });
 
-          if(number_options > 0 && !$('#need_it_sooner').is(":visible") ) {
+          if (number_options > 0 && !$('#need_it_sooner').is(":visible")) {
             $('#need_it_sooner').show();
           }
 
@@ -153,7 +137,7 @@ $(function() {
   $(".cs-quantity").keyup(function() {
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
-    if($('#address_drop').val() === '') {
+    if ($('#address_drop').val() === '') {
       return;
     }
     delay(function() {
@@ -175,12 +159,10 @@ $(function() {
     var old_price = accounting.unformat($(".cs-active-price").text());
     var new_price = old_price + delta;
 
-    $('#ship_date').text(
-      moment(delivery_date).format('MMMM Do YYYY');
-    );
+    $('#ship_date').text(moment(delivery_date).format('MMMM Do YYYY'));
 
     var money_text = accounting.formatMoney(new_price);
-    $(".cs-active-price").text(money_text)
+    $(".cs-active-price").text(money_text);
 
     $('#purchase_shipping_option > option').each(function() {
       var option = $(this);
@@ -209,13 +191,13 @@ $(function() {
   });
 
   $('#purchase-size .product-size').change(function() {
+    var sum = 0;
+
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
-    var sum = 0;
-    $('#purchase-size .product-size').each(function() {
-      sum += parseInt('0'+ $(this).val());
-    });
+    $('#purchase-size .product-size').each(function() { sum += parseInt('0'+ $(this).val()) });
     $('.total-qty span:last').text(sum);
+
     recalc_price();
   });
 

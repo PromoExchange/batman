@@ -19,7 +19,9 @@ Spree::Api::ProductsController.class_eval do
     best_price_params[:shipping_option] ||= params[:shipping_option] && params[:shipping_option].to_sym
     best_price_params[:shipping_option] ||= :ups_ground
 
-    best_price_params[:custom_pms_colors] = params[:custom_pms_colors] if params.key?(:custom_pms_colors)
+    if purchase_params.key?(:custom_pms_colors)
+      best_price_params[:custom_pms_colors] = purchase_params[:custom_pms_colors]
+    end
 
     # Shipping address can either be an ID or a hash
     if purchase_params[:shipping_address] && !(purchase_params[:shipping_address].class == String)

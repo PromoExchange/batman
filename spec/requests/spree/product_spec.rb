@@ -21,10 +21,12 @@ describe 'Products API' do
       shipping_address = FactoryGirl.create(:address)
       post "/api/products/#{product.id}/best_price",
         {
-          quantity: 25,
           id: product.id,
-          shipping_address: shipping_address.id,
-          shipping_option: :ups_ground
+          purchase: {
+            quantity: 25,
+            shipping_address: shipping_address.id,
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 841.02).abs).to be < 0.01
@@ -46,19 +48,21 @@ describe 'Products API' do
       post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          shipping_address:
-          {
-            company: 'company',
-            firstname: 'test_firstname',
-            lastname: 'test_lastname',
-            address1: 'address1',
-            address2: 'address2',
-            city: 'city',
-            zipcode: '19020',
-            phone: '123-456-7890',
-            state_id: 1
-          },
-          shipping_option: :ups_ground
+          purchase: {
+            shipping_address:
+            {
+              company: 'company',
+              firstname: 'test_firstname',
+              lastname: 'test_lastname',
+              address1: 'address1',
+              address2: 'address2',
+              city: 'city',
+              zipcode: '19020',
+              phone: '123-456-7890',
+              state_id: 1
+            },
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 764.59).abs).to be < 0.01
@@ -69,20 +73,22 @@ describe 'Products API' do
       post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          quantity: 1,
-          shipping_address:
-          {
-            company: 'company',
-            firstname: 'test_firstname',
-            lastname: 'test_lastname',
-            address1: 'address1',
-            address2: 'address2',
-            city: 'city',
-            zipcode: '19020',
-            phone: '123-456-7890',
-            state_id: 1
-          },
-          shipping_option: :ups_ground
+          purchase: {
+            quantity: 1,
+            shipping_address:
+            {
+              company: 'company',
+              firstname: 'test_firstname',
+              lastname: 'test_lastname',
+              address1: 'address1',
+              address2: 'address2',
+              city: 'city',
+              zipcode: '19020',
+              phone: '123-456-7890',
+              state_id: 1
+            },
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 43.86).abs).to be < 0.01
@@ -93,70 +99,76 @@ describe 'Products API' do
       post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          quantity: 1,
-          shipping_address:
-          {
-            company: 'company',
-            firstname: 'test_firstname',
-            lastname: 'test_lastname',
-            address1: 'address1',
-            address2: 'address2',
-            city: 'city',
-            zipcode: '19020',
-            phone: '123-456-7890',
-            state_id: 1
-          },
-          shipping_option: :ups_ground
+          purchase: {
+            quantity: 1,
+            shipping_address:
+            {
+              company: 'company',
+              firstname: 'test_firstname',
+              lastname: 'test_lastname',
+              address1: 'address1',
+              address2: 'address2',
+              city: 'city',
+              zipcode: '19020',
+              phone: '123-456-7890',
+              state_id: 1
+            },
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
     end
 
-    it 'must get a best price with a specified address, quantity of 1 and pms_color of 1', focus: true do
+    it 'must get a best price with a specified address, quantity of 1 and pms_color of 1' do
       product = FactoryGirl.create(:px_product, :with_setup_upcharges)
       post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          quantity: 1,
-          custom_pms_colors: '123',
-          shipping_address:
-          {
-            company: 'company',
-            firstname: 'test_firstname',
-            lastname: 'test_lastname',
-            address1: 'address1',
-            address2: 'address2',
-            city: 'city',
-            zipcode: '19020',
-            phone: '123-456-7890',
-            state_id: 1
-          },
-          shipping_option: :ups_ground
+          purchase: {
+            quantity: 1,
+            custom_pms_colors: '123',
+            shipping_address:
+            {
+              company: 'company',
+              firstname: 'test_firstname',
+              lastname: 'test_lastname',
+              address1: 'address1',
+              address2: 'address2',
+              city: 'city',
+              zipcode: '19020',
+              phone: '123-456-7890',
+              state_id: 1
+            },
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 106.10).abs).to be < 0.01
     end
 
-    it 'must get a best price with a specified address, quantity of 1 and pms_color of 2', focus: true do
+    it 'must get a best price with a specified address, quantity of 1 and pms_color of 2' do
       product = FactoryGirl.create(:px_product, :with_setup_upcharges)
       post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          quantity: 1,
-          custom_pms_colors: '123,456,567',
-          shipping_address:
-          {
-            company: 'company',
-            firstname: 'test_firstname',
-            lastname: 'test_lastname',
-            address1: 'address1',
-            address2: 'address2',
-            city: 'city',
-            zipcode: '19020',
-            phone: '123-456-7890',
-            state_id: 1
-          },
-          shipping_option: :ups_ground
+          purchase: {
+            quantity: 1,
+            custom_pms_colors: '123,456',
+            shipping_address:
+            {
+              company: 'company',
+              firstname: 'test_firstname',
+              lastname: 'test_lastname',
+              address1: 'address1',
+              address2: 'address2',
+              city: 'city',
+              zipcode: '19020',
+              phone: '123-456-7890',
+              state_id: 1
+            },
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 168.34).abs).to be < 0.01
@@ -167,20 +179,22 @@ describe 'Products API' do
       post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          quantity: 1,
-          custom_pms_colors: '321,123',
-          shipping_address:
-          {
-            company: 'company',
-            firstname: 'test_firstname',
-            lastname: 'test_lastname',
-            address1: 'address1',
-            address2: 'address2',
-            zipcode: '19020',
-            phone: '123-456-7890',
-            state_id: 1
-          },
-          shipping_option: :ups_ground
+          purchase: {
+            quantity: 1,
+            custom_pms_colors: '321,123',
+            shipping_address:
+            {
+              company: 'company',
+              firstname: 'test_firstname',
+              lastname: 'test_lastname',
+              address1: 'address1',
+              address2: 'address2',
+              zipcode: '19020',
+              phone: '123-456-7890',
+              state_id: 1
+            },
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(400)
       expect(json['errors'].any?).to be_truthy
@@ -197,10 +211,12 @@ describe 'Products API' do
       shipping_address = FactoryGirl.create(:address)
       post "/api/products/#{product.id}/best_price",
         {
-          quantity: 300,
           id: product.id,
-          shipping_address: shipping_address.id,
-          shipping_option: :ups_ground
+          purchase: {
+            quantity: 300,
+            shipping_address: shipping_address.id,
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 8005.10).abs).to be < 0.01
@@ -218,8 +234,10 @@ describe 'Products API' do
       post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          shipping_address: shipping_address.id,
-          shipping_option: :fixed_price_per_item
+          purchase: {
+            shipping_address: shipping_address.id,
+            shipping_option: :fixed_price_per_item
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 898.39).abs).to be < 0.01
@@ -260,10 +278,12 @@ describe 'Products API' do
       shipping_address = FactoryGirl.create(:address)
       post "/api/products/#{product.id}/best_price",
         {
-          quantity: 200,
           id: product.id,
-          shipping_address: shipping_address.id,
-          shipping_option: :fixed_price_per_item
+          purchase: {
+            quantity: 200,
+            shipping_address: shipping_address.id,
+            shipping_option: :fixed_price_per_item
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 5952.72).abs).to be < 0.01
@@ -281,8 +301,10 @@ describe 'Products API' do
       post "/api/products/#{product.id}/best_price",
         {
           id: product.id,
-          shipping_address: shipping_address.id,
-          shipping_option: :fixed_price_total
+          purchase: {
+            shipping_address: shipping_address.id,
+            shipping_option: :fixed_price_total
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 945.07).abs).to be < 0.01
@@ -299,10 +321,12 @@ describe 'Products API' do
       shipping_address = FactoryGirl.create(:address)
       post "/api/products/#{product.id}/best_price",
         {
-          quantity: 200,
           id: product.id,
-          shipping_address: shipping_address.id,
-          shipping_option: :fixed_price_total
+          purchase: {
+            quantity: 200,
+            shipping_address: shipping_address.id,
+            shipping_option: :fixed_price_total
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 5454.82).abs).to be < 0.01
@@ -319,10 +343,12 @@ describe 'Products API' do
       shipping_address = FactoryGirl.create(:address)
       post "/api/products/#{product.id}/best_price",
         {
-          quantity: 200,
           id: product.id,
-          shipping_address: shipping_address.id,
-          shipping_option: :ups_next_day_air
+          purchase: {
+            quantity: 200,
+            shipping_address: shipping_address.id,
+            shipping_option: :ups_next_day_air
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 5673.72).abs).to be < 0.01

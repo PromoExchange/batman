@@ -68,8 +68,7 @@ $(function() {
       }
 
       $.ajax({
-        type: 'GET',
-        contentType: "application/json",
+        type: 'POST',
         url: '/api/products/' + $('#purchase_product_id').val() + '/best_price',
         data: params,
         headers: {

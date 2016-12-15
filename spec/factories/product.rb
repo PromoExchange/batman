@@ -7,7 +7,7 @@ FactoryGirl.define do
 
     after(:create) do |product|
       FactoryGirl.create_list(:color_product, 5, product: product)
-      FactoryGirl.create(:carton, product: product)
+      product.carton = FactoryGirl.create(:carton, product_id: product.id)
       product.imprint_methods << FactoryGirl.create(:imprint_method)
       company_store = FactoryGirl.create(:company_store, supplier: product.supplier)
       FactoryGirl.create(
@@ -42,7 +42,9 @@ FactoryGirl.define do
     end
 
     trait :with_price_codes do
-      price_code = 'PQR'
+      after(:create) do |product|
+        Spree::VolumePrice.where(variant: product.master).update_all(price_code: 'PQR')
+      end
     end
 
     trait :with_less_than_minimum do

@@ -1,27 +1,57 @@
 Spree::Api::ProductsController.class_eval do
+  def errors
+    @errors ||= []
+  end
+
   def best_price
     @product = Spree::Product.find(params[:id])
 
-    # Best price for the supplied shipping option (the selected)
-    requested_price = @product.best_price(
-      quantity: purchase_params[:quantity].to_i,
-      shipping_option: (purchase_params[:shipping_option].to_sym || :ups_ground),
-      shipping_address: purchase_params[:shipping_address].to_i
-    )
+    best_price_params = {}
+    purchase_params = params[:purchase]
+
+    best_price_params[:quantity] = (purchase_params && purchase_params.key?(:quantity)) &&
+      purchase_params[:quantity].to_i
+    best_price_params[:quantity] ||= params[:quantity] && params[:quantity].to_i
+    best_price_params[:quantity] ||= @product.minimum_quantity
+
+    best_price_params[:shipping_option] = (purchase_params && purchase_params.key?(:shipping_option)) &&
+      purchase_params[:shipping_option].to_sym
+    best_price_params[:shipping_option] ||= params[:shipping_option] && params[:shipping_option].to_sym
+    best_price_params[:shipping_option] ||= :ups_ground
+
+    best_price_params[:custom_pms_colors] = params[:custom_pms_colors] if params.key?(:custom_pms_colors)
+
+    # Shipping address can either be an ID or a hash
+    if params[:shipping_address] && !(params[:shipping_address].class == String)
+      params[:shipping_address][:country_id] = Spree::Country.find_by(iso: 'US').id
+      address = Spree::Address.where(params[:shipping_address].to_hash).first_or_create
+      if address.errors.any?
+        errors = address.errors.full_messages
+        raise 'Failed address validation'
+      end
+      best_price_params[:shipping_address] = address.id
+    else
+      best_price_params[:shipping_address] = (purchase_params && purchase_params.key?(:shipping_address)) &&
+        purchase_params[:shipping_address].to_i
+      best_price_params[:shipping_address] ||= params[:shipping_address] && params[:shipping_address].to_i
+      best_price_params[:shipping_address] ||= @product.company_store.buyer.shipping_address.id
+    end
+
+    requested_price = @product.best_price(best_price_params)
 
     response = {
       best_price: requested_price[:best_price].to_f,
-      quantity: purchase_params[:quantity].to_i,
+      quantity: best_price_params[:quantity],
       delivery_days: requested_price[:delivery_days],
       shipping_options: []
     }
 
     @product.available_shipping_options.each do |soption|
-      this_shipping_option = soption[0].to_sym
+      this_shipping_option = soption.to_sym
       alternate_price = @product.best_price(
-        quantity: purchase_params[:quantity].to_i,
+        quantity: best_price_params[:quantity],
         shipping_option: this_shipping_option,
-        shipping_address: purchase_params[:shipping_address].to_i
+        shipping_address: best_price_params[:shipping_address]
       )
 
       shipping_name = this_shipping_option.to_s.titleize.sub('Ups', 'UPS')
@@ -42,15 +72,15 @@ Spree::Api::ProductsController.class_eval do
     render json: response, status: :ok
   rescue StandardError => e
     Rails.logger.error("Failed to get best price: #{e}")
-    render nothing: true, status: :internal_server_error
+    if errors.any?
+      errors.each { |error| Rails.logger.error(error.to_s) }
+      render json: { errors: errors }, status: :bad_request
+    else
+      render nothing: true, status: :internal_server_error
+    end
   end
 
-  def purchase_params
-    params.require(:purchase).permit(
-      :product_id,
-      :quantity,
-      :shipping_address,
-      :shipping_option
-    )
+  def configure
+    render json: Spree::Preconfigure.first
   end
 end

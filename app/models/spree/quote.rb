@@ -86,13 +86,6 @@ class Spree::Quote < Spree::Base
   validates :shipping_cost, presence: true
   validates :shipping_option, presence: true
   validates :shipping_address, presence: true
-  validates :quantity, presence: true, numericality: {
-    only_integer: true,
-    greater_than_or_equal_to: (lambda do |quote|
-      return 50 if quote.product.nil?
-      quote.product.minimum_quantity
-    end)
-  }
   validates_associated :product
   validates_associated :main_color
   validates_associated :shipping_address

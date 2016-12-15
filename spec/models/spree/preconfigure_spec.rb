@@ -14,6 +14,7 @@ RSpec.describe Spree::Preconfigure, type: :model do
     it { should validate_presence_of(:imprint_method_id) }
     it { should validate_presence_of(:main_color_id) }
     it { should validate_presence_of(:logo_id) }
+    it { should validate_presence_of(:primary) }
   end
 
   describe 'associations' do

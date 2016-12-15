@@ -46,13 +46,9 @@ describe Spree::Quote, type: :model do
   describe 'validations' do
     it { should validate_presence_of(:main_color) }
     it { should validate_presence_of(:shipping_address) }
-    it { should validate_presence_of(:quantity) }
     it { should validate_presence_of(:shipping_days) }
     it { should validate_presence_of(:shipping_cost) }
     it { should validate_presence_of(:shipping_option) }
-    it { should_not allow_value(1).for(:quantity) }
-    it { should allow_value(50).for(:quantity) }
-    it { should validate_numericality_of(:quantity).only_integer }
   end
 
   describe 'associations' do
@@ -123,7 +119,7 @@ describe Spree::Quote, type: :model do
       expect(quote2.reference).not_to be_empty
     end
 
-    it 'should have a specific cache key', focus: true do
+    it 'should have a specific cache key' do
       quote = FactoryGirl.create(:quote)
       expect(quote.cache_key =~ /#{quote.product.id}/).to be_truthy
       expect(quote.cache_key =~ /#{quote.quantity}/).to be_truthy

@@ -12,6 +12,17 @@ class Spree::Preconfigure < Spree::Base
   validates :imprint_method_id, presence: true
   validates :main_color_id, presence: true
   validates :logo_id, presence: true
+  validates :primary, presence: true
+
+  # TODO: Add validation so we only have 1 primiary configuration
 
   delegate :clear_cache, to: :product
+
+  def best_price_params
+    {
+      quantity: 1,
+      shipping_address: buyer.shipping_address,
+      shipping_option: :ups_ground
+    }
+  end
 end

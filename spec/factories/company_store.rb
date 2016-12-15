@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :company_store, class: 'Spree::CompanyStore' do
     supplier
-    association :buyer, factory: :user
+    association :buyer, factory: :px_user
     logo { File.new(Rails.root.join('spec', 'fixtures', 'batman.jpeg')) }
     slug 'test'
     name 'CS Test'

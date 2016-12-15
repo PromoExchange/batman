@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161112213905) do
+ActiveRecord::Schema.define(version: 20161210211354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -543,12 +542,13 @@ ActiveRecord::Schema.define(version: 20161112213905) do
   add_index "spree_pms_colors_suppliers", ["supplier_id"], name: "index_spree_pms_colors_suppliers_on_supplier_id", using: :btree
 
   create_table "spree_preconfigures", force: :cascade do |t|
-    t.integer "product_id",        null: false
-    t.integer "buyer_id",          null: false
-    t.integer "imprint_method_id", null: false
-    t.integer "main_color_id",     null: false
-    t.integer "logo_id",           null: false
+    t.integer "product_id",                       null: false
+    t.integer "buyer_id",                         null: false
+    t.integer "imprint_method_id",                null: false
+    t.integer "main_color_id",                    null: false
+    t.integer "logo_id",                          null: false
     t.string  "custom_pms_colors"
+    t.boolean "primary",           default: true, null: false
   end
 
   create_table "spree_preferences", force: :cascade do |t|

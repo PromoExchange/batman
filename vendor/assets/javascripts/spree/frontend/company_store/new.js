@@ -41,7 +41,8 @@ $(function() {
       $("#price-spin").show();
       var selected_shipping_option = $('#purchase_shipping_option').val();
       var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
-      if ($('#purchase_company_store_slug').val() !== 'gooten') {
+      var is_gooten = $('#purchase_company_store_slug').val() == 'gooten';
+      if (is_gooten == false) {
         var params = {
           purchase: {
             quantity: actual,
@@ -81,6 +82,10 @@ $(function() {
             $('.cs-purchase-submit').prop('disabled', false);
             $(".cs-active-price").show();
             return;
+          }
+
+          if (is_gooten == true) {
+            $('#purchase_address_id').val(data.shipping_address_id);
           }
 
           var money_text = accounting.formatMoney((parseFloat(data.best_price)));

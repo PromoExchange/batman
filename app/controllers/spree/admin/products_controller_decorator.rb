@@ -12,7 +12,8 @@ Spree::Admin::ProductsController.class_eval do
       buyer: user,
       imprint_method: @product.imprint_method,
       main_color: @product.color_product.first,
-      logo: user.logos.where(custom: true).first
+      logo: user.logos.where(custom: true).first,
+      product: @product
     ).first_or_create
     @product.save!
   rescue => e

@@ -1,5 +1,6 @@
 <%- api_key = @current_company_store.buyer.spree_api_key unless @current_company_store.nil? %>
 <%- api_key = spree_current_user.spree_api_key if api_key.nil? && spree_current_user.present? %>
+<%- is_gooten = @current_company_store.slug == 'gooten' %>
 
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
@@ -27,15 +28,14 @@
         <%= render partial: 'imprint_method', locals: { f: f }%>
         <%= render partial: 'logos', locals: { f: f } %>
         <%= render partial: 'main_color', locals: { f: f } %>
-        <% if @current_company_store.slug != 'gooten' %>
-          <%= render partial: 'price_breaks', locals: { f: f } %>
-        <% end %>
-        <div class="<%= 'col-md-4' unless @product.wearable? %>">
+        <% if is_gooten %>
           <%= render partial: 'quantity', locals: { f: f } %>
-        </div>
-        <% if @current_company_store.slug == 'gooten' %>
           <%= render partial: 'address', locals: { f: f } %>
         <% else %>
+          <%= render partial: 'price_breaks', locals: { f: f } %>
+          <div class="<%= 'col-md-4' unless @product.wearable? %>">
+            <%= render partial: 'quantity', locals: { f: f } %>
+          </div>
           <div class="<%= 'col-md-8' unless @product.wearable? %>">
             <%= render partial: 'address_drop', locals: { f: f } %>
           </div>

@@ -48,6 +48,7 @@ Spree::Api::ProductsController.class_eval do
       best_price: requested_price[:best_price].to_f,
       quantity: best_price_params[:quantity],
       delivery_days: requested_price[:delivery_days],
+      shipping_address_id: best_price_params[:shipping_address],
       shipping_options: []
     }
 

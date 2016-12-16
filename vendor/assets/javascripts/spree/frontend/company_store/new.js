@@ -27,6 +27,10 @@ $(function() {
   }
 
   function recalc_price() {
+    if (!addressFilled() && ($('#purchase_ship_to_zip').val() === '' || $('#purchase_ship_to_zip').val() === undefined)) {
+      return;
+    }
+
     var actual = 0;
     var min = 0;
 
@@ -35,6 +39,9 @@ $(function() {
        min = quantities.min;
     }
     actual = quantities.actual;
+    if (actual === 0) {
+      return;
+    }
     $(".cs-active-price").hide();
 
     if (actual >= min) {
@@ -146,6 +153,9 @@ $(function() {
     var city = $('#purchase_address_city').val()
     var state_id = $('#purchase_address_state').val()
     var zipcode = $('#purchase_address_zipcode').val()
+    if (!company || !address1 || !address2 || !city || !state_id || !zipcode) {
+      return false;
+    }
 
     return company.length > 0 && address1.length > 0 && address2.length > 0 && city.length > 0 && state_id.length > 0 && zipcode.length > 0;
   }
@@ -172,9 +182,6 @@ $(function() {
   $("#purchase_address_zipcode").change(addressChanged);
 
   $(".cs-quantity").keyup(function() {
-    if (!addressFilled()) {
-      return;
-    }
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
     if ($('#address_drop').val() === '') {
@@ -231,9 +238,6 @@ $(function() {
   });
 
   $('#purchase-size .product-size').change(function() {
-    if (!addressFilled()) {
-      return;
-    }
     var sum = 0;
 
     $('.cs-purchase-submit').prop('disabled', true);

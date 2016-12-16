@@ -66,7 +66,8 @@ class Spree::PurchasesController < Spree::StoreController
     order = nil
 
     Spree::Purchase.transaction do
-      purchase = Spree::Purchase.new(purchase_params)
+      new_purchase_params = purchase_params.except(:address)
+      purchase = Spree::Purchase.new(new_purchase_params)
 
       order = Spree::Order.create(user_id: purchase_params[:buyer_id])
 
@@ -130,6 +131,8 @@ class Spree::PurchasesController < Spree::StoreController
       @addresses << address
     end
 
+    @states = Spree::State.where(country: Spree::Country.find_by(iso: 'US'))
+
     @shipping_options = [
       ['UPS Ground', :ups_ground],
       ['UPS Three-Day Select', :ups_3day_select],
@@ -150,7 +153,8 @@ class Spree::PurchasesController < Spree::StoreController
       :imprint_method_id,
       :main_color_id,
       :address_id,
-      :shipping_option
+      :shipping_option,
+      address: [:company, :address1, :address2, :city, :state_id, :zipcode]
     )
   end
 end

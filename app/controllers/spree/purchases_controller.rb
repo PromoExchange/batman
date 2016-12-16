@@ -114,6 +114,7 @@ class Spree::PurchasesController < Spree::StoreController
     )
 
     Resque.enqueue(SendInvoice, order_id: @order.id)
+    SLACK.ping "Order for $#{@order.total} by #{@order.user.email}"
 
     redirect_to "/company_store/#{current_company_store.slug}"
   end

@@ -68,9 +68,9 @@ html, body {
 }
 
 @media only screen and (max-width: 900px) {
-  .form-actions {
-    text-align:center;
-    margin:auto;
+  #purchase-card {
+    display: flex;
+    justify-content: center
   }
 }
 
@@ -86,5 +86,11 @@ html, body {
     width: 200px;
     margin: auto;
     display:block;
+  }
+}
+@media only screen and (max-width: 900px) {
+  #pay-with-card {
+    display: flex;
+    justify-content: center
   }
 }

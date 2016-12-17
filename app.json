@@ -46,6 +46,9 @@
     "SECRET_KEY_BASE":{
       "required":true
     },
+    "SLACK_URL":{
+      "required":true
+    },
     "STRIPE_PUBLISHABLE_KEY":"pk_test_OAUX2tTaVitolU0iysmyQCHk",
     "STRIPE_SECRET_KEY":"sk_test_BUEgUvIraeg7Not6KPvNXjXL",
     "UPS_API_KEY":{

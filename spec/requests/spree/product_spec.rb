@@ -31,16 +31,31 @@ describe 'Products API' do
       expect(response).to have_http_status(200)
       expect((json['best_price'].to_f - 841.02).abs).to be < 0.01
       expect(json['delivery_days']).to eq 12
+      expect(json.key?('workbook')).to be_falsey
     end
 
-    it 'must get a best price without parameters' do
-      product = FactoryGirl.create(:px_product)
+    it 'must get a best price and workbook' do
+      product = FactoryGirl.create(
+        :px_product,
+        :with_setup_upcharges,
+        :with_run_upcharges,
+        :with_carton
+      )
+      shipping_address = FactoryGirl.create(:address)
       post "/api/products/#{product.id}/best_price",
         {
+          id: product.id,
+          get_workbook: 1,
+          purchase: {
+            quantity: 25,
+            shipping_address: shipping_address.id,
+            shipping_option: :ups_ground
+          }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 767.33).abs).to be < 0.01
-      expect(json).not_to be_empty
+      expect((json['best_price'].to_f - 841.02).abs).to be < 0.01
+      expect(json['delivery_days']).to eq 12
+      expect(json['workbook']).not_to eq 0
     end
 
     it 'must get a best price with a specified address' do

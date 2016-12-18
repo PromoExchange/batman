@@ -52,6 +52,11 @@ Spree::Api::ProductsController.class_eval do
       shipping_options: []
     }
 
+    if params[:get_workbook].present?
+      quote = Spree::Quote.find(requested_price[:quote_id])
+      response[:workbook] = quote.messages
+    end
+
     @product.available_shipping_options.each do |soption|
       this_shipping_option = soption.to_sym
       alternate_price = @product.best_price(

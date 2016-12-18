@@ -116,6 +116,8 @@ $(function() {
             selected_value = false;
             if (option.shipping_option == selected_shipping_option) {
               selected_value = true;
+            } else {
+              option_text = option_text + ', Estimated delivery: ' + moment(option.delivery_date).format(' MMMM Do YYYY');
             }
             var new_option = $('<option>', {
               value: option.shipping_option,
@@ -219,15 +221,17 @@ $(function() {
 
       var sign = '+';
       var option_money_text = accounting.formatMoney((parseFloat(new_delta)));
+      var option_date_text = ', Estimated delivery: ' + moment(option.attr('delivery_date')).format(' MMMM Do YYYY');
       if (new_delta < 0) {
         sign = '-';
         option_money_text = accounting.formatMoney((parseFloat(Math.abs(new_delta))));
       } else if (new_delta == 0) {
         sign = '';
         option_money_text = '';
+        option_date_text = '';
       }
 
-      var option_text = option.attr('name') + ' ' + sign + option_money_text;
+      var option_text = option.attr('name') + ' ' + sign + option_money_text + option_date_text;
       $(this).text(option_text);
     });
   });

@@ -1,12 +1,14 @@
-<div class="row">
-  <div class="form-group purchase-size" id="purchase-size" min-quantity="<%= @product.minimum_quantity %>">
-    <div class="col-md-3">
-      <h3>Enter Quantity</h3>
+<div class="form-group purchase-size" id="purchase-size" min-quantity="<%= @product.minimum_quantity %>">
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.label(:quantity, Spree.t(:quantity)) %>:
       <% if @current_company_store.slug != 'gooten' %>
-        <span>min. <%= @product.minimum_quantity %></span>
+        <span>(min <%= @product.minimum_quantity %>)</span>
       <% end %>
     </div>
-    <div class="col-md-9 purchase-list">
+  </div>
+  <div class="row">
+    <div class="col-md-12 purchase-list">
       <ul>
         <% @purchase.class.sizes.each do |key| %>
           <% size_value = @size_quantity.present? ? @size_quantity[key] : 0 %>
@@ -16,10 +18,6 @@
           </li>
         <% end %>
       </ul>
-    </div>
-    <div class="total-qty pull-right">
-      <span class="pull-left">Total Qty:</span>
-      <span class='pull-right'><%= @total_size.present? ? @total_size : '0' %></span>
     </div>
   </div>
 </div>

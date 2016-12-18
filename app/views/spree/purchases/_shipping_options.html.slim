@@ -1,8 +1,0 @@
-- if @product.carton.fixed_price.nil?
-  a style='display:none' id='need_it_sooner' Need it sooner?
-  .form-group style='display:none' id='shipping_option_group'
-    = f.label :shipping_option, 'Shipping Option'
-    = f.select :shipping_option, options_for_select(@shipping_options), { }, { class: 'form-control' }
-- else
-  - option = @product.carton.per_item ? :fixed_price_per_item : :fixed_price_total
-  = f.hidden_field :shipping_option, value: option

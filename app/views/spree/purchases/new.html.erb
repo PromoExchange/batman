@@ -15,24 +15,18 @@
     <br /><br />
 
     <% if is_gooten %>
-      <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
-        <div class="form-group">
-          <%= f.label :logo, Spree.t(:logo) %>:
-          <%= f.file_field :logo, class: 'logo-upload' %>
-          <p>Acceptable file formats: (.png, .jpg)
-            <span
-              class='glyphicon glyphicon-question-sign'
-              data-toggle='tooltip'
-              data-placement='top'
-              title='Please contact our support team to find out how to get the correct file format if you do not currently have it available.'>
-            </span>
-          </p>
-        </div>
+      <div class="well">
+        <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
+          <div class="form-group">
+            <h2 class="text-center"><%= Spree.t(:logo) %></h2>
+            <%= f.file_field :logo, class: 'logo-upload' %>
+          </div>
 
-        <br />
+          <br />
 
-        <%= image_tag 'star-1.png', class: 'hidden logo-to-upload' %>
-      <% end %>
+          <%= image_tag 'star-1.png', class: 'hidden logo-to-upload text-center' %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 

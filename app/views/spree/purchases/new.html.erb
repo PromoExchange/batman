@@ -14,25 +14,27 @@
 
     <br /><br />
 
-    <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
-      <div class="form-group">
-        <%= f.label :logo, Spree.t(:logo) %>:
-        <%= f.file_field :logo, class: 'logo-upload' %>
-        <p>Acceptable file formats: (.png, .jpg)
-          <span
-            class='glyphicon glyphicon-question-sign'
-            data-toggle='tooltip'
-            data-placement='top'
-            title='Please contact our support team to find out how to get the correct file format if you do not currently have it available.'>
-          </span>
-        </p>
-      </div>
+    <% if is_gooten %>
+      <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
+        <div class="form-group">
+          <%= f.label :logo, Spree.t(:logo) %>:
+          <%= f.file_field :logo, class: 'logo-upload' %>
+          <p>Acceptable file formats: (.png, .jpg)
+            <span
+              class='glyphicon glyphicon-question-sign'
+              data-toggle='tooltip'
+              data-placement='top'
+              title='Please contact our support team to find out how to get the correct file format if you do not currently have it available.'>
+            </span>
+          </p>
+        </div>
 
-      <br />
+        <br />
 
-      <%= image_tag 'star-1.png', class: 'hidden logo-to-upload' %>
-    <% end %>
-  </div>
+        <%= image_tag 'star-1.png', class: 'hidden logo-to-upload' %>
+      <% end %>
+    </div>
+  <% end %>
 
   <div class="col-md-6">
     <h1 id='new_purchase_name'><%= @product.name %></h1>

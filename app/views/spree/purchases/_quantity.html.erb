@@ -1,5 +1,5 @@
 <% if @product.wearable? %>
-  <%= render partial: 'purchase_size', locals: {f: f} %>
+  <%= render partial: 'purchase_size', locals: { f: f } %>
 <% else %>
   <div class="form-group">
     <%= f.label(:quantity, Spree.t(:quantity)) %>

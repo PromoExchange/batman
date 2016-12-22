@@ -21,6 +21,9 @@ MethodLength:
 ClassLength:
   Enabled: false
 
+ClassAndModuleChildren:
+  Enabled: false
+
 NumericLiterals:
   MinDigits: 6
 

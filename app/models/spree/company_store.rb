@@ -7,6 +7,7 @@ class Spree::CompanyStore < Spree::Base
   validates :supplier_id, presence: true
   validates :slug, presence: true
   validates :name, presence: true
+  validates :host, presence: true
 
   delegate :products, to: :supplier
 
@@ -16,6 +17,13 @@ class Spree::CompanyStore < Spree::Base
     content_type: %w(image/jpeg image/png)
 
   accepts_nested_attributes_for :markups, allow_destroy: true, reject_if: ->(m) { m[:markup].blank? }
+
+  def store_taxon
+    Spree::Taxon.where(
+      name: slug,
+      taxonomy: Spree::Taxonomy.where(name: 'Products').first_or_create
+    ).first_or_create
+  end
 
   def seller
     Rails.cache.fetch("#{cache_key}/seller", expires_in: 5.minutes) do

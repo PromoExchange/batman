@@ -1,6 +1,7 @@
 class Spree::CompanyStoreController < Spree::StoreController
   layout 'company_store_layout'
   before_action :fetch_company_store, only: [:show]
+  before_action :store_view_setup, only: [:show]
 
   def index
     company_store_id = ENV['COMPANYSTORE_ID']

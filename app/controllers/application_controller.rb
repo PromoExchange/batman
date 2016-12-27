@@ -10,6 +10,11 @@ class ApplicationController < ActionController::Base
     @current_company_store ||= Spree::CompanyStore.find(session[:company_store_id])
   end
 
+  def store_view_setup
+    return if current_company_store.nil?
+    prepend_view_path "app/views/#{current_company_store.slug}_store/"
+  end
+
   def ping
     render json: { ping: 'pong' }
   end

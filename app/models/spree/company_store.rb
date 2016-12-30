@@ -21,7 +21,7 @@ class Spree::CompanyStore < Spree::Base
   def store_taxon
     Spree::Taxon.where(
       name: slug,
-      taxonomy: Spree::Taxonomy.where(name: 'Products').first_or_create
+      taxonomy: Spree::Taxonomy.where(name: 'Stores').first_or_create
     ).first_or_create
   end
 

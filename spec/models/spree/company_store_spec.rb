@@ -32,7 +32,7 @@ RSpec.describe Spree::CompanyStore, type: :model do
 
     it 'should return a valid taxon for this CS' do
       expect(company_store.store_taxon.valid?).to be_truthy
-      product_taxonomy = Spree::Taxonomy.where(name: 'Products').first
+      product_taxonomy = Spree::Taxonomy.where(name: 'Stores').first
       expect(company_store.store_taxon.taxonomy).to eq product_taxonomy
       expect(company_store.store_taxon.parent).to be_nil
     end

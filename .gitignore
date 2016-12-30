@@ -40,3 +40,6 @@ dump.rdb
 coverage
 
 .irbrc
+
+# Heroku dump file
+latest.dump

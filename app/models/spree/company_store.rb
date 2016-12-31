@@ -29,6 +29,14 @@ class Spree::CompanyStore < Spree::Base
     ).first_or_create
   end
 
+  def store_categories
+    categories_taxonomy = Spree::Taxonomy.where(name: 'Categories').first
+    generic_taxon = Spree::Taxon.where(taxonomy: categories_taxonomy, name: 'Generic').first
+    categories_taxons = Spree::Taxon.where(taxonomy: categories_taxonomy).where.not(id: generic_taxon.id)
+    generic_products = Spree::Classification.where(product: cs.products, taxon: generic_taxon).uniq.pluck(:product_id)
+    Spree::Classification.where(taxon: categories_taxons, product_id: generic_products).uniq
+  end
+
   def seller
     Rails.cache.fetch("#{cache_key}/seller", expires_in: 5.minutes) do
       Spree::User.find_by(email: ENV['SELLER_EMAIL'])

@@ -30,8 +30,8 @@ class Spree::CompanyStore < Spree::Base
   end
 
   def store_categories
-    categories_taxonomy = Spree::Taxonomy.where(name: 'Categories').first
-    generic_taxon = Spree::Taxon.where(taxonomy: categories_taxonomy, name: 'Generic').first
+    categories_taxonomy = Spree::Taxonomy.find_by(name: 'Categories')
+    generic_taxon = Spree::Taxon.find_by(taxonomy: categories_taxonomy, name: 'Generic')
     categories_taxons = Spree::Taxon.where(taxonomy: categories_taxonomy).where.not(id: generic_taxon.id)
     generic_products = Spree::Classification.where(product: cs.products, taxon: generic_taxon).uniq.pluck(:product_id)
     Spree::Classification.where(taxon: categories_taxons, product_id: generic_products).uniq

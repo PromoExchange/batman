@@ -9,14 +9,18 @@ class Spree::CompanyStore < Spree::Base
   validates :name, presence: true
   validates :host, presence: true
 
-  delegate :products, to: :supplier
-
   has_attached_file :logo, path: '/company_store/:id/:style/:basename.:extension'
   validates_attachment :logo, presence: true
   validates_attachment_content_type :logo,
     content_type: %w(image/jpeg image/png)
 
   accepts_nested_attributes_for :markups, allow_destroy: true, reject_if: ->(m) { m[:markup].blank? }
+
+  def products
+    Spree::Product.where(
+      id: Spree::Classification.where(taxon: store_taxon).pluck(:product_id)
+    )
+  end
 
   def store_taxon
     Spree::Taxon.where(

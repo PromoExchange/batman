@@ -58,9 +58,18 @@ Spree::Product.class_eval do
     end
   end
 
+  def original?
+    ActiveRecord::Base.connection.column_exists?(:spree_products, :original_supplier_id)
+  end
+
+  def choice_supplier
+    return original_supplier if original?
+    supplier
+  end
+
   def markup
     Rails.cache.fetch("#{cache_key}/markup", expires_in: 5.minutes) do
-      Spree::Markup.find_by(supplier: original_supplier, company_store: company_store)
+      Spree::Markup.find_by(supplier: choice_supplier, company_store: company_store)
     end
   end
 

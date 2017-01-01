@@ -9,6 +9,6 @@ class Spree::Markup < Spree::Base
   validates :markup, presence: true
 
   def clear_cache
-    Spree::Product.where(original_supplier_id: supplier_id).find_each(&:clear_cache)
+    company_store.products.each(&:clear_cache)
   end
 end

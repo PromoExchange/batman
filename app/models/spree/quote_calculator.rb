@@ -18,7 +18,7 @@ module Spree::QuoteCalculator
     log('Quote: Calculating')
     log("Item name: #{product.name}")
     log("Factory: #{product.supplier.name}")
-    log("Original Factory: #{product.original_supplier.name}")
+    log("Original Factory: #{product.original_supplier.name}") if product.original?
     log("SKU: #{product.master.sku}")
     log("Item Count: #{quantity}")
 

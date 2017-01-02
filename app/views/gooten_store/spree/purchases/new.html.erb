@@ -1,35 +1,28 @@
 <%- api_key = @current_company_store.buyer.spree_api_key unless @current_company_store.nil? %>
 <%- api_key = spree_current_user.spree_api_key if api_key.nil? && spree_current_user.present? %>
-<%- is_gooten = @current_company_store.slug == 'gooten' %>
-
-<h1>I AM GOOTEN</h1>
 
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
-    <% @product.images.each_with_index do |image, index| %>
-      <% if index.zero? %>
-        <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
-      <% else %>
-        <%= image_tag image.attachment.url(:small) %>
-      <% end %>
+    <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
+
+    <% @product.images.each do |image| %>
+      <%= image_tag image.attachment.url(:small) %>
     <% end %>
 
     <br /><br />
 
-    <% if is_gooten %>
-      <div class="well">
-        <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
-          <div class="form-group">
-            <h2 class="text-center"><%= Spree.t(:logo) %></h2>
-            <%= f.file_field :logo, class: 'logo-upload' %>
-          </div>
+    <div class="well">
+      <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
+        <div class="form-group">
+          <h2 class="text-center"><%= Spree.t(:logo) %></h2>
+          <%= f.file_field :logo, class: 'logo-upload' %>
+        </div>
 
-          <br />
+        <br />
 
-          <%= image_tag 'star-1.png', class: 'hidden logo-to-upload text-center' %>
-        <% end %>
-      </div>
-    <% end %>
+        <%= image_tag 'star-1.png', class: 'hidden logo-to-upload text-center' %>
+      <% end %>
+    </div>
   </div>
 
   <div class="col-md-6">
@@ -53,18 +46,9 @@
         <%= render partial: 'imprint_method', locals: { f: f }%>
         <%= render partial: 'logos', locals: { f: f } %>
         <%= render partial: 'main_color', locals: { f: f } %>
-        <% if is_gooten %>
-          <%= render partial: 'quantity', locals: { f: f } %>
-          <%= render partial: 'address', locals: { f: f } %>
-        <% else %>
-          <%= render partial: 'price_breaks', locals: { f: f } %>
-          <div class="<%= 'col-md-4' unless @product.wearable? %>">
-            <%= render partial: 'quantity', locals: { f: f } %>
-          </div>
-          <div class="<%= 'col-md-8' unless @product.wearable? %>">
-            <%= render partial: 'address_drop', locals: { f: f } %>
-          </div>
-        <% end %>
+        <%= render partial: 'quality', locals: { f: f } %>
+        <%= render partial: 'quantity', locals: { f: f } %>
+        <%= render partial: 'address', locals: { f: f } %>
         <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
         <%= render partial: 'shipping_options', locals: { f: f } %>
         <%= render partial: 'active_price', locals: { f: f } %>

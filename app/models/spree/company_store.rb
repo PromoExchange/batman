@@ -23,6 +23,10 @@ class Spree::CompanyStore < Spree::Base
     end
   end
 
+  def store_categories
+    Spree::Classification.all[0..5]
+  end
+
   def cache_key
     "#{model_name.cache_key}/#{id || 'new'}"
   end

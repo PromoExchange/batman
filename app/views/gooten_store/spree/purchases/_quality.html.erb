@@ -1,0 +1,4 @@
+<div class="form-group">
+  <%= f.label(:quality, Spree.t(:quality)) %>
+  <%= f.select :quality_option, options_for_select(@quality_options), { }, { class: 'form-control' } %>
+</div>

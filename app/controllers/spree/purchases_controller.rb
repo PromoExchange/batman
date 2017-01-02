@@ -36,7 +36,7 @@ class Spree::PurchasesController < Spree::StoreController
   def create
     # TODO: Move :size into purchase_params
     if params[:size].present?
-      params[:size] = params[:size].merge(params[:size]) { |_k, val| (val.to_i < 0) ? 0 : val.to_i }
+      params[:size] = params[:size].merge(params[:size]) { |_k, val| val.to_i < 0 ? 0 : val.to_i }
       @size_quantity = params[:size]
       params[:purchase][:quantity] = params[:size].values.map(&:to_i).reduce(:+)
       @total_size = purchase_params[:quantity]
@@ -74,8 +74,7 @@ class Spree::PurchasesController < Spree::StoreController
 
       purchase.order_id = order.id
 
-      # TODO: Once the quote structure gets recast as a
-      # as calculator we can have a real quantity here.
+      # TODO: Once the quote structure gets recast as a as calculator we can have a real quantity here.
       li = Spree::LineItem.create(
         currency: 'USD',
         order_id: order.id,
@@ -142,6 +141,12 @@ class Spree::PurchasesController < Spree::StoreController
       ['UPS Next Day Air Saver', :ups_next_day_air_saver],
       ['UPS Next Day Air Early A.M.', :ups_next_day_air_early_am],
       ['UPS Next Day Air', :ups_next_day_air]
+    ]
+
+    @quality_options = [
+      ['Economy', :economy],
+      ['Premium', :premium],
+      ['Custom', :custom]
     ]
   end
 

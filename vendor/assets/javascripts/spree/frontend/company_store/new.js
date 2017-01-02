@@ -201,6 +201,10 @@ $(function() {
     recalc_price();
   });
 
+  $('#purchase_quality_option').change(function() {
+    recalc_price();
+  });
+
   $('#purchase_shipping_option').change(function() {
     var selected_shipping_option = $('#purchase_shipping_option option:selected');
     var delivery_date = selected_shipping_option.attr('delivery_date');

@@ -4,12 +4,9 @@
 
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
-    <% @product.images.each_with_index do |image, index| %>
-      <% if index.zero? %>
-        <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
-      <% else %>
-        <%= image_tag image.attachment.url(:small) %>
-      <% end %>
+    <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
+    <% @product.images.each do |image| %>
+      <%= image_tag image.attachment.url(:small), class: 'secondary-product-image' %>
     <% end %>
 
     <br /><br />

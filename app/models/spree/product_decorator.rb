@@ -4,6 +4,7 @@ Spree::Product.class_eval do
 
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_many :upcharges, class_name: 'Spree::UpchargeProduct', foreign_key: 'related_id'
+  has_one :special_price, class_name: 'Spree::Gooten::Price', inverse_of: :product
   has_many :color_product
   has_one :carton, dependent: :destroy
   belongs_to :original_supplier, class_name: 'Spree::Supplier', inverse_of: :products
@@ -316,6 +317,10 @@ Spree::Product.class_eval do
         best_price: nil,
         delivery_days: nil
       }
+    end
+
+    if special_price.present? && options[:quantity] < special_price.quantity
+      total_price = options[:quantity] * special_price.price
     end
 
     response = {

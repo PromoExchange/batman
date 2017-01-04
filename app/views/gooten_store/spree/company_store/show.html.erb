@@ -2,7 +2,7 @@
   <% @current_company_store.store_categories.each do |category| %>
     <div class="col-md-4 cs-product">
       <% unless category.images.empty? %>
-        <%= link_to large_image(category, { itemprop: 'image', class: 'cs-image' }), main_app.new_purchase_path(purchase: { product_id: @current_company_store.products.first.id }), itemprop: 'url' %>
+        <%= link_to large_image(category, { itemprop: 'image', class: 'cs-image' }), main_app.new_gooten_purchase_path(purchase: { category_id: category.id }), itemprop: 'url' %>
       <% end %>
       <div class="cs-product-text text-center"><%= category.name %></div>
     </div>

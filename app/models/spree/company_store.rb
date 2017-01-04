@@ -18,13 +18,25 @@ class Spree::CompanyStore < Spree::Base
 
   accepts_nested_attributes_for :markups, allow_destroy: true, reject_if: ->(m) { m[:markup].blank? }
 
-  def products
+  def products(options = {})
+    returned_products = Spree::Product.where(
+      id: Spree::Classification.where(taxon: store_taxon).pluck(:product_id)
+    ).to_a
+
     # 1. Get all products (no options)
     # 2. Get products for a given category
     # 3. Get products for a given category and quality
-    Spree::Product.where(
-      id: Spree::Classification.where(taxon: store_taxon).pluck(:product_id)
-    )
+    if options[:category].present?
+      returned_products.reject! do |product|
+        true unless product.category == options[:category]
+      end
+      if options[:quality].present?
+        returned_products.reject! do |product|
+          true unless product.quality == options[:quality]
+        end
+      end
+    end
+    returned_products
   end
 
   def store_taxon

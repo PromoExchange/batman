@@ -50,10 +50,6 @@ module Batman
     config.autoload_paths << Rails.root.join('lib')
 
     # Force SSL if envionment variable Set
-    if ENV["FORCE_SSL"] == 'yes'
-      config.force_ssl = true
-    else
-      config.force_ssl = false
-    end
+    config.force_ssl = (ENV['FORCE_SSL'] == 'yes')
   end
 end

@@ -1,61 +1,37 @@
 namespace :migrate do
-  desc 'Migrate markup'
-  task create_markup: :environment do
-    seller = Spree::User.find_by_email(ENV['SELLER_EMAIL'] || 'michael.goldstein@thepromoexchange.com')
-    raise "Unable to find seller [#{ENV['SELLER_EMAIL'] || 'michael.goldstein@thepromoexchange.com'}]" if seller.nil?
+  desc 'Products to new category'
+  task product_category: :environment do
+    raise 'This is a run once only task' unless Spree::Taxonomy.where(name: 'Colors').present?
 
-    suppliers = Spree::CompanyStore.pluck(:supplier_id)
-    Spree::Product.where(supplier: suppliers).each do |product|
-      next if product.original_supplier.nil?
-      next if product.company_store.nil?
+    # Clean up colors
+    color_taxonomy = Spree::Taxonomy.where(name: 'Colors').first
+    Spree::Taxon.where(taxonomy: color_taxonomy).destroy_all
+    Spree::Taxonomy.where(name: 'Colors').destroy_all
 
-      prebid = Spree::Prebid.where(
-        supplier: product.original_supplier,
-        seller: seller,
-        live: true
-      ).first
-
-      unless prebid.nil?
-        markup = prebid.markup
-        eqp = prebid.eqp
-        eqp_discount = prebid.eqp_discount
+    # Convert products to category
+    Spree::CompanyStore.all.each do |cs|
+      store_taxon = cs.store_taxon
+      Spree::Product.where(supplier_id: cs.supplier_id).each do |product|
+        Spree::Classification.where(
+          product: product,
+          taxon: store_taxon
+        ).first_or_create
       end
+    end
 
-      Spree::Markup.where(
-        supplier: product.original_supplier,
-        markup: markup || 0.10,
-        eqp: eqp || false,
-        eqp_discount: eqp_discount || 0.0,
-        live: true,
-        company_store: product.company_store
+    # Convert Wearable to new Wearables
+    categories_taxonomy = Spree::Taxon.where(name: 'Categories').first
+    new_apparel_taxon = Spree::Taxon.where(
+      name: 'Apparel',
+      taxonomy: categories_taxonomy
+    ).first
+
+    old_apparel_taxon = Spree::Taxon.where(dc_category_guid: '7F4C59A7-6226-11D4-8976-00105A7027AA')
+    Spree::Classification.where(taxon: old_apparel_taxon).each do |old_apparel_product|
+      Spree::Classification.where(
+        product: old_apparel_product.product,
+        taxon: new_apparel_taxon
       ).first_or_create
     end
-  end
-
-  namespace :user do
-    desc 'Assign addresses'
-    task address_assign: :environment do
-      Spree::Address.all.each do |address|
-        if address.ship?
-          next if address.ship_user.nil?
-          address.update(user_id: address.ship_user.id)
-        else
-          next if address.bill_user.nil?
-          address.update(user_id: address.bill_user.id)
-        end
-        address.save!
-      end
-    end
-
-    desc 'Email confirmation for existing users'
-    task email_confirmation: :environment do
-      Spree::User.all.each(&:confirm!)
-    end
-    desc 'Run all migration tasks'
-    task all: [
-      'environment',
-      'migrate:user:address_assign',
-      'email_confirmation'
-    ]
   end
 end

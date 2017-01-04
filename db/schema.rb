@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 20170102160729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -1266,6 +1265,7 @@ ActiveRecord::Schema.define(version: 20170102160729) do
     t.string   "meta_keywords"
     t.integer  "depth"
     t.string   "dc_category_guid"
+    t.string   "slug"
   end
 
   add_index "spree_taxons", ["parent_id"], name: "index_taxons_on_parent_id", using: :btree

@@ -4,6 +4,7 @@ Spree::Product.class_eval do
 
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   has_many :upcharges, class_name: 'Spree::UpchargeProduct', foreign_key: 'related_id'
+  has_one :special_price, class_name: 'Spree::Gooten::Price', inverse_of: :product
   has_many :color_product
   has_one :carton, dependent: :destroy
   belongs_to :original_supplier, class_name: 'Spree::Supplier', inverse_of: :products
@@ -58,9 +59,18 @@ Spree::Product.class_eval do
     end
   end
 
+  def original?
+    ActiveRecord::Base.connection.column_exists?(:spree_products, :original_supplier_id)
+  end
+
+  def choice_supplier
+    return original_supplier if original?
+    supplier
+  end
+
   def markup
     Rails.cache.fetch("#{cache_key}/markup", expires_in: 5.minutes) do
-      Spree::Markup.find_by(supplier: original_supplier, company_store: company_store)
+      Spree::Markup.find_by(supplier: choice_supplier, company_store: company_store)
     end
   end
 
@@ -307,6 +317,10 @@ Spree::Product.class_eval do
         best_price: nil,
         delivery_days: nil
       }
+    end
+
+    if special_price.present? && options[:quantity] < special_price.quantity
+      total_price = options[:quantity] * special_price.price
     end
 
     response = {

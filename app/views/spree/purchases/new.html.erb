@@ -71,7 +71,7 @@
       <p id='mobile-align-center'><strong>Description:</strong> <%= @product.description %></p>
     <% end %>
 
-    <p id='mobile-align-center'><strong>Factory:</strong> <%= @product.original_supplier.name %></p>
+    <p id='mobile-align-center'><strong>Factory:</strong> <%= @product.original? ? @product.original_supplier.name : @product.supplier.name %></p>
     <p id='mobile-align-center'><strong>SKU:</strong> <%= @product.sku %></p>
   </div>
 </div>

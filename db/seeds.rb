@@ -27,16 +27,6 @@ class TaxonLoader
     load_taxon_tree(category_root, category_taxonomy, category_taxonomy)
   end
 
-  def self.load_colors(file_name)
-    color_taxonomy = Spree::Taxonomy.where(name: 'Colors').first_or_create
-    File.open(file_name).each do |color|
-      Spree::Taxon.create(
-        name: color.strip,
-        parent_id: Spree::Taxon.where(name: 'Colors').first.id,
-        taxonomy_id: color_taxonomy.id)
-    end
-  end
-
   def self.load_taxon_tree(branch, parent, taxonomy)
     branch.each do |k, v|
       taxon = Spree::Taxon.create(name: k,
@@ -46,8 +36,6 @@ class TaxonLoader
     end
   end
 end
-
-TaxonLoader.load_colors(seed_path('px_colors.txt'))
 
 puts 'Upcharge types'
 File.open(seed_path('upcharge_types.txt')).each do |n|

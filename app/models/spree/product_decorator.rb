@@ -56,13 +56,13 @@ Spree::Product.class_eval do
   def quality
     # TODO: We are picking first but there should be only one
     quality = Spree::Classification.find_by(taxon: quality_taxons, product: self)
-    quality && quality.taxon.name.parameterize.underscore.to_sym
+    quality && quality.taxon.to_sym
   end
 
   def category
     # TODO: Again we are picking the first one only, but could be more than one
     category = Spree::Classification.find_by(taxon: categories_taxons, product: self)
-    category && category.taxon.name.parameterize.underscore.to_sym
+    category && category.taxon.to_sym
   end
 
   def company_store

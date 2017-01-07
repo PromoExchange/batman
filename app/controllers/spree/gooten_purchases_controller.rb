@@ -4,14 +4,16 @@ class Spree::GootenPurchasesController < Spree::StoreController
 
   def new
     @category = Spree::Taxon.find(purchase_params[:category_id])
+    quality = purchase_params[:quality] || :economy
+    @product = @current_company_store.products(category: @category.to_sym, quality: quality).first
 
     @purchase = Spree::Purchase.new(
       quantity: nil,
-      # logo: @product.company_store.buyer.logos.first.id,
-      # custom_pms_colors: @product.preconfigure.custom_pms_colors,
-      # imprint_method_id: @product.preconfigure.imprint_method_id,
-      # main_color_id: @product.preconfigure.main_color_id,
-      # buyer_id: @product.company_store.buyer.id,
+      product_id: @product.id,
+      logo: @current_company_store.default_logo,
+      imprint_method_id: @product.preconfigure.imprint_method_id,
+      main_color_id: @product.preconfigure.main_color_id,
+      buyer_id: @current_company_store.buyer.id,
       price_breaks: [],
       sizes: [],
       shipping_option: :ups_ground
@@ -138,7 +140,7 @@ class Spree::GootenPurchasesController < Spree::StoreController
     @quality_options = [
       ['Economy', :economy],
       ['Premium', :premium],
-      ['Custom', :custom]
+      ['Super Premium', :super_premium]
     ]
   end
 

@@ -18,6 +18,10 @@ class Spree::CompanyStore < Spree::Base
 
   accepts_nested_attributes_for :markups, allow_destroy: true, reject_if: ->(m) { m[:markup].blank? }
 
+  def default_logo
+    buyer.logos.first
+  end
+
   def products(options = {})
     returned_products = Spree::Product.where(
       id: Spree::Classification.where(taxon: store_taxon).pluck(:product_id)

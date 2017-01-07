@@ -3,7 +3,7 @@
 
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
-    <%= large_image(@category, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
+    <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
 
     <% @category.images.each do |image| %>
       <%= image_tag image.attachment.url(:small) %>

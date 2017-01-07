@@ -137,10 +137,14 @@ class Spree::GootenPurchasesController < Spree::StoreController
       ['UPS Next Day Air', :ups_next_day_air]
     ]
 
+    economy_product = @current_company_store.products(category: @category.to_sym, quality: :economy).first
+    premium_product = @current_company_store.products(category: @category.to_sym, quality: :premium).first
+    super_premium_product = @current_company_store.products(category: @category.to_sym, quality: :super_premium).first
+
     @quality_options = [
-      ['Economy', :economy],
-      ['Premium', :premium],
-      ['Super Premium', :super_premium]
+      { name: 'Economy', quality: :economy, product_id: economy_product.id },
+      { name: 'Premium', quality: :premium, product_id: premium_product.id },
+      { name: 'Super Premium', quality: :super_premium, product_id: super_premium_product.id }
     ]
   end
 

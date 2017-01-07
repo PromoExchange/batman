@@ -202,6 +202,8 @@ $(function() {
   });
 
   $('#purchase_quality_option').change(function() {
+    var product_id = $('#purchase_quality_option option:selected').attr('product-id');
+    $('#purchase_product_id').val(product_id);
     recalc_price();
   });
 

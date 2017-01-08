@@ -35,7 +35,7 @@
     <div>
       <h4>Destination:</h3>
       <ul class="display-address-ul">
-        <%- address = @order.line_items.first.product.company_store.buyer.ship_address %>
+        <%- address = @order.ship_address %>
         <li><%= address.company %></li>
         <li><%= address.address1 %></li>
         <li><%= address.address2 %></li>

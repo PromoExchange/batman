@@ -70,7 +70,10 @@ class Spree::PurchasesController < Spree::StoreController
       new_purchase_params = purchase_params.except(:address)
       purchase = Spree::Purchase.new(new_purchase_params)
 
-      order = Spree::Order.create(user_id: purchase_params[:buyer_id])
+      order = Spree::Order.create(
+        user_id: purchase_params[:buyer_id],
+        ship_address_id: purchase_params[:address_id]
+      )
 
       purchase.order_id = order.id
 

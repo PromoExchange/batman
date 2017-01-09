@@ -7,7 +7,7 @@
       <% else %>
         <%= link_to large_image(category, { itemprop: 'image', class: 'cs-image' }), main_app.new_gooten_purchase_path(purchase: { category_id: category.id }), itemprop: 'url' %>
       <% end %>
-      <div class="cs-product-text text-center"><%= category.name %></div>
+      <div class="cs-product-text text-center"><%= category.name.pluralize %></div>
     </div>
   <% end %>
 </div>

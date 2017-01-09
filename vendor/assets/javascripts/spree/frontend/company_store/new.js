@@ -151,15 +151,14 @@ $(function() {
   function addressFilled() {
     var company = $('#purchase_address_company').val()
     var address1 = $('#purchase_address_address1').val()
-    var address2 = $('#purchase_address_address2').val()
     var city = $('#purchase_address_city').val()
     var state_id = $('#purchase_address_state').val()
     var zipcode = $('#purchase_address_zipcode').val()
-    if (!company || !address1 || !address2 || !city || !state_id || !zipcode) {
+    if (!company || !address1 || !city || !state_id || !zipcode) {
       return false;
     }
 
-    return company.length > 0 && address1.length > 0 && address2.length > 0 && city.length > 0 && state_id.length > 0 && zipcode.length > 0;
+    return company.length > 0 && address1.length > 0 && city.length > 0 && state_id.length > 0 && zipcode.length > 0;
   }
 
   function addressChanged() {

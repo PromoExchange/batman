@@ -83,6 +83,12 @@ RSpec.describe Spree::Quote, type: :model do
       expect(quote2.total_price).to be > quote.total_price
     end
 
+    it 'should apply product setup charge twice' do
+      quote2 = FactoryGirl.create(:quote, :with_two_setup_upcharges)
+      expect((quote2.total_price - 1066.28).abs).to be < 0.01
+      expect(quote2.total_price).to be > quote.total_price
+    end
+
     it 'should apply product run charges' do
       quote2 = FactoryGirl.create(:quote, :with_run_upcharges)
       expect((quote2.total_price - 778.78).abs).to be < 0.01

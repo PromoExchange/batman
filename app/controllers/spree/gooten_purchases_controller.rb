@@ -1,29 +1,23 @@
-class Spree::PurchasesController < Spree::StoreController
+class Spree::GootenPurchasesController < Spree::StoreController
   layout 'company_store_layout'
   before_action :store_view_setup
 
   def new
-    # TODO: Allow creation with shipping_option
-    @product = Spree::Product.find(purchase_params[:product_id])
+    @category = Spree::Taxon.find(purchase_params[:category_id])
+    quality = purchase_params[:quality] || :economy
+    @product = @current_company_store.products(category: @category.to_sym, quality: quality).first
 
     @purchase = Spree::Purchase.new(
       quantity: nil,
-      product_id: purchase_params[:product_id].to_i,
-      logo_id: @product.company_store.buyer.logos.first.id,
-      custom_pms_colors: @product.preconfigure.custom_pms_colors,
+      product_id: @product.id,
+      logo: @current_company_store.default_logo,
       imprint_method_id: @product.preconfigure.imprint_method_id,
       main_color_id: @product.preconfigure.main_color_id,
-      buyer_id: @product.company_store.buyer.id,
+      buyer_id: @current_company_store.buyer.id,
       price_breaks: [],
       sizes: [],
       shipping_option: :ups_ground
     )
-
-    @product.price_breaks.each do |price_break|
-      lowest_range = price_break.split('..')[0].gsub(/\D/, '').to_i
-      best_price = @product.best_price(quantity: lowest_range)[:best_price].to_f / lowest_range
-      @purchase.price_breaks << [lowest_range, best_price]
-    end
 
     supporting_data
 
@@ -70,10 +64,7 @@ class Spree::PurchasesController < Spree::StoreController
       new_purchase_params = purchase_params.except(:address)
       purchase = Spree::Purchase.new(new_purchase_params)
 
-      order = Spree::Order.create(
-        user_id: purchase_params[:buyer_id],
-        ship_address_id: purchase_params[:address_id]
-      )
+      order = Spree::Order.create(user_id: purchase_params[:buyer_id])
 
       purchase.order_id = order.id
 
@@ -146,15 +137,20 @@ class Spree::PurchasesController < Spree::StoreController
       ['UPS Next Day Air', :ups_next_day_air]
     ]
 
+    economy_product = @current_company_store.products(category: @category.to_sym, quality: :economy).first
+    premium_product = @current_company_store.products(category: @category.to_sym, quality: :premium).first
+    super_premium_product = @current_company_store.products(category: @category.to_sym, quality: :super_premium).first
+
     @quality_options = [
-      ['Economy', :economy],
-      ['Premium', :premium],
-      ['Custom', :custom]
+      { name: 'Economy', quality: :economy, product_id: economy_product.id },
+      { name: 'Premium', quality: :premium, product_id: premium_product.id },
+      { name: 'Super Premium', quality: :super_premium, product_id: super_premium_product.id }
     ]
   end
 
   def purchase_params
     params.require(:purchase).permit(
+      :category_id,
       :product_id,
       :buyer_id,
       :logo_id,

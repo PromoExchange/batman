@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161231123251) do
+ActiveRecord::Schema.define(version: 20170107175145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -830,6 +830,7 @@ ActiveRecord::Schema.define(version: 20161231123251) do
     t.integer "shipping_option",                null: false
     t.integer "address_id",                     null: false
     t.string  "reference",         default: ""
+    t.integer "quality_option"
   end
 
   create_table "spree_quotes", force: :cascade do |t|
@@ -1264,7 +1265,6 @@ ActiveRecord::Schema.define(version: 20161231123251) do
     t.string   "meta_keywords"
     t.integer  "depth"
     t.string   "dc_category_guid"
-    t.string   "slug"
   end
 
   add_index "spree_taxons", ["parent_id"], name: "index_taxons_on_parent_id", using: :btree

@@ -1,5 +1,5 @@
 <%= f.hidden_field :address_id, value: 0 %>
-
+<%= f.label(:address, Spree.t(:address)) %>:
 <%= f.fields_for :address, class: 'form' do |f| %>
   <div class="form-group">
     <%= f.text_field(:company, class: 'form-control', placeholder: 'Company Name')%>

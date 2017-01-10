@@ -1,4 +1,6 @@
 class Spree::CompanyStore < Spree::Base
+  include Categories
+
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
   belongs_to :buyer, class_name: 'Spree::User'
   has_many :markups, dependent: :destroy
@@ -16,10 +18,29 @@ class Spree::CompanyStore < Spree::Base
 
   accepts_nested_attributes_for :markups, allow_destroy: true, reject_if: ->(m) { m[:markup].blank? }
 
-  def products
-    Spree::Product.where(
+  def default_logo
+    buyer.logos.first
+  end
+
+  def products(options = {})
+    returned_products = Spree::Product.where(
       id: Spree::Classification.where(taxon: store_taxon).pluck(:product_id)
-    )
+    ).to_a
+
+    # 1. Get all products (no options)
+    # 2. Get products for a given category
+    # 3. Get products for a given category and quality
+    if options[:category].present?
+      returned_products.reject! do |product|
+        true unless product.category == options[:category]
+      end
+      if options[:quality].present?
+        returned_products.reject! do |product|
+          true unless product.quality == options[:quality]
+        end
+      end
+    end
+    returned_products
   end
 
   def store_taxon
@@ -30,10 +51,6 @@ class Spree::CompanyStore < Spree::Base
   end
 
   def store_categories
-    # TODO: Refactor this, this has become messy
-    categories_taxonomy = Spree::Taxonomy.find_by(name: 'Categories')
-    generic_taxon = Spree::Taxon.find_by(taxonomy: categories_taxonomy, name: 'Generic')
-    categories_taxons = Spree::Taxon.where(taxonomy: categories_taxonomy).where.not(id: generic_taxon.id)
     generic_products = Spree::Classification.where(product: products, taxon: generic_taxon).uniq.pluck(:product_id)
     Spree::Taxon.where(
       id: Spree::Classification.where(taxon: categories_taxons, product_id: generic_products).uniq.pluck(:taxon_id)

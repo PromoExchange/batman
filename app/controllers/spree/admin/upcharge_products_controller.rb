@@ -53,6 +53,7 @@ class Spree::Admin::UpchargeProductsController < Spree::Admin::BaseController
       :value,
       :range,
       :price_code,
+      :apply_count,
       :imprint_method_id
     )
   end

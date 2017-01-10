@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170107175145) do
+ActiveRecord::Schema.define(version: 20170110214339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1302,15 +1302,16 @@ ActiveRecord::Schema.define(version: 20170107175145) do
   end
 
   create_table "spree_upcharges", force: :cascade do |t|
-    t.integer "upcharge_type_id",  null: false
-    t.integer "related_id",        null: false
-    t.string  "value",             null: false
+    t.integer "upcharge_type_id",              null: false
+    t.integer "related_id",                    null: false
+    t.string  "value",                         null: false
     t.string  "range"
     t.string  "actual"
     t.string  "price_code"
     t.integer "position"
     t.integer "imprint_method_id"
     t.string  "type"
+    t.integer "apply_count",       default: 1
   end
 
   add_index "spree_upcharges", ["imprint_method_id"], name: "index_spree_upcharges_on_imprint_method_id", using: :btree

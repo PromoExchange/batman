@@ -33,6 +33,7 @@ gem 'slim', '~> 3.0', '>= 3.0.6'
 gem 'nokogiri'
 gem 'ruby-prof'
 gem 'slack-notifier'
+gem 'pluck_to_hash', '~> 0.1.3'
 
 # spree ecommerce
 gem 'spree', '3.0.5'

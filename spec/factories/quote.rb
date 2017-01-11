@@ -26,6 +26,10 @@ FactoryGirl.define do
       association :product, factory: [:px_product, :with_two_setup_upcharges]
     end
 
+    trait :with_range_setup_upcharges do
+      association :product, factory: [:px_product, :with_range_setup_upcharges]
+    end
+
     trait :with_run_upcharges do
       association :product, factory: [:px_product, :with_run_upcharges]
     end

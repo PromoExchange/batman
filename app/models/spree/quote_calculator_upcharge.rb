@@ -7,6 +7,8 @@ module Spree::QuoteCalculatorUpcharge
       .order(:position)
       .pluck_to_hash(:name, :price_code, :value, :range, :apply_count)
 
+    setup_applied_count = 1
+
     product_upcharges.each do |product_upcharge|
       price_code = product_upcharge[:price_code].gsub(/[1-9]/, '')
 
@@ -43,6 +45,25 @@ module Spree::QuoteCalculatorUpcharge
             "#{Spree::Price.discount_price(price_code, less_than_minimum_surcharge)}")
           log("After applying surcharge unit cost: #{self.unit_price}")
         when 'setup'
+          setup_in_range = true
+
+          unless product_upcharge[:range].blank?
+            log("Setup range check: #{product_upcharge[:range]} - setup_apply #{setup_applied_count}")
+            bounds = []
+            if product_upcharge[:range].include? '+'
+              bounds[0] = product_upcharge[:range].gsub(/([()])|\+/, '').to_i
+              bounds[1] = [num_colors, 1].max * 2
+            else
+              bounds = product_upcharge[:range].gsub(/[()]/, '').split('..').map(&:to_i)
+            end
+            setup_in_range = Range.new(bounds[0], bounds[1]).member?(setup_applied_count)
+          end
+
+          unless setup_in_range
+            log("Not in setup range #{product_upcharge[:range]} - #{[num_colors, 1].max} , skipping")
+            next
+          end
+
           setup_charge = product_upcharge[:value].to_f
           num_setups = [num_colors, 1].max
           (1..num_setups).each do
@@ -56,6 +77,7 @@ module Spree::QuoteCalculatorUpcharge
           log("Price code: #{price_code}")
           log("Discounted Charge: #{Spree::Price.discount_price(price_code, setup_charge)}")
           log("After applying charge unit cost: #{self.unit_price}")
+          setup_applied_count += 1
         when 'run'
           next unless in_range
           run_charge = product_upcharge[:value].to_f

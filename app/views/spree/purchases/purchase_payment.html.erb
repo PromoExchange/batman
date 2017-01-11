@@ -25,7 +25,7 @@
         <div class="purchase-product-color"<%= @order.purchase.main_color.color %></div>
       </td>
       <td><%= @order.purchase.quantity %></td>
-      <td><%= number_to_currency(@order.total.to_f) %></td>
+      <td><%= number_to_currency(@order.item_total.to_f) %></td>
     </tr>
   </tbody>
 </table>
@@ -50,7 +50,7 @@
       <script
         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
         data-key="<%=ENV['STRIPE_PUBLISHABLE_KEY']%>"
-        data-amount=<%= @order.total.to_f * 100 %>
+        data-amount=<%= @order.item_total.to_f * 100 %>
         data-name="<%= @current_company_store.slug.titleize %>"
         data-description="<%= product.name %>"
         data-image="/images/px_logo.png"

@@ -12,6 +12,7 @@ class Spree::Purchase < Spree::Base
   belongs_to :buyer, class_name: 'Spree::User'
   belongs_to :address, class_name: 'Spree::Address'
   belongs_to :order, dependent: :destroy
+  has_one :image, as: :viewable, dependent: :destroy, class_name: 'Spree::Image'
 
   # TODO: remove reference, moved to purchase
   after_create :generate_reference

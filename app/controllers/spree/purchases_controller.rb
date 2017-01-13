@@ -67,8 +67,12 @@ class Spree::PurchasesController < Spree::StoreController
     order = nil
 
     Spree::Purchase.transaction do
-      new_purchase_params = purchase_params.except(:address)
+      new_purchase_params = purchase_params.except(:address, :image_id)
       purchase = Spree::Purchase.new(new_purchase_params)
+
+      if purchase_params[:image_id].present?
+        purchase.image = Spree::Image.new(attachment: Spree::Image.find(purchase_params[:image_id]).attachment)
+      end
 
       order = Spree::Order.create(
         user_id: purchase_params[:buyer_id],
@@ -117,7 +121,7 @@ class Spree::PurchasesController < Spree::StoreController
     )
 
     Resque.enqueue(SendInvoice, order_id: @order.id)
-    SLACK.ping "Order for $#{@order.total} by #{@order.user.email}"
+    SLACK.ping "Order for $#{@order.total} by #{@order.user.email}. Image: #{@order.purchase.image.attachment.url}"
 
     redirect_to "/company_store/#{current_company_store.slug}"
   end
@@ -156,6 +160,7 @@ class Spree::PurchasesController < Spree::StoreController
   def purchase_params
     params.require(:purchase).permit(
       :product_id,
+      :image_id,
       :buyer_id,
       :logo_id,
       :ship_to_zip,

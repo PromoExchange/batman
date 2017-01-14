@@ -1,0 +1,15 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxons), admin_taxons_path %> /
+  <%= @taxon.name %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <ul class="nav nav-pills nav-stacked" data-hook="admin_taxon_tabs">
+    <%= content_tag :li, class: ('active' if current == :details) do %>
+      <%= link_to_with_icon 'edit', Spree.t(:details), edit_admin_taxonomy_taxon_url(@taxonomy, @taxon.id) %>
+    <% end%>
+    <%= content_tag :li, class: ('active' if current == :images) do %>
+      <%= link_to_with_icon 'picture', Spree.t(:images), admin_taxonomy_taxon_images_url(@taxonomy, @taxon.id) %>
+    <% end%>
+  </ul>
+<% end %>

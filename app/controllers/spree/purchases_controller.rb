@@ -114,14 +114,14 @@ class Spree::PurchasesController < Spree::StoreController
       "token: #{params[:stripeToken]} description: #{params[:stripeEmail]}")
 
     Stripe::Charge.create(
-      amount: (@order.total.to_f * 100).to_i,
+      amount: (@order.item_total.to_f * 100).to_i,
       currency: 'usd',
       source: params[:stripeToken],
       description: params[:stripeEmail].to_s
     )
 
     Resque.enqueue(SendInvoice, order_id: @order.id)
-    SLACK.ping "Order for $#{@order.total} by #{@order.user.email}. Image: #{@order.purchase.image.attachment.url}"
+    SLACK.ping "Order for $#{@order.item_total} by #{@order.user.email}. Image: #{@order.purchase.image.attachment.url}"
 
     redirect_to "/company_store/#{current_company_store.slug}"
   end

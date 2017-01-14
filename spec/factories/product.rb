@@ -80,6 +80,37 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_two_setup_upcharges do
+      after(:create) do |product|
+        create_list(
+          :product_setup_upcharge,
+          1,
+          related_id: product.id,
+          imprint_method_id: product.imprint_method.id,
+          apply_count: 2
+        )
+      end
+    end
+
+    trait :with_range_setup_upcharges do
+      after(:create) do |product|
+        create(
+          :product_setup_upcharge,
+          range: '(1..1)',
+          value: '50',
+          related_id: product.id,
+          imprint_method_id: product.imprint_method.id
+        )
+        create(
+          :product_setup_upcharge,
+          range: '2+',
+          value: '100',
+          related_id: product.id,
+          imprint_method_id: product.imprint_method.id
+        )
+      end
+    end
+
     trait :with_additional_location_upcharge do
       after(:create) do |product|
         create(

@@ -3,10 +3,12 @@
 
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
-    <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
+    <% unless @category.images.empty? %>
+      <%= large_image(@category, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
+    <% end %>
 
     <% @category.images.each do |image| %>
-      <%= image_tag image.attachment.url(:small) %>
+      <%= image_tag image.attachment.url(:small), class: 'small-tile-image', onclick: "selectImage('#{image.id}', '#{image.attachment.url(:large)}');return false;" %>
     <% end %>
 
     <br /><br />
@@ -32,6 +34,7 @@
       <%= f.hidden_field :company_store_slug, value: @current_company_store.slug %>
       <%= f.hidden_field :product_id, value: @product.id %>
       <%= f.hidden_field :buyer_id, value: @purchase.buyer_id %>
+      <%= f.hidden_field :image_id, value: nil %>
 
       <% if @purchase.errors.any? %>
         <p class="alert alert-error">Errors</p>
@@ -57,3 +60,10 @@
     <% end %>
   </div>
 </div>
+
+<script type="text/javascript">
+  var selectImage = function(imageId, src) {
+    $('.main-product-image').attr('src', src);
+    $('#purchase_image_id').attr('value', imageId);
+  }
+</script>

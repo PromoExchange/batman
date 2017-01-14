@@ -40,6 +40,10 @@ module Spree
         end
       end
 
+      def model_class
+        Spree::Image
+      end
+
       private
 
       def location_after_destroy

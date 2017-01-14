@@ -139,6 +139,16 @@ Rails.application.routes.draw do
         resources :preconfigure
       end
 
+      resources :taxonomies do
+        resources :taxons do
+          resources :images, controller: :taxon_images do
+            collection do
+              post :update_positions
+            end
+          end
+        end
+      end
+
       resources :users do
         resources :logos
 

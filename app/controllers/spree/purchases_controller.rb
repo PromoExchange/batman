@@ -169,6 +169,7 @@ class Spree::PurchasesController < Spree::StoreController
       :main_color_id,
       :address_id,
       :shipping_option,
+      :quality_option,
       address: [:company, :address1, :address2, :city, :state_id, :zipcode]
     )
   end

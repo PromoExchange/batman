@@ -5,7 +5,9 @@ class Spree::GootenPurchasesController < Spree::StoreController
   def new
     @category = Spree::Taxon.find(purchase_params[:category_id])
     quality = purchase_params[:quality] || :economy
-    @product = @current_company_store.products(category: @category.to_sym, quality: quality).first
+    @product = @current_company_store.products(category: @category.to_sym, quality: quality.to_sym).first
+
+    supporting_data
 
     @purchase = Spree::Purchase.new(
       quantity: nil,
@@ -16,10 +18,9 @@ class Spree::GootenPurchasesController < Spree::StoreController
       buyer_id: @current_company_store.buyer.id,
       price_breaks: [],
       sizes: [],
-      shipping_option: :ups_ground
+      shipping_option: :ups_ground,
+      quality_option: @quality_options.find { |qo| qo[:quality] == quality.to_sym }[:quality]
     )
-
-    supporting_data
 
     render :new
   rescue StandardError => e
@@ -78,6 +79,7 @@ class Spree::GootenPurchasesController < Spree::StoreController
       :main_color_id,
       :address_id,
       :shipping_option,
+      :quality,
       address: [:company, :address1, :address2, :city, :state_id, :zipcode]
     )
   end

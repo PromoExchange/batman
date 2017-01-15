@@ -3,11 +3,11 @@
 
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
-    <% unless @category.images.empty? %>
-      <%= large_image(@category, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
+    <% unless @product.images.empty? %>
+      <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
     <% end %>
 
-    <% @category.images.each do |image| %>
+    <% @product.images.each do |image| %>
       <%= image_tag image.attachment.url(:small), class: 'small-tile-image', onclick: "selectImage('#{image.id}', '#{image.attachment.url(:large)}');return false;" %>
     <% end %>
 
@@ -66,4 +66,10 @@
     $('.main-product-image').attr('src', src);
     $('#purchase_image_id').attr('value', imageId);
   }
+
+  $('#purchase_quality_option').change(function() {
+    var quality_option = $("#purchase_quality_option").val();
+    var url = "/gooten_purchases/new?purchase[category_id]=<%= @category.id %>&purchase[quality]=" + quality_option;
+    window.location.href = url;
+  });
 </script>

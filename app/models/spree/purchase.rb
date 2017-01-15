@@ -31,6 +31,8 @@ class Spree::Purchase < Spree::Base
   validates :shipping_option, presence: true
   validates :address_id, presence: true
 
+  enum quality_option: { economy: 0, premium: 1, super_premium: 2 }
+
   def self.sizes
     %w(S M L XL 2XL)
   end

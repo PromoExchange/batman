@@ -58,7 +58,11 @@ class Spree::GootenPurchasesController < Spree::StoreController
     @quality_options = [
       { name: 'Economy', quality: :economy, product_id: economy_product.id },
       { name: 'Premium', quality: :premium, product_id: premium_product.id },
-      { name: 'Super Premium', quality: :super_premium, product_id: super_premium_product.id }
+      {
+        name: super_premium_product.original_supplier.name,
+        quality: :super_premium,
+        product_id: super_premium_product.id
+      }
     ]
   end
 

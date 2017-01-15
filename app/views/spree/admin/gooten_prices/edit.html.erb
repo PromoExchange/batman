@@ -1,0 +1,14 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :gooten_prices } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @special_price } %>
+
+<%= form_for [:admin, @special_price], url: admin_product_gooten_price_path(@product, @special_price) do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+
+    <div class="form-actions">
+      <%= button Spree.t('actions.update'), 'save' %>
+      <span class="or"><%= Spree.t(:or) %></span>
+      <%= button_link_to Spree.t('actions.cancel'), spree.edit_admin_product_url(@product), icon: 'delete', id: 'cancel_link' %>
+    </div>
+  </fieldset>
+<% end %>

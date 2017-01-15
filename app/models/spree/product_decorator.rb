@@ -2,6 +2,7 @@ Spree::Product.class_eval do
   include Categories
 
   before_create :build_default_carton
+  before_save :build_default_special_price
   after_save :clear_cache
 
   belongs_to :supplier, class_name: 'Spree::Supplier', inverse_of: :products
@@ -471,5 +472,11 @@ Spree::Product.class_eval do
 
   def build_default_carton
     build_carton
+  end
+
+  def build_default_special_price
+    if company_store.slug == 'gooten'
+      self.special_price = Spree::Gooten::Price.new(company_store: company_store, quantity: 0)
+    end
   end
 end

@@ -14,7 +14,7 @@
     <%= f.field_container :price, class: ['form-group'] do %>
       <%= f.label :price, Spree.t(:price) %>
       <span class='required'>*</span>
-      <%= f.number_field :price, class: 'form-control' %>
+      <%= f.number_field :price, class: 'form-control', step: :any %>
       <%= f.error_message_on :price %>
     <% end %>
   </div>

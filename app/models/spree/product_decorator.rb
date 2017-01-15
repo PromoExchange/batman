@@ -475,7 +475,7 @@ Spree::Product.class_eval do
   end
 
   def build_default_special_price
-    if company_store.slug == 'gooten'
+    if company_store.present? && company_store.slug == 'gooten'
       self.special_price = Spree::Gooten::Price.new(company_store: company_store, quantity: 0)
     end
   end

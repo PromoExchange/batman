@@ -137,6 +137,7 @@ Rails.application.routes.draw do
         resources :upcharge_products
         resources :cartons
         resources :preconfigure
+        resources :gooten_prices
       end
 
       resources :taxonomies do

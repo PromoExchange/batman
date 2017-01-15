@@ -26,5 +26,8 @@
     <%= content_tag :li, class: ('active' if current == :carton) do %>
       <%= link_to_with_icon 'list-alt', 'Carton', spree.edit_admin_product_carton_url(@product, @product.carton) %>
     <% end if can?(:admin, Spree::Carton) %>
+    <%= content_tag :li, class: ('active' if current == :gooten_prices) do %>
+      <%= link_to_with_icon 'list-alt', 'Gooten Pricing', spree.edit_admin_product_gooten_price_url(@product, @product.special_price) %>
+    <% end if @product.special_price.present? %>
   </ul>
 <% end %>

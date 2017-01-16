@@ -7,7 +7,8 @@
       <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
     <% end %>
 
-    <% @product.images.each do |image| %>
+    <% @product.images.each.with_index do |image, index| %>
+      <% next if index == 0 %>
       <%= image_tag image.attachment.url(:small), class: 'small-tile-image', onclick: "selectImage('#{image.id}', '#{image.attachment.url(:large)}');return false;" %>
     <% end %>
 

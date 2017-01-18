@@ -53,8 +53,6 @@ Rails.application.routes.draw do
     as: 'purchases',
     only: [:new, :create]
 
-  resources :gooten_purchases, controller: 'spree/gooten_purchases', as: :gooten_purchases, only: [:new, :create]
-
   resources :product_requests,
     controller: 'spree/product_requests',
     as: 'product_requests',

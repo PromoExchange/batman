@@ -4,19 +4,25 @@ class Spree::PurchasesController < Spree::StoreController
 
   def new
     # TODO: Allow creation with shipping_option
-    @product = Spree::Product.find(purchase_params[:product_id])
+    @category = Spree::Taxon.find_by_id(purchase_params[:category_id])
+    @product = Spree::Product.find_by_id(purchase_params[:product_id]) ||
+      @current_company_store.products(category: @category.to_sym, quality: quality.to_sym).first
+    quality = params[:purchase][:quality] || :economy
+
+    supporting_data
 
     @purchase = Spree::Purchase.new(
-      quantity: nil,
-      product_id: purchase_params[:product_id].to_i,
-      logo_id: @product.company_store.buyer.logos.first.id,
+      buyer: @current_company_store.buyer,
       custom_pms_colors: @product.preconfigure.custom_pms_colors,
       imprint_method_id: @product.preconfigure.imprint_method_id,
+      logo: @current_company_store.default_logo,
       main_color_id: @product.preconfigure.main_color_id,
-      buyer_id: @product.company_store.buyer.id,
       price_breaks: [],
-      sizes: [],
-      shipping_option: :ups_ground
+      product_id: purchase_params[:product_id].to_i,
+      quality_option: quality,
+      quantity: nil,
+      shipping_option: :ups_ground,
+      sizes: []
     )
 
     @product.price_breaks.each do |price_break|
@@ -154,11 +160,21 @@ class Spree::PurchasesController < Spree::StoreController
       ['UPS Next Day Air', :ups_next_day_air]
     ]
 
-    @quality_options = [
-      ['Economy', :economy],
-      ['Premium', :premium],
-      ['Custom', :custom]
-    ]
+    if @category
+      economy_product = @current_company_store.products(category: @category.to_sym, quality: :economy).first
+      premium_product = @current_company_store.products(category: @category.to_sym, quality: :premium).first
+      super_premium_product = @current_company_store.products(category: @category.to_sym, quality: :super_premium).first
+
+      @quality_options = [
+        { name: 'Economy', quality: :economy, product_id: economy_product.id },
+        { name: 'Premium', quality: :premium, product_id: premium_product.id },
+        {
+          name: super_premium_product.original_supplier.name,
+          quality: :super_premium,
+          product_id: super_premium_product.id
+        }
+      ]
+    end
   end
 
   def purchase_params

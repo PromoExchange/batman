@@ -18,6 +18,8 @@ class Spree::CompanyStore < Spree::Base
 
   accepts_nested_attributes_for :markups, allow_destroy: true, reject_if: ->(m) { m[:markup].blank? }
 
+  enum store_type: [:traditional, :hybrid, :gooten]
+
   def default_logo
     buyer.logos.first
   end

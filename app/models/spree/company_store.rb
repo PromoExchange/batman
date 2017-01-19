@@ -23,9 +23,7 @@ class Spree::CompanyStore < Spree::Base
   end
 
   def products(options = {})
-    returned_products = Spree::Product.where(
-      id: Spree::Classification.where(taxon: store_taxon).pluck(:product_id)
-    ).to_a
+    returned_products = store_taxon.products.to_a
 
     # 1. Get all products (no options)
     # 2. Get products for a given category
@@ -43,6 +41,10 @@ class Spree::CompanyStore < Spree::Base
     returned_products
   end
 
+  def generic_products
+    generic_taxon.products & store_taxon.products
+  end
+
   def store_taxon
     Spree::Taxon.where(
       name: slug,
@@ -51,10 +53,11 @@ class Spree::CompanyStore < Spree::Base
   end
 
   def store_categories
-    generic_products = Spree::Classification.where(product: products, taxon: generic_taxon).uniq.pluck(:product_id)
-    Spree::Taxon.where(
-      id: Spree::Classification.where(taxon: categories_taxons, product_id: generic_products).uniq.pluck(:taxon_id)
-    )
+    categories_taxons.where(
+      id: Spree::Classification.where(
+        product_id: generic_products
+      ).pluck(:taxon_id)
+    ).sort_by(&:name)
   end
 
   def seller

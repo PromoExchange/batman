@@ -1,22 +1,30 @@
-<%= f.hidden_field :address_id, value: 0 %>
-<%= f.label(:address, Spree.t(:address)) %>:
-<%= f.fields_for :address, class: 'form' do |f| %>
-  <div class="form-group">
-    <%= f.text_field(:company, class: 'form-control', placeholder: 'Company Name')%>
-    <br />
-    <%= f.text_field(:address1, class: 'form-control', placeholder: 'Address 1')%>
-    <br />
-    <%= f.text_field(:address2, class: 'form-control', placeholder: 'Address 2')%>
-    <br />
-    <%= f.text_field(:city, class: 'form-control', placeholder: 'City')%>
-    <br />
-    <div class="row">
-      <div class="col-md-8">
-        <%= f.select :state, options_for_select(@states.map { |state| [state.name, state.id] }), {}, { class: 'form-control' } %>
-      </div>
-      <div class="col-md-4">
-        <%= f.text_field(:zipcode, class: 'form-control', placeholder: 'Zip Code')%>
-      </div>
-    <div>
+<% if @current_company_store.gooten? %>
+  <%= f.hidden_field :address_id, value: 0 %>
+  <%= f.label(:address, Spree.t(:address)) %>:
+  <%= f.fields_for :address, class: 'form' do |f| %>
+    <div class="form-group">
+      <%= f.text_field(:company, class: 'form-control', placeholder: 'Company Name')%>
+      <br />
+      <%= f.text_field(:address1, class: 'form-control', placeholder: 'Address 1')%>
+      <br />
+      <%= f.text_field(:address2, class: 'form-control', placeholder: 'Address 2')%>
+      <br />
+      <%= f.text_field(:city, class: 'form-control', placeholder: 'City')%>
+      <br />
+      <div class="row">
+        <div class="col-md-8">
+          <%= f.select :state, options_for_select(@states.map { |state| [state.name, state.id] }), {}, { class: 'form-control' } %>
+        </div>
+        <div class="col-md-4">
+          <%= f.text_field(:zipcode, class: 'form-control', placeholder: 'Zip Code')%>
+        </div>
+      <div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="form-group" data-hook="buttons">
+    <%= f.hidden_field :address_id, value: 0 %>
+    <%= f.label :ship_to_zip, 'Shipping Address' %>
+    <%= f.select :ship_to_zip, options_for_select(@addresses.map{ |address| [ address.name, address.zipcode, { 'data-id': address.id }]}), { } , { class: 'form-control' } %>
   </div>
 <% end %>

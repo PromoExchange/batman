@@ -4,10 +4,10 @@ class Spree::PurchasesController < Spree::StoreController
 
   def new
     # TODO: Allow creation with shipping_option
-    @category = Spree::Taxon.find_by_id(purchase_params[:category_id])
+    quality = params[:purchase][:quality] || :economy
+    @category = Spree::Taxon.find_by_id(params[:purchase][:category_id])
     @product = Spree::Product.find_by_id(purchase_params[:product_id]) ||
       @current_company_store.products(category: @category.to_sym, quality: quality.to_sym).first
-    quality = params[:purchase][:quality] || :economy
 
     supporting_data
 

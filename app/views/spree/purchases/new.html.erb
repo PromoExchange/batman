@@ -4,9 +4,25 @@
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
     <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
-    <% @product.images.each.with_index do |image, index| %>
-      <% next if index == 0 %>
+    <% @product.images.each do |image| %>
       <%= image_tag image.attachment.url(:small), class: 'secondary-product-image' %>
+    <% end if @product.images.size > 1 %>
+
+    <% if @current_company_store.gooten? %>
+      <br /><br />
+
+      <div class="well">
+        <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
+          <div class="form-group">
+            <h2 class="text-center"><%= Spree.t(:logo) %></h2>
+            <%= f.file_field :logo, class: 'logo-upload' %>
+          </div>
+
+          <br />
+
+          <%= image_tag 'star-1.png', class: 'hidden logo-to-upload text-center' %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 
@@ -17,6 +33,8 @@
       <%= f.hidden_field :company_store_slug, value: @current_company_store.slug %>
       <%= f.hidden_field :product_id, value: @product.id %>
       <%= f.hidden_field :buyer_id, value: @purchase.buyer_id %>
+      <%= f.hidden_field :image_id, value: nil %>
+      <%= f.hidden_field :category_id, value: @category.blank? ? nil : @category.id %>
 
       <% if @purchase.errors.any? %>
         <p class="alert alert-error">Errors</p>
@@ -31,13 +49,10 @@
         <%= render partial: 'imprint_method', locals: { f: f }%>
         <%= render partial: 'logos', locals: { f: f } %>
         <%= render partial: 'main_color', locals: { f: f } %>
-        <%= render partial: 'price_breaks', locals: { f: f } %>
-        <div class="<%= 'col-md-4' unless @product.wearable? %>">
-          <%= render partial: 'quantity', locals: { f: f } %>
-        </div>
-        <div class="<%= 'col-md-8' unless @product.wearable? %>">
-          <%= render partial: 'address_drop', locals: { f: f } %>
-        </div>
+        <%= render partial: 'quality', locals: { f: f } unless @current_company_store.traditional? %>
+        <%= render(partial: 'price_breaks', locals: { f: f }) unless @current_company_store.gooten? %>
+        <%= render partial: 'quantity', locals: { f: f } %>
+        <%= render partial: 'address', locals: { f: f } %>
         <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
         <%= render partial: 'shipping_options', locals: { f: f } %>
         <%= render partial: 'active_price', locals: { f: f } %>

@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170110214339) do
+ActiveRecord::Schema.define(version: 20170118023656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -176,6 +177,7 @@ ActiveRecord::Schema.define(version: 20170110214339) do
     t.string   "logo_content_type"
     t.integer  "logo_file_size"
     t.datetime "logo_updated_at"
+    t.integer  "store_type",        default: 0
   end
 
   create_table "spree_countries", force: :cascade do |t|

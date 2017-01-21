@@ -61,6 +61,7 @@ class Spree::Admin::CompanyStoresController < Spree::Admin::ResourceController
       :name,
       :slug,
       :supplier_id,
+      :store_type,
       markups_attributes: [:eqp, :id, :markup, :live, :supplier_id]
     )
   end

@@ -29,11 +29,11 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4" data-hook="admin_company_store_form_display_name">
-      <%= f.field_container :display_name, class: ['form-group'] do %>
-        <%= f.label :display_name, raw(Spree.t(:display_name) + content_tag(:span, ' *', class: 'required')) %>
-        <%= f.text_field :display_name, class: 'form-control title' %>
-        <%= f.error_message_on :display_name %>
+    <div class="col-md-4" data-hook="admin_company_store_form_type">
+      <%= f.field_container :store_type, class: ['form-group'] do %>
+        <%= f.label :store_type, raw(Spree.t(:store_type) + content_tag(:span, ' *', class: 'required')) %>
+        <%= f.select :store_type, Spree::CompanyStore.store_types.keys.map { |st| [st.humanize, st] }, {}, { class: 'select2' } %>
+        <%= f.error_message_on :store_type %>
       <% end %>
     </div>
 

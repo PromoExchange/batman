@@ -3,7 +3,17 @@
   <%=
     f.select(
       :quality_option,
-      options_for_select(@quality_options.map { |quality| [quality[:name], quality[:quality], { 'product-id': quality[:product_id] }] }, @purchase.quality_option),
+      options_for_select(
+        @quality_options.map do |quality|
+          [quality[:name], quality[:quality],
+            {
+              'product-id': quality[:product_id],
+              'images': quality[:images].to_json
+            }
+          ]
+        end,
+        @purchase.quality_option
+      ),
       { },
       { class: 'form-control' }
     )

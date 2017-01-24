@@ -26,6 +26,10 @@ $(function() {
     return { min: min, actual: actual };
   }
 
+  function is_gooten() {
+    ($('#purchase_company_store_slug').val() == 'gooten');
+  }
+
   function recalc_price() {
     if (!addressFilled() && ($('#purchase_ship_to_zip').val() === '' || $('#purchase_ship_to_zip').val() === undefined)) {
       return;
@@ -35,7 +39,7 @@ $(function() {
     var min = 0;
 
     var quantities = get_quantity();
-    if ($('#purchase_company_store_slug').val() !== 'gooten') {
+    if (!is_gooten()) {
        min = quantities.min;
     }
     actual = quantities.actual;
@@ -48,8 +52,7 @@ $(function() {
       $("#price-spin").show();
       var selected_shipping_option = $('#purchase_shipping_option').val();
       var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
-      var is_gooten = $('#purchase_company_store_slug').val() == 'gooten';
-      if (is_gooten == false) {
+      if (!is_gooten()) {
         var params = {
           purchase: {
             quantity: actual,
@@ -91,7 +94,7 @@ $(function() {
             return;
           }
 
-          if (is_gooten == true) {
+          if (is_gooten()) {
             $('#purchase_address_id').val(data.shipping_address_id);
           }
 
@@ -201,8 +204,18 @@ $(function() {
   });
 
   $('#purchase_quality_option').change(function() {
-    var product_id = $('#purchase_quality_option option:selected').attr('product-id');
-    $('#purchase_product_id').val(product_id);
+    var selected_quality_option = $('#purchase_quality_option option:selected');
+    $('#purchase_product_id').val(selected_quality_option.attr('product-id'));
+    var images = JSON.parse(selected_quality_option.attr('images'));
+    $('.main-product-image').attr('src', images[0]['large_src']);
+    var small_images_div = $('.small-images');
+    small_images_div.empty();
+    $.each(images, function( index, value ){
+      var img = $('<img class="secondary-product-image" src="http://placehold.it/100x100" alt="alt-text">')
+      img.attr('src', value['small_src']);
+      img.attr('alt', value['alt']);
+      small_images_div.append(img);
+    });
     recalc_price();
   });
 

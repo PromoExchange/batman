@@ -21,11 +21,4 @@ $(function() {
     $('.main-product-image').attr('src', src);
     $('#purchase_image_id').attr('value', imageId);
   }
-
-  $('#purchase_quality_option').change(function() {
-    var quality_option = $("#purchase_quality_option").val();
-    var categoryId = $('#purchase_category_id').val();
-    var url = "/purchases/new?purchase[category_id]=" + categoryId + "&purchase[quality]=" + quality_option;
-    window.location.href = url;
-  });
 });

@@ -174,6 +174,19 @@ class Spree::PurchasesController < Spree::StoreController
           product_id: super_premium_product.id
         }
       ]
+
+      @quality_options.each do |quality_option|
+        product = Spree::Product.find(quality_option[:product_id])
+        quality_option[:images] = []
+        product.images.each do |image|
+          quality_option[:images] << {
+            large_src: image.attachment.url(:large),
+            small_src: image.attachment.url(:small),
+            alt: image.attachment.name,
+            id: image.id
+          }
+        end
+      end
     end
   end
 

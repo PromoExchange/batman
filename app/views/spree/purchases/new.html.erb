@@ -4,9 +4,11 @@
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
   <div class="col-md-6">
     <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
-    <% @product.images.each do |image| %>
-      <%= image_tag image.attachment.url(:small), class: 'secondary-product-image' %>
-    <% end if @product.images.size > 1 %>
+    <div class='small-images'>
+      <% @product.images.each do |image| %>
+        <%= image_tag image.attachment.url(:small), class: 'secondary-product-image' %>
+      <% end if @product.images.size > 1 %>
+    </div>
 
     <% if @current_company_store.gooten? %>
       <br /><br />

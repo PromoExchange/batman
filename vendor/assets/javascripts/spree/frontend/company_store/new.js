@@ -206,11 +206,13 @@ $(function() {
     $('.main-product-image').attr('src', images[0]['large_src']);
     var small_images_div = $('.small-images');
     small_images_div.empty();
+
     $.each(images, function( index, value ){
-      var img = $('<img class="secondary-product-image" src="http://placehold.it/100x100" alt="alt-text">')
-      img.attr('src', value['small_src']);
-      img.attr('alt', value['alt']);
-      small_images_div.append(img);
+      small_images_div.append(
+        $('<img class="secondary-product-image" src="http://placehold.it/100x100" alt="alt-text">')
+          .attr('src', value['small_src'])
+          .attr('alt', value['alt'])
+      );
     });
     recalc_price();
   });

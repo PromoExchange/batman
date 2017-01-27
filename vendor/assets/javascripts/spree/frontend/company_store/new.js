@@ -1,7 +1,6 @@
 $(function() {
   var delay = (function(){
     var timer = 0;
-
     return function(callback, ms) {
       clearTimeout (timer);
       timer = setTimeout(callback, ms);
@@ -26,20 +25,16 @@ $(function() {
     return { min: min, actual: actual };
   }
 
-  function is_gooten() {
-    ($('#purchase_company_store_slug').val() == 'gooten');
-  }
-
   function recalc_price() {
     if (!addressFilled() && ($('#purchase_ship_to_zip').val() === '' || $('#purchase_ship_to_zip').val() === undefined)) {
       return;
     }
 
     var actual = 0;
-    var min = 0;
+    var min = 1;
 
     var quantities = get_quantity();
-    if (!is_gooten()) {
+    if ($('#purchase_company_store_slug').val() != 'gooten') {
        min = quantities.min;
     }
     actual = quantities.actual;
@@ -52,7 +47,8 @@ $(function() {
       $("#price-spin").show();
       var selected_shipping_option = $('#purchase_shipping_option').val();
       var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
-      if (!is_gooten()) {
+
+      if ($('#purchase_company_store_slug').val() != 'gooten') {
         var params = {
           purchase: {
             quantity: actual,
@@ -94,7 +90,7 @@ $(function() {
             return;
           }
 
-          if (is_gooten()) {
+          if ($('#purchase_company_store_slug').val() == 'gooten') {
             $('#purchase_address_id').val(data.shipping_address_id);
           }
 

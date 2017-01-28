@@ -199,11 +199,26 @@ $(function() {
     recalc_price();
   });
 
+  function set_quality_tooltip(selected_element) {
+    quality_tooltip = $('#quality_toolip');
+    if(quality_tooltip.length == 0 ) return;
+    selected_quality_option = typeof selected_element !== 'undefined' ? selected_element : $('#purchase_quality_option option:selected');
+    quality_tooltip.hide();
+    quality_tooltip_text = selected_quality_option.attr('quality_note');
+    if( typeof quality_tooltip_text !== 'undefined' && quality_tooltip_text !== '') {
+      quality_tooltip.attr('title', quality_tooltip_text).show();
+    }
+  }
+
   $('#purchase_quality_option').change(function() {
     var selected_quality_option = $('#purchase_quality_option option:selected');
+    set_quality_tooltip(selected_quality_option);
     $('#purchase_product_id').val(selected_quality_option.attr('product-id'));
+
     var images = JSON.parse(selected_quality_option.attr('images'));
+
     $('.main-product-image').attr('src', images[0]['large_src']);
+
     var small_images_div = $('.small-images');
     small_images_div.empty();
 
@@ -270,6 +285,7 @@ $(function() {
 
   $(document).ready(function() {
     set_address_id();
+    set_quality_tooltip();
     $('#need_it_sooner').hide();
     $(".cs-quantity").val('');
     $('#purchase-size .product-size').each(function() {

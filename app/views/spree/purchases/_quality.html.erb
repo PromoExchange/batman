@@ -1,5 +1,14 @@
 <div class="form-group">
-  <%= f.label(:quality, Spree.t(:quality)) %>
+  <%= f.label(:quality, Spree.t(:quality)) %>:
+
+  <% if @product.quality_note.present? %>
+    <p class='glyphicon glyphicon-question-sign'
+      data-toggle='tooltip'
+      data-placement='top'
+      title='<%= @product.quality_note %>'>
+    </p>
+  <% end %>
+
   <%=
     f.select(
       :quality_option,

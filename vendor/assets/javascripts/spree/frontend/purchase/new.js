@@ -1,6 +1,7 @@
 $(function() {
   $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover();
   });
 
   $('.logo-upload').change(function() {

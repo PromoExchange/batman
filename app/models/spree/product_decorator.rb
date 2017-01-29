@@ -342,6 +342,7 @@ Spree::Product.class_eval do
       quote_id: quote.id,
       best_price: total_price,
       shipping_option: quote.shipping_option,
+      shipping_cost: quote.shipping_cost,
       quantity: options[:quantity].to_i,
       delivery_days: production_time + quote.shipping_days
     }

@@ -9,6 +9,7 @@ Spree::Api::ProductsController.class_eval do
     best_price_params = {}
     purchase_params = params[:purchase]
 
+    # TODO: This is very messy
     best_price_params[:quantity] = (purchase_params && purchase_params.key?(:quantity)) &&
       purchase_params[:quantity].to_i
     best_price_params[:quantity] ||= params[:quantity] && params[:quantity].to_i
@@ -46,6 +47,7 @@ Spree::Api::ProductsController.class_eval do
 
     response = {
       best_price: requested_price[:best_price].to_f,
+      shipping_cost: requested_price[:shipping_cost],
       quantity: best_price_params[:quantity],
       delivery_days: requested_price[:delivery_days],
       shipping_address_id: best_price_params[:shipping_address],

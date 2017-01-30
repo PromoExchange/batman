@@ -31,8 +31,6 @@ class Spree::PurchasesController < Spree::StoreController
       @purchase.price_breaks << [lowest_range, best_price]
     end
 
-    supporting_data
-
     render :new
   rescue StandardError => e
     Rails.logger.error(e)
@@ -87,7 +85,7 @@ class Spree::PurchasesController < Spree::StoreController
 
       purchase.order_id = order.id
 
-      # TODO: Once the quote structure gets recast as a as calculator we can have a real quantity here.
+      # TODO: Once the quote structure gets recast as a calculator we can have a real quantity here.
       li = Spree::LineItem.create(
         currency: 'USD',
         order_id: order.id,
@@ -161,23 +159,18 @@ class Spree::PurchasesController < Spree::StoreController
     ]
 
     if @category
-      economy_product = @current_company_store.products(category: @category.to_sym, quality: :economy).first
-      premium_product = @current_company_store.products(category: @category.to_sym, quality: :premium).first
-      super_premium_product = @current_company_store.products(category: @category.to_sym, quality: :super_premium).first
-
-      @quality_options = [
-        { name: 'Economy', quality: :economy, product_id: economy_product.id },
-        { name: 'Premium', quality: :premium, product_id: premium_product.id },
-        {
-          name: super_premium_product.original_supplier.name,
-          quality: :super_premium,
-          product_id: super_premium_product.id
+      @quality_options = []
+      [:economy, :premium, :super_premium].each do |quality|
+        product = @current_company_store.products(category: @category.to_sym, quality: quality).first
+        raise "Unable to find product that matches category: #{@category.to_sym} - quality: #{quality}" if product.nil?
+        quality_option = {
+          name: quality == :super_premium ? product.original_supplier.name : quality.to_s.titleize,
+          quality: quality,
+          product_id: product.id,
+          quality_note: product.quality_note,
+          images: []
         }
-      ]
 
-      @quality_options.each do |quality_option|
-        product = Spree::Product.find(quality_option[:product_id])
-        quality_option[:images] = []
         product.images.each do |image|
           quality_option[:images] << {
             large_src: image.attachment.url(:large),
@@ -186,6 +179,8 @@ class Spree::PurchasesController < Spree::StoreController
             id: image.id
           }
         end
+
+        @quality_options << quality_option
       end
     end
   end

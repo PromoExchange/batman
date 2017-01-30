@@ -42,6 +42,7 @@ $(function() {
       return;
     }
     $(".cs-active-price").hide();
+    $("#breakout_question").hide();
 
     if (actual >= min) {
       $("#price-spin").show();
@@ -87,6 +88,7 @@ $(function() {
             $("#price-spin").hide();
             $('.cs-purchase-submit').prop('disabled', false);
             $(".cs-active-price").show();
+            $("#breakout_question").show();
             return;
           }
 
@@ -94,8 +96,8 @@ $(function() {
             $('#purchase_address_id').val(data.shipping_address_id);
           }
 
-          var money_text = accounting.formatMoney((parseFloat(data.best_price)));
           $('#ship_date').text(moment(new Date()).add(data.delivery_days, 'days').format('MMMM Do YYYY'));
+
           var number_options = 0;
           var shipping_option_control = $('#purchase_shipping_option');
           if (typeof selected_shipping_option == 'undefined') {
@@ -133,10 +135,18 @@ $(function() {
             $('#need_it_sooner').show();
           }
 
-          $(".cs-active-price").text(money_text);
+          var best_price = parseFloat(data.best_price);
+          var shipping_cost = parseFloat(data.shipping_cost);
+
+          $(".cs-active-price")
+            .text(accounting.formatMoney(best_price))
+            .attr('base-cost', accounting.formatMoney(best_price - shipping_cost))
+            .attr('shipping-cost', accounting.formatMoney(shipping_cost));
+
           $("#price-spin").hide();
           $('.cs-purchase-submit').prop('disabled', false);
           $(".cs-active-price").show();
+          $("#breakout_question").show();
         },
         error: function(data) {
           $(".cs-active-price").text('No Price Found');
@@ -146,6 +156,21 @@ $(function() {
       });
     }
   }
+
+  $("#breakout_question").popover({
+    html: true,
+    content: function(){
+      var active_price = $(".cs-active-price");
+      return $('<table class="table-condensed">')
+        .append('<tr><td>Base Cost</td><td>' + active_price.attr('base-cost') + '</tr>')
+        .append('<tr><td>Shipping Cost</td><td>' + active_price.attr('shipping-cost') + '</tr>')
+        .prop('outerHTML');
+    }
+  }).hover(function() {
+    $(this).popover('show');
+  }).mouseleave(function() {
+    $(this).popover('hide');
+  });
 
   function addressFilled() {
     var company = $('#purchase_address_company').val()
@@ -199,11 +224,26 @@ $(function() {
     recalc_price();
   });
 
+  function set_quality_tooltip(selected_element) {
+    quality_tooltip = $('#quality_toolip');
+    if(quality_tooltip.length == 0 ) return;
+    selected_quality_option = typeof selected_element !== 'undefined' ? selected_element : $('#purchase_quality_option option:selected');
+    quality_tooltip.hide();
+    quality_tooltip_text = selected_quality_option.attr('quality_note');
+    if( typeof quality_tooltip_text !== 'undefined' && quality_tooltip_text !== '') {
+      quality_tooltip.attr('title', quality_tooltip_text).show();
+    }
+  }
+
   $('#purchase_quality_option').change(function() {
     var selected_quality_option = $('#purchase_quality_option option:selected');
+    set_quality_tooltip(selected_quality_option);
     $('#purchase_product_id').val(selected_quality_option.attr('product-id'));
+
     var images = JSON.parse(selected_quality_option.attr('images'));
+
     $('.main-product-image').attr('src', images[0]['large_src']);
+
     var small_images_div = $('.small-images');
     small_images_div.empty();
 
@@ -270,6 +310,7 @@ $(function() {
 
   $(document).ready(function() {
     set_address_id();
+    set_quality_tooltip();
     $('#need_it_sooner').hide();
     $(".cs-quantity").val('');
     $('#purchase-size .product-size').each(function() {

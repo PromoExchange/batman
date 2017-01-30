@@ -1,13 +1,12 @@
 <div class="form-group">
   <%= f.label(:quality, Spree.t(:quality)) %>:
 
-  <% if @product.quality_note.present? %>
-    <p class='glyphicon glyphicon-question-sign'
-      data-toggle='tooltip'
-      data-placement='top'
-      title='<%= @product.quality_note %>'>
-    </p>
-  <% end %>
+  <p class='display:none glyphicon glyphicon-question-sign'
+    id='quality_toolip'
+    data-toggle='tooltip'
+    data-placement='top'
+    title='<%= @product.quality_note %>'>
+  </p>
 
   <%=
     f.select(
@@ -17,6 +16,7 @@
           [quality[:name], quality[:quality],
             {
               'product-id': quality[:product_id],
+              'quality_note': quality[:quality_note],
               'images': quality[:images].to_json
             }
           ]

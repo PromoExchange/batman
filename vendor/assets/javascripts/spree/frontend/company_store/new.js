@@ -157,7 +157,7 @@ $(function() {
     }
   }
 
-  $(".cs-active-price").popover({
+  $("#breakout_question").popover({
     html: true,
     content: function(){
       var active_price = $(".cs-active-price");

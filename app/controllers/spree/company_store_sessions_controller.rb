@@ -8,34 +8,15 @@ class Spree::CompanyStoreSessionsController < Spree::StoreController
   include Spree::Core::ControllerHelpers::Store
 
   def create
-    user = Spree::User.find_by_email(params[:spree_user][:email])
+    user = @current_company_store.buyer
 
     if user.valid_password?(params[:spree_user][:password])
       session[:spree_user] = user.email
-      respond_to do |format|
-        format.html do
-          flash[:success] = Spree.t(:logged_in_succesfully)
-          redirect_back_or_default(after_sign_in_path_for(spree_current_user))
-        end
-        format.js do
-          render json: {
-            user: spree_current_user,
-            ship_address: spree_current_user.ship_address,
-            bill_address: spree_current_user.bill_address
-          }.to_json
-        end
-      end
+      redirect_back_or_default(after_sign_in_path_for(spree_current_user))
     else
       session.delete(:spree_user)
-      respond_to do |format|
-        format.html do
-          flash.now[:error] = t('devise.failure.invalid')
-          render :new
-        end
-        format.js do
-          render json: { error: t('devise.failure.invalid') }, status: :unprocessable_entity
-        end
-      end
+      flash.now[:error] = t('devise.failure.invalid')
+      render :new
     end
   end
 

@@ -1,6 +1,5 @@
 <%= form_for Spree::User.new, as: :spree_user, url: "/company_store/#{@current_company_store.slug}/login" do |f| %>
   <fieldset id="password-credentials">
-    <%= f.hidden_field :email, value: @current_company_store.buyer.email %>
     <div class="form-group">
       <%= f.password_field :password, class: 'form-control', tabindex: 2, placeholder: Spree.t(:password) %>
     </div>

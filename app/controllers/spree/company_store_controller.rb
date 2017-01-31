@@ -15,6 +15,14 @@ class Spree::CompanyStoreController < Spree::StoreController
     render js: "window.location = '/'"
   end
 
+  def show
+    return render(:show) unless @current_company_store.requires_auth
+
+    if session[:spree_user].blank? || session[:spree_user] != @current_company_store.buyer.email
+      redirect_to "/company_store/#{@current_company_store.slug}/login"
+    end
+  end
+
   private
 
   def fetch_company_store

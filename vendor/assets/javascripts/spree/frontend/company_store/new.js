@@ -35,7 +35,7 @@ $(function() {
 
     var quantities = get_quantity();
     if ($('#purchase_company_store_type').val() != 'gooten') {
-       min = quantities.min;
+      min = quantities.min;
     }
     actual = quantities.actual;
     if (actual === 0) {

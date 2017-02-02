@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
       <%= f.label(:quantity, Spree.t(:quantity)) %>:
-      <% if @current_company_store.traditional? %>
+      <% unless @current_company_store.gooten? %>
         <span>(min <%= @product.minimum_quantity %>)</span>
       <% end %>
     </div>

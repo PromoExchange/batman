@@ -3,10 +3,10 @@
 <% else %>
   <div class="form-group">
     <%= f.label(:quantity, Spree.t(:quantity)) %>
-    <% if @current_company_store.gooten? %>
-      <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: 1)%>
-    <% else %>
+    <% if @current_company_store.traditional? %>
       <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: @product.minimum_quantity, placeholder: "Minimum #{@product.minimum_quantity}")%>
+    <% else %>
+      <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: 1)%>
     <% end %>
   </div>
 <% end %>

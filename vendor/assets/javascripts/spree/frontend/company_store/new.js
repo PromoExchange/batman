@@ -34,7 +34,7 @@ $(function() {
     var min = 1;
 
     var quantities = get_quantity();
-    if ($('#purchase_company_store_slug').val() != 'gooten') {
+    if ($('#purchase_company_store_type').val() == 'traditional') {
        min = quantities.min;
     }
     actual = quantities.actual;
@@ -49,7 +49,7 @@ $(function() {
       var selected_shipping_option = $('#purchase_shipping_option').val();
       var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
 
-      if ($('#purchase_company_store_slug').val() != 'gooten') {
+      if ($('#purchase_company_store_type').val() == 'gooten') {
         var params = {
           purchase: {
             quantity: actual,

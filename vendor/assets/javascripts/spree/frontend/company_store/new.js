@@ -34,7 +34,7 @@ $(function() {
     var min = 1;
 
     var quantities = get_quantity();
-    if ($('#purchase_company_store_type').val() == 'traditional') {
+    if ($('#purchase_company_store_type').val() != 'gooten') {
        min = quantities.min;
     }
     actual = quantities.actual;
@@ -70,7 +70,7 @@ $(function() {
               zipcode: $('#purchase_address_zipcode').val()
             },
             shipping_option: selected_shipping_option,
-            custom_pms_colors: '123,456' // TODO: Make this dynamic
+            custom_pms_colors: null // TODO: Make this dynamic
           }
         };
       }

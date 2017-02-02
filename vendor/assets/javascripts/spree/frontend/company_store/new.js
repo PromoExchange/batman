@@ -124,6 +124,8 @@ $(function() {
               value: option.shipping_option,
               delta: option.delta,
               name: option.name,
+              shipping_cost: accounting.formatMoney(option.shipping_cost),
+              base_cost: accounting.formatMoney(option.total_cost - option.shipping_cost),
               delivery_date: option.delivery_date,
               selected: selected_value
             }).text(option_text);
@@ -140,8 +142,8 @@ $(function() {
 
           $(".cs-active-price")
             .text(accounting.formatMoney(best_price))
-            .attr('base-cost', accounting.formatMoney(best_price - shipping_cost))
-            .attr('shipping-cost', accounting.formatMoney(shipping_cost));
+            .attr('base_cost', accounting.formatMoney(best_price - shipping_cost))
+            .attr('shipping_cost', accounting.formatMoney(shipping_cost));
 
           $("#price-spin").hide();
           $('.cs-purchase-submit').prop('disabled', false);
@@ -162,8 +164,8 @@ $(function() {
     content: function(){
       var active_price = $(".cs-active-price");
       return $('<table class="table-condensed">')
-        .append('<tr><td>Base Cost</td><td>' + active_price.attr('base-cost') + '</tr>')
-        .append('<tr><td>Shipping Cost</td><td>' + active_price.attr('shipping-cost') + '</tr>')
+        .append('<tr><td>Base Cost</td><td>' + active_price.attr('base_cost') + '</tr>')
+        .append('<tr><td>Shipping Cost</td><td>' + active_price.attr('shipping_cost') + '</tr>')
         .prop('outerHTML');
     }
   }).hover(function() {
@@ -256,7 +258,7 @@ $(function() {
         );
       });
     }
-    
+
     recalc_price();
   });
 
@@ -270,7 +272,9 @@ $(function() {
     $('#ship_date').text(moment(delivery_date).format('MMMM Do YYYY'));
 
     var money_text = accounting.formatMoney(new_price);
-    $(".cs-active-price").text(money_text);
+    $(".cs-active-price").text(money_text)
+      .attr('base_cost', selected_shipping_option.attr('base_cost'))
+      .attr('shipping_cost', selected_shipping_option.attr('shipping_cost'));
 
     $('#purchase_shipping_option > option').each(function() {
       var option = $(this);
@@ -291,7 +295,7 @@ $(function() {
       }
 
       var option_text = option.attr('name') + ' ' + sign + option_money_text + option_date_text;
-      $(this).text(option_text);
+      option.text(option_text);
     });
   });
 

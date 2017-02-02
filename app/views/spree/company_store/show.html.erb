@@ -1,5 +1,5 @@
 <div class="row">
-  <% if @current_company_store.store_type == 'traditional' %>
+  <% if @current_company_store.traditional? %>
     <% @products.each do |product| %>
       <div class="col-md-4 cs-product">
         <%= link_to large_image(product, { itemprop: 'image', class: 'cs-image' }), main_app.new_purchase_path(purchase: { product_id: product.id }), itemprop: 'url' %>

@@ -75,6 +75,7 @@ Spree::Api::ProductsController.class_eval do
       response[:shipping_options].push(
         name: shipping_name,
         total_cost: alternate_price[:best_price].to_f,
+        shipping_cost: alternate_price[:shipping_cost].to_f,
         delta: (alternate_price[:best_price] - requested_price[:best_price]).round(2).to_f,
         delivery_date: adjusted_delivery_date,
         delivery_days: alternate_price[:delivery_days],

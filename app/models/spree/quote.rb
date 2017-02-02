@@ -106,14 +106,15 @@ class Spree::Quote < Spree::Base
     )
     self.shipping_option = options[:shipping_option]
 
-    log("Total price called #{options}")
-    from_cache = true
-    best_price = Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
-      from_cache = false
-      best_price(options)
-    end
-    log("Retrieved from cache [#{from_cache}]")
-    best_price
+    # TODO: Cache not just the price but the entire object
+    # log("Total price called #{options}")
+    # from_cache = true
+    # best_price = Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
+    #   from_cache = false
+    #   best_price(options)
+    # end
+    # log("Retrieved from cache [#{from_cache}]")
+    best_price(options)
   end
 
   def cache_key(specific_shipping_option = nil)

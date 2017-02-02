@@ -247,13 +247,16 @@ $(function() {
     var small_images_div = $('.small-images');
     small_images_div.empty();
 
-    $.each(images, function( index, value ){
-      small_images_div.append(
-        $('<img class="secondary-product-image" src="http://placehold.it/100x100" alt="alt-text">')
-          .attr('src', value['small_src'])
-          .attr('alt', value['alt'])
-      );
-    });
+    if (images.length > 1) {
+      $.each(images, function( index, value ){
+        small_images_div.append(
+          $('<img class="secondary-product-image" src="http://placehold.it/100x100" alt="alt-text">')
+            .attr('src', value['small_src'])
+            .attr('alt', value['alt'])
+        );
+      });
+    }
+    
     recalc_price();
   });
 

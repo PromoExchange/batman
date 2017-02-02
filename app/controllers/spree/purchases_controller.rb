@@ -1,9 +1,7 @@
 class Spree::PurchasesController < Spree::StoreController
   layout 'company_store_layout'
-  before_action :store_view_setup
 
   def new
-    # TODO: Allow creation with shipping_option
     quality = params[:purchase][:quality] || :economy
     @category = Spree::Taxon.find_by_id(params[:purchase][:category_id])
     @product = Spree::Product.find_by_id(purchase_params[:product_id]) ||

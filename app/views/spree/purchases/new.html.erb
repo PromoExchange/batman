@@ -52,7 +52,7 @@
         <%= render partial: 'logos', locals: { f: f } %>
         <%= render partial: 'main_color', locals: { f: f } %>
         <%= render partial: 'quality', locals: { f: f } unless @current_company_store.traditional? %>
-        <%= render(partial: 'price_breaks', locals: { f: f }) unless @current_company_store.gooten? %>
+        <%= render(partial: 'price_breaks', locals: { f: f }) if @current_company_store.traditional? %>
         <%= render partial: 'quantity', locals: { f: f } %>
         <%= render partial: 'address', locals: { f: f } %>
         <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>

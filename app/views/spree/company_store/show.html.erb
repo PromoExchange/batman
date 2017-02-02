@@ -1,14 +1,28 @@
 <div class="row">
-  <% @products.each do |product| %>
-    <div class="col-md-4 cs-product">
-      <%= link_to large_image(product, { itemprop: 'image', class: 'cs-image' }), main_app.new_purchase_path(purchase: { product_id: product.id }), itemprop: 'url' %>
-      <div class="cs-product-text text-center"><%= product.name %></div>
-      <div class="cs-product-text text-center cs-lowest-bid"><%= number_to_currency(product.best_price()[:best_price].to_f / product.last_price_break_minimum) %></div>
-    </div>
+  <% if @current_company_store.traditional? %>
+    <% @products.each do |product| %>
+      <div class="col-md-4 cs-product">
+        <%= link_to large_image(product, { itemprop: 'image', class: 'cs-image' }), main_app.new_purchase_path(purchase: { product_id: product.id }), itemprop: 'url' %>
+        <div class="cs-product-text text-center"><%= product.name %></div>
+        <div class="cs-product-text text-center cs-lowest-bid"><%= number_to_currency(product.best_price()[:best_price].to_f / product.last_price_break_minimum) %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <% @current_company_store.store_categories.each do |category| %>
+      <div class="col-md-4 cs-product">
+        <% if category.images.empty? %>
+          <% product = @current_company_store.products( category: category.to_sym, quality: :economy ).first %>
+          <%= link_to large_image(product, { itemprop: 'image', class: 'cs-image' }), main_app.new_purchase_path(purchase: { category_id: category.id }), itemprop: 'url' %>
+        <% else %>
+          <%= link_to large_image(category, { itemprop: 'image', class: 'cs-image' }), main_app.new_purchase_path(purchase: { category_id: category.id }), itemprop: 'url' %>
+        <% end %>
+        <div class="cs-product-text text-center"><%= category.name.pluralize %></div>
+      </div>
+    <% end %>
   <% end %>
 </div>
 
-<% if @current_company_store.slug != 'gooten' %>
+<% if @current_company_store.store_type == 'traditional' %>
   <div class="product-ideas text-center">
     <p>Can't find the product you are looking for? Let the PromoExchange swag pros provide you with some custom ideas.</p>
     <%= button_tag "Inspire me with new product ideas!", class: 'btn btn-success cs-button', id: 'inspire-me', data: { toggle: 'modal', target: '#inspire-me-request' } %>

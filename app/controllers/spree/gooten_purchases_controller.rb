@@ -1,6 +1,5 @@
 class Spree::GootenPurchasesController < Spree::StoreController
   layout 'company_store_layout'
-  before_action :store_view_setup
 
   def new
     @category = Spree::Taxon.find(purchase_params[:category_id])

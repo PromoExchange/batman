@@ -23,10 +23,12 @@ class Spree::PurchasesController < Spree::StoreController
       sizes: []
     )
 
-    @product.price_breaks.each do |price_break|
-      lowest_range = price_break.split('..')[0].gsub(/\D/, '').to_i
-      best_price = @product.best_price(quantity: lowest_range)[:best_price].to_f / lowest_range
-      @purchase.price_breaks << [lowest_range, best_price]
+    if @current_company_store.traditional?
+      @product.price_breaks.each do |price_break|
+        lowest_range = price_break.split('..')[0].gsub(/\D/, '').to_i
+        best_price = @product.best_price(quantity: lowest_range)[:best_price].to_f / lowest_range
+        @purchase.price_breaks << [lowest_range, best_price]
+      end
     end
 
     render :new

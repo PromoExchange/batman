@@ -51,7 +51,7 @@
         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
         data-key="<%=ENV['STRIPE_PUBLISHABLE_KEY']%>"
         data-amount=<%= @order.item_total.to_f * 100 %>
-        data-name="<%= @current_company_store.slug.titleize %>"
+        data-name="<%= @current_company_store.display_name %>"
         data-description="<%= product.name %>"
         data-image="/images/px_logo.png"
         data-allow-remember-me="false"

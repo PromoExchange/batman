@@ -25,22 +25,24 @@ class Spree::CompanyStore < Spree::Base
   end
 
   def products(options = {})
-    returned_products = store_taxon.products.to_a
+    Rails.cache.fetch("#{cache_key}/products/#{options}", expires_in: 5.minutes) do
+      returned_products = store_taxon.products.to_a
 
-    # 1. Get all products (no options)
-    # 2. Get products for a given category
-    # 3. Get products for a given category and quality
-    if options[:category].present?
-      returned_products.reject! do |product|
-        true unless product.category == options[:category]
-      end
-      if options[:quality].present?
+      # 1. Get all products (no options)
+      # 2. Get products for a given category
+      # 3. Get products for a given category and quality
+      if options[:category].present?
         returned_products.reject! do |product|
-          true unless product.quality == options[:quality]
+          true unless product.category == options[:category]
+        end
+        if options[:quality].present?
+          returned_products.reject! do |product|
+            true unless product.quality == options[:quality]
+          end
         end
       end
+      returned_products
     end
-    returned_products
   end
 
   def generic_products

@@ -55,11 +55,13 @@ class Spree::CompanyStore < Spree::Base
   end
 
   def store_categories
-    categories_taxons.where(
-      id: Spree::Classification.where(
-        product_id: generic_products
-      ).pluck(:taxon_id)
-    ).sort_by(&:name)
+    Rails.cache.fetch("#{cache_key}/store_categories", expires_in: 5.minutes) do
+      categories_taxons.where(
+        id: Spree::Classification.where(
+          product_id: generic_products
+        ).pluck(:taxon_id)
+      ).sort_by(&:name)
+    end
   end
 
   def seller

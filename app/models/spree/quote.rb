@@ -92,6 +92,7 @@ class Spree::Quote < Spree::Base
   delegate :imprint_method, to: :product
 
   def clear_cache
+    return if cache_keys.nil?
     cache_keys.each do |k|
       Rails.cache.delete(k)
     end
@@ -140,7 +141,8 @@ class Spree::Quote < Spree::Base
   end
 
   def cache_keys
-    Rails.cache.instance_variable_get('@data').keys.select { |k, _v| k.start_with?(cache_key) }
+    cache_data = Rails.cache.instance_variable_get('@data')
+    cache_data.keys.select { |k, _v| k.start_with?(cache_key) } unless cache_data.nil?
   end
 
   def cache_key

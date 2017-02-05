@@ -311,12 +311,11 @@ Spree::Product.class_eval do
 
     raise 'Unable to find product configuration' if configuration.nil?
 
-    quote = quotes.where(
+    quote = quotes.send(options[:shipping_option]).where(
       quantity: options[:quantity],
       main_color: configuration.main_color,
       shipping_address: options[:shipping_address],
-      custom_pms_colors: configuration.custom_pms_colors,
-      shipping_option: options[:shipping_option].to_s
+      custom_pms_colors: configuration.custom_pms_colors
     ).first_or_create
 
     raise 'Failed to get price' if quote.nil?

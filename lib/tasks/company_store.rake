@@ -190,10 +190,20 @@ namespace :company_store do
 
     base_store.products.each do |product|
       new_product = product.dup
-      new_product.sku = "#{args[:slug1]}-#{product.sku}"
+      new_product.sku = "#{args[:slug2]}-#{product.sku}"
       new_product.supplier = next_store.supplier
       new_product.price = 1.0
-      new_product.save!
+
+      product.taxons.each do |taxon|
+        new_product.taxons << taxon unless taxon.parent.name == 'Stores'
+      end
+      new_product.taxons << Spree::Taxon.where(name: args[:slug2]).first
+
+      begin
+        new_product.save!
+      rescue => e
+        puts e
+      end
     end
   end
 end

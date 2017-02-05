@@ -24,6 +24,10 @@ class Spree::CompanyStore < Spree::Base
     buyer.logos.first
   end
 
+  def display_name
+    self[:display_name].nil? ? slug.titleize : self[:display_name]
+  end
+
   def products(options = {})
     returned_products = store_taxon.products.to_a
 

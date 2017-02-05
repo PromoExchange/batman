@@ -25,7 +25,7 @@ class Spree::CompanyStore < Spree::Base
   end
 
   def display_name
-    self[:display_name].nil? ? slug.titleize : self[:display_name]
+    self[:display_name].nil? ? (slug || '').titleize : self[:display_name]
   end
 
   def products(options = {})

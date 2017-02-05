@@ -80,10 +80,6 @@ class Spree::Quote < Spree::Base
 
   validates :main_color, presence: true
   validates :product, presence: true
-  # NOTE: This will become stale because holidays days may be different
-  # from the time of the original quote and now
-  validates :shipping_days, presence: true
-  validates :shipping_cost, presence: true
   validates :shipping_option, presence: true
   validates :shipping_address, presence: true
   validates_associated :product
@@ -95,34 +91,10 @@ class Spree::Quote < Spree::Base
   delegate :markup, to: :product
   delegate :imprint_method, to: :product
 
-  def refresh_cache
-    Rails.cache.delete("#{cache_key}/total_price")
-    total_price
-  end
-
-  def total_price(options = {})
-    options.reverse_merge!(
-      shipping_option: :ups_ground
-    )
-    self.shipping_option = options[:shipping_option]
-
-    # TODO: Cache not just the price but the entire object
-    # log("Total price called #{options}")
-    # from_cache = true
-    # best_price = Rails.cache.fetch("#{cache_key}/total_price", expires_in: cache_expiration.hours) do
-    #   from_cache = false
-    #   best_price(options)
-    # end
-    # log("Retrieved from cache [#{from_cache}]")
-    best_price(options)
-  end
-
-  def cache_key(specific_shipping_option = nil)
-    "#{model_name.cache_key}/#{product.id}/#{(specific_shipping_option || shipping_option)}/#{quantity}"
-  end
-
-  def log(message)
-    messages << message if write_log == true
+  def clear_cache
+    cache_keys.each do |k|
+      Rails.cache.delete(k)
+    end
   end
 
   def num_colors
@@ -136,7 +108,17 @@ class Spree::Quote < Spree::Base
     messages.clear
   end
 
-  private
+  def price
+    Rails.cache.fetch("#{cache_key}/price", expires_in: cache_expiration.hours) do
+      best_price
+      {
+        total_price: unit_price * quantity,
+        unit_price: unit_price,
+        shipping_cost: shipping_cost,
+        shipping_days: shipping_days
+      }
+    end
+  end
 
   def generate_reference
     update_column :reference, SecureRandom.hex(3).upcase
@@ -147,6 +129,7 @@ class Spree::Quote < Spree::Base
     raise e, 'Retries exhausted'
   end
 
+  # TODO: http://api.rubyonrails.org/classes/ActiveRecord/Store.html
   after_find do |quote|
     quote.messages = JSON.parse(quote.workbook).to_a unless quote.workbook.blank?
   end
@@ -154,5 +137,17 @@ class Spree::Quote < Spree::Base
   before_save do |quote|
     quote.messages.each { |m| Rails.logger.info(m) }
     quote.workbook = quote.messages.to_json
+  end
+
+  def cache_keys
+    Rails.cache.instance_variable_get('@data').keys.select { |k, _v| k.start_with?(cache_key) }
+  end
+
+  def cache_key
+    "#{model_name.cache_key}/#{id || 'new'}"
+  end
+
+  def log(message)
+    messages << message if write_log == true
   end
 end

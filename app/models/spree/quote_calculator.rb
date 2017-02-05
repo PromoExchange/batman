@@ -4,16 +4,10 @@ module Spree::QuoteCalculator
   include QuoteCalculatorShipping
   include QuoteCalculatorFees
 
-  def best_price(options = {})
+  private
+
+  def best_price
     clear_log
-
-    log("Best price called #{options}")
-
-    [
-      :shipping_option
-    ].each do |o|
-      raise "Cannot calculate quote, missing required option [#{o}]" unless options.key?(o)
-    end
 
     log('Quote: Calculating')
     log("Item name: #{product.name}")

@@ -182,4 +182,18 @@ namespace :company_store do
     load_products(params)
     create_price_cache(company_store.supplier)
   end
+
+  desc 'copy products from one store to another'
+  task :copy_products, [:slug1, :slug2] => :environment do |_t, args|
+    base_store = Spree::CompanyStore.find_by(slug: args[:slug1])
+    next_store = Spree::CompanyStore.find_by(slug: args[:slug2])
+
+    base_store.products.each do |product|
+      new_product = product.dup
+      new_product.sku = "#{args[:slug1]}-#{product.sku}"
+      new_product.supplier = next_store.supplier
+      new_product.price = 1.0
+      new_product.save!
+    end
+  end
 end

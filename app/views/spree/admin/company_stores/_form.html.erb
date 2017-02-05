@@ -56,7 +56,15 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4" data-hook="admin_company_store_form_requires_auth">
+    <div class="col-md-6" data-hook="admin_company_store_form_display_name">
+      <%= f.field_container :display_name, class: ['form-group'] do %>
+        <%= f.label :display_name, Spree.t(:display_name) %>
+        <%= f.text_field :display_name, class: 'form-control title' %>
+        <%= f.error_message_on :display_name %>
+      <% end %>
+    </div>
+
+    <div class="col-md-6" data-hook="admin_company_store_form_requires_auth">
       <%= f.field_container :requires_auth, class: ['form-group'] do %>
         <%= f.label :requires_auth, raw(Spree.t(:requires_auth) + '?') %>
         <%= f.check_box :requires_auth, class: ['form-group'] %>

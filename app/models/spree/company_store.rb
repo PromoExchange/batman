@@ -24,6 +24,10 @@ class Spree::CompanyStore < Spree::Base
     buyer.logos.first
   end
 
+  def display_name
+    self[:display_name].nil? ? (slug || '').titleize : self[:display_name]
+  end
+
   def products(options = {})
     Rails.cache.fetch("#{cache_key}/products/#{options}", expires_in: 5.minutes) do
       returned_products = store_taxon.products.to_a

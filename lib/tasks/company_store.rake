@@ -182,4 +182,68 @@ namespace :company_store do
     load_products(params)
     create_price_cache(company_store.supplier)
   end
+
+  desc 'copy products from one store to another'
+  task :copy_products, [:slug1, :slug2] => :environment do |_t, args|
+    base_store = Spree::CompanyStore.find_by(slug: args[:slug1])
+    next_store = Spree::CompanyStore.find_by(slug: args[:slug2])
+
+    base_store.products.each do |product|
+      new_product = product.dup
+      new_product.sku = "#{args[:slug2]}-#{product.sku}"
+      new_product.supplier = next_store.supplier
+      new_product.price = 1.0
+
+      begin
+        new_product.save!
+      rescue => e
+        puts e
+        exit
+      end
+
+      product.taxons.each do |taxon|
+        new_product.taxons << taxon unless taxon.parent.name == 'Stores'
+      end
+      new_product.taxons << Spree::Taxon.where(name: args[:slug2]).first
+
+      product.color_product.each do |color|
+        new_color = color.dup
+        new_color.product_id = new_product.id
+        new_color.save! unless new_color.product_id.blank?
+      end
+
+      product.upcharges.each do |upcharge|
+        new_upcharge = upcharge.dup
+        new_upcharge.related_id = new_product.id
+        new_upcharge.save!
+      end
+
+      product.imprint_methods.each do |im|
+        new_product.imprint_methods << im
+      end
+
+      new_product.carton.width = product.carton.width
+      new_product.carton.length = product.carton.length
+      new_product.carton.height = product.carton.height
+      new_product.carton.weight = product.carton.weight
+      new_product.carton.quantity = product.carton.quantity
+      new_product.carton.originating_zip = product.carton.originating_zip
+      new_product.carton.fixed_price = product.carton.fixed_price
+      new_product.carton.per_item = product.carton.per_item
+      new_product.carton.upcharge = product.carton.upcharge
+      new_product.carton.save!
+
+      product.volume_prices.each do |volume_price|
+        newvp = volume_price.dup
+        newvp.variant_id = new_product.id
+        newvp.save!
+      end
+
+      begin
+        new_product.save!
+      rescue => e
+        puts e
+      end
+    end
+  end
 end

@@ -19,17 +19,6 @@ RSpec.describe Spree::CompanyStore, type: :model do
   describe 'methods' do
     let(:company_store) { FactoryGirl.create(:company_store) }
 
-    it 'should have a specific cache key' do
-      expect(company_store.cache_key =~ /#{company_store.id}/).to be_truthy
-      expect(company_store.cache_key =~ /^#{company_store.model_name.cache_key}/).to be_truthy
-    end
-
-    it 'should have a specific cache key for new' do
-      company_store = FactoryGirl.build(:company_store)
-      expect(company_store.cache_key =~ /new/).to be_truthy
-      expect(company_store.cache_key =~ /^#{company_store.model_name.cache_key}/).to be_truthy
-    end
-
     it 'should return a valid taxon for this CS' do
       expect(company_store.store_taxon.valid?).to be_truthy
       product_taxonomy = Spree::Taxonomy.where(name: 'Stores').first

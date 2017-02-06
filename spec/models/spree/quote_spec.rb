@@ -46,8 +46,6 @@ describe Spree::Quote, type: :model do
   describe 'validations' do
     it { should validate_presence_of(:main_color) }
     it { should validate_presence_of(:shipping_address) }
-    it { should validate_presence_of(:shipping_days) }
-    it { should validate_presence_of(:shipping_cost) }
     it { should validate_presence_of(:shipping_option) }
   end
 
@@ -56,30 +54,6 @@ describe Spree::Quote, type: :model do
     it { should belong_to(:product) }
     it { should belong_to(:shipping_address) }
     it { should have_many(:pms_colors) }
-  end
-
-  describe 'messages' do
-    it 'should add a log message' do
-      quote = FactoryGirl.build(:quote)
-      5.times { quote.log('Test message') }
-      expect(quote.messages.count).to eq 5
-    end
-
-    it 'should save and restore messages', active: true do
-      quote = FactoryGirl.build(:quote)
-      15.times { |i| quote.log("Test message #{i}") }
-      quote.save
-      quote2 = Spree::Quote.find(quote.id)
-      expect(quote2.messages.count).to eq 15
-    end
-
-    it 'should clear messages' do
-      quote = FactoryGirl.create(:quote)
-      5.times { quote.log('Test Message') }
-      expect(quote.messages.count).to eq 5
-      quote.clear_log
-      expect(quote.messages.count).to eq 0
-    end
   end
 
   describe 'methods' do
@@ -110,29 +84,13 @@ describe Spree::Quote, type: :model do
 
     it 'should have a default shipping days of 5 (Fixed Price)' do
       quote = FactoryGirl.create(:quote, :with_fixed_price_total)
-      expect(quote.shipping_days).to eq(5)
+      expect(quote.price[:shipping_days]).to eq(5)
     end
 
     it 'should generate a reference' do
       quote = FactoryGirl.create(:quote, reference: nil)
       quote2 = Spree::Quote.find(quote.id)
       expect(quote2.reference).not_to be_empty
-    end
-
-    it 'should have a specific cache key' do
-      quote = FactoryGirl.create(:quote)
-      expect(quote.cache_key =~ /#{quote.product.id}/).to be_truthy
-      expect(quote.cache_key =~ /#{quote.quantity}/).to be_truthy
-      expect(quote.cache_key =~ /#{quote.shipping_option}/).to be_truthy
-      expect(quote.cache_key =~ /#{quote.model_name.cache_key}/).to be_truthy
-    end
-
-    it 'should have a specific cache key with shipping option' do
-      quote = FactoryGirl.create(:quote)
-      expect(quote.cache_key(:ups_3day_select) =~ /#{quote.product.id}/).to be_truthy
-      expect(quote.cache_key(:ups_3day_select) =~ /#{quote.quantity}/).to be_truthy
-      expect(quote.cache_key(:ups_3day_select) =~ /#{:ups_3day_select}/).to be_truthy
-      expect(quote.cache_key(:ups_3day_select) =~ /#{quote.model_name.cache_key}/).to be_truthy
     end
   end
 end

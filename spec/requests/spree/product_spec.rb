@@ -29,7 +29,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 841.02).abs).to be < 0.01
+      expect((json['best_price'].to_f - 842.12).abs).to be < 0.01
       expect(json['delivery_days']).to eq 12
       expect(json.key?('workbook')).to be_falsey
     end
@@ -53,7 +53,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 841.02).abs).to be < 0.01
+      expect((json['best_price'].to_f - 842.12).abs).to be < 0.01
       expect(json['delivery_days']).to eq 12
       expect(json['workbook']).not_to eq 0
     end
@@ -80,7 +80,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 764.59).abs).to be < 0.01
+      expect((json['best_price'].to_f - 765.32).abs).to be < 0.01
     end
 
     it 'must get a best price with a specified address and quantity of 1' do
@@ -106,7 +106,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 43.86).abs).to be < 0.01
+      expect((json['best_price'].to_f - 44.60).abs).to be < 0.01
     end
 
     it 'must get a best price with a specified address and quantity of 1 and :with_less_than_minimum' do
@@ -132,7 +132,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 118.55).abs).to be < 0.01
+      expect((json['best_price'].to_f - 119.28).abs).to be < 0.01
     end
 
     it 'must get a best price with a specified address, quantity of 1 and pms_color of 1' do
@@ -159,7 +159,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 106.10).abs).to be < 0.01
+      expect((json['best_price'].to_f - 106.84).abs).to be < 0.01
     end
 
     it 'must get a best price with a specified address, quantity of 1 and pms_color of 2' do
@@ -186,7 +186,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 168.34).abs).to be < 0.01
+      expect((json['best_price'].to_f - 169.07).abs).to be < 0.01
     end
 
     it 'must return an address error with an invalid address' do
@@ -234,7 +234,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 8005.10).abs).to be < 0.01
+      expect((json['best_price'].to_f - 8007.31).abs).to be < 0.01
       expect(json['delivery_days']).to eq 12
     end
 
@@ -279,7 +279,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 854.85).abs).to be < 0.01
+      expect((json['best_price'].to_f - 855.95).abs).to be < 0.01
       expect(json['delivery_days']).to eq 12
     end
 
@@ -366,7 +366,7 @@ describe 'Products API' do
           }
         }, 'X-Spree-Token' => current_api_user.spree_api_key.to_s
       expect(response).to have_http_status(200)
-      expect((json['best_price'].to_f - 5673.72).abs).to be < 0.01
+      expect((json['best_price'].to_f - 5688.66).abs).to be < 0.01
       expect(json['delivery_days']).to eq 8
     end
   end

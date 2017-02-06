@@ -48,9 +48,7 @@ Spree::Product.class_eval do
   delegate :fixed_price_shipping?, to: :carton
 
   def clear_cache
-    quotes.each do |q|
-      Rails.cache.delete("#{q.cache_key}/total_price")
-    end
+    quotes.each(&:clear_cache)
     quotes.destroy_all
   end
 
@@ -313,38 +311,28 @@ Spree::Product.class_eval do
 
     raise 'Unable to find product configuration' if configuration.nil?
 
-    quote = quotes.where(
+    quote = quotes.send(options[:shipping_option]).where(
       quantity: options[:quantity],
       main_color: configuration.main_color,
       shipping_address: options[:shipping_address],
-      custom_pms_colors: configuration.custom_pms_colors,
-      shipping_option: options[:shipping_option]
+      custom_pms_colors: configuration.custom_pms_colors
     ).first_or_create
 
     raise 'Failed to get price' if quote.nil?
 
-    total_price = quote.total_price(shipping_option: options[:shipping_option])
-
-    if total_price.nil?
-      return {
-        error_code: quote.error_code.to_s,
-        error_message: quote.messages.last,
-        best_price: nil,
-        delivery_days: nil
-      }
-    end
+    price = quote.price
 
     if special_price.present? && options[:quantity] < special_price.quantity
-      total_price = options[:quantity] * special_price.price
+      price[:total_price] = options[:quantity] * special_price.price
     end
 
     response = {
       quote_id: quote.id,
-      best_price: total_price,
+      best_price: price[:total_price],
       shipping_option: quote.shipping_option,
-      shipping_cost: quote.shipping_cost,
+      shipping_cost: price[:shipping_cost],
       quantity: options[:quantity].to_i,
-      delivery_days: production_time + quote.shipping_days
+      delivery_days: production_time + price[:shipping_days]
     }
 
     response

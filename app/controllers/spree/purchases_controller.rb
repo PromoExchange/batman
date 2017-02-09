@@ -125,13 +125,16 @@ class Spree::PurchasesController < Spree::StoreController
     )
 
     Resque.enqueue(SendInvoice, order_id: @order.id)
-    if @order.purchase.image.present?
-      SLACK.ping "Order for $#{@order.item_total} by #{@order.user.email}: #{@order.purchase.image.attachment.url}"
-    else
-      SLACK.ping "Order for $#{@order.item_total} by #{@order.user.email}"
-    end
+    # if @order.purchase.image.present?
+    #   SLACK.ping "Order for $#{@order.item_total} by #{@order.user.email}: #{@order.purchase.image.attachment.url}"
+    # else
+    #   SLACK.ping "Order for $#{@order.item_total} by #{@order.user.email}"
+    # end
 
     redirect_to "/company_store/#{current_company_store.slug}"
+  rescue StandardError => e
+    Rails.logger.error(e)
+    render nothing: true, status: 500
   end
 
   def supporting_data

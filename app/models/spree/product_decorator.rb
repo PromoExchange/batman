@@ -335,6 +335,8 @@ Spree::Product.class_eval do
       delivery_days: production_time + price[:shipping_days]
     }
 
+    response[:workbook] = quote.messages if options[:need_workbook] == true
+
     response
   rescue StandardError => e
     error_msg = "Failed to get best price: #{e}"

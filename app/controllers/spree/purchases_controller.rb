@@ -40,6 +40,7 @@ class Spree::PurchasesController < Spree::StoreController
   def create
     # TODO: Move :size into purchase_params
     if params[:size].present?
+      params[:purchase][:quantity_sizes] = params[:size].to_json
       params[:size] = params[:size].merge(params[:size]) { |_k, val| val.to_i < 0 ? 0 : val.to_i }
       @size_quantity = params[:size]
       params[:purchase][:quantity] = params[:size].values.map(&:to_i).reduce(:+)
@@ -58,6 +59,7 @@ class Spree::PurchasesController < Spree::StoreController
     Rails.logger.info("custom_pms_colors: #{purchase_params[:custom_pms_colors]}")
     Rails.logger.info("address_id: #{purchase_params[:address_id]}")
     Rails.logger.info("shipping_option: #{purchase_params[:shipping_option]}")
+    Rails.logger.info("quantity_sizes: #{purchase_params[:quantity_sizes] || '(not wearable)'}")
 
     @product = Spree::Product.find(purchase_params[:product_id])
 
@@ -202,6 +204,7 @@ class Spree::PurchasesController < Spree::StoreController
       :address_id,
       :shipping_option,
       :quality_option,
+      :quantity_sizes,
       address: [:company, :address1, :address2, :city, :state_id, :zipcode]
     )
   end

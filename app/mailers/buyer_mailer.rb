@@ -1,7 +1,11 @@
 class BuyerMailer < ApplicationMailer
-  def invoice(purchase)
+  def invoice(purchase, payment_email)
     @purchase = purchase
-    mail(to: @purchase.buyer.email, subject: "Invoice for PromoExchange Purchase: #{@purchase.reference}")
+    @payment_email = payment_email
+    mail(
+      to: [@purchase.buyer.email, @payment_email].join(','),
+      subject: "Invoice for PromoExchange Purchase: #{@purchase.reference}"
+    )
   end
 
   def send_inspire_me_request(inspire_me_request, product_request)

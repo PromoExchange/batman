@@ -1,7 +1,6 @@
 <h2>Sales Receipt: <%= @purchase.reference %></h2>
 <p>Date: <%= Time.zone.now.strftime('%m/%d/%Y') %></p>
 
-
 <h4>Bill To:</h4>
 <ul style='list-style: none;'>
   <li><%= @purchase.address.company %></li>
@@ -13,6 +12,10 @@
     <%= @purchase.address.zipcode %>
   </li>
 </ul>
+
+<p>
+<b>eMail used for payment:</b> <%= @payment_email %>
+</p>
 
 <h4>Order:</h4>
 <table>

@@ -124,7 +124,7 @@ class Spree::PurchasesController < Spree::StoreController
       description: params[:stripeEmail].to_s
     )
 
-    Resque.enqueue(SendInvoice, order_id: @order.id)
+    Resque.enqueue(SendInvoice, order_id: @order.id, payment_email: params[:stripeEmail])
 
     message = "<!channel> Order for $#{@order.item_total} by #{@order.user.email}"
     message << " via #{params[:stripeEmail]}" unless params[:stripeEmail].blank?

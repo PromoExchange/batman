@@ -126,7 +126,7 @@ class Spree::PurchasesController < Spree::StoreController
 
     Resque.enqueue(SendInvoice, order_id: @order.id, payment_email: params[:stripeEmail])
 
-    message = "<!channel> Order for $#{@order.item_total} by #{@order.user.email}"
+    message = "<!channel> Order (#{@order.purchase.reference}) for $#{@order.item_total} by #{@order.user.email}"
     message << " via #{params[:stripeEmail]}" unless params[:stripeEmail].blank?
     message << " : #{@order.purchase.image.attachment.url}" if @order.purchase.image.present?
 

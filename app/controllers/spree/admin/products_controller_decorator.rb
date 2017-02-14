@@ -16,8 +16,8 @@ Spree::Admin::ProductsController.class_eval do
       product: @product
     ).first_or_create
     @product.save!
-  rescue => e
-    Rails.logger.warn "Unable to create preconfigure: #{e}"
+  rescue StandardError => e
+    Rails.logger.error "Unable to create preconfigure: #{e}"
   end
 
   def price_breaks
@@ -25,10 +25,10 @@ Spree::Admin::ProductsController.class_eval do
     @product.price_breaks.each do |price_break|
       lowest_range = price_break.split('..')[0].gsub(/\D/, '').to_i
       best_price = @product.best_price(quantity: lowest_range, need_workbook: true)
-      @price_breaks << [lowest_range, price[:best_price].to_f / lowest_range, best_price[:workbook]]
+      @price_breaks << [lowest_range, best_price[:best_price].to_f / lowest_range, best_price[:workbook]]
     end
-  rescue
-    Rails.logger.warn "Unable to create price_breaks: #{e}"
+  rescue StandardError => e
+    Rails.logger.error "Unable to create price_breaks: #{e}"
   end
 
   def load_data

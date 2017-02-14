@@ -43,8 +43,9 @@ Exporting from Heroku and importing locally
 -------------------------------------------
 
 1. `heroku pg:backups capture --app px-batman`
-1. **NOTE** Delete the previous latest.dump file is present.
-1. `heroku pg:backups download --app px-batman` (to latest.dump)
+1. `heroku pg:backups download --app px-batman` (to latest.dump).
+**NOTE**: Rename or delete the previously downloaded `latest.dump` file.
+
 1. `pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d batman_dev latest.dump`
 
 See: [Heroku export/import](https://devcenter.heroku.com/articles/heroku-postgres-import-export)

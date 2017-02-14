@@ -33,6 +33,7 @@ class Spree::Purchase < Spree::Base
 
   enum quality_option: { economy: 0, premium: 1, super_premium: 2 }
 
+  # TODO: This should come from the product, not sure if this is used
   def self.sizes
     %w(S M L XL 2XL)
   end

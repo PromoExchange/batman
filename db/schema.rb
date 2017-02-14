@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170129212738) do
+ActiveRecord::Schema.define(version: 20170212204619) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -835,6 +835,7 @@ ActiveRecord::Schema.define(version: 20170129212738) do
     t.integer "address_id",                     null: false
     t.string  "reference",         default: ""
     t.integer "quality_option"
+    t.string  "quantity_sizes"
   end
 
   create_table "spree_quotes", force: :cascade do |t|

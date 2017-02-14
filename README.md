@@ -7,15 +7,19 @@ Batman is the main application for PromoExchange's promotional products auction 
 
 Requirements
 -------------
+- [Homebrew](https://brew.sh/)
+- [Ruby Version Manager (rvm)](https://rvm.io/)
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [Ruby 2.2.2](https://github.com/sstephenson/rbenv)
+- [Ruby 2.2.3](https://github.com/sstephenson/rbenv)
 - [Bundler 1+](http://bundler.io/)
-- [Rails 4.2.1](http://railsapps.github.io/installing-rails.html)
+- [Rails 4.2.2](http://railsapps.github.io/installing-rails.html)
 - [Postgres 9+](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
 - [Redis](http://redis.io/topics/quickstart)
 
 Windows Installation
 --------------------
+** N.B. Windows development environment is not really supported **
+
 The following installation links are for a Microsoft Windows Environment.
 N.B. These are untested as I do not have access to a Windows machine
 - [Git CLI Installation](https://git-scm.com/download/win). This also includes a bash prompt.
@@ -33,15 +37,14 @@ Installation
 1. `git clone git@github.com:PromoExchange/batman.git`
 2. `bundle install`
 3. `bower install`
-4. `bundle exec rake db:schema:load`
-5. `bundle exec rake db:seed`
-6. `PRODUCT_LOAD_IMAGES=true bundle exec rake product:load:all`, this will take a significant amount of time, as it is loading the database with all product information and images pulled from the internet.
+4. Take a copy of the heroku database and install locally. See below for instructions.
 
 Exporting from Heroku and importing locally
 -------------------------------------------
 
 1. `heroku pg:backups capture --app px-batman`
-1. `heroku pg:backups download --app px-batman`
+1. **NOTE** Delete the previous latest.dump file is present.
+1. `heroku pg:backups download --app px-batman` (to latest.dump)
 1. `pg_restore --verbose --clean --no-acl --no-owner -h localhost -U postgres -d batman_dev latest.dump`
 
 See: [Heroku export/import](https://devcenter.heroku.com/articles/heroku-postgres-import-export)

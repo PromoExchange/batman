@@ -22,10 +22,14 @@
     <div>
       <table class="table">
         <thead>
-          <tr><th>Quantity</th><th>Price</th></tr>
+          <tr><th>Quantity</th><th>Price</th><th>Log</th></tr>
         </thead>
         <% @price_breaks.each do |preak| %>
-          <tr><td><%= preak[0] %></td><td><%= number_to_currency(preak[1]) %> each</td></tr>
+          <tr>
+            <td><%= preak[0] %></td>
+            <td><%= number_to_currency(preak[1]) %> each</td>
+            <td><button type="button" class="btn btn-success btn-sm log-button" data-log="<%= preak[2] %>">Log</button></td>
+          </tr>
         <% end %>
       </table>
     </div>
@@ -38,3 +42,5 @@
     <%= render partial: 'spree/admin/shared/edit_resource_links' %>
   </fieldset>
 <% end %>
+
+<%= render "log_modal" %>

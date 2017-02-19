@@ -9,10 +9,23 @@ $(function() {
     $('#purchase-size .product-size').each(function() {
       $(this).val('');
     });
+    if($('#purchase_company_store_type').val() === 'gooten') {
+      $('.gooten-element').hide();
+      $('#breadcrumb-element').show();
+      $('#logo-element').show();
+    }
   });
 
   $('.logo-upload').change(function() {
     readURL(this);
+  });
+
+  $('.breadcrumb-item > a').click(function(crumb) {
+    crumb.preventDefault();
+    $('.breadcrumb-item active').removeClass('active');
+    $(this).addClass('active');
+    $('.gooten-element').hide();
+    $('#' + $(this).data('crumb') + '-element').show();
   });
 
   function readURL(input) {

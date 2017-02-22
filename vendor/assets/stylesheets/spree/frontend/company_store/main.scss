@@ -54,8 +54,18 @@ $cs-text-color: #313131;
 }
 
 .cs-footer {
+  margin-top: 10px;
   background-color: #222222;
   width: 100%;
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+#cs-shipping-option {
+  margin-top: 10px;
 }
 
 .cs-footer-bottom {

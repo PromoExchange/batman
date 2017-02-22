@@ -16,37 +16,38 @@
     <%= render partial: 'breadcrumb' %>
     <%= render partial: 'upload_logo' %>
     <%= form_for @purchase, url: main_app.purchases_path, class: 'form' do |f| %>
-      <%= f.hidden_field :company_store_slug, value: @current_company_store.slug %>
-      <%= f.hidden_field :company_store_type, value: @current_company_store.store_type %>
-      <%= f.hidden_field :product_id, value: @product.id %>
-      <%= f.hidden_field :buyer_id, value: @purchase.buyer_id %>
-      <%= f.hidden_field :image_id, value: nil %>
-      <%= f.hidden_field :category_id, value: @category.blank? ? nil : @category.id %>
+      <div class="vertical-align">
+        <%= f.hidden_field :company_store_slug, value: @current_company_store.slug %>
+        <%= f.hidden_field :company_store_type, value: @current_company_store.store_type %>
+        <%= f.hidden_field :product_id, value: @product.id %>
+        <%= f.hidden_field :buyer_id, value: @purchase.buyer_id %>
+        <%= f.hidden_field :image_id, value: nil %>
+        <%= f.hidden_field :category_id, value: @category.blank? ? nil : @category.id %>
 
-      <% if @purchase.errors.any? %>
-        <p class="alert alert-error">Errors</p>
-        <ul>
-          <% @purchase.errors.full_messages.each do |message| %>
-            <li class="error"><%= message %></li>
-          <% end %>
-        </ul>
-      <% end %>
+        <% if @purchase.errors.any? %>
+          <p class="alert alert-error">Errors</p>
+          <ul>
+            <% @purchase.errors.full_messages.each do |message| %>
+              <li class="error"><%= message %></li>
+            <% end %>
+          </ul>
+        <% end %>
 
-      <fieldset>
-        <%= render partial: 'imprint_method', locals: { f: f }%>
-        <%= render partial: 'logo', locals: { f: f } %>
-        <%= render partial: 'main_color', locals: { f: f } %>
-        <%= render partial: 'quality', locals: { f: f } unless @current_company_store.traditional? %>
-        <%= render(partial: 'price_breaks', locals: { f: f }) if @current_company_store.traditional? %>
-        <%= render partial: 'quantity', locals: { f: f } %>
-        <%= render partial: 'address', locals: { f: f } %>
-        <%= render partial: 'shipping_options', locals: { f: f } %>
-      </fieldset>
+        <fieldset>
+          <%= render partial: 'imprint_method', locals: { f: f }%>
+          <%= render partial: 'logo', locals: { f: f } %>
+          <%= render partial: 'main_color', locals: { f: f } %>
+          <%= render partial: 'quality', locals: { f: f } unless @current_company_store.traditional? %>
+          <%= render(partial: 'price_breaks', locals: { f: f }) if @current_company_store.traditional? %>
+          <%= render partial: 'quantity', locals: { f: f } %>
+          <%= render partial: 'address', locals: { f: f } %>
+          <%= render partial: 'shipping_options', locals: { f: f } %>
+        </fieldset>
+      </div>
+      <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
+      <%= render partial: 'active_price' %>
+      <%= render partial: 'buttons' %>
     <% end %>
-
-    <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
-    <%= render partial: 'active_price' %>
-    <%= render partial: 'buttons' %>
 
     <% if @current_company_store.traditional? %>
       <% if @product.description %>

@@ -48,6 +48,7 @@
       <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
       <%= render partial: 'active_price' %>
       <%= render partial: 'buttons' %>
+      <%= render partial: 'summary' %>
     <% end %>
 
     <% if @current_company_store.traditional? %>

@@ -6,7 +6,7 @@
   }
 
   .popover-title { height: 0px;}
-  
+
   .purchase-size .purchase-list ul {
     display: inline-block;
     margin: 0;
@@ -74,5 +74,22 @@
 
   .logo-to-upload {
     max-height: 200px;
+  }
+
+  .summary-product-image {
+    width: 100px;
+  }
+
+  #summary-element {
+    li {
+      list-style-type: none;
+      font-size: 14px;
+      em {
+        font-weight: 900;
+      }
+    }
+    p {
+      margin-left: 30px;
+    }
   }
 }

@@ -13,9 +13,11 @@ $(function() {
       $('.gooten-element').hide();
       $('#breadcrumb-element').show();
       $('#color-element').show();
+      $('#summary-element').show();
       $('#left-panel').hide();
       $('#right-panel').removeClass('col-md-6');
       $('#right-panel').addClass('col-md-8 col-md-offset-2');
+      set_summary();
     }
   });
 
@@ -29,6 +31,8 @@ $(function() {
     $(this).addClass('active');
     $('.gooten-element').hide();
     $('#' + $(this).data('crumb') + '-element').show();
+    $('#summary-element').show();
+    set_summary();
   });
 
   function readURL(input) {
@@ -54,22 +58,70 @@ $(function() {
     };
   })();
 
+  function set_summary() {
+    var main_image = $('.main-product-image').first();
+    var summary_image = $('.summary-product-image').first();
+    $.each(["src","alt"], function(_i, s){
+      summary_image.attr(s, main_image.attr(s));
+    });
+
+    var quantity = get_quantity();
+    var bounding_line = $("#summary-quantity").closest("li");
+    if( quantity.actual > 0 ) {
+      $("#summary-quantity").text(get_quantity().display);
+      bounding_line.show();
+    } else {
+      bounding_line.hide();
+    }
+
+    bounding_line = $("#summary-address").closest("li");
+    if(addressFilled()) {
+      var address_display = '<p>';
+      $.each(['company', 'address1', 'address2', 'city', 'state','zipcode'], function(_i, s){
+        if( s === 'state') {
+          address_display += $('#purchase_address_state option:selected').text() + '</br>';
+        } else {
+          address_line = $('#purchase_address_'+s).val();
+          if(address_line) {
+            address_display += address_line + '</br>';
+          }
+        }
+      });
+      if(address_display != "<p>") {
+        address_display += "</p>";
+        $("#summary-address").html(address_display);
+      }
+      bounding_line.show();
+    } else {
+      bounding_line.hide();
+    }
+
+    $("#summary-quality").text($('#purchase_quality_option option:selected').text());
+  }
+
   function get_quantity() {
     var actual = 0;
     var min = 0;
+    var display = '';
 
     if($('#purchase-size .product-size').length) {
       min = parseInt($("#purchase-size").attr('min-quantity'));
-      $('#purchase-size .product-size').each(function() {
-        actual += parseInt('0'+ $(this).val());
+      $('#purchase-size .product-size').each(function(index) {
+        quantity_val = parseInt('0'+ $(this).val());
+        if( quantity_val > 0 ) {
+          actual += quantity_val;
+          display += ['S','M','L','XL','2XL'][index];
+          display += ':' + quantity_val.toString() + ' ';
+        }
       });
     } else {
       var e = $(".cs-quantity");
       min = parseInt(e.attr('min'));
       actual = parseInt(e.val());
+      display = actual.toString();
     }
 
-    return { min: min, actual: actual };
+    return { min: min, actual: actual, display: display};
   }
 
   function recalc_price() {

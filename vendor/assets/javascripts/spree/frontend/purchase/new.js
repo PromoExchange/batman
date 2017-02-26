@@ -12,7 +12,7 @@ $(function() {
     if($('#purchase_company_store_type').val() === 'gooten') {
       $('.gooten-element').hide();
       $('#breadcrumb-element').show();
-      $('#logo-element').show();
+      $('#color-element').show();
       $('#left-panel').hide();
       $('#right-panel').removeClass('col-md-6');
       $('#right-panel').addClass('col-md-8 col-md-offset-2');

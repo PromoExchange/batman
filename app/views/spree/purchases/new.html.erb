@@ -15,6 +15,7 @@
     <h1 id='new_purchase_name'><%= (@category && @category.name) || @product.name %></h1>
     <%= render partial: 'breadcrumb' %>
     <%= render partial: 'upload_logo' %>
+    <%= render partial: 'color' %>
     <%= form_for @purchase, url: main_app.purchases_path, class: 'form' do |f| %>
       <div class="vertical-align">
         <%= f.hidden_field :company_store_slug, value: @current_company_store.slug %>

@@ -13,6 +13,9 @@ $(function() {
       $('.gooten-element').hide();
       $('#breadcrumb-element').show();
       $('#logo-element').show();
+      $('#left-panel').hide();
+      $('#right-panel').removeClass('col-md-6');
+      $('#right-panel').addClass('col-md-8 col-md-offset-2');
     }
   });
 

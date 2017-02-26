@@ -2,7 +2,7 @@
   <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
   <div class='small-images'>
     <% @product.images.each do |image| %>
-      <%= image_tag image.attachment.url(:small), class: 'secondary-product-image' %>
+      <%= image_tag image.attachment.url(:small), class: 'secondary-product-image', data: { image_id: image.id, large_src: image.attachment.url(:large)}  %>
     <% end if @product.images.size > 1 %>
   </div>
 </div>

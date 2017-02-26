@@ -45,11 +45,6 @@ $(function() {
     }
   }
 
-  var selectImage = function(imageId, src) {
-    $('.main-product-image').attr('src', src);
-    $('#purchase_image_id').attr('value', imageId);
-  }
-
   var delay = (function(){
     var timer = 0;
     return function(callback, ms) {
@@ -128,6 +123,7 @@ $(function() {
     if (!addressFilled() && ($('#purchase_ship_to_zip').val() === '' || $('#purchase_ship_to_zip').val() === undefined)) {
       return;
     }
+    set_summary();
 
     var actual = 0;
     var min = 1;
@@ -352,13 +348,22 @@ $(function() {
       $.each(images, function( index, value ){
         small_images_div.append(
           $('<img class="secondary-product-image" src="http://placehold.it/100x100" alt="alt-text">')
-            .attr('src', value['small_src'])
             .attr('alt', value['alt'])
+            .attr('src', value['small_src'])
+            .data('image-id', value['image_id'])
+            .data('large-src', value['large_src'])
         );
       });
     }
 
     recalc_price();
+  });
+
+  $('.secondary-product-image').click(function(){
+    $('.main-product-image').attr('src', $(this).data('large-src'));
+    $('.main-product-image').attr('alt', $(this).attr('alt'));
+    $('#purchase_image_id').attr('value', $(this).data('image-id'));
+    set_summary();
   });
 
   $('#purchase_shipping_option').change(function() {

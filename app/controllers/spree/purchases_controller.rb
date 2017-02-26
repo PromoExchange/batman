@@ -182,7 +182,7 @@ class Spree::PurchasesController < Spree::StoreController
             large_src: image.attachment.url(:large),
             small_src: image.attachment.url(:small),
             alt: image.attachment.name,
-            id: image.id
+            image_id: image.id
           }
         end
 

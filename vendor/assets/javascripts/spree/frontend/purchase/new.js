@@ -126,6 +126,7 @@ $(function() {
   }
 
   function recalc_price() {
+    set_summary();
     if (!addressFilled() && ($('#purchase_ship_to_zip').val() === '' || $('#purchase_ship_to_zip').val() === undefined)) {
       return;
     }
@@ -251,7 +252,6 @@ $(function() {
           $('.cs-purchase-submit').prop('disabled', false);
           $(".cs-active-price").show();
           $("#breakout_question").show();
-          set_summary();
         },
         error: function(data) {
           $(".cs-active-price").text('No Price Found');

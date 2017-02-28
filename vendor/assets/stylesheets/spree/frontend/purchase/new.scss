@@ -80,6 +80,37 @@
     width: 100px;
   }
 
+  #breadcrumb-element {
+    margin-top: 15px;
+    .breadcrumb {
+      background: rgba(245, 245, 245, 1);
+      border: 0px solid rgba(245, 245, 245, 1);
+      border-radius: 5px;
+      display: block;
+    }
+
+    .breadcrumb li {
+      font-size: 22px;
+    }
+
+    .breadcrumb a {
+      color: rgba(66, 139, 202, 1);
+    }
+
+    .breadcrumb a:hover {
+      color: rgba(42, 100, 150, 1);
+    }
+
+    .breadcrumb>.active {
+      color: rgba(240, 19, 19, 1);
+    }
+
+    .breadcrumb>li+li:before {
+      color: rgba(204, 204, 204, 1);
+      content: "\276F\00a0";
+    }
+  }
+
   #summary-element {
     li {
       list-style-type: none;

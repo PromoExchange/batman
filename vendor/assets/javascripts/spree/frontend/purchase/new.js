@@ -10,6 +10,10 @@ $(function() {
       $(this).val('');
     });
     if($('#purchase_company_store_type').val() === 'gooten') {
+      $("body").css('background-color', '#F0F0F0');
+      $("#right-panel").css('background-color', 'white');
+      $("#cs-logo").hide();
+      $("#new_purchase_name").hide();
       $('.gooten-element').hide();
       $('#breadcrumb-element').show();
       $('#color-element').show();
@@ -28,12 +32,13 @@ $(function() {
 
   $('.breadcrumb-item > a').click(function(crumb) {
     crumb.preventDefault();
-    $('.breadcrumb-item active').removeClass('active');
-    $(this).addClass('active');
     $('.gooten-element').hide();
     $('#' + $(this).data('crumb') + '-element').show();
-    $('#summary-element').show();
+    $('.breadcrumb-item.active').removeClass('active');
+    $(this).closest('.breadcrumb-item').addClass('active');
+    $(this).fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
     set_summary();
+    $('#summary-element').show();
   });
 
   function readURL(input) {

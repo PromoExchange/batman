@@ -13,10 +13,11 @@ $(function() {
       $('.gooten-element').hide();
       $('#breadcrumb-element').show();
       $('#color-element').show();
-      $('#summary-element').show();
       $('#left-panel').hide();
       $('#right-panel').removeClass('col-md-6');
       $('#right-panel').addClass('col-md-8 col-md-offset-2');
+      $('.calculated').hide();
+      $("#summary-element").show();
       set_summary();
     }
   });
@@ -123,7 +124,6 @@ $(function() {
     if (!addressFilled() && ($('#purchase_ship_to_zip').val() === '' || $('#purchase_ship_to_zip').val() === undefined)) {
       return;
     }
-    set_summary();
 
     var actual = 0;
     var min = 1;
@@ -152,6 +152,7 @@ $(function() {
             shipping_option: selected_shipping_option
           }
         };
+        $(".calculated").show();
       } else {
         var params = {
           purchase: {
@@ -169,6 +170,7 @@ $(function() {
           }
         };
       }
+
 
       $.ajax({
         type: 'POST',
@@ -244,6 +246,7 @@ $(function() {
           $('.cs-purchase-submit').prop('disabled', false);
           $(".cs-active-price").show();
           $("#breakout_question").show();
+          set_summary();
         },
         error: function(data) {
           $(".cs-active-price").text('No Price Found');

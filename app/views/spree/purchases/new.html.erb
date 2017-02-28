@@ -45,9 +45,11 @@
           <%= render partial: 'shipping_options', locals: { f: f } %>
         </fieldset>
       </div>
-      <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
-      <%= render partial: 'active_price' %>
-      <%= render partial: 'buttons' %>
+      <div class="calculated">
+        <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
+        <%= render partial: 'active_price' %>
+        <%= render partial: 'buttons' %>
+      </div>
       <%= render partial: 'summary' %>
     <% end %>
 

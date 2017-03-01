@@ -10,6 +10,7 @@ $(function() {
       $(this).val('');
     });
     if($('#purchase_company_store_type').val() === 'gooten') {
+      // TODO: Place inside bounding CS div and drive with css
       $("body").css('background-color', '#F0F0F0');
       $("#right-panel").css('background-color', 'white');
       $("#cs-logo").hide();
@@ -32,8 +33,16 @@ $(function() {
 
   $('.breadcrumb-item > a').click(function(crumb) {
     crumb.preventDefault();
+    var crumb_slug = $(this).data('crumb');
+    if( crumb_slug === 'quality') {
+      $(this).closest('.breadcrumb-item').addClass('completed');
+    }
+    $('.breadcrumb-item').each(function(_i, c2) {
+      if($(c2).children('a').data('crumb') == crumb_slug) return false;
+      $(c2).addClass('completed');
+    });
     $('.gooten-element').hide();
-    $('#' + $(this).data('crumb') + '-element').show();
+    $('#' + crumb_slug + '-element').show();
     $('.breadcrumb-item.active').removeClass('active');
     $(this).closest('.breadcrumb-item').addClass('active');
     $(this).fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });

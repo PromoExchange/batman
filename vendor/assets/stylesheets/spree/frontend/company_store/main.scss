@@ -49,19 +49,18 @@ $cs-text-color: #313131;
   width: 100%;
 }
 
-.footer-push {
+.footer-push-1 {
   height: 60px;
+}
+
+.footer-push-2 {
+  height: 120px;
 }
 
 .cs-footer {
   margin-top: 10px;
   background-color: #222222;
   width: 100%;
-}
-
-.vertical-align {
-  display: flex;
-  align-items: center;
 }
 
 #cs-shipping-option {

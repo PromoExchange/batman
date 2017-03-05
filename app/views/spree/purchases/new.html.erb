@@ -17,7 +17,7 @@
     <%= render partial: 'upload_logo' %>
     <%= render partial: 'color' %>
     <%= form_for @purchase, url: main_app.purchases_path, class: 'form' do |f| %>
-      <div class="vertical-align">
+      <div class="top-form">
         <%= f.hidden_field :company_store_slug, value: @current_company_store.slug %>
         <%= f.hidden_field :company_store_type, value: @current_company_store.store_type %>
         <%= f.hidden_field :product_id, value: @product.id %>
@@ -44,11 +44,11 @@
           <%= render partial: 'address', locals: { f: f } %>
           <%= render partial: 'shipping_options', locals: { f: f } %>
         </fieldset>
-      </div>
-      <div class="calculated">
-        <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
-        <%= render partial: 'active_price' %>
-        <%= render partial: 'buttons' %>
+        <div class="calculated">
+          <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
+          <%= render partial: 'active_price' %>
+          <%= render partial: 'buttons' %>
+        </div>
       </div>
       <%= render partial: 'summary' %>
     <% end %>

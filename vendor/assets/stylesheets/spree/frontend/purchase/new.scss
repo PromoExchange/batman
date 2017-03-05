@@ -4,7 +4,7 @@
     margin-bottom: 15px;
     width: 100%;
   }
-
+  
   .popover-title { height: 0px;}
 
   .purchase-size .purchase-list ul {
@@ -81,17 +81,19 @@
   }
 
   #breadcrumb-element {
-    margin-top: 15px;
+    margin-top: 5px;
     .breadcrumb {
-      padding: 0px;
-    	background: #D4D4D4;
-    	list-style: none;
-    	overflow: hidden;
+      background: #D4D4D4;
+      list-style: none;
       margin-top: 20px;
+    	overflow: hidden;
+      padding: 0px;
     }
+
     .breadcrumb>li+li:before {
     	padding: 0;
     }
+
     .breadcrumb li {
     	float: left;
     }
@@ -154,41 +156,13 @@
     .breadcrumb li a:hover:after { border-left-color: #ffc107   !important; }
   }
 
-  #breadcrumb-element-old {
-    margin-top: 15px;
-    .breadcrumb {
-      background: rgba(245, 245, 245, 1);
-      border: 0px solid rgba(245, 245, 245, 1);
-      border-radius: 5px;
-      display: block;
-    }
-
-    .breadcrumb li {
-      font-size: 22px;
-    }
-
-    .breadcrumb a {
-      color: rgba(66, 139, 202, 1);
-    }
-
-    .breadcrumb a:hover {
-      color: rgba(42, 100, 150, 1);
-    }
-
-    .breadcrumb>.active {
-      color: rgba(240, 19, 19, 1);
-    }
-
-    .breadcrumb>li+li:before {
-      color: rgba(204, 204, 204, 1);
-      content: "\276F\00a0";
-    }
-  }
-
   #summary-element {
+    position: fixed;
+    bottom: 0px;
+    height: 120px;
     li {
-      list-style-type: none;
       font-size: 14px;
+      list-style-type: none;
       em {
         font-weight: 900;
       }

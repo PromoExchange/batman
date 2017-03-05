@@ -11,8 +11,12 @@ $(function() {
     });
     if($('#purchase_company_store_type').val() === 'gooten') {
       // TODO: Place inside bounding CS div and drive with css
-      $("body").css('background-color', '#F0F0F0');
-      $("#right-panel").css('background-color', 'white');
+      $('.gooten-element').css({
+        'margin-left': '30px';
+        'margin-right': '30px';
+      });
+
+      $('.calculated').css('margin-left': '30px');
       $("#cs-logo").hide();
       $("#new_purchase_name").hide();
       $('.gooten-element').hide();
@@ -20,9 +24,14 @@ $(function() {
       $('#color-element').show();
       $('#left-panel').hide();
       $('#right-panel').removeClass('col-md-6');
-      $('#right-panel').addClass('col-md-8 col-md-offset-2');
+      $('#right-panel').addClass('col-md-12');
       $('.calculated').hide();
       $("#summary-element").show();
+      $('#cs-container').css({
+        'margin': '0 auto',
+        'width':  '100%'
+      });
+      $(".cs-footer").hide();
       set_summary();
     }
   });
@@ -86,19 +95,23 @@ $(function() {
 
     bounding_line = $("#summary-address").closest("li");
     if(addressFilled()) {
-      var address_display = '<p>';
+      var address_display = '<span>';
+      var seperator = ', ';
       $.each(['company', 'address1', 'address2', 'city', 'state','zipcode'], function(_i, s){
-        if( s === 'state') {
-          address_display += $('#purchase_address_state option:selected').text() + '</br>';
+        if(s === 'zipcode') {
+          seperator = '';
+        }
+        if(s === 'state') {
+          address_display += $('#purchase_address_state option:selected').text() + seperator;
         } else {
           address_line = $('#purchase_address_'+s).val();
           if(address_line) {
-            address_display += address_line + '</br>';
+            address_display += address_line + seperator;
           }
         }
       });
-      if(address_display != "<p>") {
-        address_display += "</p>";
+      if(address_display != "<span>") {
+        address_display += "</span>";
         $("#summary-address").html(address_display);
       }
       bounding_line.show();
@@ -186,7 +199,6 @@ $(function() {
         };
       }
 
-
       $.ajax({
         type: 'POST',
         url: '/api/products/' + $('#purchase_product_id').val() + '/best_price',
@@ -261,6 +273,7 @@ $(function() {
           $('.cs-purchase-submit').prop('disabled', false);
           $(".cs-active-price").show();
           $("#breakout_question").show();
+          $('.cs-summary-lines').show();
         },
         error: function(data) {
           $(".cs-active-price").text('No Price Found');

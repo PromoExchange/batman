@@ -101,6 +101,7 @@ textarea {
 .active-star{
   background-position: -1px -32px;
 }
+
 .inactive-star{
   background-position: -1px 0px;
 }
@@ -304,9 +305,6 @@ textarea {
   background-color: #3097de;
 }
 
-
-
-
 .panel-default {
   border-color: white;
 }
@@ -321,13 +319,11 @@ textarea {
   background-color: #3097de;
 }
 
-
 // Buyer FAQ CSS
 
 #headingOne {
   background-color: #333333;
   color: #C0C0C0;
-
 }
 
 #headingTwo {
@@ -436,7 +432,7 @@ textarea {
 
 .alert-success {
   color: black;
-  border-color:#71ccdf;
+  border-color: #71ccdf;
   background-color: #71ccdf;
   font-weight: bold;
 }
@@ -459,7 +455,6 @@ textarea {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-
 
 html, body {
   height: 100%;

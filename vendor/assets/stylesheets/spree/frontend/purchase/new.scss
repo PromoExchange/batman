@@ -4,8 +4,8 @@
     margin-bottom: 15px;
     width: 100%;
   }
-  
-  .popover-title { height: 0px;}
+
+  .popover-title { height: 0;}
 
   .purchase-size .purchase-list ul {
     display: inline-block;
@@ -13,27 +13,27 @@
     padding: 0;
   }
 
-  .purchase-size .purchase-list ul li{
+  .purchase-size .purchase-list ul li {
     list-style-type: none;
-    padding: 0;
-    margin-right: 10px;
     margin-bottom: 10px;
+    margin-right: 10px;
+    padding: 0;
   }
 
   .purchase-size .purchase-list ul li input,
-  .purchase-size .purchase-list ul li span.dispaly-size{
+  .purchase-size .purchase-list ul li span.dispaly-size {
     border-color: #ccc;
-    text-align: center;
+    border-radius: 0;
     font-size: 18px;
     font-weight: 700;
-    border-radius: 0px;
     height: 44px;
+    text-align: center;
   }
 
-  .purchase-size .purchase-list ul li span{
+  .purchase-size .purchase-list ul li span {
+    display: inline-block;
     font-size: 15px;
     text-align: center;
-    display: inline-block;
     width: 100%;
   }
 
@@ -87,7 +87,7 @@
       list-style: none;
       margin-top: 20px;
     	overflow: hidden;
-      padding: 0px;
+      padding: 0;
     }
 
     .breadcrumb>li+li:before {
@@ -97,17 +97,21 @@
     .breadcrumb li {
     	float: left;
     }
+
     .breadcrumb li.active a {
     	background: brown;                   /* fallback color */
     	background: #ffc107 ;
     }
+
     .breadcrumb li.completed a {
     	background: brown;                   /* fallback color */
     	background: hsla(153, 57%, 51%, 1);
     }
+
     .breadcrumb li.active a:after {
     	border-left: 30px solid #ffc107 ;
     }
+
     .breadcrumb li.completed a:after {
     	border-left: 30px solid hsla(153, 57%, 51%, 1);
     }
@@ -120,6 +124,7 @@
     	display: block;
     	float: left;
     }
+
     .breadcrumb li a:after {
     	content: " ";
     	display: block;
@@ -134,6 +139,7 @@
     	left: 100%;
     	z-index: 2;
     }
+
     .breadcrumb li a:before {
     	content: " ";
     	display: block;
@@ -149,11 +155,13 @@
     	left: 100%;
     	z-index: 1;
     }
+
     .breadcrumb li:first-child a {
     	padding-left: 15px;
     }
-    .breadcrumb li a:hover { background: #ffc107  ; }
-    .breadcrumb li a:hover:after { border-left-color: #ffc107   !important; }
+
+    .breadcrumb li a:hover { background: #ffc107; }
+    .breadcrumb li a:hover:after { border-left-color: #ffc107 !important; }
   }
 
   #summary-element {

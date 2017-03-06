@@ -12,8 +12,8 @@ $(function() {
     if($('#purchase_company_store_type').val() === 'gooten') {
       // TODO: Place inside bounding CS div and drive with css
       $('.gooten-element').css({
-        'margin-left': '30px';
-        'margin-right': '30px';
+        'margin-left': '30px',
+        'margin-right': '30px'
       });
 
       $('.calculated').css('margin-left': '30px');

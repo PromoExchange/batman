@@ -16,7 +16,7 @@ $(function() {
         'margin-right': '30px'
       });
 
-      $('.calculated').css('margin-left': '30px');
+      $('.calculated').css({'margin-left': '30px'});
       $("#cs-logo").hide();
       $("#new_purchase_name").hide();
       $('.gooten-element').hide();

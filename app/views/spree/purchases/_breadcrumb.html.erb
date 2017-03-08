@@ -1,11 +1,15 @@
 <% if @current_company_store.gooten? %>
-  <div style="display:none" id="breadcrumb-element">
+  <div style="display:none" id="breadcrumb-element" data-crumb='color'>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active"><a href="#" data-crumb='color'>1.&nbsp;Color</a></li>
-      <li class="breadcrumb-item"><a href="#" data-crumb='logo'>2.&nbsp;Logo</a></li>
-      <li class="breadcrumb-item"><a href="#" data-crumb='quantity'>3.&nbsp;Quantity</a></li>
-      <li class="breadcrumb-item"><a href="#" data-crumb='address'>4.&nbsp;Address</a></li>
-      <li class="breadcrumb-item"><a href="#" data-crumb='quality'>5.&nbsp;Quality</a></li>
+      <li class="breadcrumb-item active"><div data-crumb='color'>1.&nbsp;Color</div></li>
+      <li class="breadcrumb-item"><div data-crumb='logo'>2.&nbsp;Logo</div></li>
+      <li class="breadcrumb-item"><div data-crumb='quantity'>3.&nbsp;Quantity</div></li>
+      <li class="breadcrumb-item"><div data-crumb='address'>4.&nbsp;Address</div></li>
+      <li class="breadcrumb-item"><div data-crumb='quality'>5.&nbsp;Quality</div></li>
     </ol>
+    <ul class="pager">
+      <li><a href="#">Previous</a></li>
+      <li><a href="#">Next</a></li>
+    </ul>
   </div>
 <% end %>

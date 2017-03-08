@@ -98,25 +98,25 @@
     	float: left;
     }
 
-    .breadcrumb li.active a {
+    .breadcrumb li.active div {
     	background: brown;                   /* fallback color */
     	background: #ffc107 ;
     }
 
-    .breadcrumb li.completed a {
+    .breadcrumb li.completed div {
     	background: brown;                   /* fallback color */
     	background: hsla(153, 57%, 51%, 1);
     }
 
-    .breadcrumb li.active a:after {
+    .breadcrumb li.active div:after {
     	border-left: 30px solid #ffc107 ;
     }
 
-    .breadcrumb li.completed a:after {
+    .breadcrumb li.completed div:after {
     	border-left: 30px solid hsla(153, 57%, 51%, 1);
     }
 
-    .breadcrumb li a {
+    .breadcrumb li div{
     	color: white;
     	text-decoration: none;
     	padding: 10px 0 10px 45px;
@@ -125,7 +125,7 @@
     	float: left;
     }
 
-    .breadcrumb li a:after {
+    .breadcrumb li div:after {
     	content: " ";
     	display: block;
     	width: 0;
@@ -140,7 +140,7 @@
     	z-index: 2;
     }
 
-    .breadcrumb li a:before {
+    .breadcrumb li div:before {
     	content: " ";
     	display: block;
     	width: 0;
@@ -156,12 +156,12 @@
     	z-index: 1;
     }
 
-    .breadcrumb li:first-child a {
+    .breadcrumb li:first-child div {
     	padding-left: 15px;
     }
 
-    .breadcrumb li a:hover { background: #ffc107; }
-    .breadcrumb li a:hover:after { border-left-color: #ffc107 !important; }
+    .breadcrumb li div:hover { background: #ffc107; }
+    .breadcrumb li div:hover:after { border-left-color: #ffc107 !important; }
   }
 
   #summary-element {

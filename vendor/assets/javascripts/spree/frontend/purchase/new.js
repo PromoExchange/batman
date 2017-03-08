@@ -24,7 +24,7 @@ $(function() {
       $('#color-element').show();
       $('#left-panel').hide();
       $('#right-panel').removeClass('col-md-6');
-      $('#right-panel').addClass('col-md-12');
+      $('#right-panel').addClass('col-md-6 col-md-offset-3');
       $('.calculated').hide();
       $("#summary-element").show();
       $('#cs-container').css({
@@ -40,9 +40,10 @@ $(function() {
     readURL(this);
   });
 
-  $('.breadcrumb-item > a').click(function(crumb) {
+  $('.pager a').click(function(crumb) {
+    debugger;
     crumb.preventDefault();
-    var crumb_slug = $(this).data('crumb');
+    var crumb_slug = $("#breadcrumb-element").data('crumb');
     if( crumb_slug === 'quality') {
       $(this).closest('.breadcrumb-item').addClass('completed');
     }

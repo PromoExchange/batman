@@ -40,22 +40,50 @@ $(function() {
     readURL(this);
   });
 
-  $('.pager a').click(function(crumb) {
-    debugger;
+  $('button.question-page').click(function(crumb) {
     crumb.preventDefault();
-    var crumb_slug = $("#breadcrumb-element").data('crumb');
-    if( crumb_slug === 'quality') {
-      $(this).closest('.breadcrumb-item').addClass('completed');
+
+    var previous = ($(this).attr("id") === 'previous-button');
+
+    var current_slug = $("#breadcrumb-element").data('crumb');
+    var next_slug = 'logo';
+
+    switch(current_slug) {
+      case 'color':
+        if (previous === true) return;
+        next_slug = 'logo';
+        break;
+      case 'logo':
+        next_slug = ( previous === true ? 'color' : 'quantity' );
+        break;
+      case 'quantity':
+        next_slug = ( previous === true ? 'logo' : 'address' );
+        break;
+      case 'address':
+        next_slug = ( previous === true ? 'quantity' : 'quality' );
+        break;
+      case 'quality':
+        if( previous === false ) return;
+        next_slug = 'address';
+        break;
     }
+
+    $('.breadcrumb-item.active').removeClass('active');
+
     $('.breadcrumb-item').each(function(_i, c2) {
-      if($(c2).children('a').data('crumb') == crumb_slug) return false;
-      $(c2).addClass('completed');
+      var this_crumb = $(c2).children('div').data('crumb');
+      if( this_crumb === current_slug ) {
+        $(c2).addClass('completed');
+      }
+      if( this_crumb === next_slug) {
+        $(c2).removeClass('completed');
+        $(c2).addClass('active');
+        return false;
+      }
     });
     $('.gooten-element').hide();
-    $('#' + crumb_slug + '-element').show();
-    $('.breadcrumb-item.active').removeClass('active');
-    $(this).closest('.breadcrumb-item').addClass('active');
-    $(this).fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
+    $('#' + next_slug + '-element').show();
+    $("#breadcrumb-element").data('crumb',next_slug);
     set_summary();
     $('#summary-element').show();
   });
@@ -274,7 +302,6 @@ $(function() {
           $('.cs-purchase-submit').prop('disabled', false);
           $(".cs-active-price").show();
           $("#breakout_question").show();
-          $('.cs-summary-lines').show();
         },
         error: function(data) {
           $(".cs-active-price").text('No Price Found');

@@ -164,6 +164,21 @@
     .breadcrumb li div:hover:after { border-left-color: #ffc107 !important; }
   }
 
+  #previous-button {
+    font-weight: 200;
+    font-size: 12px;
+  }
+
+  .corner-box {
+    position: relative;
+  }
+
+  .corner-box > button {
+    top: 0;
+    position: absolute;
+    right: 0;
+  }
+
   #summary-element {
     position: fixed;
     bottom: 0px;

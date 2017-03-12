@@ -15,7 +15,6 @@ $(function() {
         'margin-left': '30px',
         'margin-right': '30px'
       });
-
       $('.calculated').css({'margin-left': '30px'});
       $("#cs-logo").hide();
       $("#new_purchase_name").hide();

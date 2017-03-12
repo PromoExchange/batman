@@ -21,13 +21,10 @@
         </div>
       </div>
 
-      <div id="cs-container" class="container cs-">
+      <div id="cs-container" class="container">
         <div class="row">
-          <div id="content">
-            <%= flash_messages %>
-            <%= yield %>
-          </div>
-
+          <%= flash_messages %>
+          <%= yield %>
           <%= yield :templates %>
         </div>
       </div>

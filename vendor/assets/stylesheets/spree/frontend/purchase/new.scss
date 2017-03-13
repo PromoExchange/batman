@@ -83,7 +83,7 @@
   #breadcrumb-element {
     margin-top: 5px;
     .breadcrumb {
-      background: #D4D4D4;
+      background: #ffffff;
       list-style: none;
       margin-top: 20px;
     	overflow: hidden;
@@ -95,6 +95,7 @@
     }
 
     .breadcrumb li {
+      background: #d4d4d4;
     	float: left;
     }
 

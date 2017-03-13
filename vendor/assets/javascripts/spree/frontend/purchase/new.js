@@ -62,13 +62,14 @@ $(function() {
         next_slug = ( previous === true ? 'quantity' : 'quality' );
         if ( previous !== true ) {
           $("#breadcrumb-element").data('quality-seen', 'true');
-          $("#next-button").hide();
           recalc_price();
         }
         break;
       case 'quality':
-        if( previous === false ) return;
-        $("#next-button").show();
+        if( previous === false ) {
+          $('.cs-purchase-submit').click();
+          return;
+        }
         next_slug = 'address';
         break;
     }

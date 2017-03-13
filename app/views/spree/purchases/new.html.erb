@@ -44,7 +44,9 @@
           <%= render partial: 'address', locals: { f: f } %>
           <%= render partial: 'shipping_options', locals: { f: f } %>
         </fieldset>
-        <button type="button" id='next-button' class="question-page btn btn-default">Next</button>
+        <% if(@current_company_store.gooten?) %>
+          <button type="button" id='next-button' class="question-page btn btn-sm btn-default">Next</button>
+        <% end %>
         <div class="calculated">
           <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
           <%= render partial: 'active_price' %>

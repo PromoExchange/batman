@@ -60,9 +60,15 @@ $(function() {
         break;
       case 'address':
         next_slug = ( previous === true ? 'quantity' : 'quality' );
+        if ( previous !== true ) {
+          $("#breadcrumb-element").data('quality-seen', 'true');
+          $("#next-button").hide();
+          recalc_price();
+        }
         break;
       case 'quality':
         if( previous === false ) return;
+        $("#next-button").show();
         next_slug = 'address';
         break;
     }
@@ -176,6 +182,11 @@ $(function() {
   }
 
   function recalc_price() {
+    debugger;
+    if( $('#purchase_company_store_type').val() === 'gooten' ) {
+      if( $("#breadcrumb-element").data('quality-seen') !== 'true' ) return;
+    }
+
     set_summary();
     if (!addressFilled() && ($('#purchase_ship_to_zip').val() === '' || $('#purchase_ship_to_zip').val() === undefined)) {
       return;

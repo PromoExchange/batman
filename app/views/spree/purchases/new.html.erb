@@ -45,7 +45,14 @@
           <%= render partial: 'shipping_options', locals: { f: f } %>
         </fieldset>
         <% if(@current_company_store.gooten?) %>
-          <button type="button" id='next-button' class="question-page btn btn-sm btn-default">Next</button>
+          <div class="pager-buttons row">
+            <div class="col-md-1 col-md-offset-5">
+              <button type="button" id='next-button' class="question-page btn btn-sm btn-default">Next</button>
+            </div>
+            <div class="col-md-2">
+              <button type="button" id='previous-button' class="btn btn-link question-page">Previous</button><br/>
+            </div>
+          </div>
         <% end %>
         <div class="calculated">
           <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>

@@ -15,7 +15,7 @@ $(function() {
         'margin-left': '30px',
         'margin-right': '30px'
       });
-      $('.calculated').css({'margin-left': '30px'});
+      $('.calculated').hide().css({'margin-left': '30px'});
       $("#cs-logo").hide();
       $("#new_purchase_name").hide();
       $('.gooten-element').hide();
@@ -24,7 +24,7 @@ $(function() {
       $('#left-panel').hide();
       $('#right-panel').removeClass('col-md-6');
       $('#right-panel').addClass('col-md-6 col-md-offset-3');
-      $('.calculated').hide();
+      $('.cs-purchase-submit').hide();
       $("#summary-element").show();
       $('#cs-container').css({
         'margin': '0 auto',
@@ -62,14 +62,25 @@ $(function() {
         next_slug = ( previous === true ? 'quantity' : 'quality' );
         if ( previous !== true ) {
           $("#breadcrumb-element").data('quality-seen', 'true');
+          // $('#next-button').html('Purchase').addClass('btn-primary');
+          $('#next-button').html('Purchase');
+          $('#previous-button').css({'padding-left': '30px'});
           recalc_price();
+        } else {
+          // $('#next-button').html('Next').removeClass('btn-primary');
+          $('#next-button').html('Next');
+          $('#previous-button').css({'padding-left': '0px'});
         }
         break;
       case 'quality':
         if( previous === false ) {
-          $('.cs-purchase-submit').click();
-          return;
+          if( $('.cs-active-price').is(':visible') ) {
+            $('#new_purchase').submit();
+            return;
+          }         
         }
+        $('#next-button').html('Next').removeClass('btn-primary');
+        $('#previous-button').css({'padding-left': '0px'});
         next_slug = 'address';
         break;
     }
@@ -183,7 +194,6 @@ $(function() {
   }
 
   function recalc_price() {
-    debugger;
     if( $('#purchase_company_store_type').val() === 'gooten' ) {
       if( $("#breadcrumb-element").data('quality-seen') !== 'true' ) return;
     }

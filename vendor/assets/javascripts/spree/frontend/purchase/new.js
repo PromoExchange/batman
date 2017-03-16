@@ -62,12 +62,10 @@ $(function() {
         next_slug = ( previous === true ? 'quantity' : 'quality' );
         if ( previous !== true ) {
           $("#breadcrumb-element").data('quality-seen', 'true');
-          // $('#next-button').html('Purchase').addClass('btn-primary');
           $('#next-button').html('Purchase');
           $('#previous-button').css({'padding-left': '30px'});
           recalc_price();
         } else {
-          // $('#next-button').html('Next').removeClass('btn-primary');
           $('#next-button').html('Next');
           $('#previous-button').css({'padding-left': '0px'});
         }
@@ -77,13 +75,24 @@ $(function() {
           if( $('.cs-active-price').is(':visible') ) {
             $('#new_purchase').submit();
             return;
-          }         
+          }
         }
         $('#next-button').html('Next').removeClass('btn-primary');
         $('#previous-button').css({'padding-left': '0px'});
         next_slug = 'address';
         break;
     }
+
+    var next_disabled = false;
+    if( next_slug === 'quantity' ) {
+      next_disabled = !(get_quantity().actual > 0);
+    } else if(next_slug === 'address' ) {
+      next_disabled = !addressFilled();
+    } else if(next_slug === 'logo') {
+      next_disabled = !($("#breadcrumb-element").data('logod') === true );
+    }
+
+    $('#next-button').prop('disabled', next_disabled);
 
     $('.breadcrumb-item.active').removeClass('active');
 
@@ -101,15 +110,16 @@ $(function() {
     $('.gooten-element').hide();
     $('#' + next_slug + '-element').show();
     $("#breadcrumb-element").data('crumb',next_slug);
-    set_summary();
     $('#summary-element').show();
   });
 
   function readURL(input) {
     if (input.files && input.files[0]) {
       var reader = new FileReader();
+      $("#breadcrumb-element").data('logod',true);
       reader.onload = function(e) {
         $('.logo-to-upload').attr('src', e.target.result).removeClass('hidden');
+        $('#next-button').prop('disabled', false);
       }
       reader.readAsDataURL(input.files[0]);
     }
@@ -365,6 +375,8 @@ $(function() {
     if (!addressFilled()) {
       return;
     }
+
+    $('#next-button').prop('disabled', false);
     var sum = 0;
 
     $('.cs-purchase-submit').prop('disabled', true);
@@ -385,6 +397,9 @@ $(function() {
   $(".cs-quantity").keyup(function() {
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
+    if(get_quantity().actual > 0 ) {
+      $('#next-button').prop('disabled', false);
+    }
     if ($('#address_drop').val() === '') {
       return;
     }
@@ -490,6 +505,7 @@ $(function() {
   $('#purchase-size .product-size').change(function() {
     var sum = 0;
 
+    $('#next-button').prop('disabled', !(get_quantity().actual > 0));
     $('.cs-purchase-submit').prop('disabled', true);
     $('#ship_date').text('--');
     $('#purchase-size .product-size').each(function() { sum += parseInt('0'+ $(this).val()) });

@@ -84,19 +84,31 @@ $(function() {
     }
 
     var next_disabled = false;
-    var add_sticky = true;
-    if( next_slug === 'quantity' ) {
-      next_disabled = !(get_quantity().actual > 0);
-    } else if(next_slug === 'address' ) {
-      next_disabled = !addressFilled();
-      add_sticky = false;
-    } else if(next_slug === 'logo') {
-      next_disabled = !($("#breadcrumb-element").data('logod') === true );
-      add_sticky = false;
+    var add_sticky = false;
+    switch(next_slug) {
+      case 'quality':
+        add_sticky = true;
+        break;
+      case 'quantity':
+        next_disabled = !(get_quantity().actual > 0);
+        add_sticky = true;
+        break;
+      case 'address':
+        next_disabled = !addressFilled();
+        if( !$('.cs-active-price').is(':visible') ) {
+          add_sticky = true;
+        }
+        break;
+      case 'logo':
+        next_disabled = !($("#breadcrumb-element").data('logod') === true );
+        add_sticky = !($("#breadcrumb-element").data('logod') === true );
+        break;
     }
 
     if( add_sticky === true ) {
       $('#summary-element').addClass('sticky-bottom');
+    } else {
+      $('#summary-element').removeClass('sticky-bottom');
     }
 
     $('#next-button').prop('disabled', next_disabled);

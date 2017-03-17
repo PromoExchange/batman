@@ -1,12 +1,14 @@
-<% if @product.wearable? %>
-  <%= render partial: 'purchase_size', locals: { f: f } %>
-<% else %>
-  <div class="form-group">
-    <%= f.label(:quantity, Spree.t(:quantity)) %>
-    <% if @current_company_store.gooten? %>
-      <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: 1)%>
-    <% else %>
-      <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: @product.minimum_quantity, placeholder: "Minimum #{@product.minimum_quantity}")%>
-    <% end %>
-  </div>
-<% end %>
+<div class="gooten-element" id="quantity-element">
+  <% if @product.wearable? %>
+    <%= render partial: 'purchase_size', locals: { f: f } %>
+  <% else %>
+    <div class="form-group">
+      <%= f.label(:quantity, Spree.t(:quantity)) %>
+      <% if @current_company_store.gooten? %>
+        <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: 1)%>
+      <% else %>
+        <%= f.number_field(:quantity, class: 'form-control cs-quantity', min: @product.minimum_quantity, placeholder: "Minimum #{@product.minimum_quantity}")%>
+      <% end %>
+    </div>
+  <% end %>
+</div>

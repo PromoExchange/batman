@@ -23,18 +23,14 @@
 
       <div id="cs-container" class="container">
         <div class="row">
-          <div id="content">
-            <%= flash_messages %>
-            <%= yield %>
-          </div>
-
+          <%= flash_messages %>
+          <%= yield %>
           <%= yield :templates %>
         </div>
       </div>
 
-      <div class="footer-push"></div>
+      <div class="footer-push-1"></div>
     </div>
-
     <%= render partial: 'spree/shared/company_store_footer' %>
   </body>
 </html>

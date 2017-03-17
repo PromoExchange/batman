@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212204619) do
+ActiveRecord::Schema.define(version: 20170219172407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,40 +97,6 @@ ActiveRecord::Schema.define(version: 20170212204619) do
 
   add_index "spree_assets", ["viewable_id"], name: "index_assets_on_viewable_id", using: :btree
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
-
-  create_table "spree_auction_payments", force: :cascade do |t|
-    t.integer  "bid_id",          null: false
-    t.string   "charge_id"
-    t.string   "status"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.string   "failure_code"
-    t.string   "failure_message"
-    t.integer  "request_idea_id"
-  end
-
-  create_table "spree_auction_sizes", force: :cascade do |t|
-    t.integer  "auction_id"
-    t.string   "product_size"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
-
-  create_table "spree_auctions_pms_colors", force: :cascade do |t|
-    t.integer "auction_id",   null: false
-    t.integer "pms_color_id", null: false
-  end
-
-  add_index "spree_auctions_pms_colors", ["auction_id"], name: "index_spree_auctions_pms_colors_on_auction_id", using: :btree
-  add_index "spree_auctions_pms_colors", ["pms_color_id"], name: "index_spree_auctions_pms_colors_on_pms_color_id", using: :btree
-
-  create_table "spree_auctions_users", id: false, force: :cascade do |t|
-    t.integer "auction_id", null: false
-    t.integer "user_id",    null: false
-  end
-
-  add_index "spree_auctions_users", ["auction_id"], name: "index_spree_auctions_users_on_auction_id", using: :btree
-  add_index "spree_auctions_users", ["user_id"], name: "index_spree_auctions_users_on_user_id", using: :btree
 
   create_table "spree_calculators", force: :cascade do |t|
     t.string   "type"
@@ -957,17 +923,6 @@ ActiveRecord::Schema.define(version: 20170212204619) do
 
   add_index "spree_return_items", ["customer_return_id"], name: "index_return_items_on_customer_return_id", using: :btree
   add_index "spree_return_items", ["exchange_inventory_unit_id"], name: "index_spree_return_items_on_exchange_inventory_unit_id", using: :btree
-
-  create_table "spree_reviews", force: :cascade do |t|
-    t.integer  "auction_id"
-    t.integer  "user_id"
-    t.float    "rating",     default: 0.0
-    t.text     "review"
-    t.string   "ip_address"
-    t.boolean  "approved",   default: true
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
 
   create_table "spree_roles", force: :cascade do |t|
     t.string "name"

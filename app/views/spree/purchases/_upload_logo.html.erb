@@ -1,0 +1,14 @@
+<% if @current_company_store.gooten? %>
+  <div class="well gooten-element" id="logo-element" style="display:none">
+    <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
+      <div class="form-group">
+        <h2 class="text-center"><%= Spree.t(:logo) %></h2>
+        <%= f.file_field :logo, class: 'logo-upload' %>
+      </div>
+
+      <br />
+
+      <%= image_tag 'star-1.png', class: 'hidden logo-to-upload text-center' %>
+    <% end %>
+  </div>
+<% end %>

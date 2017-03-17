@@ -2,65 +2,67 @@
 <%- api_key = spree_current_user.spree_api_key if api_key.nil? && spree_current_user.present? %>
 
 <div class="cs-page row" id="new-purchase" data-key="<%= api_key %>">
-  <div class="col-md-6">
+  <div id="left-panel" class="col-md-6">
     <%= large_image(@product, itemprop: 'image', class: 'main-product-image mobile-image center-block') %><br/>
     <div class='small-images'>
       <% @product.images.each do |image| %>
-        <%= image_tag image.attachment.url(:small), class: 'secondary-product-image' %>
+        <%= image_tag image.attachment.url(:small), class: 'secondary-product-image', data: { image_id: image.id, large_src: image.attachment.url(:large)}  %>
       <% end if @product.images.size > 1 %>
     </div>
-
-    <% if @current_company_store.gooten? %>
-      <br /><br />
-
-      <div class="well">
-        <%= form_for @purchase.logo, multipart: true, url: '/logos', class: 'form' do |f| %>
-          <div class="form-group">
-            <h2 class="text-center"><%= Spree.t(:logo) %></h2>
-            <%= f.file_field :logo, class: 'logo-upload' %>
-          </div>
-
-          <br />
-
-          <%= image_tag 'star-1.png', class: 'hidden logo-to-upload text-center' %>
-        <% end %>
-      </div>
-    <% end %>
   </div>
 
-  <div class="col-md-6">
-    <h1 id='new_purchase_name'><%= (@category && @category.name) || @product.name %></h1>
-
+  <div id="right-panel" class="col-md-6">
+    <% unless @current_company_store.gooten? %>
+      <h1 id='new_purchase_name'><%= (@category && @category.name) || @product.name %></h1>
+    <% end %>
+    <%= render partial: 'breadcrumb' %>
+    <%= render partial: 'upload_logo' %>
+    <%= render partial: 'color' %>
     <%= form_for @purchase, url: main_app.purchases_path, class: 'form' do |f| %>
-      <%= f.hidden_field :company_store_slug, value: @current_company_store.slug %>
-      <%= f.hidden_field :company_store_type, value: @current_company_store.store_type %>
-      <%= f.hidden_field :product_id, value: @product.id %>
-      <%= f.hidden_field :buyer_id, value: @purchase.buyer_id %>
-      <%= f.hidden_field :image_id, value: nil %>
-      <%= f.hidden_field :category_id, value: @category.blank? ? nil : @category.id %>
+      <div class="top-form">
+        <%= f.hidden_field :company_store_slug, value: @current_company_store.slug %>
+        <%= f.hidden_field :company_store_type, value: @current_company_store.store_type %>
+        <%= f.hidden_field :product_id, value: @product.id %>
+        <%= f.hidden_field :buyer_id, value: @purchase.buyer_id %>
+        <%= f.hidden_field :image_id, value: nil %>
+        <%= f.hidden_field :category_id, value: @category.blank? ? nil : @category.id %>
 
-      <% if @purchase.errors.any? %>
-        <p class="alert alert-error">Errors</p>
-        <ul>
-          <% @purchase.errors.full_messages.each do |message| %>
-            <li class="error"><%= message %></li>
-          <% end %>
-        </ul>
-      <% end %>
+        <% if @purchase.errors.any? %>
+          <p class="alert alert-error">Errors</p>
+          <ul>
+            <% @purchase.errors.full_messages.each do |message| %>
+              <li class="error"><%= message %></li>
+            <% end %>
+          </ul>
+        <% end %>
 
-      <fieldset>
-        <%= render partial: 'imprint_method', locals: { f: f }%>
-        <%= render partial: 'logos', locals: { f: f } %>
-        <%= render partial: 'main_color', locals: { f: f } %>
-        <%= render partial: 'quality', locals: { f: f } unless @current_company_store.traditional? %>
-        <%= render(partial: 'price_breaks', locals: { f: f }) if @current_company_store.traditional? %>
-        <%= render partial: 'quantity', locals: { f: f } %>
-        <%= render partial: 'address', locals: { f: f } %>
-        <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
-        <%= render partial: 'shipping_options', locals: { f: f } %>
-        <%= render partial: 'active_price', locals: { f: f } %>
-        <%= render partial: 'buttons', locals: { f: f } %>
-      </fieldset>
+        <fieldset>
+          <%= render partial: 'imprint_method', locals: { f: f }%>
+          <%= render partial: 'logo', locals: { f: f } %>
+          <%= render partial: 'main_color', locals: { f: f } %>
+          <%= render partial: 'quality', locals: { f: f } unless @current_company_store.traditional? %>
+          <%= render(partial: 'price_breaks', locals: { f: f }) if @current_company_store.traditional? %>
+          <%= render partial: 'quantity', locals: { f: f } %>
+          <%= render partial: 'address', locals: { f: f } %>
+          <%= render partial: 'shipping_options', locals: { f: f } %>
+        </fieldset>
+        <% if(@current_company_store.gooten?) %>
+          <div class="pager-buttons row">
+            <div class="col-md-1 col-md-offset-5">
+              <button type="button" id='next-button' class="question-page btn btn-sm btn-default">Next</button>
+            </div>
+            <div class="col-md-2">
+              <button type="button" id='previous-button' class="btn btn-link question-page">Previous</button><br/>
+            </div>
+          </div>
+        <% end %>
+        <div class="calculated">
+          <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
+          <%= render partial: 'active_price' %>
+          <%= render partial: 'buttons' %>
+        </div>
+      </div>
+      <%= render partial: 'summary' %>
     <% end %>
 
     <% if @current_company_store.traditional? %>

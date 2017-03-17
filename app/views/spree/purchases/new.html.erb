@@ -12,7 +12,9 @@
   </div>
 
   <div id="right-panel" class="col-md-6">
-    <h1 id='new_purchase_name'><%= (@category && @category.name) || @product.name %></h1>
+    <% unless @current_company_store.gooten? %>
+      <h1 id='new_purchase_name'><%= (@category && @category.name) || @product.name %></h1>
+    <% end %>
     <%= render partial: 'breadcrumb' %>
     <%= render partial: 'upload_logo' %>
     <%= render partial: 'color' %>

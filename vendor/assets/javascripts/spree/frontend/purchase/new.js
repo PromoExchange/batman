@@ -12,12 +12,11 @@ $(function() {
     if($('#purchase_company_store_type').val() === 'gooten') {
       // TODO: Place inside bounding CS div and drive with css
       $('.gooten-element').css({
-        'margin-left': '30px',
-        'margin-right': '30px'
+        'margin-left': '20px',
+        'margin-right': '20px'
       });
-      $('.calculated').hide().css({'margin-left': '30px'});
+      $('.calculated').hide().css({'margin-left': '20px'});
       $("#cs-logo").hide();
-      $("#new_purchase_name").hide();
       $('.gooten-element').hide();
       $('#breadcrumb-element').show();
       $('#color-element').show();
@@ -49,37 +48,37 @@ $(function() {
 
     switch(current_slug) {
       case 'color':
-        if (previous === true) return;
-        next_slug = 'logo';
+        next_slug = ( previous === true ? 'quantity' : 'logo' );
         break;
       case 'logo':
-        next_slug = ( previous === true ? 'color' : 'quantity' );
-        break;
-      case 'quantity':
-        next_slug = ( previous === true ? 'logo' : 'address' );
-        break;
-      case 'address':
-        next_slug = ( previous === true ? 'quantity' : 'quality' );
+        next_slug = ( previous === true ? 'color' : 'address' );
         if ( previous !== true ) {
-          $("#breadcrumb-element").data('quality-seen', 'true');
+          $("#breadcrumb-element").data('address-seen', 'true');
           $('#next-button').html('Purchase');
-          $('#previous-button').css({'padding-left': '30px'});
+          $('#previous-button').css({'margin-left': '30px'});
           recalc_price();
         } else {
           $('#next-button').html('Next');
           $('#previous-button').css({'padding-left': '0px'});
         }
         break;
-      case 'quality':
+      case 'quantity':
+        next_slug = ( previous === true ? 'quality' : 'color' );
+        break;
+      case 'address':
         if( previous === false ) {
           if( $('.cs-active-price').is(':visible') ) {
             $('#new_purchase').submit();
             return;
           }
         }
+        next_slug = 'logo';
         $('#next-button').html('Next').removeClass('btn-primary');
-        $('#previous-button').css({'padding-left': '0px'});
-        next_slug = 'address';
+        $('#previous-button').css({'margin-left': '0px'});
+        break;
+      case 'quality':
+        if (previous === true) return;
+        next_slug = 'quantity';
         break;
     }
 
@@ -205,7 +204,7 @@ $(function() {
 
   function recalc_price() {
     if( $('#purchase_company_store_type').val() === 'gooten' ) {
-      if( $("#breadcrumb-element").data('quality-seen') !== 'true' ) return;
+      if( $("#breadcrumb-element").data('address-seen') !== 'true' ) return;
     }
 
     set_summary();

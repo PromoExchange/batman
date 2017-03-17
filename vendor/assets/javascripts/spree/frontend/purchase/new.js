@@ -19,7 +19,7 @@ $(function() {
       $("#cs-logo").hide();
       $('.gooten-element').hide();
       $('#breadcrumb-element').show();
-      $('#color-element').show();
+      $('#quality-element').show();
       $('#left-panel').hide();
       $('#right-panel').removeClass('col-md-6');
       $('#right-panel').addClass('col-md-6 col-md-offset-3');
@@ -72,6 +72,7 @@ $(function() {
             return;
           }
         }
+        $('.cs-wrapper').css({'margin': '0 auto -60px'});
         next_slug = 'logo';
         $('#next-button').html('Next').removeClass('btn-primary');
         $('#previous-button').css({'margin-left': '0px'});
@@ -83,18 +84,24 @@ $(function() {
     }
 
     var next_disabled = false;
+    var add_sticky = true;
     if( next_slug === 'quantity' ) {
       next_disabled = !(get_quantity().actual > 0);
     } else if(next_slug === 'address' ) {
       next_disabled = !addressFilled();
+      add_sticky = false;
     } else if(next_slug === 'logo') {
       next_disabled = !($("#breadcrumb-element").data('logod') === true );
+      add_sticky = false;
+    }
+
+    if( add_sticky === true ) {
+      $('#summary-element').addClass('sticky-bottom');
     }
 
     $('#next-button').prop('disabled', next_disabled);
 
     $('.breadcrumb-item.active').removeClass('active');
-
     $('.breadcrumb-item').each(function(_i, c2) {
       var this_crumb = $(c2).children('div').data('crumb');
       if( this_crumb === current_slug ) {
@@ -119,6 +126,7 @@ $(function() {
       reader.onload = function(e) {
         $('.logo-to-upload').attr('src', e.target.result).removeClass('hidden');
         $('#next-button').prop('disabled', false);
+        $('#summary-element').removeClass('sticky-bottom');
       }
       reader.readAsDataURL(input.files[0]);
     }
@@ -332,6 +340,7 @@ $(function() {
           $('.cs-purchase-submit').prop('disabled', false);
           $(".cs-active-price").show();
           $("#breakout_question").show();
+          $('#summary-element').removeClass('sticky-bottom');
         },
         error: function(data) {
           $(".cs-active-price").text('No Price Found');

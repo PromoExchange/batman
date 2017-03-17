@@ -185,10 +185,13 @@
     right: 0;
   }
 
-  #summary-element {
+  .sticky-bottom {
     position: fixed;
     bottom: 0px;
     height: 120px;
+  }
+
+  #summary-element {
     li {
       font-size: 14px;
       list-style-type: none;

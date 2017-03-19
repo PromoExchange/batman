@@ -519,6 +519,10 @@ $(function() {
   }
 
   $('img').error(function(){
-    $(this).attr('src','/images/px_logo.png');
+    var img_element = $(this)
+    img_element.attr('src','/images/px_logo.png');
+    if(img_element.hasClass('top-logo')) {
+      img_element.width(600).height(220);
+    }
   });
 });

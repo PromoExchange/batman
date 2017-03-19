@@ -16,7 +16,6 @@ $(function() {
         'margin-right': '20px'
       });
       $('.calculated').hide().css({'margin-left': '20px'});
-      $("#cs-logo").hide();
       $('.gooten-element').hide();
       $('#breadcrumb-element').show();
       $('#quality-element').show();
@@ -24,13 +23,10 @@ $(function() {
       $('#right-panel').removeClass('col-md-6');
       $('#right-panel').addClass('col-md-6 col-md-offset-3');
       $('.cs-purchase-submit').hide();
-      $("#summary-element").show();
       $('#cs-container').css({
         'margin': '0 auto',
         'width':  '100%'
       });
-      $(".cs-footer").hide();
-      set_summary();
     }
   });
 
@@ -84,33 +80,17 @@ $(function() {
     }
 
     var next_disabled = false;
-    var add_sticky = false;
     switch(next_slug) {
-      case 'quality':
-        add_sticky = true;
-        break;
       case 'quantity':
         next_disabled = !(get_quantity().actual > 0);
-        add_sticky = true;
         break;
       case 'address':
         next_disabled = !addressFilled();
-        if( !$('.cs-active-price').is(':visible') ) {
-          add_sticky = true;
-        }
         break;
       case 'logo':
         next_disabled = !($("#breadcrumb-element").data('logod') === true );
-        add_sticky = !($("#breadcrumb-element").data('logod') === true );
         break;
     }
-
-    if( add_sticky === true ) {
-      $('#summary-element').addClass('sticky-bottom');
-    } else {
-      $('#summary-element').removeClass('sticky-bottom');
-    }
-
     $('#next-button').prop('disabled', next_disabled);
 
     $('.breadcrumb-item.active').removeClass('active');
@@ -128,7 +108,6 @@ $(function() {
     $('.gooten-element').hide();
     $('#' + next_slug + '-element').show();
     $("#breadcrumb-element").data('crumb',next_slug);
-    $('#summary-element').show();
   });
 
   function readURL(input) {

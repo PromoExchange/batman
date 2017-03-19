@@ -82,86 +82,105 @@
 
   #breadcrumb-element {
     .breadcrumb {
-      background: #ffffff;
+      background: transparent;
+      border-radius: 4px;
       list-style: none;
-      margin-top: 10px;
-    	overflow: hidden;
+      margin-bottom: 20px;
+      margin-top: 20px;
+      overflow: hidden;
       padding: 0;
     }
 
+    .breadcrumb>li {
+      display: table-cell;
+      vertical-align: top;
+      width: 1%;
+    }
+
     .breadcrumb>li+li:before {
-    	padding: 0;
+      padding: 0;
     }
 
-    .breadcrumb li {
-      background: #d4d4d4;
-    	float: left;
+    .breadcrumb li div {
+      background-color: hsla(0, 0%, 83%, 1);
+      color: white;
+      display: inline-block;
+      padding: 10px 0 10px 45px;
+      position: relative;
+      text-align: center;
+      text-decoration: none;
+      text-transform: capitalize;
+      width: calc(100% - 10px);
     }
 
-    .breadcrumb li.active div {
-    	background: brown;                   /* fallback color */
-    	background: #ffc107 ;
+    .breadcrumb li div {
+      background-color: hsla(0, 0%, 83%, 1);
+      color: white;
+      display: inline-block;
+      padding: 10px 0 10px 45px;
+      position: relative;
+      text-align: center;
+      text-decoration: none;
+      text-transform: capitalize;
+      width: calc(100% - 10px);
     }
 
     .breadcrumb li.completed div {
-    	background: brown;                   /* fallback color */
-    	background: hsla(153, 57%, 51%, 1);
-    }
-
-    .breadcrumb li.active div:after {
-    	border-left: 30px solid #ffc107 ;
+      background: brown;
+      background: hsla(153, 57%, 51%, 1);
     }
 
     .breadcrumb li.completed div:after {
-    	border-left: 30px solid hsla(153, 57%, 51%, 1);
+      border-left: 30px solid hsla(153, 57%, 51%, 1);
     }
 
-    .breadcrumb li div{
-    	color: white;
-    	text-decoration: none;
-    	padding: 10px 0 10px 45px;
-    	position: relative;
-    	display: block;
-    	float: left;
+    .breadcrumb li.active div {
+      background: #ffc107;
     }
 
-    .breadcrumb li div:after {
-    	content: " ";
-    	display: block;
-    	width: 0;
-    	height: 0;
-    	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
-    	border-bottom: 50px solid transparent;
-    	border-left: 30px solid hsla(0, 0%, 83%, 1);
-    	position: absolute;
-    	top: 50%;
-    	margin-top: -50px;
-    	left: 100%;
-    	z-index: 2;
+    .breadcrumb li.active div:after {
+      border-left: 30px solid #ffc107;
+    }
+
+    .breadcrumb li:first-of-type div {
+      padding-left: 10px;
+      width: calc(100% + 5px);
+    }
+
+    .breadcrumb li:last-of-type div {
+      width: calc(100% - 22px);
     }
 
     .breadcrumb li div:before {
-    	content: " ";
-    	display: block;
-    	width: 0;
-    	height: 0;
-    	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
-    	border-bottom: 50px solid transparent;
-    	border-left: 30px solid white;
-    	position: absolute;
-    	top: 50%;
-    	margin-top: -50px;
-    	margin-left: 1px;
-    	left: 100%;
-    	z-index: 1;
+      border-bottom: 50px solid transparent;
+      border-left: 30px solid white;
+      border-top: 50px solid transparent;
+      content: " ";
+      display: block;
+      height: 0;
+      left: 100%;
+      margin-left: 1px;
+      margin-top: -50px;
+      position: absolute;
+      top: 50%;
+      width: 0;
+      z-index: 1;
     }
 
-    .breadcrumb li:first-child div {
-    	padding-left: 15px;
+    .breadcrumb li div:after {
+      border-bottom: 50px solid transparent;
+      border-left: 30px solid hsla(0, 0%, 83%, 1);
+      border-top: 50px solid transparent;
+      content: " ";
+      display: block;
+      height: 0;
+      left: 100%;
+      margin-top: -50px;
+      position: absolute;
+      top: 50%;
+      width: 0;
+      z-index: 2;
     }
-
-    .breadcrumb li div:hover { background: #ffc107; }
-    .breadcrumb li div:hover:after { border-left-color: #ffc107 !important; }
   }
 
   #previous-button {

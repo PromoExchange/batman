@@ -93,8 +93,8 @@ $(function() {
     }
     $('#next-button').prop('disabled', next_disabled);
 
-    $('.breadcrumb-item.active').removeClass('active');
-    $('.breadcrumb-item').each(function(_i, c2) {
+    $('ul.breadcrumb li.active').removeClass('active');
+    $('ul.breadcrumb li').each(function(_i, c2) {
       var this_crumb = $(c2).children('div').data('crumb');
       if( this_crumb === current_slug ) {
         $(c2).addClass('completed');

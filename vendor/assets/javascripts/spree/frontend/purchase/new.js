@@ -538,4 +538,8 @@ $(function() {
     var address_id = $('#purchase_ship_to_zip option:selected').attr('data-id');
     $('#purchase_address_id').val(address_id);
   }
+
+  $('img').error(function(){
+    $(this).attr('src','/images/px_logo.png');
+  });
 });

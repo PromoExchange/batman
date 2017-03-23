@@ -132,6 +132,7 @@ $(function() {
   })();
 
   function set_summary() {
+    return;
     var main_image = $('.main-product-image').first();
     var summary_image = $('.summary-product-image').first();
     $.each(["src","alt"], function(_i, s){
@@ -315,7 +316,7 @@ $(function() {
             number_options++;
           });
 
-          if (number_options > 0 && !$('#need_it_sooner').is(":visible")) {
+          if (number_options > 0 && !$('#shipping_option_group').is(":visible")) {
             $('#need_it_sooner').show();
           }
 

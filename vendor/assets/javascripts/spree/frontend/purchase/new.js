@@ -132,6 +132,7 @@ $(function() {
   })();
 
   function set_summary() {
+    return;
     var main_image = $('.main-product-image').first();
     var summary_image = $('.summary-product-image').first();
     $.each(["src","alt"], function(_i, s){

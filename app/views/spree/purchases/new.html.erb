@@ -44,8 +44,13 @@
           <%= render(partial: 'price_breaks', locals: { f: f }) if @current_company_store.traditional? %>
           <%= render partial: 'quantity', locals: { f: f } %>
           <%= render partial: 'address', locals: { f: f } %>
-          <%= render partial: 'shipping_options', locals: { f: f } %>
         </fieldset>
+        <div class="calculated">
+          <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
+          <%= render partial: 'shipping_options', locals: { f: f } %>
+          <%= render partial: 'active_price' %>
+          <%= render partial: 'buttons' %>
+        </div>
         <% if(@current_company_store.gooten?) %>
           <div class="pager-buttons row">
             <div class="col-md-1 col-md-offset-5">
@@ -56,11 +61,6 @@
             </div>
           </div>
         <% end %>
-        <div class="calculated">
-          <p id='mobile-align-center'>Estimated delivery date: <%= content_tag(:span, '--', id: 'ship_date') %></p>
-          <%= render partial: 'active_price' %>
-          <%= render partial: 'buttons' %>
-        </div>
       </div>
     <% end %>
 

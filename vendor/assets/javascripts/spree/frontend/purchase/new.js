@@ -315,7 +315,7 @@ $(function() {
             number_options++;
           });
 
-          if (number_options > 0 && !$('#need_it_sooner').is(":visible")) {
+          if (number_options > 0 && !$('#shipping_option_group').is(":visible")) {
             $('#need_it_sooner').show();
           }
 

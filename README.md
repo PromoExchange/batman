@@ -1,7 +1,5 @@
 PromoExchange
 ================
-[ ![Codeship Status for PromoExchange/batman](https://codeship.com/projects/44871a70-d8a4-0132-f585-769405cfda59/status?branch=master)](https://codeship.com/projects/78898)
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 Batman is the main application for PromoExchange's promotional products auction platform. It houses product, auction, and user information.
 
@@ -25,7 +23,6 @@ N.B. These are untested as I do not have access to a Windows machine
 - [Git CLI Installation](https://git-scm.com/download/win). This also includes a bash prompt.
 - [Github UI Installation](https://desktop.github.com/). The official GIT github UI.
 - [Redis](https://github.com/MSOpenTech/redis/releases)
-- [Atom Editor](https://atom.io/). This is recommended, but use an editor you are most familiar with.
 - [Ruby](http://rubyinstaller.org/)
 - [Postgres](http://www.postgresql.org/download/windows/)
 - [Bundler](http://bundler.io/)
